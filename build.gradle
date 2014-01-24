@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+version = '1.0'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'ym-java-epr-sdk', 'Implementation-Version': version
+    }
+}
+
+dependencies {
+    compile 'com.squareup.okhttp:okhttp:1.2.1'
+    compile 'com.google.code.gson:gson:2.2.4'
+    
+    testCompile 'org.testng:testng:6.8.7'
+}
