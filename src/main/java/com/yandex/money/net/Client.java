@@ -20,15 +20,15 @@ public class Client {
 
     private static final String USER_AGENT = "ym-java-cps-sdk";
 
-    public <T> T perform(Request<T> request) throws IOException {
-        HttpURLConnection connection = okHttpClient.open(request.requestURL());
+    public <T> T perform(IRequest<T> IRequest) throws IOException {
+        HttpURLConnection connection = okHttpClient.open(IRequest.requestURL());
 
         OutputStream out = null;
         InputStream in = null;
 
         try {
 
-            return request.parseResponse(in);
+            return IRequest.parseResponse(in);
         } finally {
             // Clean up.
             if (out != null) out.close();

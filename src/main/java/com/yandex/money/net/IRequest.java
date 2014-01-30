@@ -7,7 +7,9 @@ import java.net.URL;
 /**
  *
  */
-public interface Request<T> {
+public interface IRequest<T> {
+
+    String URI_API = "https://money.yandex.ru/api";
 
     URL requestURL() throws MalformedURLException;
 

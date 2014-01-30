@@ -2,7 +2,7 @@ package com.yandex.money;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.yandex.money.net.Client;
-import com.yandex.money.net.Request;
+import com.yandex.money.net.IRequest;
 
 import java.io.IOException;
 
@@ -18,8 +18,8 @@ public class YandexMoney {
         this.client = new Client(okHttpClient);
     }
 
-    public <T> T performRequest(Request<T> request) throws IOException {
-        return client.perform(request);
+    public <T> T performRequest(IRequest<T> IRequest) throws IOException {
+        return client.perform(IRequest);
     }
 
     private OkHttpClient defaultHttpClient() {
