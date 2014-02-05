@@ -42,6 +42,8 @@ public class InstanceId {
         private String clientId;
 
         public Request(String clientId) {
+            if (Utils.isEmpty(clientId))
+                throw new IllegalArgumentException(Utils.emptyParam("clientId"));
             this.clientId = clientId;
         }
 

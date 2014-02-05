@@ -10,6 +10,7 @@ import java.net.URL;
 public interface IRequest<T> {
 
     String URI_API = "https://money.yandex.ru/api";
+    String P2P = "p2p";
 
     URL requestURL() throws MalformedURLException;
 
