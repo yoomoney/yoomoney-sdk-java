@@ -1,9 +1,13 @@
 package com.yandex.money.model;
 
+import com.google.gson.*;
+import com.yandex.money.MoneySource;
 import com.yandex.money.Utils;
 import com.yandex.money.net.IRequest;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -15,11 +19,50 @@ public class ProcessExternalPayment {
 
     private String status;
     private String error;
-    private String acs_uri;
-    private Map<String, String> acs_params;
-    private String money_source;
-    private Long next_retry;
+    private String acsUri;
+    private Map<String, String> acsParams;
+    private MoneySource moneySource;
+    private Long nextRetry;
     private String invoiceId;
+
+    public ProcessExternalPayment(String status, String error, String acsUri, Map<String, String> acsParams,
+                                  MoneySource moneySource, Long nextRetry, String invoiceId) {
+        this.status = status;
+        this.error = error;
+        this.acsUri = acsUri;
+        this.acsParams = acsParams;
+        this.moneySource = moneySource;
+        this.nextRetry = nextRetry;
+        this.invoiceId = invoiceId;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public String getAcsUri() {
+        return acsUri;
+    }
+
+    public Map<String, String> getAcsParams() {
+        return acsParams;
+    }
+
+    public MoneySource getMoneySource() {
+        return moneySource;
+    }
+
+    public Long getNextRetry() {
+        return nextRetry;
+    }
+
+    public String getInvoiceId() {
+        return invoiceId;
+    }
 
     public static class Request implements IRequest<ProcessExternalPayment> {
 
@@ -60,7 +103,28 @@ public class ProcessExternalPayment {
 
         @Override
         public ProcessExternalPayment parseResponse(InputStream inputStream) {
-            return null;  //To change body of implemented methods use File | Settings | File Templates.
+            return new GsonBuilder().registerTypeAdapter(ProcessExternalPayment.class, new JsonDeserializer<ProcessExternalPayment>() {
+                @Override
+                public ProcessExternalPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+                    JsonObject o = json.getAsJsonObject();
+
+                    JsonObject paramsObj = o.getAsJsonObject("acs_params");
+                    Map<String, String> acsParams = Utils.parse(paramsObj);
+
+                    JsonObject objMoneySource = o.getAsJsonObject("money_source");
+                    MoneySource moneySource = MoneySource.parseJson(objMoneySource);
+
+                    return new ProcessExternalPayment(
+                            Utils.getString(o, "status"),
+                            Utils.getString(o, "error"),
+                            Utils.getString(o, "acs_uri"),
+                            acsParams,
+                            moneySource,
+                            Utils.getLong(o, "next_retry"),
+                            Utils.getString(o, "invoice_id")
+                    );
+                }
+            }).create().fromJson(new InputStreamReader(inputStream), ProcessExternalPayment.class);
         }
     }
 }

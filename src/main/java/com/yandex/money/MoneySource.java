@@ -1,5 +1,7 @@
 package com.yandex.money;
 
+import com.google.gson.JsonObject;
+
 /**
  *
  */
@@ -13,8 +15,14 @@ public class MoneySource {
         this.card = card;
     }
 
-    public MoneySource(WalletSource wallet) {
-        this.wallet = wallet;
+    public static MoneySource parseJson(JsonObject obj) {
+        JsonObject walletObj = obj.getAsJsonObject("wallet");
+        WalletSource wallet = WalletSource.parseJson(walletObj);
+
+        JsonObject cardObj = obj.getAsJsonObject("card");
+        CardSource card = CardSource.parseJson(cardObj);
+
+        return new MoneySource(wallet, card);
     }
 
     public static class WalletSource {
@@ -27,6 +35,16 @@ public class MoneySource {
 
         public boolean isAllowed() {
             return allowed;
+        }
+
+        public static WalletSource parseJson(JsonObject obj) {
+            if (obj != null) {
+                Boolean allowed = Utils.getBoolean(obj, "allowed");
+                if (allowed != null) {
+                    return new WalletSource(allowed);
+                }
+            }
+            return null;
         }
     }
 
@@ -41,6 +59,18 @@ public class MoneySource {
             this.cscRequired = cscRequired;
             this.panFragment = panFragment;
             this.type = type;
+        }
+
+        public static CardSource parseJson(JsonObject obj) {
+            if (obj != null) {
+                Boolean allowed = Utils.getBoolean(obj, "allowed");
+                Boolean cscRequired = Utils.getBoolean(obj, "csc_required");
+                String panFragment = Utils.getString(obj, "pan_fragment");
+                String type = Utils.getString(obj, "type");
+
+                return new CardSource(allowed, cscRequired, panFragment, type);
+            }
+            return null;
         }
     }
 }
