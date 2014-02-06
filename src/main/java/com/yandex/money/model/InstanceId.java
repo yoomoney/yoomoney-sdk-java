@@ -3,10 +3,13 @@ package com.yandex.money.model;
 import com.google.gson.*;
 import com.yandex.money.Utils;
 import com.yandex.money.net.IRequest;
+import com.yandex.money.net.PostRequestBodyBuffer;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -64,6 +67,15 @@ public class InstanceId {
                             Utils.getString(o, "instance_id"));
                 }
             }).create().fromJson(new InputStreamReader(inputStream), InstanceId.class);
+        }
+
+        @Override
+        public PostRequestBodyBuffer buildParameters() throws IOException {
+            return new PostRequestBodyBuffer().addParam("client_id", clientId);
+        }
+
+        @Override
+        public void writeHeaders(HttpURLConnection connection) {
         }
 
     }

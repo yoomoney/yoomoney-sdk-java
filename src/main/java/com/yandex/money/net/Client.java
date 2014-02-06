@@ -20,15 +20,33 @@ public class Client {
 
     private static final String USER_AGENT = "ym-java-cps-sdk";
 
-    public <T> T perform(IRequest<T> IRequest) throws IOException {
-        HttpURLConnection connection = okHttpClient.open(IRequest.requestURL());
+    public <T> T perform(IRequest<T> request) throws IOException {
+        if (request == null) {
+            throw new IllegalArgumentException("request is null");
+        }
+
+        HttpURLConnection connection = okHttpClient.open(request.requestURL());
 
         OutputStream out = null;
         InputStream in = null;
 
         try {
+            connection.setRequestProperty("User-Agent", USER_AGENT);
 
-            return IRequest.parseResponse(in);
+            PostRequestBodyBuffer parameters = request.buildParameters();
+            if (parameters != null) {
+                parameters.setHttpHeaders(connection);
+            }
+            request.writeHeaders(connection);
+
+            if (parameters != null) {
+                out = connection.getOutputStream();
+                parameters.write(out);
+                out.close();
+                out = null;
+            }
+
+            return request.parseResponse(in);
         } finally {
             // Clean up.
             if (out != null) out.close();

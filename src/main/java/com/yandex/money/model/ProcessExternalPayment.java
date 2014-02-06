@@ -4,10 +4,13 @@ import com.google.gson.*;
 import com.yandex.money.MoneySource;
 import com.yandex.money.Utils;
 import com.yandex.money.net.IRequest;
+import com.yandex.money.net.PostRequestBodyBuffer;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -125,6 +128,16 @@ public class ProcessExternalPayment {
                     );
                 }
             }).create().fromJson(new InputStreamReader(inputStream), ProcessExternalPayment.class);
+        }
+
+        @Override
+        public PostRequestBodyBuffer buildParameters() throws IOException {
+            return null;  //To change body of implemented methods use File | Settings | File Templates.
+        }
+
+        @Override
+        public void writeHeaders(HttpURLConnection connection) {
+            //To change body of implemented methods use File | Settings | File Templates.
         }
     }
 }

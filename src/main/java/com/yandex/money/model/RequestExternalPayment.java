@@ -4,14 +4,18 @@ import com.google.gson.*;
 import com.yandex.money.ParamsP2P;
 import com.yandex.money.Utils;
 import com.yandex.money.net.IRequest;
+import com.yandex.money.net.PostRequestBodyBuffer;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -106,6 +110,26 @@ public class RequestExternalPayment {
                             );
                 }
             }).create().fromJson(new InputStreamReader(inputStream), RequestExternalPayment.class);
+        }
+
+        @Override
+        public PostRequestBodyBuffer buildParameters() throws IOException {
+            PostRequestBodyBuffer bb = new PostRequestBodyBuffer();
+
+            bb.addParam("instance_id", instanceId);
+            bb.addParam("pattern_id", patternId);
+            for (Map.Entry<String,String> entry : params.entrySet()) {
+                bb.addParam(entry.getKey(), entry.getValue());
+            }
+
+            return bb;
+        }
+
+        @Override
+        public void writeHeaders(HttpURLConnection connection) {
+            if (accessToken != null) {
+                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            }
         }
     }
 }
