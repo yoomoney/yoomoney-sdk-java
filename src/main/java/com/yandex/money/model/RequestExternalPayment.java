@@ -15,7 +15,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -24,15 +23,16 @@ public class RequestExternalPayment {
 
     private String status;
     private String error;
-    private String request_id;
-    private BigDecimal contract_amount;
+    private String requestId;
+    private BigDecimal contractAmount;
     private String title;
 
-    public RequestExternalPayment(String status, String error, String request_id, String contract_amount, String title) {
+    public RequestExternalPayment(String status, String error, String requestId, String contractAmount, String title) {
         this.status = status;
         this.error = error;
-        this.request_id = request_id;
-        this.contract_amount = new BigDecimal(contract_amount);
+        this.requestId = requestId;
+        if (contractAmount != null)
+            this.contractAmount = new BigDecimal(contractAmount);
         this.title = title;
     }
 
@@ -44,12 +44,12 @@ public class RequestExternalPayment {
         return error;
     }
 
-    public String getRequest_id() {
-        return request_id;
+    public String getRequestId() {
+        return requestId;
     }
 
-    public BigDecimal getContract_amount() {
-        return contract_amount;
+    public BigDecimal getContractAmount() {
+        return contractAmount;
     }
 
     public String getTitle() {

@@ -39,13 +39,14 @@ public class Utils {
     public static Map<String, String> parse(JsonObject obj) {
         Map<String, String> result = new HashMap<String, String>();
 
-        for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
-            JsonElement el = entry.getValue();
-            if (el.isJsonPrimitive()) {
-                result.put(entry.getKey(), el.getAsString());
+        if (obj != null) {
+            for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
+                JsonElement el = entry.getValue();
+                if (el.isJsonPrimitive()) {
+                    result.put(entry.getKey(), el.getAsString());
+                }
             }
         }
-
 
         return result;
     }
