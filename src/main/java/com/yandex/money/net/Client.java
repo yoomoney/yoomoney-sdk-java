@@ -18,7 +18,7 @@ public class Client {
         this.okHttpClient = okHttpClient;
     }
 
-    private static final String USER_AGENT = "ym-java-cps-sdk";
+    private static final String USER_AGENT = "Yandex.Money.SDK/Java";
 
     public <T> T perform(IRequest<T> request) throws IOException {
         if (request == null) {

@@ -56,6 +56,10 @@ public class RequestExternalPayment {
         return title;
     }
 
+    public boolean isSuccess() {
+        return Utils.STATUS_SUCCESS.equals(status);
+    }
+
     public static class Request implements IRequest<RequestExternalPayment> {
 
         private String accessToken;

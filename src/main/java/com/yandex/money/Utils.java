@@ -15,7 +15,12 @@ import java.util.Set;
  */
 public class Utils {
 
-    static String NULL_PARAM_STR = "parameter %s is null or empty";
+    public static String STATUS_SUCCESS = "success";
+    public static String STATUS_REFUSED = "refused";
+    public static String STATUS_IN_PROGRESS = "in_progress";
+    public static String STATUS_EXT_AUTH_REQUIRED = "ext_auth_required";
+
+    public static String NULL_PARAM_STR = "parameter %s is null or empty";
 
     public static String emptyParam(String paramName) {
         return String.format(NULL_PARAM_STR, paramName);

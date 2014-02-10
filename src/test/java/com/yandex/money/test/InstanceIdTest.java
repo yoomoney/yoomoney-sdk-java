@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 /**
  *
  */
-public class TestInstanceId {
+public class InstanceIdTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testRequestClientIdNull() {
@@ -23,5 +23,14 @@ public class TestInstanceId {
     public void testRequestClient() {
         InstanceId.Request request = new InstanceId.Request(" ");
         Assert.assertNotNull(request);
+    }
+
+    @Test
+    public void testIsSuccess() {
+        InstanceId instanceId = new InstanceId("success", null, "id");
+        Assert.assertTrue(instanceId.isSuccess());
+
+        instanceId = new InstanceId("refused", "error", null);
+        Assert.assertFalse(instanceId.isSuccess());
     }
 }

@@ -67,6 +67,10 @@ public class ProcessExternalPayment {
         return invoiceId;
     }
 
+    public boolean isSuccess() {
+        return Utils.STATUS_SUCCESS.equals(status);
+    }
+
     public static class Request implements IRequest<ProcessExternalPayment> {
 
         private String accessToken;

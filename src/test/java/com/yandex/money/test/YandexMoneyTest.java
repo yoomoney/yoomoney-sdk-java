@@ -15,7 +15,7 @@ import java.util.HashMap;
 /**
  *
  */
-public class TestYandexMoney {
+public class YandexMoneyTest {
 
     private String CLIENT_ID = "4292CF5DF43C33F44EA913794223592481551D6FE8B7448013D6AF1F3491E2FE";
     private String PATTERN_ID_PHONE_TOPUP = "phone-topup";

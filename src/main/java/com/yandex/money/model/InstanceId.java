@@ -40,6 +40,10 @@ public class InstanceId {
         return instanceId;
     }
 
+    public boolean isSuccess() {
+        return Utils.STATUS_SUCCESS.equals(status);
+    }
+
     public static class Request implements IRequest<InstanceId> {
 
         private String clientId;
