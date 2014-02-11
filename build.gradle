@@ -18,3 +18,10 @@ dependencies {
     
     testCompile 'org.testng:testng:6.8.7'
 }
+
+task copyToLib(type: Copy) {
+    into "$buildDir/libs"
+    from configurations.runtime
+}
+
+build.dependsOn(copyToLib)
