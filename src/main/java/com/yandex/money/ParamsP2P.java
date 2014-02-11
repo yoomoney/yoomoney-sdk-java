@@ -48,7 +48,7 @@ public class ParamsP2P {
             case PHONE: result.put(PARAM_TO_TYPE, "phone");
         }
 
-        result.put(PARAM_AMOUNT_DUE, amountDue.toString());  // @todo покрыть тестом значения типа 1.9299992
+        result.put(PARAM_AMOUNT_DUE, amountDue.toString());  // @todo make a test for values like 1.929299299
 
         if (!Utils.isEmpty(message)) {
             result.put(PARAM_MESSAGE, message);

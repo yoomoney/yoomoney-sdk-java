@@ -8,14 +8,19 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
 /**
- * Http-клиент для вызова запросов
+ * Http-client for request execution
  */
 public class Client {
 
     private OkHttpClient okHttpClient;
+    private boolean debugLogging = false;
 
     public Client(OkHttpClient okHttpClient) {
         this.okHttpClient = okHttpClient;
+    }
+
+    public void setDebugLogging(boolean debugLogging) {
+        this.debugLogging = debugLogging;
     }
 
     private static final String USER_AGENT = "Yandex.Money.SDK/Java";
@@ -48,7 +53,7 @@ public class Client {
 
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 checkJSONType(connection);
-                in = connection.getInputStream();
+                in = Utils.getBodyStream(connection, debugLogging);
                 return request.parseResponse(in);
             } else {
                 throw new IOException(connection.getResponseMessage());
@@ -67,7 +72,7 @@ public class Client {
             int contentLength = Integer.valueOf(lengthHeader);
             if (contentLength > 0) {
                 String header = connection.getHeaderField("Content-Type");
-                if (header == null || !header.startsWith("application/json")) {
+                if (header == null || !header.startsWith(PostRequestBodyBuffer.CONTENT_TYPE_POST_JSON)) {
                     String message = "Server has respond by wrong Content-Type:\n" + Utils.getStatusLine(connection) + "\nContent-Type: " + header;
 //                    Log.w(TAG, message);
                     Utils.readBody2DevNull(connection);
@@ -88,14 +93,14 @@ public class Client {
         }
 
         public static void readBody2DevNull(HttpURLConnection connection) throws IOException {
-            readBody2DevNull(getBodyStream(connection));
+            readBody2DevNull(getBodyStream(connection, false));
         }
 
-        public static InputStream getBodyStream(HttpURLConnection connection) throws IOException {
+        public static InputStream getBodyStream(HttpURLConnection connection, boolean isDebugLogging) throws IOException {
             if (connection.getResponseCode() >= 400) {
-                return connection.getErrorStream();
+                return isDebugLogging ? new WireLoggingInputStream(connection.getErrorStream()) : connection.getErrorStream();
             } else {
-                return connection.getInputStream();
+                return isDebugLogging ? new WireLoggingInputStream(connection.getInputStream()) : connection.getInputStream();
             }
         }
 

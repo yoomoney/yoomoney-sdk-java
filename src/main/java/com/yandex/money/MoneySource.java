@@ -16,13 +16,17 @@ public class MoneySource {
     }
 
     public static MoneySource parseJson(JsonObject obj) {
-        JsonObject walletObj = obj.getAsJsonObject("wallet");
-        WalletSource wallet = WalletSource.parseJson(walletObj);
+        if (obj != null) {
+            JsonObject walletObj = obj.getAsJsonObject("wallet");
+            WalletSource wallet = WalletSource.parseJson(walletObj);
 
-        JsonObject cardObj = obj.getAsJsonObject("card");
-        CardSource card = CardSource.parseJson(cardObj);
+            JsonObject cardObj = obj.getAsJsonObject("card");
+            CardSource card = CardSource.parseJson(cardObj);
 
-        return new MoneySource(wallet, card);
+            return new MoneySource(wallet, card);
+        }
+
+        return null;
     }
 
     public static class WalletSource {

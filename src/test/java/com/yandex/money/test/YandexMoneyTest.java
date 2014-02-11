@@ -10,6 +10,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 /**
@@ -35,6 +36,7 @@ public class YandexMoneyTest {
     @BeforeClass
     private void setUp() {
         ym = new YandexMoney();
+        ym.setDebugLogging(true);
     }
 
     @BeforeTest
@@ -86,6 +88,8 @@ public class YandexMoneyTest {
         Assert.assertNull(respRequestExternalPayment.getError());
         Assert.assertNotNull(respRequestExternalPayment.getRequestId());
         Assert.assertTrue(respRequestExternalPayment.getRequestId().length() > 0);
+        Assert.assertEquals(respRequestExternalPayment.getContractAmount(), new BigDecimal("23.00"));
+        Assert.assertEquals(respRequestExternalPayment.getTitle(), "МТС (Россия)");
     }
 
     private HashMap<String, String> successRequestParams() {
@@ -142,6 +146,6 @@ public class YandexMoneyTest {
         respProcessExternalPayment = ym.performRequest(reqProcessExternalPayment);
 
         Assert.assertNotNull(respProcessExternalPayment);
-        Assert.assertEquals(respProcessExternalPayment.getStatus(), "success");
+        Assert.assertEquals(respProcessExternalPayment.getStatus(), "ext_auth_required");
     }
 }

@@ -9,6 +9,7 @@ import java.io.IOException;
 public class YandexMoney {
 
     private Client client;
+    private boolean debugLogging = false;
 
     public YandexMoney() {
         client = new Client(defaultHttpClient());
@@ -16,6 +17,10 @@ public class YandexMoney {
 
     public YandexMoney(OkHttpClient okHttpClient) {
         this.client = new Client(okHttpClient);
+    }
+
+    public void setDebugLogging(boolean debugLogging) {
+        client.setDebugLogging(debugLogging);
     }
 
     public <T> T performRequest(IRequest<T> IRequest) throws IOException {

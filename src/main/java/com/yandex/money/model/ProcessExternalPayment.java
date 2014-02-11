@@ -136,12 +136,22 @@ public class ProcessExternalPayment {
 
         @Override
         public PostRequestBodyBuffer buildParameters() throws IOException {
-            return null;  //To change body of implemented methods use File | Settings | File Templates.
+            PostRequestBodyBuffer bb = new PostRequestBodyBuffer();
+
+            bb.addParam("instance_id", instanceId);
+            bb.addParam("request_id", requestId);
+            bb.addParam("ext_auth_success_uri", extAuthSuccessUri);
+            bb.addParam("ext_auth_fail_uri", extAuthFailUri);
+            bb.addBooleanIfTrue("request_token", requestToken);
+
+            return bb;
         }
 
         @Override
         public void writeHeaders(HttpURLConnection connection) {
-            //To change body of implemented methods use File | Settings | File Templates.
+            if (accessToken != null) {
+                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+            }
         }
     }
 }
