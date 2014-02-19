@@ -71,6 +71,10 @@ public class ProcessExternalPayment {
         return Utils.STATUS_SUCCESS.equals(status);
     }
 
+    public boolean isExtAuthRequired() {
+        return Utils.STATUS_EXT_AUTH_REQUIRED.equals(status);
+    }
+
     public static class Request implements IRequest<ProcessExternalPayment> {
 
         private String accessToken;
