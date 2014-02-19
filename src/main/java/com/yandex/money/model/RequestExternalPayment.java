@@ -2,6 +2,7 @@ package com.yandex.money.model;
 
 import com.google.gson.*;
 import com.yandex.money.ParamsP2P;
+import com.yandex.money.ParamsPhone;
 import com.yandex.money.Utils;
 import com.yandex.money.net.IRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
@@ -91,7 +92,14 @@ public class RequestExternalPayment {
             if (paramsP2P == null)
                 throw new IllegalArgumentException(Utils.emptyParam("paramsP2P"));
 
-            return new Request(accessToken, instanceId, P2P, paramsP2P.makeParams());
+            return new Request(accessToken, instanceId, ParamsP2P.PATTERN_ID, paramsP2P.makeParams());
+        }
+
+        public static Request newInstance(String accessToken, String instanceId, ParamsPhone paramsPhone) {
+            if (paramsPhone == null)
+                throw new IllegalArgumentException(Utils.emptyParam("paramsPhone"));
+
+            return new Request(accessToken, instanceId, ParamsPhone.PATTERN_ID, paramsPhone.makeParams());
         }
 
         @Override

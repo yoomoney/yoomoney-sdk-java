@@ -7,12 +7,14 @@ import java.util.Map;
 /**
  *
  */
-public class ParamsP2P {
+public class ParamsP2P implements Params {
+
+    public static final String PATTERN_ID = "p2p";
 
     private static final String PARAM_TO = "to";
     private static final String PARAM_TO_TYPE = "toType";
     private static final String PARAM_AMOUNT_DUE = "amountDue";
-    public static final String PARAM_MESSAGE = "message";
+    private static final String PARAM_MESSAGE = "message";
 
     String to;
     IdentifierType toType;
