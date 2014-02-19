@@ -1,14 +1,12 @@
 package com.yandex.money;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -45,7 +43,7 @@ public class Utils {
         Map<String, String> result = new HashMap<String, String>();
 
         if (obj != null) {
-            for (Map.Entry<String,JsonElement> entry : obj.entrySet()) {
+            for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
                 JsonElement el = entry.getValue();
                 if (el.isJsonPrimitive()) {
                     result.put(entry.getKey(), el.getAsString());
@@ -61,4 +59,7 @@ public class Utils {
     }
 
 
+    public static String sumToStr(BigDecimal amountDue) {
+        return amountDue.toString();  // @todo make a test for values like 1.929299299
+    }
 }

@@ -54,7 +54,7 @@ public class ParamsP2P implements Params {
                 break;
         }
 
-        result.put(PARAM_AMOUNT_DUE, amountDue.toString());  // @todo make a test for values like 1.929299299
+        result.put(PARAM_AMOUNT_DUE, Utils.sumToStr(amountDue));
 
         if (!Utils.isEmpty(message)) {
             result.put(PARAM_MESSAGE, message);
