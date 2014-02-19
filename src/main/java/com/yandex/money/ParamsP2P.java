@@ -44,8 +44,12 @@ public class ParamsP2P {
         result.put(PARAM_TO, to);
 
         switch (toType) {
-            case ACCOUNT: result.put(PARAM_TO_TYPE, "account");
-            case PHONE: result.put(PARAM_TO_TYPE, "phone");
+            case ACCOUNT:
+                result.put(PARAM_TO_TYPE, "account");
+                break;
+            case PHONE:
+                result.put(PARAM_TO_TYPE, "phone");
+                break;
         }
 
         result.put(PARAM_AMOUNT_DUE, amountDue.toString());  // @todo make a test for values like 1.929299299
