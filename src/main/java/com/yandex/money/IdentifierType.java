@@ -3,5 +3,7 @@ package com.yandex.money;
 /**
  *
  */
-public class IdentifierType {
+public enum IdentifierType {
+    ACCOUNT,
+    PHONE
 }
