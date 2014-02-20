@@ -5,6 +5,7 @@ import com.yandex.money.net.Client;
 import com.yandex.money.net.IRequest;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 public class YandexMoney {
 
@@ -26,9 +27,12 @@ public class YandexMoney {
         return client.perform(IRequest);
     }
 
+    public static final long TIMEOUT_IN_SEC = 30;
+
     private OkHttpClient defaultHttpClient() {
         OkHttpClient okHttpClient = new OkHttpClient();
-        // todo set params for client (timeout, etc.)
+        okHttpClient.setConnectTimeout(TIMEOUT_IN_SEC, TimeUnit.SECONDS);
+        okHttpClient.setReadTimeout(TIMEOUT_IN_SEC, TimeUnit.SECONDS);
         return okHttpClient;
     }
 }

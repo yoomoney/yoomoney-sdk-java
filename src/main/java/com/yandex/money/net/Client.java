@@ -13,8 +13,6 @@ import java.net.URLConnection;
  */
 public class Client {
 
-    public static final int TIMEOUT = 30000;
-
     private OkHttpClient okHttpClient;
     private boolean debugLogging = false;
 
@@ -71,8 +69,7 @@ public class Client {
 
     private void setupCon(URLConnection connection) {
         connection.setRequestProperty("User-Agent", USER_AGENT);
-        connection.setConnectTimeout(TIMEOUT);
-        connection.setReadTimeout(TIMEOUT);
+
     }
 
     private void checkJSONType(HttpURLConnection connection) throws IOException {
