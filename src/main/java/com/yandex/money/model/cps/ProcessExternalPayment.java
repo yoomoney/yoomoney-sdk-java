@@ -1,7 +1,7 @@
-package com.yandex.money.model;
+package com.yandex.money.model.cps;
 
 import com.google.gson.*;
-import com.yandex.money.MoneySource;
+import com.yandex.money.model.common.MoneySource;
 import com.yandex.money.Utils;
 import com.yandex.money.net.IRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;

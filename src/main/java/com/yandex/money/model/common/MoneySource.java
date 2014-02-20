@@ -1,6 +1,7 @@
-package com.yandex.money;
+package com.yandex.money.model.common;
 
 import com.google.gson.JsonObject;
+import com.yandex.money.Utils;
 
 /**
  *

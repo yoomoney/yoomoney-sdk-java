@@ -1,6 +1,6 @@
 package com.yandex.money.test;
 
-import com.yandex.money.model.InstanceId;
+import com.yandex.money.model.cps.InstanceId;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

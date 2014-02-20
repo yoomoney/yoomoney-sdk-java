@@ -1,4 +1,6 @@
-package com.yandex.money;
+package com.yandex.money.model.common.params;
+
+import com.yandex.money.Utils;
 
 import java.math.BigDecimal;
 import java.util.HashMap;

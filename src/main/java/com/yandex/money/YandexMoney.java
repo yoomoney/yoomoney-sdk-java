@@ -9,7 +9,6 @@ import java.io.IOException;
 public class YandexMoney {
 
     private Client client;
-    private boolean debugLogging = false;
 
     public YandexMoney() {
         client = new Client(defaultHttpClient());

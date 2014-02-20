@@ -1,4 +1,4 @@
-package com.yandex.money;
+package com.yandex.money.model.common;
 
 /**
  *

@@ -1,8 +1,8 @@
-package com.yandex.money.model;
+package com.yandex.money.model.cps;
 
 import com.google.gson.*;
-import com.yandex.money.ParamsP2P;
-import com.yandex.money.ParamsPhone;
+import com.yandex.money.model.common.params.ParamsP2P;
+import com.yandex.money.model.common.params.ParamsPhone;
 import com.yandex.money.Utils;
 import com.yandex.money.net.IRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;

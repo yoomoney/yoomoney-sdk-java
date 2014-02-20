@@ -1,9 +1,9 @@
 package com.yandex.money.test;
 
 import com.yandex.money.YandexMoney;
-import com.yandex.money.model.InstanceId;
-import com.yandex.money.model.ProcessExternalPayment;
-import com.yandex.money.model.RequestExternalPayment;
+import com.yandex.money.model.cps.InstanceId;
+import com.yandex.money.model.cps.ProcessExternalPayment;
+import com.yandex.money.model.cps.RequestExternalPayment;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
