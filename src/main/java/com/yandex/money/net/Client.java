@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URLConnection;
 
 /**
  * Http-client for request execution
  */
 public class Client {
+
+    public static final int TIMEOUT = 30000;
 
     private OkHttpClient okHttpClient;
     private boolean debugLogging = false;
@@ -36,7 +39,7 @@ public class Client {
         InputStream in = null;
 
         try {
-            connection.setRequestProperty("User-Agent", USER_AGENT);
+            setupCon(connection);
 
             PostRequestBodyBuffer parameters = request.buildParameters();
             if (parameters != null) {
@@ -64,6 +67,12 @@ public class Client {
             if (out != null) out.close();
             if (in != null) in.close();
         }
+    }
+
+    private void setupCon(URLConnection connection) {
+        connection.setRequestProperty("User-Agent", USER_AGENT);
+        connection.setConnectTimeout(TIMEOUT);
+        connection.setReadTimeout(TIMEOUT);
     }
 
     private void checkJSONType(HttpURLConnection connection) throws IOException {
