@@ -16,6 +16,14 @@ public class MoneySource {
         this.card = card;
     }
 
+    public WalletSource getWallet() {
+        return wallet;
+    }
+
+    public CardSource getCard() {
+        return card;
+    }
+
     public static MoneySource parseJson(JsonObject obj) {
         if (obj != null) {
             JsonObject walletObj = obj.getAsJsonObject("wallet");
