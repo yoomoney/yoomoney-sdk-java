@@ -1,8 +1,13 @@
 package com.yandex.money.model.cps;
 
-import com.google.gson.*;
-import com.yandex.money.model.common.MoneySource;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.yandex.money.Utils;
+import com.yandex.money.model.common.MoneySource;
 import com.yandex.money.net.IRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
@@ -69,6 +74,10 @@ public class ProcessExternalPayment {
 
     public boolean isSuccess() {
         return Utils.STATUS_SUCCESS.equals(status);
+    }
+
+    public boolean isInProgress() {
+        return Utils.STATUS_IN_PROGRESS.equals(status);
     }
 
     public boolean isExtAuthRequired() {
