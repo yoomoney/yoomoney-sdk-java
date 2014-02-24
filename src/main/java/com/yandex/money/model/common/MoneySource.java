@@ -85,5 +85,17 @@ public class MoneySource {
             }
             return null;
         }
+
+        public boolean isCscRequired() {
+            return cscRequired;
+        }
+
+        public String getPanFragment() {
+            return panFragment;
+        }
+
+        public String getType() {
+            return type;
+        }
     }
 }
