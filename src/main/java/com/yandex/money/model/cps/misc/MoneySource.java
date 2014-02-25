@@ -25,7 +25,6 @@ public class MoneySource {
         this.moneySourceToken = moneySourceToken;
     }
 
-
     public static MoneySource parseJson(JsonObject obj) {
         if (obj != null) {
             String type = Utils.getString(obj, FIELD_TYPE);
@@ -38,4 +37,19 @@ public class MoneySource {
         return null;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public String getPaymentCardType() {
+        return paymentCardType;
+    }
+
+    public String getPanFragment() {
+        return panFragment;
+    }
+
+    public String getMoneySourceToken() {
+        return moneySourceToken;
+    }
 }
