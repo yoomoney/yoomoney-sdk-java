@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.Utils;
-import com.yandex.money.model.common.MoneySource;
+import com.yandex.money.model.cps.misc.MoneySource;
 import com.yandex.money.net.IRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
@@ -92,9 +92,23 @@ public class ProcessExternalPayment {
         private String extAuthSuccessUri;
         private String extAuthFailUri;
         private boolean requestToken;
+        private String moneySourceToken;
+        private String csc;
 
         public Request(String accessToken, String instanceId, String requestId, String extAuthSuccessUri,
                        String extAuthFailUri, boolean requestToken) {
+            setupCommonParams(accessToken, instanceId, requestId, extAuthSuccessUri, extAuthFailUri);
+            this.requestToken = requestToken;
+        }
+
+        public Request(String accessToken, String instanceId, String requestId, String extAuthSuccessUri,
+                       String extAuthFailUri, String moneySourceToken, String csc) {
+            setupCommonParams(accessToken, instanceId, requestId, extAuthSuccessUri, extAuthFailUri);
+            this.moneySourceToken = moneySourceToken;
+            this.csc = csc;
+        }
+
+        private void setupCommonParams(String accessToken, String instanceId, String requestId, String extAuthSuccessUri, String extAuthFailUri) {
             this.accessToken = accessToken;
 
             if (Utils.isEmpty(instanceId))
@@ -112,8 +126,6 @@ public class ProcessExternalPayment {
             if (Utils.isEmpty(extAuthFailUri))
                 throw new IllegalArgumentException(Utils.emptyParam("extAuthFailUri"));
             this.extAuthFailUri = extAuthFailUri;
-
-            this.requestToken = requestToken;
         }
 
         @Override
@@ -155,7 +167,14 @@ public class ProcessExternalPayment {
             bb.addParam("request_id", requestId);
             bb.addParam("ext_auth_success_uri", extAuthSuccessUri);
             bb.addParam("ext_auth_fail_uri", extAuthFailUri);
+
             bb.addBooleanIfTrue("request_token", requestToken);
+            if (!Utils.isEmpty(moneySourceToken)) {
+                bb.addParam("money_source_token", moneySourceToken);
+            }
+            if (!Utils.isEmpty(csc)) {
+                bb.addParam("csc", csc);
+            }
 
             return bb;
         }
