@@ -9,7 +9,7 @@ import com.yandex.money.Utils;
 public class MoneySource {
 
     private static final String FIELD_TYPE = "type";
-    private static final String FIELD_PAYMENT_CARD_TYPE = "pan_fragment";
+    private static final String FIELD_PAYMENT_CARD_TYPE = "payment_card_type";
     private static final String FIELD_PAN_FRAGMENT = "pan_fragment";
     private static final String FIELD_MONEY_SOURCE_TOKEN = "money_source_token";
 
