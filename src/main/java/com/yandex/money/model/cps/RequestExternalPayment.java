@@ -1,9 +1,14 @@
 package com.yandex.money.model.cps;
 
-import com.google.gson.*;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.yandex.money.Utils;
 import com.yandex.money.model.common.params.ParamsP2P;
 import com.yandex.money.model.common.params.ParamsPhone;
-import com.yandex.money.Utils;
 import com.yandex.money.net.IRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
@@ -58,7 +63,7 @@ public class RequestExternalPayment {
     }
 
     public boolean isSuccess() {
-        return Utils.STATUS_SUCCESS.equals(status);
+        return Status.SUCCESS.equals(status);
     }
 
     public static class Request implements IRequest<RequestExternalPayment> {

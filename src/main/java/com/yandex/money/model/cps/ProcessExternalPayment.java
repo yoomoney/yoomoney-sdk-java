@@ -73,15 +73,15 @@ public class ProcessExternalPayment {
     }
 
     public boolean isSuccess() {
-        return Utils.STATUS_SUCCESS.equals(status);
+        return Status.SUCCESS.equals(status);
     }
 
     public boolean isInProgress() {
-        return Utils.STATUS_IN_PROGRESS.equals(status);
+        return Status.IN_PROGRESS.equals(status);
     }
 
     public boolean isExtAuthRequired() {
-        return Utils.STATUS_EXT_AUTH_REQUIRED.equals(status);
+        return Status.EXT_AUTH_REQUIRED.equals(status);
     }
 
     public static class Request implements IRequest<ProcessExternalPayment> {
