@@ -27,7 +27,7 @@ public class YandexMoney {
         return client.perform(IRequest);
     }
 
-    public static final long TIMEOUT_IN_SEC = 30;
+    private static final long TIMEOUT_IN_SEC = 30;
 
     private OkHttpClient defaultHttpClient() {
         OkHttpClient okHttpClient = new OkHttpClient();
