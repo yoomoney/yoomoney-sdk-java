@@ -24,7 +24,7 @@ public class Client {
         this.debugLogging = debugLogging;
     }
 
-    private static final String USER_AGENT = "Yandex.Money.SDK/Java";
+    private static final String USER_AGENT = "yandex-money-sdk-java";
 
     public <T> T perform(IRequest<T> request) throws IOException {
         if (request == null) {
