@@ -12,7 +12,7 @@ public class YandexMoney {
     private Client client;
 
     public YandexMoney() {
-        client = new Client(defaultHttpClient());
+        this(defaultHttpClient());
     }
 
     public YandexMoney(OkHttpClient okHttpClient) {
@@ -29,7 +29,7 @@ public class YandexMoney {
 
     private static final long TIMEOUT_IN_SEC = 30;
 
-    private OkHttpClient defaultHttpClient() {
+    private static OkHttpClient defaultHttpClient() {
         OkHttpClient okHttpClient = new OkHttpClient();
         okHttpClient.setConnectTimeout(TIMEOUT_IN_SEC, TimeUnit.SECONDS);
         okHttpClient.setReadTimeout(TIMEOUT_IN_SEC, TimeUnit.SECONDS);
