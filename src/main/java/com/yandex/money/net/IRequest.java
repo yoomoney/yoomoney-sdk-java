@@ -11,9 +11,7 @@ import java.net.URL;
  */
 public interface IRequest<T> {
 
-//    String URI_API = "https://money.yandex.ru/api";
-//    String URI_API = "https://baku.yandex.ru/api";
-    String URI_API = "https://polo.yandex.ru/api";
+    String URI_API = "https://money.yandex.ru/api";
 
     URL requestURL() throws MalformedURLException;
 
