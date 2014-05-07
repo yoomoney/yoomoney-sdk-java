@@ -53,8 +53,7 @@ public class Utils {
         return str == null || str.length() == 0;
     }
 
-
     public static String sumToStr(BigDecimal amountDue) {
-        return amountDue.toString();  // @todo make a test for values like 1.929299299
+        return amountDue.toPlainString();
     }
 }
