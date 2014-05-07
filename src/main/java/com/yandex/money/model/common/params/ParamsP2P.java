@@ -17,9 +17,9 @@ public class ParamsP2P implements Params {
     private static final String PARAM_AMOUNT_DUE = "amount_due";
     private static final String PARAM_MESSAGE = "message";
 
-    String to;
-    BigDecimal amountDue;
-    String message;
+    private final String to;
+    private final BigDecimal amountDue;
+    private final String message;
 
     public ParamsP2P(String to, BigDecimal amountDue, String message) {
         if (Utils.isEmpty(to))

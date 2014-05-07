@@ -6,12 +6,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.net.URLConnection;
+import java.util.logging.Logger;
 
 /**
  * Http-client for request execution
  */
 public class Client {
+
+    private static final Logger LOG = Logger.getLogger(Client.class.getSimpleName());
 
     private OkHttpClient okHttpClient;
     private boolean debugLogging = false;
@@ -31,7 +35,11 @@ public class Client {
             throw new IllegalArgumentException("request is null");
         }
 
-        HttpURLConnection connection = okHttpClient.open(request.requestURL());
+        URL url = request.requestURL();
+        if (debugLogging) {
+            LOG.info("connecting to url: " + url.toString());
+        }
+        HttpURLConnection connection = okHttpClient.open(url);
 
         OutputStream out = null;
         InputStream in = null;
@@ -40,6 +48,9 @@ public class Client {
             setupCon(connection);
 
             PostRequestBodyBuffer parameters = request.buildParameters();
+            if (debugLogging) {
+                LOG.info("sending data: " + parameters);
+            }
             if (parameters != null) {
                 parameters.setHttpHeaders(connection);
             }
