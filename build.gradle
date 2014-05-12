@@ -13,7 +13,7 @@ jar {
 }
 
 dependencies {
-    compile 'com.squareup.okhttp:okhttp:1.2.1'
+    compile 'com.squareup.okhttp:okhttp:1.5.4'
     compile 'com.google.code.gson:gson:2.2.4'
     
     testCompile 'org.testng:testng:6.8.7'
