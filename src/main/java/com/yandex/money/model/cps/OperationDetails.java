@@ -38,4 +38,13 @@ public class OperationDetails {
                     Operation.createFromJson(json));
         }
     }
+
+    public static class Request {
+
+        private final String operationId;
+
+        public Request(String operationId) {
+            this.operationId = operationId;
+        }
+    }
 }

@@ -363,7 +363,7 @@ public class Operation {
             return this;
         }
 
-        public Operation build() {
+        public Operation createOperation() {
             return new Operation(operationId, status, patternId, direction, amount, amountDue, fee,
                     datetime, title, sender, recipient, recipientType, message, comment, codepro,
                     protectionCode, expires, answerDatetime, label, details, type, digitalGoods);
@@ -408,7 +408,7 @@ public class Operation {
                     .setAnswerDatetime(JsonUtils.getDateTime(o, "answer_datetime"))
                     .setDetails(JsonUtils.getString(o, "details"))
                     .setDigitalGoods(DigitalGoods.createFromJson(o.get("digital_goods")))
-                    .build();
+                    .createOperation();
         }
     }
 }
