@@ -12,9 +12,9 @@ public enum AccountType {
     }
 
     public static AccountType parse(String accountType) {
-        for (AccountType type : values()) {
-            if (type.accountType.equalsIgnoreCase(accountType)) {
-                return type;
+        for (AccountType value : values()) {
+            if (value.accountType.equals(accountType)) {
+                return value;
             }
         }
         return UNKNOWN;

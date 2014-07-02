@@ -24,6 +24,11 @@ public final class JsonUtils {
         return primitive == null ? null : primitive.getAsLong();
     }
 
+    public static Boolean getBoolean(JsonObject object, String memberName) {
+        JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
+        return primitive == null ? null : primitive.getAsBoolean();
+    }
+
     public static String getMandatoryString(JsonObject object, String memberName) {
         String string = getString(object, memberName);
         checkMandatoryValue(string, memberName);

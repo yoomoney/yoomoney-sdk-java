@@ -13,9 +13,9 @@ public enum AccountStatus {
     }
 
     public static AccountStatus parse(String accountStatus) {
-        for (AccountStatus status : values()) {
-            if (status.accountStatus.equalsIgnoreCase(accountStatus)) {
-                return status;
+        for (AccountStatus value : values()) {
+            if (value.accountStatus.equals(accountStatus)) {
+                return value;
             }
         }
         return UNKNOWN;
