@@ -1,7 +1,7 @@
 package com.yandex.money.model.cps.misc;
 
 import com.google.gson.JsonObject;
-import com.yandex.money.Utils;
+import com.yandex.money.model.cps.JsonUtils;
 
 /**
  *
@@ -27,10 +27,10 @@ public class MoneySource {
 
     public static MoneySource parseJson(JsonObject obj) {
         if (obj != null) {
-            String type = Utils.getString(obj, FIELD_TYPE);
-            String paymentCardType = Utils.getString(obj, FIELD_PAYMENT_CARD_TYPE);
-            String moneySourceToken = Utils.getString(obj, FIELD_MONEY_SOURCE_TOKEN);
-            String panFragment = Utils.getString(obj, FIELD_PAN_FRAGMENT);
+            String type = JsonUtils.getString(obj, FIELD_TYPE);
+            String paymentCardType = JsonUtils.getString(obj, FIELD_PAYMENT_CARD_TYPE);
+            String moneySourceToken = JsonUtils.getString(obj, FIELD_MONEY_SOURCE_TOKEN);
+            String panFragment = JsonUtils.getString(obj, FIELD_PAN_FRAGMENT);
 
             return new MoneySource(type, paymentCardType, panFragment, moneySourceToken);
         }

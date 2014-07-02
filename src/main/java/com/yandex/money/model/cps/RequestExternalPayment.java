@@ -119,11 +119,11 @@ public class RequestExternalPayment {
                 public RequestExternalPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                     JsonObject o = json.getAsJsonObject();
                     return new RequestExternalPayment(
-                            Utils.getString(o, "status"),
-                            Utils.getString(o, "error"),
-                            Utils.getString(o, "request_id"),
-                            Utils.getString(o, "contract_amount"),
-                            Utils.getString(o, "title")
+                            JsonUtils.getString(o, "status"),
+                            JsonUtils.getString(o, "error"),
+                            JsonUtils.getString(o, "request_id"),
+                            JsonUtils.getString(o, "contract_amount"),
+                            JsonUtils.getString(o, "title")
                             );
                 }
             }).create().fromJson(new InputStreamReader(inputStream), RequestExternalPayment.class);

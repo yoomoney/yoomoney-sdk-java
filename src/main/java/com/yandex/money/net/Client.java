@@ -91,7 +91,6 @@ public class Client {
                 String header = connection.getHeaderField("Content-Type");
                 if (header == null || !header.startsWith(PostRequestBodyBuffer.CONTENT_TYPE_POST_JSON)) {
                     String message = "Server has respond by wrong Content-Type:\n" + Utils.getStatusLine(connection) + "\nContent-Type: " + header;
-//                    Log.w(TAG, message);
                     Utils.readBody2DevNull(connection);
                     throw new IOException(message);
                 }

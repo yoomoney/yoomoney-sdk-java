@@ -141,19 +141,19 @@ public class ProcessExternalPayment {
                     JsonObject o = json.getAsJsonObject();
 
                     JsonObject paramsObj = o.getAsJsonObject("acs_params");
-                    Map<String, String> acsParams = Utils.parse(paramsObj);
+                    Map<String, String> acsParams = JsonUtils.map(paramsObj);
 
                     JsonObject objMoneySource = o.getAsJsonObject("money_source");
                     MoneySource moneySource = MoneySource.parseJson(objMoneySource);
 
                     return new ProcessExternalPayment(
-                            Utils.getString(o, "status"),
-                            Utils.getString(o, "error"),
-                            Utils.getString(o, "acs_uri"),
+                            JsonUtils.getString(o, "status"),
+                            JsonUtils.getString(o, "error"),
+                            JsonUtils.getString(o, "acs_uri"),
                             acsParams,
                             moneySource,
-                            Utils.getLong(o, "next_retry"),
-                            Utils.getString(o, "invoice_id")
+                            JsonUtils.getLong(o, "next_retry"),
+                            JsonUtils.getString(o, "invoice_id")
                     );
                 }
             }).create().fromJson(new InputStreamReader(inputStream), ProcessExternalPayment.class);

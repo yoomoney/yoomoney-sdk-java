@@ -71,9 +71,9 @@ public class InstanceId {
                 public InstanceId deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                     JsonObject o = json.getAsJsonObject();
                     return new InstanceId(
-                            Utils.getString(o, "status"),
-                            Utils.getString(o, "error"),
-                            Utils.getString(o, "instance_id"));
+                            JsonUtils.getString(o, "status"),
+                            JsonUtils.getString(o, "error"),
+                            JsonUtils.getString(o, "instance_id"));
                 }
             }).create().fromJson(new InputStreamReader(inputStream), InstanceId.class);
         }
