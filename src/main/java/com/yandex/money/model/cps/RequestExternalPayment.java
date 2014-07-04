@@ -28,12 +28,12 @@ import java.util.Map;
 public class RequestExternalPayment {
 
     private String status;
-    private String error;
+    private Error error;
     private String requestId;
     private BigDecimal contractAmount;
     private String title;
 
-    public RequestExternalPayment(String status, String error, String requestId, String contractAmount, String title) {
+    public RequestExternalPayment(String status, Error error, String requestId, String contractAmount, String title) {
         this.status = status;
         this.error = error;
         this.requestId = requestId;
@@ -46,7 +46,7 @@ public class RequestExternalPayment {
         return status;
     }
 
-    public String getError() {
+    public Error getError() {
         return error;
     }
 
@@ -120,7 +120,7 @@ public class RequestExternalPayment {
                     JsonObject o = json.getAsJsonObject();
                     return new RequestExternalPayment(
                             JsonUtils.getString(o, "status"),
-                            JsonUtils.getString(o, "error"),
+                            Error.parse(JsonUtils.getString(o, "error")),
                             JsonUtils.getString(o, "request_id"),
                             JsonUtils.getString(o, "contract_amount"),
                             JsonUtils.getString(o, "title")

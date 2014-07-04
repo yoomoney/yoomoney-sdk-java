@@ -16,17 +16,17 @@ import java.util.Set;
 
 public class OperationHistory {
 
-    private final String error;
+    private final Error error;
     private final String nextRecord;
     private final List<Operation> operations;
 
-    public OperationHistory(String error, String nextRecord, List<Operation> operations) {
+    public OperationHistory(Error error, String nextRecord, List<Operation> operations) {
         this.error = error;
         this.nextRecord = nextRecord;
         this.operations = operations;
     }
 
-    public String getError() {
+    public Error getError() {
         return error;
     }
 
@@ -55,7 +55,7 @@ public class OperationHistory {
                 }
             }
 
-            return new OperationHistory(JsonUtils.getString(object, "error"),
+            return new OperationHistory(Error.parse(JsonUtils.getString(object, "error")),
                     JsonUtils.getString(object, "next_record"), operations);
         }
     }

@@ -19,9 +19,21 @@ public final class JsonUtils {
     private JsonUtils() {
     }
 
+    public static long getMandatoryLong(JsonObject object, String memberName) {
+        Long l = getLong(object, memberName);
+        checkMandatoryValue(l, memberName);
+        return l;
+    }
+
     public static Long getLong(JsonObject object, String memberName) {
         JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
         return primitive == null ? null : primitive.getAsLong();
+    }
+
+    public static boolean getMandatoryBoolean(JsonObject object, String memberName) {
+        Boolean bool = getBoolean(object, memberName);
+        checkMandatoryValue(bool, memberName);
+        return bool;
     }
 
     public static Boolean getBoolean(JsonObject object, String memberName) {

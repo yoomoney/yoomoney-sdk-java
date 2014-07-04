@@ -24,10 +24,10 @@ import java.net.URL;
 public class InstanceId {
 
     private String status;
-    private String error;
+    private Error error;
     private String instanceId;
 
-    public InstanceId(String status, String error, String instanceId) {
+    public InstanceId(String status, Error error, String instanceId) {
         this.status = status;
         this.error = error;
         this.instanceId = instanceId;
@@ -37,7 +37,7 @@ public class InstanceId {
         return status;
     }
 
-    public String getError() {
+    public Error getError() {
         return error;
     }
 
@@ -72,7 +72,7 @@ public class InstanceId {
                     JsonObject o = json.getAsJsonObject();
                     return new InstanceId(
                             JsonUtils.getString(o, "status"),
-                            JsonUtils.getString(o, "error"),
+                            Error.parse(JsonUtils.getString(o, "error")),
                             JsonUtils.getString(o, "instance_id"));
                 }
             }).create().fromJson(new InputStreamReader(inputStream), InstanceId.class);

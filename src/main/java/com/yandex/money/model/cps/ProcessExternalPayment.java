@@ -7,7 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.Utils;
-import com.yandex.money.model.cps.misc.MoneySource;
+import com.yandex.money.model.cps.misc.MoneySourceExternal;
 import com.yandex.money.net.IRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
@@ -26,15 +26,15 @@ import java.util.Map;
 public class ProcessExternalPayment {
 
     private String status;
-    private String error;
+    private Error error;
     private String acsUri;
     private Map<String, String> acsParams;
-    private MoneySource moneySource;
+    private MoneySourceExternal moneySource;
     private Long nextRetry;
     private String invoiceId;
 
-    public ProcessExternalPayment(String status, String error, String acsUri, Map<String, String> acsParams,
-                                  MoneySource moneySource, Long nextRetry, String invoiceId) {
+    public ProcessExternalPayment(String status, Error error, String acsUri, Map<String, String> acsParams,
+                                  MoneySourceExternal moneySource, Long nextRetry, String invoiceId) {
         this.status = status;
         this.error = error;
         this.acsUri = acsUri;
@@ -48,7 +48,7 @@ public class ProcessExternalPayment {
         return status;
     }
 
-    public String getError() {
+    public Error getError() {
         return error;
     }
 
@@ -60,7 +60,7 @@ public class ProcessExternalPayment {
         return acsParams;
     }
 
-    public MoneySource getMoneySource() {
+    public MoneySourceExternal getMoneySource() {
         return moneySource;
     }
 
@@ -144,11 +144,11 @@ public class ProcessExternalPayment {
                     Map<String, String> acsParams = JsonUtils.map(paramsObj);
 
                     JsonObject objMoneySource = o.getAsJsonObject("money_source");
-                    MoneySource moneySource = MoneySource.parseJson(objMoneySource);
+                    MoneySourceExternal moneySource = MoneySourceExternal.parseJson(objMoneySource);
 
                     return new ProcessExternalPayment(
                             JsonUtils.getString(o, "status"),
-                            JsonUtils.getString(o, "error"),
+                            Error.parse(JsonUtils.getString(o, "error")),
                             JsonUtils.getString(o, "acs_uri"),
                             acsParams,
                             moneySource,

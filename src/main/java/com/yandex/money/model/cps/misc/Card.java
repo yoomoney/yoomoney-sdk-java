@@ -14,12 +14,13 @@ import java.lang.reflect.Type;
 /**
  * @author vyasevich
  */
-public class Card {
+public class Card extends MoneySource {
 
     private final String panFragment;
     private final String type;
 
-    public Card(String panFragment, String type) {
+    public Card(String id, String panFragment, String type) {
+        super(id);
         this.panFragment = panFragment;
         this.type = type;
     }
@@ -48,7 +49,8 @@ public class Card {
                 throws JsonParseException {
 
             JsonObject object = json.getAsJsonObject();
-            return new Card(JsonUtils.getString(object, "pan_fragment"),
+            return new Card(JsonUtils.getString(object, "id"),
+                    JsonUtils.getString(object, "pan_fragment"),
                     JsonUtils.getString(object, "type"));
         }
     }
