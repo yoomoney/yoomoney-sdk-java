@@ -8,6 +8,7 @@ public enum Error {
 
     ACCOUNT_BLOCKED("account_blocked"),
     AUTHORIZATION_REJECT("authorization_reject"),
+    CONTRACT_NOT_FOUND("contract_not_found"),
     EXT_ACTION_REQUIRED("ext_action_required"),
     ILLEGAL_PARAM_AMOUNT("illegal_param_amount"),
     ILLEGAL_PARAM_AMOUNT_DUE("illegal_param_amount_due"),
@@ -31,6 +32,7 @@ public enum Error {
     ILLEGAL_PARAMS("illegal_params"),
     NOT_ENOUGH_FUNDS("not_enough_funds"),
     LIMIT_EXCEEDED("limit_exceeded"),
+    MONEY_SOURCE_NOT_AVAILABLE("money_source_not_available"),
     PAYEE_NOT_FOUND("payee_not_found"),
     PAYMENT_REFUSED("payment_refused"),
     UNKNOWN("unknown");

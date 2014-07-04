@@ -147,7 +147,7 @@ public class RequestPayment {
 
         private boolean testPayment;
         private boolean testCardAvailable;
-        private TestError testError;
+        private TestResult testResult;
 
         public Request(String patternId, Map<String, String> paymentParameters) {
             checkNotNullAndNotEmpty(patternId, "patternId");
@@ -231,8 +231,8 @@ public class RequestPayment {
             return this;
         }
 
-        public Request setTestError(TestError testError) {
-            this.testError = testError;
+        public Request setTestResult(TestResult testResult) {
+            this.testResult = testResult;
             return this;
         }
 
@@ -317,8 +317,9 @@ public class RequestPayment {
         }
     }
 
-    public enum TestError {
+    public enum TestResult {
 
+        SUCCESS("success"),
         ILLEGAL_PARAMS("illegal_params"),
         ILLEGAL_PARAM_LABEL("illegal_param_label"),
         ILLEGAL_PARAM_TO("illegal_param_to"),
@@ -335,14 +336,14 @@ public class RequestPayment {
         ACCOUNT_BLOCKED("account_blocked"),
         EXT_ACTION_REQUIRED("ext_action_required");
 
-        private final String error;
+        private final String result;
 
-        private TestError(String error) {
-            this.error = error;
+        private TestResult(String result) {
+            this.result = result;
         }
 
-        public String getError() {
-            return error;
+        public String getResult() {
+            return result;
         }
     }
 
