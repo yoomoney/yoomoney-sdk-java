@@ -23,6 +23,8 @@ public enum Error {
     ILLEGAL_PARAM_LABEL("illegal_param_label"),
     ILLEGAL_PARAM_MESSAGE("illegal_param_message"),
     ILLEGAL_PARAM_MONEY_SOURCE_TOKEN("illegal_param_money_source_token"),
+    ILLEGAL_PARAM_OPERATION_ID("illegal_param_operation_id"),
+    ILLEGAL_PARAM_PROTECTION_CODE("illegal_param_protection_code"),
     ILLEGAL_PARAM_RECORDS("illegal_param_records"),
     ILLEGAL_PARAM_REQUEST_ID("illegal_param_request_id"),
     ILLEGAL_PARAM_START_RECORD("illegal_param_start_record"),

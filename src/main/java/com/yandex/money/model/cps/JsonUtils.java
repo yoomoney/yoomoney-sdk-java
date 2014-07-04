@@ -19,6 +19,17 @@ public final class JsonUtils {
     private JsonUtils() {
     }
 
+    public static int getMandatoryInt(JsonObject object, String memberName) {
+        Integer integer = getInt(object, memberName);
+        checkMandatoryValue(integer, memberName);
+        return integer;
+    }
+
+    public static Integer getInt(JsonObject object, String memberName) {
+        JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
+        return primitive == null ? null : primitive.getAsInt();
+    }
+
     public static long getMandatoryLong(JsonObject object, String memberName) {
         Long l = getLong(object, memberName);
         checkMandatoryValue(l, memberName);
