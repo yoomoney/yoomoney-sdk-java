@@ -1,5 +1,7 @@
 package com.yandex.money.model.cps;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -12,9 +14,16 @@ import com.yandex.money.model.cps.misc.Avatar;
 import com.yandex.money.model.cps.misc.BalanceDetails;
 import com.yandex.money.model.cps.misc.Card;
 import com.yandex.money.model.cps.misc.Currency;
+import com.yandex.money.net.IRequest;
+import com.yandex.money.net.PostRequestBodyBuffer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class AccountInfo {
 
@@ -84,6 +93,30 @@ public class AccountInfo {
 
     public String[] getAdditionalServices() {
         return additionalServices;
+    }
+
+    public static final class Request implements IRequest<AccountInfo> {
+
+        @Override
+        public URL requestURL() throws MalformedURLException {
+            return new URL(URI_API + "account-info");
+        }
+
+        @Override
+        public AccountInfo parseResponse(InputStream inputStream) {
+            return buildGson().fromJson(new InputStreamReader(inputStream), AccountInfo.class);
+        }
+
+        @Override
+        public PostRequestBodyBuffer buildParameters() throws IOException {
+            return null;
+        }
+
+        private static Gson buildGson() {
+            return new GsonBuilder()
+                    .registerTypeAdapter(AccountInfo.class, new Deserializer())
+                    .create();
+        }
     }
 
     private static final class Deserializer implements JsonDeserializer<AccountInfo> {

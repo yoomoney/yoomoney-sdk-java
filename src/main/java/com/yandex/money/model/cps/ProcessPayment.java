@@ -1,5 +1,7 @@
 package com.yandex.money.model.cps;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -7,9 +9,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.cps.misc.DigitalGoods;
 import com.yandex.money.model.cps.misc.MoneySource;
+import com.yandex.money.net.IRequest;
+import com.yandex.money.net.PostRequestBodyBuffer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 /**
@@ -133,7 +142,7 @@ public class ProcessPayment {
         }
     }
 
-    public static final class Request {
+    public static final class Request implements IRequest<ProcessPayment> {
 
         private final String requestId;
         private final MoneySource moneySource;
@@ -162,6 +171,34 @@ public class ProcessPayment {
             this.extAuthFailUri = extAuthFailUri;
         }
 
+        @Override
+        public URL requestURL() throws MalformedURLException {
+            return new URL(URI_API + "request-payment");
+        }
+
+        @Override
+        public ProcessPayment parseResponse(InputStream inputStream) {
+            return buildGson().fromJson(new InputStreamReader(inputStream), ProcessPayment.class);
+        }
+
+        @Override
+        public PostRequestBodyBuffer buildParameters() throws IOException {
+            PostRequestBodyBuffer postRequestBodyBuffer = new PostRequestBodyBuffer();
+            if (moneySource != null) {
+                postRequestBodyBuffer.addParam("money_source", moneySource.getId());
+            }
+            if (testResult != null) {
+                postRequestBodyBuffer.addParam("test_result", testResult.getCode());
+            }
+            return postRequestBodyBuffer
+                    .addParam("request_id", requestId)
+                    .addParamIfNotNull("csc", csc)
+                    .addParamIfNotNull("ext_auth_success_uri", extAuthSuccessUri)
+                    .addParamIfNotNull("ext_auth_fail_uri", extAuthFailUri)
+                    .addParamIfNotNull("test_payment", testPayment)
+                    .addParamIfNotNull("test_card", testCardAvailable);
+        }
+
         public void setTestPayment(boolean testPayment) {
             this.testPayment = testPayment;
         }
@@ -172,6 +209,12 @@ public class ProcessPayment {
 
         public void setTestResult(TestResult testResult) {
             this.testResult = testResult;
+        }
+
+        private static Gson buildGson() {
+            return new GsonBuilder()
+                    .registerTypeAdapter(ProcessPayment.class, new Deserializer())
+                    .create();
         }
     }
 
@@ -189,14 +232,14 @@ public class ProcessPayment {
         ILLEGAL_PARAM_EXT_AUTH_SUCCESS_URI("illegal_param_ext_auth_success_uri"),
         ILLEGAL_PARAM_EXT_AUTH_FAIL_URI("illegal_param_ext_auth_fail_uri");
 
-        private final String result;
+        private final String code;
 
-        private TestResult(String result) {
-            this.result = result;
+        private TestResult(String code) {
+            this.code = code;
         }
 
-        public String getResult() {
-            return result;
+        public String getCode() {
+            return code;
         }
     }
 

@@ -1,5 +1,7 @@
 package com.yandex.money.model.cps;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -11,9 +13,16 @@ import com.yandex.money.model.cps.misc.AccountType;
 import com.yandex.money.model.cps.misc.Card;
 import com.yandex.money.model.cps.misc.MoneySource;
 import com.yandex.money.model.cps.misc.Wallet;
+import com.yandex.money.net.IRequest;
+import com.yandex.money.net.PostRequestBodyBuffer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -128,22 +137,22 @@ public class RequestPayment {
         }
     }
 
-    public static final class Request {
+    public static final class Request implements IRequest<RequestPayment> {
 
         private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT = new BigDecimal(0.02);
         private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT_DUE = new BigDecimal(0.01);
 
         private final String patternId;
         private final String to;
-        private final  BigDecimal amount;
-        private final  BigDecimal amountDue;
-        private final  String comment;
-        private final  String message;
-        private final  String label;
-        private final  Boolean codepro;
-        private final  Integer expirePeriod;
-        private final  Map<String, String> paymentParameters;
-        private final  String phoneNumber;
+        private final BigDecimal amount;
+        private final BigDecimal amountDue;
+        private final String comment;
+        private final String message;
+        private final String label;
+        private final Boolean codepro;
+        private final Integer expirePeriod;
+        private final Map<String, String> paymentParameters;
+        private final String phoneNumber;
 
         private boolean testPayment;
         private boolean testCardAvailable;
@@ -221,6 +230,37 @@ public class RequestPayment {
             this.phoneNumber = null;
         }
 
+        @Override
+        public URL requestURL() throws MalformedURLException {
+            return new URL(URI_API + "request-payment");
+        }
+
+        @Override
+        public RequestPayment parseResponse(InputStream inputStream) {
+            return createGson().fromJson(new InputStreamReader(inputStream), RequestPayment.class);
+        }
+
+        @Override
+        public PostRequestBodyBuffer buildParameters() throws IOException {
+            PostRequestBodyBuffer postRequestBodyBuffer = new PostRequestBodyBuffer();
+            if (paymentParameters != null) {
+                for (Map.Entry<String, String> parameter : paymentParameters.entrySet()) {
+                    postRequestBodyBuffer.addParam(parameter.getKey(), parameter.getValue());
+                }
+            }
+            return postRequestBodyBuffer
+                    .addParam("pattern-id", patternId)
+                    .addParamIfNotNull("phone-number", phoneNumber)
+                    .addParamIfNotNull("to", to)
+                    .addParamIfNotNull("amount", amount)
+                    .addParamIfNotNull("amount_due", amountDue)
+                    .addParamIfNotNull("comment", comment)
+                    .addParamIfNotNull("message", message)
+                    .addParamIfNotNull("label", label)
+                    .addBooleanIfTrue("codepro", codepro)
+                    .addParamIfNotNull("expire_period", expirePeriod);
+        }
+
         public Request setTestPayment(boolean testPayment) {
             this.testPayment = testPayment;
             return this;
@@ -234,6 +274,11 @@ public class RequestPayment {
         public Request setTestResult(TestResult testResult) {
             this.testResult = testResult;
             return this;
+        }
+
+        private static Gson createGson() {
+            return new GsonBuilder()
+                    .create();
         }
 
         private void checkNotNullAndNotEmpty(String value, String field) {

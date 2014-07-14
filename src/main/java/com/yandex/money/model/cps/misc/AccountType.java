@@ -5,18 +5,22 @@ public enum AccountType {
     PROFESSIONAL("professional"),
     UNKNOWN("unknown");
 
-    private final String accountType;
+    private final String code;
 
-    AccountType(String accountType) {
-        this.accountType = accountType;
+    AccountType(String code) {
+        this.code = code;
     }
 
-    public static AccountType parse(String accountType) {
+    public static AccountType parse(String code) {
         for (AccountType value : values()) {
-            if (value.accountType.equals(accountType)) {
+            if (value.code.equals(code)) {
                 return value;
             }
         }
         return UNKNOWN;
+    }
+
+    public String getCode() {
+        return code;
     }
 }

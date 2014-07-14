@@ -130,7 +130,7 @@ public class ProcessExternalPayment {
 
         @Override
         public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "/process-external-payment");
+            return new URL(URI_API + "process-external-payment");
         }
 
         @Override

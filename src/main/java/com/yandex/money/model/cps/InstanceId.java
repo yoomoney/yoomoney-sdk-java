@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -61,7 +60,7 @@ public class InstanceId {
 
         @Override
         public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "/instance-id");
+            return new URL(URI_API + "instance-id");
         }
 
         @Override
@@ -82,10 +81,5 @@ public class InstanceId {
         public PostRequestBodyBuffer buildParameters() throws IOException {
             return new PostRequestBodyBuffer().addParam("client_id", clientId);
         }
-
-        @Override
-        public void writeHeaders(HttpURLConnection connection) {
-        }
-
     }
 }

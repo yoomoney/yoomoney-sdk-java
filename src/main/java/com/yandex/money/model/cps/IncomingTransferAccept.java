@@ -1,12 +1,21 @@
 package com.yandex.money.model.cps;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.yandex.money.net.IRequest;
+import com.yandex.money.net.PostRequestBodyBuffer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -63,7 +72,7 @@ public class IncomingTransferAccept {
         }
     }
 
-    public static final class Request {
+    public static final class Request implements IRequest<IncomingTransferAccept> {
 
         private final String operationId;
         private final String protectionCode;
@@ -74,6 +83,30 @@ public class IncomingTransferAccept {
             }
             this.operationId = operationId;
             this.protectionCode = protectionCode;
+        }
+
+        @Override
+        public URL requestURL() throws MalformedURLException {
+            return new URL(URI_API + "incoming-transfer-accept");
+        }
+
+        @Override
+        public IncomingTransferAccept parseResponse(InputStream inputStream) {
+            return buildGson().fromJson(new InputStreamReader(inputStream),
+                    IncomingTransferAccept.class);
+        }
+
+        @Override
+        public PostRequestBodyBuffer buildParameters() throws IOException {
+            return new PostRequestBodyBuffer()
+                    .addParam("operation_id", operationId)
+                    .addParamIfNotNull("protection_code", protectionCode);
+        }
+
+        private static Gson buildGson() {
+            return new GsonBuilder()
+                    .registerTypeAdapter(IncomingTransferAccept.class, new Deserializer())
+                    .create();
         }
     }
 

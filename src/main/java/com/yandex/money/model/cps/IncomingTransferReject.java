@@ -1,12 +1,21 @@
 package com.yandex.money.model.cps;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.yandex.money.net.IRequest;
+import com.yandex.money.net.PostRequestBodyBuffer;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -50,7 +59,8 @@ public class IncomingTransferReject {
         }
     }
 
-    public static final class Request {
+    public static final class Request implements IRequest<IncomingTransferReject> {
+
         private String operationId;
 
         public Request(String operationId) {
@@ -58,6 +68,29 @@ public class IncomingTransferReject {
                 throw new IllegalArgumentException("operationId is null or empty");
             }
             this.operationId = operationId;
+        }
+
+        @Override
+        public URL requestURL() throws MalformedURLException {
+            return new URL(URI_API + "incoming-transfer-reject");
+        }
+
+        @Override
+        public IncomingTransferReject parseResponse(InputStream inputStream) {
+            return buildGson().fromJson(new InputStreamReader(inputStream),
+                    IncomingTransferReject.class);
+        }
+
+        @Override
+        public PostRequestBodyBuffer buildParameters() throws IOException {
+            return new PostRequestBodyBuffer()
+                    .addParam("operation_id", operationId);
+        }
+
+        private static Gson buildGson() {
+            return new GsonBuilder()
+                    .registerTypeAdapter(Request.class, new Deserializer())
+                    .create();
         }
     }
 

@@ -222,4 +222,8 @@ public enum Currency {
     public static Currency parseNumericCode(Integer numericCode) {
         return NUMERIC_MAP.get(numericCode);
     }
+
+    public Integer getNumericCode() {
+        return numericCode;
+    }
 }

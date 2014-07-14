@@ -1,16 +1,26 @@
 package com.yandex.money.model.cps;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.cps.misc.Operation;
+import com.yandex.money.net.IRequest;
+import com.yandex.money.net.PostRequestBodyBuffer;
 
 import org.joda.time.DateTime;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -38,29 +48,7 @@ public class OperationHistory {
         return operations;
     }
 
-    public static final class Deserializer implements JsonDeserializer<OperationHistory> {
-        @Override
-        public OperationHistory deserialize(JsonElement json, Type typeOfT,
-                                            JsonDeserializationContext context)
-                throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-
-            final String operationsMember = "operations";
-            List<Operation> operations = null;
-            if (object.has(operationsMember)) {
-                operations = new ArrayList<>();
-                for (JsonElement element : object.getAsJsonArray(operationsMember)) {
-                    operations.add(Operation.createFromJson(element));
-                }
-            }
-
-            return new OperationHistory(Error.parse(JsonUtils.getString(object, "error")),
-                    JsonUtils.getString(object, "next_record"), operations);
-        }
-    }
-
-    public static class Request {
+    public static class Request implements IRequest<OperationHistory> {
 
         private final Set<FilterType> types;
         private final String label;
@@ -90,6 +78,43 @@ public class OperationHistory {
             }
             this.records = records;
             this.details = details;
+        }
+
+        @Override
+        public URL requestURL() throws MalformedURLException {
+            return new URL(URI_API + "operation-history");
+        }
+
+        @Override
+        public OperationHistory parseResponse(InputStream inputStream) {
+            return buildGson().fromJson(new InputStreamReader(inputStream), OperationHistory.class);
+        }
+
+        @Override
+        public PostRequestBodyBuffer buildParameters() throws IOException {
+            PostRequestBodyBuffer requestBodyBuffer = new PostRequestBodyBuffer();
+            if (types != null && !types.isEmpty()) {
+                StringBuilder builder = new StringBuilder();
+                Iterator<FilterType> iterator = types.iterator();
+                builder.append(iterator.next().toString());
+                while (iterator.hasNext()) {
+                    builder.append(' ').append(iterator.next().toString());
+                }
+                requestBodyBuffer.addParam("type", builder.toString());
+            }
+            return requestBodyBuffer
+                    .addParamIfNotNull("label", label)
+                    .addDateTimeIfNotNull("from", from)
+                    .addDateTimeIfNotNull("till", till)
+                    .addParamIfNotNull("start_record", startRecord)
+                    .addParamIfNotNull("records", records)
+                    .addParamIfNotNull("details", details);
+        }
+
+        private static Gson buildGson() {
+            return new GsonBuilder()
+                    .registerTypeAdapter(OperationHistory.class, new Deserializer())
+                    .create();
         }
 
         public static class Builder {
@@ -157,6 +182,28 @@ public class OperationHistory {
         @Override
         public String toString() {
             return filterType;
+        }
+    }
+
+    private static final class Deserializer implements JsonDeserializer<OperationHistory> {
+        @Override
+        public OperationHistory deserialize(JsonElement json, Type typeOfT,
+                                            JsonDeserializationContext context)
+                throws JsonParseException {
+
+            JsonObject object = json.getAsJsonObject();
+
+            final String operationsMember = "operations";
+            List<Operation> operations = null;
+            if (object.has(operationsMember)) {
+                operations = new ArrayList<>();
+                for (JsonElement element : object.getAsJsonArray(operationsMember)) {
+                    operations.add(Operation.createFromJson(element));
+                }
+            }
+
+            return new OperationHistory(Error.parse(JsonUtils.getString(object, "error")),
+                    JsonUtils.getString(object, "next_record"), operations);
         }
     }
 }

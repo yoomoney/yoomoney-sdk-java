@@ -109,7 +109,7 @@ public class RequestExternalPayment {
 
         @Override
         public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "/request-external-payment");
+            return new URL(URI_API + "request-external-payment");
         }
 
         @Override

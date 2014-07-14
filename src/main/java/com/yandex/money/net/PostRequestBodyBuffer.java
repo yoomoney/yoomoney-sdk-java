@@ -1,9 +1,12 @@
 package com.yandex.money.net;
 
+import org.joda.time.DateTime;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URLEncoder;
@@ -30,6 +33,29 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
+    }
+
+    public PostRequestBodyBuffer addParamIfNotNull(String name, Integer value) {
+        return value != null ? addParam(name, value.toString()) : this;
+    }
+
+    public PostRequestBodyBuffer addParamIfNotNull(String name, Boolean value) {
+        return value != null ? addParam(name, value.toString()) : this;
+    }
+
+    public PostRequestBodyBuffer addParamIfNotNull(String name, String value) {
+        return value != null ? addParam(name, value) : this;
+    }
+
+    public PostRequestBodyBuffer addParamIfNotNull(String name, BigDecimal value) {
+        return value != null ? addParam(name, value.toPlainString()) : this;
+    }
+
+    public PostRequestBodyBuffer addDateTimeIfNotNull(String name, DateTime value) {
+        if (value != null) {
+            return addParam(name, value.toString());
+        }
+        else return this;
     }
 
     public PostRequestBodyBuffer addBooleanIfTrue(String name, Boolean value) {

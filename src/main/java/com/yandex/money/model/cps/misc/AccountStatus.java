@@ -6,18 +6,22 @@ public enum AccountStatus {
     IDENTIFIED("identified"),
     UNKNOWN("unknown");
 
-    private final String accountStatus;
+    private final String code;
 
-    AccountStatus(String accountStatus) {
-        this.accountStatus = accountStatus;
+    AccountStatus(String code) {
+        this.code = code;
     }
 
-    public static AccountStatus parse(String accountStatus) {
+    public static AccountStatus parse(String code) {
         for (AccountStatus value : values()) {
-            if (value.accountStatus.equals(accountStatus)) {
+            if (value.code.equals(code)) {
                 return value;
             }
         }
         return UNKNOWN;
+    }
+
+    public String getCode() {
+        return code;
     }
 }
