@@ -6,7 +6,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
+import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 import com.yandex.money.utils.Strings;
 
@@ -20,19 +22,19 @@ import java.net.URL;
 /**
  *
  */
-public class InstanceId {
+public class InstanceId implements MethodResponse {
 
-    private String status;
+    private Status status;
     private Error error;
     private String instanceId;
 
-    public InstanceId(String status, Error error, String instanceId) {
+    public InstanceId(Status status, Error error, String instanceId) {
         this.status = status;
         this.error = error;
         this.instanceId = instanceId;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -45,7 +47,28 @@ public class InstanceId {
     }
 
     public boolean isSuccess() {
-        return Status.SUCCESS.equals(status);
+        return status == Status.SUCCESS;
+    }
+
+    public enum Status {
+        SUCCESS(CODE_SUCCESS),
+        REFUSED(CODE_REFUSED),
+        UNKNOWN(CODE_UNKNOWN);
+
+        private final String status;
+
+        private Status(String status) {
+            this.status = status;
+        }
+
+        public static Status parse(String status) {
+            for (Status value : values()) {
+                if (value.status.equals(status)) {
+                    return value;
+                }
+            }
+            return UNKNOWN;
+        }
     }
 
     public static class Request implements MethodRequest<InstanceId> {
@@ -59,8 +82,8 @@ public class InstanceId {
         }
 
         @Override
-        public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "instance-id");
+        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
+            return new URL(hostsProvider.getMoneyApi() + "/instance-id");
         }
 
         @Override
@@ -70,7 +93,7 @@ public class InstanceId {
                 public InstanceId deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                     JsonObject o = json.getAsJsonObject();
                     return new InstanceId(
-                            JsonUtils.getString(o, "status"),
+                            Status.parse(JsonUtils.getString(o, "status")),
                             Error.parse(JsonUtils.getString(o, "error")),
                             JsonUtils.getString(o, "instance_id"));
                 }

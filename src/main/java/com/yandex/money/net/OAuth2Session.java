@@ -42,7 +42,8 @@ public class OAuth2Session implements Session {
         }
 
         final OkHttpClient httpClient = client.getHttpClient();
-        final HttpURLConnection connection = httpClient.open(request.requestURL());
+        final HostsProvider hostsProvider = client.getHostsProvider();
+        final HttpURLConnection connection = httpClient.open(request.requestURL(hostsProvider));
         connection.setInstanceFollowRedirects(false);
 
         InputStream inputStream = null;

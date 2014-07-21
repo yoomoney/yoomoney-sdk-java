@@ -13,7 +13,9 @@ import com.yandex.money.model.cps.misc.AccountType;
 import com.yandex.money.model.cps.misc.Card;
 import com.yandex.money.model.cps.misc.MoneySource;
 import com.yandex.money.model.cps.misc.Wallet;
+import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
+import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -30,7 +32,7 @@ import java.util.Map;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class RequestPayment {
+public class RequestPayment implements MethodResponse {
 
     private final Status status;
     private final Error error;
@@ -117,9 +119,10 @@ public class RequestPayment {
     }
 
     public enum Status {
-        SUCCESS("success"),
-        REFUSED("refused"),
-        UNKNOWN("unknown");
+        SUCCESS(CODE_SUCCESS),
+        REFUSED(CODE_REFUSED),
+        HOLD_FOR_PICKUP(CODE_HOLD_FOR_PICKUP),
+        UNKNOWN(CODE_UNKNOWN);
 
         private final String status;
 
@@ -231,8 +234,8 @@ public class RequestPayment {
         }
 
         @Override
-        public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "request-payment");
+        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
+            return new URL(hostsProvider.getMoneyApi() + "/request-payment");
         }
 
         @Override

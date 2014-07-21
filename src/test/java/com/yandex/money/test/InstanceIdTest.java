@@ -29,10 +29,10 @@ public class InstanceIdTest {
 
     @Test
     public void testIsSuccess() {
-        InstanceId instanceId = new InstanceId("success", null, "id");
+        InstanceId instanceId = new InstanceId(InstanceId.Status.SUCCESS, null, "id");
         Assert.assertTrue(instanceId.isSuccess());
 
-        instanceId = new InstanceId("refused", Error.UNKNOWN, null);
+        instanceId = new InstanceId(InstanceId.Status.REFUSED, Error.UNKNOWN, null);
         Assert.assertFalse(instanceId.isSuccess());
     }
 }

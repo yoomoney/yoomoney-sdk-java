@@ -63,7 +63,7 @@ public class YandexMoneyTest {
         reqInstanceId = new InstanceId.Request(CLIENT_ID);
         respInstanceId = ym.execute(reqInstanceId);
 
-        Assert.assertEquals(respInstanceId.getStatus(), "success");
+        Assert.assertEquals(respInstanceId.getStatus(), InstanceId.Status.SUCCESS);
         Assert.assertNotNull(respInstanceId.getInstanceId());
         Assert.assertNull(respInstanceId.getError());
     }
@@ -75,7 +75,7 @@ public class YandexMoneyTest {
         reqInstanceId = new InstanceId.Request(" ");
         respInstanceId = ym.execute(reqInstanceId);
 
-        Assert.assertEquals(respInstanceId.getStatus(), "refused");
+        Assert.assertEquals(respInstanceId.getStatus(), InstanceId.Status.REFUSED);
         Assert.assertNotNull(respInstanceId.getError());
         Assert.assertEquals(respInstanceId.getError(), Error.ILLEGAL_PARAM_CLIENT_ID);
         Assert.assertNull(respInstanceId.getInstanceId());
@@ -96,11 +96,13 @@ public class YandexMoneyTest {
         respRequestExternalPayment = ym.execute(reqRequestExternalPayment);
 
         Assert.assertNotNull(respRequestExternalPayment);
-        Assert.assertEquals(respRequestExternalPayment.getStatus(), "success");
+        Assert.assertEquals(respRequestExternalPayment.getStatus(),
+                RequestExternalPayment.Status.SUCCESS);
         Assert.assertNull(respRequestExternalPayment.getError());
         Assert.assertNotNull(respRequestExternalPayment.getRequestId());
         Assert.assertTrue(respRequestExternalPayment.getRequestId().length() > 0);
-        Assert.assertEquals(respRequestExternalPayment.getContractAmount(), new BigDecimal("23.00"));
+        Assert.assertEquals(respRequestExternalPayment.getContractAmount(),
+                new BigDecimal("23.00"));
     }
 
     private HashMap<String, String> successRequestParams() {
@@ -118,26 +120,31 @@ public class YandexMoneyTest {
         respInstanceId = ym.execute(reqInstanceId);
 
         HashMap<String, String> params = successRequestParams();
-        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(respInstanceId.getInstanceId(), " ", params);
+        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
+                respInstanceId.getInstanceId(), " ", params);
 
         respRequestExternalPayment = ym.execute(reqRequestExternalPayment);
 
         Assert.assertNotNull(respRequestExternalPayment);
-        Assert.assertEquals(respRequestExternalPayment.getStatus(), "refused");
+        Assert.assertEquals(respRequestExternalPayment.getStatus(),
+                RequestExternalPayment.Status.REFUSED);
         Assert.assertEquals(respRequestExternalPayment.getError(), Error.ILLEGAL_PARAMS);
         Assert.assertNull(respRequestExternalPayment.getRequestId());
 
         params = successRequestParams();
         params.remove("amount");
-        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
+        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
+                respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
         respRequestExternalPayment = ym.execute(reqRequestExternalPayment);
 
         params = successRequestParams();
         params.remove("phone-number");
-        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
+        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
+                respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
         respRequestExternalPayment = ym.execute(reqRequestExternalPayment);
         Assert.assertNotNull(respRequestExternalPayment);
-        Assert.assertEquals(respRequestExternalPayment.getStatus(), "refused");
+        Assert.assertEquals(respRequestExternalPayment.getStatus(),
+                RequestExternalPayment.Status.REFUSED);
         Assert.assertEquals(respRequestExternalPayment.getError(), Error.ILLEGAL_PARAMS);
         Assert.assertNull(respRequestExternalPayment.getRequestId());
     }
@@ -150,7 +157,8 @@ public class YandexMoneyTest {
         respInstanceId = ym.execute(reqInstanceId);
 
         HashMap<String, String> params = successRequestParams();
-        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
+        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
+                respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
 
         respRequestExternalPayment = ym.execute(reqRequestExternalPayment);
 
@@ -162,6 +170,7 @@ public class YandexMoneyTest {
         respProcessExternalPayment = ym.execute(reqProcessExternalPayment);
 
         Assert.assertNotNull(respProcessExternalPayment);
-        Assert.assertEquals(respProcessExternalPayment.getStatus(), "ext_auth_required");
+        Assert.assertEquals(respProcessExternalPayment.getStatus(),
+                ProcessExternalPayment.Status.EXT_AUTH_REQUIRED);
     }
 }

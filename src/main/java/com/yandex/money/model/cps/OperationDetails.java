@@ -8,7 +8,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.cps.misc.Operation;
+import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
+import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -18,7 +20,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class OperationDetails {
+public class OperationDetails implements MethodResponse {
 
     private final String error;
     private final Operation operation;
@@ -48,8 +50,8 @@ public class OperationDetails {
         }
 
         @Override
-        public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "operation-details");
+        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
+            return new URL(hostsProvider.getMoneyApi() + "/operation-details");
         }
 
         @Override

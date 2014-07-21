@@ -13,7 +13,9 @@ import com.yandex.money.model.cps.misc.AccountType;
 import com.yandex.money.model.cps.misc.Avatar;
 import com.yandex.money.model.cps.misc.BalanceDetails;
 import com.yandex.money.model.cps.misc.Card;
+import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
+import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 import com.yandex.money.utils.Currency;
 
@@ -25,7 +27,7 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class AccountInfo {
+public class AccountInfo implements MethodResponse {
 
     private final String account;
     private final BigDecimal balance;
@@ -98,8 +100,8 @@ public class AccountInfo {
     public static final class Request implements MethodRequest<AccountInfo> {
 
         @Override
-        public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "account-info");
+        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
+            return new URL(hostsProvider.getMoneyApi() + "/account-info");
         }
 
         @Override

@@ -7,7 +7,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
+import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -20,7 +22,7 @@ import java.net.URL;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class IncomingTransferReject {
+public class IncomingTransferReject implements MethodResponse {
 
     private final Status status;
     private final Error error;
@@ -39,9 +41,9 @@ public class IncomingTransferReject {
     }
 
     public enum Status {
-        SUCCESS("success"),
-        REFUSED("refused"),
-        UNKNOWN("unknown");
+        SUCCESS(CODE_SUCCESS),
+        REFUSED(CODE_REFUSED),
+        UNKNOWN(CODE_UNKNOWN);
 
         private final String status;
 
@@ -71,8 +73,8 @@ public class IncomingTransferReject {
         }
 
         @Override
-        public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "incoming-transfer-reject");
+        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
+            return new URL(hostsProvider.getMoneyApi() + "/incoming-transfer-reject");
         }
 
         @Override

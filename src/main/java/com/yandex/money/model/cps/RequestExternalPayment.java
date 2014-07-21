@@ -8,7 +8,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.common.params.P2pParams;
 import com.yandex.money.model.common.params.PhoneParams;
+import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
+import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 import com.yandex.money.utils.Strings;
 
@@ -24,15 +26,15 @@ import java.util.Map;
 /**
  *
  */
-public class RequestExternalPayment {
+public class RequestExternalPayment implements MethodResponse {
 
-    private final String status;
+    private final Status status;
     private final Error error;
     private final String requestId;
     private final BigDecimal contractAmount;
     private final String title;
 
-    public RequestExternalPayment(String status, Error error, String requestId,
+    public RequestExternalPayment(Status status, Error error, String requestId,
                                   String contractAmount, String title) {
 
         this.status = status;
@@ -42,7 +44,7 @@ public class RequestExternalPayment {
         this.title = title;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -63,7 +65,28 @@ public class RequestExternalPayment {
     }
 
     public boolean isSuccess() {
-        return Status.SUCCESS.equals(status);
+        return status == Status.SUCCESS;
+    }
+
+    public enum Status {
+        SUCCESS(CODE_SUCCESS),
+        REFUSED(CODE_REFUSED),
+        UNKNOWN(CODE_UNKNOWN);
+
+        private final String status;
+
+        private Status(String status) {
+            this.status = status;
+        }
+
+        public static Status parse(String status) {
+            for (Status value : values()) {
+                if (value.status.equals(status)) {
+                    return value;
+                }
+            }
+            return UNKNOWN;
+        }
     }
 
     public static class Request implements MethodRequest<RequestExternalPayment> {
@@ -106,8 +129,8 @@ public class RequestExternalPayment {
         }
 
         @Override
-        public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "request-external-payment");
+        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
+            return new URL(hostsProvider.getMoneyApi() + "/request-external-payment");
         }
 
         @Override
@@ -117,7 +140,7 @@ public class RequestExternalPayment {
                 public RequestExternalPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                     JsonObject o = json.getAsJsonObject();
                     return new RequestExternalPayment(
-                            JsonUtils.getString(o, "status"),
+                            Status.parse(JsonUtils.getString(o, "status")),
                             Error.parse(JsonUtils.getString(o, "error")),
                             JsonUtils.getString(o, "request_id"),
                             JsonUtils.getString(o, "contract_amount"),

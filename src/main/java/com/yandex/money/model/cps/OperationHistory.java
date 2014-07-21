@@ -8,7 +8,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.cps.misc.Operation;
+import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
+import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import org.joda.time.DateTime;
@@ -24,7 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public class OperationHistory {
+public class OperationHistory implements MethodResponse {
 
     private final Error error;
     private final String nextRecord;
@@ -81,8 +83,8 @@ public class OperationHistory {
         }
 
         @Override
-        public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "operation-history");
+        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
+            return new URL(hostsProvider.getMoneyApi() + "/operation-history");
         }
 
         @Override

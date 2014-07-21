@@ -7,6 +7,7 @@ import com.squareup.okhttp.OkHttpClient;
  */
 public interface ApiClient {
     OkHttpClient getHttpClient();
+    HostsProvider getHostsProvider();
     String getUserAgent();
     String getLanguage();
 }

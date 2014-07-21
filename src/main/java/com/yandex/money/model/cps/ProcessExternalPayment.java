@@ -7,7 +7,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.cps.misc.MoneySourceExternal;
+import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
+import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 import com.yandex.money.utils.Strings;
 
@@ -22,9 +24,9 @@ import java.util.Map;
 /**
  *
  */
-public class ProcessExternalPayment {
+public class ProcessExternalPayment implements MethodResponse {
 
-    private final String status;
+    private final Status status;
     private final Error error;
     private final String acsUri;
     private final Map<String, String> acsParams;
@@ -32,7 +34,7 @@ public class ProcessExternalPayment {
     private final Long nextRetry;
     private final String invoiceId;
 
-    public ProcessExternalPayment(String status, Error error, String acsUri,
+    public ProcessExternalPayment(Status status, Error error, String acsUri,
                                   Map<String, String> acsParams, MoneySourceExternal moneySource,
                                   Long nextRetry, String invoiceId) {
 
@@ -45,7 +47,7 @@ public class ProcessExternalPayment {
         this.invoiceId = invoiceId;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
@@ -74,15 +76,38 @@ public class ProcessExternalPayment {
     }
 
     public boolean isSuccess() {
-        return Status.SUCCESS.equals(status);
+        return status == Status.SUCCESS;
     }
 
     public boolean isInProgress() {
-        return Status.IN_PROGRESS.equals(status);
+        return status == Status.IN_PROGRESS;
     }
 
     public boolean isExtAuthRequired() {
-        return Status.EXT_AUTH_REQUIRED.equals(status);
+        return status == Status.EXT_AUTH_REQUIRED;
+    }
+
+    public enum Status {
+        SUCCESS(CODE_SUCCESS),
+        REFUSED(CODE_REFUSED),
+        IN_PROGRESS(CODE_IN_PROGRESS),
+        EXT_AUTH_REQUIRED(CODE_EXT_AUTH_REQUIRED),
+        UNKNOWN(CODE_UNKNOWN);
+
+        private final String status;
+
+        private Status(String status) {
+            this.status = status;
+        }
+
+        public static Status parse(String status) {
+            for (Status value : values()) {
+                if (value.status.equals(status)) {
+                    return value;
+                }
+            }
+            return UNKNOWN;
+        }
     }
 
     public static class Request implements MethodRequest<ProcessExternalPayment> {
@@ -138,8 +163,8 @@ public class ProcessExternalPayment {
         }
 
         @Override
-        public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "process-external-payment");
+        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
+            return new URL(hostsProvider.getMoneyApi() + "/process-external-payment");
         }
 
         @Override
@@ -156,7 +181,7 @@ public class ProcessExternalPayment {
                     MoneySourceExternal moneySource = MoneySourceExternal.parseJson(objMoneySource);
 
                     return new ProcessExternalPayment(
-                            JsonUtils.getString(o, "status"),
+                            Status.parse(JsonUtils.getString(o, "status")),
                             Error.parse(JsonUtils.getString(o, "error")),
                             JsonUtils.getString(o, "acs_uri"),
                             acsParams,

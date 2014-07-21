@@ -12,12 +12,24 @@ public class DefaultApiClient implements ApiClient {
 
     private static final long DEFAULT_TIMEOUT = 30;
 
+    private final OkHttpClient httpClient;
+    private final HostsProvider hostsProvider;
+
+    public DefaultApiClient() {
+        httpClient = new OkHttpClient();
+        httpClient.setReadTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        httpClient.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
+        hostsProvider = new HostsProvider(false);
+    }
+
     @Override
     public OkHttpClient getHttpClient() {
-        OkHttpClient client = new OkHttpClient();
-        client.setReadTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        client.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        return client;
+        return httpClient;
+    }
+
+    @Override
+    public HostsProvider getHostsProvider() {
+        return hostsProvider;
     }
 
     @Override

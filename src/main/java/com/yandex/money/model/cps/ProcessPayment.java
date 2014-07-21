@@ -9,7 +9,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.cps.misc.DigitalGoods;
 import com.yandex.money.model.cps.misc.MoneySource;
+import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
+import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -24,7 +26,7 @@ import java.util.Map;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class ProcessPayment {
+public class ProcessPayment implements MethodResponse {
 
     private final Status status;
     private final Error error;
@@ -120,11 +122,11 @@ public class ProcessPayment {
 
     public enum Status {
 
-        SUCCESS("success"),
-        REFUSED("refused"),
-        IN_PROGRESS("in_progress"),
-        EXT_AUTH_REQUIRED("ext_auth_required"),
-        UNKNOWN("unknown");
+        SUCCESS(CODE_SUCCESS),
+        REFUSED(CODE_REFUSED),
+        IN_PROGRESS(CODE_IN_PROGRESS),
+        EXT_AUTH_REQUIRED(CODE_EXT_AUTH_REQUIRED),
+        UNKNOWN(CODE_UNKNOWN);
 
         private final String status;
 
@@ -172,8 +174,8 @@ public class ProcessPayment {
         }
 
         @Override
-        public URL requestURL() throws MalformedURLException {
-            return new URL(URI_API + "request-payment");
+        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
+            return new URL(hostsProvider.getMoneyApi() + "/request-payment");
         }
 
         @Override
