@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public interface IRequest<T> {
+public interface MethodRequest<T> {
 
     String URI_API = "https://money.yandex.ru/api/";
 

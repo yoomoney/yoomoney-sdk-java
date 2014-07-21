@@ -6,18 +6,17 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.Utils;
-import com.yandex.money.model.common.params.ParamsP2P;
-import com.yandex.money.model.common.params.ParamsPhone;
-import com.yandex.money.net.IRequest;
+import com.yandex.money.model.common.params.P2pParams;
+import com.yandex.money.model.common.params.PhoneParams;
+import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -27,18 +26,19 @@ import java.util.Map;
  */
 public class RequestExternalPayment {
 
-    private String status;
-    private Error error;
-    private String requestId;
-    private BigDecimal contractAmount;
-    private String title;
+    private final String status;
+    private final Error error;
+    private final String requestId;
+    private final BigDecimal contractAmount;
+    private final String title;
 
-    public RequestExternalPayment(String status, Error error, String requestId, String contractAmount, String title) {
+    public RequestExternalPayment(String status, Error error, String requestId,
+                                  String contractAmount, String title) {
+
         this.status = status;
         this.error = error;
         this.requestId = requestId;
-        if (contractAmount != null)
-            this.contractAmount = new BigDecimal(contractAmount);
+        this.contractAmount = contractAmount == null ? null : new BigDecimal(contractAmount);
         this.title = title;
     }
 
@@ -66,45 +66,43 @@ public class RequestExternalPayment {
         return Status.SUCCESS.equals(status);
     }
 
-    public static class Request implements IRequest<RequestExternalPayment> {
+    public static class Request implements MethodRequest<RequestExternalPayment> {
 
-        private String accessToken;
-        private String instanceId;
-        private String patternId;
-        private Map<String, String> params;
+        private final String instanceId;
+        private final String patternId;
+        private final Map<String, String> params;
 
-        private Request(String accessToken, String instanceId, String patternId, Map<String, String> params) {
-            this.accessToken = accessToken;
-            if (Utils.isEmpty(instanceId))
-                throw new IllegalArgumentException(Utils.emptyParam("instanceId"));
+        private Request(String instanceId, String patternId, Map<String, String> params) {
+            if (Strings.isNullOrEmpty(instanceId))
+                throw new IllegalArgumentException("instanceId is null or empty");
             this.instanceId = instanceId;
-            if (Utils.isEmpty(patternId))
-                throw new IllegalArgumentException(Utils.emptyParam("patternId"));
+            if (Strings.isNullOrEmpty(patternId))
+                throw new IllegalArgumentException("patternId is null or empty");
             this.patternId = patternId;
 
             this.params = params;
         }
 
-        public static Request newInstance(String accessToken, String instanceId, String patternId,
+        public static Request newInstance(String instanceId, String patternId,
                                           Map<String, String> paramsShop) {
             if (paramsShop == null)
-                throw new IllegalArgumentException(Utils.emptyParam("paramsShop"));
+                throw new IllegalArgumentException("paramsShop is null or empty");
 
-            return new Request(accessToken, instanceId, patternId, paramsShop);
+            return new Request(instanceId, patternId, paramsShop);
         }
 
-        public static Request newInstance(String accessToken, String instanceId, ParamsP2P paramsP2P) {
-            if (paramsP2P == null)
-                throw new IllegalArgumentException(Utils.emptyParam("paramsP2P"));
+        public static Request newInstance(String instanceId, P2pParams p2pParams) {
+            if (p2pParams == null)
+                throw new IllegalArgumentException("p2pParams is null or empty");
 
-            return new Request(accessToken, instanceId, ParamsP2P.PATTERN_ID, paramsP2P.makeParams());
+            return new Request(instanceId, P2pParams.PATTERN_ID, p2pParams.makeParams());
         }
 
-        public static Request newInstance(String accessToken, String instanceId, ParamsPhone paramsPhone) {
-            if (paramsPhone == null)
-                throw new IllegalArgumentException(Utils.emptyParam("paramsPhone"));
+        public static Request newInstance(String instanceId, PhoneParams phoneParams) {
+            if (phoneParams == null)
+                throw new IllegalArgumentException("phoneParams is null or empty");
 
-            return new Request(accessToken, instanceId, ParamsPhone.PATTERN_ID, paramsPhone.makeParams());
+            return new Request(instanceId, PhoneParams.PATTERN_ID, phoneParams.makeParams());
         }
 
         @Override
@@ -140,13 +138,6 @@ public class RequestExternalPayment {
             }
 
             return bb;
-        }
-
-        @Override
-        public void writeHeaders(HttpURLConnection connection) {
-            if (accessToken != null) {
-                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-            }
         }
     }
 }

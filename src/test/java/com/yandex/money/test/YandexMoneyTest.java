@@ -1,9 +1,15 @@
 package com.yandex.money.test;
 
 import com.yandex.money.YandexMoney;
+import com.yandex.money.exceptions.InsufficientScopeException;
+import com.yandex.money.exceptions.InvalidRequestException;
+import com.yandex.money.exceptions.InvalidTokenException;
+import com.yandex.money.model.common.params.PhoneParams;
+import com.yandex.money.model.cps.Error;
 import com.yandex.money.model.cps.InstanceId;
 import com.yandex.money.model.cps.ProcessExternalPayment;
 import com.yandex.money.model.cps.RequestExternalPayment;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
@@ -18,20 +24,19 @@ import java.util.HashMap;
  */
 public class YandexMoneyTest {
 
-    private String CLIENT_ID = "4292CF5DF43C33F44EA913794223592481551D6FE8B7448013D6AF1F3491E2FE";
-    private String PATTERN_ID_PHONE_TOPUP = "phone-topup";
+    private String CLIENT_ID = "[your_client_id]";
+    private String PATTERN_ID_PHONE_TOPUP = PhoneParams.PATTERN_ID;
 
     private YandexMoney ym;
 
-    InstanceId respInstanceId;
-    InstanceId.Request reqInstanceId;
+    private InstanceId respInstanceId;
+    private InstanceId.Request reqInstanceId;
 
-    RequestExternalPayment respRequestExternalPayment;
-    RequestExternalPayment.Request reqRequestExternalPayment;
+    private RequestExternalPayment respRequestExternalPayment;
+    private RequestExternalPayment.Request reqRequestExternalPayment;
 
-    ProcessExternalPayment respProcessExternalPayment;
-    ProcessExternalPayment.Request reqProcessExternalPayment;
-
+    private ProcessExternalPayment respProcessExternalPayment;
+    private ProcessExternalPayment.Request reqProcessExternalPayment;
 
     @BeforeClass
     private void setUp() {
@@ -52,9 +57,11 @@ public class YandexMoneyTest {
     }
 
     @Test
-    public void testInstanceIdSuccess() throws IOException {
+    public void testInstanceIdSuccess() throws IOException, InsufficientScopeException,
+            InvalidTokenException, InvalidRequestException {
+
         reqInstanceId = new InstanceId.Request(CLIENT_ID);
-        respInstanceId = ym.performRequest(reqInstanceId);
+        respInstanceId = ym.execute(reqInstanceId);
 
         Assert.assertEquals(respInstanceId.getStatus(), "success");
         Assert.assertNotNull(respInstanceId.getInstanceId());
@@ -62,26 +69,31 @@ public class YandexMoneyTest {
     }
 
     @Test
-    public void testInstanceIdFail() throws IOException {
+    public void testInstanceIdFail() throws IOException, InsufficientScopeException,
+            InvalidTokenException, InvalidRequestException {
+
         reqInstanceId = new InstanceId.Request(" ");
-        respInstanceId = ym.performRequest(reqInstanceId);
+        respInstanceId = ym.execute(reqInstanceId);
 
         Assert.assertEquals(respInstanceId.getStatus(), "refused");
         Assert.assertNotNull(respInstanceId.getError());
-        Assert.assertEquals(respInstanceId.getError(), "illegal_param_client_id");
+        Assert.assertEquals(respInstanceId.getError(), Error.ILLEGAL_PARAM_CLIENT_ID);
         Assert.assertNull(respInstanceId.getInstanceId());
     }
 
     @Test
-    public void testRequestExternalPayment() throws IOException {
+    public void testRequestExternalPayment() throws IOException, InsufficientScopeException,
+            InvalidTokenException, InvalidRequestException {
+
         reqInstanceId = new InstanceId.Request(CLIENT_ID);
-        respInstanceId = ym.performRequest(reqInstanceId);
+        respInstanceId = ym.execute(reqInstanceId);
 
         String patternId = "phone-topup";
         HashMap<String, String> params = successRequestParams();
-        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(null, respInstanceId.getInstanceId(), patternId, params);
+        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
+                respInstanceId.getInstanceId(), patternId, params);
 
-        respRequestExternalPayment = ym.performRequest(reqRequestExternalPayment);
+        respRequestExternalPayment = ym.execute(reqRequestExternalPayment);
 
         Assert.assertNotNull(respRequestExternalPayment);
         Assert.assertEquals(respRequestExternalPayment.getStatus(), "success");
@@ -89,61 +101,65 @@ public class YandexMoneyTest {
         Assert.assertNotNull(respRequestExternalPayment.getRequestId());
         Assert.assertTrue(respRequestExternalPayment.getRequestId().length() > 0);
         Assert.assertEquals(respRequestExternalPayment.getContractAmount(), new BigDecimal("23.00"));
-        Assert.assertEquals(respRequestExternalPayment.getTitle(), "МТС (Россия)");
     }
 
     private HashMap<String, String> successRequestParams() {
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> params = new HashMap<>();
         params.put("amount", "23");
         params.put("phone-number", "79112611383");
         return params;
     }
 
     @Test
-    public void testRequestExternalFail() throws IOException {
+    public void testRequestExternalFail() throws IOException, InsufficientScopeException,
+            InvalidTokenException, InvalidRequestException {
+
         reqInstanceId = new InstanceId.Request(CLIENT_ID);
-        respInstanceId = ym.performRequest(reqInstanceId);
+        respInstanceId = ym.execute(reqInstanceId);
 
         HashMap<String, String> params = successRequestParams();
-        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(null, respInstanceId.getInstanceId(), " ", params);
+        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(respInstanceId.getInstanceId(), " ", params);
 
-        respRequestExternalPayment = ym.performRequest(reqRequestExternalPayment);
+        respRequestExternalPayment = ym.execute(reqRequestExternalPayment);
 
         Assert.assertNotNull(respRequestExternalPayment);
         Assert.assertEquals(respRequestExternalPayment.getStatus(), "refused");
-        Assert.assertEquals(respRequestExternalPayment.getError(), "illegal_params");
+        Assert.assertEquals(respRequestExternalPayment.getError(), Error.ILLEGAL_PARAMS);
         Assert.assertNull(respRequestExternalPayment.getRequestId());
 
         params = successRequestParams();
         params.remove("amount");
-        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(null, respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
-        respRequestExternalPayment = ym.performRequest(reqRequestExternalPayment);
+        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
+        respRequestExternalPayment = ym.execute(reqRequestExternalPayment);
 
         params = successRequestParams();
         params.remove("phone-number");
-        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(null, respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
-        respRequestExternalPayment = ym.performRequest(reqRequestExternalPayment);
+        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
+        respRequestExternalPayment = ym.execute(reqRequestExternalPayment);
         Assert.assertNotNull(respRequestExternalPayment);
         Assert.assertEquals(respRequestExternalPayment.getStatus(), "refused");
-        Assert.assertEquals(respRequestExternalPayment.getError(), "illegal_params");
+        Assert.assertEquals(respRequestExternalPayment.getError(), Error.ILLEGAL_PARAMS);
         Assert.assertNull(respRequestExternalPayment.getRequestId());
     }
 
     @Test
-    public void testProcessExternalPayment() throws IOException {
+    public void testProcessExternalPayment() throws IOException, InsufficientScopeException,
+            InvalidTokenException, InvalidRequestException {
+
         reqInstanceId = new InstanceId.Request(CLIENT_ID);
-        respInstanceId = ym.performRequest(reqInstanceId);
+        respInstanceId = ym.execute(reqInstanceId);
 
         HashMap<String, String> params = successRequestParams();
-        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(null, respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
+        reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
 
-        respRequestExternalPayment = ym.performRequest(reqRequestExternalPayment);
+        respRequestExternalPayment = ym.execute(reqRequestExternalPayment);
 
         String successUri = "https://elbrus.yandex.ru/success";
         String failUri = "https://elbrus.yandex.ru/fail";
-        reqProcessExternalPayment = new ProcessExternalPayment.Request(null, respInstanceId.getInstanceId(),
-                respRequestExternalPayment.getRequestId(), successUri, failUri, false);
-        respProcessExternalPayment = ym.performRequest(reqProcessExternalPayment);
+        reqProcessExternalPayment = new ProcessExternalPayment.Request(
+                respInstanceId.getInstanceId(), respRequestExternalPayment.getRequestId(),
+                successUri, failUri, false);
+        respProcessExternalPayment = ym.execute(reqProcessExternalPayment);
 
         Assert.assertNotNull(respProcessExternalPayment);
         Assert.assertEquals(respProcessExternalPayment.getStatus(), "ext_auth_required");

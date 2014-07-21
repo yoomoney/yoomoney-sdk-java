@@ -13,7 +13,7 @@ import com.yandex.money.model.cps.misc.AccountType;
 import com.yandex.money.model.cps.misc.Card;
 import com.yandex.money.model.cps.misc.MoneySource;
 import com.yandex.money.model.cps.misc.Wallet;
-import com.yandex.money.net.IRequest;
+import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -137,7 +137,7 @@ public class RequestPayment {
         }
     }
 
-    public static final class Request implements IRequest<RequestPayment> {
+    public static final class Request implements MethodRequest<RequestPayment> {
 
         private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT = new BigDecimal(0.02);
         private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT_DUE = new BigDecimal(0.01);

@@ -6,9 +6,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.Utils;
-import com.yandex.money.net.IRequest;
+import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,13 +48,13 @@ public class InstanceId {
         return Status.SUCCESS.equals(status);
     }
 
-    public static class Request implements IRequest<InstanceId> {
+    public static class Request implements MethodRequest<InstanceId> {
 
         private String clientId;
 
         public Request(String clientId) {
-            if (Utils.isEmpty(clientId))
-                throw new IllegalArgumentException(Utils.emptyParam("clientId"));
+            if (Strings.isNullOrEmpty(clientId))
+                throw new IllegalArgumentException("clientId is null or empty");
             this.clientId = clientId;
         }
 

@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.cps.misc.DigitalGoods;
 import com.yandex.money.model.cps.misc.MoneySource;
-import com.yandex.money.net.IRequest;
+import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -142,7 +142,7 @@ public class ProcessPayment {
         }
     }
 
-    public static final class Request implements IRequest<ProcessPayment> {
+    public static final class Request implements MethodRequest<ProcessPayment> {
 
         private final String requestId;
         private final MoneySource moneySource;

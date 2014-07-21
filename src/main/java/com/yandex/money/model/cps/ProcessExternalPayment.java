@@ -6,16 +6,15 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.Utils;
 import com.yandex.money.model.cps.misc.MoneySourceExternal;
-import com.yandex.money.net.IRequest;
+import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
@@ -25,16 +24,18 @@ import java.util.Map;
  */
 public class ProcessExternalPayment {
 
-    private String status;
-    private Error error;
-    private String acsUri;
-    private Map<String, String> acsParams;
-    private MoneySourceExternal moneySource;
-    private Long nextRetry;
-    private String invoiceId;
+    private final String status;
+    private final Error error;
+    private final String acsUri;
+    private final Map<String, String> acsParams;
+    private final MoneySourceExternal moneySource;
+    private final Long nextRetry;
+    private final String invoiceId;
 
-    public ProcessExternalPayment(String status, Error error, String acsUri, Map<String, String> acsParams,
-                                  MoneySourceExternal moneySource, Long nextRetry, String invoiceId) {
+    public ProcessExternalPayment(String status, Error error, String acsUri,
+                                  Map<String, String> acsParams, MoneySourceExternal moneySource,
+                                  Long nextRetry, String invoiceId) {
+
         this.status = status;
         this.error = error;
         this.acsUri = acsUri;
@@ -84,48 +85,56 @@ public class ProcessExternalPayment {
         return Status.EXT_AUTH_REQUIRED.equals(status);
     }
 
-    public static class Request implements IRequest<ProcessExternalPayment> {
+    public static class Request implements MethodRequest<ProcessExternalPayment> {
 
-        private String accessToken;
-        private String instanceId;
-        private String requestId;
-        private String extAuthSuccessUri;
-        private String extAuthFailUri;
-        private boolean requestToken;
-        private String moneySourceToken;
-        private String csc;
+        private final String instanceId;
+        private final String requestId;
+        private final String extAuthSuccessUri;
+        private final String extAuthFailUri;
+        private final boolean requestToken;
+        private final String moneySourceToken;
+        private final String csc;
 
-        public Request(String accessToken, String instanceId, String requestId, String extAuthSuccessUri,
+        public Request(String instanceId, String requestId, String extAuthSuccessUri,
                        String extAuthFailUri, boolean requestToken) {
-            setupCommonParams(accessToken, instanceId, requestId, extAuthSuccessUri, extAuthFailUri);
-            this.requestToken = requestToken;
+            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, requestToken, null, null);
         }
 
-        public Request(String accessToken, String instanceId, String requestId, String extAuthSuccessUri,
+        public Request(String instanceId, String requestId, String extAuthSuccessUri,
                        String extAuthFailUri, String moneySourceToken, String csc) {
-            setupCommonParams(accessToken, instanceId, requestId, extAuthSuccessUri, extAuthFailUri);
-            this.moneySourceToken = moneySourceToken;
-            this.csc = csc;
+            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, false, moneySourceToken,
+                    csc);
         }
 
-        private void setupCommonParams(String accessToken, String instanceId, String requestId, String extAuthSuccessUri, String extAuthFailUri) {
-            this.accessToken = accessToken;
+        private Request(String instanceId, String requestId, String extAuthSuccessUri,
+                        String extAuthFailUri, boolean requestToken, String moneySourceToken,
+                        String csc) {
 
-            if (Utils.isEmpty(instanceId))
-                throw new IllegalArgumentException(Utils.emptyParam("instanceId"));
+            if (Strings.isNullOrEmpty(instanceId))
+                throw new IllegalArgumentException("instanceId is null or empty");
             this.instanceId = instanceId;
 
-            if (Utils.isEmpty(requestId))
-                throw new IllegalArgumentException(Utils.emptyParam("requestId"));
+            if (Strings.isNullOrEmpty(requestId))
+                throw new IllegalArgumentException("requestId is null or empty");
             this.requestId = requestId;
 
-            if (Utils.isEmpty(extAuthSuccessUri))
-                throw new IllegalArgumentException(Utils.emptyParam("extAuthSuccessUri"));
+            if (Strings.isNullOrEmpty(extAuthSuccessUri))
+                throw new IllegalArgumentException("extAuthSuccessUri is null or empty");
             this.extAuthSuccessUri = extAuthSuccessUri;
 
-            if (Utils.isEmpty(extAuthFailUri))
-                throw new IllegalArgumentException(Utils.emptyParam("extAuthFailUri"));
+            if (Strings.isNullOrEmpty(extAuthFailUri))
+                throw new IllegalArgumentException("extAuthFailUri is null or empty");
             this.extAuthFailUri = extAuthFailUri;
+
+            if (requestToken) {
+                this.requestToken = true;
+                this.moneySourceToken = null;
+                this.csc = null;
+            } else {
+                this.requestToken = false;
+                this.moneySourceToken = moneySourceToken;
+                this.csc = csc;
+            }
         }
 
         @Override
@@ -169,21 +178,14 @@ public class ProcessExternalPayment {
             bb.addParam("ext_auth_fail_uri", extAuthFailUri);
 
             bb.addBooleanIfTrue("request_token", requestToken);
-            if (!Utils.isEmpty(moneySourceToken)) {
+            if (!Strings.isNullOrEmpty(moneySourceToken)) {
                 bb.addParam("money_source_token", moneySourceToken);
             }
-            if (!Utils.isEmpty(csc)) {
+            if (!Strings.isNullOrEmpty(csc)) {
                 bb.addParam("csc", csc);
             }
 
             return bb;
-        }
-
-        @Override
-        public void writeHeaders(HttpURLConnection connection) {
-            if (accessToken != null) {
-                connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-            }
         }
     }
 }

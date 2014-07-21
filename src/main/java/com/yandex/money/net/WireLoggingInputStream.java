@@ -13,12 +13,15 @@ public final class WireLoggingInputStream extends InputStream {
 
     private static Logger LOG = Logger.getLogger(WireLoggingInputStream.class.getName());
 
-    final InputStream inputStream;
-    final ByteArrayOutputStream buffer;
+    private final InputStream inputStream;
+    private final ByteArrayOutputStream buffer;
 
     public WireLoggingInputStream(InputStream inputStream) {
+        if (inputStream == null) {
+            throw new NullPointerException("input stream is null");
+        }
         this.inputStream = inputStream;
-        buffer = new ByteArrayOutputStream();
+        this.buffer = new ByteArrayOutputStream();
     }
 
     @Override

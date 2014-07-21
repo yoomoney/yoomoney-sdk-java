@@ -1,4 +1,4 @@
-package com.yandex.money.model.cps.misc;
+package com.yandex.money.utils;
 
 import java.util.Collections;
 import java.util.HashMap;

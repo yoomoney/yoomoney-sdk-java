@@ -39,7 +39,6 @@ public enum Error {
     PAYMENT_REFUSED("payment_refused"),
     UNKNOWN("unknown");
 
-
     private static final Map<String, Error> ERRORS;
     static {
         Map<String, Error> map = new HashMap<>();
@@ -56,6 +55,9 @@ public enum Error {
     }
 
     public static Error parse(String error) {
+        if (error == null) {
+            return null;
+        }
         return ERRORS.containsKey(error) ? ERRORS.get(error) : UNKNOWN;
     }
 }

@@ -8,7 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.cps.misc.Operation;
-import com.yandex.money.net.IRequest;
+import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import org.joda.time.DateTime;
@@ -48,7 +48,7 @@ public class OperationHistory {
         return operations;
     }
 
-    public static class Request implements IRequest<OperationHistory> {
+    public static class Request implements MethodRequest<OperationHistory> {
 
         private final Set<FilterType> types;
         private final String label;

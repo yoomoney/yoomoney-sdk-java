@@ -13,9 +13,9 @@ import com.yandex.money.model.cps.misc.AccountType;
 import com.yandex.money.model.cps.misc.Avatar;
 import com.yandex.money.model.cps.misc.BalanceDetails;
 import com.yandex.money.model.cps.misc.Card;
-import com.yandex.money.model.cps.misc.Currency;
-import com.yandex.money.net.IRequest;
+import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Currency;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -95,7 +95,7 @@ public class AccountInfo {
         return additionalServices;
     }
 
-    public static final class Request implements IRequest<AccountInfo> {
+    public static final class Request implements MethodRequest<AccountInfo> {
 
         @Override
         public URL requestURL() throws MalformedURLException {

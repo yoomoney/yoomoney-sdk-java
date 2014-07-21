@@ -1,6 +1,6 @@
 package com.yandex.money.model.common.params;
 
-import com.yandex.money.Utils;
+import com.yandex.money.utils.Strings;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -9,7 +9,7 @@ import java.util.Map;
 /**
  *
  */
-public class ParamsP2P implements Params {
+public class P2pParams implements Params {
 
     public static final String PATTERN_ID = "p2p";
 
@@ -21,19 +21,19 @@ public class ParamsP2P implements Params {
     private final BigDecimal amountDue;
     private final String message;
 
-    public ParamsP2P(String to, BigDecimal amountDue, String message) {
-        if (Utils.isEmpty(to))
-            throw new IllegalArgumentException(Utils.emptyParam(PARAM_TO));
+    public P2pParams(String to, BigDecimal amountDue, String message) {
+        if (Strings.isNullOrEmpty(to))
+            throw new IllegalArgumentException(PARAM_TO + " is null or empty");
         this.to = to;
 
         if (amountDue == null)
-            throw new IllegalArgumentException(Utils.emptyParam(PARAM_AMOUNT_DUE));
+            throw new IllegalArgumentException(PARAM_AMOUNT_DUE + " is null or empty");
         this.amountDue = amountDue;
 
         this.message = message;
     }
 
-    public ParamsP2P(String to, BigDecimal amountDue) {
+    public P2pParams(String to, BigDecimal amountDue) {
         this(to, amountDue, null);
     }
 
@@ -41,9 +41,9 @@ public class ParamsP2P implements Params {
         Map<String, String> result = new HashMap<String, String>();
         result.put(PARAM_TO, to);
 
-        result.put(PARAM_AMOUNT_DUE, Utils.sumToStr(amountDue));
+        result.put(PARAM_AMOUNT_DUE, amountDue.toPlainString());
 
-        if (!Utils.isEmpty(message)) {
+        if (Strings.isNullOrEmpty(message)) {
             result.put(PARAM_MESSAGE, message);
         }
 

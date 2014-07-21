@@ -8,7 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.cps.misc.Operation;
-import com.yandex.money.net.IRequest;
+import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ public class OperationDetails {
         return operation;
     }
 
-    public static class Request implements IRequest<OperationDetails> {
+    public static class Request implements MethodRequest<OperationDetails> {
 
         private final String operationId;
 

@@ -7,7 +7,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.net.IRequest;
+import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -72,7 +72,7 @@ public class IncomingTransferAccept {
         }
     }
 
-    public static final class Request implements IRequest<IncomingTransferAccept> {
+    public static final class Request implements MethodRequest<IncomingTransferAccept> {
 
         private final String operationId;
         private final String protectionCode;

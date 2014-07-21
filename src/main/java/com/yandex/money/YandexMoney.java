@@ -1,38 +1,37 @@
 package com.yandex.money;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.yandex.money.net.Client;
-import com.yandex.money.net.IRequest;
+import com.yandex.money.exceptions.InsufficientScopeException;
+import com.yandex.money.exceptions.InvalidRequestException;
+import com.yandex.money.exceptions.InvalidTokenException;
+import com.yandex.money.net.ApiClient;
+import com.yandex.money.net.DefaultApiClient;
+import com.yandex.money.net.MethodRequest;
+import com.yandex.money.net.OAuth2Session;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 public class YandexMoney {
 
-    private Client client;
+    private final OAuth2Session session;
 
     public YandexMoney() {
-        this(defaultHttpClient());
+        this(new DefaultApiClient());
     }
 
-    public YandexMoney(OkHttpClient okHttpClient) {
-        this.client = new Client(okHttpClient);
+    public YandexMoney(ApiClient apiClient) {
+        session = new OAuth2Session(apiClient);
+    }
+
+    public <T> T execute(MethodRequest<T> methodRequest) throws IOException,
+            InsufficientScopeException, InvalidTokenException, InvalidRequestException {
+        return session.execute(methodRequest);
+    }
+
+    public void setToken(String token) {
+        session.setToken(token);
     }
 
     public void setDebugLogging(boolean debugLogging) {
-        client.setDebugLogging(debugLogging);
-    }
-
-    public <T> T performRequest(IRequest<T> IRequest) throws IOException {
-        return client.perform(IRequest);
-    }
-
-    private static final long TIMEOUT_IN_SEC = 30;
-
-    private static OkHttpClient defaultHttpClient() {
-        OkHttpClient okHttpClient = new OkHttpClient();
-        okHttpClient.setConnectTimeout(TIMEOUT_IN_SEC, TimeUnit.SECONDS);
-        okHttpClient.setReadTimeout(TIMEOUT_IN_SEC, TimeUnit.SECONDS);
-        return okHttpClient;
+        session.setDebugLogging(debugLogging);
     }
 }

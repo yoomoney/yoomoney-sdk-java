@@ -1,6 +1,8 @@
 package com.yandex.money.test;
 
+import com.yandex.money.model.cps.Error;
 import com.yandex.money.model.cps.InstanceId;
+
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -30,7 +32,7 @@ public class InstanceIdTest {
         InstanceId instanceId = new InstanceId("success", null, "id");
         Assert.assertTrue(instanceId.isSuccess());
 
-        instanceId = new InstanceId("refused", "error", null);
+        instanceId = new InstanceId("refused", Error.UNKNOWN, null);
         Assert.assertFalse(instanceId.isSuccess());
     }
 }
