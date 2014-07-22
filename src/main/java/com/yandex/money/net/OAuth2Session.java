@@ -112,6 +112,10 @@ public class OAuth2Session implements Session {
         this.debugLogging = debugLogging;
     }
 
+    public OAuth2Authorization createOAuth2Authorization() {
+        return new OAuth2Authorization(client.getHostsProvider());
+    }
+
     private boolean isJsonType(HttpURLConnection connection) {
         String field = connection.getHeaderField(HttpHeaders.CONTENT_TYPE);
         return field != null && field.startsWith(MimeTypes.Application.JSON);
