@@ -22,9 +22,8 @@ import java.util.HashMap;
 /**
  *
  */
-public class YandexMoneyTest {
+public class YandexMoneyTest implements ApiTest {
 
-    private String CLIENT_ID = "[your_client_id]";
     private String PATTERN_ID_PHONE_TOPUP = PhoneParams.PATTERN_ID;
 
     private YandexMoney ym;

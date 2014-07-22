@@ -20,6 +20,9 @@ public enum PayeeIdentifierType {
     }
 
     public static PayeeIdentifierType parse(String identifier) {
+        if (identifier == null) {
+            return null;
+        }
         for (PayeeIdentifierType value : values()) {
             if (value.identifier.equals(identifier)) {
                 return value;

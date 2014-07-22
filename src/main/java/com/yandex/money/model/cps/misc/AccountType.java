@@ -12,6 +12,9 @@ public enum AccountType {
     }
 
     public static AccountType parse(String code) {
+        if (code == null) {
+            return null;
+        }
         for (AccountType value : values()) {
             if (value.code.equals(code)) {
                 return value;

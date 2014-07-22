@@ -49,6 +49,10 @@ public class Token implements MethodResponse {
         private final String redirectUri;
         private final String clientSecret;
 
+        public Request(String code, String clientId, String redirectUri) {
+            this(code, clientId, redirectUri, null);
+        }
+
         public Request(String code, String clientId, String redirectUri, String clientSecret) {
             if (Strings.isNullOrEmpty(code)) {
                 throw new NullPointerException("code is null or empty");
@@ -59,6 +63,9 @@ public class Token implements MethodResponse {
             }
             this.clientId = clientId;
             this.grantType = "authorization_code";
+            if (Strings.isNullOrEmpty(redirectUri)) {
+                throw new NullPointerException("redirectUri is null or empty");
+            }
             this.redirectUri = redirectUri;
             this.clientSecret = clientSecret;
         }

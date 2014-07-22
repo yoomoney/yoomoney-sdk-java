@@ -42,7 +42,7 @@ public class Operation {
                         BigDecimal amount, BigDecimal amountDue, BigDecimal fee, DateTime datetime,
                         String title, String sender, String recipient,
                         PayeeIdentifierType recipientType, String message, String comment,
-                        boolean codepro, String protectionCode, DateTime expires,
+                        Boolean codepro, String protectionCode, DateTime expires,
                         DateTime answerDatetime, String label, String details, Type type,
                         DigitalGoods digitalGoods) {
 
@@ -244,7 +244,7 @@ public class Operation {
         private PayeeIdentifierType recipientType;
         private String message;
         private String comment;
-        private boolean codepro;
+        private Boolean codepro;
         private String protectionCode;
         private DateTime expires;
         private DateTime answerDatetime;
@@ -323,7 +323,7 @@ public class Operation {
             return this;
         }
 
-        public Builder setCodepro(boolean codepro) {
+        public Builder setCodepro(Boolean codepro) {
             this.codepro = codepro;
             return this;
         }

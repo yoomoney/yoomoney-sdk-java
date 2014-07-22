@@ -13,7 +13,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.security.GeneralSecurityException;
 import java.util.logging.Logger;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -24,6 +28,7 @@ public class OAuth2Session implements Session {
 
     private final ApiClient client;
 
+    private SSLSocketFactory sslSocketFactory;
     private String accessToken;
     private boolean debugLogging = false;
 
@@ -42,7 +47,7 @@ public class OAuth2Session implements Session {
             throw new NullPointerException("request is null");
         }
 
-        final OkHttpClient httpClient = client.getHttpClient();
+        final OkHttpClient httpClient = getHttpClient();
         final HostsProvider hostsProvider = client.getHostsProvider();
         final HttpURLConnection connection = httpClient.open(request.requestURL(hostsProvider));
         connection.setInstanceFollowRedirects(false);
@@ -111,10 +116,32 @@ public class OAuth2Session implements Session {
 
     public void setDebugLogging(boolean debugLogging) {
         this.debugLogging = debugLogging;
+        this.sslSocketFactory = createSslSocketFactory();
+        if (debugLogging) {
+            sslSocketFactory = new WireLoggingSocketFactory(sslSocketFactory);
+        }
     }
 
     public OAuth2Authorization createOAuth2Authorization() {
         return new OAuth2Authorization(client.getHostsProvider());
+    }
+
+    private static SSLSocketFactory createSslSocketFactory() {
+        try {
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, null, null);
+            return context.getSocketFactory();
+        } catch (GeneralSecurityException exception) {
+            throw new RuntimeException(exception);
+        }
+    }
+
+    private OkHttpClient getHttpClient() {
+        OkHttpClient httpClient = client.getHttpClient();
+        if (sslSocketFactory != null) {
+            httpClient.setSslSocketFactory(sslSocketFactory);
+        }
+        return httpClient;
     }
 
     private boolean isJsonType(HttpURLConnection connection) {

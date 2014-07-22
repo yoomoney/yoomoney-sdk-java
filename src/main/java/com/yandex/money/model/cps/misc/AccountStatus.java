@@ -13,6 +13,9 @@ public enum AccountStatus {
     }
 
     public static AccountStatus parse(String code) {
+        if (code == null) {
+            return null;
+        }
         for (AccountStatus value : values()) {
             if (value.code.equals(code)) {
                 return value;
