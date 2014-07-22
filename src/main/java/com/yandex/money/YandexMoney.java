@@ -27,8 +27,8 @@ public class YandexMoney {
         return session.execute(methodRequest);
     }
 
-    public void setToken(String token) {
-        session.setToken(token);
+    public void setAccessToken(String accessToken) {
+        session.setAccessToken(accessToken);
     }
 
     public void setDebugLogging(boolean debugLogging) {

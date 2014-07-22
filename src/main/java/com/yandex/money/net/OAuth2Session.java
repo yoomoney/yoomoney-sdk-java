@@ -7,6 +7,7 @@ import com.yandex.money.exceptions.InvalidTokenException;
 import com.yandex.money.utils.HttpHeaders;
 import com.yandex.money.utils.MimeTypes;
 import com.yandex.money.utils.Streams;
+import com.yandex.money.utils.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +24,7 @@ public class OAuth2Session implements Session {
 
     private final ApiClient client;
 
-    private String token;
+    private String accessToken;
     private boolean debugLogging = false;
 
     public OAuth2Session(ApiClient client) {
@@ -61,7 +62,7 @@ public class OAuth2Session implements Session {
             connection.setRequestProperty(HttpHeaders.ACCEPT_LANGUAGE, client.getLanguage());
 
             if (isAuthorized()) {
-                connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Bearer " + token);
+                connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
             }
             connection.setUseCaches(false);
 
@@ -100,12 +101,12 @@ public class OAuth2Session implements Session {
         }
     }
 
-    public void setToken(String token) {
-        this.token = token;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public boolean isAuthorized() {
-        return token != null && token.length() > 0;
+        return !Strings.isNullOrEmpty(accessToken);
     }
 
     public void setDebugLogging(boolean debugLogging) {
