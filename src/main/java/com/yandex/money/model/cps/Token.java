@@ -97,6 +97,23 @@ public class Token implements MethodResponse {
         }
     }
 
+    public static final class Revoke implements MethodRequest<Object> {
+        @Override
+        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
+            return new URL(hostsProvider.getMoneyApi() + "/revoke");
+        }
+
+        @Override
+        public Object parseResponse(InputStream inputStream) {
+            return null;
+        }
+
+        @Override
+        public PostRequestBodyBuffer buildParameters() throws IOException {
+            return null;
+        }
+    }
+
     private static final class Deserializer implements JsonDeserializer<Token> {
 
         @Override

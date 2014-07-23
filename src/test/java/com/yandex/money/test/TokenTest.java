@@ -20,7 +20,7 @@ public class TokenTest implements ApiTest {
     private static final String CODE = "authorization_code";
 
     @Test
-    public void testRequestToken() throws InvalidTokenException, InsufficientScopeException,
+    public void testToken() throws InvalidTokenException, InsufficientScopeException,
             InvalidRequestException, IOException {
 
         OAuth2Session session = new OAuth2Session(new DefaultApiClient());
@@ -28,5 +28,8 @@ public class TokenTest implements ApiTest {
 
         Token token = session.execute(new Token.Request(CODE, CLIENT_ID, REDIRECT_URI, null));
         Assert.assertNotNull(token);
+
+        session.setAccessToken(token.getAccessToken());
+        session.execute(new Token.Revoke());
     }
 }
