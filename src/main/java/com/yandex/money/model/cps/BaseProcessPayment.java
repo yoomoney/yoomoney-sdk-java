@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class BaseProcessPayment implements MethodResponse {
+public abstract class BaseProcessPayment implements MethodResponse {
 
     protected static final String MEMBER_STATUS = "status";
     protected static final String MEMBER_ERROR = "error";
