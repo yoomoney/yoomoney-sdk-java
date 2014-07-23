@@ -9,7 +9,6 @@ import com.google.gson.JsonParseException;
 import com.yandex.money.model.cps.misc.MoneySourceExternal;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
-import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 import com.yandex.money.utils.Strings;
 
@@ -24,90 +23,26 @@ import java.util.Map;
 /**
  *
  */
-public class ProcessExternalPayment implements MethodResponse {
+public class ProcessExternalPayment extends BaseProcessPayment {
 
-    private final Status status;
-    private final Error error;
-    private final String acsUri;
-    private final Map<String, String> acsParams;
     private final MoneySourceExternal moneySource;
-    private final Long nextRetry;
     private final String invoiceId;
 
     public ProcessExternalPayment(Status status, Error error, String acsUri,
                                   Map<String, String> acsParams, MoneySourceExternal moneySource,
                                   Long nextRetry, String invoiceId) {
 
-        this.status = status;
-        this.error = error;
-        this.acsUri = acsUri;
-        this.acsParams = acsParams;
+        super(status, error, acsUri, acsParams, nextRetry);
         this.moneySource = moneySource;
-        this.nextRetry = nextRetry;
         this.invoiceId = invoiceId;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public String getAcsUri() {
-        return acsUri;
-    }
-
-    public Map<String, String> getAcsParams() {
-        return acsParams;
     }
 
     public MoneySourceExternal getMoneySource() {
         return moneySource;
     }
 
-    public Long getNextRetry() {
-        return nextRetry;
-    }
-
     public String getInvoiceId() {
         return invoiceId;
-    }
-
-    public boolean isSuccess() {
-        return status == Status.SUCCESS;
-    }
-
-    public boolean isInProgress() {
-        return status == Status.IN_PROGRESS;
-    }
-
-    public boolean isExtAuthRequired() {
-        return status == Status.EXT_AUTH_REQUIRED;
-    }
-
-    public enum Status {
-        SUCCESS(CODE_SUCCESS),
-        REFUSED(CODE_REFUSED),
-        IN_PROGRESS(CODE_IN_PROGRESS),
-        EXT_AUTH_REQUIRED(CODE_EXT_AUTH_REQUIRED),
-        UNKNOWN(CODE_UNKNOWN);
-
-        private final String status;
-
-        private Status(String status) {
-            this.status = status;
-        }
-
-        public static Status parse(String status) {
-            for (Status value : values()) {
-                if (value.status.equals(status)) {
-                    return value;
-                }
-            }
-            return UNKNOWN;
-        }
     }
 
     public static class Request implements MethodRequest<ProcessExternalPayment> {
@@ -174,19 +109,19 @@ public class ProcessExternalPayment implements MethodResponse {
                 public ProcessExternalPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                     JsonObject o = json.getAsJsonObject();
 
-                    JsonObject paramsObj = o.getAsJsonObject("acs_params");
+                    JsonObject paramsObj = o.getAsJsonObject(MEMBER_ACS_PARAMS);
                     Map<String, String> acsParams = JsonUtils.map(paramsObj);
 
                     JsonObject objMoneySource = o.getAsJsonObject("money_source");
                     MoneySourceExternal moneySource = MoneySourceExternal.parseJson(objMoneySource);
 
                     return new ProcessExternalPayment(
-                            Status.parse(JsonUtils.getString(o, "status")),
-                            Error.parse(JsonUtils.getString(o, "error")),
-                            JsonUtils.getString(o, "acs_uri"),
+                            Status.parse(JsonUtils.getString(o, MEMBER_STATUS)),
+                            Error.parse(JsonUtils.getString(o, MEMBER_ERROR)),
+                            JsonUtils.getString(o, MEMBER_ACS_URI),
                             acsParams,
                             moneySource,
-                            JsonUtils.getLong(o, "next_retry"),
+                            JsonUtils.getLong(o, MEMBER_NEXT_RETRY),
                             JsonUtils.getString(o, "invoice_id")
                     );
                 }

@@ -91,10 +91,10 @@ public class RequestExternalPayment extends BaseRequestPayment {
                 public RequestExternalPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                     JsonObject o = json.getAsJsonObject();
                     return new RequestExternalPayment(
-                            Status.parse(JsonUtils.getString(o, "status")),
-                            Error.parse(JsonUtils.getString(o, "error")),
-                            JsonUtils.getString(o, "request_id"),
-                            JsonUtils.getBigDecimal(o, "contract_amount"),
+                            Status.parse(JsonUtils.getString(o, MEMBER_STATUS)),
+                            Error.parse(JsonUtils.getString(o, MEMBER_ERROR)),
+                            JsonUtils.getString(o, MEMBER_REQUEST_ID),
+                            JsonUtils.getBigDecimal(o, MEMBER_CONTRACT_AMOUNT),
                             JsonUtils.getString(o, "title"));
                 }
             }).create().fromJson(new InputStreamReader(inputStream), RequestExternalPayment.class);

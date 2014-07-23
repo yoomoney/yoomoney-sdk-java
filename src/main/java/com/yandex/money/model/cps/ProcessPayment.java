@@ -11,7 +11,6 @@ import com.yandex.money.model.cps.misc.DigitalGoods;
 import com.yandex.money.model.cps.misc.MoneySource;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
-import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -26,10 +25,8 @@ import java.util.Map;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class ProcessPayment implements MethodResponse {
+public class ProcessPayment extends BaseProcessPayment {
 
-    private final Status status;
-    private final Error error;
     private final String paymentId;
     private final BigDecimal balance;
     private final String invoiceId;
@@ -37,9 +34,6 @@ public class ProcessPayment implements MethodResponse {
     private final String payee;
     private final BigDecimal creditAmount;
     private final String accountUnblockUri;
-    private final String acsUri;
-    private final Map<String, String> acsParams;
-    private final Long nextRetry;
     private final DigitalGoods digitalGoods;
 
     private ProcessPayment(Status status, Error error, String paymentId, BigDecimal balance,
@@ -47,14 +41,10 @@ public class ProcessPayment implements MethodResponse {
                            String accountUnblockUri, String acsUri, Map<String, String> acsParams,
                            Long nextRetry, DigitalGoods digitalGoods) {
 
+        super(status, error, acsUri, acsParams, nextRetry);
         if (status == Status.SUCCESS && paymentId == null) {
             throw new NullPointerException("paymentId is null when status is success");
         }
-        if (status == Status.EXT_AUTH_REQUIRED && acsUri == null) {
-            throw new NullPointerException("acsUri is null when status is ext_auth_required");
-        }
-        this.status = status;
-        this.error = error;
         this.paymentId = paymentId;
         this.balance = balance;
         this.invoiceId = invoiceId;
@@ -62,18 +52,7 @@ public class ProcessPayment implements MethodResponse {
         this.payee = payee;
         this.creditAmount = creditAmount;
         this.accountUnblockUri = accountUnblockUri;
-        this.acsUri = acsUri;
-        this.acsParams = acsParams;
-        this.nextRetry = nextRetry;
         this.digitalGoods = digitalGoods;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public Error getError() {
-        return error;
     }
 
     public String getPaymentId() {
@@ -104,44 +83,8 @@ public class ProcessPayment implements MethodResponse {
         return accountUnblockUri;
     }
 
-    public String getAcsUri() {
-        return acsUri;
-    }
-
-    public Map<String, String> getAcsParams() {
-        return acsParams;
-    }
-
-    public Long getNextRetry() {
-        return nextRetry;
-    }
-
     public DigitalGoods getDigitalGoods() {
         return digitalGoods;
-    }
-
-    public enum Status {
-
-        SUCCESS(CODE_SUCCESS),
-        REFUSED(CODE_REFUSED),
-        IN_PROGRESS(CODE_IN_PROGRESS),
-        EXT_AUTH_REQUIRED(CODE_EXT_AUTH_REQUIRED),
-        UNKNOWN(CODE_UNKNOWN);
-
-        private final String status;
-
-        private Status(String status) {
-            this.status = status;
-        }
-
-        public static Status parse(String status) {
-            for (Status value : values()) {
-                if (value.status.equals(status)) {
-                    return value;
-                }
-            }
-            return UNKNOWN;
-        }
     }
 
     public static final class Request implements MethodRequest<ProcessPayment> {
@@ -339,8 +282,8 @@ public class ProcessPayment implements MethodResponse {
 
             JsonObject object = json.getAsJsonObject();
             return new Builder()
-                    .setStatus(Status.parse(JsonUtils.getMandatoryString(object, "status")))
-                    .setError(Error.parse(JsonUtils.getString(object, "error")))
+                    .setStatus(Status.parse(JsonUtils.getMandatoryString(object, MEMBER_STATUS)))
+                    .setError(Error.parse(JsonUtils.getString(object, MEMBER_ERROR)))
                     .setPaymentId(JsonUtils.getString(object, "payment_id"))
                     .setBalance(JsonUtils.getBigDecimal(object, "balance"))
                     .setInvoiceId(JsonUtils.getString(object, "invoice_id"))
@@ -348,9 +291,10 @@ public class ProcessPayment implements MethodResponse {
                     .setPayee(JsonUtils.getString(object, "payee"))
                     .setCreditAmount(JsonUtils.getBigDecimal(object, "credit_amount"))
                     .setAccountUnblockUri(JsonUtils.getString(object, "account_unblock_uri"))
-                    .setAcsUri(JsonUtils.getString(object, "acs_uri"))
-                    .setAcsParams(JsonUtils.map(object.getAsJsonObject("acs_params")))
-                    .setNextRetry(JsonUtils.getLong(object, "next_retry"))
+                    .setAcsUri(JsonUtils.getString(object, MEMBER_ACS_URI))
+                    .setAcsParams(object.has(MEMBER_ACS_PARAMS) ?
+                            JsonUtils.map(object.getAsJsonObject(MEMBER_ACS_PARAMS)) : null)
+                    .setNextRetry(JsonUtils.getLong(object, MEMBER_NEXT_RETRY))
                     .setDigitalGoods(DigitalGoods.createFromJson(object.get("digital_goods")))
                     .createProcessPayment();
         }

@@ -459,12 +459,12 @@ public class RequestPayment extends BaseRequestPayment {
                 }
             }
             return new Builder()
-                    .setStatus(Status.parse(JsonUtils.getMandatoryString(object, "status")))
-                    .setError(Error.parse(JsonUtils.getString(object, "error")))
+                    .setStatus(Status.parse(JsonUtils.getMandatoryString(object, MEMBER_STATUS)))
+                    .setError(Error.parse(JsonUtils.getString(object, MEMBER_ERROR)))
                     .setMoneySources(moneySources)
                     .setCscRequired(cscRequired)
-                    .setRequestId(JsonUtils.getString(object, "request_id"))
-                    .setContractAmount(JsonUtils.getBigDecimal(object, "contract_amount"))
+                    .setRequestId(JsonUtils.getString(object, MEMBER_REQUEST_ID))
+                    .setContractAmount(JsonUtils.getBigDecimal(object, MEMBER_CONTRACT_AMOUNT))
                     .setBalance(JsonUtils.getBigDecimal(object, "balance"))
                     .setRecipientAccountStatus(AccountStatus.parse(
                             JsonUtils.getString(object, "recipient_account_status")))

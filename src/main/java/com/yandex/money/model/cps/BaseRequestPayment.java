@@ -9,6 +9,11 @@ import java.math.BigDecimal;
  */
 public abstract class BaseRequestPayment implements MethodResponse {
 
+    protected static final String MEMBER_STATUS = "status";
+    protected static final String MEMBER_ERROR = "error";
+    protected static final String MEMBER_REQUEST_ID = "request_id";
+    protected static final String MEMBER_CONTRACT_AMOUNT = "contract_amount";
+
     private final Status status;
     private final Error error;
     private final String requestId;
