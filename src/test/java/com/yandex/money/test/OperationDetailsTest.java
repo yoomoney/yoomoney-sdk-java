@@ -14,6 +14,7 @@ import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -39,8 +40,6 @@ public class OperationDetailsTest implements ApiTest {
         OperationHistory history = yandexMoney.execute(historyRequest);
         Assert.assertNotNull(history);
 
-        DateTime from = null;
-        DateTime till = null;
         yandexMoney.setDebugLogging(false);
         List<Operation> operations = history.getOperations();
         for (Operation operation : operations) {
@@ -58,30 +57,24 @@ public class OperationDetailsTest implements ApiTest {
             DateTime datetime = operation.getDatetime();
             Assert.assertNotNull(datetime);
             Assert.assertTrue(datetime.isEqual(operationDetails.getOperation().getDatetime()));
-
-            if (from == null) {
-                from = datetime;
-                till = datetime;
-            } else {
-                if (from.isAfter(datetime)) {
-                    from = datetime.minusSeconds(1);
-                }
-                if (till.isBefore(datetime)) {
-                    till = datetime.plusSeconds(1);
-                }
-            }
         }
 
-        if (operations.size() > 1) {
-            Assert.assertNotEquals(from, till);
-        }
+        if (operations.size() > 0) {
+            HashSet<OperationHistory.FilterType> types = new HashSet<>();
+            types.add(OperationHistory.FilterType.PAYMENT);
+            types.add(OperationHistory.FilterType.DEPOSITION);
 
-        historyRequest = new OperationHistory.Request.Builder()
-                .setFrom(from)
-                .setTill(till)
-                .createRequest();
-        yandexMoney.setDebugLogging(true);
-        Assert.assertEquals(yandexMoney.execute(historyRequest).getOperations().size(),
-                operations.size());
+            historyRequest = new OperationHistory.Request.Builder()
+                    .setTypes(types)
+                    .setFrom(operations.get(operations.size() - 1).getDatetime())
+                    .setTill(operations.get(0).getDatetime().plusSeconds(1))
+                    .setDetails(true)
+                    .setRecords(operations.size())
+                    .createRequest();
+
+            yandexMoney.setDebugLogging(true);
+            Assert.assertEquals(yandexMoney.execute(historyRequest).getOperations().size(),
+                    operations.size());
+        }
     }
 }

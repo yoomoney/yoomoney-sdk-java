@@ -1,5 +1,8 @@
 package com.yandex.money.net;
 
+import com.yandex.money.utils.HttpHeaders;
+import com.yandex.money.utils.MimeTypes;
+
 import org.joda.time.DateTime;
 
 import java.io.ByteArrayOutputStream;
@@ -19,17 +22,17 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
 
     public static final Charset REQUEST_CHARSET_UTF8 = Charset.forName("UTF-8");
 
-    public static final String CONTENT_TYPE_POST_FORM = "application/x-www-form-urlencoded";
-    public static final String CONTENT_TYPE_POST_JSON = "application/json";
-
     private static final byte[] POST_PARAM_DELIMITER = "&".getBytes(REQUEST_CHARSET_UTF8);
     private static final byte[] POST_PARAM_NV_DELIMITER = "=".getBytes(REQUEST_CHARSET_UTF8);
 
     public PostRequestBodyBuffer addParam(String name, String value) {
         try {
             return addParamWithoutURLEncoding(
-                    URLEncoder.encode(name, REQUEST_CHARSET_UTF8.name()).getBytes(REQUEST_CHARSET_UTF8),
-                    URLEncoder.encode(value, REQUEST_CHARSET_UTF8.name()).getBytes(REQUEST_CHARSET_UTF8));
+                    URLEncoder.encode(name, REQUEST_CHARSET_UTF8.name())
+                            .getBytes(REQUEST_CHARSET_UTF8),
+                    URLEncoder.encode(value, REQUEST_CHARSET_UTF8.name())
+                            .replace("+", "%20")
+                            .getBytes(REQUEST_CHARSET_UTF8));
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
@@ -81,7 +84,8 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
 
     public void setHttpHeaders(HttpURLConnection connection) throws ProtocolException {
         connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", CONTENT_TYPE_POST_FORM);
+        connection.setRequestProperty(HttpHeaders.CONTENT_TYPE,
+                MimeTypes.Application.X_WWW_FORM_URLENCODED);
         connection.setFixedLengthStreamingMode(size());
     }
 
