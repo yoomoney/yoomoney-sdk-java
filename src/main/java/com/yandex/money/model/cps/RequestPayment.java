@@ -15,7 +15,6 @@ import com.yandex.money.model.cps.misc.MoneySource;
 import com.yandex.money.model.cps.misc.Wallet;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
-import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -32,14 +31,10 @@ import java.util.Map;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class RequestPayment implements MethodResponse {
+public class RequestPayment extends BaseRequestPayment {
 
-    private final Status status;
-    private final Error error;
     private final List<MoneySource> moneySources;
     private final Boolean cscRequired;
-    private final String requestId;
-    private final BigDecimal contractAmount;
     private final BigDecimal balance;
     private final AccountStatus recipientAccountStatus;
     private final AccountType recipientAccountType;
@@ -53,15 +48,9 @@ public class RequestPayment implements MethodResponse {
                            AccountType recipientAccountType, String protectionCode,
                            String accountUnblockUri, String extActionUri) {
 
-        if (status == Status.SUCCESS && requestId == null) {
-            throw new IllegalArgumentException("requestId is null when status is success");
-        }
-        this.status = status;
-        this.error = error;
+        super(status, error, requestId, contractAmount);
         this.moneySources = moneySources;
         this.cscRequired = cscRequired;
-        this.requestId = requestId;
-        this.contractAmount = contractAmount;
         this.balance = balance;
         this.recipientAccountStatus = recipientAccountStatus;
         this.recipientAccountType = recipientAccountType;
@@ -70,28 +59,12 @@ public class RequestPayment implements MethodResponse {
         this.extActionUri = extActionUri;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
     public List<MoneySource> getMoneySources() {
         return moneySources;
     }
 
     public Boolean getCscRequired() {
         return cscRequired;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public BigDecimal getContractAmount() {
-        return contractAmount;
     }
 
     public BigDecimal getBalance() {
@@ -116,28 +89,6 @@ public class RequestPayment implements MethodResponse {
 
     public String getExtActionUri() {
         return extActionUri;
-    }
-
-    public enum Status {
-        SUCCESS(CODE_SUCCESS),
-        REFUSED(CODE_REFUSED),
-        HOLD_FOR_PICKUP(CODE_HOLD_FOR_PICKUP),
-        UNKNOWN(CODE_UNKNOWN);
-
-        private final String status;
-
-        private Status(String status) {
-            this.status = status;
-        }
-
-        public static Status parse(String status) {
-            for (Status value : values()) {
-                if (value.status.equals(status)) {
-                    return value;
-                }
-            }
-            return UNKNOWN;
-        }
     }
 
     public static final class Request implements MethodRequest<RequestPayment> {
@@ -252,7 +203,7 @@ public class RequestPayment implements MethodResponse {
                 }
             }
             return postRequestBodyBuffer
-                    .addParam("pattern-id", patternId)
+                    .addParam("pattern_id", patternId)
                     .addParamIfNotNull("phone-number", phoneNumber)
                     .addParamIfNotNull("to", to)
                     .addParamIfNotNull("amount", amount)
@@ -281,6 +232,7 @@ public class RequestPayment implements MethodResponse {
 
         private static Gson createGson() {
             return new GsonBuilder()
+                    .registerTypeAdapter(RequestPayment.class, new Deserializer())
                     .create();
         }
 
@@ -487,16 +439,22 @@ public class RequestPayment implements MethodResponse {
             List<MoneySource> moneySources = new ArrayList<>();
             Boolean cscRequired = null;
             if (moneySource != null) {
-                JsonObject wallet = moneySource.getAsJsonObject("wallet");
-                if (JsonUtils.getMandatoryBoolean(wallet, "allowed")) {
-                    moneySources.add(new Wallet());
+                final String walletMember = "wallet";
+                if (moneySource.has(walletMember)) {
+                    JsonObject wallet = moneySource.getAsJsonObject(walletMember);
+                    if (JsonUtils.getMandatoryBoolean(wallet, "allowed")) {
+                        moneySources.add(new Wallet());
+                    }
                 }
-                JsonObject cards = moneySource.getAsJsonObject("cards");
-                if (JsonUtils.getMandatoryBoolean(cards, "allowed")) {
-                    cscRequired = JsonUtils.getMandatoryBoolean(object, "csc_required");
-                    JsonArray items = cards.getAsJsonArray("items");
-                    for (JsonElement item : items) {
-                        moneySources.add(Card.createFromJson(item));
+                final String cardsMember = "cards";
+                if (moneySource.has(cardsMember)) {
+                    JsonObject cards = moneySource.getAsJsonObject(cardsMember);
+                    if (JsonUtils.getMandatoryBoolean(cards, "allowed")) {
+                        cscRequired = JsonUtils.getMandatoryBoolean(object, "csc_required");
+                        JsonArray items = cards.getAsJsonArray("items");
+                        for (JsonElement item : items) {
+                            moneySources.add(Card.createFromJson(item));
+                        }
                     }
                 }
             }

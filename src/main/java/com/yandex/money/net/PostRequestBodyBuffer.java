@@ -62,7 +62,7 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
     }
 
     public PostRequestBodyBuffer addBooleanIfTrue(String name, Boolean value) {
-        if (value)
+        if (value != null && value)
             return addParam(name, "true");
         else
             return this;

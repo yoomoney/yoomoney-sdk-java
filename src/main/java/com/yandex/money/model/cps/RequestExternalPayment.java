@@ -10,7 +10,6 @@ import com.yandex.money.model.common.params.P2pParams;
 import com.yandex.money.model.common.params.PhoneParams;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
-import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
 import com.yandex.money.utils.Strings;
 
@@ -26,67 +25,19 @@ import java.util.Map;
 /**
  *
  */
-public class RequestExternalPayment implements MethodResponse {
+public class RequestExternalPayment extends BaseRequestPayment {
 
-    private final Status status;
-    private final Error error;
-    private final String requestId;
-    private final BigDecimal contractAmount;
     private final String title;
 
     public RequestExternalPayment(Status status, Error error, String requestId,
-                                  String contractAmount, String title) {
+                                  BigDecimal contractAmount, String title) {
 
-        this.status = status;
-        this.error = error;
-        this.requestId = requestId;
-        this.contractAmount = contractAmount == null ? null : new BigDecimal(contractAmount);
+        super(status, error, requestId, contractAmount);
         this.title = title;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public BigDecimal getContractAmount() {
-        return contractAmount;
     }
 
     public String getTitle() {
         return title;
-    }
-
-    public boolean isSuccess() {
-        return status == Status.SUCCESS;
-    }
-
-    public enum Status {
-        SUCCESS(CODE_SUCCESS),
-        REFUSED(CODE_REFUSED),
-        UNKNOWN(CODE_UNKNOWN);
-
-        private final String status;
-
-        private Status(String status) {
-            this.status = status;
-        }
-
-        public static Status parse(String status) {
-            for (Status value : values()) {
-                if (value.status.equals(status)) {
-                    return value;
-                }
-            }
-            return UNKNOWN;
-        }
     }
 
     public static class Request implements MethodRequest<RequestExternalPayment> {
@@ -143,9 +94,8 @@ public class RequestExternalPayment implements MethodResponse {
                             Status.parse(JsonUtils.getString(o, "status")),
                             Error.parse(JsonUtils.getString(o, "error")),
                             JsonUtils.getString(o, "request_id"),
-                            JsonUtils.getString(o, "contract_amount"),
-                            JsonUtils.getString(o, "title")
-                            );
+                            JsonUtils.getBigDecimal(o, "contract_amount"),
+                            JsonUtils.getString(o, "title"));
                 }
             }).create().fromJson(new InputStreamReader(inputStream), RequestExternalPayment.class);
         }
