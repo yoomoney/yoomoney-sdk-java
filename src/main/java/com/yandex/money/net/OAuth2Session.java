@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.GeneralSecurityException;
 import java.util.logging.Logger;
 
@@ -26,7 +27,7 @@ public class OAuth2Session implements Session {
 
     private static final Logger LOGGER = Logger.getLogger(OAuth2Session.class.getName());
 
-    private final ApiClient client;
+    protected final ApiClient client;
 
     private SSLSocketFactory sslSocketFactory;
     private String accessToken;
@@ -47,10 +48,8 @@ public class OAuth2Session implements Session {
             throw new NullPointerException("request is null");
         }
 
-        final OkHttpClient httpClient = getHttpClient();
         final HostsProvider hostsProvider = client.getHostsProvider();
-        final HttpURLConnection connection = httpClient.open(request.requestURL(hostsProvider));
-        connection.setInstanceFollowRedirects(false);
+        final HttpURLConnection connection = openConnection(request.requestURL(hostsProvider));
 
         InputStream inputStream = null;
         OutputStream outputStream = null;
@@ -63,13 +62,9 @@ public class OAuth2Session implements Session {
                 parameters.setHttpHeaders(connection);
             }
 
-            connection.setRequestProperty(HttpHeaders.USER_AGENT, client.getUserAgent());
-            connection.setRequestProperty(HttpHeaders.ACCEPT_LANGUAGE, client.getLanguage());
-
             if (isAuthorized()) {
                 connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
             }
-            connection.setUseCaches(false);
 
             if (parameters != null) {
                 outputStream = connection.getOutputStream();
@@ -126,6 +121,32 @@ public class OAuth2Session implements Session {
         return new OAuth2Authorization(client.getHostsProvider());
     }
 
+    protected HttpURLConnection openConnection(URL url) {
+        OkHttpClient httpClient = getHttpClient();
+        HttpURLConnection connection = httpClient.open(url);
+
+        connection.setInstanceFollowRedirects(false);
+        connection.setRequestProperty(HttpHeaders.USER_AGENT, client.getUserAgent());
+        connection.setRequestProperty(HttpHeaders.ACCEPT_LANGUAGE, client.getLanguage());
+        connection.setUseCaches(false);
+
+        return connection;
+    }
+
+    protected InputStream getInputStream(HttpURLConnection connection) throws IOException {
+        InputStream stream = connection.getResponseCode() >= HttpURLConnection.HTTP_BAD_REQUEST ?
+                connection.getErrorStream() : connection.getInputStream();
+        return debugLogging ? new WireLoggingInputStream(stream) : stream;
+    }
+
+    protected String processError(HttpURLConnection connection) throws IOException {
+        String field = connection.getHeaderField(HttpHeaders.WWW_AUTHENTICATE);
+        LOGGER.warning("Server has responded with a error: " + getError(connection) + "\n" +
+                HttpHeaders.WWW_AUTHENTICATE + ": " + field);
+        Streams.readStreamToNull(getInputStream(connection));
+        return field;
+    }
+
     private static SSLSocketFactory createSslSocketFactory() {
         try {
             SSLContext context = SSLContext.getInstance("TLS");
@@ -147,20 +168,6 @@ public class OAuth2Session implements Session {
     private boolean isJsonType(HttpURLConnection connection) {
         String field = connection.getHeaderField(HttpHeaders.CONTENT_TYPE);
         return field != null && field.startsWith(MimeTypes.Application.JSON);
-    }
-
-    private InputStream getInputStream(HttpURLConnection connection) throws IOException {
-        InputStream stream = connection.getResponseCode() >= HttpURLConnection.HTTP_BAD_REQUEST ?
-                connection.getErrorStream() : connection.getInputStream();
-        return debugLogging ? new WireLoggingInputStream(stream) : stream;
-    }
-
-    private String processError(HttpURLConnection connection) throws IOException {
-        String field = connection.getHeaderField(HttpHeaders.WWW_AUTHENTICATE);
-        LOGGER.warning("Server has responded with a error: " + getError(connection) + "\n" +
-                HttpHeaders.WWW_AUTHENTICATE + ": " + field);
-        Streams.readStreamToNull(getInputStream(connection));
-        return field;
     }
 
     private String getError(HttpURLConnection connection) {
