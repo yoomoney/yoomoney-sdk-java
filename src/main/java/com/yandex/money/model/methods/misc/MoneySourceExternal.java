@@ -1,7 +1,7 @@
-package com.yandex.money.model.cps.misc;
+package com.yandex.money.model.methods.misc;
 
 import com.google.gson.JsonObject;
-import com.yandex.money.model.cps.JsonUtils;
+import com.yandex.money.model.methods.JsonUtils;
 
 /**
  *

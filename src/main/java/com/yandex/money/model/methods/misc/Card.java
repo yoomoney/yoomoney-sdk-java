@@ -1,4 +1,4 @@
-package com.yandex.money.model.cps.misc;
+package com.yandex.money.model.methods.misc;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.yandex.money.model.cps.JsonUtils;
+import com.yandex.money.model.methods.JsonUtils;
 
 import java.lang.reflect.Type;
 

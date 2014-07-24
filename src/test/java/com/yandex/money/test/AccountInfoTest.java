@@ -4,7 +4,7 @@ import com.yandex.money.YandexMoney;
 import com.yandex.money.exceptions.InsufficientScopeException;
 import com.yandex.money.exceptions.InvalidRequestException;
 import com.yandex.money.exceptions.InvalidTokenException;
-import com.yandex.money.model.cps.AccountInfo;
+import com.yandex.money.model.methods.AccountInfo;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;

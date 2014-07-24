@@ -1,4 +1,4 @@
-package com.yandex.money.model.cps;
+package com.yandex.money.model.methods;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -7,8 +7,8 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.model.cps.misc.DigitalGoods;
-import com.yandex.money.model.cps.misc.MoneySource;
+import com.yandex.money.model.methods.misc.DigitalGoods;
+import com.yandex.money.model.methods.misc.MoneySource;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;

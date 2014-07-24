@@ -1,4 +1,4 @@
-package com.yandex.money.model.cps;
+package com.yandex.money.model.methods;
 
 import com.yandex.money.net.MethodResponse;
 

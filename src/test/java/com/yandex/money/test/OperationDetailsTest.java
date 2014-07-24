@@ -4,9 +4,9 @@ import com.yandex.money.YandexMoney;
 import com.yandex.money.exceptions.InsufficientScopeException;
 import com.yandex.money.exceptions.InvalidRequestException;
 import com.yandex.money.exceptions.InvalidTokenException;
-import com.yandex.money.model.cps.OperationDetails;
-import com.yandex.money.model.cps.OperationHistory;
-import com.yandex.money.model.cps.misc.Operation;
+import com.yandex.money.model.methods.OperationDetails;
+import com.yandex.money.model.methods.OperationHistory;
+import com.yandex.money.model.methods.misc.Operation;
 
 import org.joda.time.DateTime;
 import org.testng.Assert;

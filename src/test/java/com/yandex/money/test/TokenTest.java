@@ -3,7 +3,7 @@ package com.yandex.money.test;
 import com.yandex.money.exceptions.InsufficientScopeException;
 import com.yandex.money.exceptions.InvalidRequestException;
 import com.yandex.money.exceptions.InvalidTokenException;
-import com.yandex.money.model.cps.Token;
+import com.yandex.money.model.methods.Token;
 import com.yandex.money.net.DefaultApiClient;
 import com.yandex.money.net.OAuth2Session;
 

@@ -1,4 +1,4 @@
-package com.yandex.money.model.cps;
+package com.yandex.money.model.methods;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

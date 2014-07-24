@@ -1,4 +1,4 @@
-package com.yandex.money.model.cps.misc;
+package com.yandex.money.model.methods.misc;
 
 public enum PayeeIdentifierType {
     ACCOUNT("account"),
