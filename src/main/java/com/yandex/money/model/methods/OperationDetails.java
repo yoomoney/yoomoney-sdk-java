@@ -22,15 +22,15 @@ import java.net.URL;
 
 public class OperationDetails implements MethodResponse {
 
-    private final String error;
+    private final Error error;
     private final Operation operation;
 
-    public OperationDetails(String error, Operation operation) {
+    public OperationDetails(Error error, Operation operation) {
         this.error = error;
         this.operation = operation;
     }
 
-    public String getError() {
+    public Error getError() {
         return error;
     }
 
@@ -79,7 +79,7 @@ public class OperationDetails implements MethodResponse {
                 throws JsonParseException {
 
             JsonObject object = json.getAsJsonObject();
-            return new OperationDetails(JsonUtils.getString(object, "error"),
+            return new OperationDetails(Error.parse(JsonUtils.getString(object, "error")),
                     Operation.createFromJson(json));
         }
     }

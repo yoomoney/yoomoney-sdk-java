@@ -12,6 +12,7 @@ import com.yandex.money.model.methods.JsonUtils;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
+import java.util.Map;
 
 public class Operation {
 
@@ -35,6 +36,9 @@ public class Operation {
     private final DateTime answerDatetime;
     private final String label;
     private final String details;
+    private final Boolean repeatable;
+    private final Map<String, String> paymentParameters;
+    private final Boolean favorite;
     private final Type type;
     private final DigitalGoods digitalGoods;
 
@@ -43,7 +47,8 @@ public class Operation {
                         String title, String sender, String recipient,
                         PayeeIdentifierType recipientType, String message, String comment,
                         Boolean codepro, String protectionCode, DateTime expires,
-                        DateTime answerDatetime, String label, String details, Type type,
+                        DateTime answerDatetime, String label, String details, Boolean repeatable,
+                        Map<String, String> paymentParameters, Boolean favorite, Type type,
                         DigitalGoods digitalGoods) {
 
         this.operationId = operationId;
@@ -66,6 +71,9 @@ public class Operation {
         this.answerDatetime = answerDatetime;
         this.label = label;
         this.details = details;
+        this.repeatable = repeatable;
+        this.paymentParameters = paymentParameters;
+        this.favorite = favorite;
         this.type = type;
         this.digitalGoods = digitalGoods;
     }
@@ -130,8 +138,8 @@ public class Operation {
         return comment;
     }
 
-    public Boolean getCodepro() {
-        return codepro;
+    public boolean isProtected() {
+        return codepro != null && codepro;
     }
 
     public String getProtectionCode() {
@@ -152,6 +160,14 @@ public class Operation {
 
     public String getDetails() {
         return details;
+    }
+
+    public boolean isRepeatable() {
+        return repeatable != null && repeatable;
+    }
+
+    public boolean isFavorite() {
+        return favorite != null && favorite;
     }
 
     public Type getType() {
@@ -250,6 +266,9 @@ public class Operation {
         private DateTime answerDatetime;
         private String label;
         private String details;
+        private Boolean repeatable;
+        private Map<String, String> paymentParameters;
+        private Boolean favorite;
         private Type type;
         private DigitalGoods digitalGoods;
 
@@ -353,6 +372,21 @@ public class Operation {
             return this;
         }
 
+        public Builder setRepeatable(Boolean repeatable) {
+            this.repeatable = repeatable;
+            return this;
+        }
+
+        public Builder setPaymentParameters(Map<String, String> paymentParameters) {
+            this.paymentParameters = paymentParameters;
+            return this;
+        }
+
+        public Builder setFavorite(Boolean favorite) {
+            this.favorite = favorite;
+            return this;
+        }
+
         public Builder setType(Type type) {
             this.type = type;
             return this;
@@ -366,7 +400,8 @@ public class Operation {
         public Operation createOperation() {
             return new Operation(operationId, status, patternId, direction, amount, amountDue, fee,
                     datetime, title, sender, recipient, recipientType, message, comment, codepro,
-                    protectionCode, expires, answerDatetime, label, details, type, digitalGoods);
+                    protectionCode, expires, answerDatetime, label, details, repeatable,
+                    paymentParameters, favorite, type, digitalGoods);
         }
     }
 
@@ -383,6 +418,7 @@ public class Operation {
                                      JsonDeserializationContext context) throws JsonParseException {
 
             final JsonObject o = json.getAsJsonObject();
+            final String paymentParametersMember = "payment_parameters";
             return new Builder()
                     .setOperationId(JsonUtils.getMandatoryString(o, "operation_id"))
                     .setStatus(Status.parse(JsonUtils.getString(o, "status")))
@@ -407,6 +443,10 @@ public class Operation {
                     .setExpires(JsonUtils.getDateTime(o, "expires"))
                     .setAnswerDatetime(JsonUtils.getDateTime(o, "answer_datetime"))
                     .setDetails(JsonUtils.getString(o, "details"))
+                    .setRepeatable(JsonUtils.getBoolean(o, "repeatable"))
+                    .setPaymentParameters(o.has(paymentParametersMember) ?
+                            JsonUtils.map(o.getAsJsonObject(paymentParametersMember)) : null)
+                    .setFavorite(JsonUtils.getBoolean(o, "favourite"))
                     .setDigitalGoods(DigitalGoods.createFromJson(o.get("digital_goods")))
                     .createOperation();
         }

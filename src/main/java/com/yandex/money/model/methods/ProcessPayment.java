@@ -34,12 +34,15 @@ public class ProcessPayment extends BaseProcessPayment {
     private final String payee;
     private final BigDecimal creditAmount;
     private final String accountUnblockUri;
+    private final String payeeUid;
+    private final String holdForPickupLink;
     private final DigitalGoods digitalGoods;
 
     private ProcessPayment(Status status, Error error, String paymentId, BigDecimal balance,
                            String invoiceId, String payer, String payee, BigDecimal creditAmount,
-                           String accountUnblockUri, String acsUri, Map<String, String> acsParams,
-                           Long nextRetry, DigitalGoods digitalGoods) {
+                           String accountUnblockUri, String payeeUid, String holdForPickupLink,
+                           String acsUri, Map<String, String> acsParams, Long nextRetry,
+                           DigitalGoods digitalGoods) {
 
         super(status, error, acsUri, acsParams, nextRetry);
         if (status == Status.SUCCESS && paymentId == null) {
@@ -52,6 +55,8 @@ public class ProcessPayment extends BaseProcessPayment {
         this.payee = payee;
         this.creditAmount = creditAmount;
         this.accountUnblockUri = accountUnblockUri;
+        this.payeeUid = payeeUid;
+        this.holdForPickupLink = holdForPickupLink;
         this.digitalGoods = digitalGoods;
     }
 
@@ -81,6 +86,14 @@ public class ProcessPayment extends BaseProcessPayment {
 
     public String getAccountUnblockUri() {
         return accountUnblockUri;
+    }
+
+    public String getPayeeUid() {
+        return payeeUid;
+    }
+
+    public String getHoldForPickupLink() {
+        return holdForPickupLink;
     }
 
     public DigitalGoods getDigitalGoods() {
@@ -198,6 +211,8 @@ public class ProcessPayment extends BaseProcessPayment {
         private String payee;
         private BigDecimal creditAmount;
         private String accountUnblockUri;
+        private String payeeUid;
+        private String holdForPickupLink;
         private String acsUri;
         private Map<String, String> acsParams;
         private Long nextRetry;
@@ -248,6 +263,16 @@ public class ProcessPayment extends BaseProcessPayment {
             return this;
         }
 
+        public Builder setPayeeUid(String payeeUid) {
+            this.payeeUid = payeeUid;
+            return this;
+        }
+
+        public Builder setHoldForPickupLink(String holdForPickupLink) {
+            this.holdForPickupLink = holdForPickupLink;
+            return this;
+        }
+
         public Builder setAcsUri(String acsUri) {
             this.acsUri = acsUri;
             return this;
@@ -270,7 +295,8 @@ public class ProcessPayment extends BaseProcessPayment {
 
         public ProcessPayment createProcessPayment() {
             return new ProcessPayment(status, error, paymentId, balance, invoiceId, payer, payee,
-                    creditAmount, accountUnblockUri, acsUri, acsParams, nextRetry, digitalGoods);
+                    creditAmount, accountUnblockUri, payeeUid, holdForPickupLink, acsUri, acsParams,
+                    nextRetry, digitalGoods);
         }
     }
 
@@ -291,6 +317,8 @@ public class ProcessPayment extends BaseProcessPayment {
                     .setPayee(JsonUtils.getString(object, "payee"))
                     .setCreditAmount(JsonUtils.getBigDecimal(object, "credit_amount"))
                     .setAccountUnblockUri(JsonUtils.getString(object, "account_unblock_uri"))
+                    .setPayeeUid(JsonUtils.getString(object, "payee_uid"))
+                    .setHoldForPickupLink(JsonUtils.getString(object, "hold_for_pickup_link"))
                     .setAcsUri(JsonUtils.getString(object, MEMBER_ACS_URI))
                     .setAcsParams(object.has(MEMBER_ACS_PARAMS) ?
                             JsonUtils.map(object.getAsJsonObject(MEMBER_ACS_PARAMS)) : null)

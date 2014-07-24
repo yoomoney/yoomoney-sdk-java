@@ -7,6 +7,8 @@ import java.util.Map;
 public enum Error {
 
     ACCOUNT_BLOCKED("account_blocked"),
+    ALREADY_ACCEPTED("already_accepted"),
+    ALREADY_REJECTED("already_rejected"),
     AUTHORIZATION_REJECT("authorization_reject"),
     CONTRACT_NOT_FOUND("contract_not_found"),
     EXT_ACTION_REQUIRED("ext_action_required"),
@@ -18,6 +20,7 @@ public enum Error {
     ILLEGAL_PARAM_EXPIRE_PERIOD("illegal_param_expire_period"),
     ILLEGAL_PARAM_EXT_AUTH_FAIL_URI("illegal_param_ext_auth_fail_uri"),
     ILLEGAL_PARAM_EXT_AUTH_SUCCESS_URI("illegal_param_ext_auth_success_uri"),
+    ILLEGAL_PARAM_FAVORITE_ID("illegal_param_favourite_id"),
     ILLEGAL_PARAM_FROM("illegal_param_from"),
     ILLEGAL_PARAM_INSTANCE_ID("illegal_param_instance_id"),
     ILLEGAL_PARAM_LABEL("illegal_param_label"),
