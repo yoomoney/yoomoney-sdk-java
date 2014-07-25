@@ -43,7 +43,7 @@ public class YandexMoneyTest implements ApiTest {
 
     @BeforeClass
     private void setUp() {
-        ym = new YandexMoney();
+        ym = new YandexMoney(CLIENT_ID);
         ym.setDebugLogging(true);
     }
 

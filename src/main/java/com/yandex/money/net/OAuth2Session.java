@@ -118,7 +118,7 @@ public class OAuth2Session implements Session {
     }
 
     public OAuth2Authorization createOAuth2Authorization() {
-        return new OAuth2Authorization(client.getHostsProvider());
+        return new OAuth2Authorization(client);
     }
 
     protected HttpURLConnection openConnection(URL url) {

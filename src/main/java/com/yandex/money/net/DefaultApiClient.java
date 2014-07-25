@@ -12,14 +12,24 @@ public class DefaultApiClient implements ApiClient {
 
     private static final long DEFAULT_TIMEOUT = 30;
 
+    private final String id;
     private final OkHttpClient httpClient;
     private final HostsProvider hostsProvider;
 
-    public DefaultApiClient() {
+    public DefaultApiClient(String clientId) {
+        if (clientId == null) {
+            throw new NullPointerException("client id is null");
+        }
+        id = clientId;
         httpClient = new OkHttpClient();
         httpClient.setReadTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         httpClient.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         hostsProvider = new HostsProvider(false);
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override

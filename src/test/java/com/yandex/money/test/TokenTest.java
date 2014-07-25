@@ -23,7 +23,7 @@ public class TokenTest implements ApiTest {
     public void testToken() throws InvalidTokenException, InsufficientScopeException,
             InvalidRequestException, IOException {
 
-        OAuth2Session session = new OAuth2Session(new DefaultApiClient());
+        OAuth2Session session = new OAuth2Session(new DefaultApiClient(CLIENT_ID));
         session.setDebugLogging(true);
 
         Token token = session.execute(new Token.Request(CODE, CLIENT_ID, REDIRECT_URI, null));

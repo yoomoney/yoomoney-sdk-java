@@ -14,8 +14,8 @@ public class YandexMoney {
 
     private final OAuth2Session session;
 
-    public YandexMoney() {
-        this(new DefaultApiClient());
+    public YandexMoney(String clientId) {
+        this(new DefaultApiClient(clientId));
     }
 
     public YandexMoney(ApiClient apiClient) {

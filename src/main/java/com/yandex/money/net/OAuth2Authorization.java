@@ -9,33 +9,29 @@ import java.util.Set;
  */
 public class OAuth2Authorization {
 
-    private final HostsProvider hostsProvider;
+    private final ApiClient client;
 
-    public OAuth2Authorization(HostsProvider hostsProvider) {
-        if (hostsProvider == null) {
+    public OAuth2Authorization(ApiClient client) {
+        if (client == null) {
             throw new NullPointerException("hostsProvider is null");
         }
-        this.hostsProvider = hostsProvider;
+        this.client = client;
     }
 
     public String getAuthorizeUrl() {
-        return hostsProvider.getSpMoney() + "/oauth/authorize";
+        return client.getHostsProvider().getSpMoney() + "/oauth/authorize";
     }
 
     public Params getAuthorizeParams() {
-        return new Params();
+        return new Params()
+                .setClientId(client.getId());
     }
 
-    public class Params {
+    public static final class Params {
         private String clientId;
         private String responseType;
         private String redirectUri;
         private Set<Scope> scopes;
-
-        public Params setClientId(String clientId) {
-            this.clientId = clientId;
-            return this;
-        }
 
         public Params setResponseType(String responseType) {
             this.responseType = responseType;
@@ -72,6 +68,11 @@ public class OAuth2Authorization {
                     .addParamIfNotNull("response_type", responseType)
                     .addParamIfNotNull("redirect_uri", redirectUri)
                     .toByteArray();
+        }
+
+        private Params setClientId(String clientId) {
+            this.clientId = clientId;
+            return this;
         }
     }
 }
