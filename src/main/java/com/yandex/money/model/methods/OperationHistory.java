@@ -12,6 +12,7 @@ import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Error;
 
 import org.joda.time.DateTime;
 
@@ -28,7 +29,7 @@ import java.util.Set;
 
 public class OperationHistory implements MethodResponse {
 
-    private final Error error;
+    private final com.yandex.money.utils.Error error;
     private final String nextRecord;
     private final List<Operation> operations;
 

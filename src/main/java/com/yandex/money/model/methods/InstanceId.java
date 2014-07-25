@@ -10,6 +10,7 @@ import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Error;
 import com.yandex.money.utils.Strings;
 
 import java.io.IOException;
@@ -25,7 +26,7 @@ import java.net.URL;
 public class InstanceId implements MethodResponse {
 
     private Status status;
-    private Error error;
+    private com.yandex.money.utils.Error error;
     private String instanceId;
 
     public InstanceId(Status status, Error error, String instanceId) {

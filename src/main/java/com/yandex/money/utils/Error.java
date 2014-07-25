@@ -1,4 +1,4 @@
-package com.yandex.money.model.methods;
+package com.yandex.money.utils;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.Map;
 
 public enum Error {
 
+    ACCESS_DENIED("access_denied"),
     ACCOUNT_BLOCKED("account_blocked"),
     ALREADY_ACCEPTED("already_accepted"),
     ALREADY_REJECTED("already_rejected"),
@@ -35,11 +36,15 @@ public enum Error {
     ILLEGAL_PARAM_TYPE("illegal_param_type"),
     ILLEGAL_PARAM_TILL("illegal_param_till"),
     ILLEGAL_PARAMS("illegal_params"),
+    INVALID_GRANT("invalid_grant"),
+    INVALID_REQUEST("invalid_request"),
+    INVALID_SCOPE("invalid_scope"),
     NOT_ENOUGH_FUNDS("not_enough_funds"),
     LIMIT_EXCEEDED("limit_exceeded"),
     MONEY_SOURCE_NOT_AVAILABLE("money_source_not_available"),
     PAYEE_NOT_FOUND("payee_not_found"),
     PAYMENT_REFUSED("payment_refused"),
+    UNAUTHORIZED_CLIENT("unauthorized_client"),
     UNKNOWN("unknown");
 
     private static final Map<String, Error> ERRORS;

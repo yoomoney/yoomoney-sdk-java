@@ -11,6 +11,7 @@ import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Error;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,7 +26,7 @@ import java.net.URL;
 public class IncomingTransferAccept implements MethodResponse {
 
     private final Status status;
-    private final Error error;
+    private final com.yandex.money.utils.Error error;
     private final Integer protectionCodeAttemptsAvailable;
     private final String extActionUri;
 

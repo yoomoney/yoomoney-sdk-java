@@ -7,13 +7,13 @@ import com.yandex.money.exceptions.InvalidTokenException;
 import com.yandex.money.model.common.params.PhoneParams;
 import com.yandex.money.model.methods.BaseProcessPayment;
 import com.yandex.money.model.methods.BaseRequestPayment;
-import com.yandex.money.model.methods.Error;
 import com.yandex.money.model.methods.InstanceId;
 import com.yandex.money.model.methods.ProcessExternalPayment;
 import com.yandex.money.model.methods.ProcessPayment;
 import com.yandex.money.model.methods.RequestExternalPayment;
 import com.yandex.money.model.methods.RequestPayment;
 import com.yandex.money.net.MethodRequest;
+import com.yandex.money.utils.Error;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;

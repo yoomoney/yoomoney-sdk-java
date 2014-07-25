@@ -11,6 +11,7 @@ import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Error;
 import com.yandex.money.utils.Strings;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ import java.net.URL;
 public class Token implements MethodResponse {
 
     private final String accessToken;
-    private final Error error;
+    private final com.yandex.money.utils.Error error;
 
     public Token(String accessToken, Error error) {
         this.accessToken = accessToken;
@@ -41,7 +42,7 @@ public class Token implements MethodResponse {
         return error;
     }
 
-    public static final class Request implements MethodRequest<Token> {
+    public static class Request implements MethodRequest<Token> {
 
         private final String code;
         private final String clientId;

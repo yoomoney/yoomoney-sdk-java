@@ -12,6 +12,7 @@ import com.yandex.money.model.methods.misc.MoneySource;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Error;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +39,7 @@ public class ProcessPayment extends BaseProcessPayment {
     private final String holdForPickupLink;
     private final DigitalGoods digitalGoods;
 
-    private ProcessPayment(Status status, Error error, String paymentId, BigDecimal balance,
+    private ProcessPayment(Status status, com.yandex.money.utils.Error error, String paymentId, BigDecimal balance,
                            String invoiceId, String payer, String payee, BigDecimal creditAmount,
                            String accountUnblockUri, String payeeUid, String holdForPickupLink,
                            String acsUri, Map<String, String> acsParams, Long nextRetry,

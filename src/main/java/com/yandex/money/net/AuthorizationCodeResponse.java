@@ -1,5 +1,6 @@
 package com.yandex.money.net;
 
+import com.yandex.money.utils.Error;
 import com.yandex.money.utils.UrlEncodedUtils;
 
 import java.net.URISyntaxException;
@@ -14,7 +15,7 @@ public class AuthorizationCodeResponse {
     private final Error error;
     private final String errorDescription;
 
-    private AuthorizationCodeResponse(String code, Error error, String errorDescription) {
+    protected AuthorizationCodeResponse(String code, Error error, String errorDescription) {
         this.code = code;
         this.error = error;
         this.errorDescription = errorDescription;
@@ -36,31 +37,5 @@ public class AuthorizationCodeResponse {
 
     public String getErrorDescription() {
         return errorDescription;
-    }
-
-    public enum Error {
-        ACCESS_DENIED("access_denied"),
-        INVALID_REQUEST("invalid_request"),
-        INVALID_SCOPE("invalid_scope"),
-        UNAUTHORIZED_CLIENT("unauthorized_client"),
-        UNKNOWN("unknown");
-
-        private final String code;
-
-        private Error(String code) {
-            this.code = code;
-        }
-
-        public static Error parse(String code) {
-            if (code == null) {
-                return null;
-            }
-            for (Error value : values()) {
-                if (value.code.equals(code)) {
-                    return value;
-                }
-            }
-            return UNKNOWN;
-        }
     }
 }

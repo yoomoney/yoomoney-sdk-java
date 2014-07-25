@@ -12,6 +12,7 @@ import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Error;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -22,7 +23,7 @@ import java.net.URL;
 
 public class OperationDetails implements MethodResponse {
 
-    private final Error error;
+    private final com.yandex.money.utils.Error error;
     private final Operation operation;
 
     public OperationDetails(Error error, Operation operation) {

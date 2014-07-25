@@ -1,6 +1,7 @@
 package com.yandex.money.model.methods;
 
 import com.yandex.money.net.MethodResponse;
+import com.yandex.money.utils.Error;
 
 import java.util.Map;
 
@@ -16,7 +17,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
     protected static final String MEMBER_NEXT_RETRY = "next_retry";
 
     private final Status status;
-    private final Error error;
+    private final com.yandex.money.utils.Error error;
     private final String acsUri;
     private final Map<String, String> acsParams;
     private final Long nextRetry;
