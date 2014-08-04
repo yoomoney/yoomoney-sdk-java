@@ -1,8 +1,8 @@
 package com.yandex.money.net;
 
 import com.squareup.okhttp.OkHttpClient;
+import com.yandex.money.utils.Language;
 
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -48,7 +48,7 @@ public class DefaultApiClient implements ApiClient {
     }
 
     @Override
-    public String getLanguage() {
-        return Locale.getDefault().getLanguage();
+    public Language getLanguage() {
+        return Language.getDefault();
     }
 }

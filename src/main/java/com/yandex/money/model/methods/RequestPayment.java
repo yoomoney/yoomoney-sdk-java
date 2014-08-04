@@ -8,6 +8,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.yandex.money.model.Error;
 import com.yandex.money.model.methods.misc.AccountStatus;
 import com.yandex.money.model.methods.misc.AccountType;
 import com.yandex.money.model.methods.misc.Card;
@@ -16,7 +17,6 @@ import com.yandex.money.model.methods.misc.Wallet;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
-import com.yandex.money.utils.Error;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,7 +43,7 @@ public class RequestPayment extends BaseRequestPayment {
     private final String accountUnblockUri;
     private final String extActionUri;
 
-    private RequestPayment(Status status, com.yandex.money.utils.Error error, List<MoneySource> moneySources,
+    private RequestPayment(Status status, Error error, List<MoneySource> moneySources,
                            Boolean cscRequired, String requestId, BigDecimal contractAmount,
                            BigDecimal balance, AccountStatus recipientAccountStatus,
                            AccountType recipientAccountType, String protectionCode,

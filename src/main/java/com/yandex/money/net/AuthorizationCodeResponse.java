@@ -1,6 +1,6 @@
 package com.yandex.money.net;
 
-import com.yandex.money.utils.Error;
+import com.yandex.money.model.Error;
 import com.yandex.money.utils.UrlEncodedUtils;
 
 import java.net.URISyntaxException;

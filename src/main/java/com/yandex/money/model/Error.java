@@ -1,4 +1,4 @@
-package com.yandex.money.utils;
+package com.yandex.money.model;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,6 +37,7 @@ public enum Error {
     ILLEGAL_PARAM_TILL("illegal_param_till"),
     ILLEGAL_PARAMS("illegal_params"),
     INVALID_GRANT("invalid_grant"),
+    INVALID_IMAGE("invalid_image"),
     INVALID_REQUEST("invalid_request"),
     INVALID_SCOPE("invalid_scope"),
     NOT_ENOUGH_FUNDS("not_enough_funds"),

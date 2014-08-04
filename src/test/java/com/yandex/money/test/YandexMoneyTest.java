@@ -13,7 +13,7 @@ import com.yandex.money.model.methods.ProcessPayment;
 import com.yandex.money.model.methods.RequestExternalPayment;
 import com.yandex.money.model.methods.RequestPayment;
 import com.yandex.money.net.MethodRequest;
-import com.yandex.money.utils.Error;
+import com.yandex.money.model.Error;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;

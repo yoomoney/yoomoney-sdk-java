@@ -7,11 +7,11 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.yandex.money.model.Error;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
-import com.yandex.money.utils.Error;
 import com.yandex.money.utils.Strings;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.net.URL;
 public class Token implements MethodResponse {
 
     private final String accessToken;
-    private final com.yandex.money.utils.Error error;
+    private final Error error;
 
     public Token(String accessToken, Error error) {
         this.accessToken = accessToken;
@@ -44,8 +44,9 @@ public class Token implements MethodResponse {
 
     public static class Request implements MethodRequest<Token> {
 
-        private final String code;
-        private final String clientId;
+        protected final String code;
+        protected final String clientId;
+
         private final String grantType;
         private final String redirectUri;
         private final String clientSecret;

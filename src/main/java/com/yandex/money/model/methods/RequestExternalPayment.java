@@ -6,12 +6,12 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.yandex.money.model.Error;
 import com.yandex.money.model.common.params.P2pParams;
 import com.yandex.money.model.common.params.PhoneParams;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
-import com.yandex.money.utils.Error;
 import com.yandex.money.utils.Strings;
 
 import java.io.IOException;
@@ -30,7 +30,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
 
     private final String title;
 
-    public RequestExternalPayment(Status status, com.yandex.money.utils.Error error, String requestId,
+    public RequestExternalPayment(Status status, Error error, String requestId,
                                   BigDecimal contractAmount, String title) {
 
         super(status, error, requestId, contractAmount);

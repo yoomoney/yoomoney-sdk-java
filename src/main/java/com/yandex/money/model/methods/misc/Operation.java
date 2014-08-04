@@ -166,6 +166,10 @@ public class Operation {
         return repeatable != null && repeatable;
     }
 
+    public Map<String, String> getPaymentParameters() {
+        return paymentParameters;
+    }
+
     public boolean isFavorite() {
         return favorite != null && favorite;
     }

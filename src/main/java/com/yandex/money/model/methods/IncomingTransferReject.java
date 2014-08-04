@@ -7,11 +7,11 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.yandex.money.model.Error;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
-import com.yandex.money.utils.Error;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +26,7 @@ import java.net.URL;
 public class IncomingTransferReject implements MethodResponse {
 
     private final Status status;
-    private final com.yandex.money.utils.Error error;
+    private final Error error;
 
     public IncomingTransferReject(Status status, Error error) {
         this.status = status;

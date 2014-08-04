@@ -2,11 +2,14 @@ package com.yandex.money.net;
 
 import com.yandex.money.utils.HttpHeaders;
 import com.yandex.money.utils.MimeTypes;
+import com.yandex.money.utils.Streams;
+import com.yandex.money.utils.Strings;
 
 import org.joda.time.DateTime;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
@@ -24,6 +27,8 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
 
     private static final byte[] POST_PARAM_DELIMITER = "&".getBytes(REQUEST_CHARSET_UTF8);
     private static final byte[] POST_PARAM_NV_DELIMITER = "=".getBytes(REQUEST_CHARSET_UTF8);
+
+    private String contentType = MimeTypes.Application.X_WWW_FORM_URLENCODED;
 
     public PostRequestBodyBuffer addParam(String name, String value) {
         try {
@@ -82,10 +87,26 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
         }
     }
 
+    public PostRequestBodyBuffer addContent(InputStream inputStream) {
+        try {
+            Streams.copy(inputStream, this);
+            return this;
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e.getMessage(), e);
+        }
+    }
+
+    public PostRequestBodyBuffer setContentType(String contentType) {
+        if (Strings.isNullOrEmpty(contentType)) {
+            throw new IllegalArgumentException("contentType should not be null or empty");
+        }
+        this.contentType = contentType;
+        return this;
+    }
+
     public void setHttpHeaders(HttpURLConnection connection) throws ProtocolException {
         connection.setRequestMethod("POST");
-        connection.setRequestProperty(HttpHeaders.CONTENT_TYPE,
-                MimeTypes.Application.X_WWW_FORM_URLENCODED);
+        connection.setRequestProperty(HttpHeaders.CONTENT_TYPE, contentType);
         connection.setFixedLengthStreamingMode(size());
     }
 

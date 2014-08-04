@@ -5,6 +5,7 @@ import com.yandex.money.exceptions.InsufficientScopeException;
 import com.yandex.money.exceptions.InvalidRequestException;
 import com.yandex.money.exceptions.InvalidTokenException;
 import com.yandex.money.utils.HttpHeaders;
+import com.yandex.money.utils.Language;
 import com.yandex.money.utils.MimeTypes;
 import com.yandex.money.utils.Streams;
 import com.yandex.money.utils.Strings;
@@ -127,7 +128,10 @@ public class OAuth2Session implements Session {
 
         connection.setInstanceFollowRedirects(false);
         connection.setRequestProperty(HttpHeaders.USER_AGENT, client.getUserAgent());
-        connection.setRequestProperty(HttpHeaders.ACCEPT_LANGUAGE, client.getLanguage());
+        Language language = client.getLanguage();
+        if (language != null) {
+            connection.setRequestProperty(HttpHeaders.ACCEPT_LANGUAGE, language.getIso6391Code());
+        }
         connection.setUseCaches(false);
 
         return connection;

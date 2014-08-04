@@ -6,11 +6,11 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.yandex.money.model.Error;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.MethodResponse;
 import com.yandex.money.net.PostRequestBodyBuffer;
-import com.yandex.money.utils.Error;
 import com.yandex.money.utils.Strings;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ import java.net.URL;
 public class InstanceId implements MethodResponse {
 
     private Status status;
-    private com.yandex.money.utils.Error error;
+    private Error error;
     private String instanceId;
 
     public InstanceId(Status status, Error error, String instanceId) {

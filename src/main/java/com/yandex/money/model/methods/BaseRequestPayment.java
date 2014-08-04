@@ -1,7 +1,7 @@
 package com.yandex.money.model.methods;
 
+import com.yandex.money.model.Error;
 import com.yandex.money.net.MethodResponse;
-import com.yandex.money.utils.Error;
 
 import java.math.BigDecimal;
 
@@ -16,7 +16,7 @@ public abstract class BaseRequestPayment implements MethodResponse {
     protected static final String MEMBER_CONTRACT_AMOUNT = "contract_amount";
 
     private final Status status;
-    private final com.yandex.money.utils.Error error;
+    private final Error error;
     private final String requestId;
     private final BigDecimal contractAmount;
 
