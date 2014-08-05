@@ -30,6 +30,10 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
 
     private String contentType = MimeTypes.Application.X_WWW_FORM_URLENCODED;
 
+    public PostRequestBodyBuffer addParam(String name, int value) {
+        return addParam(name, Integer.toString(value));
+    }
+
     public PostRequestBodyBuffer addParam(String name, String value) {
         try {
             return addParamWithoutURLEncoding(
