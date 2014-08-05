@@ -14,8 +14,13 @@ public final class MimeTypes {
 
         public static final String JSON = "application/json";
         public static final String X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
+        public static final String XML = "application/xml";
 
         private Application() {
         }
+    }
+
+    public static final class Text {
+        public static final String XML = "text/xml";
     }
 }
