@@ -13,10 +13,10 @@ public enum PayeeIdentifierType {
     private static final String EMAIL_PATTERN = "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@[a-zA-Z0-9]" +
             "[a-zA-Z0-9\\-]{0,64}(\\.[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25})+";
 
-    private final String identifier;
+    private final String code;
 
-    private PayeeIdentifierType(String identifier) {
-        this.identifier = identifier;
+    private PayeeIdentifierType(String code) {
+        this.code = code;
     }
 
     public static PayeeIdentifierType parse(String identifier) {
@@ -24,7 +24,7 @@ public enum PayeeIdentifierType {
             return null;
         }
         for (PayeeIdentifierType value : values()) {
-            if (value.identifier.equals(identifier)) {
+            if (value.code.equals(identifier)) {
                 return value;
             }
         }
@@ -45,5 +45,9 @@ public enum PayeeIdentifierType {
         } else {
             return UNKNOWN;
         }
+    }
+
+    public String getCode() {
+        return code;
     }
 }

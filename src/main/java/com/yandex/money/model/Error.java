@@ -47,6 +47,7 @@ public enum Error {
     LIMIT_EXCEEDED("limit_exceeded"),
     MONEY_SOURCE_NOT_AVAILABLE("money_source_not_available"),
     PAYEE_NOT_FOUND("payee_not_found"),
+    PAYMENT_EXPIRED("payment_expired"),
     PAYMENT_REFUSED("payment_refused"),
     TOO_MANY_RECORDS("too_many_records"),
     UNAUTHORIZED_CLIENT("unauthorized_client"),

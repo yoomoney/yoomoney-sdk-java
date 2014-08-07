@@ -176,15 +176,14 @@ public class OperationHistory implements MethodResponse {
         PAYMENT("payment"),
         INCOMING_TRANSFER_UNACCEPTED("incoming-transfers-unaccepted");
 
-        private final String filterType;
+        private final String code;
 
-        private FilterType(String filterType) {
-            this.filterType = filterType;
+        private FilterType(String code) {
+            this.code = code;
         }
 
-        @Override
-        public String toString() {
-            return filterType;
+        public String getCode() {
+            return code;
         }
     }
 
