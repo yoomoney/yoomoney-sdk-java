@@ -49,11 +49,11 @@ public class Card extends MoneySource {
 
     private static Gson buildGson() {
         return new GsonBuilder()
-                .registerTypeAdapter(Card.class, new Deserializer())
+                .registerTypeAdapter(Card.class, new TypeAdapter())
                 .create();
     }
 
-    private static final class Deserializer
+    private static final class TypeAdapter
             implements JsonDeserializer<Card>, JsonSerializer<Card> {
 
         private static final String FIELD_ID = "id";
