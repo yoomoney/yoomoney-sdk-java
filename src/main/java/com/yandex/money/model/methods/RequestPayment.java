@@ -17,6 +17,7 @@ import com.yandex.money.model.methods.misc.Wallet;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.PostRequestBodyBuffer;
+import com.yandex.money.utils.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,8 +65,8 @@ public class RequestPayment extends BaseRequestPayment {
         return moneySources;
     }
 
-    public Boolean getCscRequired() {
-        return cscRequired;
+    public Boolean isCscRequired() {
+        return cscRequired != null && cscRequired;
     }
 
     public BigDecimal getBalance() {
@@ -238,7 +239,7 @@ public class RequestPayment extends BaseRequestPayment {
         }
 
         private void checkNotNullAndNotEmpty(String value, String field) {
-            if (value == null || value.isEmpty()) {
+            if (Strings.isNullOrEmpty(value)) {
                 throw new IllegalArgumentException(field + " is null or empty");
             }
         }
