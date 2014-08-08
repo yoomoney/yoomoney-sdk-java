@@ -99,9 +99,9 @@ public class OperationHistory implements MethodResponse {
             if (types != null && !types.isEmpty()) {
                 StringBuilder builder = new StringBuilder();
                 Iterator<FilterType> iterator = types.iterator();
-                builder.append(iterator.next().toString());
+                builder.append(iterator.next().getCode());
                 while (iterator.hasNext()) {
-                    builder.append(' ').append(iterator.next().toString());
+                    builder.append(' ').append(iterator.next().getCode());
                 }
                 requestBodyBuffer.addParam("type", builder.toString());
             }

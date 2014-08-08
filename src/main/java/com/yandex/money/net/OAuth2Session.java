@@ -127,7 +127,10 @@ public class OAuth2Session implements Session {
         HttpURLConnection connection = httpClient.open(url);
 
         connection.setInstanceFollowRedirects(false);
-        connection.setRequestProperty(HttpHeaders.USER_AGENT, client.getUserAgent());
+        UserAgent userAgent = client.getUserAgent();
+        if (userAgent != null) {
+            connection.setRequestProperty(HttpHeaders.USER_AGENT, userAgent.getName());
+        }
         Language language = client.getLanguage();
         if (language != null) {
             connection.setRequestProperty(HttpHeaders.ACCEPT_LANGUAGE, language.getIso6391Code());

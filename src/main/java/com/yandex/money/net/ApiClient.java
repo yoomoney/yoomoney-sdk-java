@@ -10,6 +10,6 @@ public interface ApiClient {
     String getId();
     OkHttpClient getHttpClient();
     HostsProvider getHostsProvider();
-    String getUserAgent();
+    UserAgent getUserAgent();
     Language getLanguage();
 }

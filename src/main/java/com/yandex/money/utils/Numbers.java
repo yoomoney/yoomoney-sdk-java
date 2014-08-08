@@ -15,4 +15,15 @@ public class Numbers {
                 HEX_ARRAY[b & 0x0F]
         };
     }
+
+    public static String bytesToHex(byte[] bytes) {
+        if (bytes == null) {
+            throw new NullPointerException("bytes is null");
+        }
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(byteToHex(b));
+        }
+        return result.toString();
+    }
 }

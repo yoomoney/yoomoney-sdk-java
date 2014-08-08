@@ -97,6 +97,10 @@ public class AccountInfo implements MethodResponse {
         return additionalServices;
     }
 
+    public boolean isIdentified() {
+        return accountStatus == AccountStatus.IDENTIFIED;
+    }
+
     public static final class Request implements MethodRequest<AccountInfo> {
 
         @Override

@@ -223,6 +223,10 @@ public enum Currency {
         return NUMERIC_MAP.get(numericCode);
     }
 
+    public String getAlphaCode() {
+        return alphaCode;
+    }
+
     public Integer getNumericCode() {
         return numericCode;
     }

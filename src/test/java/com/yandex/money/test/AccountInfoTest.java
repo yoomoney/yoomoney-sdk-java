@@ -21,7 +21,7 @@ public class AccountInfoTest implements ApiTest {
 
     @BeforeTest
     public void beforeTest() {
-        yandexMoney = new YandexMoney();
+        yandexMoney = new YandexMoney(CLIENT_ID);
         yandexMoney.setDebugLogging(true);
         yandexMoney.setAccessToken(ACCESS_TOKEN);
     }
