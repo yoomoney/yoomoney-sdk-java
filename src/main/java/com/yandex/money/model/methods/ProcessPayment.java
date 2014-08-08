@@ -132,7 +132,7 @@ public class ProcessPayment extends BaseProcessPayment {
 
         @Override
         public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/request-payment");
+            return new URL(hostsProvider.getMoneyApi() + "/process-payment");
         }
 
         @Override
@@ -146,16 +146,20 @@ public class ProcessPayment extends BaseProcessPayment {
             if (moneySource != null) {
                 postRequestBodyBuffer.addParam("money_source", moneySource.getId());
             }
-            if (testResult != null) {
-                postRequestBodyBuffer.addParam("test_result", testResult.getCode());
+            if (testPayment) {
+                postRequestBodyBuffer.addParamIfNotNull("test_payment", true);
+                if (testCardAvailable) {
+                    postRequestBodyBuffer.addParamIfNotNull("test_card", true);
+                }
+                if (testResult != null) {
+                    postRequestBodyBuffer.addParam("test_result", testResult.getCode());
+                }
             }
             return postRequestBodyBuffer
                     .addParam("request_id", requestId)
                     .addParamIfNotNull("csc", csc)
                     .addParamIfNotNull("ext_auth_success_uri", extAuthSuccessUri)
-                    .addParamIfNotNull("ext_auth_fail_uri", extAuthFailUri)
-                    .addParamIfNotNull("test_payment", testPayment)
-                    .addParamIfNotNull("test_card", testCardAvailable);
+                    .addParamIfNotNull("ext_auth_fail_uri", extAuthFailUri);
         }
 
         public void setTestPayment(boolean testPayment) {
