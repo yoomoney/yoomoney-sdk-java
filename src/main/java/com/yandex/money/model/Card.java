@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
-import com.yandex.money.model.methods.JsonUtils;
+import com.yandex.money.methods.JsonUtils;
 
 import java.lang.reflect.Type;
 

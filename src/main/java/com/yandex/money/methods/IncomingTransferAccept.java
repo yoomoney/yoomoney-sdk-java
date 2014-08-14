@@ -1,4 +1,4 @@
-package com.yandex.money.model.methods;
+package com.yandex.money.methods;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,14 +23,19 @@ import java.net.URL;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class IncomingTransferReject implements MethodResponse {
+public class IncomingTransferAccept implements MethodResponse {
 
     private final Status status;
     private final Error error;
+    private final Integer protectionCodeAttemptsAvailable;
+    private final String extActionUri;
 
-    public IncomingTransferReject(Status status, Error error) {
+    public IncomingTransferAccept(Status status, Error error,
+                                  Integer protectionCodeAttemptsAvailable, String extActionUri) {
         this.status = status;
         this.error = error;
+        this.protectionCodeAttemptsAvailable = protectionCodeAttemptsAvailable;
+        this.extActionUri = extActionUri;
     }
 
     public Status getStatus() {
@@ -39,6 +44,14 @@ public class IncomingTransferReject implements MethodResponse {
 
     public Error getError() {
         return error;
+    }
+
+    public Integer getProtectionCodeAttemptsAvailable() {
+        return protectionCodeAttemptsAvailable;
+    }
+
+    public String getExtActionUri() {
+        return extActionUri;
     }
 
     public enum Status {
@@ -62,51 +75,56 @@ public class IncomingTransferReject implements MethodResponse {
         }
     }
 
-    public static final class Request implements MethodRequest<IncomingTransferReject> {
+    public static final class Request implements MethodRequest<IncomingTransferAccept> {
 
-        private String operationId;
+        private final String operationId;
+        private final String protectionCode;
 
-        public Request(String operationId) {
+        public Request(String operationId, String protectionCode) {
             if (operationId == null || operationId.isEmpty()) {
                 throw new IllegalArgumentException("operationId is null or empty");
             }
             this.operationId = operationId;
+            this.protectionCode = protectionCode;
         }
 
         @Override
         public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/incoming-transfer-reject");
+            return new URL(hostsProvider.getMoneyApi() + "/incoming-transfer-accept");
         }
 
         @Override
-        public IncomingTransferReject parseResponse(InputStream inputStream) {
+        public IncomingTransferAccept parseResponse(InputStream inputStream) {
             return buildGson().fromJson(new InputStreamReader(inputStream),
-                    IncomingTransferReject.class);
+                    IncomingTransferAccept.class);
         }
 
         @Override
         public PostRequestBodyBuffer buildParameters() throws IOException {
             return new PostRequestBodyBuffer()
-                    .addParam("operation_id", operationId);
+                    .addParam("operation_id", operationId)
+                    .addParamIfNotNull("protection_code", protectionCode);
         }
 
         private static Gson buildGson() {
             return new GsonBuilder()
-                    .registerTypeAdapter(Request.class, new Deserializer())
+                    .registerTypeAdapter(IncomingTransferAccept.class, new Deserializer())
                     .create();
         }
     }
 
-    private static final class Deserializer implements JsonDeserializer<IncomingTransferReject> {
+    private static final class Deserializer implements JsonDeserializer<IncomingTransferAccept> {
         @Override
-        public IncomingTransferReject deserialize(JsonElement json, Type typeOfT,
+        public IncomingTransferAccept deserialize(JsonElement json, Type typeOfT,
                                                   JsonDeserializationContext context)
                 throws JsonParseException {
 
             JsonObject object = json.getAsJsonObject();
-            return new IncomingTransferReject(
+            return new IncomingTransferAccept(
                     Status.parse(JsonUtils.getMandatoryString(object, "status")),
-                    Error.parse(JsonUtils.getString(object, "error")));
+                    Error.parse(JsonUtils.getString(object, "error")),
+                    JsonUtils.getInt(object, "protection_code_attempts_available"),
+                    JsonUtils.getString(object, "ext_action_uri"));
         }
     }
 }

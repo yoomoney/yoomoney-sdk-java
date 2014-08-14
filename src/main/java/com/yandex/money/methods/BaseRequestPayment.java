@@ -1,4 +1,4 @@
-package com.yandex.money.model.methods;
+package com.yandex.money.methods;
 
 import com.yandex.money.model.Error;
 import com.yandex.money.net.MethodResponse;
