@@ -1,11 +1,11 @@
 package com.yandex.money.test;
 
-import com.yandex.money.exceptions.InsufficientScopeException;
-import com.yandex.money.exceptions.InvalidRequestException;
-import com.yandex.money.exceptions.InvalidTokenException;
-import com.yandex.money.methods.Token;
-import com.yandex.money.net.DefaultApiClient;
-import com.yandex.money.net.OAuth2Session;
+import com.yandex.money.api.exceptions.InsufficientScopeException;
+import com.yandex.money.api.exceptions.InvalidRequestException;
+import com.yandex.money.api.exceptions.InvalidTokenException;
+import com.yandex.money.api.methods.Token;
+import com.yandex.money.api.net.DefaultApiClient;
+import com.yandex.money.api.net.OAuth2Session;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

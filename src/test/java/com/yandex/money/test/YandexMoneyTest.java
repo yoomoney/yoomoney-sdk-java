@@ -1,19 +1,19 @@
 package com.yandex.money.test;
 
-import com.yandex.money.YandexMoney;
-import com.yandex.money.exceptions.InsufficientScopeException;
-import com.yandex.money.exceptions.InvalidRequestException;
-import com.yandex.money.exceptions.InvalidTokenException;
-import com.yandex.money.methods.BaseProcessPayment;
-import com.yandex.money.methods.BaseRequestPayment;
-import com.yandex.money.methods.InstanceId;
-import com.yandex.money.methods.ProcessExternalPayment;
-import com.yandex.money.methods.ProcessPayment;
-import com.yandex.money.methods.RequestExternalPayment;
-import com.yandex.money.methods.RequestPayment;
-import com.yandex.money.methods.params.PhoneParams;
-import com.yandex.money.model.Error;
-import com.yandex.money.net.MethodRequest;
+import com.yandex.money.api.YandexMoney;
+import com.yandex.money.api.exceptions.InsufficientScopeException;
+import com.yandex.money.api.exceptions.InvalidRequestException;
+import com.yandex.money.api.exceptions.InvalidTokenException;
+import com.yandex.money.api.methods.BaseProcessPayment;
+import com.yandex.money.api.methods.BaseRequestPayment;
+import com.yandex.money.api.methods.InstanceId;
+import com.yandex.money.api.methods.ProcessExternalPayment;
+import com.yandex.money.api.methods.ProcessPayment;
+import com.yandex.money.api.methods.RequestExternalPayment;
+import com.yandex.money.api.methods.RequestPayment;
+import com.yandex.money.api.methods.params.PhoneParams;
+import com.yandex.money.api.model.Error;
+import com.yandex.money.api.net.MethodRequest;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;

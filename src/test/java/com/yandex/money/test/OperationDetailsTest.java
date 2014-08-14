@@ -1,12 +1,12 @@
 package com.yandex.money.test;
 
-import com.yandex.money.YandexMoney;
-import com.yandex.money.exceptions.InsufficientScopeException;
-import com.yandex.money.exceptions.InvalidRequestException;
-import com.yandex.money.exceptions.InvalidTokenException;
-import com.yandex.money.methods.OperationDetails;
-import com.yandex.money.methods.OperationHistory;
-import com.yandex.money.model.Operation;
+import com.yandex.money.api.YandexMoney;
+import com.yandex.money.api.exceptions.InsufficientScopeException;
+import com.yandex.money.api.exceptions.InvalidRequestException;
+import com.yandex.money.api.exceptions.InvalidTokenException;
+import com.yandex.money.api.methods.OperationDetails;
+import com.yandex.money.api.methods.OperationHistory;
+import com.yandex.money.api.model.Operation;
 
 import org.joda.time.DateTime;
 import org.testng.Assert;
