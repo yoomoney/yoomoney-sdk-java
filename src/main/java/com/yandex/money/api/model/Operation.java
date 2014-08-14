@@ -14,6 +14,9 @@ import org.joda.time.DateTime;
 import java.math.BigDecimal;
 import java.util.Map;
 
+/**
+ * Operation details.
+ */
 public class Operation {
 
     private final String operationId;
@@ -42,6 +45,9 @@ public class Operation {
     private final Type type;
     private final DigitalGoods digitalGoods;
 
+    /**
+     * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
+     */
     protected Operation(String operationId, Status status, String patternId, Direction direction,
                         BigDecimal amount, BigDecimal amountDue, BigDecimal fee, DateTime datetime,
                         String title, String sender, String recipient,
@@ -78,94 +84,163 @@ public class Operation {
         this.digitalGoods = digitalGoods;
     }
 
+    /**
+     * Creates {@link com.yandex.money.api.model.Operation} from JSON.
+     */
     public static Operation createFromJson(JsonElement element) {
         return buildGson().fromJson(element, Operation.class);
     }
 
+    /**
+     * @return operation id
+     */
     public String getOperationId() {
         return operationId;
     }
 
+    /**
+     * @return status of operation
+     */
     public Status getStatus() {
         return status;
     }
 
+    /**
+     * @return pattern id
+     */
     public String getPatternId() {
         return patternId;
     }
 
+    /**
+     * @return direction of operation
+     */
     public Direction getDirection() {
         return direction;
     }
 
+    /**
+     * @return amount
+     */
     public BigDecimal getAmount() {
         return amount;
     }
 
+    /**
+     * @return received amount
+     */
     public BigDecimal getAmountDue() {
         return amountDue;
     }
 
+    /**
+     * @return fee
+     */
     public BigDecimal getFee() {
         return fee;
     }
 
+    /**
+     * @return operation datetime
+     */
     public DateTime getDatetime() {
         return datetime;
     }
 
+    /**
+     * @return title of operation
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * @return sender
+     */
     public String getSender() {
         return sender;
     }
 
+    /**
+     * @return recipient
+     */
     public String getRecipient() {
         return recipient;
     }
 
+    /**
+     * @return type of recipient identifier
+     */
     public PayeeIdentifierType getRecipientType() {
         return recipientType;
     }
 
+    /**
+     * @return message to recipient
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     * @return operation comment
+     */
     public String getComment() {
         return comment;
     }
 
+    /**
+     * @return {@code true} if operation is protected with a code
+     */
     public boolean isProtected() {
         return codepro != null && codepro;
     }
 
+    /**
+     * @return protection code for operation
+     */
     public String getProtectionCode() {
         return protectionCode;
     }
 
+    /**
+     * @return protection code expiration datetime
+     */
     public DateTime getExpires() {
         return expires;
     }
 
+    /**
+     * @return answer datetime of operation acceptance/revoke
+     */
     public DateTime getAnswerDatetime() {
         return answerDatetime;
     }
 
+    /**
+     * @return label of operation
+     */
     public String getLabel() {
         return label;
     }
 
+    /**
+     * @return details of operation
+     */
     public String getDetails() {
         return details;
     }
 
+    /**
+     * @return {@code true} if operation can be repeated
+     */
     public boolean isRepeatable() {
         return repeatable != null && repeatable;
     }
 
+    /**
+     * @return payment parameters
+     */
     public Map<String, String> getPaymentParameters() {
         return paymentParameters;
     }
@@ -174,18 +249,39 @@ public class Operation {
         return favorite != null && favorite;
     }
 
+    /**
+     * @return type of operation
+     */
     public Type getType() {
         return type;
     }
 
+    /**
+     * @return digital goods
+     */
     public DigitalGoods getDigitalGoods() {
         return digitalGoods;
     }
 
+    /**
+     * Status of opeartion.
+     */
     public enum Status {
+        /**
+         * Operation succeeded.
+         */
         SUCCESS("success"),
+        /**
+         * Operation refused.
+         */
         REFUSED("refused"),
+        /**
+         * Operation is in progress, e.g. P2P with protection code has not been received.
+         */
         IN_PROGRESS("in_progress"),
+        /**
+         * Status of operation is unknown.
+         */
         UNKNOWN("unknown");
 
         private final String status;
@@ -204,12 +300,33 @@ public class Operation {
         }
     }
 
+    /**
+     * Type of operation.
+     */
     public enum Type {
+        /**
+         * Payment to a shop.
+         */
         PAYMENT_SHOP("payment-shop"),
+        /**
+         * Outgoing transfer.
+         */
         OUTGOING_TRANSFER("outgoing-transfer"),
+        /**
+         * Incoming transfer.
+         */
         INCOMING_TRANSFER("incoming-transfer"),
+        /**
+         * Incoming transfer with protection code.
+         */
         INCOMING_TRANSFER_PROTECTED("incoming-transfer-protected"),
+        /**
+         * Deposition.
+         */
         DEPOSITION("deposition"),
+        /**
+         * Unknown.
+         */
         UNKNOWN("unknown");
 
         private final String type;
@@ -228,9 +345,21 @@ public class Operation {
         }
     }
 
+    /**
+     * Direction of operation.
+     */
     public enum Direction {
+        /**
+         * Incoming.
+         */
         INCOMING("in"),
+        /**
+         * Outgoing.
+         */
         OUTGOING("out"),
+        /**
+         * Unknown.
+         */
         UNKNOWN("unknown");
 
         private final String direction;
@@ -249,6 +378,9 @@ public class Operation {
         }
     }
 
+    /**
+     * Creates {@link com.yandex.money.api.model.Operation}.
+     */
     public static class Builder {
         private String operationId;
         private Status status;

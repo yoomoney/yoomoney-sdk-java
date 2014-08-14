@@ -11,12 +11,22 @@ import com.yandex.money.api.methods.JsonUtils;
 
 import java.lang.reflect.Type;
 
+/**
+ * Describes digital item, that user can obtain when paying for them.
+ */
 public class Good {
 
     private final String serial;
     private final String secret;
     private final String merchantArticleId;
 
+    /**
+     * Constructor.
+     *
+     * @param serial serial number
+     * @param secret secret
+     * @param merchantArticleId merchant article id
+     */
     public Good(String serial, String secret, String merchantArticleId) {
         if (serial == null) {
             throw new NullPointerException("serial is null");
@@ -29,18 +39,30 @@ public class Good {
         this.merchantArticleId = merchantArticleId;
     }
 
+    /**
+     * Creates {@link com.yandex.money.api.model.Good} from JSON.
+     */
     public static Good createFromJson(JsonElement json) {
         return buildGson().fromJson(json, Good.class);
     }
 
+    /**
+     * @return serial number
+     */
     public String getSerial() {
         return serial;
     }
 
+    /**
+     * @return secret
+     */
     public String getSecret() {
         return secret;
     }
 
+    /**
+     * @return merchant article id
+     */
     public String getMerchantArticleId() {
         return merchantArticleId;
     }

@@ -13,11 +13,22 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Digital Goods that can be obtained after payment if available.
+ *
+ * @see com.yandex.money.api.model.Good
+ */
 public class DigitalGoods {
 
     private final List<Good> article;
     private final List<Good> bonus;
 
+    /**
+     * Constructor.
+     *
+     * @param article main articles
+     * @param bonus bonuses
+     */
     public DigitalGoods(List<Good> article, List<Good> bonus) {
         if (article == null) {
             throw new NullPointerException("article is null");
@@ -29,14 +40,23 @@ public class DigitalGoods {
         this.bonus = bonus;
     }
 
+    /**
+     * Creates {@link com.yandex.money.api.model.DigitalGoods} from JSON.
+     */
     public static DigitalGoods createFromJson(JsonElement element) {
         return buildGson().fromJson(element, DigitalGoods.class);
     }
 
+    /**
+     * @return not null list of articles
+     */
     public List<Good> getArticle() {
         return article;
     }
 
+    /**
+     * @return not null list of bonuses
+     */
     public List<Good> getBonus() {
         return bonus;
     }

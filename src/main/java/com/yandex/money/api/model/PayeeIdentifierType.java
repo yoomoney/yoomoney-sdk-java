@@ -1,9 +1,28 @@
 package com.yandex.money.api.model;
 
+/**
+ * Type of payee identifier.
+ * <p/>
+ * Provides convenience methods to determine the type.
+ *
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
+ */
 public enum PayeeIdentifierType {
+    /**
+     * Account number.
+     */
     ACCOUNT("account"),
+    /**
+     * Phone number.
+     */
     PHONE("phone"),
+    /**
+     * Email address.
+     */
     EMAIL("email"),
+    /**
+     * Unknown identifier.
+     */
     UNKNOWN("unknown");
 
     private static final String ACCOUNT_PATTERN = "41\\d{9,31}";
@@ -31,6 +50,12 @@ public enum PayeeIdentifierType {
         return UNKNOWN;
     }
 
+    /**
+     * Determines identifier type by identifier.
+     *
+     * @param identifier the identifier
+     * @return type
+     */
     public static PayeeIdentifierType determine(String identifier) {
         if (identifier == null || identifier.isEmpty()) {
             return UNKNOWN;

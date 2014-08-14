@@ -1,8 +1,22 @@
 package com.yandex.money.api.model;
 
+/**
+ * Account's type.
+ *
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
+ */
 public enum AccountType {
+    /**
+     * Personal.
+     */
     PERSONAL("personal"),
+    /**
+     * Professional.
+     */
     PROFESSIONAL("professional"),
+    /**
+     * Unknown.
+     */
     UNKNOWN("unknown");
 
     private final String code;

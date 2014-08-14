@@ -12,6 +12,11 @@ import com.yandex.money.api.methods.JsonUtils;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 
+/**
+ * Detailed balance info.
+ *
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
+ */
 public class BalanceDetails {
 
     private final BigDecimal total;
@@ -20,6 +25,15 @@ public class BalanceDetails {
     private final BigDecimal blocked;
     private final BigDecimal debt;
 
+    /**
+     * Constructor
+     *
+     * @param total total balance
+     * @param available available balance
+     * @param depositionPending  pending deposition
+     * @param blocked money blocked
+     * @param debt account's debt
+     */
     public BalanceDetails(BigDecimal total, BigDecimal available, BigDecimal depositionPending,
                           BigDecimal blocked, BigDecimal debt) {
 
@@ -36,26 +50,47 @@ public class BalanceDetails {
         this.debt = debt;
     }
 
+    /**
+     * Creates {@link com.yandex.money.api.model.BalanceDetails} from JSON.
+     *
+     * @param element JSON object
+     * @return {@link com.yandex.money.api.model.BalanceDetails}
+     */
     public static BalanceDetails createFromJson(JsonElement element) {
         return buildGson().fromJson(element, BalanceDetails.class);
     }
 
+    /**
+     * @return total balance
+     */
     public BigDecimal getTotal() {
         return total;
     }
 
+    /**
+     * @return available balance
+     */
     public BigDecimal getAvailable() {
         return available;
     }
 
+    /**
+     * @return pending deposition
+     */
     public BigDecimal getDepositionPending() {
         return depositionPending;
     }
 
+    /**
+     * @return money blocked
+     */
     public BigDecimal getBlocked() {
         return blocked;
     }
 
+    /**
+     * @return account's debt
+     */
     public BigDecimal getDebt() {
         return debt;
     }

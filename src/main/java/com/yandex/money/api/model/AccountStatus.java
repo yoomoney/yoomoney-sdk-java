@@ -1,9 +1,26 @@
 package com.yandex.money.api.model;
 
+/**
+ * Account status.
+ *
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
+ */
 public enum AccountStatus {
+    /**
+     * Anonymous account.
+     */
     ANONYMOUS("anonymous"),
+    /**
+     * Named account.
+     */
     NAMED("named"),
+    /**
+     * Identified account.
+     */
     IDENTIFIED("identified"),
+    /**
+     * Unknown account.
+     */
     UNKNOWN("unknown");
 
     private final String code;

@@ -14,35 +14,61 @@ import com.yandex.money.api.methods.JsonUtils;
 import java.lang.reflect.Type;
 
 /**
- * @author vyasevich
+ * Bank card info.
+ *
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class Card extends MoneySource {
 
     private final String panFragment;
     private final String type;
 
+    /**
+     * Constructor.
+     *
+     * @param id unique card id
+     * @param panFragment panned fragment of card's number
+     * @param type type of a card
+     */
     public Card(String id, String panFragment, String type) {
         super(id);
         this.panFragment = panFragment;
         this.type = type;
     }
 
+    /**
+     * Creates {@link com.yandex.money.api.model.Card} from {@link com.google.gson.JsonElement}.
+     */
     public static Card createFromJson(JsonElement element) {
         return buildGson().fromJson(element, Card.class);
     }
 
+    /**
+     * Creates {@link com.yandex.money.api.model.Card} from JSON.
+     */
     public static Card createFromJson(String json) {
         return buildGson().fromJson(json, Card.class);
     }
 
+    /**
+     * @return panned fragment of card's number
+     */
     public String getPanFragment() {
         return panFragment;
     }
 
+    /**
+     * @return type of a card (e.g. VISA, MasterCard, AmericanExpress, etc.)
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Serializes {@link com.yandex.money.api.model.Card} object to JSON text.
+     *
+     * @return JSON text
+     */
     public String serializeToJson() {
         return buildGson().toJson(this);
     }

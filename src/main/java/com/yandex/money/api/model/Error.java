@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * List of errors you may encounter when using API methods.
+ */
 public enum Error {
 
     ACCESS_DENIED("access_denied"),

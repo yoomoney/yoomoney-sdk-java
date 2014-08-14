@@ -13,11 +13,22 @@ import org.joda.time.DateTime;
 
 import java.lang.reflect.Type;
 
+/**
+ * Describes avatar from {@link com.yandex.money.api.methods.AccountInfo}.
+ *
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
+ */
 public class Avatar {
 
     private final String url;
     private final DateTime timestamp;
 
+    /**
+     * Constructor.
+     *
+     * @param url url to avatar
+     * @param timestamp avatar change time
+     */
     public Avatar(String url, DateTime timestamp) {
         if (url == null || url.length() == 0) {
             throw new JsonParseException("avatar url is null or empty");
@@ -29,14 +40,26 @@ public class Avatar {
         this.timestamp = timestamp;
     }
 
+    /**
+     * Creates {@link com.yandex.money.api.model.Avatar} from a JSON object.
+     *
+     * @param json JSON
+     * @return {@link com.yandex.money.api.model.Avatar}
+     */
     public static Avatar createFromJson(JsonElement json) {
         return buildGson().fromJson(json, Avatar.class);
     }
 
+    /**
+     * @return url to avatar
+     */
     public String getUrl() {
         return url;
     }
 
+    /**
+     * @return avatar change time
+     */
     public DateTime getTimestamp() {
         return timestamp;
     }
