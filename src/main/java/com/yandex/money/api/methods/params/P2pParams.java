@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Convenience class for P2P payment parameters.
  *
+ * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
 public class P2pParams implements Params {
 
@@ -21,6 +23,13 @@ public class P2pParams implements Params {
     private final BigDecimal amountDue;
     private final String message;
 
+    /**
+     * Constructor.
+     *
+     * @param to recipient's account number
+     * @param amountDue amount to receive
+     * @param message message to a recipient
+     */
     public P2pParams(String to, BigDecimal amountDue, String message) {
         if (Strings.isNullOrEmpty(to))
             throw new IllegalArgumentException(PARAM_TO + " is null or empty");
@@ -33,10 +42,17 @@ public class P2pParams implements Params {
         this.message = message;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param to recipient's account number
+     * @param amountDue amount to receive
+     */
     public P2pParams(String to, BigDecimal amountDue) {
         this(to, amountDue, null);
     }
 
+    @Override
     public Map<String, String> makeParams() {
         Map<String, String> result = new HashMap<String, String>();
         result.put(PARAM_TO, to);

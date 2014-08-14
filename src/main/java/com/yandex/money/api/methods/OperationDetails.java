@@ -21,11 +21,22 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * Operation details result.
+ *
+ * @author Roman Tsirulnikov (romanvt@yamoney.ru)
+ */
 public class OperationDetails implements MethodResponse {
 
     private final Error error;
     private final Operation operation;
 
+    /**
+     * Constructor.
+     *
+     * @param error error code
+     * @param operation operation
+     */
     public OperationDetails(Error error, Operation operation) {
         this.error = error;
         this.operation = operation;
@@ -39,10 +50,22 @@ public class OperationDetails implements MethodResponse {
         return operation;
     }
 
+    /**
+     * Requests for specific operation details.
+     * <p/>
+     * Authorized session required.
+     *
+     * @see com.yandex.money.api.net.OAuth2Session
+     */
     public static class Request implements MethodRequest<OperationDetails> {
 
         private final String operationId;
 
+        /**
+         * Constructor.
+         *
+         * @param operationId operation's id
+         */
         public Request(String operationId) {
             if (operationId == null || operationId.isEmpty()) {
                 throw new IllegalArgumentException("operationId is null or empty");

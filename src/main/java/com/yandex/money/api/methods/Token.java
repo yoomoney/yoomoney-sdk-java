@@ -22,6 +22,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * Access token.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class Token implements MethodResponse {
@@ -29,6 +31,12 @@ public class Token implements MethodResponse {
     private final String accessToken;
     private final Error error;
 
+    /**
+     * Constructor.
+     *
+     * @param accessToken access token itself
+     * @param error error code
+     */
     public Token(String accessToken, Error error) {
         this.accessToken = accessToken;
         this.error = error;
@@ -42,6 +50,9 @@ public class Token implements MethodResponse {
         return error;
     }
 
+    /**
+     * Request for access token.
+     */
     public static class Request implements MethodRequest<Token> {
 
         protected final String code;
@@ -51,10 +62,25 @@ public class Token implements MethodResponse {
         private final String redirectUri;
         private final String clientSecret;
 
+        /**
+         * Constructor.
+         *
+         * @param code temporary code
+         * @param clientId application's client id
+         * @param redirectUri redirect uri
+         */
         public Request(String code, String clientId, String redirectUri) {
             this(code, clientId, redirectUri, null);
         }
 
+        /**
+         * Constructor.
+         *
+         * @param code temporary code
+         * @param clientId application's client id
+         * @param redirectUri redirect uri
+         * @param clientSecret a secret word for verifying application's authenticity.
+         */
         public Request(String code, String clientId, String redirectUri, String clientSecret) {
             if (Strings.isNullOrEmpty(code)) {
                 throw new NullPointerException("code is null or empty");
@@ -99,6 +125,9 @@ public class Token implements MethodResponse {
         }
     }
 
+    /**
+     * Revokes access token.
+     */
     public static final class Revoke implements MethodRequest<Object> {
         @Override
         public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {

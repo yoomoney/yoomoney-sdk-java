@@ -21,7 +21,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * Instance ID result.
  *
+ * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
 public class InstanceId implements MethodResponse {
 
@@ -29,6 +31,13 @@ public class InstanceId implements MethodResponse {
     private Error error;
     private String instanceId;
 
+    /**
+     * Constructor.
+     *
+     * @param status status of an operation
+     * @param error error code
+     * @param instanceId instance id if success
+     */
     public InstanceId(Status status, Error error, String instanceId) {
         this.status = status;
         this.error = error;
@@ -51,9 +60,21 @@ public class InstanceId implements MethodResponse {
         return status == Status.SUCCESS;
     }
 
+    /**
+     * Status of an instance id request.
+     */
     public enum Status {
+        /**
+         * Successful.
+         */
         SUCCESS(CODE_SUCCESS),
+        /**
+         * Refused due to various reasons.
+         */
         REFUSED(CODE_REFUSED),
+        /**
+         * Unknown.
+         */
         UNKNOWN(CODE_UNKNOWN);
 
         private final String status;
@@ -72,10 +93,18 @@ public class InstanceId implements MethodResponse {
         }
     }
 
+    /**
+     * Request for a new instance id.
+     */
     public static class Request implements MethodRequest<InstanceId> {
 
         private String clientId;
 
+        /**
+         * Construct request using provided client ID.
+         *
+         * @param clientId client id of the application
+         */
         public Request(String clientId) {
             if (Strings.isNullOrEmpty(clientId))
                 throw new IllegalArgumentException("clientId is null or empty");

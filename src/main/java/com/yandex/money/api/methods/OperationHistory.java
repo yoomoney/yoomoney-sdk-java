@@ -27,12 +27,27 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Operation history.
+ * <p/>
+ * If successful contains list of operations as well as token to a next record if there are more
+ * operations in a user's history.
+ *
+ * @author Roman Tsirulnikov (romanvt@yamoney.ru)
+ */
 public class OperationHistory implements MethodResponse {
 
     private final Error error;
     private final String nextRecord;
     private final List<Operation> operations;
 
+    /**
+     * Constructor.
+     *
+     * @param error error code
+     * @param nextRecord nextRecord marker used in subsequent request if needed
+     * @param operations list of operations
+     */
     public OperationHistory(Error error, String nextRecord, List<Operation> operations) {
         this.error = error;
         this.nextRecord = nextRecord;
@@ -51,6 +66,13 @@ public class OperationHistory implements MethodResponse {
         return operations;
     }
 
+    /**
+     * Requests for a list of operations in user's history.
+     * <p/>
+     * Authorized session required.
+     *
+     * @see com.yandex.money.api.net.OAuth2Session
+     */
     public static class Request implements MethodRequest<OperationHistory> {
 
         private final Set<FilterType> types;
@@ -61,6 +83,9 @@ public class OperationHistory implements MethodResponse {
         private final Integer records;
         private final Boolean details;
 
+        /**
+         * Use builder to create the request.
+         */
         private Request(Set<FilterType> types, String label, DateTime from, DateTime till,
                         String startRecord, Integer records, Boolean details) {
 
@@ -120,6 +145,9 @@ public class OperationHistory implements MethodResponse {
                     .create();
         }
 
+        /**
+         * Builder for a {@link com.yandex.money.api.methods.OperationHistory.Request}.
+         */
         public static class Builder {
             private Set<FilterType> types;
             private String label;
@@ -129,51 +157,104 @@ public class OperationHistory implements MethodResponse {
             private Integer records;
             private Boolean details;
 
+            /**
+             * Specifies types of operations that respond should contain. Can be omitted if no
+             * specific types are required: respond will contain every operation.
+             *
+             * @param types set of operation types
+             */
             public Builder setTypes(Set<FilterType> types) {
                 this.types = types;
                 return this;
             }
 
+            /**
+             * Look up for a specific operations using theirs labels.
+             *
+             * @param label the label
+             */
             public Builder setLabel(String label) {
                 this.label = label;
                 return this;
             }
 
+            /**
+             * Look for operations starting {@code from} specified time.
+             *
+             * @param from time
+             */
             public Builder setFrom(DateTime from) {
                 this.from = from;
                 return this;
             }
 
+            /**
+             * Look for operations {@code till} specified time.
+             *
+             * @param till time
+             */
             public Builder setTill(DateTime till) {
                 this.till = till;
                 return this;
             }
 
+            /**
+             * Marker to subsequent page of operation's list
+             *
+             * @param startRecord marker
+             */
             public Builder setStartRecord(String startRecord) {
                 this.startRecord = startRecord;
                 return this;
             }
 
+            /**
+             * Limit number of records in response.
+             *
+             * @param records limit
+             */
             public Builder setRecords(Integer records) {
                 this.records = records;
                 return this;
             }
 
+            /**
+             * Request operation details. If set to {@code true} list of operations will contain
+             * extended operation details.
+             *
+             * @param details request detailed operations
+             */
             public Builder setDetails(Boolean details) {
                 this.details = details;
                 return this;
             }
 
+            /**
+             * Creates the {@link com.yandex.money.api.methods.OperationHistory.Request}
+             *
+             * @return the request
+             */
             public Request createRequest() {
                 return new Request(types, label, from, till, startRecord, records, details);
             }
         }
     }
 
+    /**
+     * Filter types.
+     */
     public enum FilterType {
-
+        /**
+         * Depositions.
+         */
         DEPOSITION("deposition"),
+        /**
+         * Payments.
+         */
         PAYMENT("payment"),
+        /**
+         * Unaccepted incoming transfers (e.g. p2p transfer with protection code).
+         */
         INCOMING_TRANSFER_UNACCEPTED("incoming-transfers-unaccepted");
 
         private final String code;

@@ -22,13 +22,23 @@ import java.net.URL;
 import java.util.Map;
 
 /**
+ * Process external payment.
  *
+ * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
 public class ProcessExternalPayment extends BaseProcessPayment {
 
     private final MoneySourceExternal moneySource;
     private final String invoiceId;
 
+    /**
+     * Constructor.
+     *
+     * @param moneySource money source info if asked for a money source token
+     * @param invoiceId invoice id of successful operation
+     *
+     * @see com.yandex.money.api.methods.BaseProcessPayment
+     */
     public ProcessExternalPayment(Status status, Error error, String acsUri,
                                   Map<String, String> acsParams, MoneySourceExternal moneySource,
                                   Long nextRetry, String invoiceId) {
@@ -46,6 +56,9 @@ public class ProcessExternalPayment extends BaseProcessPayment {
         return invoiceId;
     }
 
+    /**
+     * Request for processing external payment.
+     */
     public static class Request implements MethodRequest<ProcessExternalPayment> {
 
         private final String instanceId;
@@ -56,11 +69,30 @@ public class ProcessExternalPayment extends BaseProcessPayment {
         private final String moneySourceToken;
         private final String csc;
 
+        /**
+         * For paying with a new card.
+         *
+         * @param instanceId application's instance id
+         * @param requestId request id from {@link com.yandex.money.api.methods.RequestExternalPayment}
+         * @param extAuthSuccessUri success URI to use if payment succeeded
+         * @param extAuthFailUri fail URI to use if payment failed
+         * @param requestToken {@code true} if money source token is required
+         */
         public Request(String instanceId, String requestId, String extAuthSuccessUri,
                        String extAuthFailUri, boolean requestToken) {
             this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, requestToken, null, null);
         }
 
+        /**
+         * For paying with a saved card.
+         *
+         * @param instanceId application's instance id
+         * @param requestId request id from {@link com.yandex.money.api.methods.RequestExternalPayment}
+         * @param extAuthSuccessUri success URI to use if payment succeeded
+         * @param extAuthFailUri fail URI to use if payment failed
+         * @param moneySourceToken money source token of a saved card
+         * @param csc Card Security Code for a saved card.
+         */
         public Request(String instanceId, String requestId, String extAuthSuccessUri,
                        String extAuthFailUri, String moneySourceToken, String csc) {
             this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, false, moneySourceToken,

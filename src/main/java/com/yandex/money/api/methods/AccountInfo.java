@@ -18,6 +18,7 @@ import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 import com.yandex.money.api.utils.Currency;
+import com.yandex.money.api.utils.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,6 +28,11 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+/**
+ * Information of user account.
+ *
+ * @author Roman Tsirulnikov (romanvt@yamoney.ru)
+ */
 public class AccountInfo implements MethodResponse {
 
     private final String account;
@@ -39,17 +45,30 @@ public class AccountInfo implements MethodResponse {
     private final Card[] linkedCards;
     private final String[] additionalServices;
 
+    /**
+     * Constructor.
+     *
+     * @param account account's number (required)
+     * @param balance current balance (required)
+     * @param currency selected currency
+     * @param accountStatus account's status
+     * @param accountType account's type
+     * @param avatar avatar's info
+     * @param balanceDetails detailed balance if available
+     * @param linkedCards linked cards
+     * @param additionalServices additional services
+     */
     public AccountInfo(String account, BigDecimal balance, Currency currency,
                        AccountStatus accountStatus, AccountType accountType, Avatar avatar,
                        BalanceDetails balanceDetails, Card[] linkedCards,
                        String[] additionalServices) {
 
-        if (account == null) {
-            throw new JsonParseException("Has no mandatory field 'account'");
+        if (Strings.isNullOrEmpty(account)) {
+            throw new IllegalArgumentException("account is null or empty");
         }
         this.account = account;
         if (balance == null) {
-            throw new JsonParseException("Has no mandatory field 'balance'");
+            throw new IllegalArgumentException("balance is null");
         }
         this.balance = balance;
         this.currency = currency;
@@ -101,6 +120,13 @@ public class AccountInfo implements MethodResponse {
         return accountStatus == AccountStatus.IDENTIFIED;
     }
 
+    /**
+     * Requests for {@link com.yandex.money.api.methods.AccountInfo}.
+     * <p/>
+     * Authorized session required.
+     *
+     * @see com.yandex.money.api.net.OAuth2Session
+     */
     public static final class Request implements MethodRequest<AccountInfo> {
 
         @Override

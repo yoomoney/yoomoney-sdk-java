@@ -24,6 +24,8 @@ import java.net.URL;
 import java.util.Map;
 
 /**
+ * Process payment.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class ProcessPayment extends BaseProcessPayment {
@@ -39,6 +41,9 @@ public class ProcessPayment extends BaseProcessPayment {
     private final String holdForPickupLink;
     private final DigitalGoods digitalGoods;
 
+    /**
+     * Use {@link com.yandex.money.api.methods.ProcessPayment.Builder} to create an instance.
+     */
     private ProcessPayment(Status status, Error error, String paymentId, BigDecimal balance,
                            String invoiceId, String payer, String payee, BigDecimal creditAmount,
                            String accountUnblockUri, String payeeUid, String holdForPickupLink,
@@ -101,6 +106,13 @@ public class ProcessPayment extends BaseProcessPayment {
         return digitalGoods;
     }
 
+    /**
+     * Request for payment processing.
+     * <p/>
+     * Authorized session required.
+     *
+     * @see com.yandex.money.api.net.OAuth2Session
+     */
     public static final class Request implements MethodRequest<ProcessPayment> {
 
         private final String requestId;
@@ -113,10 +125,26 @@ public class ProcessPayment extends BaseProcessPayment {
         private boolean testCardAvailable;
         private TestResult testResult;
 
+        /**
+         * Repeat request using the same request id. This is used when {@link ProcessPayment} is in
+         * {@code IN_PROGRESS} state.
+         *
+         * @param requestId request id
+         */
         public Request(String requestId) {
             this(requestId, null, null, null, null);
         }
 
+        /**
+         * First request for payment processing.
+         *
+         * @param requestId request id
+         * @param moneySource selected money source
+         * @param csc Card Security Code if selected money source requires it
+         * @param extAuthSuccessUri uri which will be used for redirection if operation is
+         *                          successful
+         * @param extAuthFailUri uri which will be used for redirection if operation is failed
+         */
         public Request(String requestId, MoneySource moneySource, String csc,
                        String extAuthSuccessUri, String extAuthFailUri) {
 
@@ -162,14 +190,29 @@ public class ProcessPayment extends BaseProcessPayment {
                     .addParamIfNotNull("ext_auth_fail_uri", extAuthFailUri);
         }
 
+        /**
+         * Sets if this is a test payment.
+         *
+         * @param testPayment {@code true} if test payment
+         */
         public void setTestPayment(boolean testPayment) {
             this.testPayment = testPayment;
         }
 
+        /**
+         * Sets if test card is available
+         *
+         * @param testCardAvailable {@code true} if test card is available
+         */
         public void setTestCardAvailable(boolean testCardAvailable) {
             this.testCardAvailable = testCardAvailable;
         }
 
+        /**
+         * Required test result.
+         *
+         * @param testResult test result
+         */
         public void setTestResult(TestResult testResult) {
             this.testResult = testResult;
         }
@@ -181,6 +224,9 @@ public class ProcessPayment extends BaseProcessPayment {
         }
     }
 
+    /**
+     * Available test results.
+     */
     public enum TestResult {
 
         SUCCESS("success"),
@@ -206,6 +252,9 @@ public class ProcessPayment extends BaseProcessPayment {
         }
     }
 
+    /**
+     * Builder for {@link com.yandex.money.api.methods.ProcessPayment}.
+     */
     public static class Builder {
         private Status status;
         private Error error;
@@ -223,46 +272,73 @@ public class ProcessPayment extends BaseProcessPayment {
         private Long nextRetry;
         private DigitalGoods digitalGoods;
 
+        /**
+         * @param status status of process payment
+         */
         public Builder setStatus(Status status) {
             this.status = status;
             return this;
         }
 
+        /**
+         * @param error error code
+         */
         public Builder setError(Error error) {
             this.error = error;
             return this;
         }
 
+        /**
+         * @param paymentId payment id
+         */
         public Builder setPaymentId(String paymentId) {
             this.paymentId = paymentId;
             return this;
         }
 
+        /**
+         * @param balance account's balance
+         */
         public Builder setBalance(BigDecimal balance) {
             this.balance = balance;
             return this;
         }
 
+        /**
+         * @param invoiceId invoice id of successful operation
+         */
         public Builder setInvoiceId(String invoiceId) {
             this.invoiceId = invoiceId;
             return this;
         }
 
+        /**
+         * @param payer payer's account number
+         */
         public Builder setPayer(String payer) {
             this.payer = payer;
             return this;
         }
 
+        /**
+         * @param payee payee's account number
+         */
         public Builder setPayee(String payee) {
             this.payee = payee;
             return this;
         }
 
+        /**
+         * @param creditAmount this amount payee will receive
+         */
         public Builder setCreditAmount(BigDecimal creditAmount) {
             this.creditAmount = creditAmount;
             return this;
         }
 
+        /**
+         * @param accountUnblockUri for locked accounts URI that can be used to unlock it
+         */
         public Builder setAccountUnblockUri(String accountUnblockUri) {
             this.accountUnblockUri = accountUnblockUri;
             return this;
@@ -273,31 +349,51 @@ public class ProcessPayment extends BaseProcessPayment {
             return this;
         }
 
+        /**
+         * @param holdForPickupLink link for payment receiving
+         */
         public Builder setHoldForPickupLink(String holdForPickupLink) {
             this.holdForPickupLink = holdForPickupLink;
             return this;
         }
 
+        /**
+         * @param acsUri address for 3D Secure authorization
+         */
         public Builder setAcsUri(String acsUri) {
             this.acsUri = acsUri;
             return this;
         }
 
+        /**
+         * @param acsParams POST parameters for 3D Secure authorization (key-value pairs)
+         */
         public Builder setAcsParams(Map<String, String> acsParams) {
             this.acsParams = acsParams;
             return this;
         }
 
+        /**
+         * @param nextRetry recommended time interval between process payment requests
+         */
         public Builder setNextRetry(Long nextRetry) {
             this.nextRetry = nextRetry;
             return this;
         }
 
+        /**
+         * @param digitalGoods received digital goods
+         */
         public Builder setDigitalGoods(DigitalGoods digitalGoods) {
             this.digitalGoods = digitalGoods;
             return this;
         }
 
+        /**
+         * Creates {@link ProcessPayment} instance.
+         *
+         * @return {@link ProcessPayment} instance
+         */
         public ProcessPayment createProcessPayment() {
             return new ProcessPayment(status, error, paymentId, balance, invoiceId, payer, payee,
                     creditAmount, accountUnblockUri, payeeUid, holdForPickupLink, acsUri, acsParams,

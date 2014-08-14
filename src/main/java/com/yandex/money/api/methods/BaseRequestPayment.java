@@ -6,6 +6,8 @@ import com.yandex.money.api.net.MethodResponse;
 import java.math.BigDecimal;
 
 /**
+ * Base class for request payment operations.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public abstract class BaseRequestPayment implements MethodResponse {
@@ -20,6 +22,14 @@ public abstract class BaseRequestPayment implements MethodResponse {
     private final String requestId;
     private final BigDecimal contractAmount;
 
+    /**
+     * Constructor.
+     *
+     * @param status status of the request
+     * @param error error code
+     * @param requestId unique request id
+     * @param contractAmount contract amount
+     */
     protected BaseRequestPayment(Status status, Error error, String requestId,
                                  BigDecimal contractAmount) {
 

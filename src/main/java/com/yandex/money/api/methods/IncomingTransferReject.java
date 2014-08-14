@@ -21,6 +21,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * Incoming transfer reject operation.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class IncomingTransferReject implements MethodResponse {
@@ -28,6 +30,12 @@ public class IncomingTransferReject implements MethodResponse {
     private final Status status;
     private final Error error;
 
+    /**
+     * Constructor.
+     *
+     * @param status status of an operation
+     * @param error error code
+     */
     public IncomingTransferReject(Status status, Error error) {
         this.status = status;
         this.error = error;
@@ -41,9 +49,21 @@ public class IncomingTransferReject implements MethodResponse {
         return error;
     }
 
+    /**
+     * Status of rejection.
+     */
     public enum Status {
+        /**
+         * Successful.
+         */
         SUCCESS(CODE_SUCCESS),
+        /**
+         * Refused.
+         */
         REFUSED(CODE_REFUSED),
+        /**
+         * Unknown.
+         */
         UNKNOWN(CODE_UNKNOWN);
 
         private final String status;
@@ -62,10 +82,22 @@ public class IncomingTransferReject implements MethodResponse {
         }
     }
 
+    /**
+     * Rejects incoming transfer.
+     * <p/>
+     * Authorized session required.
+     *
+     * @see com.yandex.money.api.net.OAuth2Session
+     */
     public static final class Request implements MethodRequest<IncomingTransferReject> {
 
         private String operationId;
 
+        /**
+         * Constructor.
+         *
+         * @param operationId rejecting operation id
+         */
         public Request(String operationId) {
             if (operationId == null || operationId.isEmpty()) {
                 throw new IllegalArgumentException("operationId is null or empty");

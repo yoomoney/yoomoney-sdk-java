@@ -7,7 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Convenience class for phone top up parameters.
  *
+ * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
 public class PhoneParams implements Params {
 
@@ -19,6 +21,12 @@ public class PhoneParams implements Params {
     private final String number;
     private final BigDecimal amount;
 
+    /**
+     * Constructor.
+     *
+     * @param number phone number
+     * @param amount top up amount
+     */
     public PhoneParams(String number, BigDecimal amount) {
         if (Strings.isNullOrEmpty(number))
             throw new IllegalArgumentException(PARAM_PHONE_NUMBER + " is null or empty");

@@ -6,6 +6,8 @@ import com.yandex.money.api.net.MethodResponse;
 import java.util.Map;
 
 /**
+ * Base class for all process payment operations.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public abstract class BaseProcessPayment implements MethodResponse {
@@ -22,6 +24,15 @@ public abstract class BaseProcessPayment implements MethodResponse {
     private final Map<String, String> acsParams;
     private final Long nextRetry;
 
+    /**
+     * Constructor.
+     *
+     * @param status status of the operation
+     * @param error error code
+     * @param acsUri address for 3D Secure authorization
+     * @param acsParams POST parameters for 3D Secure authorization (key-value pairs)
+     * @param nextRetry recommended time interval between process payment requests
+     */
     public BaseProcessPayment(Status status, Error error, String acsUri,
                               Map<String, String> acsParams, Long nextRetry) {
 

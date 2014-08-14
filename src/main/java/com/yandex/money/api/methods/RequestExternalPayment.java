@@ -24,12 +24,19 @@ import java.net.URL;
 import java.util.Map;
 
 /**
+ * Context of an external payment.
  *
+ * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
 public class RequestExternalPayment extends BaseRequestPayment {
 
     private final String title;
 
+    /**
+     * Constructor.
+     *
+     * @param title title of payment
+     */
     public RequestExternalPayment(Status status, Error error, String requestId,
                                   BigDecimal contractAmount, String title) {
 
@@ -41,12 +48,19 @@ public class RequestExternalPayment extends BaseRequestPayment {
         return title;
     }
 
+    /**
+     * Requests context of external payment.
+     */
     public static class Request implements MethodRequest<RequestExternalPayment> {
 
         private final String instanceId;
         private final String patternId;
         private final Map<String, String> params;
 
+        /**
+         * Use static methods to create
+         * {@link com.yandex.money.api.methods.RequestExternalPayment.Request}.
+         */
         private Request(String instanceId, String patternId, Map<String, String> params) {
             if (Strings.isNullOrEmpty(instanceId))
                 throw new IllegalArgumentException("instanceId is null or empty");
@@ -58,6 +72,15 @@ public class RequestExternalPayment extends BaseRequestPayment {
             this.params = params;
         }
 
+        /**
+         * Creates instance of payment's request for general purposes. In other words for payments
+         * to a specific shop with known parameters.
+         *
+         * @param instanceId application's instance id
+         * @param patternId pattern id of a shop
+         * @param paramsShop shop parameters
+         * @return new request instance
+         */
         public static Request newInstance(String instanceId, String patternId,
                                           Map<String, String> paramsShop) {
             if (paramsShop == null)
@@ -66,6 +89,13 @@ public class RequestExternalPayment extends BaseRequestPayment {
             return new Request(instanceId, patternId, paramsShop);
         }
 
+        /**
+         * Creates instance of request for P2P payments.
+         *
+         * @param instanceId application's instance id
+         * @param p2pParams p2p parameters
+         * @return new request instance
+         */
         public static Request newInstance(String instanceId, P2pParams p2pParams) {
             if (p2pParams == null)
                 throw new IllegalArgumentException("p2pParams is null or empty");
@@ -73,6 +103,13 @@ public class RequestExternalPayment extends BaseRequestPayment {
             return new Request(instanceId, P2pParams.PATTERN_ID, p2pParams.makeParams());
         }
 
+        /**
+         * Creates instance of request to top up a phone number.
+         *
+         * @param instanceId application's instance id
+         * @param phoneParams phone payment parameters
+         * @return new request instance
+         */
         public static Request newInstance(String instanceId, PhoneParams phoneParams) {
             if (phoneParams == null)
                 throw new IllegalArgumentException("phoneParams is null or empty");

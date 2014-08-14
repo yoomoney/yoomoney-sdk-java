@@ -21,6 +21,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
+ * Incoming transfer accept result.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class IncomingTransferAccept implements MethodResponse {
@@ -30,6 +32,15 @@ public class IncomingTransferAccept implements MethodResponse {
     private final Integer protectionCodeAttemptsAvailable;
     private final String extActionUri;
 
+    /**
+     * Constructor.
+     *
+     * @param status status of an operation
+     * @param error error code
+     * @param protectionCodeAttemptsAvailable number of attempts available after invalid protection
+     *                                        code submission
+     * @param extActionUri address to perform external action for successful acceptance
+     */
     public IncomingTransferAccept(Status status, Error error,
                                   Integer protectionCodeAttemptsAvailable, String extActionUri) {
         this.status = status;
@@ -54,9 +65,21 @@ public class IncomingTransferAccept implements MethodResponse {
         return extActionUri;
     }
 
+    /**
+     * Status of {@link com.yandex.money.api.methods.IncomingTransferAccept}
+     */
     public enum Status {
+        /**
+         * Successful.
+         */
         SUCCESS(CODE_SUCCESS),
+        /**
+         * Operation refused.
+         */
         REFUSED(CODE_REFUSED),
+        /**
+         * Unknown status.
+         */
         UNKNOWN(CODE_UNKNOWN);
 
         private final String status;
@@ -75,11 +98,24 @@ public class IncomingTransferAccept implements MethodResponse {
         }
     }
 
+    /**
+     * Requests to perform {@link com.yandex.money.api.methods.IncomingTransferAccept}.
+     * <p/>
+     * Authorized session required.
+     *
+     * @see com.yandex.money.api.net.OAuth2Session
+     */
     public static final class Request implements MethodRequest<IncomingTransferAccept> {
 
         private final String operationId;
         private final String protectionCode;
 
+        /**
+         * Constructor.
+         *
+         * @param operationId unique operation id
+         * @param protectionCode protection code if transfer is protected
+         */
         public Request(String operationId, String protectionCode) {
             if (operationId == null || operationId.isEmpty()) {
                 throw new IllegalArgumentException("operationId is null or empty");
