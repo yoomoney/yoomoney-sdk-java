@@ -8,7 +8,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.model.Error;
-import com.yandex.money.model.methods.misc.Operation;
+import com.yandex.money.model.Operation;
 import com.yandex.money.net.HostsProvider;
 import com.yandex.money.net.MethodRequest;
 import com.yandex.money.net.MethodResponse;

@@ -1,4 +1,4 @@
-package com.yandex.money.model.methods.misc;
+package com.yandex.money.model;
 
 import com.google.gson.JsonObject;
 import com.yandex.money.model.methods.JsonUtils;

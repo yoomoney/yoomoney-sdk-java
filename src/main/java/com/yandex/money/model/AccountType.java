@@ -1,4 +1,4 @@
-package com.yandex.money.model.methods.misc;
+package com.yandex.money.model;
 
 public enum AccountType {
     PERSONAL("personal"),
