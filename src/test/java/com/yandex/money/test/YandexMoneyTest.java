@@ -11,8 +11,8 @@ import com.yandex.money.methods.ProcessExternalPayment;
 import com.yandex.money.methods.ProcessPayment;
 import com.yandex.money.methods.RequestExternalPayment;
 import com.yandex.money.methods.RequestPayment;
+import com.yandex.money.methods.params.PhoneParams;
 import com.yandex.money.model.Error;
-import com.yandex.money.model.common.params.PhoneParams;
 import com.yandex.money.net.MethodRequest;
 
 import org.testng.Assert;

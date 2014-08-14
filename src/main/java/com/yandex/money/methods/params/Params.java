@@ -1,4 +1,4 @@
-package com.yandex.money.model.common.params;
+package com.yandex.money.methods.params;
 
 import java.util.Map;
 
