@@ -1,16 +1,19 @@
 package com.yandex.money.api.exceptions;
 
 /**
- * API и OAuth2.
- * Обязательные параметры запроса отсутствуют или имеют некорректные или недопустимые значения.
- * Формат запроса не соответствует протоколу.
- * Запрос невозможно разобрать.
- * Приложению следует изменить параметры/формат запроса и отправить запрос повторно.
+ * Request is invalid.
+ * <p/>
+ * This exception is thrown when:
+ * <ul>
+ *     <li>mandatory method parameters are missing or have invalid or inconsistent values;</li>
+ *     <li>request format does not meet the protocol;</li>
+ *     <li>request can not be parsed;</li>
+ * </ul>
+ * You should change request parameters and send it again.
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
 public final class InvalidRequestException extends Exception {
-
     public InvalidRequestException(String error) {
         super(error);
     }
