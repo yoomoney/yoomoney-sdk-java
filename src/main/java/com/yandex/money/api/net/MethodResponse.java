@@ -1,6 +1,8 @@
 package com.yandex.money.api.net;
 
 /**
+ * API responses implement this interface.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public interface MethodResponse {

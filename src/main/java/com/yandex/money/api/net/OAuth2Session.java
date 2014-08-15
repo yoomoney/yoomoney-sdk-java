@@ -22,6 +22,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 
 /**
+ * OAuth2 session that can be used to perform API requests and retrieve responses.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class OAuth2Session implements Session {
@@ -34,6 +36,11 @@ public class OAuth2Session implements Session {
     private String accessToken;
     private boolean debugLogging = false;
 
+    /**
+     * Constructor.
+     *
+     * @param client API client used to perform operations
+     */
     public OAuth2Session(ApiClient client) {
         if (client == null) {
             throw new NullPointerException("client is null");
@@ -102,14 +109,30 @@ public class OAuth2Session implements Session {
         }
     }
 
+    /**
+     * Sets access token to perform authorized operations. Can be set to {@code null}, if no
+     * access token is required to execute a request.
+     *
+     * @param accessToken access token
+     */
     public void setAccessToken(String accessToken) {
         this.accessToken = accessToken;
     }
 
+    /**
+     * Checks if session is authorized.
+     *
+     * @return {@code true} if authorized
+     */
     public boolean isAuthorized() {
         return !Strings.isNullOrEmpty(accessToken);
     }
 
+    /**
+     * Set requests and responses logging.
+     *
+     * @param debugLogging {@code true} if logging is required
+     */
     public void setDebugLogging(boolean debugLogging) {
         this.debugLogging = debugLogging;
         this.sslSocketFactory = createSslSocketFactory();
@@ -118,10 +141,22 @@ public class OAuth2Session implements Session {
         }
     }
 
+    /**
+     * Convenience method to create {@link com.yandex.money.api.net.OAuth2Authorization} object for
+     * user authentication.
+     *
+     * @return authorization parameters
+     */
     public OAuth2Authorization createOAuth2Authorization() {
         return new OAuth2Authorization(client);
     }
 
+    /**
+     * Opens connection using specified url.
+     *
+     * @param url url to open connection
+     * @return reference to opened connection
+     */
     protected HttpURLConnection openConnection(URL url) {
         OkHttpClient httpClient = getHttpClient();
         HttpURLConnection connection = httpClient.open(url);
@@ -140,12 +175,26 @@ public class OAuth2Session implements Session {
         return connection;
     }
 
+    /**
+     * Gets input stream from connection. Logging can be applied if
+     * {@link com.yandex.money.api.net.OAuth2Session#setDebugLogging(boolean)} is set to
+     * {@code true}.
+     *
+     * @param connection connection reference
+     * @return input stream
+     */
     protected InputStream getInputStream(HttpURLConnection connection) throws IOException {
         InputStream stream = connection.getResponseCode() >= HttpURLConnection.HTTP_BAD_REQUEST ?
                 connection.getErrorStream() : connection.getInputStream();
         return debugLogging ? new WireLoggingInputStream(stream) : stream;
     }
 
+    /**
+     * Processes connection errors.
+     *
+     * @param connection connection reference
+     * @return WWW-Authenticate field of connection
+     */
     protected String processError(HttpURLConnection connection) throws IOException {
         String field = connection.getHeaderField(HttpHeaders.WWW_AUTHENTICATE);
         LOGGER.warning("Server has responded with a error: " + getError(connection) + "\n" +

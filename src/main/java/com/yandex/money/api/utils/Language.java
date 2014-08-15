@@ -6,6 +6,8 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
+ * Enum of allowed languages. For CIS countries: Russian is default language.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public enum Language {
@@ -43,6 +45,9 @@ public enum Language {
         this.iso6391Code = iso6391Code;
     }
 
+    /**
+     * @return default language based on {@link java.util.Locale#getDefault()}
+     */
     public static Language getDefault() {
         Locale locale = Locale.getDefault();
         for (Language value : values()) {
@@ -53,6 +58,10 @@ public enum Language {
         return getSupported(locale.getLanguage());
     }
 
+    /**
+     * @param iso6391Code ISO-639-1 code
+     * @return preferred language for specified code
+     */
     public static Language getSupported(String iso6391Code) {
         if (Strings.isNullOrEmpty(iso6391Code)) {
             throw new IllegalArgumentException("ISO-639-1 code can not be null or empty");
@@ -65,11 +74,11 @@ public enum Language {
         return isCis(iso6391Code) ? RUSSIAN : ENGLISH;
     }
 
-    public static boolean isCis(String iso6391Code) {
-        return cisIso6391Codes.contains(iso6391Code);
-    }
-
     public String getIso6391Code() {
         return iso6391Code;
+    }
+
+    private static boolean isCis(String iso6391Code) {
+        return cisIso6391Codes.contains(iso6391Code);
     }
 }

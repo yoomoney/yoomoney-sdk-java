@@ -19,6 +19,11 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
+/**
+ * Logging wrapper for socket factory.
+ *
+ * @author Roman Tsirulnikov (romanvt@yamoney.ru)
+ */
 final class WireLoggingSocketFactory extends SSLSocketFactory {
     private static final Logger LOG = Logger.getLogger(WireLoggingSocketFactory.class.getName());
     private final SSLSocketFactory delegate;

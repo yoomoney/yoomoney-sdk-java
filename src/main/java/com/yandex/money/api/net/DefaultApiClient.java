@@ -6,6 +6,8 @@ import com.yandex.money.api.utils.Language;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * Default implementation of {@link com.yandex.money.api.net.ApiClient} interface.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class DefaultApiClient implements ApiClient {
@@ -16,6 +18,11 @@ public class DefaultApiClient implements ApiClient {
     private final OkHttpClient httpClient;
     private final HostsProvider hostsProvider;
 
+    /**
+     * Constructor.
+     *
+     * @param clientId client id to use
+     */
     public DefaultApiClient(String clientId) {
         if (clientId == null) {
             throw new NullPointerException("client id is null");

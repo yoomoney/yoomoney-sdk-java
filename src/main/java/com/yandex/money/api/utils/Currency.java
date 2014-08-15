@@ -5,7 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author vyasevich
+ * Complete list of currencies as in ISO 4217.
+ *
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public enum Currency {
     AED("AED", 784),

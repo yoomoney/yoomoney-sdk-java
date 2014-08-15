@@ -7,9 +7,9 @@ import java.util.logging.Logger;
 
 /**
  * Logging wrapper for server responses
- * Suppose, that responses in UTF-8
+ * Supposes, that responses in UTF-8
  */
-public final class WireLoggingInputStream extends InputStream {
+final class WireLoggingInputStream extends InputStream {
 
     private static Logger LOG = Logger.getLogger(WireLoggingInputStream.class.getName());
 
