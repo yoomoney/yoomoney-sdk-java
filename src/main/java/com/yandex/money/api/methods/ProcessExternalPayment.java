@@ -142,8 +142,11 @@ public class ProcessExternalPayment extends BaseProcessPayment {
                 public ProcessExternalPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                     JsonObject o = json.getAsJsonObject();
 
+                    Map<String, String> acsParams = null;
                     JsonObject paramsObj = o.getAsJsonObject(MEMBER_ACS_PARAMS);
-                    Map<String, String> acsParams = JsonUtils.map(paramsObj);
+                    if (paramsObj != null) {
+                        acsParams = JsonUtils.map(paramsObj);
+                    }
 
                     JsonObject objMoneySource = o.getAsJsonObject("money_source");
                     MoneySourceExternal moneySource = MoneySourceExternal.parseJson(objMoneySource);
