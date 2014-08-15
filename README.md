@@ -36,8 +36,8 @@ YandexMoney instance can perform a request (call of API method). For example, if
 ```Java
 ...
 final String clientId = "[your_client_id]";
-YandexMoney ym = new YandexMoney(;
-InstanceId response = ym.performRequest(new InstanceId.Request(clientId));
+YandexMoney ym = new YandexMoney(clientId);
+InstanceId response = ym.execute(new InstanceId.Request(clientId));
 // handling the response
 ...
 ```
@@ -54,7 +54,7 @@ When you do `RequestExternalPayment`, you create payment's context:
 ...
 String patternId = ... // depends on your implementation
 Map<String, String> params = ... // depends on your implementation
-RequestExternalPayment rep = ym.performRequest(new RequestExternalPayment.Request.newInstance(accessToken, instanceId, patternId, params));
+RequestExternalPayment rep = ym.execute(new RequestExternalPayment.Request.newInstance(instanceId, patternId, params));
 String requestId = rep.getRequestId();
 ...
 ```
@@ -73,22 +73,24 @@ There are four statuses of `ProcessExternalPayment` (see `Status` class and API 
 So to process payment you should do something like this:
 
 ```Java
-public void processPayment(String requestId, ProcessExternalPayment.Request pepRequest) {
-	try {
-		ProcessExternalPayment pep = ym.performRequest(pepRequest);
-		String status = pep.getStatus();
-		if (Status.SUCCESS.equals(status)) {
-			// payment succeeded
-		} else if (Status.REFUSED.equals(status)) {
-		    // payment refused
-		} else if (Status.IN_PROGRESS.equals(status)) {
-			processPayment(requestId, pepRequest);
-		} else if (Status.EXT_AUTH_REQUIRED.equals(status)) {
-		   // show web page for 3D Secure authentication
-		}
-	} catch (IOException e) {
-		// handle exception
-	}
+public void processPayment(String requestId, ProcessExternalPayment.Request pepRequest)
+        throws Exception {
+
+    ProcessExternalPayment pep = ym.execute(pepRequest);
+    switch (pep.getStatus()) {
+        case SUCCESS:
+            // payment succeeded
+            break;
+        case REFUSED:
+            // payment refused
+            break;
+        case IN_PROGRESS:
+            processPayment(requestId, pepRequest);
+            break;
+        case EXT_AUTH_REQUIRED:
+            // show web page for 3D Secure authentication
+            break;
+    }
 }
 ```
 
