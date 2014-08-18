@@ -1,6 +1,7 @@
 package com.yandex.money.api.net;
 
 import com.yandex.money.api.model.Scope;
+import com.yandex.money.api.utils.Strings;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -55,6 +56,7 @@ public class OAuth2Authorization {
         private String responseType;
         private String redirectUri;
         private Set<Scope> scopes;
+        private String rawScope;
 
         /**
          * @param responseType specific response type
@@ -73,7 +75,9 @@ public class OAuth2Authorization {
         }
 
         /**
-         * @param scope add required scope
+         * Scopes are added to a set so there are no two identical scopes in params.
+         *
+         * @param scope required scope
          */
         public Params addScope(Scope scope) {
             if (scope != null) {
@@ -86,19 +90,34 @@ public class OAuth2Authorization {
         }
 
         /**
+         * Sets raw scopes parameter. Overrides {@link #addScope(com.yandex.money.api.model.Scope)}.
+         *
+         * @param rawScope {@code scope} parameter
+         */
+        public Params setRawScope(String rawScope) {
+            this.rawScope = rawScope;
+            return this;
+        }
+
+        /**
          * Build provided parameters.
          *
          * @return parameters
          */
         public byte[] build() {
             PostRequestBodyBuffer buffer = new PostRequestBodyBuffer();
-            if (scopes != null) {
-                Iterator<Scope> iterator = scopes.iterator();
-                StringBuilder builder = new StringBuilder(iterator.next().getCode());
-                while (iterator.hasNext()) {
-                    builder.append(" ").append(iterator.next());
+            final String scopeName = "scope";
+            if (Strings.isNullOrEmpty(rawScope)) {
+                if (scopes != null) {
+                    Iterator<Scope> iterator = scopes.iterator();
+                    StringBuilder builder = new StringBuilder(iterator.next().getQualifiedName());
+                    while (iterator.hasNext()) {
+                        builder.append(" ").append(iterator.next());
+                    }
+                    buffer.addParam(scopeName, builder.toString());
                 }
-                buffer.addParam("scope", builder.toString());
+            } else {
+                buffer.addParam(scopeName, rawScope);
             }
             return buffer
                     .addParamIfNotNull("client_id", clientId)
