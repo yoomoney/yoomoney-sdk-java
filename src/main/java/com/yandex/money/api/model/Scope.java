@@ -126,7 +126,7 @@ public class Scope {
         return name;
     }
 
-    private static class MoneySourceScope extends Scope {
+    public static final class MoneySourceScope extends Scope {
 
         private boolean wallet = true;
         private boolean cards = false;
@@ -171,7 +171,7 @@ public class Scope {
         }
     }
 
-    private static class LimitedScope extends Scope {
+    public static class LimitedScope extends Scope {
 
         private Integer duration;
         private BigDecimal sum;
@@ -224,7 +224,7 @@ public class Scope {
         }
     }
 
-    private static class PaymentScope extends LimitedScope {
+    public static final class PaymentScope extends LimitedScope {
 
         private final String patternId;
         private final String account;
