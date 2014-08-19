@@ -565,7 +565,7 @@ public class RequestPayment extends BaseRequestPayment {
                 if (moneySource.has(cardsMember)) {
                     JsonObject cards = moneySource.getAsJsonObject(cardsMember);
                     if (JsonUtils.getMandatoryBoolean(cards, "allowed")) {
-                        cscRequired = JsonUtils.getMandatoryBoolean(object, "csc_required");
+                        cscRequired = JsonUtils.getMandatoryBoolean(cards, "csc_required");
                         JsonArray items = cards.getAsJsonArray("items");
                         for (JsonElement item : items) {
                             moneySources.add(Card.createFromJson(item));
