@@ -32,4 +32,53 @@ public final class Strings {
         }
         return value.matches("\\d*");
     }
+
+    /**
+     * Concatenates {@code array} of strings to one string using {@code splitter} as a separator.
+     *
+     * @param array array of strings
+     * @param splitter separator
+     * @return concatenated string
+     */
+    public static String concatenate(String[] array, String splitter) {
+        if (array == null) {
+            throw new NullPointerException("array is null");
+        }
+        if (splitter == null) {
+            throw new NullPointerException("splitter is null");
+        }
+        if (array.length == 0) {
+            return "";
+        }
+
+        StringBuilder sb = new StringBuilder(array[0]);
+        for (int i = 1; i < array.length; ++i) {
+            sb.append(splitter).append(array[i]);
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Splits {@code str} to array of strings where the max length of each string is equals or less
+     * than {@code n}.
+     *
+     * @param str source string
+     * @param n max length
+     * @return array of strings
+     */
+    public static String[] split(String str, int n) {
+        if (str == null) {
+            throw new NullPointerException("str is null");
+        }
+        if (n <= 0) {
+            throw new IllegalArgumentException("n should be greater than 0");
+        }
+
+        final int length = str.length();
+        String[] result = new String[length / n + (length % n == 0 ? 0 : 1)];
+        for (int i = 0; i < result.length; ++i) {
+            result[i] = str.substring(i * n, (i + 1) * n);
+        }
+        return result;
+    }
 }
