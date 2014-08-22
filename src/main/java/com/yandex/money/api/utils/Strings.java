@@ -77,7 +77,9 @@ public final class Strings {
         final int length = str.length();
         String[] result = new String[length / n + (length % n == 0 ? 0 : 1)];
         for (int i = 0; i < result.length; ++i) {
-            result[i] = str.substring(i * n, (i + 1) * n);
+            int beginIndex = i * n;
+            int endIndex = (i + 1) * n;
+            result[i] = str.substring(beginIndex, endIndex < length ? endIndex : length);
         }
         return result;
     }

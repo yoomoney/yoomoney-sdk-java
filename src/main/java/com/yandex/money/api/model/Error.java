@@ -53,6 +53,7 @@ public enum Error {
     PAYEE_NOT_FOUND("payee_not_found"),
     PAYMENT_EXPIRED("payment_expired"),
     PAYMENT_REFUSED("payment_refused"),
+    TECHNICAL_ERROR("technical_error"),
     TOO_MANY_RECORDS("too_many_records"),
     UNAUTHORIZED_CLIENT("unauthorized_client"),
     UNKNOWN("unknown");
