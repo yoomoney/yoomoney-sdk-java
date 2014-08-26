@@ -45,7 +45,7 @@ public class OAuth2Authorization {
      */
     public Params getAuthorizeParams() {
         return new Params()
-                .setClientId(client.getId());
+                .setClientId(client.getClientId());
     }
 
     /**

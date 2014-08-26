@@ -12,7 +12,7 @@ public interface ApiClient {
     /**
      * @return client id of an application
      */
-    String getId();
+    String getClientId();
 
     /**
      * @return HTTP client to use when executing API requests

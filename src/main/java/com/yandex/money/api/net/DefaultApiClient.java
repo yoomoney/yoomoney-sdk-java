@@ -35,7 +35,7 @@ public class DefaultApiClient implements ApiClient {
     }
 
     @Override
-    public String getId() {
+    public String getClientId() {
         return id;
     }
 
