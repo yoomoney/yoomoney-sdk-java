@@ -91,6 +91,37 @@ public class Operation {
         return buildGson().fromJson(element, Operation.class);
     }
 
+    @Override
+    public String toString() {
+        return "Operation{" +
+                "operationId='" + operationId + '\'' +
+                ", status=" + status +
+                ", patternId='" + patternId + '\'' +
+                ", direction=" + direction +
+                ", amount=" + amount +
+                ", amountDue=" + amountDue +
+                ", fee=" + fee +
+                ", datetime=" + datetime +
+                ", title='" + title + '\'' +
+                ", sender='" + sender + '\'' +
+                ", recipient='" + recipient + '\'' +
+                ", recipientType=" + recipientType +
+                ", message='" + message + '\'' +
+                ", comment='" + comment + '\'' +
+                ", codepro=" + codepro +
+                ", protectionCode='" + protectionCode + '\'' +
+                ", expires=" + expires +
+                ", answerDatetime=" + answerDatetime +
+                ", label='" + label + '\'' +
+                ", details='" + details + '\'' +
+                ", repeatable=" + repeatable +
+                ", paymentParameters=" + paymentParameters +
+                ", favorite=" + favorite +
+                ", type=" + type +
+                ", digitalGoods=" + digitalGoods +
+                '}';
+    }
+
     /**
      * @return operation id
      */

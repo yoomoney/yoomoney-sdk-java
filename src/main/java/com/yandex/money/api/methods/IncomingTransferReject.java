@@ -41,6 +41,14 @@ public class IncomingTransferReject implements MethodResponse {
         this.error = error;
     }
 
+    @Override
+    public String toString() {
+        return "IncomingTransferReject{" +
+                "status=" + status +
+                ", error=" + error +
+                '}';
+    }
+
     public Status getStatus() {
         return status;
     }

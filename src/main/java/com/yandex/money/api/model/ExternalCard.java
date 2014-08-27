@@ -46,6 +46,14 @@ public class ExternalCard extends Card {
         return buildGson().fromJson(jsonElement, ExternalCard.class);
     }
 
+    @Override
+    public String toString() {
+        return "ExternalCard{" +
+                "fundingSourceType='" + fundingSourceType + '\'' +
+                ", moneySourceToken='" + moneySourceToken + '\'' +
+                '}';
+    }
+
     public String getFundingSourceType() {
         return fundingSourceType;
     }

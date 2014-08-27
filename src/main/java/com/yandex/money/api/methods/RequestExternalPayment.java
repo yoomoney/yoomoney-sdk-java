@@ -44,6 +44,17 @@ public class RequestExternalPayment extends BaseRequestPayment {
         this.title = title;
     }
 
+    @Override
+    public String toString() {
+        return "RequestExternalPayment{" +
+                "status=" + getStatus() +
+                ", error=" + getError() +
+                ", requestId='" + getRequestId() + '\'' +
+                ", contractAmount=" + getContractAmount() +
+                ", title='" + title + '\'' +
+                '}';
+    }
+
     public String getTitle() {
         return title;
     }

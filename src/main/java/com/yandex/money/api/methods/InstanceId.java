@@ -44,6 +44,15 @@ public class InstanceId implements MethodResponse {
         this.instanceId = instanceId;
     }
 
+    @Override
+    public String toString() {
+        return "InstanceId{" +
+                "status=" + status +
+                ", error=" + error +
+                ", instanceId='" + instanceId + '\'' +
+                '}';
+    }
+
     public Status getStatus() {
         return status;
     }

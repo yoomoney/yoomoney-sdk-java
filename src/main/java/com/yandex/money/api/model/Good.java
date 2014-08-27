@@ -46,6 +46,15 @@ public class Good {
         return buildGson().fromJson(json, Good.class);
     }
 
+    @Override
+    public String toString() {
+        return "Good{" +
+                "serial='" + serial + '\'' +
+                ", secret='" + secret + '\'' +
+                ", merchantArticleId='" + merchantArticleId + '\'' +
+                '}';
+    }
+
     /**
      * @return serial number
      */

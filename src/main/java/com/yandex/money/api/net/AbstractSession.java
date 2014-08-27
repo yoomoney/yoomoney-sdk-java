@@ -9,11 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.util.logging.Logger;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 
 /**
  * Abstract session that provides convenience methods to work with requests.
@@ -26,7 +22,6 @@ public abstract class AbstractSession {
 
     protected final ApiClient client;
 
-    private SSLSocketFactory sslSocketFactory;
     private boolean debugLogging = false;
 
     /**
@@ -48,10 +43,6 @@ public abstract class AbstractSession {
      */
     public void setDebugLogging(boolean debugLogging) {
         this.debugLogging = debugLogging;
-        this.sslSocketFactory = createSslSocketFactory();
-        if (debugLogging) {
-            sslSocketFactory = new WireLoggingSocketFactory(sslSocketFactory);
-        }
     }
 
     /**
@@ -61,7 +52,7 @@ public abstract class AbstractSession {
      * @return reference to opened connection
      */
     protected HttpURLConnection openConnection(URL url) {
-        OkHttpClient httpClient = getHttpClient();
+        OkHttpClient httpClient = client.getHttpClient();
         HttpURLConnection connection = httpClient.open(url);
 
         connection.setInstanceFollowRedirects(false);
@@ -89,7 +80,7 @@ public abstract class AbstractSession {
     protected InputStream getInputStream(HttpURLConnection connection) throws IOException {
         InputStream stream = connection.getResponseCode() >= HttpURLConnection.HTTP_BAD_REQUEST ?
                 connection.getErrorStream() : connection.getInputStream();
-        return debugLogging ? new WireLoggingInputStream(stream) : stream;
+        return debugLogging ? new ResponseLoggingInputStream(stream) : stream;
     }
 
     /**
@@ -104,24 +95,6 @@ public abstract class AbstractSession {
                 HttpHeaders.WWW_AUTHENTICATE + ": " + field);
         Streams.readStreamToNull(getInputStream(connection));
         return field;
-    }
-
-    private static SSLSocketFactory createSslSocketFactory() {
-        try {
-            SSLContext context = SSLContext.getInstance("TLS");
-            context.init(null, null, null);
-            return context.getSocketFactory();
-        } catch (GeneralSecurityException exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-
-    private OkHttpClient getHttpClient() {
-        OkHttpClient httpClient = client.getHttpClient();
-        if (sslSocketFactory != null) {
-            httpClient.setSslSocketFactory(sslSocketFactory);
-        }
-        return httpClient;
     }
 
     private String getError(HttpURLConnection connection) {

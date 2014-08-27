@@ -9,14 +9,14 @@ import java.util.logging.Logger;
  * Logging wrapper for server responses
  * Supposes, that responses in UTF-8
  */
-final class WireLoggingInputStream extends InputStream {
+final class ResponseLoggingInputStream extends InputStream {
 
-    private static Logger LOG = Logger.getLogger(WireLoggingInputStream.class.getName());
+    private static Logger LOG = Logger.getLogger(ResponseLoggingInputStream.class.getName());
 
     private final InputStream inputStream;
     private final ByteArrayOutputStream buffer;
 
-    public WireLoggingInputStream(InputStream inputStream) {
+    public ResponseLoggingInputStream(InputStream inputStream) {
         if (inputStream == null) {
             throw new NullPointerException("input stream is null");
         }

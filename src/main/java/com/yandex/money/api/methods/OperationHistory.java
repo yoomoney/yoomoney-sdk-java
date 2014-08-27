@@ -54,6 +54,15 @@ public class OperationHistory implements MethodResponse {
         this.operations = operations;
     }
 
+    @Override
+    public String toString() {
+        return "OperationHistory{" +
+                "error=" + error +
+                ", nextRecord='" + nextRecord + '\'' +
+                ", operations=" + operations +
+                '}';
+    }
+
     public Error getError() {
         return error;
     }

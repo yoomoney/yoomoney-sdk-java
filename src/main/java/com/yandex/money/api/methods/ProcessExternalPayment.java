@@ -48,6 +48,19 @@ public class ProcessExternalPayment extends BaseProcessPayment {
         this.invoiceId = invoiceId;
     }
 
+    @Override
+    public String toString() {
+        return "ProcessExternalPayment{" +
+                "status=" + getStatus() +
+                ", error=" + getError() +
+                ", acsUri='" + getAcsUri() + '\'' +
+                ", acsParams=" + getAcsParams() +
+                ", nextRetry=" + getNextRetry() +
+                ", moneySource=" + moneySource +
+                ", invoiceId='" + invoiceId + '\'' +
+                '}';
+    }
+
     public ExternalCard getMoneySource() {
         return moneySource;
     }

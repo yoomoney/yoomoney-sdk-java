@@ -66,6 +66,24 @@ public class RequestPayment extends BaseRequestPayment {
         this.extActionUri = extActionUri;
     }
 
+    @Override
+    public String toString() {
+        return "RequestPayment{" +
+                "status=" + getStatus() +
+                ", error=" + getError() +
+                ", requestId='" + getRequestId() + '\'' +
+                ", contractAmount=" + getContractAmount() +
+                ", moneySources=" + moneySources +
+                ", cscRequired=" + cscRequired +
+                ", balance=" + balance +
+                ", recipientAccountStatus=" + recipientAccountStatus +
+                ", recipientAccountType=" + recipientAccountType +
+                ", protectionCode='" + protectionCode + '\'' +
+                ", accountUnblockUri='" + accountUnblockUri + '\'' +
+                ", extActionUri='" + extActionUri + '\'' +
+                '}';
+    }
+
     public List<MoneySource> getMoneySources() {
         return moneySources;
     }

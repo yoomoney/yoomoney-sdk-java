@@ -40,6 +40,14 @@ public class Avatar {
         this.timestamp = timestamp;
     }
 
+    @Override
+    public String toString() {
+        return "Avatar{" +
+                "url='" + url + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
+    }
+
     /**
      * Creates {@link com.yandex.money.api.model.Avatar} from a JSON object.
      *

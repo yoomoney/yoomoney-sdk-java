@@ -42,6 +42,14 @@ public class Token implements MethodResponse {
         this.error = error;
     }
 
+    @Override
+    public String toString() {
+        return "Token{" +
+                "accessToken='" + accessToken + '\'' +
+                ", error=" + error +
+                '}';
+    }
+
     public String getAccessToken() {
         return accessToken;
     }

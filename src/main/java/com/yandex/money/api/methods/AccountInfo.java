@@ -27,6 +27,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
 
 /**
  * Information of user account.
@@ -118,6 +119,21 @@ public class AccountInfo implements MethodResponse {
 
     public boolean isIdentified() {
         return accountStatus == AccountStatus.IDENTIFIED;
+    }
+
+    @Override
+    public String toString() {
+        return "AccountInfo{" +
+                "account='" + account + '\'' +
+                ", balance=" + balance +
+                ", currency=" + currency +
+                ", accountStatus=" + accountStatus +
+                ", accountType=" + accountType +
+                ", avatar=" + avatar +
+                ", balanceDetails=" + balanceDetails +
+                ", linkedCards=" + Arrays.toString(linkedCards) +
+                ", additionalServices=" + Arrays.toString(additionalServices) +
+                '}';
     }
 
     /**

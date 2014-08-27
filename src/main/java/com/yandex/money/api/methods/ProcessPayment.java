@@ -66,6 +66,27 @@ public class ProcessPayment extends BaseProcessPayment {
         this.digitalGoods = digitalGoods;
     }
 
+    @Override
+    public String toString() {
+        return "ProcessPayment{" +
+                "status=" + getStatus() +
+                ", error=" + getError() +
+                ", acsUri='" + getAcsUri() + '\'' +
+                ", acsParams=" + getAcsParams() +
+                ", nextRetry=" + getNextRetry() +
+                ", paymentId='" + paymentId + '\'' +
+                ", balance=" + balance +
+                ", invoiceId='" + invoiceId + '\'' +
+                ", payer='" + payer + '\'' +
+                ", payee='" + payee + '\'' +
+                ", creditAmount=" + creditAmount +
+                ", accountUnblockUri='" + accountUnblockUri + '\'' +
+                ", payeeUid='" + payeeUid + '\'' +
+                ", holdForPickupLink='" + holdForPickupLink + '\'' +
+                ", digitalGoods=" + digitalGoods +
+                '}';
+    }
+
     public String getPaymentId() {
         return paymentId;
     }

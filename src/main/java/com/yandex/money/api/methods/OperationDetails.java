@@ -42,6 +42,14 @@ public class OperationDetails implements MethodResponse {
         this.operation = operation;
     }
 
+    @Override
+    public String toString() {
+        return "OperationDetails{" +
+                "error=" + error +
+                ", operation=" + operation +
+                '}';
+    }
+
     public Error getError() {
         return error;
     }

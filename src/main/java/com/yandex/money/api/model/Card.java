@@ -50,6 +50,14 @@ public class Card extends MoneySource {
         return buildGson().fromJson(json, Card.class);
     }
 
+    @Override
+    public String toString() {
+        return "Card{" +
+                "panFragment='" + panFragment + '\'' +
+                ", type='" + type + '\'' +
+                '}';
+    }
+
     /**
      * @return panned fragment of card's number
      */

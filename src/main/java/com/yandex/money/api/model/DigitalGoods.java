@@ -47,6 +47,14 @@ public class DigitalGoods {
         return buildGson().fromJson(element, DigitalGoods.class);
     }
 
+    @Override
+    public String toString() {
+        return "DigitalGoods{" +
+                "article=" + article +
+                ", bonus=" + bonus +
+                '}';
+    }
+
     /**
      * @return not null list of articles
      */

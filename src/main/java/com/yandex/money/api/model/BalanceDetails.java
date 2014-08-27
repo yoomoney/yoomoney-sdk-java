@@ -60,6 +60,17 @@ public class BalanceDetails {
         return buildGson().fromJson(element, BalanceDetails.class);
     }
 
+    @Override
+    public String toString() {
+        return "BalanceDetails{" +
+                "total=" + total +
+                ", available=" + available +
+                ", depositionPending=" + depositionPending +
+                ", blocked=" + blocked +
+                ", debt=" + debt +
+                '}';
+    }
+
     /**
      * @return total balance
      */

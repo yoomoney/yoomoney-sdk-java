@@ -49,6 +49,16 @@ public class IncomingTransferAccept implements MethodResponse {
         this.extActionUri = extActionUri;
     }
 
+    @Override
+    public String toString() {
+        return "IncomingTransferAccept{" +
+                "status=" + status +
+                ", error=" + error +
+                ", protectionCodeAttemptsAvailable=" + protectionCodeAttemptsAvailable +
+                ", extActionUri='" + extActionUri + '\'' +
+                '}';
+    }
+
     public Status getStatus() {
         return status;
     }
