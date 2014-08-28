@@ -4,7 +4,6 @@ import com.yandex.money.api.model.Scope;
 import com.yandex.money.api.utils.Strings;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -109,12 +108,7 @@ public class OAuth2Authorization {
             final String scopeName = "scope";
             if (Strings.isNullOrEmpty(rawScope)) {
                 if (scopes != null) {
-                    Iterator<Scope> iterator = scopes.iterator();
-                    StringBuilder builder = new StringBuilder(iterator.next().getQualifiedName());
-                    while (iterator.hasNext()) {
-                        builder.append(" ").append(iterator.next());
-                    }
-                    buffer.addParam(scopeName, builder.toString());
+                    buffer.addParam(scopeName, Scope.createScopeParameter(scopes.iterator()));
                 }
             } else {
                 buffer.addParam(scopeName, rawScope);
