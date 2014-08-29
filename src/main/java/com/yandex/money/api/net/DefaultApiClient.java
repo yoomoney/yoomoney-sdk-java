@@ -76,7 +76,7 @@ public class DefaultApiClient implements ApiClient {
         return new UserAgent() {
             @Override
             public String getName() {
-                return "yandex-money-sdk";
+                return "Yandex.Money.SDK/Java";
             }
         };
     }
