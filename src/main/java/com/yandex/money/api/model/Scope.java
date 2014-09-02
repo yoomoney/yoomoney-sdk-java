@@ -3,6 +3,7 @@ package com.yandex.money.api.model;
 import com.yandex.money.api.utils.Strings;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 
 /**
  * Access token's scope. Provides simple and customizable scopes for every occasion. Complete list
@@ -107,6 +108,24 @@ public class Scope {
      */
     public static PaymentScope createPaymentScopeToPattern(String patternId) {
         return PaymentScope.createPaymentToPattern(patternId);
+    }
+
+    /**
+     * Creates {@code scope} parameter from iterator.
+     *
+     * @param scopes some scopes
+     * @return parameter's value
+     */
+    public static String createScopeParameter(Iterator<Scope> scopes) {
+        if (scopes == null || !scopes.hasNext()) {
+            throw new IllegalArgumentException("scopes is null or empty");
+        }
+
+        StringBuilder builder = new StringBuilder(scopes.next().getQualifiedName());
+        while (scopes.hasNext()) {
+            builder.append(" ").append(scopes.next().getQualifiedName());
+        }
+        return builder.toString();
     }
 
     @Override
