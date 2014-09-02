@@ -50,7 +50,9 @@ public class TokenTest implements ApiTest {
         scopes.add(Scope.ACCOUNT_INFO);
 
         AuxToken auxToken = session.execute(new AuxToken.Request(scopes));
-        Assert.assertNotNull(auxToken.getAuxToken());
+        String token = auxToken.getAuxToken();
+        Assert.assertNotNull(token);
+        session.setAccessToken(token);
 
         AccountInfo accountInfo = session.execute(new AccountInfo.Request());
         Assert.assertNotNull(accountInfo.getAccount());

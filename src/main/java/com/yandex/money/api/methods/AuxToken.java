@@ -80,7 +80,7 @@ public class AuxToken implements MethodResponse {
 
         @Override
         public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getSpMoney() + "/oauth/token-aux");
+            return new URL(hostsProvider.getMoneyApi() + "/token-aux");
         }
 
         @Override
