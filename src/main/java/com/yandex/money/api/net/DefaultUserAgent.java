@@ -3,7 +3,7 @@ package com.yandex.money.api.net;
 import com.yandex.money.api.utils.Strings;
 
 /**
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ *  Default implementation of {@link com.yandex.money.api.net.UserAgent} interface.
  */
 public class DefaultUserAgent implements UserAgent {
 
