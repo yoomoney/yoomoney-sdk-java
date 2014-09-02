@@ -4,6 +4,7 @@ import com.squareup.okhttp.ConnectionPool;
 import com.squareup.okhttp.OkAuthenticator;
 import com.squareup.okhttp.OkHttpClient;
 import com.yandex.money.api.utils.Language;
+import com.yandex.money.api.utils.Strings;
 
 import java.io.IOException;
 import java.net.Proxy;
@@ -27,6 +28,8 @@ public class DefaultApiClient implements ApiClient {
     private final String id;
     private final OkHttpClient httpClient;
     private final HostsProvider hostsProvider;
+
+    private String platform = "Java";
 
     /**
      * Constructor.
@@ -56,6 +59,23 @@ public class DefaultApiClient implements ApiClient {
         }
     }
 
+    /**
+     * Constructor.
+     * <p/>
+     * If {@code platform} parameter is null or empty default value will be used. No exception will
+     * be thrown.
+     *
+     * @param clientId client id to use
+     * @param debugLogging {@code true} if logging is required
+     * @param platform the name of a platform client is running on
+     */
+    public DefaultApiClient(String clientId, boolean debugLogging, String platform) {
+        this(clientId, debugLogging);
+        if (!Strings.isNullOrEmpty(platform)) {
+            this.platform = platform;
+        }
+    }
+
     @Override
     public String getClientId() {
         return id;
@@ -73,7 +93,7 @@ public class DefaultApiClient implements ApiClient {
 
     @Override
     public UserAgent getUserAgent() {
-        return new DefaultUserAgent("Java");
+        return new DefaultUserAgent(platform);
     }
 
     @Override
