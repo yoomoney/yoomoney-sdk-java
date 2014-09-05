@@ -59,7 +59,7 @@ public class P2pParams implements Params {
 
         result.put(PARAM_AMOUNT_DUE, amountDue.toPlainString());
 
-        if (Strings.isNullOrEmpty(message)) {
+        if (!Strings.isNullOrEmpty(message)) {
             result.put(PARAM_MESSAGE, message);
         }
 

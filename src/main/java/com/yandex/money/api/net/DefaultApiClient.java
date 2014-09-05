@@ -107,7 +107,7 @@ public class DefaultApiClient implements ApiClient {
         client.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         client.setAuthenticator(NULL_AUTHENTICATOR);
         client.setConnectionPool(new ConnectionPool(4, 10 * 60 * 1000L));
-        client.setFollowProtocolRedirects(false);
+        client.setFollowSslRedirects(false);
         return client;
     }
 
