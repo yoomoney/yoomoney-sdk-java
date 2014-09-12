@@ -83,4 +83,17 @@ public final class Strings {
         }
         return result;
     }
+
+    /**
+     * Splits string using separator to divide groups.
+     *
+     * @param str the string to split
+     * @param groupSize group size
+     * @param separator separator
+     * @return grouped string
+     */
+    public static String group(String str, int groupSize, String separator) {
+        String[] split = split(str, groupSize);
+        return concatenate(split, separator);
+    }
 }
