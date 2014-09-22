@@ -254,9 +254,7 @@ public class RequestPayment extends BaseRequestPayment {
         public PostRequestBodyBuffer buildParameters() throws IOException {
             PostRequestBodyBuffer postRequestBodyBuffer = new PostRequestBodyBuffer();
             if (paymentParameters != null) {
-                for (Map.Entry<String, String> parameter : paymentParameters.entrySet()) {
-                    postRequestBodyBuffer.addParam(parameter.getKey(), parameter.getValue());
-                }
+                postRequestBodyBuffer.addParams(paymentParameters);
             }
             return postRequestBodyBuffer
                     .addParam("pattern_id", patternId)

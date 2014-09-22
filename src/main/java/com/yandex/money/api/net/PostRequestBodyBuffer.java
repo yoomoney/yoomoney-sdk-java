@@ -17,6 +17,7 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 /**
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
@@ -57,6 +58,22 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
         } catch (UnsupportedEncodingException e) {
             throw new IllegalStateException(e.getMessage(), e);
         }
+    }
+
+    /**
+     * Adds map of name-value pairs to buffer.
+     *
+     * @param params name-value pairs
+     */
+    public PostRequestBodyBuffer addParams(Map<String, String> params) {
+        if (params == null) {
+            throw new NullPointerException("params is null");
+        }
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            addParam(entry.getKey(), entry.getValue());
+        }
+        return this;
     }
 
     /**

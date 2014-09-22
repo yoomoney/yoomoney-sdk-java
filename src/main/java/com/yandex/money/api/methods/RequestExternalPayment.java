@@ -151,15 +151,10 @@ public class RequestExternalPayment extends BaseRequestPayment {
 
         @Override
         public PostRequestBodyBuffer buildParameters() throws IOException {
-            PostRequestBodyBuffer bb = new PostRequestBodyBuffer();
-
-            bb.addParam("instance_id", instanceId);
-            bb.addParam("pattern_id", patternId);
-            for (Map.Entry<String,String> entry : params.entrySet()) {
-                bb.addParam(entry.getKey(), entry.getValue());
-            }
-
-            return bb;
+            return new PostRequestBodyBuffer()
+                    .addParam("instance_id", instanceId)
+                    .addParam("pattern_id", patternId)
+                    .addParams(params);
         }
     }
 }
