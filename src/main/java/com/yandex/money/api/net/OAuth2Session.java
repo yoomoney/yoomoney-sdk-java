@@ -47,6 +47,7 @@ public class OAuth2Session extends AbstractSession {
         try {
             PostRequestBodyBuffer parameters = request.buildParameters();
             if (parameters == null) {
+                connection.setRequestMethod("POST");
                 connection.setRequestProperty(HttpHeaders.CONTENT_LENGTH, "0");
             } else {
                 parameters.setHttpHeaders(connection);
