@@ -137,6 +137,25 @@ public class Token implements MethodResponse {
      * Revokes access token.
      */
     public static final class Revoke implements MethodRequest<Object> {
+
+        private final boolean revokeAll;
+
+        /**
+         * Revoke only one token.
+         */
+        public Revoke() {
+            this(false);
+        }
+
+        /**
+         * Revoke token.
+         *
+         * @param revokeAll if {@code true} all bound tokens will be also revoked
+         */
+        public Revoke(boolean revokeAll) {
+            this.revokeAll = revokeAll;
+        }
+
         @Override
         public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
             return new URL(hostsProvider.getMoneyApi() + "/revoke");
@@ -149,7 +168,8 @@ public class Token implements MethodResponse {
 
         @Override
         public PostRequestBodyBuffer buildParameters() throws IOException {
-            return null;
+            return new PostRequestBodyBuffer()
+                    .addBooleanIfTrue("revoke-all", revokeAll);
         }
     }
 
