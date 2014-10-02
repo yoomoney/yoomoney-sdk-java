@@ -56,6 +56,7 @@ public class OAuth2Authorization {
         private String redirectUri;
         private Set<Scope> scopes;
         private String rawScope;
+        private String instanceName;
 
         /**
          * @param responseType specific response type
@@ -99,6 +100,16 @@ public class OAuth2Authorization {
         }
 
         /**
+         * Sets unique instance name for application.
+         *
+         * @param instanceName the instance name
+         */
+        public Params setInstanceName(String instanceName) {
+            this.instanceName = instanceName;
+            return this;
+        }
+
+        /**
          * Build provided parameters.
          *
          * @return parameters
@@ -117,6 +128,7 @@ public class OAuth2Authorization {
                     .addParamIfNotNull("client_id", clientId)
                     .addParamIfNotNull("response_type", responseType)
                     .addParamIfNotNull("redirect_uri", redirectUri)
+                    .addParamIfNotNull("instance_name", instanceName)
                     .toByteArray();
         }
 
