@@ -14,8 +14,8 @@ jar {
 
 dependencies {
     compile 'com.squareup.okhttp:okhttp:1.6.0'
-    compile 'com.google.code.gson:gson:2.2.4'
-    compile 'joda-time:joda-time:2.3'
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'joda-time:joda-time:2.5'
 
     testCompile 'org.testng:testng:6.8.7'
 }
