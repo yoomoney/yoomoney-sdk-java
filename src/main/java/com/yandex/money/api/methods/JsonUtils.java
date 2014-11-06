@@ -179,7 +179,8 @@ public final class JsonUtils {
     }
 
     /**
-     * Maps JSON object to key-value pairs.
+     * Maps JSON object to key-value pairs. If the object contains non-primitive entries they are
+     * ignored and {@code null} value added using specified key.
      *
      * @param object JSON object
      * @return map of string key-value pairs
@@ -188,7 +189,11 @@ public final class JsonUtils {
         checkObject(object);
         Map<String, String> result = new HashMap<>();
         for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-            result.put(entry.getKey(), entry.getValue().getAsString());
+            String value = null;
+            if (entry.getValue().isJsonPrimitive()) {
+                value = entry.getValue().getAsString();
+            }
+            result.put(entry.getKey(), value);
         }
         return result;
     }
