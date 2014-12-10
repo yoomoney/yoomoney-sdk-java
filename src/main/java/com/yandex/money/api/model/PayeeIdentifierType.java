@@ -1,5 +1,7 @@
 package com.yandex.money.api.model;
 
+import com.yandex.money.api.utils.Patterns;
+
 /**
  * Type of payee identifier.
  * <p/>
@@ -24,13 +26,6 @@ public enum PayeeIdentifierType {
      * Unknown identifier.
      */
     UNKNOWN("unknown");
-
-    private static final String ACCOUNT_PATTERN = "41\\d{9,31}";
-    private static final String PHONE_PATTERN = "(\\+[0-9]+[\\- \\.]*)?(\\([0-9]+\\)[\\- \\.]*)?" +
-            "([0-9][0-9\\- \\.]+[0-9])";
-    private static final String YANDEX_PATTERN = "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}";
-    private static final String EMAIL_PATTERN = "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}@[a-zA-Z0-9]" +
-            "[a-zA-Z0-9\\-]{0,64}(\\.[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25})+";
 
     private final String code;
 
@@ -61,11 +56,11 @@ public enum PayeeIdentifierType {
             return UNKNOWN;
         }
 
-        if (identifier.matches(ACCOUNT_PATTERN)) {
+        if (identifier.matches(Patterns.ACCOUNT)) {
             return ACCOUNT;
-        } else if (identifier.matches(PHONE_PATTERN)) {
+        } else if (identifier.matches(Patterns.PHONE)) {
             return PHONE;
-        } else if (identifier.matches(YANDEX_PATTERN) || identifier.matches(EMAIL_PATTERN)) {
+        } else if (identifier.matches(Patterns.YANDEX) || identifier.matches(Patterns.EMAIL)) {
             return EMAIL;
         } else {
             return UNKNOWN;
