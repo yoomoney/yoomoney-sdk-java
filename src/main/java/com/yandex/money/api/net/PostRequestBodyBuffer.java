@@ -48,6 +48,9 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
      * @param value its value
      */
     public PostRequestBodyBuffer addParam(String name, String value) {
+        if (value == null) {
+            value = "";
+        }
         try {
             return addParamWithoutURLEncoding(
                     URLEncoder.encode(name, REQUEST_CHARSET_UTF8.name())
