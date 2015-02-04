@@ -20,6 +20,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
 
     private final Status status;
     private final Error error;
+    private final String invoiceId;
     private final String acsUri;
     private final Map<String, String> acsParams;
     private final Long nextRetry;
@@ -33,7 +34,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
      * @param acsParams POST parameters for 3D Secure authorization (key-value pairs)
      * @param nextRetry recommended time interval between process payment requests
      */
-    public BaseProcessPayment(Status status, Error error, String acsUri,
+    public BaseProcessPayment(Status status, Error error, String invoiceId, String acsUri,
                               Map<String, String> acsParams, Long nextRetry) {
 
         if (status == Status.EXT_AUTH_REQUIRED && acsUri == null) {
@@ -41,6 +42,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
         }
         this.status = status;
         this.error = error;
+        this.invoiceId = invoiceId;
         this.acsUri = acsUri;
         this.acsParams = acsParams;
         this.nextRetry = nextRetry;
@@ -52,6 +54,10 @@ public abstract class BaseProcessPayment implements MethodResponse {
 
     public Error getError() {
         return error;
+    }
+
+    public String getInvoiceId() {
+        return invoiceId;
     }
 
     public String getAcsUri() {

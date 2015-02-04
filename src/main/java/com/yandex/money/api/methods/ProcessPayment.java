@@ -32,7 +32,6 @@ public class ProcessPayment extends BaseProcessPayment {
 
     private final String paymentId;
     private final BigDecimal balance;
-    private final String invoiceId;
     private final String payer;
     private final String payee;
     private final BigDecimal creditAmount;
@@ -50,13 +49,12 @@ public class ProcessPayment extends BaseProcessPayment {
                            String acsUri, Map<String, String> acsParams, Long nextRetry,
                            DigitalGoods digitalGoods) {
 
-        super(status, error, acsUri, acsParams, nextRetry);
+        super(status, error, invoiceId, acsUri, acsParams, nextRetry);
         if (status == Status.SUCCESS && paymentId == null) {
             throw new NullPointerException("paymentId is null when status is success");
         }
         this.paymentId = paymentId;
         this.balance = balance;
-        this.invoiceId = invoiceId;
         this.payer = payer;
         this.payee = payee;
         this.creditAmount = creditAmount;
@@ -76,7 +74,6 @@ public class ProcessPayment extends BaseProcessPayment {
                 ", nextRetry=" + getNextRetry() +
                 ", paymentId='" + paymentId + '\'' +
                 ", balance=" + balance +
-                ", invoiceId='" + invoiceId + '\'' +
                 ", payer='" + payer + '\'' +
                 ", payee='" + payee + '\'' +
                 ", creditAmount=" + creditAmount +
@@ -93,10 +90,6 @@ public class ProcessPayment extends BaseProcessPayment {
 
     public BigDecimal getBalance() {
         return balance;
-    }
-
-    public String getInvoiceId() {
-        return invoiceId;
     }
 
     public String getPayer() {

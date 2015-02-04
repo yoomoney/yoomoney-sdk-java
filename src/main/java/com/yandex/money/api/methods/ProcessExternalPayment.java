@@ -43,7 +43,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
                                   Map<String, String> acsParams, ExternalCard moneySource,
                                   Long nextRetry, String invoiceId) {
 
-        super(status, error, acsUri, acsParams, nextRetry);
+        super(status, error, invoiceId, acsUri, acsParams, nextRetry);
         this.moneySource = moneySource;
         this.invoiceId = invoiceId;
     }
