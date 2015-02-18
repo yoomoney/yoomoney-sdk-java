@@ -24,6 +24,7 @@ public class BalanceDetails {
     private final BigDecimal depositionPending;
     private final BigDecimal blocked;
     private final BigDecimal debt;
+    private final BigDecimal hold;
 
     /**
      * Constructor
@@ -35,7 +36,7 @@ public class BalanceDetails {
      * @param debt account's debt
      */
     public BalanceDetails(BigDecimal total, BigDecimal available, BigDecimal depositionPending,
-                          BigDecimal blocked, BigDecimal debt) {
+                          BigDecimal blocked, BigDecimal debt, BigDecimal hold) {
 
         if (total == null) {
             throw new JsonParseException("balance total is null");
@@ -48,6 +49,7 @@ public class BalanceDetails {
         this.depositionPending = depositionPending;
         this.blocked = blocked;
         this.debt = debt;
+        this.hold = hold;
     }
 
     /**
@@ -68,6 +70,7 @@ public class BalanceDetails {
                 ", depositionPending=" + depositionPending +
                 ", blocked=" + blocked +
                 ", debt=" + debt +
+                ", hold=" + hold +
                 '}';
     }
 
@@ -106,6 +109,13 @@ public class BalanceDetails {
         return debt;
     }
 
+    /**
+     * @return money on hold
+     */
+    public BigDecimal getHold() {
+        return hold;
+    }
+
     private static Gson buildGson() {
         return new GsonBuilder()
                 .registerTypeAdapter(BalanceDetails.class, new Deserializer())
@@ -123,6 +133,7 @@ public class BalanceDetails {
                     JsonUtils.getMandatoryBigDecimal(object, "available"),
                     JsonUtils.getBigDecimal(object, "deposition_pending"),
                     JsonUtils.getBigDecimal(object, "blocked"),
+                    JsonUtils.getBigDecimal(object, "debt"),
                     JsonUtils.getBigDecimal(object, "debt"));
         }
     }
