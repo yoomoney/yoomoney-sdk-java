@@ -67,10 +67,13 @@ public class AccountInfo implements MethodResponse {
         if (Strings.isNullOrEmpty(account)) {
             throw new IllegalArgumentException("account is null or empty");
         }
-        this.account = account;
         if (balance == null) {
-            throw new IllegalArgumentException("balance is null");
+            throw new NullPointerException("balance is null");
         }
+        if (balanceDetails == null) {
+            throw new NullPointerException("balanceDetails is null");
+        }
+        this.account = account;
         this.balance = balance;
         this.currency = currency;
         this.accountStatus = accountStatus;
@@ -189,11 +192,8 @@ public class AccountInfo implements MethodResponse {
                 avatar = Avatar.createFromJson(object.get(memberAvatar));
             }
 
-            final String memberBalanceDetails = "balance_details";
-            BalanceDetails balanceDetails = null;
-            if (object.has(memberBalanceDetails)) {
-                balanceDetails = BalanceDetails.createFromJson(object.get(memberBalanceDetails));
-            }
+            BalanceDetails balanceDetails = BalanceDetails.createFromJson(
+                    object.get("balance_details"));
 
             final String memberLinkedCards = "cards_linked";
             Card[] linkedCards = null;
