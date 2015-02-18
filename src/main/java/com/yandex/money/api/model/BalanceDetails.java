@@ -134,7 +134,7 @@ public class BalanceDetails {
                     JsonUtils.getBigDecimal(object, "deposition_pending"),
                     JsonUtils.getBigDecimal(object, "blocked"),
                     JsonUtils.getBigDecimal(object, "debt"),
-                    JsonUtils.getBigDecimal(object, "debt"));
+                    JsonUtils.getBigDecimal(object, "hold"));
         }
     }
 }
