@@ -8,8 +8,9 @@ This Java library contains classes that allows you to do payments using Yandex.M
 
 The library uses:
 
-* [OkHttp][1] 1.5.4;
-* [Google GSON][2] 2.2.4.
+* [OkHttp][1] 1.6.0
+* [Google GSON][2] 2.3
+* [Joda-Time][7] 2.5
 
 ## Usage
 
@@ -104,3 +105,4 @@ public void processPayment(String requestId, ProcessExternalPayment.Request pepR
 [4]: http://api.yandex.ru/money/doc/dg/tasks/register-client.xml
 [5]: http://api.yandex.com/money/
 [6]: http://api.yandex.ru/money/
+[7]: http://www.joda.org/joda-time/
