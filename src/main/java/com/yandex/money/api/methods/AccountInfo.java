@@ -27,7 +27,9 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Information of user account.
@@ -43,8 +45,8 @@ public class AccountInfo implements MethodResponse {
     private final AccountType accountType;
     private final Avatar avatar;
     private final BalanceDetails balanceDetails;
-    private final Card[] linkedCards;
-    private final String[] additionalServices;
+    private final List<Card> linkedCards;
+    private final List<String> additionalServices;
 
     /**
      * Constructor.
@@ -61,8 +63,8 @@ public class AccountInfo implements MethodResponse {
      */
     public AccountInfo(String account, BigDecimal balance, Currency currency,
                        AccountStatus accountStatus, AccountType accountType, Avatar avatar,
-                       BalanceDetails balanceDetails, Card[] linkedCards,
-                       String[] additionalServices) {
+                       BalanceDetails balanceDetails, List<Card> linkedCards,
+                       List<String> additionalServices) {
 
         if (Strings.isNullOrEmpty(account)) {
             throw new IllegalArgumentException("account is null or empty");
@@ -73,6 +75,12 @@ public class AccountInfo implements MethodResponse {
         if (balanceDetails == null) {
             throw new NullPointerException("balanceDetails is null");
         }
+        if (linkedCards == null) {
+            throw new NullPointerException("linkedCards is null");
+        }
+        if (additionalServices == null) {
+            throw new NullPointerException("additionalServices is null");
+        }
         this.account = account;
         this.balance = balance;
         this.currency = currency;
@@ -80,8 +88,8 @@ public class AccountInfo implements MethodResponse {
         this.accountType = accountType;
         this.avatar = avatar;
         this.balanceDetails = balanceDetails;
-        this.linkedCards = linkedCards;
-        this.additionalServices = additionalServices;
+        this.linkedCards = Collections.unmodifiableList(linkedCards);
+        this.additionalServices = Collections.unmodifiableList(additionalServices);
     }
 
     public String getAccount() {
@@ -112,11 +120,11 @@ public class AccountInfo implements MethodResponse {
         return balanceDetails;
     }
 
-    public Card[] getLinkedCards() {
+    public List<Card> getLinkedCards() {
         return linkedCards;
     }
 
-    public String[] getAdditionalServices() {
+    public List<String> getAdditionalServices() {
         return additionalServices;
     }
 
@@ -134,8 +142,8 @@ public class AccountInfo implements MethodResponse {
                 ", accountType=" + accountType +
                 ", avatar=" + avatar +
                 ", balanceDetails=" + balanceDetails +
-                ", linkedCards=" + Arrays.toString(linkedCards) +
-                ", additionalServices=" + Arrays.toString(additionalServices) +
+                ", linkedCards=" + linkedCards +
+                ", additionalServices=" + additionalServices +
                 '}';
     }
 
@@ -196,24 +204,22 @@ public class AccountInfo implements MethodResponse {
                     object.get("balance_details"));
 
             final String memberLinkedCards = "cards_linked";
-            Card[] linkedCards = null;
+            List<Card> linkedCards = new ArrayList<>();
             if (object.has(memberLinkedCards)) {
                 JsonArray array = object.getAsJsonArray(memberLinkedCards);
                 final int size = array.size();
-                linkedCards = new Card[size];
                 for (int i = 0; i < size; ++i) {
-                    linkedCards[i] = Card.createFromJson(array.get(i));
+                    linkedCards.add(Card.createFromJson(array.get(i)));
                 }
             }
 
             final String memberAdditionalServices = "services_additional";
-            String[] additionalServices = null;
+            List<String> additionalServices = new ArrayList<>();
             if (object.has(memberAdditionalServices)) {
                 JsonArray array = object.getAsJsonArray(memberAdditionalServices);
                 final int size = array.size();
-                additionalServices = new String[size];
                 for (int i = 0; i < size; ++i) {
-                    additionalServices[i] = array.get(i).getAsString();
+                    additionalServices.add(array.get(i).getAsString());
                 }
             }
 
