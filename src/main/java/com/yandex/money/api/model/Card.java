@@ -110,7 +110,7 @@ public class Card extends MoneySource {
             object.addProperty(FIELD_ID, src.getId());
             object.addProperty(FIELD_PAN_FRAGMENT, src.getPanFragment());
             object.addProperty(FIELD_TYPE, src.getType());
-            return null;
+            return object;
         }
     }
 }
