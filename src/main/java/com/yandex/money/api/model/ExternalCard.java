@@ -10,8 +10,6 @@ import com.google.gson.JsonParseException;
 import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.utils.Strings;
 
-import java.lang.reflect.Type;
-
 /**
  * Represents card that not bound to an account.
  *
@@ -28,7 +26,7 @@ public class ExternalCard extends Card {
      * @param panFragment panned fragment of card's number
      * @param type type of a card
      */
-    public ExternalCard(String panFragment, String type, String fundingSourceType,
+    public ExternalCard(String panFragment, Type type, String fundingSourceType,
                         String moneySourceToken) {
 
         super(null, panFragment, type);
@@ -70,13 +68,13 @@ public class ExternalCard extends Card {
 
     private static final class Deserializer implements JsonDeserializer<ExternalCard> {
         @Override
-        public ExternalCard deserialize(JsonElement json, Type typeOfT,
+        public ExternalCard deserialize(JsonElement json, java.lang.reflect.Type typeOfT,
                                         JsonDeserializationContext context)
                 throws JsonParseException {
 
             JsonObject object = json.getAsJsonObject();
             return new ExternalCard(JsonUtils.getMandatoryString(object, "pan_fragment"),
-                    JsonUtils.getMandatoryString(object, "payment_card_type"),
+                    Type.parse(JsonUtils.getMandatoryString(object, "payment_card_type")),
                     JsonUtils.getMandatoryString(object, "type"),
                     JsonUtils.getMandatoryString(object, "money_source_token"));
         }

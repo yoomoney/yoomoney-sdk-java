@@ -11,8 +11,6 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.yandex.money.api.methods.JsonUtils;
 
-import java.lang.reflect.Type;
-
 /**
  * Bank card info.
  *
@@ -21,7 +19,7 @@ import java.lang.reflect.Type;
 public class Card extends MoneySource {
 
     private final String panFragment;
-    private final String type;
+    private final Type type;
 
     /**
      * Constructor.
@@ -30,8 +28,11 @@ public class Card extends MoneySource {
      * @param panFragment panned fragment of card's number
      * @param type type of a card
      */
-    public Card(String id, String panFragment, String type) {
+    public Card(String id, String panFragment, Type type) {
         super(id);
+        if (type == null) {
+            throw new NullPointerException("type is null");
+        }
         this.panFragment = panFragment;
         this.type = type;
     }
@@ -68,7 +69,7 @@ public class Card extends MoneySource {
     /**
      * @return type of a card (e.g. VISA, MasterCard, AmericanExpress, etc.)
      */
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
@@ -87,6 +88,36 @@ public class Card extends MoneySource {
                 .create();
     }
 
+    public enum Type {
+        VISA("VISA", "CVV2", 3),
+        MASTER_CARD("MasterCard", "CVC2", 3),
+        AMERICAN_EXPRESS("AmericanExpress", "CID", 4), // also cscAbbr = 4DBC
+        JCB("JCB", "CAV2", 3),
+        UNKNOWN("UNKNOWN", "CSC", 4);
+
+        public final String name;
+        public final String cscAbbr;
+        public final int cscLength;
+
+        Type(String name, String cscAbbr, int cscLength) {
+            this.name = name;
+            this.cscAbbr = cscAbbr;
+            this.cscLength = cscLength;
+        }
+
+        public static Type parse(String name) {
+            if (name == null) {
+                return UNKNOWN;
+            }
+            for (Type cardType : values()) {
+                if (cardType.name.equalsIgnoreCase(name)) {
+                    return cardType;
+                }
+            }
+            return UNKNOWN;
+        }
+    }
+
     private static final class TypeAdapter
             implements JsonDeserializer<Card>, JsonSerializer<Card> {
 
@@ -95,21 +126,23 @@ public class Card extends MoneySource {
         private static final String FIELD_TYPE = "type";
 
         @Override
-        public Card deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-                throws JsonParseException {
+        public Card deserialize(JsonElement json, java.lang.reflect.Type typeOfT,
+                                JsonDeserializationContext context) throws JsonParseException {
 
             JsonObject object = json.getAsJsonObject();
             return new Card(JsonUtils.getString(object, FIELD_ID),
                     JsonUtils.getString(object, FIELD_PAN_FRAGMENT),
-                    JsonUtils.getString(object, FIELD_TYPE));
+                    Type.parse(JsonUtils.getString(object, FIELD_TYPE)));
         }
 
         @Override
-        public JsonElement serialize(Card src, Type typeOfSrc, JsonSerializationContext context) {
+        public JsonElement serialize(Card src, java.lang.reflect.Type typeOfSrc,
+                                     JsonSerializationContext context) {
+
             JsonObject object = new JsonObject();
             object.addProperty(FIELD_ID, src.getId());
             object.addProperty(FIELD_PAN_FRAGMENT, src.getPanFragment());
-            object.addProperty(FIELD_TYPE, src.getType());
+            object.addProperty(FIELD_TYPE, src.getType().name);
             return object;
         }
     }
