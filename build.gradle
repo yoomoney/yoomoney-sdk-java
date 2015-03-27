@@ -1,16 +1,20 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.2.7'
+    }
+}
+
 apply plugin: 'java'
+apply plugin: 'bintray-release'
 
 repositories {
     mavenCentral()
 }
 
 version = '2.0.3'
-
-jar {
-    manifest {
-        attributes 'Implementation-Title': 'ym-java-epr-sdk', 'Implementation-Version': version
-    }
-}
 
 dependencies {
     compile 'com.squareup.okhttp:okhttp:1.6.0'
@@ -20,9 +24,12 @@ dependencies {
     testCompile 'org.testng:testng:6.8.7'
 }
 
-task copyToLib(type: Copy) {
-    into "$buildDir/libs"
-    from configurations.runtime
+publish {
+    userOrg = 'yandex-money'
+    groupId = 'com.yandex.money.api'
+    artifactId = 'yandex-money-sdk-java'
+    version = '2.0.3'
+    website = 'https://github.com/yandex-money/yandex-money-sdk-java'
+    issueTracker = "${website}/issues"
+    repository = "${website}.git"
 }
-
-build.dependsOn(copyToLib)
