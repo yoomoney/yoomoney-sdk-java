@@ -41,13 +41,9 @@ To be able to use the library you: the first thing you need to do is to register
 
 All API methods are represented as classes in package `com.yandex.money.api.methods`.
 
-Every instance of your application should have an unique id. To get it use API method `instance-id` passing your *client id*. Once obtained *instance id* can be used in other API methods.
+Some methods require an unique id to get the response. To get it use API method `instance-id` passing your *client id*. Once obtained *instance id* can be used to perform those methods.
 
-**Do NOT request *instance id* every time you need to call API method. Obtain it once and reuse it.**
-
-### Creating `YandexMoney` Context
-
-In order to call API methods you may want to use `YandexMoney` class as a context for all of your requests. You may also want to pass you own HTTP client so there are two constructors in `YandexMoney` class.
+**Do NOT request *instance id* every time you need to call an API method. Obtain it once and reuse it.**
 
 ### Performing Request
 
