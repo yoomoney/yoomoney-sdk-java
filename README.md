@@ -64,6 +64,7 @@ InstanceId instanceId = session.execute(new InstanceId.Request(clientId));
 ## Links
 
 1. Yandex.Money API (in [English][5], in [Russian][6])
+2. [Yandex.Money Java SDK on Bintray][8]
 
 [1]: http://square.github.io/okhttp/
 [2]: https://code.google.com/p/google-gson/
@@ -72,3 +73,4 @@ InstanceId instanceId = session.execute(new InstanceId.Request(clientId));
 [5]: http://api.yandex.com/money/
 [6]: http://api.yandex.ru/money/
 [7]: http://www.joda.org/joda-time/
+[8]: https://bintray.com/yandex-money/maven/yandex-money-sdk-java/view
