@@ -19,6 +19,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -142,11 +143,9 @@ public class ProcessExternalPayment extends BaseProcessPayment {
                 public ProcessExternalPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                     JsonObject o = json.getAsJsonObject();
 
-                    Map<String, String> acsParams = null;
                     JsonObject paramsObj = o.getAsJsonObject(MEMBER_ACS_PARAMS);
-                    if (paramsObj != null) {
-                        acsParams = JsonUtils.map(paramsObj);
-                    }
+                    Map<String, String> acsParams = paramsObj == null ?
+                            new HashMap<String, String>() : JsonUtils.map(paramsObj);
 
                     final String moneySourceMember = "money_source";
                     ExternalCard moneySource = o.has(moneySourceMember) ?

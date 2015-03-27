@@ -21,6 +21,7 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -365,8 +366,9 @@ public class ProcessPayment extends BaseProcessPayment {
          */
         public ProcessPayment createProcessPayment() {
             return new ProcessPayment(status, error, paymentId, balance, invoiceId, payer, payee,
-                    creditAmount, accountUnblockUri, payeeUid, holdForPickupLink, acsUri, acsParams,
-                    nextRetry, digitalGoods);
+                    creditAmount, accountUnblockUri, payeeUid, holdForPickupLink, acsUri,
+                    acsParams == null ? new HashMap<String, String>() : acsParams, nextRetry,
+                    digitalGoods);
         }
     }
 

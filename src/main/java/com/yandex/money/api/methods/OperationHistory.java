@@ -50,9 +50,12 @@ public class OperationHistory implements MethodResponse {
      * @param operations list of operations
      */
     public OperationHistory(Error error, String nextRecord, List<Operation> operations) {
+        if (operations == null) {
+            throw new NullPointerException("operations is null");
+        }
         this.error = error;
         this.nextRecord = nextRecord;
-        this.operations = operations == null ? null : Collections.unmodifiableList(operations);
+        this.operations = Collections.unmodifiableList(operations);
     }
 
     @Override
@@ -271,9 +274,8 @@ public class OperationHistory implements MethodResponse {
             JsonObject object = json.getAsJsonObject();
 
             final String operationsMember = "operations";
-            List<Operation> operations = null;
+            List<Operation> operations = new ArrayList<>();
             if (object.has(operationsMember)) {
-                operations = new ArrayList<>();
                 for (JsonElement element : object.getAsJsonArray(operationsMember)) {
                     operations.add(Operation.createFromJson(element));
                 }

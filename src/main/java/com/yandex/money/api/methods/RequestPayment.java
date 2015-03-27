@@ -57,7 +57,10 @@ public class RequestPayment extends BaseRequestPayment {
                            String accountUnblockUri, String extActionUri) {
 
         super(status, error, requestId, contractAmount);
-        this.moneySources = moneySources == null ? null : Collections.unmodifiableList(moneySources);
+        if (moneySources == null) {
+            throw new NullPointerException("moneySources is null");
+        }
+        this.moneySources = Collections.unmodifiableList(moneySources);
         this.cscRequired = cscRequired;
         this.balance = balance;
         this.recipientAccountStatus = recipientAccountStatus;

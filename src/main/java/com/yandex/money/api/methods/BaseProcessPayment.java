@@ -41,11 +41,14 @@ public abstract class BaseProcessPayment implements MethodResponse {
         if (status == Status.EXT_AUTH_REQUIRED && acsUri == null) {
             throw new NullPointerException("acsUri is null when status is ext_auth_required");
         }
+        if (acsParams == null) {
+            throw new NullPointerException("acsParams is null");
+        }
         this.status = status;
         this.error = error;
         this.invoiceId = invoiceId;
         this.acsUri = acsUri;
-        this.acsParams = acsParams == null ? null : Collections.unmodifiableMap(acsParams);
+        this.acsParams = Collections.unmodifiableMap(acsParams);
         this.nextRetry = nextRetry;
     }
 
