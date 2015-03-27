@@ -175,7 +175,8 @@ public class Operation {
         this.label = label;
         this.details = details;
         this.repeatable = repeatable != null && repeatable;
-        this.paymentParameters = Collections.unmodifiableMap(paymentParameters);
+        this.paymentParameters = paymentParameters == null ? null :
+                Collections.unmodifiableMap(paymentParameters);
         this.favorite = favorite != null && favorite;
         this.type = type;
         this.digitalGoods = digitalGoods;
