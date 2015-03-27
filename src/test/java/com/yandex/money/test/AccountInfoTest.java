@@ -1,10 +1,11 @@
 package com.yandex.money.test;
 
-import com.yandex.money.api.YandexMoney;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.methods.AccountInfo;
+import com.yandex.money.api.net.DefaultApiClient;
+import com.yandex.money.api.net.OAuth2Session;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
@@ -17,13 +18,13 @@ import java.io.IOException;
  */
 public class AccountInfoTest implements ApiTest {
 
-    private YandexMoney yandexMoney;
+    private OAuth2Session session;
 
     @BeforeTest
     public void beforeTest() {
-        yandexMoney = new YandexMoney(CLIENT_ID);
-        yandexMoney.setDebugLogging(true);
-        yandexMoney.setAccessToken(ACCESS_TOKEN);
+        session = new OAuth2Session(new DefaultApiClient(CLIENT_ID));
+        session.setDebugLogging(true);
+        session.setAccessToken(ACCESS_TOKEN);
     }
 
     @Test
@@ -31,7 +32,7 @@ public class AccountInfoTest implements ApiTest {
             InvalidRequestException, IOException {
 
         AccountInfo.Request request = new AccountInfo.Request();
-        AccountInfo accountInfo = yandexMoney.execute(request);
+        AccountInfo accountInfo = session.execute(request);
         Assert.assertNotNull(accountInfo);
     }
 }

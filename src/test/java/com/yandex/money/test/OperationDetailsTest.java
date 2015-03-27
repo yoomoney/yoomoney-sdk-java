@@ -1,12 +1,13 @@
 package com.yandex.money.test;
 
-import com.yandex.money.api.YandexMoney;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.methods.OperationDetails;
 import com.yandex.money.api.methods.OperationHistory;
 import com.yandex.money.api.model.Operation;
+import com.yandex.money.api.net.DefaultApiClient;
+import com.yandex.money.api.net.OAuth2Session;
 
 import org.joda.time.DateTime;
 import org.testng.Assert;
@@ -22,13 +23,13 @@ import java.util.List;
  */
 public class OperationDetailsTest implements ApiTest {
 
-    private YandexMoney yandexMoney;
+    private OAuth2Session session;
 
     @BeforeTest
     public void beforeTest() {
-        yandexMoney = new YandexMoney(CLIENT_ID);
-        yandexMoney.setDebugLogging(true);
-        yandexMoney.setAccessToken(ACCESS_TOKEN);
+        session = new OAuth2Session(new DefaultApiClient(CLIENT_ID));
+        session.setDebugLogging(true);
+        session.setAccessToken(ACCESS_TOKEN);
     }
 
     @Test
@@ -37,17 +38,17 @@ public class OperationDetailsTest implements ApiTest {
 
         OperationHistory.Request historyRequest = new OperationHistory.Request.Builder()
                 .createRequest();
-        OperationHistory history = yandexMoney.execute(historyRequest);
+        OperationHistory history = session.execute(historyRequest);
         Assert.assertNotNull(history);
 
-        yandexMoney.setDebugLogging(false);
+        session.setDebugLogging(false);
         List<Operation> operations = history.operations;
         for (Operation operation : operations) {
             Assert.assertNotNull(operation);
             Assert.assertNotNull(operation.operationId);
             OperationDetails.Request detailsRequest = new OperationDetails.Request(
                     operation.operationId);
-            OperationDetails operationDetails = yandexMoney.execute(detailsRequest);
+            OperationDetails operationDetails = session.execute(detailsRequest);
             Assert.assertNotNull(operationDetails);
             Assert.assertNotNull(operationDetails.operation);
             Assert.assertNull(operationDetails.error);
@@ -71,8 +72,8 @@ public class OperationDetailsTest implements ApiTest {
                     .setRecords(operations.size())
                     .createRequest();
 
-            yandexMoney.setDebugLogging(true);
-            Assert.assertEquals(yandexMoney.execute(historyRequest).operations.size(),
+            session.setDebugLogging(true);
+            Assert.assertEquals(session.execute(historyRequest).operations.size(),
                     operations.size());
         }
     }
