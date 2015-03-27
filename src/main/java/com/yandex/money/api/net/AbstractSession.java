@@ -1,13 +1,13 @@
 package com.yandex.money.api.net;
 
-import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.CacheControl;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.Response;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.Language;
-import com.yandex.money.api.utils.Streams;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.logging.Logger;
 
@@ -41,67 +41,62 @@ public abstract class AbstractSession {
      *
      * @param debugLogging {@code true} if logging is required
      */
-    public void setDebugLogging(boolean debugLogging) {
+    public final void setDebugLogging(boolean debugLogging) {
         this.debugLogging = debugLogging;
     }
 
     /**
-     * Opens connection using specified url.
+     * Prepares request builder.
      *
-     * @param url url to open connection
-     * @return reference to opened connection
+     * @param url url to use with builder
+     * @return the builder
      */
-    protected HttpURLConnection openConnection(URL url) {
-        OkHttpClient httpClient = client.getHttpClient();
-        HttpURLConnection connection = httpClient.open(url);
+    protected final Request.Builder prepareRequestBuilder(URL url) {
+        Request.Builder builder = new Request.Builder()
+                .url(url)
+                .cacheControl(new CacheControl.Builder().noCache().build());
 
-        connection.setInstanceFollowRedirects(false);
         UserAgent userAgent = client.getUserAgent();
         if (userAgent != null) {
-            connection.setRequestProperty(HttpHeaders.USER_AGENT, userAgent.getName());
+            builder.addHeader(HttpHeaders.USER_AGENT, userAgent.getName());
         }
+
         Language language = client.getLanguage();
         if (language != null) {
-            connection.setRequestProperty(HttpHeaders.ACCEPT_LANGUAGE, language.getIso6391Code());
+            builder.addHeader(HttpHeaders.ACCEPT_LANGUAGE, language.getIso6391Code());
         }
-        connection.setUseCaches(false);
 
-        return connection;
+        return builder;
     }
 
     /**
-     * Gets input stream from connection. Logging can be applied if
+     * Gets input stream from response. Logging can be applied if
      * {@link com.yandex.money.api.net.OAuth2Session#setDebugLogging(boolean)} is set to
      * {@code true}.
      *
-     * @param connection connection reference
+     * @param response response reference
      * @return input stream
      */
-    protected InputStream getInputStream(HttpURLConnection connection) throws IOException {
-        InputStream stream = connection.getResponseCode() >= HttpURLConnection.HTTP_BAD_REQUEST ?
-                connection.getErrorStream() : connection.getInputStream();
+    protected final InputStream getInputStream(Response response) throws IOException {
+        InputStream stream = response.body().byteStream();
         return debugLogging ? new ResponseLoggingInputStream(stream) : stream;
     }
 
     /**
      * Processes connection errors.
      *
-     * @param connection connection reference
+     * @param response response reference
      * @return WWW-Authenticate field of connection
      */
-    protected String processError(HttpURLConnection connection) throws IOException {
-        String field = connection.getHeaderField(HttpHeaders.WWW_AUTHENTICATE);
-        LOGGER.warning("Server has responded with a error: " + getError(connection) + "\n" +
+    protected final String processError(Response response) throws IOException {
+        String field = response.header(HttpHeaders.WWW_AUTHENTICATE);
+        LOGGER.warning("Server has responded with a error: " + getError(response) + "\n" +
                 HttpHeaders.WWW_AUTHENTICATE + ": " + field);
-        Streams.readStreamToNull(getInputStream(connection));
+        LOGGER.warning(response.body().string());
         return field;
     }
 
-    private String getError(HttpURLConnection connection) {
-        try {
-            return "HTTP " + connection.getResponseCode() + " " + connection.getResponseMessage();
-        } catch (IOException e) {
-            return "UNKNOWN " + e.toString();
-        }
+    private String getError(Response response) {
+        return "HTTP " + response.code() + " " + response.message();
     }
 }

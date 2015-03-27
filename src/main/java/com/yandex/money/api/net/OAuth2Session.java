@@ -1,5 +1,11 @@
 package com.yandex.money.api.net;
 
+import com.squareup.okhttp.Call;
+import com.squareup.okhttp.Callback;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
@@ -10,7 +16,6 @@ import com.yandex.money.api.utils.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
 
 /**
@@ -19,6 +24,10 @@ import java.net.HttpURLConnection;
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class OAuth2Session extends AbstractSession {
+
+    private final RequestBody emptyRequestBody =
+            RequestBody.create(MediaType.parse(MimeTypes.Application.X_WWW_FORM_URLENCODED),
+                    new byte[0]);
 
     private String accessToken;
 
@@ -31,65 +40,50 @@ public class OAuth2Session extends AbstractSession {
         super(client);
     }
 
+    /**
+     * Synchronous execution of a request.
+     *
+     * @param request the request
+     * @param <T> response type
+     * @return parsed response
+     * @throws IOException if something went wrong during IO operations
+     * @throws InvalidRequestException if server responded with 404 code
+     * @throws InvalidTokenException if server responded with 401 code
+     * @throws InsufficientScopeException if server responded with 403 code
+     * @see #enqueue(MethodRequest, OnResponseReady)
+     */
     public <T> T execute(MethodRequest<T> request) throws IOException, InvalidRequestException,
             InvalidTokenException, InsufficientScopeException {
+        return parseResponse(request, prepareCall(request).execute());
+    }
 
-        if (request == null) {
-            throw new NullPointerException("request is null");
-        }
+    /**
+     * Asynchronous execution of a request.
+     *
+     * @param request the request
+     * @param callback called when response is ready or if error occurred
+     * @param <T> response type
+     * @throws IOException if something went wrong during IO operations
+     */
+    public <T> void enqueue(final MethodRequest<T> request, final OnResponseReady<T> callback)
+            throws IOException {
 
-        final HostsProvider hostsProvider = client.getHostsProvider();
-        final HttpURLConnection connection = openConnection(request.requestURL(hostsProvider));
-
-        InputStream inputStream = null;
-        OutputStream outputStream = null;
-
-        try {
-            PostRequestBodyBuffer parameters = request.buildParameters();
-            if (parameters == null) {
-                connection.setRequestMethod("POST");
-                connection.setRequestProperty(HttpHeaders.CONTENT_LENGTH, "0");
-            } else {
-                parameters.setHttpHeaders(connection);
-            }
-
-            if (isAuthorized()) {
-                connection.setRequestProperty(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-            }
-
-            if (parameters != null) {
-                outputStream = connection.getOutputStream();
-                parameters.write(outputStream);
-                outputStream.close();
-                outputStream = null;
-            }
-
-            switch (connection.getResponseCode()) {
-                case HttpURLConnection.HTTP_OK:
-                    inputStream = getInputStream(connection);
-                    if (isJsonType(connection)) {
-                        return request.parseResponse(inputStream);
-                    } else {
-                        Streams.readStreamToNull(inputStream);
-                        throw new IOException("Server has responded with a wrong content type");
+        prepareCall(request)
+                .enqueue(new Callback() {
+                    @Override
+                    public void onFailure(Request request, IOException e) {
+                        callback.onFailure(e);
                     }
-                case HttpURLConnection.HTTP_BAD_REQUEST:
-                    throw new InvalidRequestException(processError(connection));
-                case HttpURLConnection.HTTP_UNAUTHORIZED:
-                    throw new InvalidTokenException(processError(connection));
-                case HttpURLConnection.HTTP_FORBIDDEN:
-                    throw new InsufficientScopeException(processError(connection));
-                default:
-                    throw new IOException(processError(connection));
-            }
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-            if (outputStream != null) {
-                outputStream.close();
-            }
-        }
+
+                    @Override
+                    public void onResponse(Response response) throws IOException {
+                        try {
+                            callback.onResponse(parseResponse(request, response));
+                        } catch (Exception e) {
+                            callback.onFailure(e);
+                        }
+                    }
+                });
     }
 
     /**
@@ -121,8 +115,81 @@ public class OAuth2Session extends AbstractSession {
         return new OAuth2Authorization(client);
     }
 
-    private boolean isJsonType(HttpURLConnection connection) {
-        String field = connection.getHeaderField(HttpHeaders.CONTENT_TYPE);
+    private <T> Call prepareCall(MethodRequest<T> request) throws IOException {
+        if (request == null) {
+            throw new NullPointerException("request is null");
+        }
+
+        final HostsProvider hostsProvider = client.getHostsProvider();
+        final Request.Builder builder = prepareRequestBuilder(request.requestURL(hostsProvider));
+
+        if (isAuthorized()) {
+            builder.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        }
+
+        PostRequestBodyBuffer parameters = request.buildParameters();
+        RequestBody requestBody = parameters == null ? emptyRequestBody :
+                parameters.getRequestBody();
+
+        return client.getHttpClient()
+                .newCall(builder.post(requestBody).build());
+    }
+
+    private <T> T parseResponse(MethodRequest<T> request, Response response) throws IOException,
+            InvalidRequestException, InvalidTokenException, InsufficientScopeException {
+
+        InputStream inputStream = null;
+        try {
+            switch (response.code()) {
+                case HttpURLConnection.HTTP_OK:
+                    inputStream = getInputStream(response);
+                    if (isJsonType(response)) {
+                        return request.parseResponse(inputStream);
+                    } else {
+                        Streams.readStreamToNull(inputStream);
+                        throw new IOException("Server has responded with a wrong content type");
+                    }
+                case HttpURLConnection.HTTP_BAD_REQUEST:
+                    throw new InvalidRequestException(processError(response));
+                case HttpURLConnection.HTTP_UNAUTHORIZED:
+                    throw new InvalidTokenException(processError(response));
+                case HttpURLConnection.HTTP_FORBIDDEN:
+                    throw new InsufficientScopeException(processError(response));
+                default:
+                    throw new IOException(processError(response));
+            }
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+    }
+
+    private boolean isJsonType(Response response) {
+        String field = response.header(HttpHeaders.CONTENT_TYPE);
         return field != null && field.startsWith(MimeTypes.Application.JSON);
+    }
+
+    /**
+     * Callback for asynchronous execution of requests. Called when response is ready or when any
+     * error occurred.
+     *
+     * @param <T> response type
+     */
+    public interface OnResponseReady<T> {
+        /**
+         * Called when the request could not be executed due to cancellation, a connectivity problem
+         * or timeout.
+         *
+         * @param exception the exception
+         */
+        void onFailure(Exception exception);
+
+        /**
+         * Called when the HTTP response was successfully returned by the remote server.
+         *
+         * @param response response
+         */
+        void onResponse(T response);
     }
 }

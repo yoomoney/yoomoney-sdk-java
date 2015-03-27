@@ -1,16 +1,11 @@
 package com.yandex.money.api.net;
 
 import com.squareup.okhttp.ConnectionPool;
-import com.squareup.okhttp.OkAuthenticator;
 import com.squareup.okhttp.OkHttpClient;
 import com.yandex.money.api.utils.Language;
 import com.yandex.money.api.utils.Strings;
 
-import java.io.IOException;
-import java.net.Proxy;
-import java.net.URL;
 import java.security.GeneralSecurityException;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
@@ -105,7 +100,6 @@ public class DefaultApiClient implements ApiClient {
         OkHttpClient client = new OkHttpClient();
         client.setReadTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         client.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        client.setAuthenticator(NULL_AUTHENTICATOR);
         client.setConnectionPool(new ConnectionPool(4, 10 * 60 * 1000L));
         client.setFollowSslRedirects(false);
         return client;
@@ -120,18 +114,4 @@ public class DefaultApiClient implements ApiClient {
             throw new RuntimeException(exception);
         }
     }
-
-    private static OkAuthenticator NULL_AUTHENTICATOR = new OkAuthenticator() {
-        @Override
-        public OkAuthenticator.Credential authenticate(
-                Proxy proxy, URL url, List<Challenge> challenges) throws IOException {
-            return null;
-        }
-
-        @Override
-        public Credential authenticateProxy(
-                Proxy proxy, URL url, List<Challenge> challenges) throws IOException {
-            return null;
-        }
-    };
 }

@@ -8,9 +8,9 @@ This Java library contains classes that allows you to do payments using Yandex.M
 
 The library uses:
 
-* [OkHttp][1] 1.6.0
-* [Google GSON][2] 2.3
-* [Joda-Time][7] 2.5
+* [OkHttp][1] 2.3.0
+* [Google GSON][2] 2.3.1
+* [Joda-Time][7] 2.7
 
 ## Usage
 

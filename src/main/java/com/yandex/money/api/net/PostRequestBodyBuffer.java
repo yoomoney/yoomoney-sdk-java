@@ -1,5 +1,7 @@
 package com.yandex.money.api.net;
 
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.RequestBody;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
 import com.yandex.money.api.utils.Streams;
@@ -182,7 +184,7 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
      * Sets specific content type if required. By default {@code application/x-www-form-urlencoded}
      * is used.
      *
-     * @param contentType
+     * @param contentType content type
      */
     public PostRequestBodyBuffer setContentType(String contentType) {
         if (Strings.isNullOrEmpty(contentType)) {
@@ -197,6 +199,7 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
      *
      * @param connection connection
      */
+    @Deprecated
     public void setHttpHeaders(HttpURLConnection connection) throws ProtocolException {
         connection.setRequestMethod("POST");
         connection.setRequestProperty(HttpHeaders.CONTENT_TYPE, contentType);
@@ -208,7 +211,12 @@ public class PostRequestBodyBuffer extends ByteArrayOutputStream {
      *
      * @param out target stream
      */
+    @Deprecated
     public void write(OutputStream out) throws IOException {
         out.write(buf, 0, count);
+    }
+
+    public RequestBody getRequestBody() {
+        return RequestBody.create(MediaType.parse(contentType), buf, 0, count);
     }
 }
