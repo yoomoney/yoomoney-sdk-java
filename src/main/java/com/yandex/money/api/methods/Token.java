@@ -28,8 +28,8 @@ import java.net.URL;
  */
 public class Token implements MethodResponse {
 
-    private final String accessToken;
-    private final Error error;
+    public final String accessToken;
+    public final Error error;
 
     /**
      * Constructor.
@@ -48,14 +48,6 @@ public class Token implements MethodResponse {
                 "accessToken='" + accessToken + '\'' +
                 ", error=" + error +
                 '}';
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    public Error getError() {
-        return error;
     }
 
     /**

@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class RequestExternalPayment extends BaseRequestPayment {
 
-    private final String title;
+    public final String title;
 
     /**
      * Constructor.
@@ -46,17 +46,9 @@ public class RequestExternalPayment extends BaseRequestPayment {
 
     @Override
     public String toString() {
-        return "RequestExternalPayment{" +
-                "status=" + getStatus() +
-                ", error=" + getError() +
-                ", requestId='" + getRequestId() + '\'' +
-                ", contractAmount=" + getContractAmount() +
-                ", title='" + title + '\'' +
+        return super.toString() + "RequestExternalPayment{" +
+                "title='" + title + '\'' +
                 '}';
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     /**

@@ -39,9 +39,9 @@ public enum Language {
         cisIso6391Codes = Collections.unmodifiableSet(codes);
     }
 
-    private final String iso6391Code;
+    public final String iso6391Code;
 
-    private Language(String iso6391Code) {
+    Language(String iso6391Code) {
         this.iso6391Code = iso6391Code;
     }
 
@@ -72,10 +72,6 @@ public enum Language {
             }
         }
         return isCis(iso6391Code) ? RUSSIAN : ENGLISH;
-    }
-
-    public String getIso6391Code() {
-        return iso6391Code;
     }
 
     private static boolean isCis(String iso6391Code) {

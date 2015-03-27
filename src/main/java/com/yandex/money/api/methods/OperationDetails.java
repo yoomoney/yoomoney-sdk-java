@@ -28,8 +28,8 @@ import java.net.URL;
  */
 public class OperationDetails implements MethodResponse {
 
-    private final Error error;
-    private final Operation operation;
+    public final Error error;
+    public final Operation operation;
 
     /**
      * Constructor.
@@ -48,14 +48,6 @@ public class OperationDetails implements MethodResponse {
                 "error=" + error +
                 ", operation=" + operation +
                 '}';
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public Operation getOperation() {
-        return operation;
     }
 
     /**

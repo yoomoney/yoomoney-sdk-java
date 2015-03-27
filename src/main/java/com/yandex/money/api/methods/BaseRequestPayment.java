@@ -17,10 +17,10 @@ public abstract class BaseRequestPayment implements MethodResponse {
     protected static final String MEMBER_REQUEST_ID = "request_id";
     protected static final String MEMBER_CONTRACT_AMOUNT = "contract_amount";
 
-    private final Status status;
-    private final Error error;
-    private final String requestId;
-    private final BigDecimal contractAmount;
+    public final Status status;
+    public final Error error;
+    public final String requestId;
+    public final BigDecimal contractAmount;
 
     /**
      * Constructor.
@@ -42,20 +42,14 @@ public abstract class BaseRequestPayment implements MethodResponse {
         this.contractAmount = contractAmount;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public BigDecimal getContractAmount() {
-        return contractAmount;
+    @Override
+    public String toString() {
+        return "BaseRequestPayment{" +
+                "status=" + status +
+                ", error=" + error +
+                ", requestId='" + requestId + '\'' +
+                ", contractAmount=" + contractAmount +
+                '}';
     }
 
     public enum Status {
@@ -66,7 +60,7 @@ public abstract class BaseRequestPayment implements MethodResponse {
 
         private final String status;
 
-        private Status(String status) {
+        Status(String status) {
             this.status = status;
         }
 

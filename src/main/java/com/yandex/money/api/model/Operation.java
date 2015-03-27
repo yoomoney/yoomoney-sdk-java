@@ -12,6 +12,7 @@ import com.yandex.money.api.methods.JsonUtils;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -19,31 +20,127 @@ import java.util.Map;
  */
 public class Operation {
 
-    private final String operationId;
-    private final Status status;
-    private final String patternId;
-    private final Direction direction;
-    private final BigDecimal amount;
-    private final BigDecimal amountDue;
-    private final BigDecimal fee;
-    private final DateTime datetime;
-    private final String title;
-    private final String sender;
-    private final String recipient;
-    private final PayeeIdentifierType recipientType;
-    private final String message;
-    private final String comment;
-    private final Boolean codepro;
-    private final String protectionCode;
-    private final DateTime expires;
-    private final DateTime answerDatetime;
-    private final String label;
-    private final String details;
-    private final Boolean repeatable;
-    private final Map<String, String> paymentParameters;
-    private final Boolean favorite;
-    private final Type type;
-    private final DigitalGoods digitalGoods;
+    /**
+     * operation id
+     */
+    public final String operationId;
+
+    /**
+     * status of operation
+     */
+    public final Status status;
+
+    /**
+     * pattern id
+     */
+    public final String patternId;
+
+    /**
+     * direction of operation
+     */
+    public final Direction direction;
+
+    /**
+     * amount
+     */
+    public final BigDecimal amount;
+
+    /**
+     * received amount
+     */
+    public final BigDecimal amountDue;
+
+    /**
+     * fee
+     */
+    public final BigDecimal fee;
+
+    /**
+     * operation datetime
+     */
+    public final DateTime datetime;
+
+    /**
+     * title of operation
+     */
+    public final String title;
+
+    /**
+     * sender
+     */
+    public final String sender;
+
+    /**
+     * recepient
+     */
+    public final String recipient;
+
+    /**
+     * type of recipient identifier
+     */
+    public final PayeeIdentifierType recipientType;
+
+    /**
+     * message to recepient
+     */
+    public final String message;
+
+    /**
+     * operation comment
+     */
+    public final String comment;
+
+    /**
+     * {@code true} if operation is protected with a code
+     */
+    public final boolean codepro;
+
+    /**
+     * protection code for operation
+     */
+    public final String protectionCode;
+
+    /**
+     * protection code expiration datetime
+     */
+    public final DateTime expires;
+
+    /**
+     * answer datetime of operation acceptance/revoke
+     */
+    public final DateTime answerDatetime;
+
+    /**
+     * label of operation
+     */
+    public final String label;
+
+    /**
+     * details of operation
+     */
+    public final String details;
+
+    /**
+     * {@code true} if operation can be repeated
+     */
+    public final boolean repeatable;
+
+    /**
+     * payment parameters
+     */
+    public final Map<String, String> paymentParameters;
+
+    public final boolean favorite;
+
+    /**
+     * type of operation
+     */
+    public final Type type;
+
+    /**
+     * digital goods
+     */
+    public final DigitalGoods digitalGoods;
 
     /**
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
@@ -71,15 +168,15 @@ public class Operation {
         this.recipientType = recipientType;
         this.message = message;
         this.comment = comment;
-        this.codepro = codepro;
+        this.codepro = codepro != null && codepro;
         this.protectionCode = protectionCode;
         this.expires = expires;
         this.answerDatetime = answerDatetime;
         this.label = label;
         this.details = details;
-        this.repeatable = repeatable;
-        this.paymentParameters = paymentParameters;
-        this.favorite = favorite;
+        this.repeatable = repeatable != null && repeatable;
+        this.paymentParameters = Collections.unmodifiableMap(paymentParameters);
+        this.favorite = favorite != null && favorite;
         this.type = type;
         this.digitalGoods = digitalGoods;
     }
@@ -120,178 +217,6 @@ public class Operation {
                 ", type=" + type +
                 ", digitalGoods=" + digitalGoods +
                 '}';
-    }
-
-    /**
-     * @return operation id
-     */
-    public String getOperationId() {
-        return operationId;
-    }
-
-    /**
-     * @return status of operation
-     */
-    public Status getStatus() {
-        return status;
-    }
-
-    /**
-     * @return pattern id
-     */
-    public String getPatternId() {
-        return patternId;
-    }
-
-    /**
-     * @return direction of operation
-     */
-    public Direction getDirection() {
-        return direction;
-    }
-
-    /**
-     * @return amount
-     */
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    /**
-     * @return received amount
-     */
-    public BigDecimal getAmountDue() {
-        return amountDue;
-    }
-
-    /**
-     * @return fee
-     */
-    public BigDecimal getFee() {
-        return fee;
-    }
-
-    /**
-     * @return operation datetime
-     */
-    public DateTime getDatetime() {
-        return datetime;
-    }
-
-    /**
-     * @return title of operation
-     */
-    public String getTitle() {
-        return title;
-    }
-
-    /**
-     * @return sender
-     */
-    public String getSender() {
-        return sender;
-    }
-
-    /**
-     * @return recipient
-     */
-    public String getRecipient() {
-        return recipient;
-    }
-
-    /**
-     * @return type of recipient identifier
-     */
-    public PayeeIdentifierType getRecipientType() {
-        return recipientType;
-    }
-
-    /**
-     * @return message to recipient
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * @return operation comment
-     */
-    public String getComment() {
-        return comment;
-    }
-
-    /**
-     * @return {@code true} if operation is protected with a code
-     */
-    public boolean isProtected() {
-        return codepro != null && codepro;
-    }
-
-    /**
-     * @return protection code for operation
-     */
-    public String getProtectionCode() {
-        return protectionCode;
-    }
-
-    /**
-     * @return protection code expiration datetime
-     */
-    public DateTime getExpires() {
-        return expires;
-    }
-
-    /**
-     * @return answer datetime of operation acceptance/revoke
-     */
-    public DateTime getAnswerDatetime() {
-        return answerDatetime;
-    }
-
-    /**
-     * @return label of operation
-     */
-    public String getLabel() {
-        return label;
-    }
-
-    /**
-     * @return details of operation
-     */
-    public String getDetails() {
-        return details;
-    }
-
-    /**
-     * @return {@code true} if operation can be repeated
-     */
-    public boolean isRepeatable() {
-        return repeatable != null && repeatable;
-    }
-
-    /**
-     * @return payment parameters
-     */
-    public Map<String, String> getPaymentParameters() {
-        return paymentParameters;
-    }
-
-    public boolean isFavorite() {
-        return favorite != null && favorite;
-    }
-
-    /**
-     * @return type of operation
-     */
-    public Type getType() {
-        return type;
-    }
-
-    /**
-     * @return digital goods
-     */
-    public DigitalGoods getDigitalGoods() {
-        return digitalGoods;
     }
 
     /**
@@ -362,7 +287,7 @@ public class Operation {
 
         private final String type;
 
-        private Type(String type) {
+        Type(String type) {
             this.type = type;
         }
 
@@ -395,7 +320,7 @@ public class Operation {
 
         private final String direction;
 
-        private Direction(String direction) {
+        Direction(String direction) {
             this.direction = direction;
         }
 

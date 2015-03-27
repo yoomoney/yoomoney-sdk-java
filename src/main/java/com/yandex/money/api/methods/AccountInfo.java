@@ -38,15 +38,15 @@ import java.util.List;
  */
 public class AccountInfo implements MethodResponse {
 
-    private final String account;
-    private final BigDecimal balance;
-    private final Currency currency;
-    private final AccountStatus accountStatus;
-    private final AccountType accountType;
-    private final Avatar avatar;
-    private final BalanceDetails balanceDetails;
-    private final List<Card> linkedCards;
-    private final List<String> additionalServices;
+    public final String account;
+    public final BigDecimal balance;
+    public final Currency currency;
+    public final AccountStatus accountStatus;
+    public final AccountType accountType;
+    public final Avatar avatar;
+    public final BalanceDetails balanceDetails;
+    public final List<Card> linkedCards;
+    public final List<String> additionalServices;
 
     /**
      * Constructor.
@@ -92,46 +92,6 @@ public class AccountInfo implements MethodResponse {
         this.additionalServices = Collections.unmodifiableList(additionalServices);
     }
 
-    public String getAccount() {
-        return account;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public Currency getCurrency() {
-        return currency;
-    }
-
-    public AccountStatus getAccountStatus() {
-        return accountStatus;
-    }
-
-    public AccountType getAccountType() {
-        return accountType;
-    }
-
-    public Avatar getAvatar() {
-        return avatar;
-    }
-
-    public BalanceDetails getBalanceDetails() {
-        return balanceDetails;
-    }
-
-    public List<Card> getLinkedCards() {
-        return linkedCards;
-    }
-
-    public List<String> getAdditionalServices() {
-        return additionalServices;
-    }
-
-    public boolean isIdentified() {
-        return accountStatus == AccountStatus.IDENTIFIED;
-    }
-
     @Override
     public String toString() {
         return "AccountInfo{" +
@@ -145,6 +105,10 @@ public class AccountInfo implements MethodResponse {
                 ", linkedCards=" + linkedCards +
                 ", additionalServices=" + additionalServices +
                 '}';
+    }
+
+    public boolean isIdentified() {
+        return accountStatus == AccountStatus.IDENTIFIED;
     }
 
     /**

@@ -18,8 +18,15 @@ import com.yandex.money.api.methods.JsonUtils;
  */
 public class Card extends MoneySource {
 
-    private final String panFragment;
-    private final Type type;
+    /**
+     * panned fragment of card's number
+     */
+    public final String panFragment;
+
+    /**
+     * type of a card (e.g. VISA, MasterCard, AmericanExpress, etc.)
+     */
+    public final Type type;
 
     /**
      * Constructor.
@@ -57,20 +64,6 @@ public class Card extends MoneySource {
                 "panFragment='" + panFragment + '\'' +
                 ", type='" + type + '\'' +
                 '}';
-    }
-
-    /**
-     * @return panned fragment of card's number
-     */
-    public String getPanFragment() {
-        return panFragment;
-    }
-
-    /**
-     * @return type of a card (e.g. VISA, MasterCard, AmericanExpress, etc.)
-     */
-    public Type getType() {
-        return type;
     }
 
     /**
@@ -140,9 +133,9 @@ public class Card extends MoneySource {
                                      JsonSerializationContext context) {
 
             JsonObject object = new JsonObject();
-            object.addProperty(FIELD_ID, src.getId());
-            object.addProperty(FIELD_PAN_FRAGMENT, src.getPanFragment());
-            object.addProperty(FIELD_TYPE, src.getType().name);
+            object.addProperty(FIELD_ID, src.id);
+            object.addProperty(FIELD_PAN_FRAGMENT, src.panFragment);
+            object.addProperty(FIELD_TYPE, src.type.name);
             return object;
         }
     }

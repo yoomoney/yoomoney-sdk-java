@@ -11,6 +11,7 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,8 +21,15 @@ import java.util.List;
  */
 public class DigitalGoods {
 
-    private final List<Good> article;
-    private final List<Good> bonus;
+    /**
+     * not null list of articles
+     */
+    public final List<Good> article;
+
+    /**
+     * not null list of bonuses
+     */
+    public final List<Good> bonus;
 
     /**
      * Constructor.
@@ -33,11 +41,11 @@ public class DigitalGoods {
         if (article == null) {
             throw new NullPointerException("article is null");
         }
-        this.article = article;
         if (bonus == null) {
             throw new NullPointerException("bonus is null");
         }
-        this.bonus = bonus;
+        this.article = Collections.unmodifiableList(article);
+        this.bonus = Collections.unmodifiableList(bonus);
     }
 
     /**
@@ -53,20 +61,6 @@ public class DigitalGoods {
                 "article=" + article +
                 ", bonus=" + bonus +
                 '}';
-    }
-
-    /**
-     * @return not null list of articles
-     */
-    public List<Good> getArticle() {
-        return article;
-    }
-
-    /**
-     * @return not null list of bonuses
-     */
-    public List<Good> getBonus() {
-        return bonus;
     }
 
     private static Gson buildGson() {

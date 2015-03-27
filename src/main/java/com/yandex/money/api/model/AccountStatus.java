@@ -23,7 +23,7 @@ public enum AccountStatus {
      */
     UNKNOWN("unknown");
 
-    private final String code;
+    public final String code;
 
     AccountStatus(String code) {
         this.code = code;
@@ -39,9 +39,5 @@ public enum AccountStatus {
             }
         }
         return UNKNOWN;
-    }
-
-    public String getCode() {
-        return code;
     }
 }

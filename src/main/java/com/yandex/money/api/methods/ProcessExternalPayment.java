@@ -28,8 +28,8 @@ import java.util.Map;
  */
 public class ProcessExternalPayment extends BaseProcessPayment {
 
-    private final ExternalCard moneySource;
-    private final String invoiceId;
+    public final ExternalCard moneySource;
+    public final String invoiceId;
 
     /**
      * Constructor.
@@ -50,23 +50,10 @@ public class ProcessExternalPayment extends BaseProcessPayment {
 
     @Override
     public String toString() {
-        return "ProcessExternalPayment{" +
-                "status=" + getStatus() +
-                ", error=" + getError() +
-                ", acsUri='" + getAcsUri() + '\'' +
-                ", acsParams=" + getAcsParams() +
-                ", nextRetry=" + getNextRetry() +
-                ", moneySource=" + moneySource +
+        return super.toString() + "ProcessExternalPayment{" +
+                "moneySource=" + moneySource +
                 ", invoiceId='" + invoiceId + '\'' +
                 '}';
-    }
-
-    public ExternalCard getMoneySource() {
-        return moneySource;
-    }
-
-    public String getInvoiceId() {
-        return invoiceId;
     }
 
     /**
@@ -189,7 +176,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
 
             bb.addBooleanIfTrue("request_token", requestToken);
             if (externalCard != null) {
-                bb.addParamIfNotNull("money_source_token", externalCard.getMoneySourceToken());
+                bb.addParamIfNotNull("money_source_token", externalCard.moneySourceToken);
                 bb.addParamIfNotNull("csc", csc);
             }
 

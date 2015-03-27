@@ -19,12 +19,35 @@ import java.math.BigDecimal;
  */
 public class BalanceDetails {
 
-    private final BigDecimal total;
-    private final BigDecimal available;
-    private final BigDecimal depositionPending;
-    private final BigDecimal blocked;
-    private final BigDecimal debt;
-    private final BigDecimal hold;
+    /**
+     * total balance
+     */
+    public final BigDecimal total;
+
+    /**
+     * available balance
+     */
+    public final BigDecimal available;
+
+    /**
+     * pending deposition
+     */
+    public final BigDecimal depositionPending;
+
+    /**
+     * money blocked
+     */
+    public final BigDecimal blocked;
+
+    /**
+     * account's debt
+     */
+    public final BigDecimal debt;
+
+    /**
+     * money on hold
+     */
+    public final BigDecimal hold;
 
     /**
      * Constructor
@@ -72,48 +95,6 @@ public class BalanceDetails {
                 ", debt=" + debt +
                 ", hold=" + hold +
                 '}';
-    }
-
-    /**
-     * @return total balance
-     */
-    public BigDecimal getTotal() {
-        return total;
-    }
-
-    /**
-     * @return available balance
-     */
-    public BigDecimal getAvailable() {
-        return available;
-    }
-
-    /**
-     * @return pending deposition
-     */
-    public BigDecimal getDepositionPending() {
-        return depositionPending;
-    }
-
-    /**
-     * @return money blocked
-     */
-    public BigDecimal getBlocked() {
-        return blocked;
-    }
-
-    /**
-     * @return account's debt
-     */
-    public BigDecimal getDebt() {
-        return debt;
-    }
-
-    /**
-     * @return money on hold
-     */
-    public BigDecimal getHold() {
-        return hold;
     }
 
     private static Gson buildGson() {

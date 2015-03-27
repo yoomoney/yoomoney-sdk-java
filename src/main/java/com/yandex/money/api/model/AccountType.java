@@ -19,7 +19,7 @@ public enum AccountType {
      */
     UNKNOWN("unknown");
 
-    private final String code;
+    public final String code;
 
     AccountType(String code) {
         this.code = code;
@@ -35,9 +35,5 @@ public enum AccountType {
             }
         }
         return UNKNOWN;
-    }
-
-    public String getCode() {
-        return code;
     }
 }

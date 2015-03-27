@@ -209,10 +209,10 @@ public enum Currency {
         NUMERIC_MAP = Collections.unmodifiableMap(temp);
     }
 
-    private final String alphaCode;
-    private final Integer numericCode;
+    public final String alphaCode;
+    public final Integer numericCode;
 
-    private Currency(String alphaCode, Integer numericCode) {
+    Currency(String alphaCode, Integer numericCode) {
         this.alphaCode = alphaCode;
         this.numericCode = numericCode;
     }
@@ -223,13 +223,5 @@ public enum Currency {
 
     public static Currency parseNumericCode(Integer numericCode) {
         return NUMERIC_MAP.get(numericCode);
-    }
-
-    public String getAlphaCode() {
-        return alphaCode;
-    }
-
-    public Integer getNumericCode() {
-        return numericCode;
     }
 }

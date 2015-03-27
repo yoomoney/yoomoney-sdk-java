@@ -27,9 +27,9 @@ public enum PayeeIdentifierType {
      */
     UNKNOWN("unknown");
 
-    private final String code;
+    public final String code;
 
-    private PayeeIdentifierType(String code) {
+    PayeeIdentifierType(String code) {
         this.code = code;
     }
 
@@ -65,9 +65,5 @@ public enum PayeeIdentifierType {
         } else {
             return UNKNOWN;
         }
-    }
-
-    public String getCode() {
-        return code;
     }
 }

@@ -30,15 +30,15 @@ import java.util.Map;
  */
 public class ProcessPayment extends BaseProcessPayment {
 
-    private final String paymentId;
-    private final BigDecimal balance;
-    private final String payer;
-    private final String payee;
-    private final BigDecimal creditAmount;
-    private final String accountUnblockUri;
-    private final String payeeUid;
-    private final String holdForPickupLink;
-    private final DigitalGoods digitalGoods;
+    public final String paymentId;
+    public final BigDecimal balance;
+    public final String payer;
+    public final String payee;
+    public final BigDecimal creditAmount;
+    public final String accountUnblockUri;
+    public final String payeeUid;
+    public final String holdForPickupLink;
+    public final DigitalGoods digitalGoods;
 
     /**
      * Use {@link com.yandex.money.api.methods.ProcessPayment.Builder} to create an instance.
@@ -66,13 +66,8 @@ public class ProcessPayment extends BaseProcessPayment {
 
     @Override
     public String toString() {
-        return "ProcessPayment{" +
-                "status=" + getStatus() +
-                ", error=" + getError() +
-                ", acsUri='" + getAcsUri() + '\'' +
-                ", acsParams=" + getAcsParams() +
-                ", nextRetry=" + getNextRetry() +
-                ", paymentId='" + paymentId + '\'' +
+        return super.toString() + "ProcessPayment{" +
+                "paymentId='" + paymentId + '\'' +
                 ", balance=" + balance +
                 ", payer='" + payer + '\'' +
                 ", payee='" + payee + '\'' +
@@ -82,42 +77,6 @@ public class ProcessPayment extends BaseProcessPayment {
                 ", holdForPickupLink='" + holdForPickupLink + '\'' +
                 ", digitalGoods=" + digitalGoods +
                 '}';
-    }
-
-    public String getPaymentId() {
-        return paymentId;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public String getPayer() {
-        return payer;
-    }
-
-    public String getPayee() {
-        return payee;
-    }
-
-    public BigDecimal getCreditAmount() {
-        return creditAmount;
-    }
-
-    public String getAccountUnblockUri() {
-        return accountUnblockUri;
-    }
-
-    public String getPayeeUid() {
-        return payeeUid;
-    }
-
-    public String getHoldForPickupLink() {
-        return holdForPickupLink;
-    }
-
-    public DigitalGoods getDigitalGoods() {
-        return digitalGoods;
     }
 
     /**
@@ -186,7 +145,7 @@ public class ProcessPayment extends BaseProcessPayment {
         public PostRequestBodyBuffer buildParameters() throws IOException {
             PostRequestBodyBuffer postRequestBodyBuffer = new PostRequestBodyBuffer();
             if (moneySource != null) {
-                postRequestBodyBuffer.addParam("money_source", moneySource.getId());
+                postRequestBodyBuffer.addParam("money_source", moneySource.id);
             }
             if (testPayment) {
                 postRequestBodyBuffer.addParamIfNotNull("test_payment", true);
@@ -194,7 +153,7 @@ public class ProcessPayment extends BaseProcessPayment {
                     postRequestBodyBuffer.addParamIfNotNull("test_card", true);
                 }
                 if (testResult != null) {
-                    postRequestBodyBuffer.addParam("test_result", testResult.getCode());
+                    postRequestBodyBuffer.addParam("test_result", testResult.code);
                 }
             }
             return postRequestBodyBuffer
@@ -255,14 +214,10 @@ public class ProcessPayment extends BaseProcessPayment {
         ILLEGAL_PARAM_EXT_AUTH_SUCCESS_URI("illegal_param_ext_auth_success_uri"),
         ILLEGAL_PARAM_EXT_AUTH_FAIL_URI("illegal_param_ext_auth_fail_uri");
 
-        private final String code;
+        public final String code;
 
-        private TestResult(String code) {
+        TestResult(String code) {
             this.code = code;
-        }
-
-        public String getCode() {
-            return code;
         }
     }
 

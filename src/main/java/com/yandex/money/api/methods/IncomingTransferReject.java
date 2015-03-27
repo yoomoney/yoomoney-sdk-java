@@ -27,8 +27,8 @@ import java.net.URL;
  */
 public class IncomingTransferReject implements MethodResponse {
 
-    private final Status status;
-    private final Error error;
+    public final Status status;
+    public final Error error;
 
     /**
      * Constructor.
@@ -47,14 +47,6 @@ public class IncomingTransferReject implements MethodResponse {
                 "status=" + status +
                 ", error=" + error +
                 '}';
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public Error getError() {
-        return error;
     }
 
     /**
@@ -76,7 +68,7 @@ public class IncomingTransferReject implements MethodResponse {
 
         private final String status;
 
-        private Status(String status) {
+        Status(String status) {
             this.status = status;
         }
 

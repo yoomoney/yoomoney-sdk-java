@@ -41,22 +41,21 @@ public class OperationDetailsTest implements ApiTest {
         Assert.assertNotNull(history);
 
         yandexMoney.setDebugLogging(false);
-        List<Operation> operations = history.getOperations();
+        List<Operation> operations = history.operations;
         for (Operation operation : operations) {
             Assert.assertNotNull(operation);
-            Assert.assertNotNull(operation.getOperationId());
+            Assert.assertNotNull(operation.operationId);
             OperationDetails.Request detailsRequest = new OperationDetails.Request(
-                    operation.getOperationId());
+                    operation.operationId);
             OperationDetails operationDetails = yandexMoney.execute(detailsRequest);
             Assert.assertNotNull(operationDetails);
-            Assert.assertNotNull(operationDetails.getOperation());
-            Assert.assertNull(operationDetails.getError());
-            Assert.assertEquals(operation.getOperationId(),
-                    operationDetails.getOperation().getOperationId());
+            Assert.assertNotNull(operationDetails.operation);
+            Assert.assertNull(operationDetails.error);
+            Assert.assertEquals(operation.operationId, operationDetails.operation.operationId);
 
-            DateTime datetime = operation.getDatetime();
+            DateTime datetime = operation.datetime;
             Assert.assertNotNull(datetime);
-            Assert.assertTrue(datetime.isEqual(operationDetails.getOperation().getDatetime()));
+            Assert.assertTrue(datetime.isEqual(operationDetails.operation.datetime));
         }
 
         if (operations.size() > 0) {
@@ -66,14 +65,14 @@ public class OperationDetailsTest implements ApiTest {
 
             historyRequest = new OperationHistory.Request.Builder()
                     .setTypes(types)
-                    .setFrom(operations.get(operations.size() - 1).getDatetime())
-                    .setTill(operations.get(0).getDatetime().plusSeconds(1))
+                    .setFrom(operations.get(operations.size() - 1).datetime)
+                    .setTill(operations.get(0).datetime.plusSeconds(1))
                     .setDetails(true)
                     .setRecords(operations.size())
                     .createRequest();
 
             yandexMoney.setDebugLogging(true);
-            Assert.assertEquals(yandexMoney.execute(historyRequest).getOperations().size(),
+            Assert.assertEquals(yandexMoney.execute(historyRequest).operations.size(),
                     operations.size());
         }
     }

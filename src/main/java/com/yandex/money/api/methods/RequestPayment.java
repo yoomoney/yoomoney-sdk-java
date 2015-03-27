@@ -27,6 +27,7 @@ import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -37,14 +38,14 @@ import java.util.Map;
  */
 public class RequestPayment extends BaseRequestPayment {
 
-    private final List<MoneySource> moneySources;
-    private final Boolean cscRequired;
-    private final BigDecimal balance;
-    private final AccountStatus recipientAccountStatus;
-    private final AccountType recipientAccountType;
-    private final String protectionCode;
-    private final String accountUnblockUri;
-    private final String extActionUri;
+    public final List<MoneySource> moneySources;
+    public final Boolean cscRequired;
+    public final BigDecimal balance;
+    public final AccountStatus recipientAccountStatus;
+    public final AccountType recipientAccountType;
+    public final String protectionCode;
+    public final String accountUnblockUri;
+    public final String extActionUri;
 
     /**
      * Use builder to create an instance.
@@ -56,7 +57,7 @@ public class RequestPayment extends BaseRequestPayment {
                            String accountUnblockUri, String extActionUri) {
 
         super(status, error, requestId, contractAmount);
-        this.moneySources = moneySources;
+        this.moneySources = moneySources == null ? null : Collections.unmodifiableList(moneySources);
         this.cscRequired = cscRequired;
         this.balance = balance;
         this.recipientAccountStatus = recipientAccountStatus;
@@ -68,12 +69,8 @@ public class RequestPayment extends BaseRequestPayment {
 
     @Override
     public String toString() {
-        return "RequestPayment{" +
-                "status=" + getStatus() +
-                ", error=" + getError() +
-                ", requestId='" + getRequestId() + '\'' +
-                ", contractAmount=" + getContractAmount() +
-                ", moneySources=" + moneySources +
+        return super.toString() + "RequestPayment{" +
+                "moneySources=" + moneySources +
                 ", cscRequired=" + cscRequired +
                 ", balance=" + balance +
                 ", recipientAccountStatus=" + recipientAccountStatus +
@@ -82,38 +79,6 @@ public class RequestPayment extends BaseRequestPayment {
                 ", accountUnblockUri='" + accountUnblockUri + '\'' +
                 ", extActionUri='" + extActionUri + '\'' +
                 '}';
-    }
-
-    public List<MoneySource> getMoneySources() {
-        return moneySources;
-    }
-
-    public Boolean isCscRequired() {
-        return cscRequired != null && cscRequired;
-    }
-
-    public BigDecimal getBalance() {
-        return balance;
-    }
-
-    public AccountStatus getRecipientAccountStatus() {
-        return recipientAccountStatus;
-    }
-
-    public AccountType getRecipientAccountType() {
-        return recipientAccountType;
-    }
-
-    public String getProtectionCode() {
-        return protectionCode;
-    }
-
-    public String getAccountUnblockUri() {
-        return accountUnblockUri;
-    }
-
-    public String getExtActionUri() {
-        return extActionUri;
     }
 
     /**
@@ -425,14 +390,10 @@ public class RequestPayment extends BaseRequestPayment {
         ACCOUNT_BLOCKED("account_blocked"),
         EXT_ACTION_REQUIRED("ext_action_required");
 
-        private final String result;
+        public final String result;
 
-        private TestResult(String result) {
+        TestResult(String result) {
             this.result = result;
-        }
-
-        public String getResult() {
-            return result;
         }
     }
 

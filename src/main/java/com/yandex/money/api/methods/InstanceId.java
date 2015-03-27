@@ -27,9 +27,9 @@ import java.net.URL;
  */
 public class InstanceId implements MethodResponse {
 
-    private Status status;
-    private Error error;
-    private String instanceId;
+    public final Status status;
+    public final Error error;
+    public final String instanceId;
 
     /**
      * Constructor.
@@ -51,18 +51,6 @@ public class InstanceId implements MethodResponse {
                 ", error=" + error +
                 ", instanceId='" + instanceId + '\'' +
                 '}';
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public String getInstanceId() {
-        return instanceId;
     }
 
     public boolean isSuccess() {

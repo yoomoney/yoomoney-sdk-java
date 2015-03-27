@@ -27,10 +27,10 @@ import java.net.URL;
  */
 public class IncomingTransferAccept implements MethodResponse {
 
-    private final Status status;
-    private final Error error;
-    private final Integer protectionCodeAttemptsAvailable;
-    private final String extActionUri;
+    public final Status status;
+    public final Error error;
+    public final Integer protectionCodeAttemptsAvailable;
+    public final String extActionUri;
 
     /**
      * Constructor.
@@ -59,22 +59,6 @@ public class IncomingTransferAccept implements MethodResponse {
                 '}';
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public Integer getProtectionCodeAttemptsAvailable() {
-        return protectionCodeAttemptsAvailable;
-    }
-
-    public String getExtActionUri() {
-        return extActionUri;
-    }
-
     /**
      * Status of {@link com.yandex.money.api.methods.IncomingTransferAccept}
      */
@@ -94,7 +78,7 @@ public class IncomingTransferAccept implements MethodResponse {
 
         private final String status;
 
-        private Status(String status) {
+        Status(String status) {
             this.status = status;
         }
 

@@ -65,9 +65,9 @@ public class YandexMoneyTest implements ApiTest {
         reqInstanceId = new InstanceId.Request(CLIENT_ID);
         respInstanceId = ym.execute(reqInstanceId);
 
-        Assert.assertEquals(respInstanceId.getStatus(), InstanceId.Status.SUCCESS);
-        Assert.assertNotNull(respInstanceId.getInstanceId());
-        Assert.assertNull(respInstanceId.getError());
+        Assert.assertEquals(respInstanceId.status, InstanceId.Status.SUCCESS);
+        Assert.assertNotNull(respInstanceId.instanceId);
+        Assert.assertNull(respInstanceId.error);
     }
 
     @Test
@@ -77,10 +77,10 @@ public class YandexMoneyTest implements ApiTest {
         reqInstanceId = new InstanceId.Request(" ");
         respInstanceId = ym.execute(reqInstanceId);
 
-        Assert.assertEquals(respInstanceId.getStatus(), InstanceId.Status.REFUSED);
-        Assert.assertNotNull(respInstanceId.getError());
-        Assert.assertEquals(respInstanceId.getError(), Error.ILLEGAL_PARAM_CLIENT_ID);
-        Assert.assertNull(respInstanceId.getInstanceId());
+        Assert.assertEquals(respInstanceId.status, InstanceId.Status.REFUSED);
+        Assert.assertNotNull(respInstanceId.error);
+        Assert.assertEquals(respInstanceId.error, Error.ILLEGAL_PARAM_CLIENT_ID);
+        Assert.assertNull(respInstanceId.instanceId);
     }
 
     @Test
@@ -107,11 +107,11 @@ public class YandexMoneyTest implements ApiTest {
         T response = ym.execute(request);
 
         Assert.assertNotNull(response);
-        Assert.assertEquals(response.getStatus(), BaseRequestPayment.Status.SUCCESS);
-        Assert.assertNull(response.getError());
-        Assert.assertNotNull(response.getRequestId());
-        Assert.assertTrue(response.getRequestId().length() > 0);
-        Assert.assertEquals(response.getContractAmount(), new BigDecimal(AMOUNT));
+        Assert.assertEquals(response.status, BaseRequestPayment.Status.SUCCESS);
+        Assert.assertNull(response.error);
+        Assert.assertNotNull(response.requestId);
+        Assert.assertTrue(response.requestId.length() > 0);
+        Assert.assertEquals(response.contractAmount, new BigDecimal(AMOUNT));
 
         return response;
     }
@@ -132,19 +132,19 @@ public class YandexMoneyTest implements ApiTest {
 
         HashMap<String, String> params = successRequestParams();
         reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
-                respInstanceId.getInstanceId(), " ", params);
+                respInstanceId.instanceId, " ", params);
         respRequestExternalPayment = testRequestPaymentFail(reqRequestExternalPayment);
 
         params = successRequestParams();
         params.remove("amount");
         reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
-                respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
+                respInstanceId.instanceId, PATTERN_ID_PHONE_TOPUP, params);
         respRequestExternalPayment = testRequestPaymentFail(reqRequestExternalPayment);
 
         params = successRequestParams();
         params.remove("phone-number");
         reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
-                respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
+                respInstanceId.instanceId, PATTERN_ID_PHONE_TOPUP, params);
         respRequestExternalPayment = testRequestPaymentFail(reqRequestExternalPayment);
     }
 
@@ -155,10 +155,10 @@ public class YandexMoneyTest implements ApiTest {
         T response = ym.execute(request);
 
         Assert.assertNotNull(response);
-        Assert.assertEquals(response.getStatus(), RequestExternalPayment.Status.REFUSED);
-        Assert.assertNotNull(response.getError());
-        Assert.assertNotEquals(response.getError(), Error.UNKNOWN);
-        Assert.assertNull(response.getRequestId());
+        Assert.assertEquals(response.status, RequestExternalPayment.Status.REFUSED);
+        Assert.assertNotNull(response.error);
+        Assert.assertNotEquals(response.error, Error.UNKNOWN);
+        Assert.assertNull(response.requestId);
 
         return response;
     }
@@ -173,7 +173,7 @@ public class YandexMoneyTest implements ApiTest {
         String successUri = "https://elbrus.yandex.ru/success";
         String failUri = "https://elbrus.yandex.ru/fail";
         reqProcessExternalPayment = new ProcessExternalPayment.Request(
-                respInstanceId.getInstanceId(), respRequestExternalPayment.getRequestId(),
+                respInstanceId.instanceId, respRequestExternalPayment.requestId,
                 successUri, failUri, false);
         testProcessPayment(reqProcessExternalPayment);
     }
@@ -185,7 +185,7 @@ public class YandexMoneyTest implements ApiTest {
         ym.setAccessToken(ACCESS_TOKEN);
         RequestPayment requestPayment = ym.execute(createRequestPayment());
         ProcessPayment processPayment = ym.execute(new ProcessPayment.Request(
-                requestPayment.getRequestId()));
+                requestPayment.requestId));
         Assert.assertNotNull(processPayment);
         ym.setAccessToken(null);
     }
@@ -196,7 +196,7 @@ public class YandexMoneyTest implements ApiTest {
 
         T response = ym.execute(request);
         Assert.assertNotNull(response);
-        Assert.assertEquals(response.getStatus(), ProcessExternalPayment.Status.EXT_AUTH_REQUIRED);
+        Assert.assertEquals(response.status, ProcessExternalPayment.Status.EXT_AUTH_REQUIRED);
     }
 
     private RequestExternalPayment.Request createRequestExternalPayment()
@@ -208,7 +208,7 @@ public class YandexMoneyTest implements ApiTest {
 
         HashMap<String, String> params = successRequestParams();
         return RequestExternalPayment.Request.newInstance(
-                respInstanceId.getInstanceId(), PATTERN_ID_PHONE_TOPUP, params);
+                respInstanceId.instanceId, PATTERN_ID_PHONE_TOPUP, params);
     }
 
     private RequestPayment.Request createRequestPayment() {

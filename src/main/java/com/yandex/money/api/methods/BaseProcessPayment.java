@@ -3,6 +3,7 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.MethodResponse;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -18,12 +19,12 @@ public abstract class BaseProcessPayment implements MethodResponse {
     protected static final String MEMBER_ACS_PARAMS = "acs_params";
     protected static final String MEMBER_NEXT_RETRY = "next_retry";
 
-    private final Status status;
-    private final Error error;
-    private final String invoiceId;
-    private final String acsUri;
-    private final Map<String, String> acsParams;
-    private final Long nextRetry;
+    public final Status status;
+    public final Error error;
+    public final String invoiceId;
+    public final String acsUri;
+    public final Map<String, String> acsParams;
+    public final Long nextRetry;
 
     /**
      * Constructor.
@@ -44,32 +45,20 @@ public abstract class BaseProcessPayment implements MethodResponse {
         this.error = error;
         this.invoiceId = invoiceId;
         this.acsUri = acsUri;
-        this.acsParams = acsParams;
+        this.acsParams = acsParams == null ? null : Collections.unmodifiableMap(acsParams);
         this.nextRetry = nextRetry;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public String getInvoiceId() {
-        return invoiceId;
-    }
-
-    public String getAcsUri() {
-        return acsUri;
-    }
-
-    public Map<String, String> getAcsParams() {
-        return acsParams;
-    }
-
-    public Long getNextRetry() {
-        return nextRetry;
+    @Override
+    public String toString() {
+        return "BaseProcessPayment{" +
+                "status=" + status +
+                ", error=" + error +
+                ", invoiceId='" + invoiceId + '\'' +
+                ", acsUri='" + acsUri + '\'' +
+                ", acsParams=" + acsParams +
+                ", nextRetry=" + nextRetry +
+                '}';
     }
 
     public enum Status {
@@ -81,7 +70,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
 
         private final String status;
 
-        private Status(String status) {
+        Status(String status) {
             this.status = status;
         }
 

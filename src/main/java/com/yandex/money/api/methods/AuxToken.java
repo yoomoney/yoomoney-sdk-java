@@ -30,8 +30,15 @@ import java.util.Set;
  */
 public class AuxToken implements MethodResponse {
 
-    private final String auxToken;
-    private final Error error;
+    /**
+     * auxiliary token
+     */
+    public final String auxToken;
+
+    /**
+     * error code
+     */
+    public final Error error;
 
     public AuxToken(String auxToken, Error error) {
         this.auxToken = auxToken;
@@ -44,20 +51,6 @@ public class AuxToken implements MethodResponse {
                 "auxToken='" + auxToken + '\'' +
                 ", error=" + error +
                 '}';
-    }
-
-    /**
-     * @return auxiliary token
-     */
-    public String getAuxToken() {
-        return auxToken;
-    }
-
-    /**
-     * @return error code
-     */
-    public Error getError() {
-        return error;
     }
 
     /**

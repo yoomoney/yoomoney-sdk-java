@@ -20,8 +20,15 @@ import java.lang.reflect.Type;
  */
 public class Avatar {
 
-    private final String url;
-    private final DateTime timestamp;
+    /**
+     * url to avatar
+     */
+    public final String url;
+
+    /**
+     * avatar change time
+     */
+    public final DateTime timestamp;
 
     /**
      * Constructor.
@@ -56,20 +63,6 @@ public class Avatar {
      */
     public static Avatar createFromJson(JsonElement json) {
         return buildGson().fromJson(json, Avatar.class);
-    }
-
-    /**
-     * @return url to avatar
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * @return avatar change time
-     */
-    public DateTime getTimestamp() {
-        return timestamp;
     }
 
     private static Gson buildGson() {

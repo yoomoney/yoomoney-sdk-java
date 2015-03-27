@@ -14,9 +14,21 @@ import java.util.Map;
  */
 public class AuthorizationCodeResponse {
 
-    private final String code;
-    private final Error error;
-    private final String errorDescription;
+    /**
+     * temporary access token to request OAuth2 access token
+     * @see com.yandex.money.api.methods.Token
+     */
+    public final String code;
+
+    /**
+     * error code
+     */
+    public final Error error;
+
+    /**
+     * human understandable error description
+     */
+    public final String errorDescription;
 
     protected AuthorizationCodeResponse(String code, Error error, String errorDescription) {
         this.code = code;
@@ -35,27 +47,5 @@ public class AuthorizationCodeResponse {
         Map<String, String> params = UrlEncodedUtils.parse(redirectUrl);
         return new AuthorizationCodeResponse(params.get("code"), Error.parse(params.get("error")),
                 params.get("error_description"));
-    }
-
-    /**
-     * @return temporary access token to request OAuth2 access token
-     * @see com.yandex.money.api.methods.Token
-     */
-    public String getCode() {
-        return code;
-    }
-
-    /**
-     * @return error code
-     */
-    public Error getError() {
-        return error;
-    }
-
-    /**
-     * @return human understandable error description
-     */
-    public String getErrorDescription() {
-        return errorDescription;
     }
 }

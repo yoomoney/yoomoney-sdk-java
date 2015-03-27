@@ -63,7 +63,7 @@ public abstract class AbstractSession {
 
         Language language = client.getLanguage();
         if (language != null) {
-            builder.addHeader(HttpHeaders.ACCEPT_LANGUAGE, language.getIso6391Code());
+            builder.addHeader(HttpHeaders.ACCEPT_LANGUAGE, language.iso6391Code);
         }
 
         return builder;

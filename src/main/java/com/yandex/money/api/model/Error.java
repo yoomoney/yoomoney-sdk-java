@@ -69,7 +69,7 @@ public enum Error {
 
     private final String error;
 
-    private Error(String error) {
+    Error(String error) {
         this.error = error;
     }
 

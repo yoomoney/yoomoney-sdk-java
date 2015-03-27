@@ -17,8 +17,8 @@ import com.yandex.money.api.utils.Strings;
  */
 public class ExternalCard extends Card {
 
-    private final String fundingSourceType;
-    private final String moneySourceToken;
+    public final String fundingSourceType;
+    public final String moneySourceToken;
 
     /**
      * Constructor.
@@ -50,14 +50,6 @@ public class ExternalCard extends Card {
                 "fundingSourceType='" + fundingSourceType + '\'' +
                 ", moneySourceToken='" + moneySourceToken + '\'' +
                 '}';
-    }
-
-    public String getFundingSourceType() {
-        return fundingSourceType;
-    }
-
-    public String getMoneySourceToken() {
-        return moneySourceToken;
     }
 
     private static Gson buildGson() {

@@ -34,7 +34,7 @@ public class TokenTest implements ApiTest {
         Token token = session.execute(new Token.Request(CODE, CLIENT_ID, REDIRECT_URI, null));
         Assert.assertNotNull(token);
 
-        session.setAccessToken(token.getAccessToken());
+        session.setAccessToken(token.accessToken);
         session.execute(new Token.Revoke());
     }
 
@@ -50,12 +50,12 @@ public class TokenTest implements ApiTest {
         scopes.add(Scope.ACCOUNT_INFO);
 
         AuxToken auxToken = session.execute(new AuxToken.Request(scopes));
-        String token = auxToken.getAuxToken();
+        String token = auxToken.auxToken;
         Assert.assertNotNull(token);
         session.setAccessToken(token);
 
         AccountInfo accountInfo = session.execute(new AccountInfo.Request());
-        Assert.assertNotNull(accountInfo.getAccount());
-        Assert.assertNotNull(accountInfo.getBalance());
+        Assert.assertNotNull(accountInfo.account);
+        Assert.assertNotNull(accountInfo.balance);
     }
 }

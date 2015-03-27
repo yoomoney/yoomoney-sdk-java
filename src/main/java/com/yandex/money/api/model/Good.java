@@ -16,9 +16,20 @@ import java.lang.reflect.Type;
  */
 public class Good {
 
-    private final String serial;
-    private final String secret;
-    private final String merchantArticleId;
+    /**
+     * serial number
+     */
+    public final String serial;
+
+    /**
+     * secret
+     */
+    public final String secret;
+
+    /**
+     * merchant article id
+     */
+    public final String merchantArticleId;
 
     /**
      * Constructor.
@@ -31,10 +42,10 @@ public class Good {
         if (serial == null) {
             throw new NullPointerException("serial is null");
         }
-        this.serial = serial;
         if (secret == null) {
             throw new NullPointerException("secret is null");
         }
+        this.serial = serial;
         this.secret = secret;
         this.merchantArticleId = merchantArticleId;
     }
@@ -53,27 +64,6 @@ public class Good {
                 ", secret='" + secret + '\'' +
                 ", merchantArticleId='" + merchantArticleId + '\'' +
                 '}';
-    }
-
-    /**
-     * @return serial number
-     */
-    public String getSerial() {
-        return serial;
-    }
-
-    /**
-     * @return secret
-     */
-    public String getSecret() {
-        return secret;
-    }
-
-    /**
-     * @return merchant article id
-     */
-    public String getMerchantArticleId() {
-        return merchantArticleId;
     }
 
     private static Gson buildGson() {

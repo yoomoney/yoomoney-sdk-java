@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -37,9 +38,9 @@ import java.util.Set;
  */
 public class OperationHistory implements MethodResponse {
 
-    private final Error error;
-    private final String nextRecord;
-    private final List<Operation> operations;
+    public final Error error;
+    public final String nextRecord;
+    public final List<Operation> operations;
 
     /**
      * Constructor.
@@ -51,7 +52,7 @@ public class OperationHistory implements MethodResponse {
     public OperationHistory(Error error, String nextRecord, List<Operation> operations) {
         this.error = error;
         this.nextRecord = nextRecord;
-        this.operations = operations;
+        this.operations = operations == null ? null : Collections.unmodifiableList(operations);
     }
 
     @Override
@@ -61,18 +62,6 @@ public class OperationHistory implements MethodResponse {
                 ", nextRecord='" + nextRecord + '\'' +
                 ", operations=" + operations +
                 '}';
-    }
-
-    public Error getError() {
-        return error;
-    }
-
-    public String getNextRecord() {
-        return nextRecord;
-    }
-
-    public List<Operation> getOperations() {
-        return operations;
     }
 
     /**
@@ -133,9 +122,9 @@ public class OperationHistory implements MethodResponse {
             if (types != null && !types.isEmpty()) {
                 StringBuilder builder = new StringBuilder();
                 Iterator<FilterType> iterator = types.iterator();
-                builder.append(iterator.next().getCode());
+                builder.append(iterator.next().code);
                 while (iterator.hasNext()) {
-                    builder.append(' ').append(iterator.next().getCode());
+                    builder.append(' ').append(iterator.next().code);
                 }
                 requestBodyBuffer.addParam("type", builder.toString());
             }
@@ -266,14 +255,10 @@ public class OperationHistory implements MethodResponse {
          */
         INCOMING_TRANSFER_UNACCEPTED("incoming-transfers-unaccepted");
 
-        private final String code;
+        public final String code;
 
-        private FilterType(String code) {
+        FilterType(String code) {
             this.code = code;
-        }
-
-        public String getCode() {
-            return code;
         }
     }
 
