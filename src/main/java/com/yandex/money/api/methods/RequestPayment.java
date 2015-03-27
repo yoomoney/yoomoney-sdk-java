@@ -517,9 +517,10 @@ public class RequestPayment extends BaseRequestPayment {
          * @return {@link com.yandex.money.api.methods.RequestPayment}
          */
         public RequestPayment createRequestPayment() {
-            return new RequestPayment(status, error, moneySources, cscRequired, requestId,
-                    contractAmount, balance, recipientAccountStatus, recipientAccountType,
-                    protectionCode, accountUnblockUri, extActionUri);
+            return new RequestPayment(status, error,
+                    moneySources == null ? new ArrayList<MoneySource>() : moneySources, cscRequired,
+                    requestId, contractAmount, balance, recipientAccountStatus,
+                    recipientAccountType, protectionCode, accountUnblockUri, extActionUri);
         }
     }
 
