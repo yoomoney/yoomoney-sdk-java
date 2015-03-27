@@ -14,13 +14,29 @@ The library uses:
 
 ## Usage
 
+### Gradle Dependency (jCenter)
+
+To use the library in your project write this code to your build.gradle:
+
+```java
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+
+dependencies {
+    compile 'com.yandex.money.api:yandex-money-sdk-java:2.0.3'
+}
+```
+
 ### App Registration
 
 To be able to use the library you: the first thing you need to do is to register your application and get your unique *client id*. To do that please follow the steps described on [this page][3] (also available in [Russian][4]).
 
 ### Conception
 
-All API methods are represented as classes in package `com.yandex.money.model.cps`.
+All API methods are represented as classes in package `com.yandex.money.api.methods`.
 
 Every instance of your application should have an unique id. To get it use API method `instance-id` passing your *client id*. Once obtained *instance id* can be used in other API methods.
 
