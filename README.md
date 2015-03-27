@@ -16,6 +16,9 @@ The library uses:
 
 ### Gradle Dependency (jCenter)
 
+[![Download](https://api.bintray.com/packages/yandex-money/maven/yandex-money-sdk-java/images/download.svg)]
+(https://bintray.com/slava/yandex-money/yandex-money-sdk-java/_latestVersion)
+
 To use the library in your project write this code to your build.gradle:
 
 ```java
@@ -26,7 +29,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.yandex.money.api:yandex-money-sdk-java:2.0.3'
+    compile 'com.yandex.money.api:yandex-money-sdk-java:3.0.0'
 }
 ```
 
@@ -48,67 +51,18 @@ In order to call API methods you may want to use `YandexMoney` class as a contex
 
 ### Performing Request
 
-YandexMoney instance can perform a request (call of API method). For example, if you want to get `instance id` using YandexMoney instance you can do it like this:
+To perform request from `com.yandex.money.api.methods` package you may want to instantiate `OAuth2Session` providing `ApiClient`. For your convenience we also include `DefaultApiClient`. Also most of the methods require authorization token that will be used to authorize a user.
 
 ```Java
-...
-final String clientId = "[your_client_id]";
-YandexMoney ym = new YandexMoney(clientId);
-InstanceId response = ym.execute(new InstanceId.Request(clientId));
-// handling the response
-...
+OAuth2Session session = new OAuth2Session(new DefaultApiClient("your_client_id"));
+session.setAccessToken("access_token");
 ```
 
-All requests are performed synchronously so you may want to call these methods in background thread.
-
-### Payment
-
-There are two API methods you should call when you performing a payment: `request-external-payment` and `process-external-payment`. Corresponding classes in the library are `RequestExternalPayment` and `ProcessExternalPayment`.
-
-When you do `RequestExternalPayment`, you create payment's context:
+Once a session was created, you can perform any requests both synchronously and asynchronously using `execute` and `enqueue` methods respectively. For example:
 
 ```Java
-...
-String patternId = ... // depends on your implementation
-Map<String, String> params = ... // depends on your implementation
-RequestExternalPayment rep = ym.execute(new RequestExternalPayment.Request.newInstance(instanceId, patternId, params));
-String requestId = rep.getRequestId();
-...
-```
-
-Payment considered completed when all required information is entered and `ProcessExternalPayment` completed successfully.
-
-There are four statuses of `ProcessExternalPayment` (see `Status` class and API documentation for more details):
-
-|Status           |Meaning                                          |
-|:----------------|:------------------------------------------------|
-|Success          |Payment processed successfully.                  |
-|Refused          |Payment refused.                                 |
-|In Progress      |Payment in progress.                             |
-|Ext Auth Required|External authentication required (i.e. 3D Secure)|
-
-So to process payment you should do something like this:
-
-```Java
-public void processPayment(String requestId, ProcessExternalPayment.Request pepRequest)
-        throws Exception {
-
-    ProcessExternalPayment pep = ym.execute(pepRequest);
-    switch (pep.getStatus()) {
-        case SUCCESS:
-            // payment succeeded
-            break;
-        case REFUSED:
-            // payment refused
-            break;
-        case IN_PROGRESS:
-            processPayment(requestId, pepRequest);
-            break;
-        case EXT_AUTH_REQUIRED:
-            // show web page for 3D Secure authentication
-            break;
-    }
-}
+InstanceId instanceId = session.execute(new InstanceId.Request(clientId));
+// do something with instance id
 ```
 
 ## Links
