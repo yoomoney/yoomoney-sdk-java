@@ -63,27 +63,29 @@ public class OAuth2Session extends AbstractSession {
      * @param request the request
      * @param callback called when response is ready or if error occurred
      * @param <T> response type
+     * @return a {@link Call} object that can be canceled
      * @throws IOException if something went wrong during IO operations
      */
-    public <T> void enqueue(final MethodRequest<T> request, final OnResponseReady<T> callback)
+    public <T> Call enqueue(final MethodRequest<T> request, final OnResponseReady<T> callback)
             throws IOException {
 
-        prepareCall(request)
-                .enqueue(new Callback() {
-                    @Override
-                    public void onFailure(Request request, IOException e) {
-                        callback.onFailure(e);
-                    }
+        Call call = prepareCall(request);
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Request request, IOException e) {
+                callback.onFailure(e);
+            }
 
-                    @Override
-                    public void onResponse(Response response) throws IOException {
-                        try {
-                            callback.onResponse(parseResponse(request, response));
-                        } catch (Exception e) {
-                            callback.onFailure(e);
-                        }
-                    }
-                });
+            @Override
+            public void onResponse(Response response) throws IOException {
+                try {
+                    callback.onResponse(parseResponse(request, response));
+                } catch (Exception e) {
+                    callback.onFailure(e);
+                }
+            }
+        });
+        return call;
     }
 
     /**
