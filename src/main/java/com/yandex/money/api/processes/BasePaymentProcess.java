@@ -1,4 +1,4 @@
-package com.yandex.money.api.payment;
+package com.yandex.money.api.processes;
 
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;

@@ -1,4 +1,4 @@
-package com.yandex.money.api.payment;
+package com.yandex.money.api.processes;
 
 /**
  * Provides interface for every process.

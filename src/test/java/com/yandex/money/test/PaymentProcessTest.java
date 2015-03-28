@@ -7,10 +7,10 @@ import com.yandex.money.api.methods.RequestPayment;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.DefaultApiClient;
 import com.yandex.money.api.net.OAuth2Session;
-import com.yandex.money.api.payment.BasePaymentProcess;
-import com.yandex.money.api.payment.ExtendedPaymentProcess;
-import com.yandex.money.api.payment.ExternalPaymentProcess;
-import com.yandex.money.api.payment.PaymentProcess;
+import com.yandex.money.api.processes.BasePaymentProcess;
+import com.yandex.money.api.processes.ExtendedPaymentProcess;
+import com.yandex.money.api.processes.ExternalPaymentProcess;
+import com.yandex.money.api.processes.PaymentProcess;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
