@@ -14,6 +14,7 @@ public final class Streams {
     private static final int BUFFER_SIZE = 0x1000;
 
     private Streams() {
+        // prevents instantiating of this class
     }
 
     /**

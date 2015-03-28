@@ -12,6 +12,7 @@ public final class Numbers {
     };
 
     private Numbers() {
+        // prevents instantiating of this class
     }
 
     /**

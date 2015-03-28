@@ -35,5 +35,6 @@ public final class Patterns {
     public static final String DECIMAL = "[\\+\\-]?\\d*(\\.(\\d*)?)?";
 
     private Patterns() {
+        // prevents instantiating of this class
     }
 }

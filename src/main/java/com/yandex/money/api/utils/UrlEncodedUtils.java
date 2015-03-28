@@ -11,7 +11,11 @@ import java.util.Map;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class UrlEncodedUtils {
+public final class UrlEncodedUtils {
+
+    private UrlEncodedUtils() {
+        // prevents instantiating of this class
+    }
 
     /**
      * Parses url to key-value pairs of its parameters.

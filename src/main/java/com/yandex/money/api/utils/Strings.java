@@ -8,6 +8,7 @@ package com.yandex.money.api.utils;
 public final class Strings {
 
     private Strings() {
+        // prevents instantiating of this class
     }
 
     /**

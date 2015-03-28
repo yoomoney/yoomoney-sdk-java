@@ -16,4 +16,8 @@ public final class HttpHeaders {
     public static final String LOCATION = "Location";
     public static final String USER_AGENT = "User-Agent";
     public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
+
+    private HttpHeaders() {
+        // prevents instantiating of this class
+    }
 }
