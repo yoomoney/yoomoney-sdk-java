@@ -57,12 +57,10 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
                 state = State.STARTED;
                 break;
             case STARTED:
-                executeProcessPayment();
-                state = State.PROCESSING;
+                state = executeProcessPayment();
                 break;
             case PROCESSING:
-                executeRepeatProcessPayment();
-                state = State.COMPLETED;
+                state = executeRepeatProcessPayment();
                 break;
         }
 
@@ -166,19 +164,17 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
         }
     }
 
-    private void executeProcessPayment() throws InvalidTokenException, InsufficientScopeException,
+    private State executeProcessPayment() throws InvalidTokenException, InsufficientScopeException,
             InvalidRequestException, IOException {
-
-        executeProcessPayment(createProcessPayment());
+        return executeProcessPayment(createProcessPayment());
     }
 
-    private void executeRepeatProcessPayment() throws InvalidTokenException,
+    private State executeRepeatProcessPayment() throws InvalidTokenException,
             InsufficientScopeException, InvalidRequestException, IOException {
-
-        executeProcessPayment(createRepeatProcessPayment());
+        return executeProcessPayment(createRepeatProcessPayment());
     }
 
-    private void executeProcessPayment(MethodRequest<? extends BaseProcessPayment> request)
+    private State executeProcessPayment(MethodRequest<? extends BaseProcessPayment> request)
             throws InvalidTokenException, InsufficientScopeException, InvalidRequestException,
             IOException {
 
@@ -192,7 +188,7 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
                     if (callback != null) {
                         callback.onProcessPayment();
                     }
-                    break;
+                    return State.PROCESSING;
                 }
             case IN_PROGRESS:
                 Long nextRetry = processPayment.nextRetry;
@@ -205,6 +201,7 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
                     callback.onProcessPayment();
                 }
         }
+        return State.COMPLETED;
     }
 
     private <T> T execute(MethodRequest<T> methodRequest) throws InvalidTokenException,
