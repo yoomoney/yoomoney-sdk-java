@@ -26,16 +26,15 @@ public final class PaymentProcess extends BasePaymentProcess {
 
     @Override
     protected MethodRequest<? extends BaseRequestPayment> createRequestPayment() {
-        IPaymentProcess.ParameterProvider provider = getParameterProvider();
-        return new RequestPayment.Request(provider.getPatternId(), provider.getPaymentParameters());
+        return new RequestPayment.Request(parameterProvider.getPatternId(),
+                parameterProvider.getPaymentParameters());
     }
 
     @Override
     protected MethodRequest<? extends BaseProcessPayment> createProcessPayment() {
-        IPaymentProcess.ParameterProvider provider = getParameterProvider();
         return new ProcessPayment.Request(getRequestPayment().requestId,
-                provider.getMoneySource(), provider.getCsc(), provider.getExtAuthSuccessUri(),
-                provider.getExtAuthFailUri());
+                parameterProvider.getMoneySource(), parameterProvider.getCsc(),
+                parameterProvider.getExtAuthSuccessUri(), parameterProvider.getExtAuthFailUri());
     }
 
     @Override

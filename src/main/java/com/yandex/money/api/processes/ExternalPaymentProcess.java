@@ -34,9 +34,8 @@ public final class ExternalPaymentProcess extends BasePaymentProcess {
 
     @Override
     protected MethodRequest<? extends BaseRequestPayment> createRequestPayment() {
-        ParameterProvider provider = getParameterProvider();
-        return RequestExternalPayment.Request.newInstance(instanceId, provider.getPatternId(),
-                provider.getPaymentParameters());
+        return RequestExternalPayment.Request.newInstance(instanceId,
+                parameterProvider.getPatternId(), parameterProvider.getPaymentParameters());
     }
 
     @Override
@@ -50,12 +49,11 @@ public final class ExternalPaymentProcess extends BasePaymentProcess {
     }
 
     private ProcessExternalPayment.Request createProcessExternalPayment() {
-        ParameterProvider provider = getParameterProvider();
         String requestId = getRequestPayment().requestId;
-        String extAuthSuccessUri = provider.getExtAuthSuccessUri();
-        String extAuthFailUri = provider.getExtAuthFailUri();
-        MoneySource moneySource = provider.getMoneySource();
-        String csc = provider.getCsc();
+        String extAuthSuccessUri = parameterProvider.getExtAuthSuccessUri();
+        String extAuthFailUri = parameterProvider.getExtAuthFailUri();
+        MoneySource moneySource = parameterProvider.getMoneySource();
+        String csc = parameterProvider.getCsc();
         if (moneySource == null || !(moneySource instanceof ExternalCard) ||
                 Strings.isNullOrEmpty(csc)) {
             return new ProcessExternalPayment.Request(instanceId, requestId, extAuthSuccessUri,

@@ -21,8 +21,12 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
 
     private static final long TIMEOUT = 3 * MillisecondsIn.SECOND;
 
+    /**
+     * Provides parameters for requests.
+     */
+    protected final ParameterProvider parameterProvider;
+
     private final OAuth2Session session;
-    private final ParameterProvider parameterProvider;
 
     private BaseRequestPayment requestPayment;
     private BaseProcessPayment processPayment;
@@ -48,7 +52,7 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
     }
 
     @Override
-    public boolean proceed() throws InvalidTokenException, InsufficientScopeException,
+    public final boolean proceed() throws InvalidTokenException, InsufficientScopeException,
             InvalidRequestException, IOException {
 
         switch (state) {
@@ -68,7 +72,7 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
     }
 
     @Override
-    public boolean repeat() throws InvalidTokenException, InsufficientScopeException,
+    public final boolean repeat() throws InvalidTokenException, InsufficientScopeException,
             InvalidRequestException, IOException {
 
         switch (state) {
@@ -87,7 +91,7 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
     }
 
     @Override
-    public void reset() {
+    public final void reset() {
         this.requestPayment = null;
         this.processPayment = null;
         this.state = State.CREATED;
@@ -96,7 +100,7 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
     /**
      * @return saved state for payment process
      */
-    public SavedState getSavedState() {
+    public final SavedState getSavedState() {
         return new SavedState(requestPayment, processPayment, state);
     }
 
@@ -105,7 +109,7 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
      *
      * @param savedState saved state
      */
-    public void restoreSavedState(SavedState savedState) {
+    public final void restoreSavedState(SavedState savedState) {
         if (savedState == null) {
             throw new NullPointerException("saved state is null");
         }
@@ -115,17 +119,17 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
     }
 
     @Override
-    public BaseRequestPayment getRequestPayment() {
+    public final BaseRequestPayment getRequestPayment() {
         return requestPayment;
     }
 
     @Override
-    public BaseProcessPayment getProcessPayment() {
+    public final BaseProcessPayment getProcessPayment() {
         return processPayment;
     }
 
     @Override
-    public void setCallback(Callback callback) {
+    public final void setCallback(Callback callback) {
         this.callback = callback;
     }
 
@@ -134,26 +138,37 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
      *
      * @param accessToken access token
      */
-    public void setAccessToken(String accessToken) {
+    public final void setAccessToken(String accessToken) {
         session.setAccessToken(accessToken);
     }
 
     /**
      * @return state of payment process
      */
-    public State getState() {
+    final State getState() {
         return state;
     }
 
+    /**
+     * Creates request payment method.
+     *
+     * @return method request
+     */
     protected abstract MethodRequest<? extends BaseRequestPayment> createRequestPayment();
 
+    /**
+     * Creates process payment method.
+     *
+     * @return method request
+     */
     protected abstract MethodRequest<? extends BaseProcessPayment> createProcessPayment();
 
+    /**
+     * Creates repeat process payment method.
+     *
+     * @return method request
+     */
     protected abstract MethodRequest<? extends BaseProcessPayment> createRepeatProcessPayment();
-
-    protected final ParameterProvider getParameterProvider() {
-        return parameterProvider;
-    }
 
     private void executeRequestPayment() throws InvalidTokenException, InsufficientScopeException,
             InvalidRequestException, IOException {
