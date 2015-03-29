@@ -1,7 +1,5 @@
 package com.yandex.money.api.processes;
 
-import com.yandex.money.api.methods.BaseProcessPayment;
-import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.methods.ProcessExternalPayment;
 import com.yandex.money.api.methods.RequestExternalPayment;
 import com.yandex.money.api.model.ExternalCard;
@@ -13,7 +11,8 @@ import com.yandex.money.api.utils.Strings;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class ExternalPaymentProcess extends BasePaymentProcess {
+public final class ExternalPaymentProcess
+        extends BasePaymentProcess<RequestExternalPayment, ProcessExternalPayment> {
 
     private final String instanceId;
 
@@ -33,18 +32,18 @@ public final class ExternalPaymentProcess extends BasePaymentProcess {
     }
 
     @Override
-    protected MethodRequest<? extends BaseRequestPayment> createRequestPayment() {
+    protected MethodRequest<RequestExternalPayment> createRequestPayment() {
         return RequestExternalPayment.Request.newInstance(instanceId,
                 parameterProvider.getPatternId(), parameterProvider.getPaymentParameters());
     }
 
     @Override
-    protected MethodRequest<? extends BaseProcessPayment> createProcessPayment() {
+    protected MethodRequest<ProcessExternalPayment> createProcessPayment() {
         return createProcessExternalPayment();
     }
 
     @Override
-    protected MethodRequest<? extends BaseProcessPayment> createRepeatProcessPayment() {
+    protected MethodRequest<ProcessExternalPayment> createRepeatProcessPayment() {
         return createProcessExternalPayment();
     }
 

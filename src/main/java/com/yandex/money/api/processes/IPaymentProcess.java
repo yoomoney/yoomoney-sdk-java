@@ -29,11 +29,6 @@ interface IPaymentProcess extends Process {
     BaseProcessPayment getProcessPayment();
 
     /**
-     * @param callback callback to perform on operation complete
-     */
-    void setCallback(Callback callback);
-
-    /**
      * Provides parameters to perform payment process.
      */
     interface ParameterProvider {
@@ -67,21 +62,5 @@ interface IPaymentProcess extends Process {
          * @return fail URI
          */
         String getExtAuthFailUri();
-    }
-
-    /**
-     * Callback to call on operation complete.
-     */
-    interface Callback {
-
-        /**
-         * Called when request payment response received.
-         */
-        void onRequestPayment();
-
-        /**
-         * Called when process payment response received.
-         */
-        void onProcessPayment();
     }
 }

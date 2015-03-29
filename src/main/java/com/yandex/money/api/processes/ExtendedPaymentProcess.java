@@ -1,16 +1,12 @@
 package com.yandex.money.api.processes;
 
-import com.yandex.money.api.exceptions.InsufficientScopeException;
-import com.yandex.money.api.exceptions.InvalidRequestException;
-import com.yandex.money.api.exceptions.InvalidTokenException;
+import com.squareup.okhttp.Call;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.OAuth2Session;
-
-import java.io.IOException;
 
 /**
  * Combined payment process of {@link PaymentProcess} and {@link ExternalPaymentProcess}.
@@ -44,33 +40,29 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     @Override
-    public boolean proceed() throws InvalidTokenException, InsufficientScopeException,
-            InvalidRequestException, IOException {
-
-        if (getState() == BasePaymentProcess.State.STARTED && mutablePaymentContext) {
-            MoneySource moneySource = parameterProvider.getMoneySource();
-            if (moneySource == null) {
-                throw new NullPointerException("moneySource is null; not provided by " +
-                        "ParameterProvider");
-            }
-
-            if (paymentContext == PaymentContext.PAYMENT && moneySource instanceof ExternalCard) {
-                paymentContext = PaymentContext.EXTERNAL_PAYMENT;
-            } else if (paymentContext == PaymentContext.EXTERNAL_PAYMENT &&
-                    moneySource instanceof Wallet) {
-                paymentContext = PaymentContext.PAYMENT;
-            }
-        }
-
+    public boolean proceed() throws Exception {
+        switchContextIfRequired();
         return paymentContext == PaymentContext.PAYMENT ? paymentProcess.proceed() :
                 externalPaymentProcess.proceed();
     }
 
     @Override
-    public boolean repeat() throws InvalidTokenException, InsufficientScopeException,
-            InvalidRequestException, IOException {
+    public <T> Call proceed(OAuth2Session.OnResponseReady<T> callback) throws Exception {
+        switchContextIfRequired();
+        return paymentContext == PaymentContext.PAYMENT ? paymentProcess.proceed(callback) :
+                externalPaymentProcess.proceed(callback);
+    }
+
+    @Override
+    public boolean repeat() throws Exception {
         return paymentContext == PaymentContext.PAYMENT ? paymentProcess.repeat() :
                 externalPaymentProcess.repeat();
+    }
+
+    @Override
+    public <T> Call repeat(OAuth2Session.OnResponseReady<T> callback) throws Exception {
+        return paymentContext == PaymentContext.PAYMENT ? paymentProcess.repeat(callback) :
+                externalPaymentProcess.repeat(callback);
     }
 
     @Override
@@ -89,12 +81,6 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     public BaseProcessPayment getProcessPayment() {
         return paymentContext == PaymentContext.PAYMENT ? paymentProcess.getProcessPayment() :
                 externalPaymentProcess.getProcessPayment();
-    }
-
-    @Override
-    public void setCallback(Callback callback) {
-        paymentProcess.setCallback(callback);
-        externalPaymentProcess.setCallback(callback);
     }
 
     /**
@@ -156,6 +142,23 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      */
     public void setRequestToken(boolean requestToken) {
         externalPaymentProcess.setRequestToken(requestToken);
+    }
+
+    private void switchContextIfRequired() {
+        if (getState() == BasePaymentProcess.State.STARTED && mutablePaymentContext) {
+            MoneySource moneySource = parameterProvider.getMoneySource();
+            if (moneySource == null) {
+                throw new NullPointerException("moneySource is null; not provided by " +
+                        "ParameterProvider");
+            }
+
+            if (paymentContext == PaymentContext.PAYMENT && moneySource instanceof ExternalCard) {
+                paymentContext = PaymentContext.EXTERNAL_PAYMENT;
+            } else if (paymentContext == PaymentContext.EXTERNAL_PAYMENT &&
+                    moneySource instanceof Wallet) {
+                paymentContext = PaymentContext.PAYMENT;
+            }
+        }
     }
 
     private BasePaymentProcess.State getState() {

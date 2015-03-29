@@ -129,18 +129,24 @@ public class OAuth2SessionTest {
     }
 
     private void executeTestAsync(MockResponse response, Mock.Request request) throws Exception {
+        final ThreadSync sync = new ThreadSync();
+
         server.enqueue(response);
         session.enqueue(request, new OAuth2Session.OnResponseReady<Mock>() {
             @Override
             public void onFailure(Exception exception) {
                 Assert.assertNotNull(exception);
+                sync.doNotify();
             }
 
             @Override
             public void onResponse(Mock response) {
                 checkResponse(response);
+                sync.doNotify();
             }
         });
+
+        sync.doWait();
     }
 
     private void checkResponse(Mock response) {

@@ -1,8 +1,6 @@
 package com.yandex.money.api.processes;
 
-import com.yandex.money.api.exceptions.InsufficientScopeException;
-import com.yandex.money.api.exceptions.InvalidRequestException;
-import com.yandex.money.api.exceptions.InvalidTokenException;
+import com.squareup.okhttp.Call;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.net.MethodRequest;
@@ -17,7 +15,8 @@ import java.io.IOException;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public abstract class BasePaymentProcess implements IPaymentProcess {
+public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
+        PP extends BaseProcessPayment> implements IPaymentProcess {
 
     private static final long TIMEOUT = 3 * MillisecondsIn.SECOND;
 
@@ -28,9 +27,8 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
 
     private final OAuth2Session session;
 
-    private BaseRequestPayment requestPayment;
-    private BaseProcessPayment processPayment;
-    private Callback callback;
+    private RP requestPayment;
+    private PP processPayment;
     private State state;
 
     /**
@@ -52,29 +50,39 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
     }
 
     @Override
-    public final boolean proceed() throws InvalidTokenException, InsufficientScopeException,
-            InvalidRequestException, IOException {
-
+    public final boolean proceed() throws Exception {
         switch (state) {
             case CREATED:
                 executeRequestPayment();
-                state = State.STARTED;
                 break;
             case STARTED:
-                state = executeProcessPayment();
+                executeProcessPayment();
                 break;
             case PROCESSING:
-                state = executeRepeatProcessPayment();
+                executeRepeatProcessPayment();
                 break;
         }
 
         return isCompleted();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public final boolean repeat() throws InvalidTokenException, InsufficientScopeException,
-            InvalidRequestException, IOException {
+    public final <T> Call proceed(OAuth2Session.OnResponseReady<T> callback) throws Exception {
+        switch (state) {
+            case CREATED:
+                return enqueueRequestPayment((OAuth2Session.OnResponseReady<RP>) callback);
+            case STARTED:
+                return enqueueProcessPayment((OAuth2Session.OnResponseReady<PP>) callback);
+            case PROCESSING:
+                return enqueueRepeatProcessPayment((OAuth2Session.OnResponseReady<PP>) callback);
+            default:
+                throw new IllegalStateException("payment process is broken");
+        }
+    }
 
+    @Override
+    public final boolean repeat() throws Exception {
         switch (state) {
             case STARTED:
                 executeRequestPayment();
@@ -90,6 +98,21 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
         return isCompleted();
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public final <T> Call repeat(OAuth2Session.OnResponseReady<T> callback) throws Exception {
+        switch (state) {
+            case STARTED:
+                return enqueueRequestPayment((OAuth2Session.OnResponseReady<RP>) callback);
+            case PROCESSING:
+                return enqueueProcessPayment((OAuth2Session.OnResponseReady<PP>) callback);
+            case COMPLETED:
+                return enqueueRepeatProcessPayment((OAuth2Session.OnResponseReady<PP>) callback);
+            default:
+                throw new IllegalStateException("payment process is broken");
+        }
+    }
+
     @Override
     public final void reset() {
         this.requestPayment = null;
@@ -100,8 +123,8 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
     /**
      * @return saved state for payment process
      */
-    public final SavedState getSavedState() {
-        return new SavedState(requestPayment, processPayment, state);
+    public final SavedState<RP, PP> getSavedState() {
+        return new SavedState<>(requestPayment, processPayment, state);
     }
 
     /**
@@ -109,7 +132,7 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
      *
      * @param savedState saved state
      */
-    public final void restoreSavedState(SavedState savedState) {
+    public final void restoreSavedState(SavedState<RP, PP> savedState) {
         if (savedState == null) {
             throw new NullPointerException("saved state is null");
         }
@@ -126,11 +149,6 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
     @Override
     public final BaseProcessPayment getProcessPayment() {
         return processPayment;
-    }
-
-    @Override
-    public final void setCallback(Callback callback) {
-        this.callback = callback;
     }
 
     /**
@@ -154,74 +172,148 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
      *
      * @return method request
      */
-    protected abstract MethodRequest<? extends BaseRequestPayment> createRequestPayment();
+    protected abstract MethodRequest<RP> createRequestPayment();
 
     /**
      * Creates process payment method.
      *
      * @return method request
      */
-    protected abstract MethodRequest<? extends BaseProcessPayment> createProcessPayment();
+    protected abstract MethodRequest<PP> createProcessPayment();
 
     /**
      * Creates repeat process payment method.
      *
      * @return method request
      */
-    protected abstract MethodRequest<? extends BaseProcessPayment> createRepeatProcessPayment();
+    protected abstract MethodRequest<PP> createRepeatProcessPayment();
 
-    private void executeRequestPayment() throws InvalidTokenException, InsufficientScopeException,
-            InvalidRequestException, IOException {
-
+    private void executeRequestPayment() throws Exception {
         requestPayment = execute(createRequestPayment());
-        if (callback != null) {
-            callback.onRequestPayment();
-        }
+        state = State.STARTED;
     }
 
-    private State executeProcessPayment() throws InvalidTokenException, InsufficientScopeException,
-            InvalidRequestException, IOException {
-        return executeProcessPayment(createProcessPayment());
+    private void executeProcessPayment() throws Exception {
+        executeProcessPayment(createProcessPayment());
     }
 
-    private State executeRepeatProcessPayment() throws InvalidTokenException,
-            InsufficientScopeException, InvalidRequestException, IOException {
-        return executeProcessPayment(createRepeatProcessPayment());
+    private void executeRepeatProcessPayment() throws Exception {
+        executeProcessPayment(createRepeatProcessPayment());
     }
 
-    private State executeProcessPayment(MethodRequest<? extends BaseProcessPayment> request)
-            throws InvalidTokenException, InsufficientScopeException, InvalidRequestException,
-            IOException {
+    private void executeProcessPayment(final MethodRequest<PP> request) throws Exception {
+        processPayment(new ProcessPaymentResolver<PP>() {
+            @Override
+            public PP getProcessPayment() throws Exception {
+                return execute(request);
+            }
 
+            @Override
+            public void onInProgress() throws Exception {
+                executeProcessPayment(request);
+            }
+        });
+    }
+
+    private <T> T execute(MethodRequest<T> methodRequest) throws Exception {
+        return session.execute(methodRequest);
+    }
+
+    private Call enqueueRequestPayment(final OAuth2Session.OnResponseReady<RP> callback)
+            throws IOException {
+
+        return enqueue(createRequestPayment(), new OAuth2Session.OnResponseReady<RP>() {
+            @Override
+            public void onFailure(Exception exception) {
+                callback.onFailure(exception);
+            }
+
+            @Override
+            public void onResponse(RP response) {
+                requestPayment = response;
+                state = State.STARTED;
+                callback.onResponse(response);
+            }
+        });
+    }
+
+    private Call enqueueProcessPayment(OAuth2Session.OnResponseReady<PP> callback)
+            throws IOException {
+        return enqueueProcessPayment(createProcessPayment(), callback);
+    }
+
+    private Call enqueueRepeatProcessPayment(OAuth2Session.OnResponseReady<PP> callback)
+            throws IOException {
+        return enqueueProcessPayment(createRepeatProcessPayment(), callback);
+    }
+
+    private Call enqueueProcessPayment(final MethodRequest<PP> request,
+                                       final OAuth2Session.OnResponseReady<PP> callback)
+            throws IOException {
+
+        return enqueue(request, new OAuth2Session.OnResponseReady<PP>() {
+            @Override
+            public void onFailure(Exception exception) {
+                callback.onFailure(exception);
+            }
+
+            @Override
+            public void onResponse(final PP response) {
+                try {
+                    if (processPayment(new ProcessPaymentResolver<PP>() {
+                        @Override
+                        public PP getProcessPayment() {
+                            return response;
+                        }
+
+                        @Override
+                        public void onInProgress() throws Exception {
+                            enqueueProcessPayment(request, callback);
+                        }
+                    })) {
+                        callback.onResponse(response);
+                    }
+                } catch (Exception e) {
+                    callback.onFailure(e);
+                }
+            }
+        });
+    }
+
+    private <T> Call enqueue(MethodRequest<T> methodRequest,
+                             OAuth2Session.OnResponseReady<T> callback) throws IOException {
+        return session.enqueue(methodRequest, callback);
+    }
+
+    /**
+     * Processes payment using {@link BasePaymentProcess.ProcessPaymentResolver} to resolve process
+     * payment and repeat request as required.
+     *
+     * @param resolver the resolver
+     * @return {@code true} if operation is complete
+     */
+    private boolean processPayment(ProcessPaymentResolver<PP> resolver) throws Exception {
         BaseProcessPayment.Status previousStatus = processPayment == null ? null :
                 processPayment.status;
-        processPayment = execute(request);
+        processPayment = resolver.getProcessPayment();
 
         switch (processPayment.status) {
             case EXT_AUTH_REQUIRED:
                 if (previousStatus != BaseProcessPayment.Status.EXT_AUTH_REQUIRED) {
-                    if (callback != null) {
-                        callback.onProcessPayment();
-                    }
-                    return State.PROCESSING;
+                    state = State.PROCESSING;
+                    return true;
                 }
             case IN_PROGRESS:
+                state = State.PROCESSING;
                 Long nextRetry = processPayment.nextRetry;
                 long timeout = nextRetry == null || nextRetry == 0L ? TIMEOUT : nextRetry;
                 Threads.sleep(timeout);
-                executeProcessPayment(request);
-                break;
-            default:
-                if (callback != null) {
-                    callback.onProcessPayment();
-                }
+                resolver.onInProgress();
+                return false;
         }
-        return State.COMPLETED;
-    }
 
-    private <T> T execute(MethodRequest<T> methodRequest) throws InvalidTokenException,
-            InsufficientScopeException, InvalidRequestException, IOException {
-        return session.execute(methodRequest);
+        state = State.COMPLETED;
+        return true;
     }
 
     private boolean isCompleted() {
@@ -231,10 +323,10 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
     /**
      * Saved state of payment process.
      */
-    public static class SavedState {
+    public static class SavedState<RP extends BaseRequestPayment, PP extends BaseProcessPayment> {
 
-        private final BaseRequestPayment requestPayment;
-        private final BaseProcessPayment processPayment;
+        private final RP requestPayment;
+        private final PP processPayment;
         private final State state;
 
         /**
@@ -244,14 +336,11 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
          * @param processPayment request payment
          * @param flags flags of saved state
          */
-        public SavedState(BaseRequestPayment requestPayment, BaseProcessPayment processPayment,
-                          int flags) {
+        public SavedState(RP requestPayment, PP processPayment, int flags) {
             this(requestPayment, processPayment, parseState(flags));
         }
 
-        private SavedState(BaseRequestPayment requestPayment, BaseProcessPayment processPayment,
-                          State state) {
-
+        private SavedState(RP requestPayment, PP processPayment, State state) {
             if (state == null) {
                 throw new NullPointerException("state is null");
             }
@@ -297,14 +386,14 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
         /**
          * @return request payment
          */
-        public final BaseRequestPayment getRequestPayment() {
+        public final RP getRequestPayment() {
             return requestPayment;
         }
 
         /**
          * @return process payment
          */
-        public final BaseProcessPayment getProcessPayment() {
+        public final PP getProcessPayment() {
             return processPayment;
         }
 
@@ -343,5 +432,10 @@ public abstract class BasePaymentProcess implements IPaymentProcess {
          * Indicates that payment process is completed.
          */
         COMPLETED
+    }
+
+    private interface ProcessPaymentResolver<PP> {
+        PP getProcessPayment() throws Exception;
+        void onInProgress() throws Exception;
     }
 }

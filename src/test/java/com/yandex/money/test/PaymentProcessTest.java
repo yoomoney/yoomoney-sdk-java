@@ -2,6 +2,8 @@ package com.yandex.money.test;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+import com.yandex.money.api.methods.BaseProcessPayment;
+import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.methods.ProcessExternalPayment;
 import com.yandex.money.api.methods.ProcessPayment;
 import com.yandex.money.api.methods.RequestExternalPayment;
@@ -28,6 +30,7 @@ import java.util.Map;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
+@Test(singleThreaded = true)
 public class PaymentProcessTest {
 
     private final MockWebServer server = new MockWebServer();
@@ -52,25 +55,34 @@ public class PaymentProcessTest {
 
     @Test
     public void testPaymentProcess() throws Exception {
-        enqueueResponse("{\"status\":\"success\",\"wallet\":{\"allowed\":true},\"card\":{\"allowed\":\"true\",\"csc_required\":\"true\",\"id\":\"card-385244400\",\"pan_fragment\":\"5280****7918\",\"type\":\"MasterCard\"},\"cards\":{\"allowed\":true,\"csc_required\":true,\"items\":[{\"id\":\"card-385244400\",\"pan_fragment\":\"5280****7918\",\"type\":\"MasterCard\"},{\"id\":\"card-385244401\",\"pan_fragment\":\"4008****7919\",\"type\":\"Visa\"}]},\"request_id\":\"33373230335f343462363963333932636234633130613062623338323265393136323530336564636130623263375f33303030333539313637\",\"balance\":1000}");
-        enqueueResponse("{\"status\":\"in_progress\",\"next_retry\":1}");
-        enqueueResponse("{\"status\":\"success\",\"payment_id\":\"2ABCDE123456789\",\"invoice_id\":\"1234567890123456789\",\"balance\":1000}");
+        enqueuePaymentProcess();
         checkPaymentProcess(new PaymentProcess(session, parameterProvider));
     }
 
     @Test
+    public void testAsyncPaymentProcess() throws Exception {
+        enqueuePaymentProcess();
+        checkAsyncPaymentProcess(new PaymentProcess(session, parameterProvider));
+    }
+
+    @Test
     public void testExternalPaymentProcess() throws Exception {
-        enqueueResponse("{\"status\":\"success\",\"request_id\":\"3931303833373438395f343434316466313864616236613236363063386361663834336137386537643935383639383062635f3330363333323938\",\"contract_amount\":100,\"title\":\"Оплата услуг NNNN\"}");
-        enqueueResponse("{\"status\":\"in_progress\",\"next_retry\":1}");
-        enqueueResponse("{\"status\":\"success\",\"invoice_id\":\"3000130505460\",\"money_source\":{\"type\":\"payment-card\",\"payment_card_type\":\"VISA\",\"pan_fragment\":\"**** **** **** 0334\",\"money_source_token\":\"B6AE719BAF712404E08EF8A430B0F58CD8F2C592452CA5205F7E52B1FC72BD3D42745714D60B4E75BD742F22E8120F0861ED99B69EC01C6194CF5D425C89598B959DE0E9EDB13AFD710CF74ACE08DBFBE2A49F14F9792B32289CE2456EB50EF7DFE6D22E466D417ACD1BF8DE33B5C93BDA9AAA8C4D693DCD2E9AA2A31A51C185\"}}");
+        enqueueExternalPaymentProcess();
         checkPaymentProcess(new ExternalPaymentProcess(session, parameterProvider, "stub"));
     }
 
     @Test
-    public void testPaymentProcessStateRestore() {
-        BasePaymentProcess paymentProcess = new PaymentProcess(session, parameterProvider);
+    public void testAsyncExternalPaymentProcess() throws Exception {
+        enqueueExternalPaymentProcess();
+        checkAsyncPaymentProcess(new ExternalPaymentProcess(session, parameterProvider, "stub"));
+    }
 
-        BasePaymentProcess.SavedState savedState = createPaymentProcessSavedState();
+    @Test
+    public void testPaymentProcessStateRestore() {
+        PaymentProcess paymentProcess = new PaymentProcess(session, parameterProvider);
+
+        BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> savedState =
+                createPaymentProcessSavedState();
         paymentProcess.restoreSavedState(savedState);
         BasePaymentProcess.SavedState state = paymentProcess.getSavedState();
 
@@ -81,10 +93,11 @@ public class PaymentProcessTest {
 
     @Test
     public void testExternalPaymentProcessStateRestore() {
-        BasePaymentProcess paymentProcess = new ExternalPaymentProcess(
+        ExternalPaymentProcess paymentProcess = new ExternalPaymentProcess(
                 session, parameterProvider, "");
 
-        BasePaymentProcess.SavedState savedState = createExternalPaymentProcessSavedState();
+        BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> savedState =
+                createExternalPaymentProcessSavedState();
         paymentProcess.restoreSavedState(savedState);
         BasePaymentProcess.SavedState state = paymentProcess.getSavedState();
 
@@ -106,6 +119,18 @@ public class PaymentProcessTest {
         Assert.assertEquals(savedState.getFlags(), state.getFlags());
     }
 
+    private void enqueuePaymentProcess() {
+        enqueueResponse("{\"status\":\"success\",\"wallet\":{\"allowed\":true},\"card\":{\"allowed\":\"true\",\"csc_required\":\"true\",\"id\":\"card-385244400\",\"pan_fragment\":\"5280****7918\",\"type\":\"MasterCard\"},\"cards\":{\"allowed\":true,\"csc_required\":true,\"items\":[{\"id\":\"card-385244400\",\"pan_fragment\":\"5280****7918\",\"type\":\"MasterCard\"},{\"id\":\"card-385244401\",\"pan_fragment\":\"4008****7919\",\"type\":\"Visa\"}]},\"request_id\":\"33373230335f343462363963333932636234633130613062623338323265393136323530336564636130623263375f33303030333539313637\",\"balance\":1000}");
+        enqueueResponse("{\"status\":\"in_progress\",\"next_retry\":1}");
+        enqueueResponse("{\"status\":\"success\",\"payment_id\":\"2ABCDE123456789\",\"invoice_id\":\"1234567890123456789\",\"balance\":1000}");
+    }
+
+    private void enqueueExternalPaymentProcess() {
+        enqueueResponse("{\"status\":\"success\",\"request_id\":\"3931303833373438395f343434316466313864616236613236363063386361663834336137386537643935383639383062635f3330363333323938\",\"contract_amount\":100,\"title\":\"Оплата услуг NNNN\"}");
+        enqueueResponse("{\"status\":\"in_progress\",\"next_retry\":1}");
+        enqueueResponse("{\"status\":\"success\",\"invoice_id\":\"3000130505460\",\"money_source\":{\"type\":\"payment-card\",\"payment_card_type\":\"VISA\",\"pan_fragment\":\"**** **** **** 0334\",\"money_source_token\":\"B6AE719BAF712404E08EF8A430B0F58CD8F2C592452CA5205F7E52B1FC72BD3D42745714D60B4E75BD742F22E8120F0861ED99B69EC01C6194CF5D425C89598B959DE0E9EDB13AFD710CF74ACE08DBFBE2A49F14F9792B32289CE2456EB50EF7DFE6D22E466D417ACD1BF8DE33B5C93BDA9AAA8C4D693DCD2E9AA2A31A51C185\"}}");
+    }
+
     private void enqueueResponse(String response) {
         server.enqueue(new MockResponse()
                 .addHeader(HttpHeaders.CONTENT_TYPE, MimeTypes.Application.JSON)
@@ -115,6 +140,42 @@ public class PaymentProcessTest {
     private void checkPaymentProcess(BasePaymentProcess process) throws Exception {
         Assert.assertFalse(process.proceed());
         Assert.assertTrue(process.proceed());
+    }
+
+    private synchronized void checkAsyncPaymentProcess(BasePaymentProcess process)
+            throws Exception {
+
+        final ThreadSync sync = new ThreadSync();
+
+        process.proceed(new OAuth2Session.OnResponseReady<BaseRequestPayment>() {
+            @Override
+            public void onFailure(Exception exception) {
+                Assert.assertTrue(false);
+                sync.doNotify();
+            }
+
+            @Override
+            public void onResponse(BaseRequestPayment response) {
+                Assert.assertTrue(true);
+                sync.doNotify();
+            }
+        });
+        sync.doWait();
+
+        process.proceed(new OAuth2Session.OnResponseReady<BaseProcessPayment>() {
+            @Override
+            public void onFailure(Exception exception) {
+                Assert.assertTrue(false);
+                sync.doNotify();
+            }
+
+            @Override
+            public void onResponse(BaseProcessPayment response) {
+                Assert.assertTrue(true);
+                sync.doNotify();
+            }
+        });
+        sync.doWait();
     }
 
     private BasePaymentProcess.ParameterProvider createParameterProviderStub() {
@@ -151,16 +212,20 @@ public class PaymentProcessTest {
         };
     }
 
-    private BasePaymentProcess.SavedState createPaymentProcessSavedState() {
-        return new BasePaymentProcess.SavedState(
+    private BasePaymentProcess.SavedState<RequestPayment, ProcessPayment>
+            createPaymentProcessSavedState() {
+
+        return new BasePaymentProcess.SavedState<>(
                 new RequestPayment.Builder().createRequestPayment(),
                 new ProcessPayment.Builder().createProcessPayment(),
                 3
         );
     }
 
-    private BasePaymentProcess.SavedState createExternalPaymentProcessSavedState() {
-        return new BasePaymentProcess.SavedState(
+    private BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment>
+            createExternalPaymentProcessSavedState() {
+
+        return new BasePaymentProcess.SavedState<>(
                 new RequestExternalPayment(null, null, null, null, null),
                 new ProcessExternalPayment(null, null, null, new HashMap<String, String>(), null,
                         null, null), 3);
