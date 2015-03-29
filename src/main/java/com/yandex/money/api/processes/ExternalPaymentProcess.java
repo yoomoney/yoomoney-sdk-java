@@ -14,13 +14,17 @@ import com.yandex.money.api.utils.Strings;
 public final class ExternalPaymentProcess
         extends BasePaymentProcess<RequestExternalPayment, ProcessExternalPayment> {
 
-    private final String instanceId;
-
+    private String instanceId;
     private boolean requestToken;
 
-    public ExternalPaymentProcess(OAuth2Session session, ParameterProvider parameterProvider,
-                                  String instanceId) {
+    public ExternalPaymentProcess(OAuth2Session session, ParameterProvider parameterProvider) {
         super(session, parameterProvider);
+    }
+
+    /**
+     * @param instanceId instance id
+     */
+    public void setInstanceId(String instanceId) {
         this.instanceId = instanceId;
     }
 

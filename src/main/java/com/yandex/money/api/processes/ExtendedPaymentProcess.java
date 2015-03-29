@@ -3,6 +3,10 @@ package com.yandex.money.api.processes;
 import com.squareup.okhttp.Call;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
+import com.yandex.money.api.methods.ProcessExternalPayment;
+import com.yandex.money.api.methods.ProcessPayment;
+import com.yandex.money.api.methods.RequestExternalPayment;
+import com.yandex.money.api.methods.RequestPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
@@ -28,12 +32,9 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      * @param session session to run the process on
      * @param parameterProvider parameter's provider
      */
-    public ExtendedPaymentProcess(OAuth2Session session, ParameterProvider parameterProvider,
-                                  String instanceId) {
-
+    public ExtendedPaymentProcess(OAuth2Session session, ParameterProvider parameterProvider) {
         this.paymentProcess = new PaymentProcess(session, parameterProvider);
-        this.externalPaymentProcess = new ExternalPaymentProcess(session, parameterProvider,
-                instanceId);
+        this.externalPaymentProcess = new ExternalPaymentProcess(session, parameterProvider);
         this.parameterProvider = parameterProvider;
         this.paymentContext = session.isAuthorized() ? PaymentContext.PAYMENT :
                 PaymentContext.EXTERNAL_PAYMENT;
@@ -128,9 +129,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     /**
-     * Sets access token.
-     *
-     * @param accessToken access token
+     * @see {@link BasePaymentProcess#setAccessToken(String)}
      */
     public void setAccessToken(String accessToken) {
         paymentProcess.setAccessToken(accessToken);
@@ -138,7 +137,14 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     /**
-     * @param requestToken if money source token is required
+     * @see {@link ExternalPaymentProcess#setInstanceId(String)}
+     */
+    public void setInstanceId(String instanceId) {
+        externalPaymentProcess.setInstanceId(instanceId);
+    }
+
+    /**
+     * @see {@link ExternalPaymentProcess#setRequestToken(boolean)}
      */
     public void setRequestToken(boolean requestToken) {
         externalPaymentProcess.setRequestToken(requestToken);
@@ -171,8 +177,8 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      */
     public static final class SavedState {
 
-        private final BasePaymentProcess.SavedState paymentProcessSavedState;
-        private final BasePaymentProcess.SavedState externalPaymentProcessSavedState;
+        private final BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> paymentProcessSavedState;
+        private final BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> externalPaymentProcessSavedState;
         private final PaymentContext paymentContext;
         private final boolean mutablePaymentContext;
 
@@ -183,16 +189,16 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
          * @param externalPaymentProcessSavedState {@link ExtendedPaymentProcess} saved state
          * @param flags flags
          */
-        public SavedState(BasePaymentProcess.SavedState paymentProcessSavedState,
-                          BasePaymentProcess.SavedState externalPaymentProcessSavedState,
+        public SavedState(BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> paymentProcessSavedState,
+                          BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> externalPaymentProcessSavedState,
                           int flags) {
 
             this(paymentProcessSavedState, externalPaymentProcessSavedState, parseContext(flags),
                     parseMutablePaymentContext(flags));
         }
 
-        private SavedState(BasePaymentProcess.SavedState paymentProcessSavedState,
-                           BasePaymentProcess.SavedState externalPaymentProcessSavedState,
+        private SavedState(BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> paymentProcessSavedState,
+                           BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> externalPaymentProcessSavedState,
                            PaymentContext paymentContext, boolean mutablePaymentContext) {
 
             this.paymentProcessSavedState = paymentProcessSavedState;
@@ -204,14 +210,14 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
         /**
          * @return {@link PaymentProcess} saved state
          */
-        public BasePaymentProcess.SavedState getPaymentProcessSavedState() {
+        public BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> getPaymentProcessSavedState() {
             return paymentProcessSavedState;
         }
 
         /**
          * @return {@link ExtendedPaymentProcess} saved state
          */
-        public BasePaymentProcess.SavedState getExternalPaymentProcessSavedState() {
+        public BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> getExternalPaymentProcessSavedState() {
             return externalPaymentProcessSavedState;
         }
 
