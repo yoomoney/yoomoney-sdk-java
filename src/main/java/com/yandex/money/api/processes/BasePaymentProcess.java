@@ -29,6 +29,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
 
     private RP requestPayment;
     private PP processPayment;
+    private Callbacks<RP, PP> callbacks;
     private State state;
 
     /**
@@ -66,16 +67,16 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         return isCompleted();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public final <T> Call proceed(OAuth2Session.OnResponseReady<T> callback) throws Exception {
+    public final Call proceedAsync() throws Exception {
+        checkCallbacks();
         switch (state) {
             case CREATED:
-                return enqueueRequestPayment((OAuth2Session.OnResponseReady<RP>) callback);
+                return enqueueRequestPayment(callbacks.getOnRequestCallback());
             case STARTED:
-                return enqueueProcessPayment((OAuth2Session.OnResponseReady<PP>) callback);
+                return enqueueProcessPayment(callbacks.getOnProcessCallback());
             case PROCESSING:
-                return enqueueRepeatProcessPayment((OAuth2Session.OnResponseReady<PP>) callback);
+                return enqueueRepeatProcessPayment(callbacks.getOnProcessCallback());
             default:
                 throw new IllegalStateException("payment process is broken");
         }
@@ -98,16 +99,16 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         return isCompleted();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public final <T> Call repeat(OAuth2Session.OnResponseReady<T> callback) throws Exception {
+    public final Call repeatAsync() throws Exception {
+        checkCallbacks();
         switch (state) {
             case STARTED:
-                return enqueueRequestPayment((OAuth2Session.OnResponseReady<RP>) callback);
+                return enqueueRequestPayment(callbacks.getOnRequestCallback());
             case PROCESSING:
-                return enqueueProcessPayment((OAuth2Session.OnResponseReady<PP>) callback);
+                return enqueueProcessPayment(callbacks.getOnProcessCallback());
             case COMPLETED:
-                return enqueueRepeatProcessPayment((OAuth2Session.OnResponseReady<PP>) callback);
+                return enqueueRepeatProcessPayment(callbacks.getOnProcessCallback());
             default:
                 throw new IllegalStateException("payment process is broken");
         }
@@ -123,8 +124,8 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     /**
      * @return saved state for payment process
      */
-    public final SavedState<RP, PP> getSavedState() {
-        return new SavedState<>(requestPayment, processPayment, state);
+    public SavedState<RP, PP> getSavedState() {
+        return createSavedState(requestPayment, processPayment, state);
     }
 
     /**
@@ -161,6 +162,15 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     }
 
     /**
+     * Sets callbacks for async operations.
+     *
+     * @param callbacks the callbacks
+     */
+    public void setCallbacks(Callbacks<RP, PP> callbacks) {
+        this.callbacks = callbacks;
+    }
+
+    /**
      * @return state of payment process
      */
     final State getState() {
@@ -187,6 +197,8 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      * @return method request
      */
     protected abstract MethodRequest<PP> createRepeatProcessPayment();
+
+    protected abstract SavedState<RP, PP> createSavedState(RP requestPayment, PP processPayment, State state);
 
     private void executeRequestPayment() throws Exception {
         requestPayment = execute(createRequestPayment());
@@ -217,6 +229,12 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
 
     private <T> T execute(MethodRequest<T> methodRequest) throws Exception {
         return session.execute(methodRequest);
+    }
+
+    private void checkCallbacks() {
+        if (callbacks == null) {
+            throw new NullPointerException("no callbacks provided");
+        }
     }
 
     private Call enqueueRequestPayment(final OAuth2Session.OnResponseReady<RP> callback)
@@ -320,10 +338,15 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         return state == State.COMPLETED;
     }
 
+    public interface Callbacks<RP extends BaseRequestPayment, PP extends BaseProcessPayment> {
+        OAuth2Session.OnResponseReady<RP> getOnRequestCallback();
+        OAuth2Session.OnResponseReady<PP> getOnProcessCallback();
+    }
+
     /**
      * Saved state of payment process.
      */
-    public static class SavedState<RP extends BaseRequestPayment, PP extends BaseProcessPayment> {
+    public static class SavedState <RP extends BaseRequestPayment, PP extends BaseProcessPayment> {
 
         private final RP requestPayment;
         private final PP processPayment;
@@ -333,14 +356,21 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
          * Constructor.
          *
          * @param requestPayment request payment
-         * @param processPayment request payment
+         * @param processPayment process payment
          * @param flags flags of saved state
          */
         public SavedState(RP requestPayment, PP processPayment, int flags) {
             this(requestPayment, processPayment, parseState(flags));
         }
 
-        private SavedState(RP requestPayment, PP processPayment, State state) {
+        /**
+         * Constructor.
+         *
+         * @param requestPayment request payment
+         * @param processPayment process payment
+         * @param state state
+         */
+        protected SavedState(RP requestPayment, PP processPayment, State state) {
             if (state == null) {
                 throw new NullPointerException("state is null");
             }

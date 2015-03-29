@@ -1,7 +1,6 @@
 package com.yandex.money.api.processes;
 
 import com.squareup.okhttp.Call;
-import com.yandex.money.api.net.OAuth2Session;
 
 /**
  * Provides interface for every process.
@@ -21,11 +20,9 @@ interface Process {
     /**
      * Tries to perform next step of a process asynchronously.
      *
-     * @param callback callback
-     * @param <T> type of response
      * @return a {@link Call} object that can be canceled
      */
-    <T> Call proceed(OAuth2Session.OnResponseReady<T> callback) throws Exception;
+    Call proceedAsync() throws Exception;
 
     /**
      * Tries to repeat the step of a process.
@@ -38,9 +35,7 @@ interface Process {
     /**
      * Tries to perform next step of a process asynchronously.
      *
-     * @param callback callback
-     * @param <T> type of response
      * @return a {@link Call} object that can be canceled
      */
-    <T> Call repeat(OAuth2Session.OnResponseReady<T> callback) throws Exception;
+    Call repeatAsync() throws Exception;
 }

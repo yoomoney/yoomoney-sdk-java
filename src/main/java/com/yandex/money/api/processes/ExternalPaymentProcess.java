@@ -21,6 +21,11 @@ public final class ExternalPaymentProcess
         super(session, parameterProvider);
     }
 
+    @Override
+    public SavedState getSavedState() {
+        return (SavedState) super.getSavedState();
+    }
+
     /**
      * @param instanceId instance id
      */
@@ -51,6 +56,12 @@ public final class ExternalPaymentProcess
         return createProcessExternalPayment();
     }
 
+    @Override
+    protected SavedState createSavedState(RequestExternalPayment requestPayment,
+                                          ProcessExternalPayment processPayment, State state) {
+        return new SavedState(requestPayment, processPayment, state);
+    }
+
     private ProcessExternalPayment.Request createProcessExternalPayment() {
         String requestId = getRequestPayment().requestId;
         String extAuthSuccessUri = parameterProvider.getExtAuthSuccessUri();
@@ -64,6 +75,27 @@ public final class ExternalPaymentProcess
         } else {
             return new ProcessExternalPayment.Request(instanceId, requestId, extAuthSuccessUri,
                     extAuthFailUri, (ExternalCard) moneySource, csc);
+        }
+    }
+
+    /**
+     * @see BasePaymentProcess.Callbacks
+     */
+    public interface Callbacks
+            extends BasePaymentProcess.Callbacks<RequestExternalPayment, ProcessExternalPayment> {
+    }
+
+    public static final class SavedState
+            extends BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> {
+
+        public SavedState(RequestExternalPayment requestPayment,
+                          ProcessExternalPayment processPayment, int flags) {
+            super(requestPayment, processPayment, flags);
+        }
+
+        SavedState(RequestExternalPayment requestPayment, ProcessExternalPayment processPayment,
+                   State state) {
+            super(requestPayment, processPayment, state);
         }
     }
 }

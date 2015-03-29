@@ -3,10 +3,6 @@ package com.yandex.money.api.processes;
 import com.squareup.okhttp.Call;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
-import com.yandex.money.api.methods.ProcessExternalPayment;
-import com.yandex.money.api.methods.ProcessPayment;
-import com.yandex.money.api.methods.RequestExternalPayment;
-import com.yandex.money.api.methods.RequestPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
@@ -48,10 +44,10 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     @Override
-    public <T> Call proceed(OAuth2Session.OnResponseReady<T> callback) throws Exception {
+    public Call proceedAsync() throws Exception {
         switchContextIfRequired();
-        return paymentContext == PaymentContext.PAYMENT ? paymentProcess.proceed(callback) :
-                externalPaymentProcess.proceed(callback);
+        return paymentContext == PaymentContext.PAYMENT ? paymentProcess.proceedAsync() :
+                externalPaymentProcess.proceedAsync();
     }
 
     @Override
@@ -61,9 +57,9 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     @Override
-    public <T> Call repeat(OAuth2Session.OnResponseReady<T> callback) throws Exception {
-        return paymentContext == PaymentContext.PAYMENT ? paymentProcess.repeat(callback) :
-                externalPaymentProcess.repeat(callback);
+    public Call repeatAsync() throws Exception {
+        return paymentContext == PaymentContext.PAYMENT ? paymentProcess.repeatAsync() :
+                externalPaymentProcess.repeatAsync();
     }
 
     @Override
@@ -150,6 +146,16 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
         externalPaymentProcess.setRequestToken(requestToken);
     }
 
+    /**
+     * Sets callbacks for async operations of the process.
+     *
+     * @param callbacks callbacks
+     */
+    public void setCallbacks(Callbacks callbacks) {
+        paymentProcess.setCallbacks(callbacks.getPaymentCallbacks());
+        externalPaymentProcess.setCallbacks(callbacks.getExternalPaymentCallbacks());
+    }
+
     private void switchContextIfRequired() {
         if (getState() == BasePaymentProcess.State.STARTED && mutablePaymentContext) {
             MoneySource moneySource = parameterProvider.getMoneySource();
@@ -173,12 +179,29 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     /**
+     * Callbacks for the process.
+     */
+    public interface Callbacks {
+        /**
+         * @return payment process callbacks
+         * @see PaymentProcess.Callbacks
+         */
+        PaymentProcess.Callbacks getPaymentCallbacks();
+
+        /**
+         * @return external payment process callbacks
+         * @see ExternalPaymentProcess.Callbacks
+         */
+        ExternalPaymentProcess.Callbacks getExternalPaymentCallbacks();
+    }
+
+    /**
      * Saved state of extended payment process.
      */
     public static final class SavedState {
 
-        private final BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> paymentProcessSavedState;
-        private final BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> externalPaymentProcessSavedState;
+        private final PaymentProcess.SavedState paymentProcessSavedState;
+        private final ExternalPaymentProcess.SavedState externalPaymentProcessSavedState;
         private final PaymentContext paymentContext;
         private final boolean mutablePaymentContext;
 
@@ -189,16 +212,16 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
          * @param externalPaymentProcessSavedState {@link ExtendedPaymentProcess} saved state
          * @param flags flags
          */
-        public SavedState(BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> paymentProcessSavedState,
-                          BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> externalPaymentProcessSavedState,
+        public SavedState(PaymentProcess.SavedState paymentProcessSavedState,
+                          ExternalPaymentProcess.SavedState externalPaymentProcessSavedState,
                           int flags) {
 
             this(paymentProcessSavedState, externalPaymentProcessSavedState, parseContext(flags),
                     parseMutablePaymentContext(flags));
         }
 
-        private SavedState(BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> paymentProcessSavedState,
-                           BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> externalPaymentProcessSavedState,
+        private SavedState(PaymentProcess.SavedState paymentProcessSavedState,
+                           ExternalPaymentProcess.SavedState externalPaymentProcessSavedState,
                            PaymentContext paymentContext, boolean mutablePaymentContext) {
 
             this.paymentProcessSavedState = paymentProcessSavedState;
@@ -210,14 +233,14 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
         /**
          * @return {@link PaymentProcess} saved state
          */
-        public BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> getPaymentProcessSavedState() {
+        public PaymentProcess.SavedState getPaymentProcessSavedState() {
             return paymentProcessSavedState;
         }
 
         /**
          * @return {@link ExtendedPaymentProcess} saved state
          */
-        public BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> getExternalPaymentProcessSavedState() {
+        public ExternalPaymentProcess.SavedState getExternalPaymentProcessSavedState() {
             return externalPaymentProcessSavedState;
         }
 

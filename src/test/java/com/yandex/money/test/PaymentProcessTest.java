@@ -2,8 +2,6 @@ package com.yandex.money.test;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
-import com.yandex.money.api.methods.BaseProcessPayment;
-import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.methods.ProcessExternalPayment;
 import com.yandex.money.api.methods.ProcessPayment;
 import com.yandex.money.api.methods.RequestExternalPayment;
@@ -68,13 +66,17 @@ public class PaymentProcessTest {
     @Test
     public void testExternalPaymentProcess() throws Exception {
         enqueueExternalPaymentProcess();
-        checkPaymentProcess(new ExternalPaymentProcess(session, parameterProvider, "stub"));
+        ExternalPaymentProcess process = new ExternalPaymentProcess(session, parameterProvider);
+        process.setInstanceId("instanceId");
+        checkPaymentProcess(process);
     }
 
     @Test
     public void testAsyncExternalPaymentProcess() throws Exception {
         enqueueExternalPaymentProcess();
-        checkAsyncPaymentProcess(new ExternalPaymentProcess(session, parameterProvider, "stub"));
+        ExternalPaymentProcess process = new ExternalPaymentProcess(session, parameterProvider);
+        process.setInstanceId("instanceId");
+        checkAsyncPaymentProcess(process);
     }
 
     @Test
@@ -94,7 +96,7 @@ public class PaymentProcessTest {
     @Test
     public void testExternalPaymentProcessStateRestore() {
         ExternalPaymentProcess paymentProcess = new ExternalPaymentProcess(
-                session, parameterProvider, "");
+                session, parameterProvider);
 
         BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> savedState =
                 createExternalPaymentProcessSavedState();
@@ -108,8 +110,8 @@ public class PaymentProcessTest {
 
     @Test
     public void testExtendedPaymentProcessStateRestore() {
-        ExtendedPaymentProcess extendedPaymentProcess = new ExtendedPaymentProcess(session,
-                parameterProvider, "");
+        ExtendedPaymentProcess extendedPaymentProcess = new ExtendedPaymentProcess(
+                session, parameterProvider);
 
         ExtendedPaymentProcess.SavedState savedState = new ExtendedPaymentProcess.SavedState(
                 createPaymentProcessSavedState(), createExternalPaymentProcessSavedState(), 11);
@@ -145,36 +147,15 @@ public class PaymentProcessTest {
     private synchronized void checkAsyncPaymentProcess(BasePaymentProcess process)
             throws Exception {
 
-        final ThreadSync sync = new ThreadSync();
+        ThreadSync sync = new ThreadSync();
 
-        process.proceed(new OAuth2Session.OnResponseReady<BaseRequestPayment>() {
-            @Override
-            public void onFailure(Exception exception) {
-                Assert.assertTrue(false);
-                sync.doNotify();
-            }
+        //noinspection unchecked
+        process.setCallbacks(new Callbacks(sync));
 
-            @Override
-            public void onResponse(BaseRequestPayment response) {
-                Assert.assertTrue(true);
-                sync.doNotify();
-            }
-        });
+        process.proceedAsync();
         sync.doWait();
 
-        process.proceed(new OAuth2Session.OnResponseReady<BaseProcessPayment>() {
-            @Override
-            public void onFailure(Exception exception) {
-                Assert.assertTrue(false);
-                sync.doNotify();
-            }
-
-            @Override
-            public void onResponse(BaseProcessPayment response) {
-                Assert.assertTrue(true);
-                sync.doNotify();
-            }
-        });
+        process.proceedAsync();
         sync.doWait();
     }
 
@@ -212,22 +193,54 @@ public class PaymentProcessTest {
         };
     }
 
-    private BasePaymentProcess.SavedState<RequestPayment, ProcessPayment>
-            createPaymentProcessSavedState() {
-
-        return new BasePaymentProcess.SavedState<>(
+    private PaymentProcess.SavedState createPaymentProcessSavedState() {
+        return new PaymentProcess.SavedState(
                 new RequestPayment.Builder().createRequestPayment(),
                 new ProcessPayment.Builder().createProcessPayment(),
                 3
         );
     }
 
-    private BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment>
-            createExternalPaymentProcessSavedState() {
-
-        return new BasePaymentProcess.SavedState<>(
+    private ExternalPaymentProcess.SavedState createExternalPaymentProcessSavedState() {
+        return new ExternalPaymentProcess.SavedState(
                 new RequestExternalPayment(null, null, null, null, null),
                 new ProcessExternalPayment(null, null, null, new HashMap<String, String>(), null,
-                        null, null), 3);
+                        null, null),
+                3
+        );
+    }
+
+    private static final class Callbacks implements BasePaymentProcess.Callbacks {
+
+        private final ThreadSync sync;
+        private final OnResponseReady onResponseReady = new OnResponseReady();
+
+        public Callbacks(ThreadSync sync) {
+            this.sync = sync;
+        }
+
+        @Override
+        public OAuth2Session.OnResponseReady getOnRequestCallback() {
+            return onResponseReady;
+        }
+
+        @Override
+        public OAuth2Session.OnResponseReady getOnProcessCallback() {
+            return onResponseReady;
+        }
+
+        private final class OnResponseReady implements OAuth2Session.OnResponseReady {
+            @Override
+            public void onFailure(Exception exception) {
+                Assert.assertTrue(false);
+                sync.doWait();
+            }
+
+            @Override
+            public void onResponse(Object response) {
+                Assert.assertTrue(true);
+                sync.doNotify();
+            }
+        }
     }
 }

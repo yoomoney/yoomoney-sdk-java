@@ -23,6 +23,11 @@ public final class PaymentProcess extends BasePaymentProcess<RequestPayment, Pro
     }
 
     @Override
+    public SavedState getSavedState() {
+        return (SavedState) super.getSavedState();
+    }
+
+    @Override
     protected MethodRequest<RequestPayment> createRequestPayment() {
         return new RequestPayment.Request(parameterProvider.getPatternId(),
                 parameterProvider.getPaymentParameters());
@@ -38,5 +43,30 @@ public final class PaymentProcess extends BasePaymentProcess<RequestPayment, Pro
     @Override
     protected MethodRequest<ProcessPayment> createRepeatProcessPayment() {
         return new ProcessPayment.Request(getRequestPayment().requestId);
+    }
+
+    @Override
+    protected SavedState createSavedState(RequestPayment requestPayment,
+                                          ProcessPayment processPayment, State state) {
+        return new SavedState(requestPayment, processPayment, state);
+    }
+
+    /**
+     * @see BasePaymentProcess.Callbacks
+     */
+    public interface Callbacks
+            extends BasePaymentProcess.Callbacks<RequestPayment, ProcessPayment> {
+    }
+
+    public static final class SavedState
+            extends BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> {
+
+        public SavedState(RequestPayment requestPayment, ProcessPayment processPayment, int flags) {
+            super(requestPayment, processPayment, flags);
+        }
+
+        SavedState(RequestPayment requestPayment, ProcessPayment processPayment, State state) {
+            super(requestPayment, processPayment, state);
+        }
     }
 }
