@@ -11,7 +11,7 @@ import java.util.Map;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-interface IPaymentProcess extends Process {
+public interface IPaymentProcess extends Process {
 
     /**
      * Resets payment process to its initial state.

@@ -17,7 +17,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
 
     private final PaymentProcess paymentProcess;
     private final ExternalPaymentProcess externalPaymentProcess;
-    private final ParameterProvider parameterProvider;
+    private final ExternalPaymentProcess.ParameterProvider parameterProvider;
 
     private PaymentContext paymentContext;
     private boolean mutablePaymentContext = true;
@@ -28,7 +28,9 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      * @param session session to run the process on
      * @param parameterProvider parameter's provider
      */
-    public ExtendedPaymentProcess(OAuth2Session session, ParameterProvider parameterProvider) {
+    public ExtendedPaymentProcess(OAuth2Session session,
+                                  ExternalPaymentProcess.ParameterProvider parameterProvider) {
+
         this.paymentProcess = new PaymentProcess(session, parameterProvider);
         this.externalPaymentProcess = new ExternalPaymentProcess(session, parameterProvider);
         this.parameterProvider = parameterProvider;
@@ -137,13 +139,6 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      */
     public void setInstanceId(String instanceId) {
         externalPaymentProcess.setInstanceId(instanceId);
-    }
-
-    /**
-     * @see {@link ExternalPaymentProcess#setRequestToken(boolean)}
-     */
-    public void setRequestToken(boolean requestToken) {
-        externalPaymentProcess.setRequestToken(requestToken);
     }
 
     /**

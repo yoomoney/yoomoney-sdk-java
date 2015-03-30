@@ -71,15 +71,15 @@ public abstract class BaseProcessPayment implements MethodResponse {
         EXT_AUTH_REQUIRED(CODE_EXT_AUTH_REQUIRED),
         UNKNOWN(CODE_UNKNOWN);
 
-        private final String status;
+        public final String code;
 
-        Status(String status) {
-            this.status = status;
+        Status(String code) {
+            this.code = code;
         }
 
         public static Status parse(String status) {
             for (Status value : values()) {
-                if (value.status.equals(status)) {
+                if (value.code.equals(status)) {
                     return value;
                 }
             }

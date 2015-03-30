@@ -43,7 +43,7 @@ public class PaymentProcessTest {
             };
         }
     });
-    private final BasePaymentProcess.ParameterProvider parameterProvider =
+    private final ExternalPaymentProcess.ParameterProvider parameterProvider =
             createParameterProviderStub();
 
     @BeforeClass
@@ -159,8 +159,8 @@ public class PaymentProcessTest {
         sync.doWait();
     }
 
-    private BasePaymentProcess.ParameterProvider createParameterProviderStub() {
-        return new BasePaymentProcess.ParameterProvider() {
+    private ExternalPaymentProcess.ParameterProvider createParameterProviderStub() {
+        return new ExternalPaymentProcess.ParameterProvider() {
             @Override
             public String getPatternId() {
                 return "1234";
@@ -189,6 +189,11 @@ public class PaymentProcessTest {
             @Override
             public String getExtAuthFailUri() {
                 return "stub";
+            }
+
+            @Override
+            public boolean getRequestToken() {
+                return false;
             }
         };
     }

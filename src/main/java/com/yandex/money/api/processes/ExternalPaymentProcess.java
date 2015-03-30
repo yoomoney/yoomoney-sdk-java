@@ -14,11 +14,13 @@ import com.yandex.money.api.utils.Strings;
 public final class ExternalPaymentProcess
         extends BasePaymentProcess<RequestExternalPayment, ProcessExternalPayment> {
 
+    private final ParameterProvider parameterProvider;
+
     private String instanceId;
-    private boolean requestToken;
 
     public ExternalPaymentProcess(OAuth2Session session, ParameterProvider parameterProvider) {
         super(session, parameterProvider);
+        this.parameterProvider = parameterProvider;
     }
 
     @Override
@@ -31,13 +33,6 @@ public final class ExternalPaymentProcess
      */
     public void setInstanceId(String instanceId) {
         this.instanceId = instanceId;
-    }
-
-    /**
-     * @param requestToken {@code true} if money source token is required
-     */
-    public void setRequestToken(boolean requestToken) {
-        this.requestToken = requestToken;
     }
 
     @Override
@@ -71,11 +66,19 @@ public final class ExternalPaymentProcess
         if (moneySource == null || !(moneySource instanceof ExternalCard) ||
                 Strings.isNullOrEmpty(csc)) {
             return new ProcessExternalPayment.Request(instanceId, requestId, extAuthSuccessUri,
-                    extAuthFailUri, requestToken);
+                    extAuthFailUri, parameterProvider.getRequestToken());
         } else {
             return new ProcessExternalPayment.Request(instanceId, requestId, extAuthSuccessUri,
                     extAuthFailUri, (ExternalCard) moneySource, csc);
         }
+    }
+
+    /**
+     * Extends {@link BasePaymentProcess.ParameterProvider} interface providing additional
+     * parameters for 
+     */
+    public interface ParameterProvider extends BasePaymentProcess.ParameterProvider {
+        boolean getRequestToken();
     }
 
     /**
