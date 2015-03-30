@@ -192,7 +192,7 @@ public class PaymentProcessTest {
             }
 
             @Override
-            public boolean getRequestToken() {
+            public boolean isRequestToken() {
                 return false;
             }
         };

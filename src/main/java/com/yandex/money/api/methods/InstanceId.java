@@ -74,7 +74,7 @@ public class InstanceId implements MethodResponse {
          */
         UNKNOWN(CODE_UNKNOWN);
 
-        private final String code;
+        public final String code;
 
         Status(String code) {
             this.code = code;

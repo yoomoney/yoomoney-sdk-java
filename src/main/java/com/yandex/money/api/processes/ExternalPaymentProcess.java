@@ -66,7 +66,7 @@ public final class ExternalPaymentProcess
         if (moneySource == null || !(moneySource instanceof ExternalCard) ||
                 Strings.isNullOrEmpty(csc)) {
             return new ProcessExternalPayment.Request(instanceId, requestId, extAuthSuccessUri,
-                    extAuthFailUri, parameterProvider.getRequestToken());
+                    extAuthFailUri, parameterProvider.isRequestToken());
         } else {
             return new ProcessExternalPayment.Request(instanceId, requestId, extAuthSuccessUri,
                     extAuthFailUri, (ExternalCard) moneySource, csc);
@@ -75,10 +75,13 @@ public final class ExternalPaymentProcess
 
     /**
      * Extends {@link BasePaymentProcess.ParameterProvider} interface providing additional
-     * parameters for 
+     * parameters for
      */
     public interface ParameterProvider extends BasePaymentProcess.ParameterProvider {
-        boolean getRequestToken();
+        /**
+         * @return {@code true} if should request token for money source
+         */
+        boolean isRequestToken();
     }
 
     /**
