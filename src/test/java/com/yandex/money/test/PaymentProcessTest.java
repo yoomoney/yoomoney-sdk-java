@@ -225,16 +225,16 @@ public class PaymentProcessTest {
         }
 
         @Override
-        public OAuth2Session.OnResponseReady getOnRequestCallback() {
+        public com.yandex.money.api.net.OnResponseReady getOnRequestCallback() {
             return onResponseReady;
         }
 
         @Override
-        public OAuth2Session.OnResponseReady getOnProcessCallback() {
+        public com.yandex.money.api.net.OnResponseReady getOnProcessCallback() {
             return onResponseReady;
         }
 
-        private final class OnResponseReady implements OAuth2Session.OnResponseReady {
+        private final class OnResponseReady implements com.yandex.money.api.net.OnResponseReady {
             @Override
             public void onFailure(Exception exception) {
                 Assert.assertTrue(false);

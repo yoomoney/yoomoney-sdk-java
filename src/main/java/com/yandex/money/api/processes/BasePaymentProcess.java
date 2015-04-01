@@ -5,6 +5,7 @@ import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.OAuth2Session;
+import com.yandex.money.api.net.OnResponseReady;
 import com.yandex.money.api.utils.MillisecondsIn;
 import com.yandex.money.api.utils.Threads;
 
@@ -237,10 +238,10 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         }
     }
 
-    private Call enqueueRequestPayment(final OAuth2Session.OnResponseReady<RP> callback)
+    private Call enqueueRequestPayment(final OnResponseReady<RP> callback)
             throws IOException {
 
-        return enqueue(createRequestPayment(), new OAuth2Session.OnResponseReady<RP>() {
+        return enqueue(createRequestPayment(), new OnResponseReady<RP>() {
             @Override
             public void onFailure(Exception exception) {
                 callback.onFailure(exception);
@@ -255,21 +256,21 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         });
     }
 
-    private Call enqueueProcessPayment(OAuth2Session.OnResponseReady<PP> callback)
+    private Call enqueueProcessPayment(OnResponseReady<PP> callback)
             throws IOException {
         return enqueueProcessPayment(createProcessPayment(), callback);
     }
 
-    private Call enqueueRepeatProcessPayment(OAuth2Session.OnResponseReady<PP> callback)
+    private Call enqueueRepeatProcessPayment(OnResponseReady<PP> callback)
             throws IOException {
         return enqueueProcessPayment(createRepeatProcessPayment(), callback);
     }
 
     private Call enqueueProcessPayment(final MethodRequest<PP> request,
-                                       final OAuth2Session.OnResponseReady<PP> callback)
+                                       final OnResponseReady<PP> callback)
             throws IOException {
 
-        return enqueue(request, new OAuth2Session.OnResponseReady<PP>() {
+        return enqueue(request, new OnResponseReady<PP>() {
             @Override
             public void onFailure(Exception exception) {
                 callback.onFailure(exception);
@@ -299,7 +300,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     }
 
     private <T> Call enqueue(MethodRequest<T> methodRequest,
-                             OAuth2Session.OnResponseReady<T> callback) throws IOException {
+                             OnResponseReady<T> callback) throws IOException {
         return session.enqueue(methodRequest, callback);
     }
 
@@ -339,8 +340,8 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     }
 
     public interface Callbacks<RP extends BaseRequestPayment, PP extends BaseProcessPayment> {
-        OAuth2Session.OnResponseReady<RP> getOnRequestCallback();
-        OAuth2Session.OnResponseReady<PP> getOnProcessCallback();
+        OnResponseReady<RP> getOnRequestCallback();
+        OnResponseReady<PP> getOnProcessCallback();
     }
 
     /**

@@ -18,6 +18,7 @@ import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.OAuth2Session;
+import com.yandex.money.api.net.OnResponseReady;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
@@ -132,7 +133,7 @@ public class OAuth2SessionTest {
         final ThreadSync sync = new ThreadSync();
 
         server.enqueue(response);
-        session.enqueue(request, new OAuth2Session.OnResponseReady<Mock>() {
+        session.enqueue(request, new OnResponseReady<Mock>() {
             @Override
             public void onFailure(Exception exception) {
                 Assert.assertNotNull(exception);
