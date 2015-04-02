@@ -103,7 +103,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
             if (p2pParams == null)
                 throw new IllegalArgumentException("p2pParams is null or empty");
 
-            return new Request(instanceId, P2pParams.PATTERN_ID, p2pParams.makeParams());
+            return new Request(instanceId, p2pParams.getPatternId(), p2pParams.makeParams());
         }
 
         /**
@@ -117,7 +117,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
             if (phoneParams == null)
                 throw new IllegalArgumentException("phoneParams is null or empty");
 
-            return new Request(instanceId, PhoneParams.PATTERN_ID, phoneParams.makeParams());
+            return new Request(instanceId, phoneParams.getPatternId(), phoneParams.makeParams());
         }
 
         @Override

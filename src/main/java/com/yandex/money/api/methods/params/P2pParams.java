@@ -53,6 +53,11 @@ public class P2pParams implements Params {
     }
 
     @Override
+    public String getPatternId() {
+        return PATTERN_ID;
+    }
+
+    @Override
     public Map<String, String> makeParams() {
         Map<String, String> result = new HashMap<String, String>();
         result.put(PARAM_TO, to);

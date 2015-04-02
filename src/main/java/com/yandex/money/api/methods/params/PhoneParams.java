@@ -37,6 +37,10 @@ public class PhoneParams implements Params {
         this.amount = amount;
     }
 
+    @Override
+    public String getPatternId() {
+        return PATTERN_ID;
+    }
 
     @Override
     public Map<String, String> makeParams() {
