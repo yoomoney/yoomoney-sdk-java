@@ -63,7 +63,7 @@ import java.util.Map;
 public class RequestPayment extends BaseRequestPayment {
 
     public final List<MoneySource> moneySources;
-    public final Boolean cscRequired;
+    public final boolean cscRequired;
     public final BigDecimal balance;
     public final AccountStatus recipientAccountStatus;
     public final AccountType recipientAccountType;
@@ -85,7 +85,7 @@ public class RequestPayment extends BaseRequestPayment {
             throw new NullPointerException("moneySources is null");
         }
         this.moneySources = Collections.unmodifiableList(moneySources);
-        this.cscRequired = cscRequired;
+        this.cscRequired = cscRequired != null && cscRequired;
         this.balance = balance;
         this.recipientAccountStatus = recipientAccountStatus;
         this.recipientAccountType = recipientAccountType;
