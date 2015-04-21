@@ -48,7 +48,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
     public final String invoiceId;
     public final String acsUri;
     public final Map<String, String> acsParams;
-    public final Long nextRetry;
+    public final Long nextRetry; // TODO make it long
 
     /**
      * Constructor.

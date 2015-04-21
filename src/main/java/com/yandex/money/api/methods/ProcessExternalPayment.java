@@ -53,8 +53,21 @@ import java.util.Map;
  */
 public class ProcessExternalPayment extends BaseProcessPayment {
 
-    public final ExternalCard moneySource;
-    public final String invoiceId;
+    public final ExternalCard moneySource; // TODO rename it to externalCard
+
+    /**
+     * Constructor.
+     *
+     * @param moneySource money source info if asked for a money source token
+     *
+     * @see com.yandex.money.api.methods.BaseProcessPayment
+     */
+    public ProcessExternalPayment(Status status, Error error, String invoiceId, String acsUri,
+                                  Map<String, String> acsParams, Long nextRetry,
+                                  ExternalCard moneySource) {
+        super(status, error, invoiceId, acsUri, acsParams, nextRetry);
+        this.moneySource = moneySource;
+    }
 
     /**
      * Constructor.
@@ -64,13 +77,11 @@ public class ProcessExternalPayment extends BaseProcessPayment {
      *
      * @see com.yandex.money.api.methods.BaseProcessPayment
      */
+    @Deprecated
     public ProcessExternalPayment(Status status, Error error, String acsUri,
                                   Map<String, String> acsParams, ExternalCard moneySource,
                                   Long nextRetry, String invoiceId) {
-
-        super(status, error, invoiceId, acsUri, acsParams, nextRetry);
-        this.moneySource = moneySource;
-        this.invoiceId = invoiceId;
+        this(status, error, invoiceId, acsUri, acsParams, nextRetry, moneySource);
     }
 
     @Override
@@ -178,11 +189,11 @@ public class ProcessExternalPayment extends BaseProcessPayment {
                     return new ProcessExternalPayment(
                             Status.parse(JsonUtils.getString(o, MEMBER_STATUS)),
                             Error.parse(JsonUtils.getString(o, MEMBER_ERROR)),
+                            JsonUtils.getString(o, "invoice_id"),
                             JsonUtils.getString(o, MEMBER_ACS_URI),
                             acsParams,
-                            moneySource,
                             JsonUtils.getLong(o, MEMBER_NEXT_RETRY),
-                            JsonUtils.getString(o, "invoice_id")
+                            moneySource
                     );
                 }
             }).create().fromJson(new InputStreamReader(inputStream), ProcessExternalPayment.class);
