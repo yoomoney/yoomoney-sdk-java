@@ -39,6 +39,7 @@ import com.yandex.money.api.net.OAuth2Session;
  */
 public final class ExtendedPaymentProcess implements IPaymentProcess {
 
+    private final OAuth2Session session;
     private final PaymentProcess paymentProcess;
     private final ExternalPaymentProcess externalPaymentProcess;
     private final ExternalPaymentProcess.ParameterProvider parameterProvider;
@@ -55,11 +56,14 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     public ExtendedPaymentProcess(OAuth2Session session,
                                   ExternalPaymentProcess.ParameterProvider parameterProvider) {
 
+        if (session == null) {
+            throw new NullPointerException("session is null");
+        }
+        this.session = session;
         this.paymentProcess = new PaymentProcess(session, parameterProvider);
         this.externalPaymentProcess = new ExternalPaymentProcess(session, parameterProvider);
         this.parameterProvider = parameterProvider;
-        this.paymentContext = session.isAuthorized() ? PaymentContext.PAYMENT :
-                PaymentContext.EXTERNAL_PAYMENT;
+        invalidatePaymentContext();
     }
 
     @Override
@@ -154,8 +158,8 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      * @see {@link BasePaymentProcess#setAccessToken(String)}
      */
     public void setAccessToken(String accessToken) {
-        paymentProcess.setAccessToken(accessToken);
-        externalPaymentProcess.setAccessToken(accessToken);
+        session.setAccessToken(accessToken);
+        invalidatePaymentContext();
     }
 
     /**
@@ -173,6 +177,11 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     public void setCallbacks(Callbacks callbacks) {
         paymentProcess.setCallbacks(callbacks.getPaymentCallbacks());
         externalPaymentProcess.setCallbacks(callbacks.getExternalPaymentCallbacks());
+    }
+
+    private void invalidatePaymentContext() {
+        this.paymentContext = session.isAuthorized() ? PaymentContext.PAYMENT :
+                PaymentContext.EXTERNAL_PAYMENT;
     }
 
     private void switchContextIfRequired() {
