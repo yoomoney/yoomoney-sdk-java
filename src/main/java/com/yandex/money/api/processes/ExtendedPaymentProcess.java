@@ -96,6 +96,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     public void reset() {
         paymentProcess.reset();
         externalPaymentProcess.reset();
+        invalidatePaymentContext();
     }
 
     @Override
