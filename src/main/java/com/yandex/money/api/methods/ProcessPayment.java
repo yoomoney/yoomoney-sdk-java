@@ -34,8 +34,8 @@ import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.DigitalGoods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 
 import java.io.IOException;
@@ -111,7 +111,7 @@ public class ProcessPayment extends BaseProcessPayment {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request implements MethodRequest<ProcessPayment> {
+    public static final class Request implements ApiRequest<ProcessPayment> {
 
         private final String requestId;
         private final MoneySource moneySource;

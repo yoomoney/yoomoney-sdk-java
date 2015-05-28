@@ -37,9 +37,9 @@ import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.methods.JsonUtils;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.DefaultApiClient;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.OAuth2Session;
 import com.yandex.money.api.net.OnResponseReady;
@@ -186,7 +186,7 @@ public class OAuth2SessionTest {
             this.code = code;
         }
 
-        public static final class Request implements MethodRequest<Mock> {
+        public static final class Request implements ApiRequest<Mock> {
 
             private final URL url;
             private final String param;

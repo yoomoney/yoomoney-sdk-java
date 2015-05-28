@@ -33,8 +33,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 
@@ -98,7 +98,7 @@ public class OperationHistory implements MethodResponse {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static class Request implements MethodRequest<OperationHistory> {
+    public static class Request implements ApiRequest<OperationHistory> {
 
         private final Set<FilterType> types;
         private final String label;

@@ -32,8 +32,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 
@@ -123,7 +123,7 @@ public class IncomingTransferAccept implements MethodResponse {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request implements MethodRequest<IncomingTransferAccept> {
+    public static final class Request implements ApiRequest<IncomingTransferAccept> {
 
         private final String operationId;
         private final String protectionCode;

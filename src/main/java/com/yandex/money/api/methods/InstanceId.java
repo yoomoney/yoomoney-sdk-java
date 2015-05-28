@@ -31,8 +31,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 import com.yandex.money.api.utils.Strings;
@@ -117,7 +117,7 @@ public class InstanceId implements MethodResponse {
     /**
      * Request for a new instance id.
      */
-    public static class Request implements MethodRequest<InstanceId> {
+    public static class Request implements ApiRequest<InstanceId> {
 
         private String clientId;
 

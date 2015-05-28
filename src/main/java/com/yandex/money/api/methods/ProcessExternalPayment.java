@@ -32,8 +32,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.ExternalCard;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 import com.yandex.money.api.utils.Strings;
 
@@ -95,7 +95,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
     /**
      * Request for processing external payment.
      */
-    public static class Request implements MethodRequest<ProcessExternalPayment> {
+    public static class Request implements ApiRequest<ProcessExternalPayment> {
 
         private final String instanceId;
         private final String requestId;

@@ -33,8 +33,8 @@ import com.google.gson.JsonParseException;
 import com.yandex.money.api.methods.params.P2pParams;
 import com.yandex.money.api.methods.params.PhoneParams;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 import com.yandex.money.api.utils.Strings;
 
@@ -78,7 +78,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
     /**
      * Requests context of external payment.
      */
-    public static class Request implements MethodRequest<RequestExternalPayment> {
+    public static class Request implements ApiRequest<RequestExternalPayment> {
 
         private final String instanceId;
         private final String patternId;

@@ -38,8 +38,8 @@ import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 import com.yandex.money.api.utils.Strings;
 
@@ -115,7 +115,7 @@ public class RequestPayment extends BaseRequestPayment {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request implements MethodRequest<RequestPayment> {
+    public static final class Request implements ApiRequest<RequestPayment> {
 
         private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT = new BigDecimal(0.02);
         private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT_DUE = new BigDecimal(0.01);

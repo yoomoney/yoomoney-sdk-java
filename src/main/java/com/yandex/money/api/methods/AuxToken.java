@@ -33,8 +33,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Scope;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 
@@ -84,7 +84,7 @@ public class AuxToken implements MethodResponse {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request implements MethodRequest<AuxToken> {
+    public static final class Request implements ApiRequest<AuxToken> {
 
         private final Set<Scope> scopes;
 

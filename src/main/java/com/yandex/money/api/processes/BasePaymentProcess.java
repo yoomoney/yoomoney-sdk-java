@@ -27,7 +27,7 @@ package com.yandex.money.api.processes;
 import com.squareup.okhttp.Call;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
-import com.yandex.money.api.net.MethodRequest;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.OAuth2Session;
 import com.yandex.money.api.net.OnResponseReady;
 import com.yandex.money.api.utils.MillisecondsIn;
@@ -207,21 +207,21 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      *
      * @return method request
      */
-    protected abstract MethodRequest<RP> createRequestPayment();
+    protected abstract ApiRequest<RP> createRequestPayment();
 
     /**
      * Creates process payment method.
      *
      * @return method request
      */
-    protected abstract MethodRequest<PP> createProcessPayment();
+    protected abstract ApiRequest<PP> createProcessPayment();
 
     /**
      * Creates repeat process payment method.
      *
      * @return method request
      */
-    protected abstract MethodRequest<PP> createRepeatProcessPayment();
+    protected abstract ApiRequest<PP> createRepeatProcessPayment();
 
     protected abstract SavedState<RP, PP> createSavedState(RP requestPayment, PP processPayment, State state);
 
@@ -238,7 +238,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         executeProcessPayment(createRepeatProcessPayment());
     }
 
-    private void executeProcessPayment(final MethodRequest<PP> request) throws Exception {
+    private void executeProcessPayment(final ApiRequest<PP> request) throws Exception {
         processPayment(new ProcessPaymentResolver<PP>() {
             @Override
             public PP getProcessPayment() throws Exception {
@@ -252,8 +252,8 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         });
     }
 
-    private <T> T execute(MethodRequest<T> methodRequest) throws Exception {
-        return session.execute(methodRequest);
+    private <T> T execute(ApiRequest<T> apiRequest) throws Exception {
+        return session.execute(apiRequest);
     }
 
     private void checkCallbacks() {
@@ -290,7 +290,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         return enqueueProcessPayment(createRepeatProcessPayment(), callback);
     }
 
-    private Call enqueueProcessPayment(final MethodRequest<PP> request,
+    private Call enqueueProcessPayment(final ApiRequest<PP> request,
                                        final OnResponseReady<PP> callback)
             throws IOException {
 
@@ -323,9 +323,9 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         });
     }
 
-    private <T> Call enqueue(MethodRequest<T> methodRequest,
+    private <T> Call enqueue(ApiRequest<T> apiRequest,
                              OnResponseReady<T> callback) throws IOException {
-        return session.enqueue(methodRequest, callback);
+        return session.enqueue(apiRequest, callback);
     }
 
     /**

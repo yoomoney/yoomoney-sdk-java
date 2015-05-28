@@ -74,9 +74,9 @@ public class OAuth2Session extends AbstractSession {
      * @throws InvalidRequestException if server responded with 404 code
      * @throws InvalidTokenException if server responded with 401 code
      * @throws InsufficientScopeException if server responded with 403 code
-     * @see #enqueue(MethodRequest, OnResponseReady)
+     * @see #enqueue(ApiRequest, OnResponseReady)
      */
-    public <T> T execute(MethodRequest<T> request) throws IOException, InvalidRequestException,
+    public <T> T execute(ApiRequest<T> request) throws IOException, InvalidRequestException,
             InvalidTokenException, InsufficientScopeException {
         return parseResponse(request, prepareCall(request).execute());
     }
@@ -90,7 +90,7 @@ public class OAuth2Session extends AbstractSession {
      * @return a {@link Call} object that can be canceled
      * @throws IOException if something went wrong during IO operations
      */
-    public <T> Call enqueue(final MethodRequest<T> request, final OnResponseReady<T> callback)
+    public <T> Call enqueue(final ApiRequest<T> request, final OnResponseReady<T> callback)
             throws IOException {
 
         Call call = prepareCall(request);
@@ -141,7 +141,7 @@ public class OAuth2Session extends AbstractSession {
         return new OAuth2Authorization(client);
     }
 
-    private <T> Call prepareCall(MethodRequest<T> request) throws IOException {
+    private <T> Call prepareCall(ApiRequest<T> request) throws IOException {
         if (request == null) {
             throw new NullPointerException("request is null");
         }
@@ -161,7 +161,7 @@ public class OAuth2Session extends AbstractSession {
                 .newCall(builder.post(requestBody).build());
     }
 
-    private <T> T parseResponse(MethodRequest<T> request, Response response) throws IOException,
+    private <T> T parseResponse(ApiRequest<T> request, Response response) throws IOException,
             InvalidRequestException, InvalidTokenException, InsufficientScopeException {
 
         InputStream inputStream = null;

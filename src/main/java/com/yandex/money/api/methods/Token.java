@@ -32,8 +32,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 import com.yandex.money.api.utils.Strings;
@@ -77,7 +77,7 @@ public class Token implements MethodResponse {
     /**
      * Request for access token.
      */
-    public static class Request implements MethodRequest<Token> {
+    public static class Request implements ApiRequest<Token> {
 
         protected final String code;
         protected final String clientId;
@@ -152,7 +152,7 @@ public class Token implements MethodResponse {
     /**
      * Revokes access token.
      */
-    public static final class Revoke implements MethodRequest<Object> {
+    public static final class Revoke implements ApiRequest<Object> {
 
         private final boolean revokeAll;
 

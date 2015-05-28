@@ -37,8 +37,8 @@ import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Avatar;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequestBodyBuffer;
 import com.yandex.money.api.utils.Currency;
@@ -142,7 +142,7 @@ public class AccountInfo implements MethodResponse {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request implements MethodRequest<AccountInfo> {
+    public static final class Request implements ApiRequest<AccountInfo> {
 
         @Override
         public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {

@@ -34,7 +34,7 @@ import java.net.URL;
  *
  * @param <T> response
  */
-public interface MethodRequest<T> {
+public interface ApiRequest<T> {
 
     /**
      * Builds URL with using specified hosts provider
