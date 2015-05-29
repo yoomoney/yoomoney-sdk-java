@@ -22,15 +22,30 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.test;
+package com.yandex.money.test.properties;
 
-import com.yandex.money.test.properties.LocalProperties;
+import java.util.Properties;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public interface ApiTest {
-    LocalProperties LOCAL_PROPERTIES = new LocalProperties();
-    String CLIENT_ID = LOCAL_PROPERTIES.getClientId();
-    String ACCESS_TOKEN = LOCAL_PROPERTIES.getAccessToken();
+public abstract class BaseProperties {
+
+    private final Properties properties = new Properties();
+
+    public BaseProperties(String resource) {
+        if (resource == null || resource.isEmpty()) {
+            throw new NullPointerException("resource is null or empty");
+        }
+
+        try {
+            properties.load(BaseProperties.class.getResourceAsStream(resource));
+        } catch (Exception e) {
+            throw new RuntimeException("properties not found", e);
+        }
+    }
+
+    protected final String get(String propertyName) {
+        return properties.getProperty(propertyName, "");
+    }
 }

@@ -24,26 +24,45 @@
 
 package com.yandex.money.api.net;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.Map;
 
 /**
- * API methods implement this interface.
+ * API requests implement this interface. Consider to use {@link BaseApiRequest} as your base class.
  *
  * @param <T> response
+ * @see BaseApiRequest
  */
 public interface ApiRequest<T> {
 
     /**
-     * Builds URL with using specified hosts provider
+     * Gets method for a request.
+     *
+     * @return method
+     */
+    Method getMethod();
+
+    /**
+     * Builds URL with using specified hosts provider.
      *
      * @param hostsProvider hosts provider
      * @return complete URL
-     * @throws MalformedURLException if URL is malformed
      */
-    URL requestURL(HostsProvider hostsProvider) throws MalformedURLException;
+    String requestUrl(HostsProvider hostsProvider);
+
+    /**
+     * Gets headers for a request. Can not be null.
+     *
+     * @return headers for a request
+     */
+    Map<String, String> getHeaders();
+
+    /**
+     * Gets post parameters to use when posting a request. Can not be null.
+     *
+     * @return parameters for a request
+     */
+    Map<String, String> getParameters();
 
     /**
      * Parses API response from stream.
@@ -54,9 +73,10 @@ public interface ApiRequest<T> {
     T parseResponse(InputStream inputStream);
 
     /**
-     * Builds post parameters to use when posting a request. Can be null.
-     *
-     * @return buffer of parameters
+     * Methods enum.
      */
-    PostRequestBodyBuffer buildParameters() throws IOException;
+    enum Method {
+        GET,
+        POST
+    }
 }

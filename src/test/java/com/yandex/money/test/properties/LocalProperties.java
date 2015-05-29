@@ -22,15 +22,22 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.test;
-
-import com.yandex.money.test.properties.LocalProperties;
+package com.yandex.money.test.properties;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public interface ApiTest {
-    LocalProperties LOCAL_PROPERTIES = new LocalProperties();
-    String CLIENT_ID = LOCAL_PROPERTIES.getClientId();
-    String ACCESS_TOKEN = LOCAL_PROPERTIES.getAccessToken();
+public final class LocalProperties extends BaseProperties {
+
+    public LocalProperties() {
+        super("/local.properties");
+    }
+
+    public String getClientId() {
+        return get("client.id");
+    }
+
+    public String getAccessToken() {
+        return get("access.token");
+    }
 }

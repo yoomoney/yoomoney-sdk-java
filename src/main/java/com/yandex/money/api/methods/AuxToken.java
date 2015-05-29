@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -33,17 +31,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Scope;
-import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Set;
 
 /**
@@ -84,37 +76,19 @@ public class AuxToken implements MethodResponse {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request implements ApiRequest<AuxToken> {
-
-        private final Set<Scope> scopes;
+    public static final class Request extends PostRequest<AuxToken> {
 
         public Request(Set<Scope> scopes) {
+            super(AuxToken.class, new Deserializer());
             if (scopes == null || scopes.isEmpty()) {
                 throw new IllegalArgumentException("scopes is null or empty");
             }
-            this.scopes = scopes;
+            addParameter("scope", Scope.createScopeParameter(scopes.iterator()));
         }
 
         @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/token-aux");
-        }
-
-        @Override
-        public AuxToken parseResponse(InputStream inputStream) {
-            return buildGson().fromJson(new InputStreamReader(inputStream), AuxToken.class);
-        }
-
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            return new PostRequestBodyBuffer()
-                    .addParam("scope", Scope.createScopeParameter(scopes.iterator()));
-        }
-
-        private static Gson buildGson() {
-            return new GsonBuilder()
-                    .registerTypeAdapter(AuxToken.class, new Deserializer())
-                    .create();
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getMoneyApi() + "/token-aux";
         }
     }
 

@@ -24,25 +24,17 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Incoming transfer accept result.
@@ -123,10 +115,7 @@ public class IncomingTransferAccept implements MethodResponse {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request implements ApiRequest<IncomingTransferAccept> {
-
-        private final String operationId;
-        private final String protectionCode;
+    public static final class Request extends PostRequest<IncomingTransferAccept> {
 
         /**
          * Constructor.
@@ -135,35 +124,17 @@ public class IncomingTransferAccept implements MethodResponse {
          * @param protectionCode protection code if transfer is protected
          */
         public Request(String operationId, String protectionCode) {
+            super(IncomingTransferAccept.class, new Deserializer());
             if (operationId == null || operationId.isEmpty()) {
                 throw new IllegalArgumentException("operationId is null or empty");
             }
-            this.operationId = operationId;
-            this.protectionCode = protectionCode;
+            addParameter("operation_id", operationId);
+            addParameter("protection_code", protectionCode);
         }
 
         @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/incoming-transfer-accept");
-        }
-
-        @Override
-        public IncomingTransferAccept parseResponse(InputStream inputStream) {
-            return buildGson().fromJson(new InputStreamReader(inputStream),
-                    IncomingTransferAccept.class);
-        }
-
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            return new PostRequestBodyBuffer()
-                    .addParam("operation_id", operationId)
-                    .addParamIfNotNull("protection_code", protectionCode);
-        }
-
-        private static Gson buildGson() {
-            return new GsonBuilder()
-                    .registerTypeAdapter(IncomingTransferAccept.class, new Deserializer())
-                    .create();
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getMoneyApi() + "/incoming-transfer-accept";
         }
     }
 

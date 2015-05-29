@@ -32,3 +32,5 @@ publish {
     issueTracker = "${website}/issues"
     repository = "${website}.git"
 }
+
+test.useTestNG()

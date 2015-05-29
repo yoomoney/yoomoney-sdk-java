@@ -24,25 +24,18 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.utils.Strings;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Instance ID result.
@@ -117,9 +110,7 @@ public class InstanceId implements MethodResponse {
     /**
      * Request for a new instance id.
      */
-    public static class Request implements ApiRequest<InstanceId> {
-
-        private String clientId;
+    public static class Request extends PostRequest<InstanceId> {
 
         /**
          * Construct request using provided client ID.
@@ -127,33 +118,31 @@ public class InstanceId implements MethodResponse {
          * @param clientId client id of the application
          */
         public Request(String clientId) {
-            if (Strings.isNullOrEmpty(clientId))
+            super(InstanceId.class, new Deserializer());
+            if (Strings.isNullOrEmpty(clientId)) {
                 throw new IllegalArgumentException("clientId is null or empty");
-            this.clientId = clientId;
+            }
+            addParameter("client_id", clientId);
         }
 
         @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/instance-id");
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getMoneyApi() + "/instance-id";
         }
+    }
+
+    private static final class Deserializer implements JsonDeserializer<InstanceId> {
 
         @Override
-        public InstanceId parseResponse(InputStream inputStream) {
-            return new GsonBuilder().registerTypeAdapter(InstanceId.class, new JsonDeserializer<InstanceId>() {
-                @Override
-                public InstanceId deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    JsonObject o = json.getAsJsonObject();
-                    return new InstanceId(
-                            Status.parse(JsonUtils.getString(o, "status")),
-                            Error.parse(JsonUtils.getString(o, "error")),
-                            JsonUtils.getString(o, "instance_id"));
-                }
-            }).create().fromJson(new InputStreamReader(inputStream), InstanceId.class);
-        }
+        public InstanceId deserialize(JsonElement json, Type typeOfT,
+                                      JsonDeserializationContext context)
+                throws JsonParseException {
 
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            return new PostRequestBodyBuffer().addParam("client_id", clientId);
+            JsonObject o = json.getAsJsonObject();
+            return new InstanceId(
+                    Status.parse(JsonUtils.getString(o, "status")),
+                    Error.parse(JsonUtils.getString(o, "error")),
+                    JsonUtils.getString(o, "instance_id"));
         }
     }
 }

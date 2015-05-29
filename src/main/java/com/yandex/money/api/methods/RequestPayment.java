@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -38,18 +36,12 @@ import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
-import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.utils.Strings;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -115,26 +107,10 @@ public class RequestPayment extends BaseRequestPayment {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request implements ApiRequest<RequestPayment> {
+    public static final class Request extends PostRequest<RequestPayment> {
 
         private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT = new BigDecimal(0.02);
         private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT_DUE = new BigDecimal(0.01);
-
-        private final String patternId;
-        private final String to;
-        private final BigDecimal amount;
-        private final BigDecimal amountDue;
-        private final String comment;
-        private final String message;
-        private final String label;
-        private final Boolean codepro;
-        private final Integer expirePeriod;
-        private final Map<String, String> paymentParameters;
-        private final String phoneNumber;
-
-        private boolean testPayment;
-        private boolean testCardAvailable;
-        private TestResult testResult;
 
         /**
          * Requests for context of payment to a specific shop.
@@ -143,21 +119,14 @@ public class RequestPayment extends BaseRequestPayment {
          * @param paymentParameters payment parameters
          */
         public Request(String patternId, Map<String, String> paymentParameters) {
+            super(RequestPayment.class, new Deserializer());
             checkNotNullAndNotEmpty(patternId, "patternId");
             if (paymentParameters == null) {
                 throw new NullPointerException("paymentParameters is null");
             }
-            this.patternId = patternId;
-            this.paymentParameters = paymentParameters;
-            this.to = null;
-            this.amount = null;
-            this.amountDue = null;
-            this.comment = null;
-            this.message = null;
-            this.label = null;
-            this.codepro = null;
-            this.expirePeriod = null;
-            this.phoneNumber = null;
+
+            addParameter("pattern_id", patternId);
+            addParameters(paymentParameters);
         }
 
         /**
@@ -167,9 +136,8 @@ public class RequestPayment extends BaseRequestPayment {
          * @param amount amount
          */
         public Request(String phoneNumber, BigDecimal amount) {
-            this.patternId = "phone-topup";
+            super(RequestPayment.class, new Deserializer());
             checkNotNullAndNotEmpty(phoneNumber, "phoneNumber");
-            this.phoneNumber = phoneNumber;
             if (amount == null) {
                 throw new NullPointerException("amount is null");
             }
@@ -177,15 +145,10 @@ public class RequestPayment extends BaseRequestPayment {
                 throw new IllegalArgumentException("amount has illegal value " +
                         amount.toPlainString());
             }
-            this.amount = amount;
-            this.to = null;
-            this.amountDue = null;
-            this.comment = null;
-            this.message = null;
-            this.label = null;
-            this.codepro = null;
-            this.expirePeriod = null;
-            this.paymentParameters = null;
+
+            addParameter("pattern_id", "phone-topup");
+            addParameter("phone-number", phoneNumber);
+            addParameter("amount", amount);
         }
 
         /**
@@ -203,9 +166,8 @@ public class RequestPayment extends BaseRequestPayment {
         private Request(String to, BigDecimal amount, BigDecimal amountDue, String comment,
                         String message, String label, Boolean codepro, Integer expirePeriod) {
 
-            this.patternId = "p2p";
+            super(RequestPayment.class, new Deserializer());
             checkNotNullAndNotEmpty(to, "to");
-            this.to = to;
             if (amount == null) {
                 if (amountDue == null) {
                     throw new NullPointerException("amount and amountDue is null");
@@ -221,89 +183,48 @@ public class RequestPayment extends BaseRequestPayment {
                             amount.toPlainString());
                 }
             }
-            this.amount = amount;
-            this.amountDue = amountDue;
-            this.comment = comment;
-            this.message = message;
-            this.label = label;
-            this.codepro = codepro;
-            this.expirePeriod = expirePeriod;
-            this.paymentParameters = null;
-            this.phoneNumber = null;
+
+            addParameter("pattern_id", "p2p");
+            addParameter("to", to);
+            addParameter("amount", amount);
+            addParameter("amount_due", amountDue);
+            addParameter("comment", comment);
+            addParameter("message", message);
+            addParameter("label", label);
+            addParameter("codepro", codepro);
+            addParameter("expire_period", expirePeriod);
         }
 
         @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/request-payment");
-        }
-
-        @Override
-        public RequestPayment parseResponse(InputStream inputStream) {
-            return createGson().fromJson(new InputStreamReader(inputStream), RequestPayment.class);
-        }
-
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            PostRequestBodyBuffer postRequestBodyBuffer = new PostRequestBodyBuffer();
-            if (paymentParameters != null) {
-                postRequestBodyBuffer.addParams(paymentParameters);
-            }
-            return postRequestBodyBuffer
-                    .addParam("pattern_id", patternId)
-                    .addParamIfNotNull("phone-number", phoneNumber)
-                    .addParamIfNotNull("to", to)
-                    .addParamIfNotNull("amount", amount)
-                    .addParamIfNotNull("amount_due", amountDue)
-                    .addParamIfNotNull("comment", comment)
-                    .addParamIfNotNull("message", message)
-                    .addParamIfNotNull("label", label)
-                    .addBooleanIfTrue("codepro", codepro)
-                    .addParamIfNotNull("expire_period", expirePeriod);
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getMoneyApi() + "/request-payment";
         }
 
         /**
-         * @param testPayment {@code true} if test payment
+         * Sets if test card is available. Automatically sets {@code test_payment} parameter.
+         *
+         * @return itself
          */
-        public Request setTestPayment(boolean testPayment) {
-            this.testPayment = testPayment;
+        public Request testCardAvailable() {
+            addParameter("test_payment", true);
+            addParameter("test_card", true);
             return this;
         }
 
         /**
-         * @param testCardAvailable {@code true} if test card is available
-         */
-        public Request setTestCardAvailable(boolean testCardAvailable) {
-            this.testCardAvailable = testCardAvailable;
-            return this;
-        }
-
-        /**
-         * @param testResult requested result
+         * Required test result. Automatically sets {@code test_payment} parameter.
+         *
+         * @param testResult test result
          */
         public Request setTestResult(TestResult testResult) {
-            this.testResult = testResult;
+            addParameter("test_payment", true);
+            addParameter("test_result", testResult.code);
             return this;
-        }
-
-        private static Gson createGson() {
-            return new GsonBuilder()
-                    .registerTypeAdapter(RequestPayment.class, new Deserializer())
-                    .create();
         }
 
         private void checkNotNullAndNotEmpty(String value, String field) {
             if (Strings.isNullOrEmpty(value)) {
                 throw new IllegalArgumentException(field + " is null or empty");
-            }
-        }
-
-        private void checkCommonAmount(BigDecimal amount, BigDecimal absoluteMinimum, String field) {
-            if (amount == null) {
-                throw new NullPointerException("amount is null");
-            }
-            if (amount.compareTo(absoluteMinimum) < 0) {
-                throw new IllegalArgumentException(field + " has illegal value " +
-                        amount.toPlainString());
             }
         }
 
@@ -417,10 +338,10 @@ public class RequestPayment extends BaseRequestPayment {
         ACCOUNT_BLOCKED("account_blocked"),
         EXT_ACTION_REQUIRED("ext_action_required");
 
-        public final String result;
+        public final String code;
 
-        TestResult(String result) {
-            this.result = result;
+        TestResult(String code) {
+            this.code = code;
         }
     }
 

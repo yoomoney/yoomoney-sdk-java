@@ -24,7 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -33,18 +32,12 @@ import com.google.gson.JsonParseException;
 import com.yandex.money.api.methods.params.P2pParams;
 import com.yandex.money.api.methods.params.PhoneParams;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.utils.Strings;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map;
 
 /**
@@ -78,25 +71,24 @@ public class RequestExternalPayment extends BaseRequestPayment {
     /**
      * Requests context of external payment.
      */
-    public static class Request implements ApiRequest<RequestExternalPayment> {
-
-        private final String instanceId;
-        private final String patternId;
-        private final Map<String, String> params;
+    public static class Request extends PostRequest<RequestExternalPayment> {
 
         /**
          * Use static methods to create
          * {@link com.yandex.money.api.methods.RequestExternalPayment.Request}.
          */
         private Request(String instanceId, String patternId, Map<String, String> params) {
-            if (Strings.isNullOrEmpty(instanceId))
+            super(RequestExternalPayment.class, new Deserializer());
+            if (Strings.isNullOrEmpty(instanceId)) {
                 throw new IllegalArgumentException("instanceId is null or empty");
-            this.instanceId = instanceId;
-            if (Strings.isNullOrEmpty(patternId))
+            }
+            if (Strings.isNullOrEmpty(patternId)) {
                 throw new IllegalArgumentException("patternId is null or empty");
-            this.patternId = patternId;
+            }
 
-            this.params = params;
+            addParameter("instance_id", instanceId);
+            addParameter("pattern_id", patternId);
+            addParameters(params);
         }
 
         /**
@@ -124,9 +116,9 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * @return new request instance
          */
         public static Request newInstance(String instanceId, P2pParams p2pParams) {
-            if (p2pParams == null)
+            if (p2pParams == null) {
                 throw new IllegalArgumentException("p2pParams is null or empty");
-
+            }
             return new Request(instanceId, p2pParams.getPatternId(), p2pParams.makeParams());
         }
 
@@ -138,39 +130,33 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * @return new request instance
          */
         public static Request newInstance(String instanceId, PhoneParams phoneParams) {
-            if (phoneParams == null)
+            if (phoneParams == null) {
                 throw new IllegalArgumentException("phoneParams is null or empty");
-
+            }
             return new Request(instanceId, phoneParams.getPatternId(), phoneParams.makeParams());
         }
 
         @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/request-external-payment");
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getMoneyApi() + "/request-external-payment";
         }
 
-        @Override
-        public RequestExternalPayment parseResponse(InputStream inputStream) {
-            return new GsonBuilder().registerTypeAdapter(RequestExternalPayment.class, new JsonDeserializer<RequestExternalPayment>() {
-                @Override
-                public RequestExternalPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-                    JsonObject o = json.getAsJsonObject();
-                    return new RequestExternalPayment(
-                            Status.parse(JsonUtils.getString(o, MEMBER_STATUS)),
-                            Error.parse(JsonUtils.getString(o, MEMBER_ERROR)),
-                            JsonUtils.getString(o, MEMBER_REQUEST_ID),
-                            JsonUtils.getBigDecimal(o, MEMBER_CONTRACT_AMOUNT),
-                            JsonUtils.getString(o, "title"));
-                }
-            }).create().fromJson(new InputStreamReader(inputStream), RequestExternalPayment.class);
-        }
+        private static final class Deserializer
+                implements JsonDeserializer<RequestExternalPayment> {
 
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            return new PostRequestBodyBuffer()
-                    .addParam("instance_id", instanceId)
-                    .addParam("pattern_id", patternId)
-                    .addParams(params);
+            @Override
+            public RequestExternalPayment deserialize(JsonElement json, Type typeOfT,
+                                                      JsonDeserializationContext context)
+                    throws JsonParseException {
+
+                JsonObject o = json.getAsJsonObject();
+                return new RequestExternalPayment(
+                        Status.parse(JsonUtils.getString(o, MEMBER_STATUS)),
+                        Error.parse(JsonUtils.getString(o, MEMBER_ERROR)),
+                        JsonUtils.getString(o, MEMBER_REQUEST_ID),
+                        JsonUtils.getBigDecimal(o, MEMBER_CONTRACT_AMOUNT),
+                        JsonUtils.getString(o, "title"));
+            }
         }
     }
 }

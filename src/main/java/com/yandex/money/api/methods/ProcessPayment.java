@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -34,17 +32,11 @@ import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.DigitalGoods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
-import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -111,17 +103,7 @@ public class ProcessPayment extends BaseProcessPayment {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request implements ApiRequest<ProcessPayment> {
-
-        private final String requestId;
-        private final MoneySource moneySource;
-        private final String csc;
-        private final String extAuthSuccessUri;
-        private final String extAuthFailUri;
-
-        private boolean testPayment;
-        private boolean testCardAvailable;
-        private TestResult testResult;
+    public static final class Request extends PostRequest<ProcessPayment> {
 
         /**
          * Repeat request using the same request id. This is used when {@link ProcessPayment} is in
@@ -146,79 +128,45 @@ public class ProcessPayment extends BaseProcessPayment {
         public Request(String requestId, MoneySource moneySource, String csc,
                        String extAuthSuccessUri, String extAuthFailUri) {
 
+            super(ProcessPayment.class, new Deserializer());
             if (requestId == null || requestId.isEmpty()) {
                 throw new IllegalArgumentException("requestId is null or empty");
             }
-            this.requestId = requestId;
-            this.moneySource = moneySource;
-            this.csc = csc;
-            this.extAuthSuccessUri = extAuthSuccessUri;
-            this.extAuthFailUri = extAuthFailUri;
-        }
 
-        @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/process-payment");
-        }
-
-        @Override
-        public ProcessPayment parseResponse(InputStream inputStream) {
-            return buildGson().fromJson(new InputStreamReader(inputStream), ProcessPayment.class);
-        }
-
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            PostRequestBodyBuffer postRequestBodyBuffer = new PostRequestBodyBuffer();
             if (moneySource != null) {
-                postRequestBodyBuffer.addParam("money_source", moneySource.id);
+                addParameter("money_source", moneySource.id);
             }
-            if (testPayment) {
-                postRequestBodyBuffer.addParamIfNotNull("test_payment", true);
-                if (testCardAvailable) {
-                    postRequestBodyBuffer.addParamIfNotNull("test_card", true);
-                }
-                if (testResult != null) {
-                    postRequestBodyBuffer.addParam("test_result", testResult.code);
-                }
-            }
-            return postRequestBodyBuffer
-                    .addParam("request_id", requestId)
-                    .addParamIfNotNull("csc", csc)
-                    .addParamIfNotNull("ext_auth_success_uri", extAuthSuccessUri)
-                    .addParamIfNotNull("ext_auth_fail_uri", extAuthFailUri);
+            addParameter("request_id", requestId);
+            addParameter("csc", csc);
+            addParameter("ext_auth_success_uri", extAuthSuccessUri);
+            addParameter("ext_auth_fail_uri", extAuthFailUri);
+        }
+
+        @Override
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getMoneyApi() + "/process-payment";
         }
 
         /**
-         * Sets if this is a test payment.
+         * Sets if test card is available. Automatically sets {@code test_payment} parameter.
          *
-         * @param testPayment {@code true} if test payment
+         * @return itself
          */
-        public void setTestPayment(boolean testPayment) {
-            this.testPayment = testPayment;
+        public Request testCardAvailable() {
+            addParameter("test_payment", true);
+            addParameter("test_card", true);
+            return this;
         }
 
         /**
-         * Sets if test card is available
-         *
-         * @param testCardAvailable {@code true} if test card is available
-         */
-        public void setTestCardAvailable(boolean testCardAvailable) {
-            this.testCardAvailable = testCardAvailable;
-        }
-
-        /**
-         * Required test result.
+         * Required test result. Automatically sets {@code test_payment} parameter.
          *
          * @param testResult test result
          */
-        public void setTestResult(TestResult testResult) {
-            this.testResult = testResult;
-        }
-
-        private static Gson buildGson() {
-            return new GsonBuilder()
-                    .registerTypeAdapter(ProcessPayment.class, new Deserializer())
-                    .create();
+        public Request setTestResult(TestResult testResult) {
+            addParameter("test_payment", true);
+            addParameter("test_result", testResult.code);
+            return this;
         }
     }
 

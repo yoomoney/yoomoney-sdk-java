@@ -24,8 +24,6 @@
 
 package com.yandex.money.test;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -37,13 +35,12 @@ import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.methods.JsonUtils;
-import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.DefaultApiClient;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.OAuth2Session;
 import com.yandex.money.api.net.OnResponseReady;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
 
@@ -52,11 +49,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 /**
@@ -186,39 +180,23 @@ public class OAuth2SessionTest {
             this.code = code;
         }
 
-        public static final class Request implements ApiRequest<Mock> {
+        public static final class Request extends PostRequest<Mock> {
 
             private final URL url;
-            private final String param;
 
             public Request(URL url) {
                 this(url, null);
             }
 
             public Request(URL url, String param) {
+                super(Mock.class, new Deserializer());
                 this.url = url;
-                this.param = param;
+                addParameter("param", param);
             }
 
             @Override
-            public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-                return url;
-            }
-
-            @Override
-            public Mock parseResponse(InputStream inputStream) {
-                return buildGson().fromJson(new InputStreamReader(inputStream), Mock.class);
-            }
-
-            @Override
-            public PostRequestBodyBuffer buildParameters() throws IOException {
-                return param == null ? null : new PostRequestBodyBuffer().addParam("param", param);
-            }
-
-            private static Gson buildGson() {
-                return new GsonBuilder()
-                        .registerTypeAdapter(Mock.class, new Deserializer())
-                        .create();
+            public String requestUrl(HostsProvider hostsProvider) {
+                return url.toString();
             }
         }
 

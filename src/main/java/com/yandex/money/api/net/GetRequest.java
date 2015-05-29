@@ -22,15 +22,21 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.test;
+package com.yandex.money.api.net;
 
-import com.yandex.money.test.properties.LocalProperties;
+import com.google.gson.JsonDeserializer;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public interface ApiTest {
-    LocalProperties LOCAL_PROPERTIES = new LocalProperties();
-    String CLIENT_ID = LOCAL_PROPERTIES.getClientId();
-    String ACCESS_TOKEN = LOCAL_PROPERTIES.getAccessToken();
+public abstract class GetRequest<T> extends BaseApiRequest<T> {
+
+    protected GetRequest(Class<T> cls, JsonDeserializer<T> deserializer) {
+        super(cls, deserializer);
+    }
+
+    @Override
+    public Method getMethod() {
+        return Method.GET;
+    }
 }
