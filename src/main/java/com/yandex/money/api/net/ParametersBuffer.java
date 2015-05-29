@@ -86,7 +86,7 @@ public final class ParametersBuffer {
     }
 
     /**
-     * Prepares POST body for a request.
+     * Prepares body for a request.
      * <p>
      * For example, there are two parameters provided:
      * <p>
@@ -98,7 +98,7 @@ public final class ParametersBuffer {
      *
      * @return body
      */
-    public RequestBody preparePost() {
+    public RequestBody prepareBody() {
         return RequestBody.create(CONTENT_TYPE, prepareBytes());
     }
 
@@ -155,7 +155,7 @@ public final class ParametersBuffer {
                 builder.append(builder.length() == 0 ? '?' : '&')
                         .append(encode(key))
                         .append('=')
-                        .append(value);
+                        .append(encode(value));
             } catch (UnsupportedEncodingException e) {
                 throw new RuntimeException(e);
             }
@@ -182,7 +182,7 @@ public final class ParametersBuffer {
                 }
                 stream.write(encode(key).getBytes(UTF8_CHARSET));
                 stream.write(EQUALS_SIGN);
-                stream.write(encode(value).replace("+", "%20").getBytes(UTF8_CHARSET));
+                stream.write(encode(value).getBytes(UTF8_CHARSET));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

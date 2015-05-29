@@ -117,7 +117,7 @@ public abstract class AbstractSession {
             }
             case POST: {
                 builder.url(request.requestUrl(client.getHostsProvider()))
-                        .post(parametersBuffer.preparePost());
+                        .post(parametersBuffer.prepareBody());
                 break;
             }
             default:
