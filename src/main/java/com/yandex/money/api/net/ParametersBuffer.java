@@ -99,9 +99,26 @@ public final class ParametersBuffer {
      * @return body
      */
     public RequestBody preparePost() {
+        return RequestBody.create(CONTENT_TYPE, prepareBytes());
+    }
+
+    /**
+     * Prepares parameters for a request as bytes.
+     * <p>
+     * For example, there are two parameters provided:
+     * <p>
+     * {@code Map<String, String> params = new HashMap<>();}<br/>
+     * {@code params.put("key1", "value1");}<br/>
+     * {@code params.put("key2", "value2");}
+     * <p>
+     * Then the method will return byte array containing "?key1=value1&key2=value2".
+     *
+     * @return byte array of parameters
+     */
+    public byte[] prepareBytes() {
         PostBuffer buffer = new PostBuffer();
         iterate(buffer);
-        return RequestBody.create(CONTENT_TYPE, buffer.getBytes());
+        return buffer.getBytes();
     }
 
     private void iterate(Buffer buffer) {
