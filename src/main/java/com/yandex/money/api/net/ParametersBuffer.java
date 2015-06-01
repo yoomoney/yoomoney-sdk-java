@@ -129,8 +129,8 @@ public final class ParametersBuffer {
             }
 
             String value = param.getValue();
-            if (value == null) {
-                value = "";
+            if (Strings.isNullOrEmpty(value)) {
+                continue;
             }
 
             buffer.nextParameter(key, value);
