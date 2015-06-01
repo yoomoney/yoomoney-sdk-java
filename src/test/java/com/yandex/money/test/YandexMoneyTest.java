@@ -132,11 +132,15 @@ public class YandexMoneyTest implements ApiTest {
         T response = session.execute(request);
 
         Assert.assertNotNull(response);
-        Assert.assertEquals(response.status, BaseRequestPayment.Status.SUCCESS);
-        Assert.assertNull(response.error);
-        Assert.assertNotNull(response.requestId);
-        Assert.assertTrue(response.requestId.length() > 0);
-        Assert.assertEquals(response.contractAmount, new BigDecimal(AMOUNT));
+        if (response.status == BaseRequestPayment.Status.SUCCESS) {
+            Assert.assertEquals(response.status, BaseRequestPayment.Status.SUCCESS);
+            Assert.assertNull(response.error);
+            Assert.assertNotNull(response.requestId);
+            Assert.assertTrue(response.requestId.length() > 0);
+            Assert.assertEquals(response.contractAmount, new BigDecimal(AMOUNT));
+        } else {
+            Assert.assertEquals(response.error, Error.NOT_ENOUGH_FUNDS);
+        }
 
         return response;
     }
@@ -209,9 +213,13 @@ public class YandexMoneyTest implements ApiTest {
 
         session.setAccessToken(ACCESS_TOKEN);
         RequestPayment requestPayment = session.execute(createRequestPayment());
-        ProcessPayment processPayment = session.execute(new ProcessPayment.Request(
-                requestPayment.requestId));
-        Assert.assertNotNull(processPayment);
+        if (requestPayment.status == BaseRequestPayment.Status.SUCCESS) {
+            ProcessPayment processPayment = session.execute(new ProcessPayment.Request(
+                    requestPayment.requestId));
+            Assert.assertNotNull(processPayment);
+        } else {
+            Assert.assertEquals(requestPayment.error, Error.NOT_ENOUGH_FUNDS);
+        }
         session.setAccessToken(null);
     }
 
