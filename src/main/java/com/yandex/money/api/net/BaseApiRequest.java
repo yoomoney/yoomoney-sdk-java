@@ -109,7 +109,16 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param value value
      */
     protected final void addHeader(String key, DateTime value) {
-        addHeader(key, DATE_TIME_FORMATTER.print(value));
+        addHeader(key, value == null ? null : DATE_TIME_FORMATTER.print(value));
+    }
+
+    /**
+     * Adds collection of headers.
+     *
+     * @param headers headers to add
+     */
+    protected final void addHeaders(Map<String, String> headers) {
+        this.headers.putAll(headers);
     }
 
     /**
@@ -129,6 +138,16 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param value value
      */
     protected final void addParameter(String key, Integer value) {
+        addParameter(key, value == null ? null : value.toString());
+    }
+
+    /**
+     * Adds {@link Long} parameter to this request.
+     *
+     * @param key key
+     * @param value value
+     */
+    protected final void addParameter(String key, Long value) {
         addParameter(key, value == null ? null : value.toString());
     }
 
