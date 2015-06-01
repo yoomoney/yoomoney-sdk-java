@@ -29,12 +29,15 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -44,6 +47,11 @@ import java.util.Map;
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public abstract class BaseApiRequest<T> implements ApiRequest<T> {
+
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat
+            .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT")
+            .withLocale(Locale.US)
+            .withZoneUTC();
 
     private final Class<T> cls;
     private final Gson gson;
@@ -85,13 +93,23 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     }
 
     /**
-     * Adds header to this request.
+     * Adds {@link String} header to this request.
      *
      * @param key key
      * @param value value
      */
     protected final void addHeader(String key, String value) {
         headers.put(key, value);
+    }
+
+    /**
+     * Adds {@link DateTime} header to this request.
+     *
+     * @param key key
+     * @param value value
+     */
+    protected final void addHeader(String key, DateTime value) {
+        addHeader(key, DATE_TIME_FORMATTER.print(value));
     }
 
     /**
