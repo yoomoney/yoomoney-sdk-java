@@ -22,15 +22,61 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.test;
+package com.yandex.money.api.net;
 
-import com.yandex.money.test.properties.LocalProperties;
+import java.io.InputStream;
+import java.util.Map;
 
 /**
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * API requests implement this interface. Consider to use {@link BaseApiRequest} as your base class.
+ *
+ * @param <T> response
+ * @see BaseApiRequest
  */
-public interface ApiTest {
-    LocalProperties LOCAL_PROPERTIES = new LocalProperties();
-    String CLIENT_ID = LOCAL_PROPERTIES.getClientId();
-    String ACCESS_TOKEN = LOCAL_PROPERTIES.getAccessToken();
+public interface ApiRequest<T> {
+
+    /**
+     * Gets method for a request.
+     *
+     * @return method
+     */
+    Method getMethod();
+
+    /**
+     * Builds URL with using specified hosts provider.
+     *
+     * @param hostsProvider hosts provider
+     * @return complete URL
+     */
+    String requestUrl(HostsProvider hostsProvider);
+
+    /**
+     * Gets headers for a request. Can not be null.
+     *
+     * @return headers for a request
+     */
+    Map<String, String> getHeaders();
+
+    /**
+     * Gets post parameters to use when posting a request. Can not be null.
+     *
+     * @return parameters for a request
+     */
+    Map<String, String> getParameters();
+
+    /**
+     * Parses API response from stream.
+     *
+     * @param inputStream input stream
+     * @return response
+     */
+    T parseResponse(InputStream inputStream);
+
+    /**
+     * Methods enum.
+     */
+    enum Method {
+        GET,
+        POST
+    }
 }

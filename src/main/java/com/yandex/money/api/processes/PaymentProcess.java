@@ -26,7 +26,7 @@ package com.yandex.money.api.processes;
 
 import com.yandex.money.api.methods.ProcessPayment;
 import com.yandex.money.api.methods.RequestPayment;
-import com.yandex.money.api.net.MethodRequest;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.OAuth2Session;
 
 /**
@@ -52,20 +52,20 @@ public final class PaymentProcess extends BasePaymentProcess<RequestPayment, Pro
     }
 
     @Override
-    protected MethodRequest<RequestPayment> createRequestPayment() {
+    protected ApiRequest<RequestPayment> createRequestPayment() {
         return new RequestPayment.Request(parameterProvider.getPatternId(),
                 parameterProvider.getPaymentParameters());
     }
 
     @Override
-    protected MethodRequest<ProcessPayment> createProcessPayment() {
+    protected ApiRequest<ProcessPayment> createProcessPayment() {
         return new ProcessPayment.Request(getRequestPayment().requestId,
                 parameterProvider.getMoneySource(), parameterProvider.getCsc(),
                 parameterProvider.getExtAuthSuccessUri(), parameterProvider.getExtAuthFailUri());
     }
 
     @Override
-    protected MethodRequest<ProcessPayment> createRepeatProcessPayment() {
+    protected ApiRequest<ProcessPayment> createRepeatProcessPayment() {
         return new ProcessPayment.Request(getRequestPayment().requestId);
     }
 

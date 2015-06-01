@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
@@ -38,19 +36,13 @@ import com.yandex.money.api.model.Avatar;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.utils.Currency;
 import com.yandex.money.api.utils.Strings;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -142,27 +134,15 @@ public class AccountInfo implements MethodResponse {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request implements MethodRequest<AccountInfo> {
+    public static final class Request extends PostRequest<AccountInfo> {
 
-        @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/account-info");
+        public Request() {
+            super(AccountInfo.class, new Deserializer());
         }
 
         @Override
-        public AccountInfo parseResponse(InputStream inputStream) {
-            return buildGson().fromJson(new InputStreamReader(inputStream), AccountInfo.class);
-        }
-
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            return null;
-        }
-
-        private static Gson buildGson() {
-            return new GsonBuilder()
-                    .registerTypeAdapter(AccountInfo.class, new Deserializer())
-                    .create();
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getMoneyApi() + "/account-info";
         }
     }
 

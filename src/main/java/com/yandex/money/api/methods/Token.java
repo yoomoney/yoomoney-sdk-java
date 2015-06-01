@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -33,17 +31,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.utils.Strings;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Access token.
@@ -77,14 +69,7 @@ public class Token implements MethodResponse {
     /**
      * Request for access token.
      */
-    public static class Request implements MethodRequest<Token> {
-
-        protected final String code;
-        protected final String clientId;
-
-        private final String grantType;
-        private final String redirectUri;
-        private final String clientSecret;
+    public static class Request extends PostRequest<Token> {
 
         /**
          * Constructor.
@@ -106,55 +91,43 @@ public class Token implements MethodResponse {
          * @param clientSecret a secret word for verifying application's authenticity.
          */
         public Request(String code, String clientId, String redirectUri, String clientSecret) {
+            super(Token.class, new Deserializer());
             if (Strings.isNullOrEmpty(code)) {
                 throw new NullPointerException("code is null or empty");
             }
-            this.code = code;
             if (Strings.isNullOrEmpty(clientId)) {
                 throw new NullPointerException("clientId is null or empty");
             }
-            this.clientId = clientId;
-            this.grantType = "authorization_code";
             if (Strings.isNullOrEmpty(redirectUri)) {
                 throw new NullPointerException("redirectUri is null or empty");
             }
-            this.redirectUri = redirectUri;
-            this.clientSecret = clientSecret;
+            addParameter("code", code);
+            addParameter("client_id", clientId);
+            addParameter("grant_type", "authorization_code");
+            addParameter("redirect_uri", redirectUri);
+            addParameter("client_secret", clientSecret);
         }
 
         @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getSpMoney() + "/oauth/token");
-        }
-
-        @Override
-        public Token parseResponse(InputStream inputStream) {
-            return buildGson().fromJson(new InputStreamReader(inputStream), Token.class);
-        }
-
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            return new PostRequestBodyBuffer()
-                    .addParam("code", code)
-                    .addParam("client_id", clientId)
-                    .addParam("grant_type", grantType)
-                    .addParamIfNotNull("redirect_uri", redirectUri)
-                    .addParamIfNotNull("client_secret", clientSecret);
-        }
-
-        private static Gson buildGson() {
-            return new GsonBuilder()
-                    .registerTypeAdapter(Token.class, new Deserializer())
-                    .create();
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getSpMoney() + "/oauth/token";
         }
     }
 
     /**
      * Revokes access token.
      */
-    public static final class Revoke implements MethodRequest<Object> {
+    public static final class Revoke extends PostRequest<Object> {
 
-        private final boolean revokeAll;
+        private static final JsonDeserializer<Object> STUB_DESERIALIZER =
+                new JsonDeserializer<Object>() {
+                    @Override
+                    public Object deserialize(JsonElement json, Type typeOfT,
+                                              JsonDeserializationContext context)
+                            throws JsonParseException {
+                        return null;
+                    }
+                };
 
         /**
          * Revoke only one token.
@@ -169,23 +142,13 @@ public class Token implements MethodResponse {
          * @param revokeAll if {@code true} all bound tokens will be also revoked
          */
         public Revoke(boolean revokeAll) {
-            this.revokeAll = revokeAll;
+            super(Object.class, STUB_DESERIALIZER);
+            addParameter("revoke-all", revokeAll);
         }
 
         @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/revoke");
-        }
-
-        @Override
-        public Object parseResponse(InputStream inputStream) {
-            return null;
-        }
-
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            return new PostRequestBodyBuffer()
-                    .addBooleanIfTrue("revoke-all", revokeAll);
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getMoneyApi() + "/revoke";
         }
     }
 

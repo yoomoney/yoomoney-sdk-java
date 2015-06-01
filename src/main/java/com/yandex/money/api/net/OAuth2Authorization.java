@@ -27,7 +27,9 @@ package com.yandex.money.api.net;
 import com.yandex.money.api.model.Scope;
 import com.yandex.money.api.utils.Strings;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -139,21 +141,23 @@ public class OAuth2Authorization {
          * @return parameters
          */
         public byte[] build() {
-            PostRequestBodyBuffer buffer = new PostRequestBodyBuffer();
+            Map<String, String> params = new HashMap<>();
             final String scopeName = "scope";
             if (Strings.isNullOrEmpty(rawScope)) {
                 if (scopes != null) {
-                    buffer.addParam(scopeName, Scope.createScopeParameter(scopes.iterator()));
+                    params.put(scopeName, Scope.createScopeParameter(scopes.iterator()));
                 }
             } else {
-                buffer.addParam(scopeName, rawScope);
+                params.put(scopeName, rawScope);
             }
-            return buffer
-                    .addParamIfNotNull("client_id", clientId)
-                    .addParamIfNotNull("response_type", responseType)
-                    .addParamIfNotNull("redirect_uri", redirectUri)
-                    .addParamIfNotNull("instance_name", instanceName)
-                    .toByteArray();
+            params.put("client_id", clientId);
+            params.put("response_type", responseType);
+            params.put("redirect_uri", redirectUri);
+            params.put("instance_name", instanceName);
+
+            return new ParametersBuffer()
+                    .setParams(params)
+                    .prepareBytes();
         }
 
         private Params setClientId(String clientId) {

@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -34,16 +32,10 @@ import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /**
  * Operation details result.
@@ -81,9 +73,7 @@ public class OperationDetails implements MethodResponse {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static class Request implements MethodRequest<OperationDetails> {
-
-        private final String operationId;
+    public static class Request extends PostRequest<OperationDetails> {
 
         /**
          * Constructor.
@@ -91,32 +81,16 @@ public class OperationDetails implements MethodResponse {
          * @param operationId operation's id
          */
         public Request(String operationId) {
+            super(OperationDetails.class, new Deserializer());
             if (operationId == null || operationId.isEmpty()) {
                 throw new IllegalArgumentException("operationId is null or empty");
             }
-            this.operationId = operationId;
+            addParameter("operation_id", operationId);
         }
 
         @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/operation-details");
-        }
-
-        @Override
-        public OperationDetails parseResponse(InputStream inputStream) {
-            return buildGson().fromJson(new InputStreamReader(inputStream), OperationDetails.class);
-        }
-
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            return new PostRequestBodyBuffer()
-                    .addParam("operation_id", operationId);
-        }
-
-        private static Gson buildGson() {
-            return new GsonBuilder()
-                    .registerTypeAdapter(OperationDetails.class, new Deserializer())
-                    .create();
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getMoneyApi() + "/operation-details";
         }
     }
 

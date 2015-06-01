@@ -25,6 +25,7 @@
 package com.yandex.money.api.net;
 
 import com.squareup.okhttp.CacheControl;
+import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.yandex.money.api.utils.HttpHeaders;
@@ -32,7 +33,7 @@ import com.yandex.money.api.utils.Language;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.util.Map;
 import java.util.logging.Logger;
 
 /**
@@ -45,6 +46,8 @@ public abstract class AbstractSession {
     private static final Logger LOGGER = Logger.getLogger(OAuth2Session.class.getName());
 
     protected final ApiClient client;
+
+    private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
 
     private boolean debugLogging = false;
 
@@ -69,16 +72,25 @@ public abstract class AbstractSession {
         this.debugLogging = debugLogging;
     }
 
-    /**
-     * Prepares request builder.
-     *
-     * @param url url to use with builder
-     * @return the builder
-     */
-    protected final Request.Builder prepareRequestBuilder(URL url) {
+    protected final <T> Call prepareCall(ApiRequest<T> request) {
+        return prepareCall(prepareRequestBuilder(request));
+    }
+
+    protected final Call prepareCall(Request.Builder builder) {
+        if (builder == null) {
+            throw new NullPointerException("builder is null");
+        }
+        return client.getHttpClient()
+                .newCall(builder.build());
+    }
+
+    protected final <T> Request.Builder prepareRequestBuilder(ApiRequest<T> request) {
+        if (request == null) {
+            throw new NullPointerException("request is null");
+        }
+
         Request.Builder builder = new Request.Builder()
-                .url(url)
-                .cacheControl(new CacheControl.Builder().noCache().build());
+                .cacheControl(cacheControl);
 
         UserAgent userAgent = client.getUserAgent();
         if (userAgent != null) {
@@ -88,6 +100,29 @@ public abstract class AbstractSession {
         Language language = client.getLanguage();
         if (language != null) {
             builder.addHeader(HttpHeaders.ACCEPT_LANGUAGE, language.iso6391Code);
+        }
+
+        for (Map.Entry<String, String> entry : request.getHeaders().entrySet()) {
+            builder.addHeader(entry.getKey(), entry.getValue());
+        }
+
+        ParametersBuffer parametersBuffer = new ParametersBuffer()
+                .setParams(request.getParameters());
+
+        switch (request.getMethod()) {
+            case GET: {
+                builder.url(request.requestUrl(client.getHostsProvider()) +
+                        parametersBuffer.prepareGet());
+                break;
+            }
+            case POST: {
+                builder.url(request.requestUrl(client.getHostsProvider()))
+                        .post(parametersBuffer.prepareBody());
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("method " + request.getMethod() +
+                        " is not supported");
         }
 
         return builder;

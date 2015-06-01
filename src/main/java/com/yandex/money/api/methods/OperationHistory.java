@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
@@ -34,18 +32,12 @@ import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.MethodResponse;
-import com.yandex.money.api.net.PostRequestBodyBuffer;
+import com.yandex.money.api.net.PostRequest;
 
 import org.joda.time.DateTime;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -98,15 +90,7 @@ public class OperationHistory implements MethodResponse {
      *
      * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static class Request implements MethodRequest<OperationHistory> {
-
-        private final Set<FilterType> types;
-        private final String label;
-        private final DateTime from;
-        private final DateTime till;
-        private final String startRecord;
-        private final Integer records;
-        private final Boolean details;
+    public static class Request extends PostRequest<OperationHistory> {
 
         /**
          * Use builder to create the request.
@@ -114,14 +98,13 @@ public class OperationHistory implements MethodResponse {
         private Request(Set<FilterType> types, String label, DateTime from, DateTime till,
                         String startRecord, Integer records, Boolean details) {
 
-            this.types = types;
-            this.label = label;
+            super(OperationHistory.class, new Deserializer());
+            if (types == null) {
+                throw new NullPointerException("types is null");
+            }
             if (from != null && till != null && from.isAfter(till)) {
                 throw new IllegalArgumentException("\'from\' should be before \'till\'");
             }
-            this.from = from;
-            this.till = till;
-            this.startRecord = startRecord;
             if (records != null) {
                 if (records < 1) {
                     records = 1;
@@ -129,45 +112,32 @@ public class OperationHistory implements MethodResponse {
                     records = 100;
                 }
             }
-            this.records = records;
-            this.details = details;
+
+            addParameter("type", prepareTypeValue(types));
+            addParameter("label", label);
+            addParameter("from", from);
+            addParameter("till", till);
+            addParameter("start_record", startRecord);
+            addParameter("records", records);
+            addParameter("details", details);
         }
 
         @Override
-        public URL requestURL(HostsProvider hostsProvider) throws MalformedURLException {
-            return new URL(hostsProvider.getMoneyApi() + "/operation-history");
+        public String requestUrl(HostsProvider hostsProvider) {
+            return hostsProvider.getMoneyApi() + "/operation-history";
         }
 
-        @Override
-        public OperationHistory parseResponse(InputStream inputStream) {
-            return buildGson().fromJson(new InputStreamReader(inputStream), OperationHistory.class);
-        }
-
-        @Override
-        public PostRequestBodyBuffer buildParameters() throws IOException {
-            PostRequestBodyBuffer requestBodyBuffer = new PostRequestBodyBuffer();
-            if (types != null && !types.isEmpty()) {
-                StringBuilder builder = new StringBuilder();
-                Iterator<FilterType> iterator = types.iterator();
+        private static String prepareTypeValue(Set<FilterType> types) {
+            StringBuilder builder = new StringBuilder();
+            Iterator<FilterType> iterator = types.iterator();
+            if (iterator.hasNext()) {
                 builder.append(iterator.next().code);
                 while (iterator.hasNext()) {
-                    builder.append(' ').append(iterator.next().code);
+                    builder.append(' ')
+                            .append(iterator.next().code);
                 }
-                requestBodyBuffer.addParam("type", builder.toString());
             }
-            return requestBodyBuffer
-                    .addParamIfNotNull("label", label)
-                    .addDateTimeIfNotNull("from", from)
-                    .addDateTimeIfNotNull("till", till)
-                    .addParamIfNotNull("start_record", startRecord)
-                    .addParamIfNotNull("records", records)
-                    .addParamIfNotNull("details", details);
-        }
-
-        private static Gson buildGson() {
-            return new GsonBuilder()
-                    .registerTypeAdapter(OperationHistory.class, new Deserializer())
-                    .create();
+            return builder.toString();
         }
 
         /**
@@ -260,7 +230,8 @@ public class OperationHistory implements MethodResponse {
              * @return the request
              */
             public Request createRequest() {
-                return new Request(types, label, from, till, startRecord, records, details);
+                return new Request(types == null ? Collections.<FilterType>emptySet() : types,
+                        label, from, till, startRecord, records, details);
             }
         }
     }

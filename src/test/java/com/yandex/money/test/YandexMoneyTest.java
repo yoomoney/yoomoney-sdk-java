@@ -36,8 +36,8 @@ import com.yandex.money.api.methods.RequestExternalPayment;
 import com.yandex.money.api.methods.RequestPayment;
 import com.yandex.money.api.methods.params.PhoneParams;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.DefaultApiClient;
-import com.yandex.money.api.net.MethodRequest;
 import com.yandex.money.api.net.OAuth2Session;
 
 import org.testng.Assert;
@@ -125,7 +125,7 @@ public class YandexMoneyTest implements ApiTest {
         session.setAccessToken(null);
     }
 
-    private <T extends BaseRequestPayment> T testRequestPayment(MethodRequest<T> request)
+    private <T extends BaseRequestPayment> T testRequestPayment(ApiRequest<T> request)
             throws InvalidTokenException, InsufficientScopeException, InvalidRequestException,
             IOException {
 
@@ -173,7 +173,7 @@ public class YandexMoneyTest implements ApiTest {
         respRequestExternalPayment = testRequestPaymentFail(reqRequestExternalPayment);
     }
 
-    private <T extends BaseRequestPayment> T testRequestPaymentFail(MethodRequest<T> request)
+    private <T extends BaseRequestPayment> T testRequestPaymentFail(ApiRequest<T> request)
             throws InvalidTokenException, InsufficientScopeException, InvalidRequestException,
             IOException {
 
@@ -215,7 +215,7 @@ public class YandexMoneyTest implements ApiTest {
         session.setAccessToken(null);
     }
 
-    private <T extends BaseProcessPayment> void testProcessPayment(MethodRequest<T> request)
+    private <T extends BaseProcessPayment> void testProcessPayment(ApiRequest<T> request)
             throws InvalidTokenException, InsufficientScopeException, InvalidRequestException,
             IOException {
 

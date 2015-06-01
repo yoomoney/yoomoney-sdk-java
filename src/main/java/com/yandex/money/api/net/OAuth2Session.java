@@ -26,9 +26,7 @@ package com.yandex.money.api.net;
 
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
@@ -48,10 +46,6 @@ import java.net.HttpURLConnection;
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class OAuth2Session extends AbstractSession {
-
-    private final RequestBody emptyRequestBody =
-            RequestBody.create(MediaType.parse(MimeTypes.Application.X_WWW_FORM_URLENCODED),
-                    new byte[0]);
 
     private String accessToken;
 
@@ -74,11 +68,11 @@ public class OAuth2Session extends AbstractSession {
      * @throws InvalidRequestException if server responded with 404 code
      * @throws InvalidTokenException if server responded with 401 code
      * @throws InsufficientScopeException if server responded with 403 code
-     * @see #enqueue(MethodRequest, OnResponseReady)
+     * @see #enqueue(ApiRequest, OnResponseReady)
      */
-    public <T> T execute(MethodRequest<T> request) throws IOException, InvalidRequestException,
+    public <T> T execute(ApiRequest<T> request) throws IOException, InvalidRequestException,
             InvalidTokenException, InsufficientScopeException {
-        return parseResponse(request, prepareCall(request).execute());
+        return parseResponse(request, makeCall(request).execute());
     }
 
     /**
@@ -90,10 +84,10 @@ public class OAuth2Session extends AbstractSession {
      * @return a {@link Call} object that can be canceled
      * @throws IOException if something went wrong during IO operations
      */
-    public <T> Call enqueue(final MethodRequest<T> request, final OnResponseReady<T> callback)
+    public <T> Call enqueue(final ApiRequest<T> request, final OnResponseReady<T> callback)
             throws IOException {
 
-        Call call = prepareCall(request);
+        Call call = makeCall(request);
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Request request, IOException e) {
@@ -141,27 +135,15 @@ public class OAuth2Session extends AbstractSession {
         return new OAuth2Authorization(client);
     }
 
-    private <T> Call prepareCall(MethodRequest<T> request) throws IOException {
-        if (request == null) {
-            throw new NullPointerException("request is null");
-        }
-
-        final HostsProvider hostsProvider = client.getHostsProvider();
-        final Request.Builder builder = prepareRequestBuilder(request.requestURL(hostsProvider));
-
+    private <T> Call makeCall(ApiRequest<T> request) {
+        final Request.Builder builder = prepareRequestBuilder(request);
         if (isAuthorized()) {
             builder.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
         }
-
-        PostRequestBodyBuffer parameters = request.buildParameters();
-        RequestBody requestBody = parameters == null ? emptyRequestBody :
-                parameters.getRequestBody();
-
-        return client.getHttpClient()
-                .newCall(builder.post(requestBody).build());
+        return prepareCall(builder);
     }
 
-    private <T> T parseResponse(MethodRequest<T> request, Response response) throws IOException,
+    private <T> T parseResponse(ApiRequest<T> request, Response response) throws IOException,
             InvalidRequestException, InvalidTokenException, InsufficientScopeException {
 
         InputStream inputStream = null;
