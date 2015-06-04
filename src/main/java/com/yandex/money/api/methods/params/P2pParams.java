@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.methods.params;
 
+import com.yandex.money.api.utils.Strings;
+
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
@@ -47,28 +49,56 @@ public final class P2pParams extends BaseParams {
      */
     public static final class Builder {
 
-        private final String to;
-        private final Boolean isAmountDue;
+        private enum Params {
 
+            AMOUNT_DUE("amount_due"),
+            AMOUNT("amount"),
+            CODEPRO("codepro"),
+            HOLD_FOR_PICKUP("hold_for_pickup"),
+            COMMENT("comment"),
+            EXPIRE("expire_period"),
+            LABEL("label"),
+            MESSAGE("message"),
+            TO("to");
+
+            public final String paramName;
+
+            Params(String paramName) {
+                this.paramName = paramName;
+            }
+        }
+
+        private String to;
         private BigDecimal amount;
+        private BigDecimal amountDue;
         private String comment;
         private Boolean codepro;
         private Integer expirePeriod;
         private String label;
         private String message;
 
-        public static Builder createWithAmount(String to, BigDecimal amount) {
-            return new Builder(to, amount, false);
-        }
-
-        public static Builder createWithAmountDue(String to, BigDecimal amountDue) {
-            return new Builder(to, amountDue, true);
-        }
-
-        private Builder(String to, BigDecimal amount, boolean isAmountDue) {
+        /**
+         * @param to account number, phone number or email of a recipient
+         */
+        public Builder setTo(String to) {
             this.to = to;
+            return this;
+        }
+
+        /**
+         * @param amount amount to pay
+         */
+        public Builder setAmount(BigDecimal amount) {
             this.amount = amount;
-            this.isAmountDue = isAmountDue;
+            return this;
+        }
+
+        /**
+         * @param amountDue amount to receive
+         */
+        public Builder setAmountDue(BigDecimal amountDue) {
+            this.amountDue = amountDue;
+            return this;
         }
 
         /**
@@ -116,16 +146,30 @@ public final class P2pParams extends BaseParams {
         }
 
         private Map<String, String> makeParams() {
+            Strings.checkNotNullAndNotEmpty(to, "to");
+
             HashMap<String, String> params = new HashMap<>();
-            params.put("pattern_id", "p2p");
-            params.put("to", to);
-            params.put(isAmountDue ? "amount_due" : "amount", amount.toPlainString());
-            params.put("comment", comment);
-            params.put("message", message);
-            params.put("label", label);
-            params.put("codepro", codepro.toString());
-            params.put("expire_period", expirePeriod.toString());
+            params.put(Params.TO.paramName, to);
+            params.put(Params.COMMENT.paramName, comment);
+            params.put(Params.MESSAGE.paramName, message);
+            params.put(Params.LABEL.paramName, label);
+            params.put(Params.CODEPRO.paramName, codepro.toString());
+            if (expirePeriod != null) {
+                params.put(Params.EXPIRE.paramName, expirePeriod.toString());
+            }
+            setAmount(params);
             return Collections.unmodifiableMap(params);
+        }
+
+        private void setAmount(Map<String, String> params) {
+            if (amount == null && amountDue == null) {
+                throw new IllegalStateException("One of \"amount\" and \"amountDue\" is mandatory");
+            }
+            if (amount == null) {
+                params.put(Params.AMOUNT_DUE.paramName, amountDue.toPlainString());
+            } else {
+                params.put(Params.AMOUNT.paramName, amount.toPlainString());
+            }
         }
     }
 }

@@ -106,7 +106,13 @@ public class RequestExternalPayment extends BaseRequestPayment {
         }
 
         /**
-         * Creates instance of request for P2P payments.
+         * Convenience method for creating instance of payments.
+         *
+         * <p>
+         * Note: the subset parameters of class {@link com.yandex.money.api.methods.params
+         * .P2pParams}
+         * is supported by now. Check out the documentation for additional information.
+         * </p>
          *
          * @param instanceId application's instance id
          * @param paymentParams payment params builder
