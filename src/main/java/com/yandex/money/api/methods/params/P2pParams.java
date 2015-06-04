@@ -27,7 +27,6 @@ package com.yandex.money.api.methods.params;
 import com.yandex.money.api.utils.Strings;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -158,7 +157,7 @@ public final class P2pParams extends BaseParams {
                 params.put(Params.EXPIRE.paramName, expirePeriod.toString());
             }
             setAmount(params);
-            return Collections.unmodifiableMap(params);
+            return params;
         }
 
         private void setAmount(Map<String, String> params) {
