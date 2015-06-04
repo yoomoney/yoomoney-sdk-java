@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.methods.params;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -49,6 +50,6 @@ class BaseParams implements Params {
     public Map<String, String> makeParams() {
         HashMap<String, String> params = new HashMap<>();
         params.putAll(paymentParams);
-        return params;
+        return Collections.unmodifiableMap(params);
     }
 }

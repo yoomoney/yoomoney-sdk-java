@@ -25,6 +25,7 @@
 package com.yandex.money.api.methods.params;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,9 +43,9 @@ public final class P2pParams extends BaseParams {
     }
 
     /**
-     * @author Anton Ermak (ermak@yamoney.ru)
+     * @author Slava Yasevich (vyasevich@yamoney.ru)
      */
-    public static class Builder {
+    public static final class Builder {
 
         private final String to;
         private final Boolean isAmountDue;
@@ -124,7 +125,7 @@ public final class P2pParams extends BaseParams {
             params.put("label", label);
             params.put("codepro", codepro.toString());
             params.put("expire_period", expirePeriod.toString());
-            return params;
+            return Collections.unmodifiableMap(params);
         }
     }
 }

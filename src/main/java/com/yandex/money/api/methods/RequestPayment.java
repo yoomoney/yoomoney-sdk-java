@@ -111,10 +111,9 @@ public class RequestPayment extends BaseRequestPayment {
     public static final class Request extends PostRequest<RequestPayment> {
 
         /**
-         * Requests for context of payment to a specific shop.
+         * Use static methods to create
          *
-         * @param patternId pattern id of payment
-         * @param paymentParameters payment parameters
+         * {@link com.yandex.money.api.methods.RequestPayment.Request}.
          */
         private Request(String patternId, Map<String, String> paymentParameters) {
             super(RequestPayment.class, new Deserializer());
@@ -133,7 +132,7 @@ public class RequestPayment extends BaseRequestPayment {
          * @return new request instance.
          */
         public static Request newInstance(String patternId, Map<String, String> params) {
-            checkNotNullAndNotEmpty(patternId, "patternId");
+            Strings.checkNotNullAndNotEmpty(patternId, "patternId");
             if (params == null || params.isEmpty()) {
                 throw new IllegalArgumentException("params is null or empty");
             }
@@ -151,12 +150,6 @@ public class RequestPayment extends BaseRequestPayment {
                 throw new IllegalArgumentException("paymentParams is null");
             }
             return Request.newInstance(paymentParams.getPatternId(), paymentParams.makeParams());
-        }
-
-        private static void checkNotNullAndNotEmpty(String value, String field) {
-            if (Strings.isNullOrEmpty(value)) {
-                throw new IllegalArgumentException(field + " is null or empty");
-            }
         }
 
         @Override

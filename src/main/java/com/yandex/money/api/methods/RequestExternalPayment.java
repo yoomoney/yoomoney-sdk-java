@@ -78,13 +78,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
          */
         private Request(String instanceId, String patternId, Map<String, String> params) {
             super(RequestExternalPayment.class, new Deserializer());
-            if (Strings.isNullOrEmpty(instanceId)) {
-                throw new IllegalArgumentException("instanceId is null or empty");
-            }
-            if (Strings.isNullOrEmpty(patternId)) {
-                throw new IllegalArgumentException("patternId is null or empty");
-            }
-
+            Strings.checkNotNullAndNotEmpty(instanceId, "instanceId");
             addParameter("instance_id", instanceId);
             addParameter("pattern_id", patternId);
             addParameters(params);
@@ -92,33 +86,38 @@ public class RequestExternalPayment extends BaseRequestPayment {
 
         /**
          * Creates instance of payment's request for general purposes. In other words for payments
-         * to a specific shop with known parameters.
+         * to a specific pattern_id with known parameters. Consider to use implementations of
+         * {@link Params} especially for p2p and phone-topup payments.
          *
          * @param instanceId application's instance id
-         * @param patternId pattern id of a shop
-         * @param paramsShop shop parameters
-         * @return new request instance
+         * @param patternId pattern_id (p2p, phone-topup or shop).
+         * @param params shop parameters.
+         * @return new request instance.
          */
         public static Request newInstance(String instanceId, String patternId,
-                                          Map<String, String> paramsShop) {
-            if (paramsShop == null) {
+                                          Map<String, String> params) {
+            Strings.checkNotNullAndNotEmpty(instanceId, "instanceId");
+            Strings.checkNotNullAndNotEmpty(patternId, "patternId");
+
+            if (params == null || params.isEmpty()) {
                 throw new IllegalArgumentException("paramsShop is null or empty");
             }
-            return new Request(instanceId, patternId, paramsShop);
+            return new Request(instanceId, patternId, params);
         }
 
         /**
          * Creates instance of request for P2P payments.
          *
          * @param instanceId application's instance id
-         * @param params payment params builder
+         * @param paymentParams payment params builder
          * @return new request instance
          */
-        public static Request newInstance(String instanceId, Params params) {
-            if (params == null) {
+        public static Request newInstance(String instanceId, Params paymentParams) {
+            if (paymentParams == null) {
                 throw new IllegalArgumentException("params is null");
             }
-            return new Request(instanceId, params.getPatternId(), params.makeParams());
+            return new Request(instanceId, paymentParams.getPatternId(),
+                    paymentParams.makeParams());
         }
 
         @Override
