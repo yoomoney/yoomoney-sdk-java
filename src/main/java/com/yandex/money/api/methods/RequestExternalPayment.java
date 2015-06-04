@@ -29,8 +29,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.api.methods.params.P2pParams;
-import com.yandex.money.api.methods.params.PhoneParams;
+import com.yandex.money.api.methods.params.Params;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
@@ -102,9 +101,9 @@ public class RequestExternalPayment extends BaseRequestPayment {
          */
         public static Request newInstance(String instanceId, String patternId,
                                           Map<String, String> paramsShop) {
-            if (paramsShop == null)
+            if (paramsShop == null) {
                 throw new IllegalArgumentException("paramsShop is null or empty");
-
+            }
             return new Request(instanceId, patternId, paramsShop);
         }
 
@@ -112,28 +111,14 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * Creates instance of request for P2P payments.
          *
          * @param instanceId application's instance id
-         * @param p2pParams p2p parameters
+         * @param params payment params builder
          * @return new request instance
          */
-        public static Request newInstance(String instanceId, P2pParams p2pParams) {
-            if (p2pParams == null) {
-                throw new IllegalArgumentException("p2pParams is null or empty");
+        public static Request newInstance(String instanceId, Params params) {
+            if (params == null) {
+                throw new IllegalArgumentException("params is null");
             }
-            return new Request(instanceId, p2pParams.getPatternId(), p2pParams.makeParams());
-        }
-
-        /**
-         * Creates instance of request to top up a phone number.
-         *
-         * @param instanceId application's instance id
-         * @param phoneParams phone payment parameters
-         * @return new request instance
-         */
-        public static Request newInstance(String instanceId, PhoneParams phoneParams) {
-            if (phoneParams == null) {
-                throw new IllegalArgumentException("phoneParams is null or empty");
-            }
-            return new Request(instanceId, phoneParams.getPatternId(), phoneParams.makeParams());
+            return new Request(instanceId, params.getPatternId(), params.makeParams());
         }
 
         @Override

@@ -246,6 +246,7 @@ public class YandexMoneyTest implements ApiTest {
 
     private RequestPayment.Request createRequestPayment() {
         HashMap<String, String> params = successRequestParams();
-        return new RequestPayment.Request(params.get("phone-number"), new BigDecimal(AMOUNT));
+        return RequestPayment.Request.newInstance(PhoneParams.newInstance(
+                params.get("phone-number"), new BigDecimal(AMOUNT)));
     }
 }

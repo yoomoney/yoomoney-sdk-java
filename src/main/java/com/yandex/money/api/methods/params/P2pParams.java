@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.methods.params;
 
-import com.yandex.money.api.utils.Strings;
-
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,63 +33,98 @@ import java.util.Map;
  *
  * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
-public class P2pParams implements Params {
+public final class P2pParams extends BaseParams {
 
     public static final String PATTERN_ID = "p2p";
 
-    private static final String PARAM_TO = "to";
-    private static final String PARAM_AMOUNT_DUE = "amount_due";
-    private static final String PARAM_MESSAGE = "message";
-
-    private final String to;
-    private final BigDecimal amountDue;
-    private final String message;
-
-    /**
-     * Constructor.
-     *
-     * @param to recipient's account number
-     * @param amountDue amount to receive
-     * @param message message to a recipient
-     */
-    public P2pParams(String to, BigDecimal amountDue, String message) {
-        if (Strings.isNullOrEmpty(to))
-            throw new IllegalArgumentException(PARAM_TO + " is null or empty");
-        this.to = to;
-
-        if (amountDue == null)
-            throw new IllegalArgumentException(PARAM_AMOUNT_DUE + " is null or empty");
-        this.amountDue = amountDue;
-
-        this.message = message;
+    private P2pParams(Map<String, String> paymentParams) {
+        super(PATTERN_ID, paymentParams);
     }
 
     /**
-     * Constructor.
-     *
-     * @param to recipient's account number
-     * @param amountDue amount to receive
+     * @author Anton Ermak (ermak@yamoney.ru)
      */
-    public P2pParams(String to, BigDecimal amountDue) {
-        this(to, amountDue, null);
-    }
+    public static class Builder {
 
-    @Override
-    public String getPatternId() {
-        return PATTERN_ID;
-    }
+        private final String to;
+        private final Boolean isAmountDue;
 
-    @Override
-    public Map<String, String> makeParams() {
-        Map<String, String> result = new HashMap<String, String>();
-        result.put(PARAM_TO, to);
+        private BigDecimal amount;
+        private String comment;
+        private Boolean codepro;
+        private Integer expirePeriod;
+        private String label;
+        private String message;
 
-        result.put(PARAM_AMOUNT_DUE, amountDue.toPlainString());
-
-        if (!Strings.isNullOrEmpty(message)) {
-            result.put(PARAM_MESSAGE, message);
+        public static Builder createWithAmount(String to, BigDecimal amount) {
+            return new Builder(to, amount, false);
         }
 
-        return result;
+        public static Builder createWithAmountDue(String to, BigDecimal amountDue) {
+            return new Builder(to, amountDue, true);
+        }
+
+        private Builder(String to, BigDecimal amount, boolean isAmountDue) {
+            this.to = to;
+            this.amount = amount;
+            this.isAmountDue = isAmountDue;
+        }
+
+        /**
+         * @param comment payment comment
+         */
+        public Builder setComment(String comment) {
+            this.comment = comment;
+            return this;
+        }
+
+        /**
+         * @param message message to a recipient
+         */
+        public Builder setMessage(String message) {
+            this.message = message;
+            return this;
+        }
+
+        /**
+         * @param label payment label
+         */
+        public Builder setLabel(String label) {
+            this.label = label;
+            return this;
+        }
+
+        /**
+         * @param codepro {@code true} if payment should be protected whith a code
+         */
+        public Builder setCodepro(Boolean codepro) {
+            this.codepro = codepro;
+            return this;
+        }
+
+        /**
+         * @param expirePeriod number of days during which a transfer can be received
+         */
+        public Builder setExpirePeriod(Integer expirePeriod) {
+            this.expirePeriod = expirePeriod;
+            return this;
+        }
+
+        public P2pParams build() {
+            return new P2pParams(makeParams());
+        }
+
+        private Map<String, String> makeParams() {
+            HashMap<String, String> params = new HashMap<>();
+            params.put("pattern_id", "p2p");
+            params.put("to", to);
+            params.put(isAmountDue ? "amount_due" : "amount", amount.toPlainString());
+            params.put("comment", comment);
+            params.put("message", message);
+            params.put("label", label);
+            params.put("codepro", codepro.toString());
+            params.put("expire_period", expirePeriod.toString());
+            return params;
+        }
     }
 }

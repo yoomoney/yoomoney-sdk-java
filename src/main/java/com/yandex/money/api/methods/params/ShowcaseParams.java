@@ -21,40 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.yandex.money.api.methods.params;
 
-import com.yandex.money.api.utils.Strings;
-
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Convenience class for phone top up parameters.
+ * Wrapper class of arbitrary shop payment parameters.
  *
- * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
+ * @author Anton Ermak (ermak@yamoney.ru).
  */
-public final class PhoneParams extends BaseParams {
+public final class ShowcaseParams extends BaseParams {
 
-    public static final String PATTERN_ID = "phone-topup";
-
-    private static final String PARAM_PHONE_NUMBER = "phone-number";
-    private static final String PARAM_AMOUNT = "amount";
-
-    public static PhoneParams newInstance(String number, BigDecimal amount) {
-        if (Strings.isNullOrEmpty(number))
-            throw new IllegalArgumentException(PARAM_PHONE_NUMBER + " is null or empty");
-        if (amount == null)
-            throw new IllegalArgumentException(PARAM_AMOUNT + " is null or empty");
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put(PARAM_PHONE_NUMBER, number);
-        params.put(PARAM_AMOUNT, amount.toPlainString());
-        return new PhoneParams(PATTERN_ID, params);
-    }
-
-    private PhoneParams(String patternId, Map<String, String> paymentParams) {
+    public ShowcaseParams(String patternId, Map<String, String> paymentParams) {
         super(patternId, paymentParams);
     }
 }
