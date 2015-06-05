@@ -112,7 +112,6 @@ public class RequestPayment extends BaseRequestPayment {
 
         /**
          * Use static methods to create
-         *
          * {@link com.yandex.money.api.methods.RequestPayment.Request}.
          */
         private Request(String patternId, Map<String, String> paymentParameters) {
@@ -128,7 +127,7 @@ public class RequestPayment extends BaseRequestPayment {
          * {@link Params} especially for p2p and phone-topup payments.
          *
          * @param patternId pattern_id (p2p, phone-topup or shop).
-         * @param params shop parameters.
+         * @param params payment parameters.
          * @return new request instance.
          */
         public static Request newInstance(String patternId, Map<String, String> params) {
@@ -142,14 +141,14 @@ public class RequestPayment extends BaseRequestPayment {
         /**
          * Creates instance of payment's request by providing convenience wrapper.
          *
-         * @param paymentParams payment params
-         * @return new request instance
+         * @param params payment parameters wrapper.
+         * @return new request instance.
          */
-        public static Request newInstance(Params paymentParams) {
-            if (paymentParams == null) {
-                throw new IllegalArgumentException("paymentParams is null");
+        public static Request newInstance(Params params) {
+            if (params == null) {
+                throw new IllegalArgumentException("params is null");
             }
-            return Request.newInstance(paymentParams.getPatternId(), paymentParams.makeParams());
+            return Request.newInstance(params.getPatternId(), params.makeParams());
         }
 
         @Override

@@ -78,7 +78,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
          */
         private Request(String instanceId, String patternId, Map<String, String> params) {
             super(RequestExternalPayment.class, new Deserializer());
-            Strings.checkNotNullAndNotEmpty(instanceId, "instanceId");
+
             addParameter("instance_id", instanceId);
             addParameter("pattern_id", patternId);
             addParameters(params);
@@ -86,12 +86,12 @@ public class RequestExternalPayment extends BaseRequestPayment {
 
         /**
          * Creates instance of payment's request for general purposes. In other words for payments
-         * to a specific pattern_id with known parameters. Consider to use implementations of
+         * to a specific pattern_id with known parameters. Take a look at subclasses of
          * {@link Params} especially for p2p and phone-topup payments.
          *
-         * @param instanceId application's instance id
+         * @param instanceId application's instance id.
          * @param patternId pattern_id (p2p, phone-topup or shop).
-         * @param params shop parameters.
+         * @param params payment parameters.
          * @return new request instance.
          */
         public static Request newInstance(String instanceId, String patternId,
@@ -110,20 +110,19 @@ public class RequestExternalPayment extends BaseRequestPayment {
          *
          * <p>
          * Note: the subset parameters of class {@link com.yandex.money.api.methods.params
-         * .P2pParams}
-         * is supported by now. Check out the documentation for additional information.
+         * .P2pParams} doesn't supported by now. Check out the documentation for additional
+         * information.
          * </p>
          *
-         * @param instanceId application's instance id
-         * @param paymentParams payment params builder
-         * @return new request instance
+         * @param instanceId application's instance id.
+         * @param params payment parameters wrapper.
+         * @return new request instance.
          */
-        public static Request newInstance(String instanceId, Params paymentParams) {
-            if (paymentParams == null) {
-                throw new IllegalArgumentException("params is null");
+        public static Request newInstance(String instanceId, Params params) {
+            if (params == null) {
+                throw new IllegalArgumentException("paymentParams is null");
             }
-            return new Request(instanceId, paymentParams.getPatternId(),
-                    paymentParams.makeParams());
+            return Request.newInstance(instanceId, params.getPatternId(), params.makeParams());
         }
 
         @Override

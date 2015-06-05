@@ -48,25 +48,6 @@ public final class P2pParams extends BaseParams {
      */
     public static final class Builder {
 
-        private enum Params {
-
-            AMOUNT_DUE("amount_due"),
-            AMOUNT("amount"),
-            CODEPRO("codepro"),
-            HOLD_FOR_PICKUP("hold_for_pickup"),
-            COMMENT("comment"),
-            EXPIRE("expire_period"),
-            LABEL("label"),
-            MESSAGE("message"),
-            TO("to");
-
-            public final String paramName;
-
-            Params(String paramName) {
-                this.paramName = paramName;
-            }
-        }
-
         private String to;
         private BigDecimal amount;
         private BigDecimal amountDue;
@@ -125,7 +106,7 @@ public final class P2pParams extends BaseParams {
         }
 
         /**
-         * @param codepro {@code true} if payment should be protected whith a code
+         * @param codepro {@code true} if payment should be protected with a code
          */
         public Builder setCodepro(Boolean codepro) {
             this.codepro = codepro;
@@ -168,6 +149,24 @@ public final class P2pParams extends BaseParams {
                 params.put(Params.AMOUNT_DUE.paramName, amountDue.toPlainString());
             } else {
                 params.put(Params.AMOUNT.paramName, amount.toPlainString());
+            }
+        }
+
+        private enum Params {
+
+            AMOUNT_DUE("amount_due"),
+            AMOUNT("amount"),
+            CODEPRO("codepro"),
+            COMMENT("comment"),
+            EXPIRE("expire_period"),
+            LABEL("label"),
+            MESSAGE("message"),
+            TO("to");
+
+            public final String paramName;
+
+            Params(String paramName) {
+                this.paramName = paramName;
             }
         }
     }
