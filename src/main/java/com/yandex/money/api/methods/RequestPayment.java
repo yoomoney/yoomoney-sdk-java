@@ -30,7 +30,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.api.methods.params.Params;
+import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Card;
@@ -124,7 +124,7 @@ public class RequestPayment extends BaseRequestPayment {
         /**
          * Creates instance of payment's request for general purposes. In other words for payments
          * to a specific pattern_id with known parameters. Consider to use implementations of
-         * {@link Params} especially for p2p and phone-topup payments.
+         * {@link PaymentParams} especially for p2p and phone-topup payments.
          *
          * @param patternId pattern_id (p2p, phone-topup or shop).
          * @param params payment parameters.
@@ -141,14 +141,14 @@ public class RequestPayment extends BaseRequestPayment {
         /**
          * Creates instance of payment's request by providing convenience wrapper.
          *
-         * @param params payment parameters wrapper.
+         * @param paymentParams payment parameters wrapper.
          * @return new request instance.
          */
-        public static Request newInstance(Params params) {
-            if (params == null) {
-                throw new IllegalArgumentException("params is null");
+        public static Request newInstance(PaymentParams paymentParams) {
+            if (paymentParams == null) {
+                throw new IllegalArgumentException("paymentParams is null");
             }
-            return Request.newInstance(params.getPatternId(), params.makeParams());
+            return Request.newInstance(paymentParams.getPatternId(), paymentParams.makeParams());
         }
 
         @Override

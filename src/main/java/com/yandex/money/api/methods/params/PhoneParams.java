@@ -35,7 +35,7 @@ import java.util.Map;
  *
  * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
-public final class PhoneParams extends BaseParams {
+public final class PhoneParams extends PaymentParams {
 
     public static final String PATTERN_ID = "phone-topup";
 

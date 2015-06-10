@@ -29,7 +29,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.api.methods.params.Params;
+import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
@@ -87,7 +87,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
         /**
          * Creates instance of payment's request for general purposes. In other words for payments
          * to a specific pattern_id with known parameters. Take a look at subclasses of
-         * {@link Params} especially for p2p and phone-topup payments.
+         * {@link PaymentParams} especially for p2p and phone-topup payments.
          *
          * @param instanceId application's instance id.
          * @param patternId pattern_id (p2p, phone-topup or shop).
@@ -100,7 +100,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
             Strings.checkNotNullAndNotEmpty(patternId, "patternId");
 
             if (params == null || params.isEmpty()) {
-                throw new IllegalArgumentException("paramsShop is null or empty");
+                throw new IllegalArgumentException("params is null or empty");
             }
             return new Request(instanceId, patternId, params);
         }
@@ -115,14 +115,15 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * </p>
          *
          * @param instanceId application's instance id.
-         * @param params payment parameters wrapper.
+         * @param paymentParams payment parameters wrapper.
          * @return new request instance.
          */
-        public static Request newInstance(String instanceId, Params params) {
-            if (params == null) {
+        public static Request newInstance(String instanceId, PaymentParams paymentParams) {
+            if (paymentParams == null) {
                 throw new IllegalArgumentException("paymentParams is null");
             }
-            return Request.newInstance(instanceId, params.getPatternId(), params.makeParams());
+            return Request.newInstance(instanceId, paymentParams.getPatternId(),
+                    paymentParams.makeParams());
         }
 
         @Override

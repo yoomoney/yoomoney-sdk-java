@@ -35,11 +35,11 @@ import java.util.Map;
  *
  * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
-public final class P2pParams extends BaseParams {
+public final class P2pTransferParams extends PaymentParams {
 
     public static final String PATTERN_ID = "p2p";
 
-    private P2pParams(Map<String, String> paymentParams) {
+    private P2pTransferParams(Map<String, String> paymentParams) {
         super(PATTERN_ID, paymentParams);
     }
 
@@ -121,8 +121,8 @@ public final class P2pParams extends BaseParams {
             return this;
         }
 
-        public P2pParams build() {
-            return new P2pParams(makeParams());
+        public P2pTransferParams build() {
+            return new P2pTransferParams(makeParams());
         }
 
         private Map<String, String> makeParams() {

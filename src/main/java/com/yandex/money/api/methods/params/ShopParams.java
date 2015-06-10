@@ -21,35 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
 package com.yandex.money.api.methods.params;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Wrapper class of arbitrary shop payment parameters.
+ *
  * @author Anton Ermak (ermak@yamoney.ru).
  */
-class BaseParams implements Params {
+public final class ShopParams extends PaymentParams {
 
-    public final String patternId;
-    public final Map<String, String> paymentParams;
-
-    public BaseParams(String patternId, Map<String, String> paymentParams) {
-        this.patternId = patternId;
-        this.paymentParams = paymentParams;
-    }
-
-    @Override
-    public String getPatternId() {
-        return patternId;
-    }
-
-    @Override
-    public Map<String, String> makeParams() {
-        HashMap<String, String> params = new HashMap<>();
-        params.putAll(paymentParams);
-        return Collections.unmodifiableMap(params);
+    public ShopParams(String patternId, Map<String, String> paymentParams) {
+        super(patternId, paymentParams);
     }
 }
