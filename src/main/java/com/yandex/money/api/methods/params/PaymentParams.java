@@ -25,7 +25,6 @@
 package com.yandex.money.api.methods.params;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,7 +35,7 @@ public abstract class PaymentParams {
     public final String patternId;
     public final Map<String, String> paymentParams;
 
-    public PaymentParams(String patternId, Map<String, String> paymentParams) {
+    PaymentParams(String patternId, Map<String, String> paymentParams) {
         this.patternId = patternId;
         this.paymentParams = paymentParams;
     }
@@ -46,8 +45,6 @@ public abstract class PaymentParams {
     }
 
     public Map<String, String> makeParams() {
-        HashMap<String, String> params = new HashMap<>();
-        params.putAll(paymentParams);
-        return Collections.unmodifiableMap(params);
+        return Collections.unmodifiableMap(paymentParams);
     }
 }
