@@ -48,7 +48,8 @@ public final class P2pTransferParams extends PaymentParams {
      */
     public static final class Builder {
 
-        private String to;
+        private final String to;
+
         private BigDecimal amount;
         private BigDecimal amountDue;
         private String comment;
@@ -57,12 +58,9 @@ public final class P2pTransferParams extends PaymentParams {
         private String label;
         private String message;
 
-        /**
-         * @param to account number, phone number or email of a recipient
-         */
-        public Builder setTo(String to) {
+        public Builder(String to) {
+            Strings.checkNotNullAndNotEmpty(to, "to");
             this.to = to;
-            return this;
         }
 
         /**
@@ -126,8 +124,6 @@ public final class P2pTransferParams extends PaymentParams {
         }
 
         private Map<String, String> makeParams() {
-            Strings.checkNotNullAndNotEmpty(to, "to");
-
             HashMap<String, String> params = new HashMap<>();
             params.put(Params.TO.paramName, to);
             params.put(Params.COMMENT.paramName, comment);
