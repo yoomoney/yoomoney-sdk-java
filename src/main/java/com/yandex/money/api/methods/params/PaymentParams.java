@@ -24,37 +24,27 @@
 
 package com.yandex.money.api.methods.params;
 
-import com.yandex.money.api.utils.Strings;
-
-import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
 
 /**
- * Convenience class for phone top up parameters.
- *
- * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
+ * @author Anton Ermak (ermak@yamoney.ru).
  */
-public final class PhoneParams extends PaymentParams {
+public abstract class PaymentParams {
 
-    public static final String PATTERN_ID = "phone-topup";
+    public final String patternId;
+    public final Map<String, String> paymentParams;
 
-    private static final String PARAM_PHONE_NUMBER = "phone-number";
-    private static final String PARAM_AMOUNT = "amount";
-
-    public static PhoneParams newInstance(String number, BigDecimal amount) {
-        if (Strings.isNullOrEmpty(number))
-            throw new IllegalArgumentException(PARAM_PHONE_NUMBER + " is null or empty");
-        if (amount == null)
-            throw new IllegalArgumentException(PARAM_AMOUNT + " is null or empty");
-
-        HashMap<String, String> params = new HashMap<>();
-        params.put(PARAM_PHONE_NUMBER, number);
-        params.put(PARAM_AMOUNT, amount.toPlainString());
-        return new PhoneParams(PATTERN_ID, params);
+    PaymentParams(String patternId, Map<String, String> paymentParams) {
+        this.patternId = patternId;
+        this.paymentParams = paymentParams;
     }
 
-    private PhoneParams(String patternId, Map<String, String> paymentParams) {
-        super(patternId, paymentParams);
+    public String getPatternId() {
+        return patternId;
+    }
+
+    public Map<String, String> makeParams() {
+        return Collections.unmodifiableMap(paymentParams);
     }
 }

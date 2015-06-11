@@ -30,6 +30,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Card;
@@ -109,90 +110,45 @@ public class RequestPayment extends BaseRequestPayment {
      */
     public static final class Request extends PostRequest<RequestPayment> {
 
-        private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT = new BigDecimal(0.02);
-        private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT_DUE = new BigDecimal(0.01);
-
         /**
-         * Requests for context of payment to a specific shop.
-         *
-         * @param patternId pattern id of a shop
-         * @param paymentParameters payment parameters
+         * Use static methods to create
+         * {@link com.yandex.money.api.methods.RequestPayment.Request}.
          */
-        public Request(String patternId, Map<String, String> paymentParameters) {
+        private Request(String patternId, Map<String, String> paymentParameters) {
             super(RequestPayment.class, new Deserializer());
-            checkNotNullAndNotEmpty(patternId, "patternId");
-            if (paymentParameters == null) {
-                throw new NullPointerException("paymentParameters is null");
-            }
 
             addParameter("pattern_id", patternId);
             addParameters(paymentParameters);
         }
 
         /**
-         * Requests for context of payment to top up a phone.
+         * Creates instance of payment's request for general purposes. In other words for payments
+         * to a specific pattern_id with known parameters. Consider to use implementations of
+         * {@link PaymentParams} especially for p2p and phone-topup payments.
          *
-         * @param phoneNumber phone number
-         * @param amount amount
+         * @param patternId pattern_id (p2p, phone-topup or shop).
+         * @param params payment parameters.
+         * @return new request instance.
          */
-        public Request(String phoneNumber, BigDecimal amount) {
-            super(RequestPayment.class, new Deserializer());
-            checkNotNullAndNotEmpty(phoneNumber, "phoneNumber");
-            if (amount == null) {
-                throw new NullPointerException("amount is null");
+        public static Request newInstance(String patternId, Map<String, String> params) {
+            Strings.checkNotNullAndNotEmpty(patternId, "patternId");
+            if (params == null || params.isEmpty()) {
+                throw new IllegalArgumentException("params is null or empty");
             }
-            if (amount.compareTo(ABSOLUTE_MINIMUM_AMOUNT) < 0) {
-                throw new IllegalArgumentException("amount has illegal value " +
-                        amount.toPlainString());
-            }
-
-            addParameter("pattern_id", "phone-topup");
-            addParameter("phone-number", phoneNumber);
-            addParameter("amount", amount);
+            return new Request(patternId, params);
         }
 
         /**
-         * Requests for a context of payment to another user.
+         * Creates instance of payment's request by providing convenience wrapper.
          *
-         * @param to account number, phone number or email of a recipient
-         * @param amount amount to pay
-         * @param amountDue amount to receive
-         * @param comment payment comment
-         * @param message message to a recipient
-         * @param label payment label
-         * @param codepro {@code true} if payment should be protected whith a code
-         * @param expirePeriod number of days during which a transfer can be received
+         * @param paymentParams payment parameters wrapper.
+         * @return new request instance.
          */
-        private Request(String to, BigDecimal amount, BigDecimal amountDue, String comment,
-                        String message, String label, Boolean codepro, Integer expirePeriod) {
-
-            super(RequestPayment.class, new Deserializer());
-            checkNotNullAndNotEmpty(to, "to");
-            if (amount == null) {
-                if (amountDue == null) {
-                    throw new NullPointerException("amount and amountDue is null");
-                } else if (amountDue.compareTo(ABSOLUTE_MINIMUM_AMOUNT_DUE) < 0) {
-                    throw new IllegalArgumentException("amountDue has illegal value: " +
-                            amountDue.toPlainString());
-                }
-            } else {
-                if (amountDue != null) {
-                    throw new IllegalArgumentException("inconsistent values amount and amountDue");
-                } else if (amount.compareTo(ABSOLUTE_MINIMUM_AMOUNT) < 0) {
-                    throw new IllegalArgumentException("amount has illegal value: " +
-                            amount.toPlainString());
-                }
+        public static Request newInstance(PaymentParams paymentParams) {
+            if (paymentParams == null) {
+                throw new IllegalArgumentException("paymentParams is null");
             }
-
-            addParameter("pattern_id", "p2p");
-            addParameter("to", to);
-            addParameter("amount", amount);
-            addParameter("amount_due", amountDue);
-            addParameter("comment", comment);
-            addParameter("message", message);
-            addParameter("label", label);
-            addParameter("codepro", codepro);
-            addParameter("expire_period", expirePeriod);
+            return Request.newInstance(paymentParams.getPatternId(), paymentParams.makeParams());
         }
 
         @Override
@@ -220,99 +176,6 @@ public class RequestPayment extends BaseRequestPayment {
             addParameter("test_payment", true);
             addParameter("test_result", testResult.code);
             return this;
-        }
-
-        private void checkNotNullAndNotEmpty(String value, String field) {
-            if (Strings.isNullOrEmpty(value)) {
-                throw new IllegalArgumentException(field + " is null or empty");
-            }
-        }
-
-        /**
-         * Creates P2P request payment.
-         */
-        public static class P2pBuilder {
-            private String to;
-            private BigDecimal amount;
-            private BigDecimal amountDue;
-            private String comment;
-            private String message;
-            private String label;
-            private Boolean codepro;
-            private Integer expirePeriod;
-
-            /**
-             * @param to account number, phone number or email of a recipient
-             */
-            public P2pBuilder setTo(String to) {
-                this.to = to;
-                return this;
-            }
-
-            /**
-             * @param amount amount to pay
-             */
-            public P2pBuilder setAmount(BigDecimal amount) {
-                this.amount = amount;
-                return this;
-            }
-
-            /**
-             * @param amountDue amount to receive
-             */
-            public P2pBuilder setAmountDue(BigDecimal amountDue) {
-                this.amountDue = amountDue;
-                return this;
-            }
-
-            /**
-             * @param comment payment comment
-             */
-            public P2pBuilder setComment(String comment) {
-                this.comment = comment;
-                return this;
-            }
-
-            /**
-             * @param message message to a recipient
-             */
-            public P2pBuilder setMessage(String message) {
-                this.message = message;
-                return this;
-            }
-
-            /**
-             * @param label payment label
-             */
-            public P2pBuilder setLabel(String label) {
-                this.label = label;
-                return this;
-            }
-
-            /**
-             * @param codepro {@code true} if payment should be protected whith a code
-             */
-            public P2pBuilder setCodepro(Boolean codepro) {
-                this.codepro = codepro;
-                return this;
-            }
-
-            /**
-             * @param expirePeriod number of days during which a transfer can be received
-             */
-            public P2pBuilder setExpirePeriod(Integer expirePeriod) {
-                this.expirePeriod = expirePeriod;
-                return this;
-            }
-
-            /**
-             * @return {@link com.yandex.money.api.methods.RequestPayment.Request} for P2P
-             * transaction
-             */
-            public Request createRequest() {
-                return new Request(to, amount, amountDue, comment, message, label, codepro,
-                        expirePeriod);
-            }
         }
     }
 

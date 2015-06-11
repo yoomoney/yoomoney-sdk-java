@@ -192,7 +192,9 @@ public class PaymentProcessTest {
 
             @Override
             public Map<String, String> getPaymentParameters() {
-                return new HashMap<>();
+                final HashMap<String, String> params = new HashMap<>();
+                params.put("foo", "bar");
+                return params;
             }
 
             @Override

@@ -121,4 +121,10 @@ public final class Strings {
         String[] split = split(str, groupSize);
         return concatenate(split, separator);
     }
+
+    public static void checkNotNullAndNotEmpty(String value, String field) {
+        if (isNullOrEmpty(value)) {
+            throw new IllegalArgumentException(field + " is null or empty");
+        }
+    }
 }

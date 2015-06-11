@@ -29,8 +29,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.api.methods.params.P2pParams;
-import com.yandex.money.api.methods.params.PhoneParams;
+import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
@@ -79,12 +78,6 @@ public class RequestExternalPayment extends BaseRequestPayment {
          */
         private Request(String instanceId, String patternId, Map<String, String> params) {
             super(RequestExternalPayment.class, new Deserializer());
-            if (Strings.isNullOrEmpty(instanceId)) {
-                throw new IllegalArgumentException("instanceId is null or empty");
-            }
-            if (Strings.isNullOrEmpty(patternId)) {
-                throw new IllegalArgumentException("patternId is null or empty");
-            }
 
             addParameter("instance_id", instanceId);
             addParameter("pattern_id", patternId);
@@ -93,47 +86,44 @@ public class RequestExternalPayment extends BaseRequestPayment {
 
         /**
          * Creates instance of payment's request for general purposes. In other words for payments
-         * to a specific shop with known parameters.
+         * to a specific pattern_id with known parameters. Take a look at subclasses of
+         * {@link PaymentParams} especially for p2p and phone-topup payments.
          *
-         * @param instanceId application's instance id
-         * @param patternId pattern id of a shop
-         * @param paramsShop shop parameters
-         * @return new request instance
+         * @param instanceId application's instance id.
+         * @param patternId pattern_id (p2p, phone-topup or shop).
+         * @param params payment parameters.
+         * @return new request instance.
          */
         public static Request newInstance(String instanceId, String patternId,
-                                          Map<String, String> paramsShop) {
-            if (paramsShop == null)
-                throw new IllegalArgumentException("paramsShop is null or empty");
+                                          Map<String, String> params) {
+            Strings.checkNotNullAndNotEmpty(instanceId, "instanceId");
+            Strings.checkNotNullAndNotEmpty(patternId, "patternId");
 
-            return new Request(instanceId, patternId, paramsShop);
+            if (params == null || params.isEmpty()) {
+                throw new IllegalArgumentException("params is null or empty");
+            }
+            return new Request(instanceId, patternId, params);
         }
 
         /**
-         * Creates instance of request for P2P payments.
+         * Convenience method for creating instance of payments.
          *
-         * @param instanceId application's instance id
-         * @param p2pParams p2p parameters
-         * @return new request instance
-         */
-        public static Request newInstance(String instanceId, P2pParams p2pParams) {
-            if (p2pParams == null) {
-                throw new IllegalArgumentException("p2pParams is null or empty");
-            }
-            return new Request(instanceId, p2pParams.getPatternId(), p2pParams.makeParams());
-        }
-
-        /**
-         * Creates instance of request to top up a phone number.
+         * <p>
+         * Note: the subset parameters of class {@link com.yandex.money.api.methods.params
+         * .P2pParams} doesn't supported by now. Check out the documentation for additional
+         * information.
+         * </p>
          *
-         * @param instanceId application's instance id
-         * @param phoneParams phone payment parameters
-         * @return new request instance
+         * @param instanceId application's instance id.
+         * @param paymentParams payment parameters wrapper.
+         * @return new request instance.
          */
-        public static Request newInstance(String instanceId, PhoneParams phoneParams) {
-            if (phoneParams == null) {
-                throw new IllegalArgumentException("phoneParams is null or empty");
+        public static Request newInstance(String instanceId, PaymentParams paymentParams) {
+            if (paymentParams == null) {
+                throw new IllegalArgumentException("paymentParams is null");
             }
-            return new Request(instanceId, phoneParams.getPatternId(), phoneParams.makeParams());
+            return Request.newInstance(instanceId, paymentParams.getPatternId(),
+                    paymentParams.makeParams());
         }
 
         @Override

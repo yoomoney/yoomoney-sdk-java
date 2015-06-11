@@ -53,7 +53,7 @@ public final class PaymentProcess extends BasePaymentProcess<RequestPayment, Pro
 
     @Override
     protected ApiRequest<RequestPayment> createRequestPayment() {
-        return new RequestPayment.Request(parameterProvider.getPatternId(),
+        return RequestPayment.Request.newInstance(parameterProvider.getPatternId(),
                 parameterProvider.getPaymentParameters());
     }
 
