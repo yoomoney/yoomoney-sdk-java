@@ -103,7 +103,10 @@ public abstract class AbstractSession {
         }
 
         for (Map.Entry<String, String> entry : request.getHeaders().entrySet()) {
-            builder.addHeader(entry.getKey(), entry.getValue());
+            String value = entry.getValue();
+            if (value != null) {
+                builder.addHeader(entry.getKey(), value);
+            }
         }
 
         ParametersBuffer parametersBuffer = new ParametersBuffer()
