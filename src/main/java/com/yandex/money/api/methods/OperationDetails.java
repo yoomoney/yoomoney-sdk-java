@@ -82,9 +82,6 @@ public class OperationDetails implements MethodResponse {
          */
         public Request(String operationId) {
             super(OperationDetails.class, new Deserializer());
-            if (operationId == null || operationId.isEmpty()) {
-                throw new IllegalArgumentException("operationId is null or empty");
-            }
             addParameter("operation_id", operationId);
         }
 

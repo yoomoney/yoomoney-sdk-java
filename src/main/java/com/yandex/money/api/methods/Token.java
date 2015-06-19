@@ -98,9 +98,6 @@ public class Token implements MethodResponse {
             if (Strings.isNullOrEmpty(clientId)) {
                 throw new NullPointerException("clientId is null or empty");
             }
-            if (Strings.isNullOrEmpty(redirectUri)) {
-                throw new NullPointerException("redirectUri is null or empty");
-            }
             addParameter("code", code);
             addParameter("client_id", clientId);
             addParameter("grant_type", "authorization_code");
