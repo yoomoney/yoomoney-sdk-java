@@ -148,7 +148,7 @@ public class RequestPayment extends BaseRequestPayment {
             if (paymentParams == null) {
                 throw new IllegalArgumentException("paymentParams is null");
             }
-            return Request.newInstance(paymentParams.getPatternId(), paymentParams.makeParams());
+            return newInstance(paymentParams.getPatternId(), paymentParams.makeParams());
         }
 
         @Override

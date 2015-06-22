@@ -54,8 +54,8 @@ import java.util.HashMap;
  */
 public class YandexMoneyTest implements ApiTest {
 
-    private static final String PATTERN_ID_PHONE_TOPUP = PhoneParams.PATTERN_ID;
-    private static final String AMOUNT = "1.00";
+    private final String phoneNumber = LOCAL_PROPERTIES.getPhoneNumber();
+    private final BigDecimal amount = LOCAL_PROPERTIES.getAmount();
 
     private OAuth2Session session;
 
@@ -137,7 +137,7 @@ public class YandexMoneyTest implements ApiTest {
             Assert.assertNull(response.error);
             Assert.assertNotNull(response.requestId);
             Assert.assertTrue(response.requestId.length() > 0);
-            Assert.assertEquals(response.contractAmount, new BigDecimal(AMOUNT));
+            Assert.assertEquals(response.contractAmount, amount);
         } else {
             Assert.assertEquals(response.error, Error.NOT_ENOUGH_FUNDS);
         }
@@ -147,8 +147,8 @@ public class YandexMoneyTest implements ApiTest {
 
     private HashMap<String, String> successRequestParams() {
         HashMap<String, String> params = new HashMap<>();
-        params.put("amount", AMOUNT);
-        params.put("phone-number", "79112611383");
+        params.put("amount", amount.toPlainString());
+        params.put("phone-number", phoneNumber);
         return params;
     }
 
@@ -167,13 +167,13 @@ public class YandexMoneyTest implements ApiTest {
         params = successRequestParams();
         params.remove("amount");
         reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
-                respInstanceId.instanceId, PATTERN_ID_PHONE_TOPUP, params);
+                respInstanceId.instanceId, PhoneParams.PATTERN_ID, params);
         respRequestExternalPayment = testRequestPaymentFail(reqRequestExternalPayment);
 
         params = successRequestParams();
         params.remove("phone-number");
         reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
-                respInstanceId.instanceId, PATTERN_ID_PHONE_TOPUP, params);
+                respInstanceId.instanceId, PhoneParams.PATTERN_ID, params);
         respRequestExternalPayment = testRequestPaymentFail(reqRequestExternalPayment);
     }
 
@@ -214,8 +214,9 @@ public class YandexMoneyTest implements ApiTest {
         session.setAccessToken(ACCESS_TOKEN);
         RequestPayment requestPayment = session.execute(createRequestPayment());
         if (requestPayment.status == BaseRequestPayment.Status.SUCCESS) {
-            ProcessPayment processPayment = session.execute(new ProcessPayment.Request(
-                    requestPayment.requestId));
+            ProcessPayment processPayment = session.execute(
+                    new ProcessPayment.Request(requestPayment.requestId)
+                            .setTestResult(ProcessPayment.TestResult.SUCCESS));
             Assert.assertNotNull(processPayment);
         } else {
             Assert.assertEquals(requestPayment.error, Error.NOT_ENOUGH_FUNDS);
@@ -241,12 +242,11 @@ public class YandexMoneyTest implements ApiTest {
 
         HashMap<String, String> params = successRequestParams();
         return RequestExternalPayment.Request.newInstance(
-                respInstanceId.instanceId, PATTERN_ID_PHONE_TOPUP, params);
+                respInstanceId.instanceId, PhoneParams.PATTERN_ID, params);
     }
 
     private RequestPayment.Request createRequestPayment() {
-        HashMap<String, String> params = successRequestParams();
-        return RequestPayment.Request.newInstance(PhoneParams.newInstance(
-                params.get("phone-number"), new BigDecimal(AMOUNT)));
+        return RequestPayment.Request.newInstance(PhoneParams.newInstance(phoneNumber, amount))
+                .setTestResult(RequestPayment.TestResult.SUCCESS);
     }
 }

@@ -24,6 +24,8 @@
 
 package com.yandex.money.test.properties;
 
+import java.math.BigDecimal;
+
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
@@ -39,5 +41,13 @@ public final class LocalProperties extends BaseProperties {
 
     public String getAccessToken() {
         return get("access.token");
+    }
+
+    public String getPhoneNumber() {
+        return get("params.phone");
+    }
+
+    public BigDecimal getAmount() {
+        return new BigDecimal(get("params.amount"));
     }
 }
