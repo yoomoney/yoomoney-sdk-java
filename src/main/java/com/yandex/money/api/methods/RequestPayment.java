@@ -33,12 +33,12 @@ import com.google.gson.JsonParseException;
 import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
-import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.CardTypeAdapter;
 import com.yandex.money.api.utils.Strings;
 
 import java.lang.reflect.Type;
@@ -357,7 +357,7 @@ public class RequestPayment extends BaseRequestPayment {
                         cscRequired = JsonUtils.getMandatoryBoolean(cards, "csc_required");
                         JsonArray items = cards.getAsJsonArray("items");
                         for (JsonElement item : items) {
-                            moneySources.add(Card.createFromJson(item));
+                            moneySources.add(CardTypeAdapter.fromJson(item));
                         }
                     }
                 }

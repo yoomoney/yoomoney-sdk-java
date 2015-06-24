@@ -24,16 +24,10 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.yandex.money.api.methods.JsonUtils;
+import com.yandex.money.api.typeadapters.CardTypeAdapter;
+
+import java.util.Objects;
 
 /**
  * Bank card info.
@@ -70,16 +64,20 @@ public class Card extends MoneySource {
 
     /**
      * Creates {@link com.yandex.money.api.model.Card} from {@link com.google.gson.JsonElement}.
+     * @deprecated use {@link CardTypeAdapter#fromJson(JsonElement)} instead
      */
+    @Deprecated
     public static Card createFromJson(JsonElement element) {
-        return buildGson().fromJson(element, Card.class);
+        return CardTypeAdapter.fromJson(element);
     }
 
     /**
      * Creates {@link com.yandex.money.api.model.Card} from JSON.
+     * @deprecated use {@link CardTypeAdapter#fromJson(String)} instead
      */
+    @Deprecated
     public static Card createFromJson(String json) {
-        return buildGson().fromJson(json, Card.class);
+        return CardTypeAdapter.fromJson(json);
     }
 
     @Override
@@ -90,19 +88,28 @@ public class Card extends MoneySource {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Card) {
+            Card card = (Card) obj;
+            return id.equals(card.id) && type == card.type &&
+                    Objects.equals(panFragment, card.panFragment);
+        }
+        return false;
+    }
+
     /**
      * Serializes {@link com.yandex.money.api.model.Card} object to JSON text.
      *
      * @return JSON text
+     * @deprecated use {@link CardTypeAdapter#toJson(Card)}
      */
+    @Deprecated
     public String serializeToJson() {
-        return buildGson().toJson(this);
-    }
-
-    private static Gson buildGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(Card.class, new TypeAdapter())
-                .create();
+        return CardTypeAdapter.toJson(this);
     }
 
     public enum Type {
@@ -132,35 +139,6 @@ public class Card extends MoneySource {
                 }
             }
             return UNKNOWN;
-        }
-    }
-
-    private static final class TypeAdapter
-            implements JsonDeserializer<Card>, JsonSerializer<Card> {
-
-        private static final String FIELD_ID = "id";
-        private static final String FIELD_PAN_FRAGMENT = "pan_fragment";
-        private static final String FIELD_TYPE = "type";
-
-        @Override
-        public Card deserialize(JsonElement json, java.lang.reflect.Type typeOfT,
-                                JsonDeserializationContext context) throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-            return new Card(JsonUtils.getString(object, FIELD_ID),
-                    JsonUtils.getString(object, FIELD_PAN_FRAGMENT),
-                    Type.parse(JsonUtils.getString(object, FIELD_TYPE)));
-        }
-
-        @Override
-        public JsonElement serialize(Card src, java.lang.reflect.Type typeOfSrc,
-                                     JsonSerializationContext context) {
-
-            JsonObject object = new JsonObject();
-            object.addProperty(FIELD_ID, src.id);
-            object.addProperty(FIELD_PAN_FRAGMENT, src.panFragment);
-            object.addProperty(FIELD_TYPE, src.type.name);
-            return object;
         }
     }
 }

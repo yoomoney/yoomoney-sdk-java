@@ -55,7 +55,7 @@ public enum AccountStatus {
 
     public static AccountStatus parse(String code) {
         if (code == null) {
-            return null;
+            return UNKNOWN;
         }
         for (AccountStatus value : values()) {
             if (value.code.equals(code)) {

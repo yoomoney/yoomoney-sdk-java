@@ -24,12 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Avatar;
@@ -38,14 +32,14 @@ import com.yandex.money.api.model.Card;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.AccountInfoTypeAdapter;
 import com.yandex.money.api.utils.Currency;
 import com.yandex.money.api.utils.Strings;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Information of user account.
@@ -88,6 +82,15 @@ public class AccountInfo implements MethodResponse {
         if (balance == null) {
             throw new NullPointerException("balance is null");
         }
+        if (currency == null) {
+            throw new NullPointerException("currency is null");
+        }
+        if (accountStatus == null) {
+            throw new NullPointerException("accountStatus is null");
+        }
+        if (accountType == null) {
+            throw new NullPointerException("accountType is null");
+        }
         if (balanceDetails == null) {
             throw new NullPointerException("balanceDetails is null");
         }
@@ -123,6 +126,29 @@ public class AccountInfo implements MethodResponse {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof AccountInfo) {
+            AccountInfo info = (AccountInfo) obj;
+            return account.equals(info.account) && balance.equals(info.balance) &&
+                    currency == info.currency && accountStatus == info.accountStatus &&
+                    accountType == info.accountType && Objects.equals(avatar, info.avatar) &&
+                    balanceDetails.equals(info.balanceDetails) &&
+                    linkedCards.equals(info.linkedCards) &&
+                    additionalServices.equals(info.additionalServices);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(account, balance, currency, accountStatus, accountType, avatar,
+                balanceDetails, linkedCards, additionalServices);
+    }
+
     public boolean isIdentified() {
         return accountStatus == AccountStatus.IDENTIFIED;
     }
@@ -137,65 +163,12 @@ public class AccountInfo implements MethodResponse {
     public static final class Request extends PostRequest<AccountInfo> {
 
         public Request() {
-            super(AccountInfo.class, new Deserializer());
+            super(AccountInfo.class, AccountInfoTypeAdapter.getInstance());
         }
 
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/account-info";
-        }
-    }
-
-    private static final class Deserializer implements JsonDeserializer<AccountInfo> {
-        @Override
-        public AccountInfo deserialize(JsonElement json, Type typeOfT,
-                                       JsonDeserializationContext context)
-                throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-
-            Currency currency;
-            try {
-                int parsed = Integer.parseInt(JsonUtils.getString(object, "currency"));
-                currency = Currency.parseNumericCode(parsed);
-            } catch (NumberFormatException e) {
-                currency = Currency.RUB;
-            }
-
-            final String memberAvatar = "avatar";
-            Avatar avatar = null;
-            if (object.has(memberAvatar)) {
-                avatar = Avatar.createFromJson(object.get(memberAvatar));
-            }
-
-            BalanceDetails balanceDetails = BalanceDetails.createFromJson(
-                    object.get("balance_details"));
-
-            final String memberLinkedCards = "cards_linked";
-            List<Card> linkedCards = new ArrayList<>();
-            if (object.has(memberLinkedCards)) {
-                JsonArray array = object.getAsJsonArray(memberLinkedCards);
-                final int size = array.size();
-                for (int i = 0; i < size; ++i) {
-                    linkedCards.add(Card.createFromJson(array.get(i)));
-                }
-            }
-
-            final String memberAdditionalServices = "services_additional";
-            List<String> additionalServices = new ArrayList<>();
-            if (object.has(memberAdditionalServices)) {
-                JsonArray array = object.getAsJsonArray(memberAdditionalServices);
-                final int size = array.size();
-                for (int i = 0; i < size; ++i) {
-                    additionalServices.add(array.get(i).getAsString());
-                }
-            }
-
-            return new AccountInfo(JsonUtils.getMandatoryString(object, "account"),
-                    JsonUtils.getMandatoryBigDecimal(object, "balance"), currency,
-                    AccountStatus.parse(JsonUtils.getString(object, "account_status")),
-                    AccountType.parse(JsonUtils.getString(object, "account_type")),
-                    avatar, balanceDetails, linkedCards, additionalServices);
         }
     }
 }

@@ -29,6 +29,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.math.BigDecimal;
@@ -41,6 +42,9 @@ import java.util.Map;
  * @author vyasevich
  */
 public final class JsonUtils {
+
+    private static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
+            .withOffsetParsed();
 
     /**
      * This class contains only static methods.
@@ -197,9 +201,7 @@ public final class JsonUtils {
      */
     public static DateTime getDateTime(JsonObject object, String memberName) {
         JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
-        return primitive == null ? null :
-                DateTime.parse(primitive.getAsString(),
-                        ISODateTimeFormat.dateTimeParser().withOffsetParsed());
+        return primitive == null ? null : DateTime.parse(primitive.getAsString(), ISO_FORMATTER);
     }
 
     /**

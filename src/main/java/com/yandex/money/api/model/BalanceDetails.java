@@ -24,17 +24,12 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.api.methods.JsonUtils;
+import com.yandex.money.api.typeadapters.BalanceDetailsTypeAdapter;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 /**
  * Detailed balance info.
@@ -88,10 +83,10 @@ public class BalanceDetails {
         if (total == null) {
             throw new JsonParseException("balance total is null");
         }
-        this.total = total;
         if (available == null) {
             throw new JsonParseException("balance available is null");
         }
+        this.total = total;
         this.available = available;
         this.depositionPending = depositionPending;
         this.blocked = blocked;
@@ -104,9 +99,11 @@ public class BalanceDetails {
      *
      * @param element JSON object
      * @return {@link com.yandex.money.api.model.BalanceDetails}
+     * @deprecated use {@link BalanceDetailsTypeAdapter#fromJson(JsonElement)} instead
      */
+    @Deprecated
     public static BalanceDetails createFromJson(JsonElement element) {
-        return buildGson().fromJson(element, BalanceDetails.class);
+        return BalanceDetailsTypeAdapter.fromJson(element);
     }
 
     @Override
@@ -121,25 +118,23 @@ public class BalanceDetails {
                 '}';
     }
 
-    private static Gson buildGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(BalanceDetails.class, new Deserializer())
-                .create();
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof BalanceDetails) {
+            BalanceDetails details = (BalanceDetails) obj;
+            return total.equals(details.total) && available.equals(details.available) &&
+                    Objects.equals(depositionPending, details.depositionPending) &&
+                    Objects.equals(blocked, details.blocked) &&
+                    Objects.equals(debt, details.debt) && Objects.equals(hold, details.hold);
+        }
+        return false;
     }
 
-    private static final class Deserializer implements JsonDeserializer<BalanceDetails> {
-        @Override
-        public BalanceDetails deserialize(JsonElement json, Type typeOfT,
-                                          JsonDeserializationContext context)
-                throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-            return new BalanceDetails(JsonUtils.getMandatoryBigDecimal(object, "total"),
-                    JsonUtils.getMandatoryBigDecimal(object, "available"),
-                    JsonUtils.getBigDecimal(object, "deposition_pending"),
-                    JsonUtils.getBigDecimal(object, "blocked"),
-                    JsonUtils.getBigDecimal(object, "debt"),
-                    JsonUtils.getBigDecimal(object, "hold"));
-        }
+    @Override
+    public int hashCode() {
+        return Objects.hash(total, available, depositionPending, blocked, debt, hold);
     }
 }

@@ -24,18 +24,14 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.yandex.money.api.methods.JsonUtils;
+import com.yandex.money.api.typeadapters.AvatarTypeAdapter;
+import com.yandex.money.api.utils.Strings;
 
 import org.joda.time.DateTime;
 
-import java.lang.reflect.Type;
+import java.util.Objects;
 
 /**
  * Describes avatar from {@link com.yandex.money.api.methods.AccountInfo}.
@@ -61,13 +57,13 @@ public class Avatar {
      * @param timestamp avatar change time
      */
     public Avatar(String url, DateTime timestamp) {
-        if (url == null || url.length() == 0) {
+        if (Strings.isNullOrEmpty(url)) {
             throw new JsonParseException("avatar url is null or empty");
         }
-        this.url = url;
         if (timestamp == null) {
             throw new JsonParseException("avatar timestamp is null");
         }
+        this.url = url;
         this.timestamp = timestamp;
     }
 
@@ -79,29 +75,32 @@ public class Avatar {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Avatar) {
+            Avatar avatar = (Avatar) obj;
+            return url.equals(avatar.url) && timestamp.isEqual(avatar.timestamp);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(url, timestamp);
+    }
+
     /**
      * Creates {@link com.yandex.money.api.model.Avatar} from a JSON object.
      *
      * @param json JSON
      * @return {@link com.yandex.money.api.model.Avatar}
+     * @deprecated use {@link AvatarTypeAdapter#fromJson(JsonElement)} instead
      */
+    @Deprecated
     public static Avatar createFromJson(JsonElement json) {
-        return buildGson().fromJson(json, Avatar.class);
-    }
-
-    private static Gson buildGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(Avatar.class, new Deserializer())
-                .create();
-    }
-
-    private static class Deserializer implements JsonDeserializer<Avatar> {
-        @Override
-        public Avatar deserialize(JsonElement json, Type typeOfT,
-                                  JsonDeserializationContext context) throws JsonParseException {
-            JsonObject object = json.getAsJsonObject();
-            return new Avatar(JsonUtils.getMandatoryString(object, "url"),
-                    JsonUtils.getMandatoryDateTime(object, "ts"));
-        }
+        return AvatarTypeAdapter.fromJson(json);
     }
 }

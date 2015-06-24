@@ -22,42 +22,13 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model;
+package com.yandex.money.api.typeadapters;
+
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonSerializer;
 
 /**
- * Account's type.
- *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public enum AccountType {
-    /**
-     * Personal.
-     */
-    PERSONAL("personal"),
-    /**
-     * Professional.
-     */
-    PROFESSIONAL("professional"),
-    /**
-     * Unknown.
-     */
-    UNKNOWN("unknown");
-
-    public final String code;
-
-    AccountType(String code) {
-        this.code = code;
-    }
-
-    public static AccountType parse(String code) {
-        if (code == null) {
-            return UNKNOWN;
-        }
-        for (AccountType value : values()) {
-            if (value.code.equals(code)) {
-                return value;
-            }
-        }
-        return UNKNOWN;
-    }
+public interface TypeAdapter<T> extends JsonSerializer<T>, JsonDeserializer<T> {
 }
