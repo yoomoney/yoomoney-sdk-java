@@ -31,10 +31,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.Card;
 
 import java.lang.reflect.Type;
+
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
  * Type adapter for {@link Card}.
@@ -107,9 +108,9 @@ public final class CardTypeAdapter implements TypeAdapter<Card> {
     public Card deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        return new Card(JsonUtils.getString(object, MEMBER_ID),
-                JsonUtils.getString(object, MEMBER_PAN_FRAGMENT),
-                Card.Type.parse(JsonUtils.getString(object, MEMBER_TYPE)));
+        return new Card(getString(object, MEMBER_ID),
+                getString(object, MEMBER_PAN_FRAGMENT),
+                Card.Type.parse(getString(object, MEMBER_TYPE)));
     }
 
     @Override

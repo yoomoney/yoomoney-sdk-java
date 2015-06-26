@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -33,15 +34,21 @@ import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
  * Static class for JSON parsing process.
  *
- * @author vyasevich
+ * Note: in upcoming major release this class will become package local and will be moved to
+ * {@code com.yandex.money.api.typeadapters} package.
+ *
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class JsonUtils {
+public final class JsonUtils { // TODO read note above and do the stuff in future release
 
     private static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
             .withOffsetParsed();
@@ -205,6 +212,51 @@ public final class JsonUtils {
     }
 
     /**
+     * Gets array from a JSON object. Uses {@link ArrayList} implementation of {@link List}.
+     *
+     * @param object json object
+     * @param memberName member's name
+     * @param converter converter
+     * @param <T> type of a value in the array
+     * @return list of values
+     */
+    public static <T> List<T> getMandatoryArray(JsonObject object, String memberName,
+                                                ElementConverter<T> converter) {
+        List<T> value = getArray(object, memberName, converter);
+        checkMandatoryValue(value, memberName);
+        return value;
+    }
+
+    /**
+     * Gets nullable array from a JSON object. Uses {@link ArrayList} implementation of
+     * {@link List}.
+     *
+     * @param object json object
+     * @param memberName member's name
+     * @param converter converter
+     * @param <T> type of a value in the array
+     * @return list of values
+     */
+    public static <T> List<T> getArray(JsonObject object, String memberName,
+                                       ElementConverter<T> converter) {
+
+        checkParameters(object, memberName);
+        JsonArray array = object.getAsJsonArray(memberName);
+        if (array == null) {
+            return null;
+        }
+
+        if (converter == null) {
+            throw new NullPointerException("converter is null");
+        }
+        List<T> result = new ArrayList<>(array.size());
+        for (JsonElement element : array) {
+            result.add(converter.convert(element));
+        }
+        return result;
+    }
+
+    /**
      * Maps JSON object to key-value pairs. If the object contains non-primitive entries they are
      * ignored and {@code null} value added using specified key.
      *
@@ -222,6 +274,46 @@ public final class JsonUtils {
             result.put(entry.getKey(), value);
         }
         return result;
+    }
+
+    /**
+     * Build JSON object using provided map. Returns {@code null} if parameter {@code map} is null.
+     *
+     * @param map key-value pairs
+     * @return JSON object
+     */
+    public static JsonObject toJsonObject(Map<String, String> map) {
+        if (map == null) {
+            return null;
+        }
+        JsonObject object = new JsonObject();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            object.addProperty(entry.getKey(), entry.getValue());
+        }
+        return object;
+    }
+
+    /**
+     * Creates JSON array with collection values using provided converter to create JSON elements.
+     * Returns {@code null} if parameter {@code map} is null.
+     *
+     * @param collection the collection
+     * @param converter converter for values
+     * @param <T> type of value
+     * @return JSON array
+     */
+    public static <T> JsonArray toJsonArray(Collection<T> collection, ValueConverter<T> converter) {
+        if (collection == null) {
+            return null;
+        }
+        if (converter == null) {
+            throw new NullPointerException("converter is null");
+        }
+        JsonArray array = new JsonArray();
+        for (T value : collection) {
+            array.add(converter.convert(value));
+        }
+        return array;
     }
 
     private static JsonPrimitive getPrimitiveChecked(JsonObject object, String memberName) {
@@ -253,5 +345,38 @@ public final class JsonUtils {
         if (value == null) {
             throw new NullPointerException("mandatory value \'" + memberName + "\' is null");
         }
+    }
+
+    public interface Converter<T> extends ElementConverter<T>, ValueConverter<T> {
+    }
+
+    /**
+     * Converter {@code JsonElement -> T}
+     *
+     * @param <T> type of value
+     */
+    public interface ElementConverter<T> {
+        /**
+         * Converts {@link JsonElement} to value.
+         *
+         * @param element JSON element
+         * @return value
+         */
+        T convert(JsonElement element);
+    }
+
+    /**
+     * Converter {@code T -> JsonElement}
+     *
+     * @param <T> type of value
+     */
+    public interface ValueConverter<T> {
+        /**
+         * Converts value to {@link JsonElement}.
+         *
+         * @param value the value
+         * @return JSON element
+         */
+        JsonElement convert(T value);
     }
 }

@@ -3,7 +3,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.novoda:bintray-release:0.2.10'
+        classpath 'com.novoda:bintray-release:0.3.0'
     }
 }
 
@@ -27,7 +27,7 @@ publish {
     userOrg = 'yandex-money'
     groupId = 'com.yandex.money.api'
     artifactId = 'yandex-money-sdk-java'
-    version = '4.0.1'
+    version = '4.1.0'
     website = 'https://github.com/yandex-money/yandex-money-sdk-java'
     issueTracker = "${website}/issues"
     repository = "${website}.git"

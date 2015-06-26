@@ -26,7 +26,6 @@ package com.yandex.money.api.typeadapters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -45,6 +44,11 @@ import com.yandex.money.api.utils.Currency;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.yandex.money.api.methods.JsonUtils.getArray;
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryBigDecimal;
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -66,6 +70,32 @@ public final class AccountInfoTypeAdapter implements TypeAdapter<AccountInfo> {
     private static final Gson GSON = new GsonBuilder()
             .registerTypeAdapter(AccountInfo.class, INSTANCE)
             .create();
+
+    private static final JsonUtils.Converter<Card> CONVERTER_CARDS_LINKED =
+            new JsonUtils.Converter<Card>() {
+                @Override
+                public Card convert(JsonElement element) {
+                    return CardTypeAdapter.fromJson(element);
+                }
+
+                @Override
+                public JsonElement convert(Card value) {
+                    return CardTypeAdapter.toJsonTree(value);
+                }
+            };
+
+    private static final JsonUtils.Converter<String> CONVERTER_SERVICES_ADDITIONAL =
+            new JsonUtils.Converter<String>() {
+                @Override
+                public String convert(JsonElement element) {
+                    return element.getAsString();
+                }
+
+                @Override
+                public JsonElement convert(String value) {
+                    return new JsonPrimitive(value);
+                }
+            };
 
     private AccountInfoTypeAdapter() {
     }
@@ -139,28 +169,18 @@ public final class AccountInfoTypeAdapter implements TypeAdapter<AccountInfo> {
         BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.fromJson(
                 object.get(MEMBER_BALANCE_DETAILS));
 
-        List<Card> linkedCards = new ArrayList<>();
-        if (object.has(MEMBER_CARDS_LINKED)) {
-            JsonArray array = object.getAsJsonArray(MEMBER_CARDS_LINKED);
-            final int size = array.size();
-            for (int i = 0; i < size; ++i) {
-                linkedCards.add(CardTypeAdapter.fromJson(array.get(i)));
-            }
-        }
+        List<Card> linkedCards = object.has(MEMBER_CARDS_LINKED) ?
+                getArray(object, MEMBER_CARDS_LINKED, CONVERTER_CARDS_LINKED) :
+                new ArrayList<Card>();
 
-        List<String> additionalServices = new ArrayList<>();
-        if (object.has(MEMBER_SERVICES_ADDITIONAL)) {
-            JsonArray array = object.getAsJsonArray(MEMBER_SERVICES_ADDITIONAL);
-            final int size = array.size();
-            for (int i = 0; i < size; ++i) {
-                additionalServices.add(array.get(i).getAsString());
-            }
-        }
+        List<String> additionalServices = object.has(MEMBER_SERVICES_ADDITIONAL) ?
+                getArray(object, MEMBER_SERVICES_ADDITIONAL,
+                        CONVERTER_SERVICES_ADDITIONAL) : new ArrayList<String>();
 
-        return new AccountInfo(JsonUtils.getMandatoryString(object, MEMBER_ACCOUNT),
-                JsonUtils.getMandatoryBigDecimal(object, MEMBER_BALANCE), currency,
-                AccountStatus.parse(JsonUtils.getMandatoryString(object, MEMBER_STATUS)),
-                AccountType.parse(JsonUtils.getMandatoryString(object, MEMBER_TYPE)),
+        return new AccountInfo(getMandatoryString(object, MEMBER_ACCOUNT),
+                getMandatoryBigDecimal(object, MEMBER_BALANCE), currency,
+                AccountStatus.parse(getMandatoryString(object, MEMBER_STATUS)),
+                AccountType.parse(getMandatoryString(object, MEMBER_TYPE)),
                 avatar, balanceDetails, linkedCards, additionalServices);
     }
 
@@ -181,19 +201,12 @@ public final class AccountInfoTypeAdapter implements TypeAdapter<AccountInfo> {
                 src.balanceDetails));
 
         if (!src.linkedCards.isEmpty()) {
-            JsonArray array = new JsonArray();
-            for (Card card : src.linkedCards) {
-                array.add(CardTypeAdapter.toJsonTree(card));
-            }
-            object.add(MEMBER_CARDS_LINKED, array);
+            object.add(MEMBER_CARDS_LINKED, toJsonArray(src.linkedCards, CONVERTER_CARDS_LINKED));
         }
 
         if (!src.additionalServices.isEmpty()) {
-            JsonArray array = new JsonArray();
-            for (String service : src.additionalServices) {
-                array.add(new JsonPrimitive(service));
-            }
-            object.add(MEMBER_SERVICES_ADDITIONAL, array);
+            object.add(MEMBER_SERVICES_ADDITIONAL,
+                    toJsonArray(src.additionalServices, CONVERTER_SERVICES_ADDITIONAL));
         }
 
         return object;

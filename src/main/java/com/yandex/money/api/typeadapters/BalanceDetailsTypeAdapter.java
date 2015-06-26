@@ -31,11 +31,13 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.Avatar;
 import com.yandex.money.api.model.BalanceDetails;
 
 import java.lang.reflect.Type;
+
+import static com.yandex.money.api.methods.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryBigDecimal;
 
 /**
  * Type adapter for {@link BalanceDetails}.
@@ -113,12 +115,12 @@ public final class BalanceDetailsTypeAdapter implements TypeAdapter<BalanceDetai
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new BalanceDetails(JsonUtils.getMandatoryBigDecimal(object, MEMBER_TOTAL),
-                JsonUtils.getMandatoryBigDecimal(object, MEMBER_AVAILABLE),
-                JsonUtils.getBigDecimal(object, MEMBER_DEPOSITION_PENDING),
-                JsonUtils.getBigDecimal(object, MEMBER_BLOCKED),
-                JsonUtils.getBigDecimal(object, MEMBER_DEBT),
-                JsonUtils.getBigDecimal(object, MEMBER_HOLD));
+        return new BalanceDetails(getMandatoryBigDecimal(object, MEMBER_TOTAL),
+                getMandatoryBigDecimal(object, MEMBER_AVAILABLE),
+                getBigDecimal(object, MEMBER_DEPOSITION_PENDING),
+                getBigDecimal(object, MEMBER_BLOCKED),
+                getBigDecimal(object, MEMBER_DEBT),
+                getBigDecimal(object, MEMBER_HOLD));
     }
 
     @Override

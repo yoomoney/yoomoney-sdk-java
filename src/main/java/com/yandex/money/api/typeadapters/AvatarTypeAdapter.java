@@ -31,10 +31,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.Avatar;
 
 import java.lang.reflect.Type;
+
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryDateTime;
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
 
 /**
  * Type adapter for {@link Avatar}.
@@ -106,8 +108,8 @@ public final class AvatarTypeAdapter implements TypeAdapter<Avatar> {
     public Avatar deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        return new Avatar(JsonUtils.getMandatoryString(object, MEMBER_URL),
-                JsonUtils.getMandatoryDateTime(object, MEMBER_TS));
+        return new Avatar(getMandatoryString(object, MEMBER_URL),
+                getMandatoryDateTime(object, MEMBER_TS));
     }
 
     @Override

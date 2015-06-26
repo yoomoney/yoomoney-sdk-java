@@ -28,6 +28,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonSerializer;
 
 /**
+ * Serializes and deserializes object to and from JSON.
+ *
+ * @param <T> type of object
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public interface TypeAdapter<T> extends JsonSerializer<T>, JsonDeserializer<T> {

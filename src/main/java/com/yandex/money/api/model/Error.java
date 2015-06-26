@@ -48,6 +48,7 @@ public enum Error {
     ILLEGAL_PARAM_CLIENT_ID("illegal_param_client_id"),
     ILLEGAL_PARAM_COMMENT("illegal_param_comment"),
     ILLEGAL_PARAM_CSC("illegal_param_csc"),
+    ILLEGAL_PARAM_DRIVER_LICENSE("illegal_param_driver_license"),
     ILLEGAL_PARAM_EXPIRE_PERIOD("illegal_param_expire_period"),
     ILLEGAL_PARAM_EXT_AUTH_FAIL_URI("illegal_param_ext_auth_fail_uri"),
     ILLEGAL_PARAM_EXT_AUTH_SUCCESS_URI("illegal_param_ext_auth_success_uri"),
@@ -70,7 +71,9 @@ public enum Error {
     ILLEGAL_PARAM_TO("illegal_param_to"),
     ILLEGAL_PARAM_TYPE("illegal_param_type"),
     ILLEGAL_PARAM_UUID("illegal_param_uuid"),
+    ILLEGAL_PARAM_VEHICLE_REG_CERTIFICATE("illegal_param_vehicle_reg_certificate"),
     ILLEGAL_PARAMS("illegal_params"),
+    ILLEGAL_REQUEST("illegal_request"),
     INVALID_GRANT("invalid_grant"),
     INVALID_IMAGE("invalid_image"),
     INVALID_REQUEST("invalid_request"),
@@ -90,15 +93,15 @@ public enum Error {
     static {
         Map<String, Error> map = new HashMap<>();
         for (Error value : values()) {
-            map.put(value.error, value);
+            map.put(value.code, value);
         }
         ERRORS = Collections.unmodifiableMap(map);
     }
 
-    private final String error;
+    public final String code;
 
-    Error(String error) {
-        this.error = error;
+    Error(String code) {
+        this.code = code;
     }
 
     public static Error parse(String error) {
