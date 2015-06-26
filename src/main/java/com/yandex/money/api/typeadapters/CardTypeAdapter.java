@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -42,17 +40,13 @@ import static com.yandex.money.api.methods.JsonUtils.getString;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class CardTypeAdapter implements TypeAdapter<Card> {
+public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
 
     private static final CardTypeAdapter INSTANCE = new CardTypeAdapter();
 
     private static final String MEMBER_ID = "id";
     private static final String MEMBER_PAN_FRAGMENT = "pan_fragment";
     private static final String MEMBER_TYPE = "type";
-
-    private static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(Card.class, INSTANCE)
-            .create();
 
     private CardTypeAdapter() {
     }
@@ -64,44 +58,9 @@ public final class CardTypeAdapter implements TypeAdapter<Card> {
         return INSTANCE;
     }
 
-    /**
-     * Creates {@link Card} from json.
-     *
-     * @param json json string
-     * @return card instance
-     */
-    public static Card fromJson(String json) {
-        return GSON.fromJson(json, Card.class);
-    }
-
-    /**
-     * Creates {@link Card} from json.
-     *
-     * @param element json element
-     * @return card instance
-     */
-    public static Card fromJson(JsonElement element) {
-        return GSON.fromJson(element, Card.class);
-    }
-
-    /**
-     * Serializes {@link Card} to json string.
-     *
-     * @param card card
-     * @return json string
-     */
-    public static String toJson(Card card) {
-        return GSON.toJson(card);
-    }
-
-    /**
-     * Serializes {@link Card} to json tree.
-     *
-     * @param card card
-     * @return json element
-     */
-    public static JsonElement toJsonTree(Card card) {
-        return GSON.toJsonTree(card);
+    @Override
+    protected Type getType() {
+        return Card.class;
     }
 
     @Override

@@ -24,45 +24,45 @@
 
 package com.yandex.money.api.typeadapters;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonSerializer;
+
+import java.lang.reflect.Type;
 
 /**
- * Serializes and deserializes object to and from JSON.
+ * Base class for type adapters.
  *
- * @param <T> type of object
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public interface TypeAdapter<T> {
+public abstract class BaseTypeAdapter<T>
+        implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
 
-    /**
-     * Creates object from json.
-     *
-     * @param json json string
-     * @return object
-     */
-    T fromJson(String json);
+    private final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(getType(), this)
+            .create();
 
-    /**
-     * Creates object from json element.
-     *
-     * @param element json element
-     * @return object
-     */
-    T fromJson(JsonElement element);
+    @Override
+    public final T fromJson(String json) {
+        return GSON.fromJson(json, getType());
+    }
 
-    /**
-     * Serializes object to json string.
-     *
-     * @param value object
-     * @return json string
-     */
-    String toJson(T value);
+    @Override
+    public final T fromJson(JsonElement element) {
+        return GSON.fromJson(element, getType());
+    }
 
-    /**
-     * Serializes object to json element.
-     *
-     * @param value object
-     * @return json element
-     */
-    JsonElement toJsonTree(T value);
+    @Override
+    public final String toJson(T value) {
+        return GSON.toJson(value);
+    }
+
+    @Override
+    public final JsonElement toJsonTree(T value) {
+        return GSON.toJsonTree(value);
+    }
+
+    protected abstract Type getType();
 }

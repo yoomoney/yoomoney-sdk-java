@@ -103,7 +103,7 @@ public class BalanceDetails {
      */
     @Deprecated
     public static BalanceDetails createFromJson(JsonElement element) {
-        return BalanceDetailsTypeAdapter.fromJson(element);
+        return BalanceDetailsTypeAdapter.getInstance().fromJson(element);
     }
 
     @Override

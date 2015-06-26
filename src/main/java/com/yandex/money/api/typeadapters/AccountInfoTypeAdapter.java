@@ -24,13 +24,10 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.JsonUtils;
@@ -53,7 +50,7 @@ import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class AccountInfoTypeAdapter implements TypeAdapter<AccountInfo> {
+public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
 
     private static final AccountInfoTypeAdapter INSTANCE = new AccountInfoTypeAdapter();
 
@@ -67,36 +64,6 @@ public final class AccountInfoTypeAdapter implements TypeAdapter<AccountInfo> {
     private static final String MEMBER_STATUS = "account_status";
     private static final String MEMBER_TYPE = "account_type";
 
-    private static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(AccountInfo.class, INSTANCE)
-            .create();
-
-    private static final JsonUtils.Converter<Card> CONVERTER_CARDS_LINKED =
-            new JsonUtils.Converter<Card>() {
-                @Override
-                public Card convert(JsonElement element) {
-                    return CardTypeAdapter.fromJson(element);
-                }
-
-                @Override
-                public JsonElement convert(Card value) {
-                    return CardTypeAdapter.toJsonTree(value);
-                }
-            };
-
-    private static final JsonUtils.Converter<String> CONVERTER_SERVICES_ADDITIONAL =
-            new JsonUtils.Converter<String>() {
-                @Override
-                public String convert(JsonElement element) {
-                    return element.getAsString();
-                }
-
-                @Override
-                public JsonElement convert(String value) {
-                    return new JsonPrimitive(value);
-                }
-            };
-
     private AccountInfoTypeAdapter() {
     }
 
@@ -107,44 +74,9 @@ public final class AccountInfoTypeAdapter implements TypeAdapter<AccountInfo> {
         return INSTANCE;
     }
 
-    /**
-     * Creates {@link AccountInfo} from json.
-     *
-     * @param json json string
-     * @return account info
-     */
-    public static AccountInfo fromJson(String json) {
-        return GSON.fromJson(json, AccountInfo.class);
-    }
-
-    /**
-     * Creates {@link AccountInfo} from json.
-     *
-     * @param element json element
-     * @return account info
-     */
-    public static AccountInfo fromJson(JsonElement element) {
-        return GSON.fromJson(element, AccountInfo.class);
-    }
-
-    /**
-     * Serializes {@link AccountInfo} to json string.
-     *
-     * @param accountInfo account info
-     * @return json string
-     */
-    public static String toJson(AccountInfo accountInfo) {
-        return GSON.toJson(accountInfo);
-    }
-
-    /**
-     * Serializes {@link AccountInfo} to json tree.
-     *
-     * @param accountInfo account info
-     * @return json element
-     */
-    public static JsonElement toJsonTree(AccountInfo accountInfo) {
-        return GSON.toJsonTree(accountInfo);
+    @Override
+    protected Type getType() {
+        return AccountInfo.class;
     }
 
     @Override
@@ -163,19 +95,19 @@ public final class AccountInfoTypeAdapter implements TypeAdapter<AccountInfo> {
 
         Avatar avatar = null;
         if (object.has(MEMBER_AVATAR)) {
-            avatar = AvatarTypeAdapter.fromJson(object.get(MEMBER_AVATAR));
+            avatar = AvatarTypeAdapter.getInstance().fromJson(object.get(MEMBER_AVATAR));
         }
 
-        BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.fromJson(
+        BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.getInstance().fromJson(
                 object.get(MEMBER_BALANCE_DETAILS));
 
         List<Card> linkedCards = object.has(MEMBER_CARDS_LINKED) ?
-                getArray(object, MEMBER_CARDS_LINKED, CONVERTER_CARDS_LINKED) :
+                getArray(object, MEMBER_CARDS_LINKED, CardTypeAdapter.getInstance()) :
                 new ArrayList<Card>();
 
         List<String> additionalServices = object.has(MEMBER_SERVICES_ADDITIONAL) ?
-                getArray(object, MEMBER_SERVICES_ADDITIONAL,
-                        CONVERTER_SERVICES_ADDITIONAL) : new ArrayList<String>();
+                getArray(object, MEMBER_SERVICES_ADDITIONAL, StringTypeAdapter.getInstance()) :
+                new ArrayList<String>();
 
         return new AccountInfo(getMandatoryString(object, MEMBER_ACCOUNT),
                 getMandatoryBigDecimal(object, MEMBER_BALANCE), currency,
@@ -196,17 +128,18 @@ public final class AccountInfoTypeAdapter implements TypeAdapter<AccountInfo> {
         object.addProperty(MEMBER_STATUS, src.accountStatus.code);
         object.addProperty(MEMBER_TYPE, src.accountType.code);
 
-        object.add(MEMBER_AVATAR, AvatarTypeAdapter.toJsonTree(src.avatar));
-        object.add(MEMBER_BALANCE_DETAILS, BalanceDetailsTypeAdapter.toJsonTree(
+        object.add(MEMBER_AVATAR, AvatarTypeAdapter.getInstance().toJsonTree(src.avatar));
+        object.add(MEMBER_BALANCE_DETAILS, BalanceDetailsTypeAdapter.getInstance().toJsonTree(
                 src.balanceDetails));
 
         if (!src.linkedCards.isEmpty()) {
-            object.add(MEMBER_CARDS_LINKED, toJsonArray(src.linkedCards, CONVERTER_CARDS_LINKED));
+            object.add(MEMBER_CARDS_LINKED, toJsonArray(src.linkedCards,
+                    CardTypeAdapter.getInstance()));
         }
 
         if (!src.additionalServices.isEmpty()) {
             object.add(MEMBER_SERVICES_ADDITIONAL,
-                    toJsonArray(src.additionalServices, CONVERTER_SERVICES_ADDITIONAL));
+                    toJsonArray(src.additionalServices, StringTypeAdapter.getInstance()));
         }
 
         return object;

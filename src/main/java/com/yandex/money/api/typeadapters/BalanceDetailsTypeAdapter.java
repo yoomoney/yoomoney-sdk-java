@@ -24,14 +24,11 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.model.Avatar;
 import com.yandex.money.api.model.BalanceDetails;
 
 import java.lang.reflect.Type;
@@ -44,7 +41,7 @@ import static com.yandex.money.api.methods.JsonUtils.getMandatoryBigDecimal;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class BalanceDetailsTypeAdapter implements TypeAdapter<BalanceDetails> {
+public final class BalanceDetailsTypeAdapter extends BaseTypeAdapter<BalanceDetails> {
 
     private static final BalanceDetailsTypeAdapter INSTANCE = new BalanceDetailsTypeAdapter();
 
@@ -54,10 +51,6 @@ public final class BalanceDetailsTypeAdapter implements TypeAdapter<BalanceDetai
     private static final String MEMBER_DEPOSITION_PENDING = "deposition_pending";
     private static final String MEMBER_HOLD = "hold";
     private static final String MEMBER_TOTAL = "total";
-
-    private static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(Avatar.class, INSTANCE)
-            .create();
 
     private BalanceDetailsTypeAdapter() {
     }
@@ -69,44 +62,9 @@ public final class BalanceDetailsTypeAdapter implements TypeAdapter<BalanceDetai
         return INSTANCE;
     }
 
-    /**
-     * Creates {@link BalanceDetails} from json.
-     *
-     * @param json json string
-     * @return balance details
-     */
-    public static BalanceDetails fromJson(String json) {
-        return GSON.fromJson(json, BalanceDetails.class);
-    }
-
-    /**
-     * Creates {@link BalanceDetails} from json.
-     *
-     * @param element json element
-     * @return balance details
-     */
-    public static BalanceDetails fromJson(JsonElement element) {
-        return GSON.fromJson(element, BalanceDetails.class);
-    }
-
-    /**
-     * Serializes {@link BalanceDetails} to json string.
-     *
-     * @param balanceDetails balance details
-     * @return json string
-     */
-    public static String toJson(BalanceDetails balanceDetails) {
-        return GSON.toJson(balanceDetails);
-    }
-
-    /**
-     * Serializes {@link BalanceDetails} to json tree.
-     *
-     * @param balanceDetails balance details
-     * @return json element
-     */
-    public static JsonElement toJsonTree(BalanceDetails balanceDetails) {
-        return GSON.toJsonTree(balanceDetails);
+    @Override
+    protected Type getType() {
+        return BalanceDetails.class;
     }
 
     @Override

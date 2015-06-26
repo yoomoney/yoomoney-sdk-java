@@ -357,7 +357,7 @@ public class RequestPayment extends BaseRequestPayment {
                         cscRequired = JsonUtils.getMandatoryBoolean(cards, "csc_required");
                         JsonArray items = cards.getAsJsonArray("items");
                         for (JsonElement item : items) {
-                            moneySources.add(CardTypeAdapter.fromJson(item));
+                            moneySources.add(CardTypeAdapter.getInstance().fromJson(item));
                         }
                     }
                 }

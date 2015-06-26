@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -43,16 +41,12 @@ import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class AvatarTypeAdapter implements TypeAdapter<Avatar> {
+public final class AvatarTypeAdapter extends BaseTypeAdapter<Avatar> {
 
     private static final AvatarTypeAdapter INSTANCE = new AvatarTypeAdapter();
 
     private static final String MEMBER_TS = "ts";
     private static final String MEMBER_URL = "url";
-
-    private static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(Avatar.class, INSTANCE)
-            .create();
 
     private AvatarTypeAdapter() {
     }
@@ -64,44 +58,9 @@ public final class AvatarTypeAdapter implements TypeAdapter<Avatar> {
         return INSTANCE;
     }
 
-    /**
-     * Creates {@link Avatar} from json.
-     *
-     * @param json json string
-     * @return avatar
-     */
-    public static Avatar fromJson(String json) {
-        return GSON.fromJson(json, Avatar.class);
-    }
-
-    /**
-     * Creates {@link Avatar} from json.
-     *
-     * @param element json element
-     * @return avatar
-     */
-    public static Avatar fromJson(JsonElement element) {
-        return GSON.fromJson(element, Avatar.class);
-    }
-
-    /**
-     * Serializes {@link Avatar} to json string.
-     *
-     * @param avatar avatar
-     * @return json string
-     */
-    public static String toJson(Avatar avatar) {
-        return GSON.toJson(avatar);
-    }
-
-    /**
-     * Serializes {@link Avatar} to json tree.
-     *
-     * @param avatar avatar
-     * @return json element
-     */
-    public static JsonElement toJsonTree(Avatar avatar) {
-        return GSON.toJsonTree(avatar);
+    @Override
+    protected Type getType() {
+        return Avatar.class;
     }
 
     @Override

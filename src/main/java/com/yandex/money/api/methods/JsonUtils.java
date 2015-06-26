@@ -28,6 +28,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.yandex.money.api.typeadapters.TypeAdapter;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
@@ -221,7 +222,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
      * @return list of values
      */
     public static <T> List<T> getMandatoryArray(JsonObject object, String memberName,
-                                                ElementConverter<T> converter) {
+                                                TypeAdapter<T> converter) {
         List<T> value = getArray(object, memberName, converter);
         checkMandatoryValue(value, memberName);
         return value;
@@ -238,7 +239,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
      * @return list of values
      */
     public static <T> List<T> getArray(JsonObject object, String memberName,
-                                       ElementConverter<T> converter) {
+                                       TypeAdapter<T> converter) {
 
         checkParameters(object, memberName);
         JsonArray array = object.getAsJsonArray(memberName);
@@ -251,7 +252,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
         }
         List<T> result = new ArrayList<>(array.size());
         for (JsonElement element : array) {
-            result.add(converter.convert(element));
+            result.add(converter.fromJson(element));
         }
         return result;
     }
@@ -302,7 +303,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
      * @param <T> type of value
      * @return JSON array
      */
-    public static <T> JsonArray toJsonArray(Collection<T> collection, ValueConverter<T> converter) {
+    public static <T> JsonArray toJsonArray(Collection<T> collection, TypeAdapter<T> converter) {
         if (collection == null) {
             return null;
         }
@@ -311,7 +312,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
         }
         JsonArray array = new JsonArray();
         for (T value : collection) {
-            array.add(converter.convert(value));
+            array.add(converter.toJsonTree(value));
         }
         return array;
     }
@@ -345,38 +346,5 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
         if (value == null) {
             throw new NullPointerException("mandatory value \'" + memberName + "\' is null");
         }
-    }
-
-    public interface Converter<T> extends ElementConverter<T>, ValueConverter<T> {
-    }
-
-    /**
-     * Converter {@code JsonElement -> T}
-     *
-     * @param <T> type of value
-     */
-    public interface ElementConverter<T> {
-        /**
-         * Converts {@link JsonElement} to value.
-         *
-         * @param element JSON element
-         * @return value
-         */
-        T convert(JsonElement element);
-    }
-
-    /**
-     * Converter {@code T -> JsonElement}
-     *
-     * @param <T> type of value
-     */
-    public interface ValueConverter<T> {
-        /**
-         * Converts value to {@link JsonElement}.
-         *
-         * @param value the value
-         * @return JSON element
-         */
-        JsonElement convert(T value);
     }
 }

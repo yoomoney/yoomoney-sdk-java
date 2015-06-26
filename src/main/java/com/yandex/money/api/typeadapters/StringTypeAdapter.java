@@ -25,44 +25,44 @@
 package com.yandex.money.api.typeadapters;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 
 /**
- * Serializes and deserializes object to and from JSON.
+ * Type adapter for strings.
  *
- * @param <T> type of object
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public interface TypeAdapter<T> {
+public final class StringTypeAdapter implements TypeAdapter<String> {
+
+    private static final StringTypeAdapter INSTANCE = new StringTypeAdapter();
+
+    private StringTypeAdapter() {
+    }
 
     /**
-     * Creates object from json.
-     *
-     * @param json json string
-     * @return object
+     * @return instance of this class
      */
-    T fromJson(String json);
+    public static StringTypeAdapter getInstance() {
+        return INSTANCE;
+    }
 
-    /**
-     * Creates object from json element.
-     *
-     * @param element json element
-     * @return object
-     */
-    T fromJson(JsonElement element);
+    @Override
+    public String fromJson(String json) {
+        throw new UnsupportedOperationException();
+    }
 
-    /**
-     * Serializes object to json string.
-     *
-     * @param value object
-     * @return json string
-     */
-    String toJson(T value);
+    @Override
+    public String fromJson(JsonElement element) {
+        return element.getAsString();
+    }
 
-    /**
-     * Serializes object to json element.
-     *
-     * @param value object
-     * @return json element
-     */
-    JsonElement toJsonTree(T value);
+    @Override
+    public String toJson(String value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public JsonElement toJsonTree(String value) {
+        return new JsonPrimitive(value);
+    }
 }

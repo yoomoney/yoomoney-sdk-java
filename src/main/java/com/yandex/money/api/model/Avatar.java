@@ -101,6 +101,6 @@ public class Avatar {
      */
     @Deprecated
     public static Avatar createFromJson(JsonElement json) {
-        return AvatarTypeAdapter.fromJson(json);
+        return AvatarTypeAdapter.getInstance().fromJson(json);
     }
 }

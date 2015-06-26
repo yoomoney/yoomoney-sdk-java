@@ -68,7 +68,7 @@ public class Card extends MoneySource {
      */
     @Deprecated
     public static Card createFromJson(JsonElement element) {
-        return CardTypeAdapter.fromJson(element);
+        return CardTypeAdapter.getInstance().fromJson(element);
     }
 
     /**
@@ -77,7 +77,7 @@ public class Card extends MoneySource {
      */
     @Deprecated
     public static Card createFromJson(String json) {
-        return CardTypeAdapter.fromJson(json);
+        return CardTypeAdapter.getInstance().fromJson(json);
     }
 
     @Override
@@ -105,11 +105,11 @@ public class Card extends MoneySource {
      * Serializes {@link com.yandex.money.api.model.Card} object to JSON text.
      *
      * @return JSON text
-     * @deprecated use {@link CardTypeAdapter#toJson(Card)}
+     * @deprecated use {@link CardTypeAdapter#toJson(Object)} instead
      */
     @Deprecated
     public String serializeToJson() {
-        return CardTypeAdapter.toJson(this);
+        return CardTypeAdapter.getInstance().toJson(this);
     }
 
     public enum Type {

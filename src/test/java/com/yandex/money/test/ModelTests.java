@@ -52,26 +52,29 @@ public class ModelTests {
     @Test
     public void testAccountInfo() {
         AccountInfo info = createAccountInfo();
-        assertEquals(AccountInfoTypeAdapter.fromJson(AccountInfoTypeAdapter.toJson(info)), info);
+        AccountInfoTypeAdapter typeAdapter = AccountInfoTypeAdapter.getInstance();
+        assertEquals(typeAdapter.fromJson(typeAdapter.toJson(info)), info);
     }
 
     @Test
     public void testAvatar() {
         Avatar avatar = createAvatar();
-        assertEquals(AvatarTypeAdapter.fromJson(AvatarTypeAdapter.toJson(avatar)), avatar);
+        AvatarTypeAdapter typeAdapter = AvatarTypeAdapter.getInstance();
+        assertEquals(typeAdapter.fromJson(typeAdapter.toJson(avatar)), avatar);
     }
 
     @Test
     public void testBalanceDetails() {
         BalanceDetails details = createBalanceDetails();
-        assertEquals(BalanceDetailsTypeAdapter.fromJson(BalanceDetailsTypeAdapter.toJson(details)),
-                details);
+        BalanceDetailsTypeAdapter typeAdapter = BalanceDetailsTypeAdapter.getInstance();
+        assertEquals(typeAdapter.fromJson(typeAdapter.toJson(details)), details);
     }
 
     @Test
     public void testCard() {
         Card card = createCard();
-        assertEquals(CardTypeAdapter.fromJson(CardTypeAdapter.toJson(card)), card);
+        CardTypeAdapter typeAdapter = CardTypeAdapter.getInstance();
+        assertEquals(typeAdapter.fromJson(typeAdapter.toJson(card)), card);
     }
 
     private static AccountInfo createAccountInfo() {
