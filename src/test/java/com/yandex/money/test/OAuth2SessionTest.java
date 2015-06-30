@@ -66,7 +66,7 @@ public class OAuth2SessionTest {
         server.start();
     }
 
-    @Test(expectedExceptions = IOException.class)
+    @Test(expectedExceptions = InvalidRequestException.class)
     public void testWrongContentType() throws Exception {
         executeTest(createResponseBase(), createRequest(true));
     }
@@ -81,9 +81,15 @@ public class OAuth2SessionTest {
         executeTest(createResponse(), createRequest(false));
     }
 
-    @Test(expectedExceptions = InvalidRequestException.class)
+    @Test
     public void testBadRequest() throws Exception {
         executeTest(createResponse().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST),
+                createRequest(true));
+    }
+
+    @Test(expectedExceptions = InvalidRequestException.class)
+    public void testInvalidBadRequest() throws Exception {
+        executeTest(createResponseBase().setResponseCode(HttpURLConnection.HTTP_BAD_REQUEST),
                 createRequest(true));
     }
 

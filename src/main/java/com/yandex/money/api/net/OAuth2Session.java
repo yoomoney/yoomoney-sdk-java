@@ -33,7 +33,6 @@ import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
-import com.yandex.money.api.utils.Streams;
 import com.yandex.money.api.utils.Strings;
 
 import java.io.IOException;
@@ -150,15 +149,14 @@ public class OAuth2Session extends AbstractSession {
         try {
             switch (response.code()) {
                 case HttpURLConnection.HTTP_OK:
+                case HttpURLConnection.HTTP_ACCEPTED:
+                case HttpURLConnection.HTTP_BAD_REQUEST:
                     inputStream = getInputStream(response);
                     if (isJsonType(response)) {
                         return request.parseResponse(inputStream);
                     } else {
-                        Streams.readStreamToNull(inputStream);
-                        throw new IOException("Server has responded with a wrong content type");
+                        throw new InvalidRequestException(processError(response));
                     }
-                case HttpURLConnection.HTTP_BAD_REQUEST:
-                    throw new InvalidRequestException(processError(response));
                 case HttpURLConnection.HTTP_UNAUTHORIZED:
                     throw new InvalidTokenException(processError(response));
                 case HttpURLConnection.HTTP_FORBIDDEN:
