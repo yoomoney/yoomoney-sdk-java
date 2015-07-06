@@ -30,8 +30,6 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializer;
 
-import java.lang.reflect.Type;
-
 /**
  * Base class for type adapters.
  *
@@ -41,7 +39,7 @@ public abstract class BaseTypeAdapter<T>
         implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
 
     private final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(getType(), this)
+            .registerTypeHierarchyAdapter(getType(), this)
             .create();
 
     @Override
@@ -64,5 +62,5 @@ public abstract class BaseTypeAdapter<T>
         return GSON.toJsonTree(value);
     }
 
-    protected abstract Type getType();
+    protected abstract Class<T> getType();
 }

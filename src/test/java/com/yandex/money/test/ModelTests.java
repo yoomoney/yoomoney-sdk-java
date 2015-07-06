@@ -30,19 +30,21 @@ import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Avatar;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
+import com.yandex.money.api.model.Error;
 import com.yandex.money.api.typeadapters.AccountInfoTypeAdapter;
 import com.yandex.money.api.typeadapters.AvatarTypeAdapter;
 import com.yandex.money.api.typeadapters.BalanceDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.CardTypeAdapter;
+import com.yandex.money.api.typeadapters.ErrorTypeAdapter;
+import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.utils.Currency;
 
 import org.joda.time.DateTime;
+import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
-
-import static org.testng.Assert.assertEquals;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -51,30 +53,31 @@ public class ModelTests {
 
     @Test
     public void testAccountInfo() {
-        AccountInfo info = createAccountInfo();
-        AccountInfoTypeAdapter typeAdapter = AccountInfoTypeAdapter.getInstance();
-        assertEquals(typeAdapter.fromJson(typeAdapter.toJson(info)), info);
+        performTest(createAccountInfo(), AccountInfoTypeAdapter.getInstance());
     }
 
     @Test
     public void testAvatar() {
-        Avatar avatar = createAvatar();
-        AvatarTypeAdapter typeAdapter = AvatarTypeAdapter.getInstance();
-        assertEquals(typeAdapter.fromJson(typeAdapter.toJson(avatar)), avatar);
+        performTest(createAvatar(), AvatarTypeAdapter.getInstance());
     }
 
     @Test
     public void testBalanceDetails() {
-        BalanceDetails details = createBalanceDetails();
-        BalanceDetailsTypeAdapter typeAdapter = BalanceDetailsTypeAdapter.getInstance();
-        assertEquals(typeAdapter.fromJson(typeAdapter.toJson(details)), details);
+        performTest(createBalanceDetails(), BalanceDetailsTypeAdapter.getInstance());
     }
 
     @Test
     public void testCard() {
-        Card card = createCard();
-        CardTypeAdapter typeAdapter = CardTypeAdapter.getInstance();
-        assertEquals(typeAdapter.fromJson(typeAdapter.toJson(card)), card);
+        performTest(createCard(), CardTypeAdapter.getInstance());
+    }
+
+    @Test
+    public void testError() {
+        performTest(Error.TECHNICAL_ERROR, ErrorTypeAdapter.getInstance());
+    }
+
+    private static <T> void performTest(T value, TypeAdapter<T> adapter) {
+        Assert.assertEquals(adapter.fromJson(adapter.toJsonTree(value)), value);
     }
 
     private static AccountInfo createAccountInfo() {

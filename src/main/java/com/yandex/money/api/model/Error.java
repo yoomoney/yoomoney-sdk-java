@@ -73,7 +73,6 @@ public enum Error {
     ILLEGAL_PARAM_UUID("illegal_param_uuid"),
     ILLEGAL_PARAM_VEHICLE_REG_CERTIFICATE("illegal_param_vehicle_reg_certificate"),
     ILLEGAL_PARAMS("illegal_params"),
-    ILLEGAL_REQUEST("illegal_request"),
     INVALID_GRANT("invalid_grant"),
     INVALID_IMAGE("invalid_image"),
     INVALID_REQUEST("invalid_request"),

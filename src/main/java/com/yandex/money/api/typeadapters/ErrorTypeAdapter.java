@@ -22,45 +22,45 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.processes;
+package com.yandex.money.api.typeadapters;
 
-import com.squareup.okhttp.Call;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonPrimitive;
+import com.yandex.money.api.model.Error;
 
 /**
- * Provides interface for every process.
+ * Type adapter for {@link Error}.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-interface Process {
+public final class ErrorTypeAdapter implements TypeAdapter<Error> {
 
-    /**
-     * Tries to perform next step of a process.
-     *
-     * @return {@code true} if process is completed
-     * @throws Exception if something went wrong
-     */
-    boolean proceed() throws Exception;
+    private static final ErrorTypeAdapter INSTANCE = new ErrorTypeAdapter();
 
-    /**
-     * Tries to perform next step of a process asynchronously.
-     * TODO implement call that can cancel subsequent requests
-     *
-     * @return a {@link Call} object that can be canceled
-     */
-    Call proceedAsync() throws Exception;
+    private ErrorTypeAdapter() {}
 
-    /**
-     * Tries to repeat the step of a process.
-     *
-     * @return {@code true} if process is completed
-     * @throws Exception if something went wrong
-     */
-    boolean repeat() throws Exception;
+    public static ErrorTypeAdapter getInstance() {
+        return INSTANCE;
+    }
 
-    /**
-     * Tries to perform next step of a process asynchronously.
-     *
-     * @return a {@link Call} object that can be canceled
-     */
-    Call repeatAsync() throws Exception;
+    @Override
+    public Error fromJson(String json) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Error fromJson(JsonElement element) {
+        return element == null ? null : Error.parse(element.getAsString());
+    }
+
+    @Override
+    public String toJson(Error value) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public JsonElement toJsonTree(Error value) {
+        return value == null ? JsonNull.INSTANCE : new JsonPrimitive(value.code);
+    }
 }

@@ -59,7 +59,7 @@ public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
     }
 
     @Override
-    protected Type getType() {
+    protected Class<Card> getType() {
         return Card.class;
     }
 

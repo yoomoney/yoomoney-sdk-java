@@ -75,7 +75,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
     }
 
     @Override
-    protected Type getType() {
+    protected Class<AccountInfo> getType() {
         return AccountInfo.class;
     }
 

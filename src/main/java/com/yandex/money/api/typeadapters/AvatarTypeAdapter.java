@@ -59,7 +59,7 @@ public final class AvatarTypeAdapter extends BaseTypeAdapter<Avatar> {
     }
 
     @Override
-    protected Type getType() {
+    protected Class<Avatar> getType() {
         return Avatar.class;
     }
 

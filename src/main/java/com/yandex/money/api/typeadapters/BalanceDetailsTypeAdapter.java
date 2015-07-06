@@ -63,7 +63,7 @@ public final class BalanceDetailsTypeAdapter extends BaseTypeAdapter<BalanceDeta
     }
 
     @Override
-    protected Type getType() {
+    protected Class<BalanceDetails> getType() {
         return BalanceDetails.class;
     }
 
