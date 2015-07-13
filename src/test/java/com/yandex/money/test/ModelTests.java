@@ -31,11 +31,14 @@ import com.yandex.money.api.model.Avatar;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.showcase.AmountType;
+import com.yandex.money.api.model.showcase.StdFee;
 import com.yandex.money.api.typeadapters.AccountInfoTypeAdapter;
 import com.yandex.money.api.typeadapters.AvatarTypeAdapter;
 import com.yandex.money.api.typeadapters.BalanceDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.CardTypeAdapter;
 import com.yandex.money.api.typeadapters.ErrorTypeAdapter;
+import com.yandex.money.api.typeadapters.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.utils.Currency;
 
@@ -74,6 +77,12 @@ public class ModelTests {
     @Test
     public void testError() {
         performTest(Error.TECHNICAL_ERROR, ErrorTypeAdapter.getInstance());
+    }
+
+    @Test
+    public void testFee() {
+        performTest(new StdFee(BigDecimal.TEN, BigDecimal.ONE, BigDecimal.ZERO, null,
+                AmountType.NET_AMOUNT), FeeTypeAdapter.getInstance());
     }
 
     private static <T> void performTest(T value, TypeAdapter<T> adapter) {
