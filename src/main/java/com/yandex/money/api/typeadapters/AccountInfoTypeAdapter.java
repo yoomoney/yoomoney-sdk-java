@@ -48,6 +48,8 @@ import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
 
 /**
+ * Type adapter for {@link AccountInfo}.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {

@@ -38,6 +38,8 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 
 /**
+ * Type adapter for {@link Fee}.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
@@ -57,6 +59,9 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
     private FeeTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static FeeTypeAdapter getInstance() {
         return INSTANCE;
     }
