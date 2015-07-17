@@ -8,11 +8,20 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Holder of collection of {@link Component}s.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public final class Group extends Container {
 
+    /**
+     * Collection of components.
+     */
     public final List<Component> items;
+
+    /**
+     * Arrangement.
+     */
     public final Layout layout;
 
     private Group(Builder builder) {
@@ -21,6 +30,13 @@ public final class Group extends Container {
         items = Collections.unmodifiableList(builder.items);
     }
 
+    /**
+     * Validates items across specified rules.
+     * <p/>
+     * TODO: refactor inheritance.
+     *
+     * @return {@code true} if group is valid and {@code false} otherwise.
+     */
     public boolean isValid() {
         for (Component component : items) {
             boolean valid = true;
@@ -36,8 +52,19 @@ public final class Group extends Container {
         return true;
     }
 
+    /**
+     * Layout that specified arrangement of contained {@link Component}s.
+     */
     public enum Layout {
+
+        /**
+         * Vertical arrangement.
+         */
         VERTICAL("VBox"),
+
+        /**
+         * Horizontal arrangement.
+         */
         HORIZONTAL("HBox");
 
         public final String code;
@@ -56,6 +83,9 @@ public final class Group extends Container {
         }
     }
 
+    /**
+     * Builder for {@link Group}.
+     */
     public static final class Builder extends Container.Builder {
 
         private List<Component> items = new ArrayList<>();

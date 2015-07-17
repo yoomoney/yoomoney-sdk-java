@@ -7,15 +7,33 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
+ * Date input specified by {@link Date#PATTERN}.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public class Date extends ParameterControl {
 
+    /**
+     * Date format.
+     */
     public static final String PATTERN = "yyyy-MM-dd";
+
+    /**
+     * Date formatter.
+     * <p/>
+     * TODO: refactor this field or {@link Date#getFormatter()}.
+     */
     public static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern(PATTERN)
             .withLocale(Locale.ENGLISH);
 
+    /**
+     * Minimal allowed value.
+     */
     public final DateTime min;
+
+    /**
+     * Maximal allowed value.
+     */
     public final DateTime max;
 
     protected Date(Builder builder) {
@@ -42,10 +60,17 @@ public class Date extends ParameterControl {
         return super.isValid(value) && isValidInner(value);
     }
 
+    /**
+     * Parses internal value to {@link DateTime}.
+     * @return appropriate {@link DateTime}.
+     */
     public DateTime toDateTime() {
         return parseDate(getValue(), getFormatter());
     }
 
+    /**
+     * TODO: remove this?
+     */
     protected DateTimeFormatter getFormatter() {
         return FORMATTER;
     }
@@ -61,6 +86,9 @@ public class Date extends ParameterControl {
         }
     }
 
+    /**
+     * {@link Date} builder.
+     */
     public static class Builder extends ParameterControl.Builder {
 
         private DateTime min;

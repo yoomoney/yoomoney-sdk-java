@@ -3,6 +3,10 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 import com.yandex.money.api.utils.Patterns;
 
 /**
+ * Email input.
+ *
+ * TODO: refactor inheritance.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public final class Email extends Text {
@@ -11,6 +15,9 @@ public final class Email extends Text {
         super(builder);
     }
 
+    /**
+     * {@link Email} builder.
+     */
     public static final class Builder extends Text.Builder {
 
         public Builder() {

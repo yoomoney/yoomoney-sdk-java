@@ -3,6 +3,10 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 import com.yandex.money.api.utils.Patterns;
 
 /**
+ * Telephone number input.
+ *
+ * TODO: maybe this class should extend ParameterControl?
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public final class Tel extends Text {
@@ -11,6 +15,9 @@ public final class Tel extends Text {
         super(builder);
     }
 
+    /**
+     * {@link Tel builder}.
+     */
     public static final class Builder extends Text.Builder {
 
         public Builder() {

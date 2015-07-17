@@ -6,11 +6,20 @@ import com.yandex.money.api.utils.Currency;
 import java.math.BigDecimal;
 
 /**
+ * The cost of transaction.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public final class Amount extends Number {
 
+    /**
+     * The currency. Default is {@link Currency#RUB}.
+     */
     public final Currency currency;
+
+    /**
+     * Fee. Default is {@link Fee#NO_FEE}.
+     */
     public final Fee fee;
 
     private Amount(Builder builder) {
@@ -19,6 +28,9 @@ public final class Amount extends Number {
         fee = builder.fee;
     }
 
+    /**
+     * {@link Amount} builder.
+     */
     public static final class Builder extends Number.Builder {
 
         private static final BigDecimal PENNY = new BigDecimal("0.01");
@@ -56,8 +68,18 @@ public final class Amount extends Number {
         }
     }
 
+    /**
+     * The type of input.
+     */
     public enum AmountType {
+        /**
+         * Specifies that sum will be debited from the payee account.
+         */
         AMOUNT("amount"),
+
+        /**
+         * Specifies that sum sum will be received by a recipient.
+         */
         NET_AMOUNT("netAmount");
 
         public final String code;

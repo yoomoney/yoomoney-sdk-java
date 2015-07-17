@@ -1,6 +1,8 @@
 package com.yandex.money.api.model.showcase.components;
 
 /**
+ * Block of plain text.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public class TextBlock {
@@ -11,6 +13,9 @@ public class TextBlock {
         this.label = label;
     }
 
+    /**
+     * Link.
+     */
     public static final class WithLink extends TextBlock {
 
         public final String link;

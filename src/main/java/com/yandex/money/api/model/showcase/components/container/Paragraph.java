@@ -7,10 +7,15 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Sequence of text blocks.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public final class Paragraph extends Container {
 
+    /**
+     * Collection of held text blocks.
+     */
     public List<TextBlock> items;
 
     private Paragraph(Builder builder) {
@@ -18,6 +23,9 @@ public final class Paragraph extends Container {
         items = Collections.unmodifiableList(builder.items);
     }
 
+    /**
+     * {@link Paragraph} builder.
+     */
     public static final class Builder extends Container.Builder {
 
         private List<TextBlock> items = new ArrayList<>();

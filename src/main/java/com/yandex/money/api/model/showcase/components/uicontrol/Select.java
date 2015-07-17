@@ -7,12 +7,25 @@ import java.util.Collections;
 import java.util.List;
 
 /**
+ * Group of selectable options.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public final class Select extends ParameterControl {
 
+    /**
+     * Held options.
+     */
     public final List<Option> options;
+
+    /**
+     * TODO: remove this field.
+     */
     public final List<String> values;
+
+    /**
+     * Recommended representation style.
+     */
     public final Style style;
 
     private Option selectedOption;
@@ -33,10 +46,16 @@ public final class Select extends ParameterControl {
                 values.contains(value) && (selectedOption == null || selectedOption.isValid()));
     }
 
+    /**
+     * @return current selected option.
+     */
     public Option getSelectedOption() {
         return selectedOption;
     }
 
+    /**
+     * TODO: is this method required?
+     */
     @Override
     protected void onValueSet(String value) {
         selectedOption = options.get(values.indexOf(value));
@@ -50,8 +69,19 @@ public final class Select extends ParameterControl {
         return values;
     }
 
+    /**
+     * Style of {@link Select} representation.
+     */
     public enum Style {
+
+        /**
+         * Options should be arranged as group of radio buttons.
+         */
         RADIO_GROUP("RadioGroup"),
+
+        /**
+         * Options should be arranged as spinner.
+         */
         SPINNER("Spinner");
 
         public final String code;
@@ -70,13 +100,34 @@ public final class Select extends ParameterControl {
         }
     }
 
+    /**
+     * Label-value container.
+     */
     public static final class Option {
 
+        /**
+         * Textural representation.
+         */
         public final String label;
+
+        /**
+         * Actual value.
+         */
         public final String value;
 
+        /**
+         * Group of elements which have to be visible when {@link Option} is selected. May be
+         * {@code null}.
+         * TODO: constructor?
+         */
         public Group group;
 
+        /**
+         * Constructor.
+         *
+         * @param label textural representation.
+         * @param value actual value.
+         */
         public Option(String label, String value) {
             if (label == null) {
                 throw new NullPointerException("label is null");
@@ -88,11 +139,18 @@ public final class Select extends ParameterControl {
             this.value = value;
         }
 
+        /**
+         * Validates current input's state.
+         * @return if the {@link Option} is valid or not.
+         */
         public boolean isValid() {
             return group == null || group.isValid();
         }
     }
 
+    /**
+     * {@link Select} builder.
+     */
     public static final class Builder extends ParameterControl.Builder {
 
         private List<Option> options = new ArrayList<>();

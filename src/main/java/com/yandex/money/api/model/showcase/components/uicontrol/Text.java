@@ -2,11 +2,22 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 
 
 /**
+ * Text field. It's like {@link TextArea} but may have optional keyboard suggestion and pattern.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public class Text extends TextArea {
 
+    /**
+     * User's input constraint represented as regular expression. May be {@code null}.
+     * {@see https://developer.mozilla
+     * .org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp}.
+     */
     public final String pattern;
+
+    /**
+     * Convenient keyboard suggestion. May be {@code null}.
+     */
     public final Keyboard keyboard;
 
     protected Text(Builder builder) {
@@ -21,6 +32,9 @@ public class Text extends TextArea {
                 (pattern == null || value.matches(pattern)) && !value.contains("\n"));
     }
 
+    /**
+     * {@link Text} builder.
+     */
     public static class Builder extends TextArea.Builder {
 
         private String pattern;
@@ -42,7 +56,12 @@ public class Text extends TextArea {
         }
     }
 
+    /**
+     * Keyboard type. The {@link Keyboard#NUMBER} means that field value can be filled with
+     * number keyboard.
+     */
     public enum Keyboard {
+
         NUMBER("number");
 
         public final String code;

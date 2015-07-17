@@ -1,11 +1,18 @@
 package com.yandex.money.api.model.showcase.components;
 
 /**
+ * Base class for all payment form fields. All components have appropriate builders and should be
+ * constructed by them.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public abstract class Component {
 
+    /**
+     * Possible field types.
+     */
     public enum Type {
+
         TEXT("text"),
         NUMBER("number"),
         AMOUNT("amount"),

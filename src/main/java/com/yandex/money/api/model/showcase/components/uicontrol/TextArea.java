@@ -1,11 +1,20 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
 /**
+ * Text field for arbitrary user's input.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public class TextArea extends ParameterControl {
 
+    /**
+     * Minimal text length.
+     */
     public final Integer minLength;
+
+    /**
+     * Maximum text length.
+     */
     public final Integer maxLength;
 
     protected TextArea(Builder builder) {
@@ -26,6 +35,9 @@ public class TextArea extends ParameterControl {
                                 (maxLength == null || value.length() <= maxLength));
     }
 
+    /**
+     * {@link TextArea} builder.
+     */
     public static class Builder extends ParameterControl.Builder {
 
         private Integer minLength;

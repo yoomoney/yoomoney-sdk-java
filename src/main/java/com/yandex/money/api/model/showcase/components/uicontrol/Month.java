@@ -6,11 +6,20 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
+ * The month and year input.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public final class Month extends Date {
 
+    /**
+     * Acceptable pattern.
+     */
     public static final String PATTERN = "yyyy-MM";
+
+    /**
+     * (De)serialization formatter.
+     */
     public static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern(PATTERN)
             .withLocale(Locale.ENGLISH);
 
@@ -18,11 +27,21 @@ public final class Month extends Date {
         super(builder);
     }
 
+    /**
+     * Getter.
+     * <p/>
+     * TODO: delete this?
+     *
+     * @return returns {@link Month} formatter.
+     */
     @Override
     protected DateTimeFormatter getFormatter() {
         return FORMATTER;
     }
 
+    /**
+     * {@link Month} builder.
+     */
     public static final class Builder extends Date.Builder {
 
         @Override

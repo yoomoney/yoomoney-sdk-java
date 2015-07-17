@@ -1,7 +1,7 @@
 package com.yandex.money.api.model.showcase.components;
 
 /**
- * All components which can change its value implement this interface.
+ * Entity which can change internal state implements this interface.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
@@ -28,9 +28,25 @@ public interface Parameter {
      */
     String getValue();
 
+    /**
+     * Possible values of auto filling macro.
+     * <p/>
+     * TODO: move this to appropriate field?
+     */
     enum AutoFill {
+        /**
+         * Current user name.
+         */
         ACCOUNT("currentuser_accountkey"),
+
+        /**
+         * Next month.
+         */
         NEXT_MONTH("calendar_next_month"),
+
+        /**
+         * Current user's email.
+         */
         EMAIL("currentuser_email");
 
         AutoFill(String code) {

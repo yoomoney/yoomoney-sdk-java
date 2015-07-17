@@ -3,12 +3,25 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 import java.math.BigDecimal;
 
 /**
+ * Numeric input.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public class Number extends ParameterControl {
 
+    /**
+     * Minimal acceptable number.
+     */
     public final BigDecimal min;
+
+    /**
+     * Maximal acceptable number.
+     */
     public final BigDecimal max;
+
+    /**
+     * Step between {@link Number#min} and {@link Number@max}.
+     */
     public final BigDecimal step;
 
     protected Number(Builder builder) {
@@ -41,6 +54,9 @@ public class Number extends ParameterControl {
         }
     }
 
+    /**
+     * {@link Number} builder.
+     */
     public static class Builder extends ParameterControl.Builder {
 
         protected BigDecimal min;

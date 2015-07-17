@@ -3,17 +3,43 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 import com.yandex.money.api.model.showcase.components.Component;
 
 /**
+ * Base class for all components allowing user's interaction.
+ *
+ * TODO: think about if 'alert', 'required' and 'readonly' fields should be in ParameterControl
+ * class.
+ *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public abstract class Control extends Component {
 
+    /**
+     * Help text. May be {@code null}.
+     */
     public final String hint;
-    public final String label;
-    public final String alert;
-    public final boolean required;
-    public final boolean readonly;
-    // TODO decide if 'alert', 'required' and 'readonly' fields should be in ParameterControl class
 
+    /**
+     * Annotation specifying the target of input. May be {@code null}.
+     */
+    public final String label;
+
+    /**
+     * Text which explains why the user's input is erroneous. May be {@code null}.
+     */
+    public final String alert;
+
+    /**
+     * Required flag. The default is {@code true}.
+     */
+    public final boolean required;
+
+    /**
+     * Readonly flag. The default is {@code false}.
+     */
+    public final boolean readonly;
+
+    /**
+     * Control builder.
+     */
     protected Control(Builder builder) {
         hint = builder.hint;
         label = builder.label;
@@ -22,6 +48,9 @@ public abstract class Control extends Component {
         readonly = builder.readonly;
     }
 
+    /**
+     * Builder for {@link Control}
+     */
     public static abstract class Builder extends Component.Builder {
 
         private String hint;
