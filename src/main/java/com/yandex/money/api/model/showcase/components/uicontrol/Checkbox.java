@@ -1,14 +1,14 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
 /**
- * On/off input.
+ * On/off control.
  *
  * @author Aleksandr Ershov (asershov@yamoney.ru)
  */
 public final class Checkbox extends ParameterControl {
 
     /**
-     * Current state.
+     * Initial state. Default is {@code false}.
      */
     public final boolean checked;
 

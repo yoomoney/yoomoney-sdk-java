@@ -10,17 +10,17 @@ import com.yandex.money.api.model.showcase.components.Parameter;
 public abstract class ParameterControl extends Control implements Parameter {
 
     /**
-     * Field name.
+     * Name.
      */
     public final String name;
 
     /**
-     * Auto fill macro. The appropriate value should be substituted automatically.
+     * Auto fill macro. The appropriate value should be inserted automatically.
      */
     public final AutoFill valueAutoFill;
 
     /**
-     * Field value.
+     * Value.
      */
     private String value;
 
@@ -47,9 +47,20 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * Sets value.
+     * Returns current value.
      *
+     * @return field value.
+     */
+    @Override
+    public final String getValue() {
+        return value;
+    }
+
+    /**
+     * Sets value.
+     * <p/>
      * TODO: isValid() call?
+     *
      * @param value input value.
      */
     @Override
@@ -63,17 +74,7 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * Returns current value.
-     *
-     * @return field value.
-     */
-    @Override
-    public final String getValue() {
-        return value;
-    }
-
-    /**
-     * Validates input's state.
+     * Validates control state.
      *
      * @return {@code true} if instance is valid and {@code false} otherwise.
      */
@@ -93,6 +94,7 @@ public abstract class ParameterControl extends Control implements Parameter {
 
     /**
      * TODO: is this method required?
+     *
      * @param value
      */
     protected void onValueSet(String value) {

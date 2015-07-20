@@ -6,7 +6,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
- * The month and year input.
+ * The month and year control.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */

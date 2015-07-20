@@ -7,6 +7,9 @@ package com.yandex.money.api.model.showcase.components;
  */
 public class TextBlock {
 
+    /**
+     * Content.
+     */
     public final String label;
 
     public TextBlock(String label) {

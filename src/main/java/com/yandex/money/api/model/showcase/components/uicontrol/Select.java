@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Group of selectable options.
+ * Control for selecting amongst a set of options.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
@@ -47,7 +47,7 @@ public final class Select extends ParameterControl {
     }
 
     /**
-     * @return current selected option.
+     * Returns default option. May be {@code null}.
      */
     public Option getSelectedOption() {
         return selectedOption;
@@ -86,17 +86,17 @@ public final class Select extends ParameterControl {
 
         public final String code;
 
-        public static Style parse(String typeName) {
+        Style(String code) {
+            this.code = code;
+        }
+
+        public static Style parse(String code) {
             for (Style type : values()) {
-                if (type.code.equalsIgnoreCase(typeName)) {
+                if (type.code.equalsIgnoreCase(code)) {
                     return type;
                 }
             }
             return SPINNER;
-        }
-
-        Style(String code) {
-            this.code = code;
         }
     }
 
@@ -106,12 +106,12 @@ public final class Select extends ParameterControl {
     public static final class Option {
 
         /**
-         * Textural representation.
+         * Label.
          */
         public final String label;
 
         /**
-         * Actual value.
+         * Value.
          */
         public final String value;
 
@@ -140,7 +140,8 @@ public final class Select extends ParameterControl {
         }
 
         /**
-         * Validates current input's state.
+         * Validates current control state.
+         *
          * @return if the {@link Option} is valid or not.
          */
         public boolean isValid() {

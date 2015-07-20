@@ -3,24 +3,24 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 import java.math.BigDecimal;
 
 /**
- * Numeric input.
+ * Numeric control.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public class Number extends ParameterControl {
 
     /**
-     * Minimal acceptable number.
+     * Minimum acceptable number.
      */
     public final BigDecimal min;
 
     /**
-     * Maximal acceptable number.
+     * Maximum acceptable number.
      */
     public final BigDecimal max;
 
     /**
-     * Step between {@link Number#min} and {@link Number@max}.
+     * Step scale factor. The default is {@link BigDecimal#ONE}.
      */
     public final BigDecimal step;
 

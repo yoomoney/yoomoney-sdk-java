@@ -48,10 +48,10 @@ public enum AmountType {
     }
 
     /**
-     * Parses amount type. If code has invalid value
+     * Parses amount type. If code has invalid value.
      *
-     * @param code the code
-     * @return amount type
+     * @param code the code.
+     * @return amount type.
      */
     public static AmountType parse(String code) {
         return NET_AMOUNT.code.equals(code) ? NET_AMOUNT : AMOUNT;

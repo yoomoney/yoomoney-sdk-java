@@ -1,7 +1,7 @@
 package com.yandex.money.api.model.showcase.components;
 
 /**
- * Base class for all payment form fields. All components have appropriate builders and should be
+ * Base entity of payment form. All components have appropriate builders and should be
  * constructed by them.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
@@ -29,17 +29,17 @@ public abstract class Component {
 
         public final String code;
 
-        public static Type parse(String typeName) {
+        Type(String code) {
+            this.code = code;
+        }
+
+        public static Type parse(String code) {
             for (Type type : values()) {
-                if (type.code.equalsIgnoreCase(typeName)) {
+                if (type.code.equalsIgnoreCase(code)) {
                     return type;
                 }
             }
             return null;
-        }
-
-        Type(String code) {
-            this.code = code;
         }
     }
 

@@ -3,8 +3,8 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 import com.yandex.money.api.utils.Patterns;
 
 /**
- * Telephone number input.
- *
+ * Telephone number control.
+ * <p/>
  * TODO: maybe this class should extend ParameterControl?
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)

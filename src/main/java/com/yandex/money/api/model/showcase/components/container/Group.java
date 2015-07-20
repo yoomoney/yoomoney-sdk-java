@@ -3,35 +3,25 @@ package com.yandex.money.api.model.showcase.components.container;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
- * Holder of collection of {@link Component}s.
+ * A {@link Container} that holds {@link Component}s.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Group extends Container {
+public final class Group extends Container<Component> {
 
     /**
-     * Collection of components.
-     */
-    public final List<Component> items;
-
-    /**
-     * Arrangement.
+     * {@link Layout}.
      */
     public final Layout layout;
 
     private Group(Builder builder) {
         super(builder);
         layout = builder.layout;
-        items = Collections.unmodifiableList(builder.items);
     }
 
     /**
-     * Validates items across specified rules.
+     * Validates contained components across constraints.
      * <p/>
      * TODO: refactor inheritance.
      *
@@ -53,7 +43,7 @@ public final class Group extends Container {
     }
 
     /**
-     * Layout that specified arrangement of contained {@link Component}s.
+     * Possible options that specifies arrangement of contained {@link Component}s.
      */
     public enum Layout {
 
@@ -69,31 +59,26 @@ public final class Group extends Container {
 
         public final String code;
 
-        public static Layout parse(String typeName) {
+        Layout(String code) {
+            this.code = code;
+        }
+
+        public static Layout parse(String code) {
             for (Layout type : values()) {
-                if (type.code.equalsIgnoreCase(typeName)) {
+                if (type.code.equalsIgnoreCase(code)) {
                     return type;
                 }
             }
             return VERTICAL;
         }
-
-        Layout(String code) {
-            this.code = code;
-        }
     }
 
     /**
-     * Builder for {@link Group}.
+     * {@link Group} builder.
      */
-    public static final class Builder extends Container.Builder {
+    public static final class Builder extends Container.Builder<Component> {
 
-        private List<Component> items = new ArrayList<>();
         private Layout layout = Layout.VERTICAL;
-
-        public Builder() {
-            super();
-        }
 
         @Override
         public Group create() {
@@ -105,14 +90,6 @@ public final class Group extends Container {
                 throw new NullPointerException("layout is null");
             }
             this.layout = layout;
-            return this;
-        }
-
-        public Builder addItem(Component component) {
-            if (component == null) {
-                throw new NullPointerException("component is null");
-            }
-            items.add(component);
             return this;
         }
     }

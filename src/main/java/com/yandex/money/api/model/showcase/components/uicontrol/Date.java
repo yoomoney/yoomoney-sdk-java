@@ -7,7 +7,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
- * Date input specified by {@link Date#PATTERN}.
+ * Date control specified by {@link Date#PATTERN}.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
@@ -62,6 +62,7 @@ public class Date extends ParameterControl {
 
     /**
      * Parses internal value to {@link DateTime}.
+     *
      * @return appropriate {@link DateTime}.
      */
     public DateTime toDateTime() {

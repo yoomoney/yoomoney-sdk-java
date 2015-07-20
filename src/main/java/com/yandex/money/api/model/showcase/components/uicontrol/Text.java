@@ -2,16 +2,16 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 
 
 /**
- * Text field. It's like {@link TextArea} but may have optional keyboard suggestion and pattern.
+ * Text field. Specializes {@link TextArea} with optional keyboard layout and pattern.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public class Text extends TextArea {
 
     /**
-     * User's input constraint represented as regular expression. May be {@code null}.
-     * {@see https://developer.mozilla
-     * .org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp}.
+     * Constraint represented as regular expression. May be {@code null}.
+     * <p/>
+     * {@see java.util.regex.Pattern}
      */
     public final String pattern;
 
@@ -30,30 +30,6 @@ public class Text extends TextArea {
     public boolean isValid(String value) {
         return super.isValid(value) && (value == null || value.isEmpty() ||
                 (pattern == null || value.matches(pattern)) && !value.contains("\n"));
-    }
-
-    /**
-     * {@link Text} builder.
-     */
-    public static class Builder extends TextArea.Builder {
-
-        private String pattern;
-        private Keyboard keyboard;
-
-        @Override
-        public Text create() {
-            return new Text(this);
-        }
-
-        public Builder setPattern(String pattern) {
-            this.pattern = pattern;
-            return this;
-        }
-
-        public Builder setKeyboard(Keyboard keyboard) {
-            this.keyboard = keyboard;
-            return this;
-        }
     }
 
     /**
@@ -77,6 +53,30 @@ public class Text extends TextArea {
                 }
             }
             return null;
+        }
+    }
+
+    /**
+     * {@link Text} builder.
+     */
+    public static class Builder extends TextArea.Builder {
+
+        private String pattern;
+        private Keyboard keyboard;
+
+        @Override
+        public Text create() {
+            return new Text(this);
+        }
+
+        public Builder setPattern(String pattern) {
+            this.pattern = pattern;
+            return this;
+        }
+
+        public Builder setKeyboard(Keyboard keyboard) {
+            this.keyboard = keyboard;
+            return this;
         }
     }
 }

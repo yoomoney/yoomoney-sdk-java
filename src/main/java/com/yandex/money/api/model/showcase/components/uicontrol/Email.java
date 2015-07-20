@@ -3,8 +3,8 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 import com.yandex.money.api.utils.Patterns;
 
 /**
- * Email input.
- *
+ * Email control.
+ * <p/>
  * TODO: refactor inheritance.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)

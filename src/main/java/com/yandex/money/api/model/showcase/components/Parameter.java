@@ -1,63 +1,70 @@
 package com.yandex.money.api.model.showcase.components;
 
 /**
- * Entity which can change internal state implements this interface.
+ * Parameter.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public interface Parameter {
 
     /**
-     * Gets a name of a parameter.
+     * Returns a name.
      *
-     * @return the name
+     * @return name
      */
     String getName();
 
     /**
-     * Sets a value parsing string accordingly.
+     * Returns a value.
+     *
+     * @return value
+     */
+    String getValue();
+
+    /**
+     * Sets a value.
      *
      * @param value the value
      */
     void setValue(String value);
 
     /**
-     * Gets string representation of a value.
-     *
-     * @return the value
-     */
-    String getValue();
-
-    /**
-     * Possible values of auto filling macro.
+     * Auto fill macros.
      * <p/>
      * TODO: move this to appropriate field?
      */
     enum AutoFill {
+
         /**
-         * Current user name.
+         * User's name.
          */
-        ACCOUNT("currentuser_accountkey"),
+        ACCOUNT("CURRENT_USER_ACCOUNT"),
 
         /**
          * Next month.
          */
-        NEXT_MONTH("calendar_next_month"),
+        NEXT_MONTH("CALENDAR_NEXT_MONTH"),
 
         /**
-         * Current user's email.
+         * User's email.
          */
-        EMAIL("currentuser_email");
+        EMAIL("CURRENT_USER_EMAIL");
+
+        public final String code;
 
         AutoFill(String code) {
             this.code = code;
         }
 
-        public final String code;
-
-        public static AutoFill parse(String macroName) {
+        /**
+         * Parses incoming code to matched enum item.
+         *
+         * @param code value to parse.
+         * @return enum item or {@code null}.
+         */
+        public static AutoFill parse(String code) {
             for (AutoFill autoFill : AutoFill.values()) {
-                if (autoFill.code.equalsIgnoreCase(macroName)) {
+                if (autoFill.code.equalsIgnoreCase(code)) {
                     return autoFill;
                 }
             }
