@@ -34,13 +34,9 @@ public abstract class Container<T> extends Component {
      */
     public static abstract class Builder<T> extends Component.Builder {
 
-        private final List<T> components;
+        private final List<T> components = new ArrayList<>();
 
         private String label;
-
-        public Builder() {
-            this.components = new ArrayList<>();
-        }
 
         public Builder setLabel(String label) {
             this.label = label;

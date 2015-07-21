@@ -66,7 +66,7 @@ public final class Group extends Container<Component> {
 
         public static Layout parse(String code) {
             for (Layout type : values()) {
-                if (type.code.equalsIgnoreCase(code)) {
+                if (type.code.equals(code)) {
                     return type;
                 }
             }
