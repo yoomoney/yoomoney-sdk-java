@@ -7,7 +7,7 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 /**
- * Date control specified by {@link Date#PATTERN}.
+ * Date control specified by {@link Date#PATTERN} (for example 2015-05-30).
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
@@ -45,6 +45,12 @@ public class Date extends ParameterControl {
         max = builder.max;
     }
 
+    /**
+     * Parses a {@link DateTime} from the specified string using a formatter.
+     *
+     * @param date      value to parse.
+     * @param formatter {@link DateTimeFormatter}.
+     */
     public static DateTime parseDate(String date, DateTimeFormatter formatter) {
         if (date == null || date.isEmpty()) {
             return null;
@@ -62,15 +68,13 @@ public class Date extends ParameterControl {
 
     /**
      * Parses internal value to {@link DateTime}.
-     *
-     * @return appropriate {@link DateTime}.
      */
     public DateTime toDateTime() {
         return parseDate(getValue(), getFormatter());
     }
 
     /**
-     * TODO: remove this?
+     * Returns control's formatter.
      */
     protected DateTimeFormatter getFormatter() {
         return FORMATTER;

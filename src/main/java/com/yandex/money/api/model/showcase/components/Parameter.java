@@ -2,7 +2,8 @@ package com.yandex.money.api.model.showcase.components;
 
 /**
  * Parameter.
- *
+ * TODO: think about merge this interface with
+ * {@link com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl}.
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public interface Parameter {
@@ -38,17 +39,17 @@ public interface Parameter {
         /**
          * User's name.
          */
-        ACCOUNT("CURRENT_USER_ACCOUNT"),
+        CURRENT_USER_ACCOUNT("currentuser_accountkey"),
 
         /**
          * Next month.
          */
-        NEXT_MONTH("CALENDAR_NEXT_MONTH"),
+        CALENDAR_NEXT_MONTH("calendar_next_month"),
 
         /**
          * User's email.
          */
-        EMAIL("CURRENT_USER_EMAIL");
+        CURRENT_USER_EMAIL("currentuser_email");
 
         public final String code;
 

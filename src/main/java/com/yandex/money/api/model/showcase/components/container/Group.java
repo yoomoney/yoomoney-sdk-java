@@ -4,7 +4,8 @@ import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl;
 
 /**
- * A {@link Container} that holds {@link Component}s.
+ * A {@link Group} is implementation of a {@link Component} that can contain only {@link Component}
+ * instances.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */

@@ -14,17 +14,17 @@ import java.util.List;
 public final class Select extends ParameterControl {
 
     /**
-     * Held options.
+     * Options.
      */
     public final List<Option> options;
 
     /**
-     * TODO: remove this field.
+     * Values.
      */
     public final List<String> values;
 
     /**
-     * Recommended representation style.
+     * Recommended representation style. Default is {@code null}.
      */
     public final Style style;
 

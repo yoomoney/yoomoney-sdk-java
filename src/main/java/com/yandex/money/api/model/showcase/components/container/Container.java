@@ -7,7 +7,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A {@link Container} is special component that can hold other components (items).
+ * A generic {@link Container} object is special component that can contain other components
+ * (items).
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */

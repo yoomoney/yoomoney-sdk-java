@@ -27,13 +27,6 @@ public final class Month extends Date {
         super(builder);
     }
 
-    /**
-     * Getter.
-     * <p/>
-     * TODO: delete this?
-     *
-     * @return returns {@link Month} formatter.
-     */
     @Override
     protected DateTimeFormatter getFormatter() {
         return FORMATTER;

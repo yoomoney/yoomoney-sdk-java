@@ -3,7 +3,7 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 import com.yandex.money.api.model.showcase.components.Component;
 
 /**
- * Base class for all components that allows user's input.
+ * Base class for all components that allow user's input.
  * <p/>
  * TODO: think about if 'alert', 'required' and 'readonly' fields should be in ParameterControl
  * class.
@@ -37,9 +37,6 @@ public abstract class Control extends Component {
      */
     public final boolean readonly;
 
-    /**
-     * Control builder.
-     */
     protected Control(Builder builder) {
         hint = builder.hint;
         label = builder.label;
