@@ -28,6 +28,25 @@ public final class Amount extends Number {
         fee = builder.fee;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Amount amount = (Amount) o;
+
+        return currency == amount.currency && fee.equals(amount.fee);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + currency.hashCode();
+        result = 31 * result + fee.hashCode();
+        return result;
+    }
+
     /**
      * {@link Amount} builder.
      */

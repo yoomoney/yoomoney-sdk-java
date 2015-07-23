@@ -23,6 +23,24 @@ public final class Checkbox extends ParameterControl {
                 (value == null || value.isEmpty() || "true".equals(value) || "false".equals(value));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Checkbox checkbox = (Checkbox) o;
+
+        return checked == checkbox.checked;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (checked ? 1 : 0);
+        return result;
+    }
+
     /**
      * {@link Checkbox} builder.
      */

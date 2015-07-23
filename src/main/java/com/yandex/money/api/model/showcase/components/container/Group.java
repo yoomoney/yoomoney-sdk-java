@@ -43,6 +43,22 @@ public final class Group extends Container<Component> {
         return true;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Group group = (Group) o;
+
+        return layout == group.layout;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return layout.hashCode();
+    }
+
     /**
      * Possible options that specifies arrangement of contained {@link Component}s.
      */

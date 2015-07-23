@@ -20,7 +20,7 @@ public abstract class ParameterControl extends Control implements Parameter {
     public final AutoFill valueAutoFill;
 
     /**
-     * Value.
+     * Default value. May be {@code null}.
      */
     private String value;
 
@@ -35,7 +35,7 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * Returns name.
+     * Returns control's  name.
      * <p/>
      * TODO: remove method field's public modifier.
      *
@@ -47,9 +47,7 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * Returns current value.
-     *
-     * @return field value.
+     * Returns default value. May be {@code null}.
      */
     @Override
     public final String getValue() {
@@ -71,6 +69,27 @@ public abstract class ParameterControl extends Control implements Parameter {
         }
         this.value = value;
         onValueSet(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ParameterControl that = (ParameterControl) o;
+
+        return name.equals(that.name) && valueAutoFill == that.valueAutoFill &&
+                !(value != null ? !value.equals(that.value) : that.value != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (valueAutoFill != null ? valueAutoFill.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
     }
 
     /**

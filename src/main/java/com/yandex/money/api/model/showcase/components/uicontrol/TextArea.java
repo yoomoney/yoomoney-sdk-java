@@ -35,6 +35,27 @@ public class TextArea extends ParameterControl {
                                 (maxLength == null || value.length() <= maxLength));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        TextArea textArea = (TextArea) o;
+
+        return !(minLength != null ? !minLength.equals(textArea.minLength) :
+                textArea.minLength != null) && !(maxLength != null ?
+                !maxLength.equals(textArea.maxLength) : textArea.maxLength != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (minLength != null ? minLength.hashCode() : 0);
+        result = 31 * result + (maxLength != null ? maxLength.hashCode() : 0);
+        return result;
+    }
+
     /**
      * {@link TextArea} builder.
      */

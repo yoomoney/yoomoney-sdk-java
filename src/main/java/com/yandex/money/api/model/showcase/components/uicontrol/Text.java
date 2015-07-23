@@ -32,6 +32,26 @@ public class Text extends TextArea {
                 (pattern == null || value.matches(pattern)) && !value.contains("\n"));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Text text = (Text) o;
+
+        return !(pattern != null ? !pattern.equals(text.pattern) : text.pattern != null) &&
+                keyboard == text.keyboard;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (pattern != null ? pattern.hashCode() : 0);
+        result = 31 * result + (keyboard != null ? keyboard.hashCode() : 0);
+        return result;
+    }
+
     /**
      * Keyboard type. The {@link Keyboard#NUMBER} means that field value can be filled with
      * number keyboard.

@@ -28,7 +28,7 @@ public final class Month extends Date {
     }
 
     @Override
-    protected DateTimeFormatter getFormatter() {
+    public DateTimeFormatter getFormatter() {
         return FORMATTER;
     }
 

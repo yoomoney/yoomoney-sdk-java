@@ -45,6 +45,30 @@ public abstract class Control extends Component {
         readonly = builder.readonly;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Control control = (Control) o;
+
+        return required == control.required && readonly == control.readonly &&
+                !(hint != null ? !hint.equals(control.hint) : control.hint != null) &&
+                !(label != null ? !label.equals(control.label) : control.label != null) &&
+                !(alert != null ? !alert.equals(control.alert) : control.alert != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = hint != null ? hint.hashCode() : 0;
+        result = 31 * result + (label != null ? label.hashCode() : 0);
+        result = 31 * result + (alert != null ? alert.hashCode() : 0);
+        result = 31 * result + (required ? 1 : 0);
+        result = 31 * result + (readonly ? 1 : 0);
+        return result;
+    }
+
     /**
      * {@link Control} builder.
      */

@@ -32,9 +32,6 @@ public final class Select extends ParameterControl {
 
     private Select(Builder builder) {
         super(builder);
-        if (builder.options == null) {
-            throw new NullPointerException("options is null");
-        }
         options = Collections.unmodifiableList(builder.options);
         values = Collections.unmodifiableList(getValues(options));
         style = builder.style;
@@ -51,6 +48,29 @@ public final class Select extends ParameterControl {
      */
     public Option getSelectedOption() {
         return selectedOption;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Select select = (Select) o;
+
+        return options.equals(select.options) && values.equals(select.values) &&
+                style == select.style && !(selectedOption != null ?
+                !selectedOption.equals(select.selectedOption) : select.selectedOption != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + options.hashCode();
+        result = 31 * result + values.hashCode();
+        result = 31 * result + (style != null ? style.hashCode() : 0);
+        result = 31 * result + (selectedOption != null ? selectedOption.hashCode() : 0);
+        return result;
     }
 
     /**

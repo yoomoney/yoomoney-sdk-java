@@ -29,6 +29,25 @@ public abstract class Container<T> extends Component {
         items = Collections.unmodifiableList(builder.components);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Container<?> container = (Container<?>) o;
+
+        return items.equals(container.items) &&
+                !(label != null ? !label.equals(container.label) : container.label != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = items.hashCode();
+        result = 31 * result + (label != null ? label.hashCode() : 0);
+        return result;
+    }
+
     /**
      * Base class for all component builders.
      */

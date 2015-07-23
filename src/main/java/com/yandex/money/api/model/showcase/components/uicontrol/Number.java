@@ -39,6 +39,27 @@ public class Number extends ParameterControl {
         return super.isValid(value) && isValidInner(value);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Number number = (Number) o;
+
+        return !(min != null ? !min.equals(number.min) : number.min != null) && !(max != null ? !max
+                .equals(number.max) : number.max != null) && step.equals(number.step);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (min != null ? min.hashCode() : 0);
+        result = 31 * result + (max != null ? max.hashCode() : 0);
+        result = 31 * result + step.hashCode();
+        return result;
+    }
+
     private boolean isValidInner(String value) {
         if (value == null || value.isEmpty()) {
             return true;
