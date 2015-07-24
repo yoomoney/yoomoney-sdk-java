@@ -1,5 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
+import com.yandex.money.api.utils.ToStringBuilder;
+
 /**
  * On/off control.
  *
@@ -39,6 +41,13 @@ public final class Checkbox extends ParameterControl {
         int result = super.hashCode();
         result = 31 * result + (checked ? 1 : 0);
         return result;
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return new ToStringBuilder("Checkbox")
+                .append("checked", checked)
+                .append(super.getToStringBuilder());
     }
 
     /**

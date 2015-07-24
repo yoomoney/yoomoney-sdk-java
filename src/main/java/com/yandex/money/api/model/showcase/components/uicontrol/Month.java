@@ -1,5 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
+import com.yandex.money.api.utils.ToStringBuilder;
+
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -30,6 +32,11 @@ public final class Month extends Date {
     @Override
     public DateTimeFormatter getFormatter() {
         return FORMATTER;
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return super.getToStringBuilder().setName("Month");
     }
 
     /**

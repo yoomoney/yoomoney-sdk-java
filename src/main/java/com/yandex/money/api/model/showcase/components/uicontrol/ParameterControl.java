@@ -1,6 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
 import com.yandex.money.api.model.showcase.components.Parameter;
+import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
  * Base class for all fields with internal state.
@@ -109,6 +110,15 @@ public abstract class ParameterControl extends Control implements Parameter {
      */
     public boolean isValid(String value) {
         return !required || (value != null && !value.isEmpty());
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return new ToStringBuilder("ParameterControl")
+                .append("name", name)
+                .append("value", value)
+                .append("valueAutoFill", valueAutoFill)
+                .append(super.getToStringBuilder());
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
 import com.yandex.money.api.utils.Patterns;
+import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
  * Email control.
@@ -13,6 +14,11 @@ public final class Email extends Text {
 
     private Email(Builder builder) {
         super(builder);
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return super.getToStringBuilder().setName("Email");
     }
 
     /**

@@ -2,6 +2,7 @@ package com.yandex.money.api.model.showcase.components.container;
 
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl;
+import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
  * A {@link Group} is implementation of a {@link Component} that can contain only {@link Component}
@@ -59,6 +60,13 @@ public final class Group extends Container<Component> {
         return layout.hashCode();
     }
 
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return new ToStringBuilder("Group")
+                .append("layout", layout)
+                .append(super.getToStringBuilder());
+    }
+
     /**
      * Possible options that specifies arrangement of contained {@link Component}s.
      */
@@ -87,6 +95,13 @@ public final class Group extends Container<Component> {
                 }
             }
             return VERTICAL;
+        }
+
+        @Override
+        public String toString() {
+            return "Layout{" +
+                    "code='" + code + '\'' +
+                    "} " + super.toString();
         }
     }
 

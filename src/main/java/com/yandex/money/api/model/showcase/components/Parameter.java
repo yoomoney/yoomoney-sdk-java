@@ -71,5 +71,12 @@ public interface Parameter {
             }
             return null;
         }
+
+        @Override
+        public String toString() {
+            return "AutoFill{" +
+                    "code='" + code + '\'' +
+                    "}";
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.yandex.money.api.model.showcase.components;
 
+import com.yandex.money.api.utils.ToStringBuilder;
+
 /**
  * Block of plain text.
  *
@@ -34,6 +36,13 @@ public class TextBlock {
         return content.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return "TextBlock{" +
+                "content='" + content + '\'' +
+                '}';
+    }
+
     /**
      * Link.
      */
@@ -65,6 +74,13 @@ public class TextBlock {
             int result = super.hashCode();
             result = 31 * result + link.hashCode();
             return result;
+        }
+
+        @Override
+        public String toString() {
+            return new ToStringBuilder("WithLink")
+                    .append("link", link)
+                    .append("content", content).toString();
         }
     }
 }

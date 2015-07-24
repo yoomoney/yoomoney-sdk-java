@@ -1,6 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
 import com.yandex.money.api.model.showcase.components.container.Group;
+import com.yandex.money.api.utils.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,6 +74,16 @@ public final class Select extends ParameterControl {
         return result;
     }
 
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return new ToStringBuilder("Select")
+                .append("options", options)
+                .append("values", values)
+                .append("style", style)
+                .append("selectedOption", selectedOption)
+                .append(super.getToStringBuilder());
+    }
+
     /**
      * TODO: is this method required?
      */
@@ -117,6 +128,13 @@ public final class Select extends ParameterControl {
                 }
             }
             return SPINNER;
+        }
+
+        @Override
+        public String toString() {
+            return "Style{" +
+                    "code='" + code + '\'' +
+                    "} " + super.toString();
         }
     }
 
@@ -166,6 +184,15 @@ public final class Select extends ParameterControl {
          */
         public boolean isValid() {
             return group == null || group.isValid();
+        }
+
+        @Override
+        public String toString() {
+            return "Option{" +
+                    "label='" + label + '\'' +
+                    ", value='" + value + '\'' +
+                    ", group=" + group +
+                    '}';
         }
     }
 

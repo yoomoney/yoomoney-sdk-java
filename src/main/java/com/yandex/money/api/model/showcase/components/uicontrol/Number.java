@@ -1,5 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
+import com.yandex.money.api.utils.ToStringBuilder;
+
 import java.math.BigDecimal;
 
 /**
@@ -58,6 +60,15 @@ public class Number extends ParameterControl {
         result = 31 * result + (max != null ? max.hashCode() : 0);
         result = 31 * result + step.hashCode();
         return result;
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return new ToStringBuilder("Number")
+                .append("min", min)
+                .append("max", max)
+                .append("step", step)
+                .append(super.getToStringBuilder());
     }
 
     private boolean isValidInner(String value) {

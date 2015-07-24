@@ -1,6 +1,7 @@
 package com.yandex.money.api.model.showcase.components.container;
 
 import com.yandex.money.api.model.showcase.components.TextBlock;
+import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
  * Sequence of text blocks.
@@ -11,6 +12,11 @@ public final class Paragraph extends Container<TextBlock> {
 
     private Paragraph(Builder builder) {
         super(builder);
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return super.getToStringBuilder().setName("Paragraph");
     }
 
     /**

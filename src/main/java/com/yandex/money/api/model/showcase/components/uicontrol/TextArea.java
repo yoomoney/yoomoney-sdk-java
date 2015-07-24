@@ -1,5 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
+import com.yandex.money.api.utils.ToStringBuilder;
+
 /**
  * Text field for arbitrary user's input.
  *
@@ -54,6 +56,11 @@ public class TextArea extends ParameterControl {
         result = 31 * result + (minLength != null ? minLength.hashCode() : 0);
         result = 31 * result + (maxLength != null ? maxLength.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return super.getToStringBuilder().setName("TextArea");
     }
 
     /**
