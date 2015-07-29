@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * @author Anton Ermak (ermak@yamoney.ru).
  */
-public class ParamsTest {
+public final class ParamsTest {
 
     private static final String accountNumber = "4100414141414";
     private static final BigDecimal amount = new BigDecimal("10.01");
