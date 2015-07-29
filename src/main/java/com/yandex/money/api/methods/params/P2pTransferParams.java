@@ -127,19 +127,24 @@ public final class P2pTransferParams extends PaymentParams {
             HashMap<String, String> params = new HashMap<>();
 
             params.put(Params.TO.paramName, to);
-            params.put(Params.COMMENT.paramName, comment);
-            params.put(Params.MESSAGE.paramName, message);
-            params.put(Params.LABEL.paramName, label);
-
-            params.put(Params.CODEPRO.paramName, getStringOrNull(codepro));
-            params.put(Params.EXPIRE.paramName, getStringOrNull(expirePeriod));
-
             setAmount(params);
-            return params;
-        }
 
-        private <T> String getStringOrNull(T value) {
-            return value == null ? null : value.toString();
+            if (comment != null) {
+                params.put(Params.COMMENT.paramName, comment);
+            }
+            if (message != null) {
+                params.put(Params.MESSAGE.paramName, message);
+            }
+            if (label != null) {
+                params.put(Params.LABEL.paramName, label);
+            }
+            if (codepro != null) {
+                params.put(Params.CODEPRO.paramName, codepro.toString());
+            }
+            if (expirePeriod != null) {
+                params.put(Params.EXPIRE.paramName, expirePeriod.toString());
+            }
+            return params;
         }
 
         private void setAmount(Map<String, String> params) {

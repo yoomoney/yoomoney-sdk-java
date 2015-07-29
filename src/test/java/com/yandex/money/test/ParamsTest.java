@@ -31,7 +31,9 @@ public final class ParamsTest {
      */
     @Test
     public void testP2pTransferParamsBuilderCreated() {
-        createP2pBuilderRequired().build();
+        int requiredParamsSize = 2;
+        P2pTransferParams params = createP2pBuilderRequired().build();
+        Assert.assertEquals(params.makeParams().size(), requiredParamsSize);
     }
 
     /**
