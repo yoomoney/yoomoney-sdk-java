@@ -129,13 +129,6 @@ public final class Select extends ParameterControl {
             }
             return SPINNER;
         }
-
-        @Override
-        public String toString() {
-            return "Style{" +
-                    "code='" + code + '\'' +
-                    "} " + super.toString();
-        }
     }
 
     /**

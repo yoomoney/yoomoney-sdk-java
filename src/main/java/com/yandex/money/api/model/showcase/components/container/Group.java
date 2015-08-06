@@ -98,13 +98,6 @@ public final class Group extends Container<Component> {
             }
             return VERTICAL;
         }
-
-        @Override
-        public String toString() {
-            return "Layout{" +
-                    "code='" + code + '\'' +
-                    "} " + super.toString();
-        }
     }
 
     /**

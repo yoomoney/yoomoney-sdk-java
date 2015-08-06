@@ -50,13 +50,6 @@ public abstract class Component {
             }
             return null;
         }
-
-        @Override
-        public String toString() {
-            return "Type{" +
-                    "code='" + code + '\'' +
-                    "} ";
-        }
     }
 
     public static abstract class Builder {

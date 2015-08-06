@@ -84,13 +84,6 @@ public class Text extends TextArea {
             }
             return null;
         }
-
-        @Override
-        public String toString() {
-            return "Keyboard{" +
-                    "code='" + code + '\'' +
-                    "} " + super.toString();
-        }
     }
 
     /**
