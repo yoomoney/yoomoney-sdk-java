@@ -76,7 +76,7 @@ public class Date extends ParameterControl {
     }
 
     /**
-     * Returns control's formatter.
+     * @return control's formatter.
      */
     public DateTimeFormatter getFormatter() {
         return FORMATTER;
@@ -104,10 +104,10 @@ public class Date extends ParameterControl {
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("Date")
+        return super.getToStringBuilder()
+                .setName("Date")
                 .append("min", min)
-                .append("max", max)
-                .append(super.getToStringBuilder());
+                .append("max", max);
     }
 
     private boolean isValidInner(String value) {

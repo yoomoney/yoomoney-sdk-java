@@ -45,9 +45,9 @@ public final class Checkbox extends ParameterControl {
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("Checkbox")
-                .append("checked", checked)
-                .append(super.getToStringBuilder());
+        return super.getToStringBuilder()
+                .setName("Checkbox")
+                .append("checked", checked);
     }
 
     /**

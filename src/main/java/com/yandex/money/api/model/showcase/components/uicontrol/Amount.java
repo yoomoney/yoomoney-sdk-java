@@ -50,10 +50,10 @@ public final class Amount extends Number {
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("Amount")
+        return super.getToStringBuilder()
+                .setName("Amount")
                 .append("currency", currency.toString())
-                .append("fee", fee.toString())
-                .append(super.getToStringBuilder());
+                .append("fee", fee.toString());
     }
 
     /**

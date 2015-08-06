@@ -36,11 +36,9 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * Returns control's  name.
-     * <p/>
      * TODO: remove method field's public modifier.
      *
-     * @return name
+     * @return control's name
      */
     @Override
     public final String getName() {
@@ -48,7 +46,7 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * Returns default value. May be {@code null}.
+     * @return default value. May be {@code null}.
      */
     @Override
     public final String getValue() {
@@ -114,11 +112,11 @@ public abstract class ParameterControl extends Control implements Parameter {
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("ParameterControl")
+        return super.getToStringBuilder()
+                .setName("ParameterControl")
                 .append("name", name)
                 .append("value", value)
-                .append("valueAutoFill", valueAutoFill)
-                .append(super.getToStringBuilder());
+                .append("valueAutoFill", valueAutoFill);
     }
 
     /**

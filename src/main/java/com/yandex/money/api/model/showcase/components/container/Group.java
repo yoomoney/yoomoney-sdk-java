@@ -48,23 +48,25 @@ public final class Group extends Container<Component> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         Group group = (Group) o;
 
         return layout == group.layout;
-
     }
 
     @Override
     public int hashCode() {
-        return layout.hashCode();
+        int result = super.hashCode();
+        result = 31 * result + (layout != null ? layout.hashCode() : 0);
+        return result;
     }
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("Group")
-                .append("layout", layout)
-                .append(super.getToStringBuilder());
+        return super.getToStringBuilder()
+                .setName("Group")
+                .append("layout", layout);
     }
 
     /**

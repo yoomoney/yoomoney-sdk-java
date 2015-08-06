@@ -10,15 +10,15 @@ import com.yandex.money.api.utils.ToStringBuilder;
 public class TextBlock {
 
     /**
-     * Content.
+     * Text.
      */
-    public final String content;
+    public final String text;
 
-    public TextBlock(String content) {
-        if (content == null) {
-            throw new NullPointerException("content is null");
+    public TextBlock(String text) {
+        if (text == null) {
+            throw new NullPointerException("text is null");
         }
-        this.content = content;
+        this.text = text;
     }
 
     @Override
@@ -28,18 +28,18 @@ public class TextBlock {
 
         TextBlock textBlock = (TextBlock) o;
 
-        return content.equals(textBlock.content);
+        return text.equals(textBlock.text);
     }
 
     @Override
     public int hashCode() {
-        return content.hashCode();
+        return text.hashCode();
     }
 
     @Override
     public String toString() {
         return "TextBlock{" +
-                "content='" + content + '\'' +
+                "text='" + text + '\'' +
                 '}';
     }
 
@@ -80,7 +80,8 @@ public class TextBlock {
         public String toString() {
             return new ToStringBuilder("WithLink")
                     .append("link", link)
-                    .append("content", content).toString();
+                    .append("text", text)
+                    .toString();
         }
     }
 }

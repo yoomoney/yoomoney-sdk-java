@@ -45,7 +45,7 @@ public final class Select extends ParameterControl {
     }
 
     /**
-     * Returns default option. May be {@code null}.
+     * @return default option. May be {@code null}.
      */
     public Option getSelectedOption() {
         return selectedOption;
@@ -76,12 +76,12 @@ public final class Select extends ParameterControl {
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("Select")
+        return super.getToStringBuilder()
+                .setName("Select")
                 .append("options", options)
                 .append("values", values)
                 .append("style", style)
-                .append("selectedOption", selectedOption)
-                .append(super.getToStringBuilder());
+                .append("selectedOption", selectedOption);
     }
 
     /**
@@ -184,6 +184,25 @@ public final class Select extends ParameterControl {
          */
         public boolean isValid() {
             return group == null || group.isValid();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Option option = (Option) o;
+
+            return label.equals(option.label) && value.equals(option.value) &&
+                    !(group != null ? !group.equals(option.group) : option.group != null);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = label.hashCode();
+            result = 31 * result + value.hashCode();
+            result = 31 * result + (group != null ? group.hashCode() : 0);
+            return result;
         }
 
         @Override

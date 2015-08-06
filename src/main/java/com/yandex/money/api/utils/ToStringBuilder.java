@@ -7,9 +7,10 @@ package com.yandex.money.api.utils;
  */
 public final class ToStringBuilder {
 
+    private static final String DELIMITER = ", ";
+    private static final String EQUALS = "=";
+
     private final StringBuilder buffer = new StringBuilder();
-    private final String DELIMITER = ", ";
-    private final String EQUALS = "=";
 
     private String name;
     private String prefix = "";
@@ -26,11 +27,6 @@ public final class ToStringBuilder {
 
     public ToStringBuilder append(String name, boolean value) {
         return appendKeyValue(name, Boolean.toString(value));
-    }
-
-    public ToStringBuilder append(ToStringBuilder that) {
-        buffer.append(DELIMITER).append(that.buffer);
-        return this;
     }
 
     public ToStringBuilder setName(String name) {
@@ -71,15 +67,15 @@ public final class ToStringBuilder {
         return this;
     }
 
-    private void checkName(String name) {
-        if (Strings.isNullOrEmpty(name)) {
-            throw new NullPointerException("name is null or empty");
-        }
-    }
-
     private ToStringBuilder appendPrefix() {
         buffer.append(prefix);
         prefix = DELIMITER;
         return this;
+    }
+
+    private void checkName(String name) {
+        if (Strings.isNullOrEmpty(name)) {
+            throw new NullPointerException("name is null or empty");
+        }
     }
 }

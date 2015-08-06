@@ -9,15 +9,11 @@ package com.yandex.money.api.model.showcase.components;
 public interface Parameter {
 
     /**
-     * Returns a name.
-     *
      * @return name
      */
     String getName();
 
     /**
-     * Returns a value.
-     *
      * @return value
      */
     String getValue();
@@ -70,13 +66,6 @@ public interface Parameter {
                 }
             }
             return null;
-        }
-
-        @Override
-        public String toString() {
-            return "AutoFill{" +
-                    "code='" + code + '\'' +
-                    "}";
         }
     }
 }

@@ -64,11 +64,11 @@ public class Number extends ParameterControl {
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("Number")
+        return super.getToStringBuilder()
+                .setName("Number")
                 .append("min", min)
                 .append("max", max)
-                .append("step", step)
-                .append(super.getToStringBuilder());
+                .append("step", step);
     }
 
     private boolean isValidInner(String value) {
