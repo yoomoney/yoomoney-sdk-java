@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
 import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.helpers.CheckboxTypeTypeAdapter;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -43,7 +43,7 @@ public final class ComponentTypeAdapterTest {
         Checkbox checkbox = populateBuilder(new Checkbox.Builder().setChecked(VALUE_CHECKED))
                 .create();
 
-        CheckboxTypeAdapter checkboxTypeAdapter = new CheckboxTypeAdapter();
+        CheckboxTypeTypeAdapter checkboxTypeAdapter = new CheckboxTypeTypeAdapter();
 
         JsonObject jsonElement = checkboxTypeAdapter.toJsonTree(checkbox).getAsJsonObject();
         assertParameterControl(jsonElement);
