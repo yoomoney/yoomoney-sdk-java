@@ -20,7 +20,7 @@ abstract class ComponentTypeAdapter<T extends Component, U extends Component.Bui
     public final T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext
             context) throws
             JsonParseException {
-        return proxyBuilder(json);
+        return deserializeWithBuilder(json);
     }
 
     @Override
@@ -32,15 +32,15 @@ abstract class ComponentTypeAdapter<T extends Component, U extends Component.Bui
 
     protected abstract U createBuilderInstance();
 
-    protected abstract void deserializeToBuilder(JsonObject from, U builder);
+    protected abstract void deserialize(JsonObject from, U builder);
 
-    protected abstract T createFromBuilder(U builder);
+    protected abstract T createInstance(U builder);
 
     protected abstract void serialize(T from, JsonObject to);
 
-    private T proxyBuilder(JsonElement json) {
+    private T deserializeWithBuilder(JsonElement json) {
         U builder = createBuilderInstance();
-        deserializeToBuilder(json.getAsJsonObject(), builder);
-        return createFromBuilder(builder);
+        deserialize(json.getAsJsonObject(), builder);
+        return createInstance(builder);
     }
 }

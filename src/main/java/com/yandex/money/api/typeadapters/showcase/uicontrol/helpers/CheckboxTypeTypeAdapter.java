@@ -16,9 +16,9 @@ public final class CheckboxTypeTypeAdapter extends ParameterControlTypeAdapter<C
     }
 
     @Override
-    protected void deserializeToBuilder(JsonObject from, Checkbox.Builder builder) {
+    protected void deserialize(JsonObject from, Checkbox.Builder builder) {
         builder.setChecked(from.get("checked").getAsBoolean());
-        super.deserializeToBuilder(from, builder);
+        super.deserialize(from, builder);
     }
 
     @Override
@@ -27,7 +27,7 @@ public final class CheckboxTypeTypeAdapter extends ParameterControlTypeAdapter<C
     }
 
     @Override
-    protected Checkbox createFromBuilder(Checkbox.Builder builder) {
+    protected Checkbox createInstance(Checkbox.Builder builder) {
         return builder.create();
     }
 

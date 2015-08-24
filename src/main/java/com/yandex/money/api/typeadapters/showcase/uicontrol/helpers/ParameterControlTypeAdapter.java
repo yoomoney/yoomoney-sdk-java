@@ -9,17 +9,20 @@ import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl
 abstract class ParameterControlTypeAdapter<T extends ParameterControl, U extends ParameterControl
         .Builder> extends ControlTypeAdapter<T, U> {
 
+    private final String KEY_NAME = "name";
+    private final String KEY_VALUE = "value";
+
     @Override
-    protected void serialize(T from, JsonObject to) {
-        to.addProperty("name", from.name);
-        to.addProperty("value", from.getValue());
-        super.serialize(from, to);
+    protected void deserialize(JsonObject from, U builder) {
+        builder.setName(from.get(KEY_NAME).getAsString());
+        builder.setValue(from.get(KEY_VALUE).getAsString());
+        super.deserialize(from, builder);
     }
 
     @Override
-    protected void deserializeToBuilder(JsonObject from, U builder) {
-        builder.setName(from.get("name").getAsString());
-        builder.setValue(from.get("value").getAsString());
-        super.deserializeToBuilder(from, builder);
+    protected void serialize(T from, JsonObject to) {
+        to.addProperty(KEY_NAME, from.name);
+        to.addProperty(KEY_VALUE, from.getValue());
+        super.serialize(from, to);
     }
 }
