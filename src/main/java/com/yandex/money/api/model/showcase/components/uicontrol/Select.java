@@ -206,6 +206,7 @@ public final class Select extends ParameterControl {
 
         @Override
         public Select create() {
+            setType(Type.SELECT);
             return new Select(this);
         }
 

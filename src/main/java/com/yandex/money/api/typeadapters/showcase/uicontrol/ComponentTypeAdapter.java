@@ -1,4 +1,4 @@
-package com.yandex.money.api.typeadapters.showcase.uicontrol.helpers;
+package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -13,30 +13,31 @@ import java.lang.reflect.Type;
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-abstract class ComponentTypeAdapter<T extends Component, U extends Component.Builder> extends
+public abstract class ComponentTypeAdapter<T extends Component, U extends Component.Builder> extends
         BaseTypeAdapter<T> {
 
     @Override
     public final T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext
             context) throws
             JsonParseException {
-        return deserializeWithBuilder(json);
+        return deserializeWithBuilder(json, context);
     }
 
     @Override
     public final JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject to = new JsonObject();
-        serialize(src, to);
+        serialize(src, to, context);
         return to;
     }
 
     protected abstract U createBuilderInstance();
 
-    protected abstract void deserialize(JsonObject from, U builder);
+    protected abstract void deserialize(JsonObject from, U builder,
+                                        JsonDeserializationContext context);
 
     protected abstract T createInstance(U builder);
 
-    protected abstract void serialize(T from, JsonObject to);
+    protected abstract void serialize(T from, JsonObject to, JsonSerializationContext context);
 
     protected final String getAsString(JsonObject json, String key) {
         return json.has(key) ? json.get(key).getAsString() : null;
@@ -46,9 +47,9 @@ abstract class ComponentTypeAdapter<T extends Component, U extends Component.Bui
         return json.has(key) ? json.get(key).getAsBoolean() : null;
     }
 
-    private T deserializeWithBuilder(JsonElement json) {
+    private T deserializeWithBuilder(JsonElement json, JsonDeserializationContext context) {
         U builder = createBuilderInstance();
-        deserialize(json.getAsJsonObject(), builder);
+        deserialize(json.getAsJsonObject(), builder, context);
         return createInstance(builder);
     }
 }

@@ -25,6 +25,7 @@ public final class Submit extends Control {
 
         @Override
         public Submit create() {
+            setType(Type.SUBMIT);
             return new Submit(this);
         }
     }

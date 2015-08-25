@@ -46,6 +46,7 @@ public final class Month extends Date {
 
         @Override
         public Month create() {
+            setType(Type.MONTH);
             return new Month(this);
         }
     }

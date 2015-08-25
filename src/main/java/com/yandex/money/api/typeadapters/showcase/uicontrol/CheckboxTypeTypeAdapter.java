@@ -1,6 +1,8 @@
-package com.yandex.money.api.typeadapters.showcase.uicontrol.helpers;
+package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
+import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
 
 /**
@@ -10,15 +12,16 @@ public final class CheckboxTypeTypeAdapter extends ParameterControlTypeAdapter<C
         .Builder> {
 
     @Override
-    protected void serialize(Checkbox from, JsonObject to) {
+    protected void serialize(Checkbox from, JsonObject to, JsonSerializationContext context) {
         to.addProperty("checked", from.checked);
-        super.serialize(from, to);
+        super.serialize(from, to, context);
     }
 
     @Override
-    protected void deserialize(JsonObject from, Checkbox.Builder builder) {
+    protected void deserialize(JsonObject from, Checkbox.Builder builder,
+                               JsonDeserializationContext context) {
         builder.setChecked(from.get("checked").getAsBoolean());
-        super.deserialize(from, builder);
+        super.deserialize(from, builder, context);
     }
 
     @Override

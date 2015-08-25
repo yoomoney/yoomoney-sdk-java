@@ -1,6 +1,8 @@
-package com.yandex.money.api.typeadapters.showcase.uicontrol.helpers;
+package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
+import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrol.Control;
 
 /**
@@ -16,7 +18,7 @@ abstract class ControlTypeAdapter<T extends Control, U extends Control.Builder> 
     private static final String KEY_REQUIRED = "required";
 
     @Override
-    protected void deserialize(JsonObject from, U builder) {
+    protected void deserialize(JsonObject from, U builder, JsonDeserializationContext context) {
         builder.setAlert(getAsString(from, KEY_ALERT));
         builder.setHint(getAsString(from, KEY_HINT));
         builder.setLabel(getAsString(from, KEY_LABEL));
@@ -25,7 +27,7 @@ abstract class ControlTypeAdapter<T extends Control, U extends Control.Builder> 
     }
 
     @Override
-    protected void serialize(T from, JsonObject to) {
+    protected void serialize(T from, JsonObject to, JsonSerializationContext context) {
         to.addProperty(KEY_ALERT, from.alert);
         to.addProperty(KEY_HINT, from.hint);
         to.addProperty(KEY_LABEL, from.label);

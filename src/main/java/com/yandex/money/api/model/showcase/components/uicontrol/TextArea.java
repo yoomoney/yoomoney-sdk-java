@@ -73,6 +73,7 @@ public class TextArea extends ParameterControl {
 
         @Override
         public TextArea create() {
+            setType(Type.TEXT_AREA);
             return new TextArea(this);
         }
 

@@ -27,6 +27,7 @@ public final class Tel extends Text {
     public static final class Builder extends Text.Builder {
 
         public Builder() {
+            setType(Type.TEL);
             super.setPattern(Patterns.PHONE);
         }
 

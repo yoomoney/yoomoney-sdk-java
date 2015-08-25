@@ -10,6 +10,12 @@ import com.yandex.money.api.utils.ToStringBuilder;
  */
 public abstract class Component {
 
+    public final Type type;
+
+    protected Component(Component.Builder builder) {
+        this.type = builder.type;
+    }
+
     @Override
     public String toString() {
         return getToStringBuilder().toString();
@@ -60,6 +66,14 @@ public abstract class Component {
     }
 
     public static abstract class Builder {
+
+        private Component.Type type;
+
+        public final Builder setType(Component.Type type) {
+            this.type = type;
+            return this;
+        }
+
         public abstract Component create();
     }
 }

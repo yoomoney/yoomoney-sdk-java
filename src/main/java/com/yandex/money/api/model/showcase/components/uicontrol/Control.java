@@ -39,6 +39,7 @@ public abstract class Control extends Component {
     public final boolean readonly;
 
     protected Control(Builder builder) {
+        super(builder);
         hint = builder.hint;
         label = builder.label;
         alert = builder.alert;

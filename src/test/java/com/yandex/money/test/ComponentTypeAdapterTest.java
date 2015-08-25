@@ -4,7 +4,7 @@ import com.google.gson.JsonObject;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
 import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.helpers.CheckboxTypeTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeTypeAdapter;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;

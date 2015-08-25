@@ -1,6 +1,8 @@
-package com.yandex.money.api.typeadapters.showcase.uicontrol.helpers;
+package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
+import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl;
 
@@ -15,7 +17,7 @@ abstract class ParameterControlTypeAdapter<T extends ParameterControl, U extends
     private final String KEY_AUTOFILL = "value_autofill";
 
     @Override
-    protected void deserialize(JsonObject from, U builder) {
+    protected void deserialize(JsonObject from, U builder, JsonDeserializationContext context) {
         builder.setName(getAsString(from, KEY_NAME));
         builder.setValue(getAsString(from, KEY_VALUE));
 
@@ -23,16 +25,16 @@ abstract class ParameterControlTypeAdapter<T extends ParameterControl, U extends
             builder.setValueAutoFill(Parameter.AutoFill.parse(from.get(KEY_AUTOFILL)
                     .getAsString()));
         }
-        super.deserialize(from, builder);
+        super.deserialize(from, builder, context);
     }
 
     @Override
-    protected void serialize(T from, JsonObject to) {
+    protected void serialize(T from, JsonObject to, JsonSerializationContext context) {
         to.addProperty(KEY_NAME, from.name);
         to.addProperty(KEY_VALUE, from.getValue());
         if (from.valueAutoFill != null) {
             to.addProperty(KEY_AUTOFILL, from.valueAutoFill.code);
         }
-        super.serialize(from, to);
+        super.serialize(from, to, context);
     }
 }

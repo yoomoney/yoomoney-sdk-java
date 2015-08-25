@@ -114,6 +114,7 @@ public final class Group extends Container<Component> {
 
         @Override
         public Group create() {
+            setType(Type.GROUP);
             return new Group(this);
         }
 
