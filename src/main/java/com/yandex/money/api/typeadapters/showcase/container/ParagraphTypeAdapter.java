@@ -50,9 +50,4 @@ public class ParagraphTypeAdapter extends ContainerTypeAdapter<TextBlock, Paragr
     protected Paragraph createInstance(Paragraph.Builder builder) {
         return builder.create();
     }
-
-    @Override
-    protected Class<Paragraph> getType() {
-        return Paragraph.class;
-    }
 }

@@ -34,7 +34,7 @@ public class GroupTypeAdapter extends ContainerTypeAdapter<Component, Group, Gro
         mapping.put(Component.Type.EMAIL, Email.class);
         mapping.put(Component.Type.GROUP, Group.class);
         mapping.put(Component.Type.MONTH, Month.class);
-        mapping.put(Component.Type.NUMBER, Month.class);
+        mapping.put(Component.Type.NUMBER, Number.class);
         mapping.put(Component.Type.PARAGRAPH, Paragraph.class);
         mapping.put(Component.Type.SELECT, Select.class);
         mapping.put(Component.Type.SUBMIT, Submit.class);
@@ -51,11 +51,6 @@ public class GroupTypeAdapter extends ContainerTypeAdapter<Component, Group, Gro
     @Override
     protected Group createInstance(Group.Builder builder) {
         return builder.create();
-    }
-
-    @Override
-    protected Class<Group> getType() {
-        return Group.class;
     }
 
     @Override

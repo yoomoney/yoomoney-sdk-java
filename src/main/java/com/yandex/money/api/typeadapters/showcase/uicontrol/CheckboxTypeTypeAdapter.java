@@ -33,9 +33,4 @@ public final class CheckboxTypeTypeAdapter extends ParameterControlTypeAdapter<C
     protected Checkbox createInstance(Checkbox.Builder builder) {
         return builder.create();
     }
-
-    @Override
-    protected Class<Checkbox> getType() {
-        return Checkbox.class;
-    }
 }
