@@ -13,15 +13,15 @@ abstract class ControlTypeAdapter<T extends Control, U extends Control.Builder> 
     private static final String KEY_HINT = "hint";
     private static final String KEY_LABEL = "label";
     private static final String KEY_READONLY = "readonly";
-    private static final String KEY_REQUIRED = "readonly";
+    private static final String KEY_REQUIRED = "required";
 
     @Override
     protected void deserialize(JsonObject from, U builder) {
-        builder.setAlert(from.get(KEY_ALERT).getAsString());
-        builder.setHint(from.get(KEY_HINT).getAsString());
-        builder.setLabel(from.get(KEY_LABEL).getAsString());
-        builder.setReadonly(from.get(KEY_READONLY).getAsBoolean());
-        builder.setRequired(from.get(KEY_REQUIRED).getAsBoolean());
+        builder.setAlert(getAsString(from, KEY_ALERT));
+        builder.setHint(getAsString(from, KEY_HINT));
+        builder.setLabel(getAsString(from, KEY_LABEL));
+        builder.setReadonly(getAsBoolean(from, KEY_READONLY));
+        builder.setRequired(getAsBoolean(from, KEY_REQUIRED));
     }
 
     @Override
