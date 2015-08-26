@@ -9,7 +9,7 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Number;
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-abstract class NumberTypeAdapter<T extends Number, U extends Number.Builder> extends
+public abstract class NumberTypeAdapter<T extends Number, U extends Number.Builder> extends
         ParameterControlTypeAdapter<T, U> {
 
     public static final NumberTypeAdapter<Number, Number.Builder> INSTANCE =

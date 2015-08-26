@@ -8,7 +8,7 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class CheckboxTypeTypeAdapter extends ParameterControlTypeAdapter<Checkbox, Checkbox
+public final class CheckboxTypeAdapter extends ParameterControlTypeAdapter<Checkbox, Checkbox
         .Builder> {
 
     @Override

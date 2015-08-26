@@ -25,6 +25,7 @@ public abstract class TextAreaTypeAdapter<T extends TextArea, U extends TextArea
                     return builder.create();
                 }
             };
+
     private static final String KEY_MINLENGTH = "minlength";
     private static final String KEY_MAXLENGTH = "maxlength";
 

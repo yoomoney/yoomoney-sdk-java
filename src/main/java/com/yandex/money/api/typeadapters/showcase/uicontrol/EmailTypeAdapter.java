@@ -5,7 +5,7 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Email;
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class EmailTypeAdapter extends TextTypeAdapter<Email, Email.Builder> {
+public final class EmailTypeAdapter extends ParameterControlTypeAdapter<Email, Email.Builder> {
 
     @Override
     protected Email.Builder createBuilderInstance() {

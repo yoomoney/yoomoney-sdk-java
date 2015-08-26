@@ -1,0 +1,15 @@
+{
+  "type": "amount",
+  "name": "sum",
+  "label": "Сумма",
+  "min": 0.01,
+  "step": 0.01,
+  "currency": "RUB",
+  "fee": {
+    "type": "std",
+    "a": 0.02,
+    "b": 0,
+    "c": 0,
+    "amount_type": "netAmount"
+  }
+}

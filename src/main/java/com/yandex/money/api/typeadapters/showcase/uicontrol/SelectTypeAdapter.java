@@ -29,7 +29,7 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
             Select.Option option = new Select.Option(itemObject.get(KEY_LABEL).getAsString(),
                     itemObject.get(KEY_VALUE).getAsString());
             if (itemObject.has(KEY_GROUP)) {
-                option.group = context.deserialize(item, Group.class);
+                option.group = context.deserialize(itemObject.get(KEY_GROUP), Group.class);
             }
             builder.addOption(option);
         }

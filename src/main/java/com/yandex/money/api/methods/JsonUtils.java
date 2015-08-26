@@ -213,6 +213,20 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
     }
 
     /**
+     * Gets nullable DateTime from a JSON object using formatter.
+     *
+     * @param object     json object
+     * @param memberName member's name
+     * @param formatter  {@link org.joda.time.DateTime}'s formatter.
+     * @return {@link org.joda.time.DateTime} value
+     */
+    public static DateTime getDateTime(JsonObject object, String memberName,
+                                       DateTimeFormatter formatter) {
+        JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
+        return primitive == null ? null : DateTime.parse(primitive.getAsString(), formatter);
+    }
+
+    /**
      * Gets array from a JSON object. Uses {@link ArrayList} implementation of {@link List}.
      *
      * @param object json object

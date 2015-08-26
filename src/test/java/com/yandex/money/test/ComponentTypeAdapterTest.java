@@ -1,75 +1,115 @@
 package com.yandex.money.test;
 
-import com.google.gson.JsonObject;
-import com.yandex.money.api.model.showcase.components.Parameter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParser;
+import com.yandex.money.api.model.showcase.Fee;
+import com.yandex.money.api.model.showcase.components.container.Group;
+import com.yandex.money.api.model.showcase.components.uicontrol.Amount;
 import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
-import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeTypeAdapter;
+import com.yandex.money.api.model.showcase.components.uicontrol.Date;
+import com.yandex.money.api.model.showcase.components.uicontrol.Email;
+import com.yandex.money.api.model.showcase.components.uicontrol.Month;
+import com.yandex.money.api.model.showcase.components.uicontrol.Number;
+import com.yandex.money.api.model.showcase.components.uicontrol.Select;
+import com.yandex.money.api.model.showcase.components.uicontrol.Text;
+import com.yandex.money.api.model.showcase.components.uicontrol.TextArea;
+import com.yandex.money.api.typeadapters.FeeTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.AmountTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.DateTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.EmailTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.MonthTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.NumberTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.SelectTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.TextAreaTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.TextTypeAdapter;
 
-import org.testng.Assert;
+import org.junit.Assert;
 import org.testng.annotations.Test;
+
+import java.lang.reflect.Type;
+import java.util.Scanner;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class ComponentTypeAdapterTest {
 
-    private static final String KEY_ALERT = "alert";
-    private static final String KEY_HINT = "hint";
-    private static final String KEY_LABEL = "label";
-    private static final String KEY_READONLY = "readonly";
-    private static final String KEY_REQUIRED = "required";
-    private static final String KEY_VALUE = "value";
-    private static final String KEY_AUTOFILL = "value_autofill";
-
-    private static final String KEY_CHECKED = "checked";
-
-    private static final String VALUE_ALERT = "alert value";
-    private static final String VALUE_HINT = "hint value";
-    private static final String VALUE_LABEL = "label value";
-    private static final String VALUE = "value";
-    private static final Parameter.AutoFill VALUE_AUTOFILL = Parameter.AutoFill.CURRENT_USER_EMAIL;
-    private static final boolean VALUE_READONLY = true;
-    private static final boolean VALUE_REQUIRED = false;
-
-    private static final boolean VALUE_CHECKED = true;
+    private static final Gson GSON = new GsonBuilder()
+            .registerTypeAdapter(Amount.class, new AmountTypeAdapter())
+            .registerTypeAdapter(Number.class, NumberTypeAdapter.INSTANCE)
+            .registerTypeAdapter(Month.class, new MonthTypeAdapter())
+            .registerTypeAdapter(Date.class, DateTypeAdapter.INSTANCE)
+            .registerTypeAdapter(Email.class, new EmailTypeAdapter())
+            .registerTypeAdapter(TextArea.class, TextAreaTypeAdapter.INSTANCE)
+            .registerTypeAdapter(Text.class, TextTypeAdapter.INSTANCE)
+            .registerTypeAdapter(Checkbox.class, new CheckboxTypeAdapter())
+            .registerTypeAdapter(Fee.class, FeeTypeAdapter.getInstance())
+            .registerTypeAdapter(Select.class, new SelectTypeAdapter())
+            .registerTypeAdapter(Group.class, new GroupTypeAdapter())
+            .create();
 
     @Test
     public void testCheckbox() {
-
-        Checkbox.Builder checkboxBuilder = new Checkbox.Builder()
-                .setChecked(VALUE_CHECKED);
-
-        Checkbox checkbox = populateBuilder(new Checkbox.Builder().setChecked(VALUE_CHECKED))
-                .create();
-
-        CheckboxTypeTypeAdapter checkboxTypeAdapter = new CheckboxTypeTypeAdapter();
-
-        //JsonObject jsonElement = checkboxTypeAdapter.toJsonTree(checkbox).getAsJsonObject();
-        //assertParameterControl(jsonElement);
-
-        //Assert.assertEquals(jsonElement.get(KEY_CHECKED).getAsBoolean(), VALUE_CHECKED);
+        check("checkbox.json", Checkbox.class);
     }
 
-    @SuppressWarnings("unchecked")
-    private <T extends ParameterControl.Builder> T populateBuilder(T builder) {
-        return (T) builder.setName("some_name")
-                .setValue(VALUE)
-                .setValueAutoFill(VALUE_AUTOFILL)
-                .setAlert(VALUE_ALERT)
-                .setHint(VALUE_HINT)
-                .setLabel(VALUE_LABEL)
-                .setReadonly(VALUE_READONLY)
-                .setRequired(VALUE_REQUIRED);
+    @Test
+    public void testText() {
+        check("text.json", Text.class);
     }
 
-    private void assertParameterControl(JsonObject jsonElement) {
-        Assert.assertEquals(jsonElement.get(KEY_ALERT).getAsString(), VALUE_ALERT);
-        Assert.assertEquals(jsonElement.get(KEY_HINT).getAsString(), VALUE_HINT);
-        Assert.assertEquals(jsonElement.get(KEY_LABEL).getAsString(), VALUE_LABEL);
-        Assert.assertEquals(jsonElement.get(KEY_VALUE).getAsString(), VALUE);
-        Assert.assertEquals(jsonElement.get(KEY_AUTOFILL).getAsString(), VALUE_AUTOFILL.code);
-        Assert.assertEquals(jsonElement.get(KEY_REQUIRED).getAsBoolean(), VALUE_REQUIRED);
-        Assert.assertEquals(jsonElement.get(KEY_READONLY).getAsBoolean(), VALUE_READONLY);
+    @Test
+    public void testTextArea() {
+        check("textarea.json", TextArea.class);
+    }
+
+    @Test
+    public void testEmail() {
+        check("email.json", Email.class);
+    }
+
+    @Test
+    public void testDate() {
+        check("date.json", Date.class);
+    }
+
+    @Test
+    public void testMonth() {
+        check("month.json", Month.class);
+    }
+
+    @Test
+    public void testSelectNoGroup() {
+        check("select_nogroup.json", Select.class);
+    }
+
+    @Test
+    public void testNumber() {
+        check("number.json", Number.class);
+    }
+
+    //@Test
+    //public void testSelect() {
+    //    check("select_group.json", Select.class);
+    //}
+
+    @Test
+    public void testAmount() {
+        check("amount.json", Amount.class);
+    }
+
+    private static String loadComponentJson(String name) {
+        return new Scanner(ComponentTypeAdapterTest.class
+                .getResourceAsStream("/components/" + name), "UTF-8").useDelimiter("\\A").next();
+    }
+
+    private static void check(String jsonName, Type type) {
+        String json = loadComponentJson(jsonName);
+
+        Object deserializedComponent = GSON.fromJson(json, type);
+        Assert.assertEquals(new JsonParser().parse(json), GSON.toJsonTree(deserializedComponent));
     }
 }

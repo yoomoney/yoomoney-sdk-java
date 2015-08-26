@@ -69,16 +69,11 @@ public abstract class Component {
 
         private Component.Type type;
 
-        protected final Builder setType(Component.Type type) {
-            this.type = type;
-            return this;
-        }
-
-        protected final Builder setType(Component.Type type) {
-            this.type = type;
-            return this;
-        }
-
         public abstract Component create();
+
+        protected final Builder setType(Component.Type type) {
+            this.type = type;
+            return this;
+        }
     }
 }

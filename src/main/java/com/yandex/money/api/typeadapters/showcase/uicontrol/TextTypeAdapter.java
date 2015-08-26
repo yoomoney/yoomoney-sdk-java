@@ -25,6 +25,7 @@ public abstract class TextTypeAdapter<T extends Text, U extends Text.Builder>
             return builder.create();
         }
     };
+
     private static final String KEY_PATTERN = "pattern";
     private static final String KEY_KEYBOARD_SUGGEST = "keyboard_suggest";
 

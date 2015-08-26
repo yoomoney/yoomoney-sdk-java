@@ -54,7 +54,7 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
     private static final String MEMBER_B = "b";
     private static final String MEMBER_C = "c";
     private static final String MEMBER_D = "d";
-    private static final String MEMBER_AMOUNT_TYPE = "amountType";
+    private static final String MEMBER_AMOUNT_TYPE = "amount_type";
 
     private FeeTypeAdapter() {
     }
@@ -64,11 +64,6 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
      */
     public static FeeTypeAdapter getInstance() {
         return INSTANCE;
-    }
-
-    @Override
-    protected Class<Fee> getType() {
-        return Fee.class;
     }
 
     @Override
@@ -102,6 +97,11 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
             throw new IllegalArgumentException("unknown fee type: " + src.getClass());
         }
         return object;
+    }
+
+    @Override
+    protected Class<Fee> getType() {
+        return Fee.class;
     }
 
     private static BigDecimal getValueOrZero(JsonObject object, String member) {

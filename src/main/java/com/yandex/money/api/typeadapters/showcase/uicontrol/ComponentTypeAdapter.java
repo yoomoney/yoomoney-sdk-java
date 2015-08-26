@@ -27,7 +27,7 @@ public abstract class ComponentTypeAdapter<T extends Component, U extends Compon
     @Override
     public final JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject to = new JsonObject();
-        to.addProperty("type", src.type.code);
+        to.addProperty("type", src.type.code); // TODO: think about it.
         serialize(src, to, context);
         return to;
     }

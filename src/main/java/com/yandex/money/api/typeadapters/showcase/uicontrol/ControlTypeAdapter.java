@@ -23,8 +23,12 @@ abstract class ControlTypeAdapter<T extends Control, U extends Control.Builder> 
         builder.setAlert(JsonUtils.getString(from, KEY_ALERT));
         builder.setHint(JsonUtils.getString(from, KEY_HINT));
         builder.setLabel(JsonUtils.getString(from, KEY_LABEL));
-        builder.setReadonly(JsonUtils.getBoolean(from, KEY_READONLY));
-        builder.setRequired(JsonUtils.getBoolean(from, KEY_REQUIRED));
+        if (from.has(KEY_READONLY)) {
+            builder.setReadonly(from.get(KEY_READONLY).getAsBoolean());
+        }
+        if (from.has(KEY_REQUIRED)) {
+            builder.setRequired(from.get(KEY_REQUIRED).getAsBoolean());
+        }
     }
 
     @Override
@@ -32,7 +36,12 @@ abstract class ControlTypeAdapter<T extends Control, U extends Control.Builder> 
         to.addProperty(KEY_ALERT, from.alert);
         to.addProperty(KEY_HINT, from.hint);
         to.addProperty(KEY_LABEL, from.label);
-        to.addProperty(KEY_READONLY, from.readonly);
-        to.addProperty(KEY_REQUIRED, from.required);
+        if (from.readonly) {
+            to.addProperty(KEY_READONLY, true);
+        }
+
+        if (!from.required) {
+            to.addProperty(KEY_REQUIRED, false);
+        }
     }
 }

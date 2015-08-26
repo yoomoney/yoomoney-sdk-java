@@ -27,6 +27,8 @@ public final class AmountTypeAdapter extends NumberTypeAdapter<Amount, Amount.Bu
 
     @Override
     protected void serialize(Amount from, JsonObject to, JsonSerializationContext context) {
+        to.addProperty(KEY_CURRENCY, from.currency.alphaCode);
+        to.add(KEY_FEE, context.serialize(from.fee, Fee.class));
         super.serialize(from, to, context);
     }
 
