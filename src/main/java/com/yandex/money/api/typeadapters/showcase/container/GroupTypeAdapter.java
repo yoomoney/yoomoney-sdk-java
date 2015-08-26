@@ -23,7 +23,7 @@ import java.util.HashMap;
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public class GroupTypeAdapter extends ContainerTypeAdapter<Component, Group, Group.Builder> {
+public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Group, Group.Builder> {
 
     private static final HashMap<Component.Type, Type> mapping = new HashMap<>();
 

@@ -5,7 +5,7 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Submit;
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public class SubmitTypeAdapter extends ControlTypeAdapter<Submit, Submit.Builder> {
+public final class SubmitTypeAdapter extends ControlTypeAdapter<Submit, Submit.Builder> {
 
     @Override
     protected Submit createInstance(Submit.Builder builder) {

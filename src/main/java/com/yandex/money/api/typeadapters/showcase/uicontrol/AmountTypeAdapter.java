@@ -13,7 +13,7 @@ import com.yandex.money.api.utils.Currency;
 public final class AmountTypeAdapter extends NumberTypeAdapter<Amount, Amount.Builder> {
 
     private static final String KEY_CURRENCY = "currency";
-    private static final String KEY_fee = "fee";
+    private static final String KEY_FEE = "fee";
 
     @Override
     protected void deserialize(JsonObject from, Amount.Builder builder,
