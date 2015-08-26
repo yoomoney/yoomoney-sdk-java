@@ -40,14 +40,6 @@ public abstract class ComponentTypeAdapter<T extends Component, U extends Compon
 
     protected abstract void serialize(T from, JsonObject to, JsonSerializationContext context);
 
-    protected final String getAsString(JsonObject json, String key) {
-        return json.has(key) ? json.get(key).getAsString() : null;
-    }
-
-    protected final Boolean getAsBoolean(JsonObject json, String key) {
-        return json.has(key) ? json.get(key).getAsBoolean() : null;
-    }
-
     private T deserializeWithBuilder(JsonElement json, JsonDeserializationContext context) {
         U builder = createBuilderInstance();
         deserialize(json.getAsJsonObject(), builder, context);

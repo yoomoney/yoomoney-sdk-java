@@ -3,6 +3,7 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrol.Control;
 
 /**
@@ -19,11 +20,11 @@ abstract class ControlTypeAdapter<T extends Control, U extends Control.Builder> 
 
     @Override
     protected void deserialize(JsonObject from, U builder, JsonDeserializationContext context) {
-        builder.setAlert(getAsString(from, KEY_ALERT));
-        builder.setHint(getAsString(from, KEY_HINT));
-        builder.setLabel(getAsString(from, KEY_LABEL));
-        builder.setReadonly(getAsBoolean(from, KEY_READONLY));
-        builder.setRequired(getAsBoolean(from, KEY_REQUIRED));
+        builder.setAlert(JsonUtils.getString(from, KEY_ALERT));
+        builder.setHint(JsonUtils.getString(from, KEY_HINT));
+        builder.setLabel(JsonUtils.getString(from, KEY_LABEL));
+        builder.setReadonly(JsonUtils.getBoolean(from, KEY_READONLY));
+        builder.setRequired(JsonUtils.getBoolean(from, KEY_REQUIRED));
     }
 
     @Override

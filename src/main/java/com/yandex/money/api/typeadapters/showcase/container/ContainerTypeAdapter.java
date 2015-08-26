@@ -5,6 +5,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.container.Container;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter;
 
@@ -19,7 +20,7 @@ public abstract class ContainerTypeAdapter<T, U extends Container<T>, K extends 
         for (JsonElement item : from.getAsJsonArray("items")) {
             builder.addItem(deserializeItem(item, context));
         }
-        builder.setLabel(getAsString(from, "label"));
+        builder.setLabel(JsonUtils.getString(from, "label"));
     }
 
     @Override
