@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.components.container.Group;
+import com.yandex.money.api.model.showcase.components.container.Paragraph;
 import com.yandex.money.api.model.showcase.components.uicontrol.Amount;
 import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
 import com.yandex.money.api.model.showcase.components.uicontrol.Date;
@@ -16,6 +17,7 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Text;
 import com.yandex.money.api.model.showcase.components.uicontrol.TextArea;
 import com.yandex.money.api.typeadapters.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.container.ParagraphTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.AmountTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.DateTypeAdapter;
@@ -49,6 +51,7 @@ public final class ComponentTypeAdapterTest {
             .registerTypeAdapter(Fee.class, FeeTypeAdapter.getInstance())
             .registerTypeAdapter(Select.class, new SelectTypeAdapter())
             .registerTypeAdapter(Group.class, new GroupTypeAdapter())
+            .registerTypeAdapter(Paragraph.class, new ParagraphTypeAdapter())
             .create();
 
     @Test
@@ -91,10 +94,10 @@ public final class ComponentTypeAdapterTest {
         check("number.json", Number.class);
     }
 
-    //@Test
-    //public void testSelect() {
-    //    check("select_group.json", Select.class);
-    //}
+    @Test
+    public void testSelect() {
+        check("select_group.json", Select.class);
+    }
 
     @Test
     public void testAmount() {

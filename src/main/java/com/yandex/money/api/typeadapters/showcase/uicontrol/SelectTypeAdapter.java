@@ -6,8 +6,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
+import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.container.Group;
 import com.yandex.money.api.model.showcase.components.uicontrol.Select;
+import com.yandex.money.api.typeadapters.showcase.ComponentTypeAdapterFactory;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -29,7 +31,8 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
             Select.Option option = new Select.Option(itemObject.get(KEY_LABEL).getAsString(),
                     itemObject.get(KEY_VALUE).getAsString());
             if (itemObject.has(KEY_GROUP)) {
-                option.group = context.deserialize(itemObject.get(KEY_GROUP), Group.class);
+                option.group = deserializeOptionGroup(itemObject.get(KEY_GROUP).getAsJsonArray(),
+                        context);
             }
             builder.addOption(option);
         }
@@ -44,7 +47,6 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
         if (selectedOption != null) {
             to.addProperty(KEY_VALUE, selectedOption.value);
         }
-
         if (from.style != null) {
             to.addProperty(KEY_STYLE, from.style.code);
         }
@@ -57,7 +59,7 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
             optionElement.addProperty(KEY_VALUE, option.value);
 
             if (option.group != null) {
-                optionElement.add(KEY_GROUP, context.serialize(option.group));
+                optionElement.add(KEY_GROUP, serializeOptionGroup(option.group, context));
             }
             options.add(optionElement);
         }
@@ -73,5 +75,26 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
     @Override
     protected Select createInstance(Select.Builder builder) {
         return builder.create();
+    }
+
+    private static JsonArray serializeOptionGroup(Group group, JsonSerializationContext context) {
+        JsonArray items = new JsonArray();
+        for (Component item : group.items) {
+            items.add(context.serialize(item));
+        }
+        return items;
+    }
+
+    private static Group deserializeOptionGroup(JsonArray items, JsonDeserializationContext
+            context) {
+        Group.Builder groupBuilder = new Group.Builder();
+        groupBuilder.setLayout(Group.Layout.VERTICAL);
+        for (JsonElement item : items) {
+            Component component = (Component) context.deserialize(item,
+                    ComponentTypeAdapterFactory.getClassFromType(
+                            item.getAsJsonObject().get("type").getAsString()));
+            groupBuilder.addItem(component);
+        }
+        return groupBuilder.create();
     }
 }
