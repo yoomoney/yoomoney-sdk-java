@@ -22,7 +22,7 @@ import java.util.HashMap;
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public class ComponentsTypeProvider {
+public final class ComponentsTypeProvider {
 
     private static final HashMap<Component.Type, Type> TYPE_MAPPING = new HashMap<>();
 

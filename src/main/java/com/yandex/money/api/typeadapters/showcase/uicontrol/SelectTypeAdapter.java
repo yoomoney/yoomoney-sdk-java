@@ -12,6 +12,8 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Select;
 import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
 
 /**
+ * Type adapter for {@link @Select} component.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select, Select.Builder> {
@@ -23,9 +25,9 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
     private static final String KEY_GROUP = "group";
 
     @Override
-    protected void deserialize(JsonObject from, Select.Builder builder,
+    protected void deserialize(JsonObject src, Select.Builder builder,
                                JsonDeserializationContext context) {
-        for (JsonElement item : from.getAsJsonArray(KEY_OPTIONS)) {
+        for (JsonElement item : src.getAsJsonArray(KEY_OPTIONS)) {
             JsonObject itemObject = item.getAsJsonObject();
 
             Select.Option option = new Select.Option(itemObject.get(KEY_LABEL).getAsString(),
@@ -36,23 +38,23 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
             }
             builder.addOption(option);
         }
-        builder.setStyle(Select.Style.parse(JsonUtils.getString(from, KEY_STYLE)));
-        super.deserialize(from, builder, context);
+        builder.setStyle(Select.Style.parse(JsonUtils.getString(src, KEY_STYLE)));
+        super.deserialize(src, builder, context);
     }
 
     @Override
-    protected void serialize(Select from, JsonObject to, JsonSerializationContext context) {
-        Select.Option selectedOption = from.getSelectedOption();
+    protected void serialize(Select src, JsonObject to, JsonSerializationContext context) {
+        Select.Option selectedOption = src.getSelectedOption();
 
         if (selectedOption != null) {
             to.addProperty(KEY_VALUE, selectedOption.value);
         }
-        if (from.style != null) {
-            to.addProperty(KEY_STYLE, from.style.code);
+        if (src.style != null) {
+            to.addProperty(KEY_STYLE, src.style.code);
         }
 
         JsonArray options = new JsonArray();
-        for (Select.Option option : from.options) {
+        for (Select.Option option : src.options) {
             JsonObject optionElement = new JsonObject();
 
             optionElement.addProperty(KEY_LABEL, option.label);
@@ -64,7 +66,7 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
             options.add(optionElement);
         }
         to.add(KEY_OPTIONS, options);
-        super.serialize(from, to, context);
+        super.serialize(src, to, context);
     }
 
     @Override

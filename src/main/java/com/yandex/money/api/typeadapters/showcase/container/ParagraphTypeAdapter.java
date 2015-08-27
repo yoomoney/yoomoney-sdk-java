@@ -9,6 +9,8 @@ import com.yandex.money.api.model.showcase.components.TextBlock;
 import com.yandex.money.api.model.showcase.components.container.Paragraph;
 
 /**
+ * Type serializer for {@link Paragraph} component container.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class ParagraphTypeAdapter extends ContainerTypeAdapter<TextBlock, Paragraph,
@@ -18,26 +20,26 @@ public final class ParagraphTypeAdapter extends ContainerTypeAdapter<TextBlock, 
     private static final String KEY_HREF = "href";
 
     @Override
-    protected JsonElement serializeItem(TextBlock item, JsonSerializationContext context) {
-        if (item instanceof TextBlock.WithLink) {
+    protected JsonElement serializeItem(TextBlock src, JsonSerializationContext context) {
+        if (src instanceof TextBlock.WithLink) {
             JsonObject element = new JsonObject();
             element.addProperty("type", "a");
-            element.addProperty("href", ((TextBlock.WithLink) item).link);
-            element.addProperty("label", item.content);
+            element.addProperty("href", ((TextBlock.WithLink) src).link);
+            element.addProperty("label", src.content);
             return element;
         } else {
-            return new JsonPrimitive(item.content);
+            return new JsonPrimitive(src.content);
         }
     }
 
     @Override
-    protected TextBlock deserializeItem(JsonElement json, JsonDeserializationContext context) {
-        if (json.isJsonObject()) {
-            JsonObject jsonObject = json.getAsJsonObject();
+    protected TextBlock deserializeItem(JsonElement src, JsonDeserializationContext context) {
+        if (src.isJsonObject()) {
+            JsonObject jsonObject = src.getAsJsonObject();
             return new TextBlock.WithLink(jsonObject.get(KEY_LABEL).getAsString(),
                     jsonObject.get(KEY_HREF).getAsString());
         } else {
-            return new TextBlock(json.getAsString());
+            return new TextBlock(src.getAsString());
         }
     }
 

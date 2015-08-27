@@ -10,11 +10,16 @@ import org.joda.time.format.DateTimeFormatter;
 
 
 /**
+ * Base type adapter for subclasses of {@link Date} component.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public abstract class DateTypeAdapter<T extends Date, U extends Date.Builder> extends
         ParameterControlTypeAdapter<T, U> {
 
+    /**
+     * Type adapter for {@link Date} component.
+     */
     public static final DateTypeAdapter<Date, Date.Builder> INSTANCE =
             new DateTypeAdapter<Date, Date.Builder>() {
 
@@ -32,18 +37,18 @@ public abstract class DateTypeAdapter<T extends Date, U extends Date.Builder> ex
     private static final String KEY_MAX = "max";
 
     @Override
-    protected void deserialize(JsonObject from, U builder, JsonDeserializationContext
+    protected void deserialize(JsonObject src, U builder, JsonDeserializationContext
             context) {
-        builder.setMin(JsonUtils.getDateTime(from, KEY_MIN, getFormatter()));
-        builder.setMax(JsonUtils.getDateTime(from, KEY_MAX, getFormatter()));
-        super.deserialize(from, builder, context);
+        builder.setMin(JsonUtils.getDateTime(src, KEY_MIN, getFormatter()));
+        builder.setMax(JsonUtils.getDateTime(src, KEY_MAX, getFormatter()));
+        super.deserialize(src, builder, context);
     }
 
     @Override
-    protected void serialize(T from, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(KEY_MIN, from.min.toString(getFormatter()));
-        to.addProperty(KEY_MAX, from.max.toString(getFormatter()));
-        super.serialize(from, to, context);
+    protected void serialize(T src, JsonObject to, JsonSerializationContext context) {
+        to.addProperty(KEY_MIN, src.min.toString(getFormatter()));
+        to.addProperty(KEY_MAX, src.max.toString(getFormatter()));
+        super.serialize(src, to, context);
     }
 
     protected DateTimeFormatter getFormatter() {

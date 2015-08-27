@@ -8,6 +8,8 @@ import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl;
 
 /**
+ * Base type adapter for components implementing {@link ParameterControl} interface.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 abstract class ParameterControlTypeAdapter<T extends ParameterControl, U extends ParameterControl
@@ -18,24 +20,24 @@ abstract class ParameterControlTypeAdapter<T extends ParameterControl, U extends
     private final String KEY_AUTOFILL = "value_autofill";
 
     @Override
-    protected void deserialize(JsonObject from, U builder, JsonDeserializationContext context) {
-        builder.setName(JsonUtils.getString(from, KEY_NAME));
-        builder.setValue(JsonUtils.getString(from, KEY_VALUE));
+    protected void deserialize(JsonObject src, U builder, JsonDeserializationContext context) {
+        builder.setName(JsonUtils.getString(src, KEY_NAME));
+        builder.setValue(JsonUtils.getString(src, KEY_VALUE));
 
-        if (from.has(KEY_AUTOFILL)) {
-            builder.setValueAutoFill(Parameter.AutoFill.parse(from.get(KEY_AUTOFILL)
+        if (src.has(KEY_AUTOFILL)) {
+            builder.setValueAutoFill(Parameter.AutoFill.parse(src.get(KEY_AUTOFILL)
                     .getAsString()));
         }
-        super.deserialize(from, builder, context);
+        super.deserialize(src, builder, context);
     }
 
     @Override
-    protected void serialize(T from, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(KEY_NAME, from.name);
-        to.addProperty(KEY_VALUE, from.getValue());
-        if (from.valueAutoFill != null) {
-            to.addProperty(KEY_AUTOFILL, from.valueAutoFill.code);
+    protected void serialize(T src, JsonObject to, JsonSerializationContext context) {
+        to.addProperty(KEY_NAME, src.name);
+        to.addProperty(KEY_VALUE, src.getValue());
+        if (src.valueAutoFill != null) {
+            to.addProperty(KEY_AUTOFILL, src.valueAutoFill.code);
         }
-        super.serialize(from, to, context);
+        super.serialize(src, to, context);
     }
 }

@@ -7,11 +7,16 @@ import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrol.Number;
 
 /**
+ * Base type adapter for subclasses of {@link Number}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public abstract class NumberTypeAdapter<T extends Number, U extends Number.Builder> extends
         ParameterControlTypeAdapter<T, U> {
 
+    /**
+     * Type adapter for {@link Number} component.
+     */
     public static final NumberTypeAdapter<Number, Number.Builder> INSTANCE =
             new NumberTypeAdapter<Number, Number.Builder>() {
 
@@ -25,24 +30,25 @@ public abstract class NumberTypeAdapter<T extends Number, U extends Number.Build
                     return builder.create();
                 }
             };
+
     private static final String KEY_MAX = "max";
     private static final String KEY_MIN = "min";
     private static final String KEY_STEP = "step";
 
     @Override
-    protected void deserialize(JsonObject from, U builder,
+    protected void deserialize(JsonObject src, U builder,
                                JsonDeserializationContext context) {
-        builder.setMax(JsonUtils.getBigDecimal(from, KEY_MAX));
-        builder.setMin(JsonUtils.getBigDecimal(from, KEY_MIN));
-        builder.setStep(JsonUtils.getBigDecimal(from, KEY_STEP));
-        super.deserialize(from, builder, context);
+        builder.setMax(JsonUtils.getBigDecimal(src, KEY_MAX));
+        builder.setMin(JsonUtils.getBigDecimal(src, KEY_MIN));
+        builder.setStep(JsonUtils.getBigDecimal(src, KEY_STEP));
+        super.deserialize(src, builder, context);
     }
 
     @Override
-    protected void serialize(T from, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(KEY_MAX, from.max);
-        to.addProperty(KEY_MIN, from.min);
-        to.addProperty(KEY_STEP, from.step);
-        super.serialize(from, to, context);
+    protected void serialize(T src, JsonObject to, JsonSerializationContext context) {
+        to.addProperty(KEY_MAX, src.max);
+        to.addProperty(KEY_MIN, src.min);
+        to.addProperty(KEY_STEP, src.step);
+        super.serialize(src, to, context);
     }
 }

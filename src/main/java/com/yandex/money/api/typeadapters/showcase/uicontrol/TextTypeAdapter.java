@@ -7,11 +7,16 @@ import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrol.Text;
 
 /**
+ * Base type adapter for subclasses of {@link Text} component.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public abstract class TextTypeAdapter<T extends Text, U extends Text.Builder>
         extends TextAreaTypeAdapter<T, U> {
 
+    /**
+     * Type adapter for {@link Text} component.
+     */
     public static final TextTypeAdapter<Text, Text.Builder> INSTANCE = new TextTypeAdapter<Text,
             Text.Builder>() {
 
@@ -30,16 +35,16 @@ public abstract class TextTypeAdapter<T extends Text, U extends Text.Builder>
     private static final String KEY_KEYBOARD_SUGGEST = "keyboard_suggest";
 
     @Override
-    protected void deserialize(JsonObject from, U builder, JsonDeserializationContext context) {
-        builder.setPattern(JsonUtils.getString(from, KEY_PATTERN));
-        builder.setKeyboard(Text.Keyboard.parse(JsonUtils.getString(from, KEY_KEYBOARD_SUGGEST)));
-        super.deserialize(from, builder, context);
+    protected void deserialize(JsonObject src, U builder, JsonDeserializationContext context) {
+        builder.setPattern(JsonUtils.getString(src, KEY_PATTERN));
+        builder.setKeyboard(Text.Keyboard.parse(JsonUtils.getString(src, KEY_KEYBOARD_SUGGEST)));
+        super.deserialize(src, builder, context);
     }
 
     @Override
-    protected void serialize(T from, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(KEY_PATTERN, from.pattern);
-        to.addProperty(KEY_KEYBOARD_SUGGEST, from.keyboard == null ? null : from.keyboard.code);
-        super.serialize(from, to, context);
+    protected void serialize(T src, JsonObject to, JsonSerializationContext context) {
+        to.addProperty(KEY_PATTERN, src.pattern);
+        to.addProperty(KEY_KEYBOARD_SUGGEST, src.keyboard == null ? null : src.keyboard.code);
+        super.serialize(src, to, context);
     }
 }

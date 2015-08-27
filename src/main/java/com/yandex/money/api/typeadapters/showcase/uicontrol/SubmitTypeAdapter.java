@@ -3,6 +3,8 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 import com.yandex.money.api.model.showcase.components.uicontrol.Submit;
 
 /**
+ * Type adapter for {@link Submit} component.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class SubmitTypeAdapter extends ControlTypeAdapter<Submit, Submit.Builder> {

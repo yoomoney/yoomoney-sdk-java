@@ -5,9 +5,11 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Month;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
+ * Type adapter for {@link Month} component.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public class MonthTypeAdapter extends DateTypeAdapter<Month, Month.Builder> {
+public final class MonthTypeAdapter extends DateTypeAdapter<Month, Month.Builder> {
 
     @Override
     protected Month createInstance(Month.Builder builder) {

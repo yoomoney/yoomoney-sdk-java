@@ -8,6 +8,8 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Amount;
 import com.yandex.money.api.utils.Currency;
 
 /**
+ * Type adapter for {@link Amount} component.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class AmountTypeAdapter extends NumberTypeAdapter<Amount, Amount.Builder> {
@@ -16,20 +18,20 @@ public final class AmountTypeAdapter extends NumberTypeAdapter<Amount, Amount.Bu
     private static final String KEY_FEE = "fee";
 
     @Override
-    protected void deserialize(JsonObject from, Amount.Builder builder,
+    protected void deserialize(JsonObject src, Amount.Builder builder,
                                JsonDeserializationContext context) {
 
-        builder.setCurrency(Currency.parseAlphaCode(from.get("currency").getAsString()));
-        builder.setFee((Fee) context.deserialize(from.get("fee"), Fee.class));
+        builder.setCurrency(Currency.parseAlphaCode(src.get("currency").getAsString()));
+        builder.setFee((Fee) context.deserialize(src.get("fee"), Fee.class));
 
-        super.deserialize(from, builder, context);
+        super.deserialize(src, builder, context);
     }
 
     @Override
-    protected void serialize(Amount from, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(KEY_CURRENCY, from.currency.alphaCode);
-        to.add(KEY_FEE, context.serialize(from.fee, Fee.class));
-        super.serialize(from, to, context);
+    protected void serialize(Amount src, JsonObject to, JsonSerializationContext context) {
+        to.addProperty(KEY_CURRENCY, src.currency.alphaCode);
+        to.add(KEY_FEE, context.serialize(src.fee, Fee.class));
+        super.serialize(src, to, context);
     }
 
     @Override
