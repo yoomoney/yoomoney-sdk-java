@@ -13,18 +13,18 @@ public abstract class NumberTypeAdapter<T extends Number, U extends Number.Build
         ParameterControlTypeAdapter<T, U> {
 
     public static final NumberTypeAdapter<Number, Number.Builder> INSTANCE =
-        new NumberTypeAdapter<Number, Number.Builder>() {
+            new NumberTypeAdapter<Number, Number.Builder>() {
 
-            @Override
-            protected Number.Builder createBuilderInstance() {
-                                                           return new Number.Builder();
-                                                                                                                              }
+                @Override
+                protected Number.Builder createBuilderInstance() {
+                    return new Number.Builder();
+                }
 
-            @Override
-            protected Number createInstance(Number.Builder builder) {
-                                                                  return builder.create();
-                                                                                                                                        }
-        };
+                @Override
+                protected Number createInstance(Number.Builder builder) {
+                    return builder.create();
+                }
+            };
     private static final String KEY_MAX = "max";
     private static final String KEY_MIN = "min";
     private static final String KEY_STEP = "step";

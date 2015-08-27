@@ -29,7 +29,6 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
 
     @Override
     protected Component deserializeItem(JsonElement json, JsonDeserializationContext context) {
-        return context.deserialize(json, ComponentTypeAdapterFactory.getClassFromType(json
-                .getAsJsonObject().get("type").getAsString()));
+        return context.deserialize(json, ComponentTypeAdapterFactory.getJsonComponentType(json));
     }
 }

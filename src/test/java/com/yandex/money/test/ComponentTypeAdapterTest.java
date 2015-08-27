@@ -13,6 +13,8 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Email;
 import com.yandex.money.api.model.showcase.components.uicontrol.Month;
 import com.yandex.money.api.model.showcase.components.uicontrol.Number;
 import com.yandex.money.api.model.showcase.components.uicontrol.Select;
+import com.yandex.money.api.model.showcase.components.uicontrol.Submit;
+import com.yandex.money.api.model.showcase.components.uicontrol.Tel;
 import com.yandex.money.api.model.showcase.components.uicontrol.Text;
 import com.yandex.money.api.model.showcase.components.uicontrol.TextArea;
 import com.yandex.money.api.typeadapters.FeeTypeAdapter;
@@ -25,6 +27,8 @@ import com.yandex.money.api.typeadapters.showcase.uicontrol.EmailTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.MonthTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.NumberTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.SelectTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.SubmitTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.TelTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.TextAreaTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.TextTypeAdapter;
 
@@ -49,7 +53,9 @@ public final class ComponentTypeAdapterTest {
             .registerTypeAdapter(Text.class, TextTypeAdapter.INSTANCE)
             .registerTypeAdapter(Checkbox.class, new CheckboxTypeAdapter())
             .registerTypeAdapter(Fee.class, FeeTypeAdapter.getInstance())
+            .registerTypeAdapter(Tel.class, new TelTypeAdapter())
             .registerTypeAdapter(Select.class, new SelectTypeAdapter())
+            .registerTypeAdapter(Submit.class, new SubmitTypeAdapter())
             .registerTypeAdapter(Group.class, new GroupTypeAdapter())
             .registerTypeAdapter(Paragraph.class, new ParagraphTypeAdapter())
             .create();
@@ -97,6 +103,21 @@ public final class ComponentTypeAdapterTest {
     @Test
     public void testSelect() {
         check("select_group.json", Select.class);
+    }
+
+    @Test
+    public void testTel() {
+        check("tel.json", Tel.class);
+    }
+
+    @Test
+    public void testSubmit() {
+        check("submit.json", Submit.class);
+    }
+
+    @Test
+    public void testParagraph() {
+        check("paragraph.json", Paragraph.class);
     }
 
     @Test

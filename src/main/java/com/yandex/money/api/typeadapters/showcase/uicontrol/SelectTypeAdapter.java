@@ -90,9 +90,8 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
         Group.Builder groupBuilder = new Group.Builder();
         groupBuilder.setLayout(Group.Layout.VERTICAL);
         for (JsonElement item : items) {
-            Component component = (Component) context.deserialize(item,
-                    ComponentTypeAdapterFactory.getClassFromType(
-                            item.getAsJsonObject().get("type").getAsString()));
+            Component component = context.deserialize(item,
+                    ComponentTypeAdapterFactory.getJsonComponentType(item));
             groupBuilder.addItem(component);
         }
         return groupBuilder.create();

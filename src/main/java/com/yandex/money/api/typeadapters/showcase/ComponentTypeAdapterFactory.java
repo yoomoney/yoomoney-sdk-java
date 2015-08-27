@@ -1,5 +1,6 @@
 package com.yandex.money.api.typeadapters.showcase;
 
+import com.google.gson.JsonElement;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.container.Group;
 import com.yandex.money.api.model.showcase.components.container.Paragraph;
@@ -40,8 +41,12 @@ public class ComponentTypeAdapterFactory {
         TYPE_MAPPING.put(Component.Type.TEXT_AREA, TextArea.class);
     }
 
-    public static Type getClassFromType(String code) {
-        return TYPE_MAPPING.get(Component.Type.parse(code));
+    public static Type getJsonComponentType(JsonElement component) {
+        return TYPE_MAPPING.get(Component.Type.parse(component.getAsJsonObject().get("type")
+                .getAsString()));
     }
 
+    private static Type getClassFromType(String code) {
+        return TYPE_MAPPING.get(Component.Type.parse(code));
+    }
 }
