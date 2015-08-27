@@ -59,7 +59,6 @@ public final class Checkbox extends ParameterControl {
 
         @Override
         public Checkbox create() {
-            setType(Type.CHECKBOX);
             return new Checkbox(this);
         }
 

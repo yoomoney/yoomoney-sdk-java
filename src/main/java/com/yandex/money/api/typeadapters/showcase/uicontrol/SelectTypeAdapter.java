@@ -9,7 +9,7 @@ import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.container.Group;
 import com.yandex.money.api.model.showcase.components.uicontrol.Select;
-import com.yandex.money.api.typeadapters.showcase.ComponentTypeAdapterFactory;
+import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -91,7 +91,7 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
         groupBuilder.setLayout(Group.Layout.VERTICAL);
         for (JsonElement item : items) {
             Component component = context.deserialize(item,
-                    ComponentTypeAdapterFactory.getJsonComponentType(item));
+                    ComponentsTypeProvider.getJsonComponentType(item));
             groupBuilder.addItem(component);
         }
         return groupBuilder.create();

@@ -131,7 +131,6 @@ public class Date extends ParameterControl {
 
         @Override
         public Date create() {
-            setType(Type.DATE);
             return new Date(this);
         }
 

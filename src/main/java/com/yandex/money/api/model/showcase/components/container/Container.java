@@ -26,7 +26,6 @@ public abstract class Container<T> extends Component {
     public final String label;
 
     protected Container(Builder<T> builder) {
-        super(builder);
         label = builder.label;
         items = Collections.unmodifiableList(builder.components);
     }

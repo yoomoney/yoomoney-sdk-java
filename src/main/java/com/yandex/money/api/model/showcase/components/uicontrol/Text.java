@@ -104,7 +104,6 @@ public class Text extends TextArea {
 
         @Override
         public Text create() {
-            setType(Type.TEXT);
             return new Text(this);
         }
 

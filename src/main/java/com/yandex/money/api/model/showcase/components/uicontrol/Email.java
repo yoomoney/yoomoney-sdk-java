@@ -32,7 +32,6 @@ public final class Email extends Text {
 
         @Override
         public Email create() {
-            setType(Type.EMAIL);
             return new Email(this);
         }
 

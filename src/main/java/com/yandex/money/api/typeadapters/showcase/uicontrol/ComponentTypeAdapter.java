@@ -8,6 +8,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.yandex.money.api.model.showcase.components.Component;
+import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
 
 import java.lang.reflect.Type;
 
@@ -27,7 +28,7 @@ public abstract class ComponentTypeAdapter<T extends Component, U extends Compon
     @Override
     public final JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject to = new JsonObject();
-        to.addProperty("type", src.type.code); // TODO: think about it.
+        to.addProperty("type", ComponentsTypeProvider.getTypeFromClass(typeOfSrc));
         serialize(src, to, context);
         return to;
     }

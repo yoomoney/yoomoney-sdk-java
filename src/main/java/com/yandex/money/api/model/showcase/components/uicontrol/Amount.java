@@ -72,7 +72,6 @@ public final class Amount extends Number {
 
         @Override
         public Amount create() {
-            setType(Type.AMOUNT);
             return new Amount(this);
         }
 

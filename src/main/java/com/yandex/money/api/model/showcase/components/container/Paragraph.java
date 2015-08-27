@@ -26,7 +26,6 @@ public final class Paragraph extends Container<TextBlock> {
 
         @Override
         public Paragraph create() {
-            setType(Type.PARAGRAPH);
             return new Paragraph(this);
         }
     }

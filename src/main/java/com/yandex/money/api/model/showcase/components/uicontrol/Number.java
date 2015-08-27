@@ -108,7 +108,6 @@ public class Number extends ParameterControl {
 
         @Override
         public Number create() {
-            setType(Type.NUMBER);
             return new Number(this);
         }
 

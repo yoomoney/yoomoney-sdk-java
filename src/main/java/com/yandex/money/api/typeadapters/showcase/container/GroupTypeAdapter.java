@@ -5,7 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.container.Group;
-import com.yandex.money.api.typeadapters.showcase.ComponentTypeAdapterFactory;
+import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -29,6 +29,6 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
 
     @Override
     protected Component deserializeItem(JsonElement json, JsonDeserializationContext context) {
-        return context.deserialize(json, ComponentTypeAdapterFactory.getJsonComponentType(json));
+        return context.deserialize(json, ComponentsTypeProvider.getJsonComponentType(json));
     }
 }
