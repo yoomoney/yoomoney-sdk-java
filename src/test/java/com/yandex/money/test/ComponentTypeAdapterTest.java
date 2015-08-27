@@ -121,8 +121,13 @@ public final class ComponentTypeAdapterTest {
     }
 
     @Test
-    public void testAmount() {
-        check("amount.json", Amount.class);
+    public void testAmountStdFee() {
+        check("amount_stdfee.json", Amount.class);
+    }
+
+    @Test
+    public void testAmountCustomFee() {
+        check("amount_customfee.json", Amount.class);
     }
 
     private static String loadComponentJson(String name) {

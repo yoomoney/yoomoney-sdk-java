@@ -13,6 +13,8 @@ import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
 import java.lang.reflect.Type;
 
 /**
+ * Base class for {@link Component} adapters.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public abstract class ComponentTypeAdapter<T extends Component, U extends Component.Builder>
@@ -33,14 +35,14 @@ public abstract class ComponentTypeAdapter<T extends Component, U extends Compon
         return to;
     }
 
-    protected abstract U createBuilderInstance();
-
     protected abstract void deserialize(JsonObject from, U builder,
                                         JsonDeserializationContext context);
 
-    protected abstract T createInstance(U builder);
-
     protected abstract void serialize(T from, JsonObject to, JsonSerializationContext context);
+
+    protected abstract U createBuilderInstance();
+
+    protected abstract T createInstance(U builder);
 
     private T deserializeWithBuilder(JsonElement json, JsonDeserializationContext context) {
         U builder = createBuilderInstance();

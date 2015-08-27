@@ -24,15 +24,9 @@ import java.util.HashMap;
  */
 public class ComponentsTypeProvider {
 
-    private ComponentsTypeProvider() {
-    }
-
     private static final HashMap<Component.Type, Type> TYPE_MAPPING = new HashMap<>();
 
     private static final HashMap<Type, String> REVERSE_TYPE_MAPPING = new HashMap<>();
-
-    private ComponentsTypeProvider() {
-    }
 
     static {
         TYPE_MAPPING.put(Component.Type.AMOUNT, Amount.class);
@@ -54,6 +48,9 @@ public class ComponentsTypeProvider {
         }
     }
 
+    private ComponentsTypeProvider() {
+    }
+
     public static Type getJsonComponentType(JsonElement component) {
         return TYPE_MAPPING.get(Component.Type.parse(component.getAsJsonObject().get("type")
                 .getAsString()));
@@ -61,9 +58,5 @@ public class ComponentsTypeProvider {
 
     public static String getTypeFromClass(Type clazz) {
         return REVERSE_TYPE_MAPPING.get(clazz);
-    }
-
-    private static Type getClassFromType(String code) {
-        return TYPE_MAPPING.get(Component.Type.parse(code));
     }
 }
