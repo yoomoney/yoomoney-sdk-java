@@ -39,6 +39,9 @@ import java.lang.reflect.Type;
 import java.util.Scanner;
 
 /**
+ * Checks {@link com.yandex.money.api.model.showcase.components.Component}'s {@link Gson} type
+ * adapters.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class ComponentTypeAdapterTest {
@@ -135,8 +138,15 @@ public final class ComponentTypeAdapterTest {
                 .getResourceAsStream("/components/" + name), "UTF-8").useDelimiter("\\A").next();
     }
 
-    private static void check(String jsonName, Type type) {
-        String json = loadComponentJson(jsonName);
+    /**
+     * Reads JSON file and asserts it for equality after deserialization and serialization steps.
+     *
+     * @param jsonFileName JSON file name in resources.
+     * @param type         type of expected {@link com.yandex.money.api.model.showcase.components
+     * .Component}.
+     */
+    private static void check(String jsonFileName, Type type) {
+        String json = loadComponentJson(jsonFileName);
 
         Object deserializedComponent = GSON.fromJson(json, type);
         Assert.assertEquals(new JsonParser().parse(json), GSON.toJsonTree(deserializedComponent));

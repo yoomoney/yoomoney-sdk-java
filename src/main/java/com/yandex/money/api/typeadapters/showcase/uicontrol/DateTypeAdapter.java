@@ -33,21 +33,21 @@ public abstract class DateTypeAdapter<T extends Date, U extends Date.Builder> ex
                     return builder.create();
                 }
             };
-    private static final String KEY_MIN = "min";
-    private static final String KEY_MAX = "max";
+    private static final String MEMBER_MIN = "min";
+    private static final String MEMBER_MAX = "max";
 
     @Override
     protected void deserialize(JsonObject src, U builder, JsonDeserializationContext
             context) {
-        builder.setMin(JsonUtils.getDateTime(src, KEY_MIN, getFormatter()));
-        builder.setMax(JsonUtils.getDateTime(src, KEY_MAX, getFormatter()));
+        builder.setMin(JsonUtils.getDateTime(src, MEMBER_MIN, getFormatter()));
+        builder.setMax(JsonUtils.getDateTime(src, MEMBER_MAX, getFormatter()));
         super.deserialize(src, builder, context);
     }
 
     @Override
     protected void serialize(T src, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(KEY_MIN, src.min.toString(getFormatter()));
-        to.addProperty(KEY_MAX, src.max.toString(getFormatter()));
+        to.addProperty(MEMBER_MIN, src.min.toString(getFormatter()));
+        to.addProperty(MEMBER_MAX, src.max.toString(getFormatter()));
         super.serialize(src, to, context);
     }
 

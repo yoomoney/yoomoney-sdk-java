@@ -31,21 +31,21 @@ public abstract class TextAreaTypeAdapter<T extends TextArea, U extends TextArea
                 }
             };
 
-    private static final String KEY_MINLENGTH = "minlength";
-    private static final String KEY_MAXLENGTH = "maxlength";
+    private static final String MEMBER_MINLENGTH = "minlength";
+    private static final String MEMBER_MAXLENGTH = "maxlength";
 
     @Override
     protected void deserialize(JsonObject src, U builder,
                                JsonDeserializationContext context) {
-        builder.setMinLength(JsonUtils.getInt(src, KEY_MINLENGTH));
-        builder.setMaxLength(JsonUtils.getInt(src, KEY_MAXLENGTH));
+        builder.setMinLength(JsonUtils.getInt(src, MEMBER_MINLENGTH));
+        builder.setMaxLength(JsonUtils.getInt(src, MEMBER_MAXLENGTH));
         super.deserialize(src, builder, context);
     }
 
     @Override
     protected void serialize(T src, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(KEY_MINLENGTH, src.minLength);
-        to.addProperty(KEY_MAXLENGTH, src.maxLength);
+        to.addProperty(MEMBER_MINLENGTH, src.minLength);
+        to.addProperty(MEMBER_MAXLENGTH, src.maxLength);
         super.serialize(src, to, context);
     }
 }

@@ -31,24 +31,24 @@ public abstract class NumberTypeAdapter<T extends Number, U extends Number.Build
                 }
             };
 
-    private static final String KEY_MAX = "max";
-    private static final String KEY_MIN = "min";
-    private static final String KEY_STEP = "step";
+    private static final String MEMBER_MAX = "max";
+    private static final String MEMBER_MIN = "min";
+    private static final String MEMBER_STEP = "step";
 
     @Override
     protected void deserialize(JsonObject src, U builder,
                                JsonDeserializationContext context) {
-        builder.setMax(JsonUtils.getBigDecimal(src, KEY_MAX));
-        builder.setMin(JsonUtils.getBigDecimal(src, KEY_MIN));
-        builder.setStep(JsonUtils.getBigDecimal(src, KEY_STEP));
+        builder.setMax(JsonUtils.getBigDecimal(src, MEMBER_MAX));
+        builder.setMin(JsonUtils.getBigDecimal(src, MEMBER_MIN));
+        builder.setStep(JsonUtils.getBigDecimal(src, MEMBER_STEP));
         super.deserialize(src, builder, context);
     }
 
     @Override
     protected void serialize(T src, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(KEY_MAX, src.max);
-        to.addProperty(KEY_MIN, src.min);
-        to.addProperty(KEY_STEP, src.step);
+        to.addProperty(MEMBER_MAX, src.max);
+        to.addProperty(MEMBER_MIN, src.min);
+        to.addProperty(MEMBER_STEP, src.step);
         super.serialize(src, to, context);
     }
 }

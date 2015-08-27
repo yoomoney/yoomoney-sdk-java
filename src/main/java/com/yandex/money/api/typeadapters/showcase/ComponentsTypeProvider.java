@@ -15,6 +15,7 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Submit;
 import com.yandex.money.api.model.showcase.components.uicontrol.Tel;
 import com.yandex.money.api.model.showcase.components.uicontrol.Text;
 import com.yandex.money.api.model.showcase.components.uicontrol.TextArea;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -52,8 +53,8 @@ public final class ComponentsTypeProvider {
     }
 
     public static Type getJsonComponentType(JsonElement component) {
-        return TYPE_MAPPING.get(Component.Type.parse(component.getAsJsonObject().get("type")
-                .getAsString()));
+        return TYPE_MAPPING.get(Component.Type.parse(component.getAsJsonObject().get(
+                ComponentTypeAdapter.MEMBER_TYPE).getAsString()));
     }
 
     public static String getTypeFromClass(Type clazz) {

@@ -14,23 +14,23 @@ import com.yandex.money.api.utils.Currency;
  */
 public final class AmountTypeAdapter extends NumberTypeAdapter<Amount, Amount.Builder> {
 
-    private static final String KEY_CURRENCY = "currency";
-    private static final String KEY_FEE = "fee";
+    private static final String MEMBER_CURRENCY = "currency";
+    private static final String MEMBER_FEE = "fee";
 
     @Override
     protected void deserialize(JsonObject src, Amount.Builder builder,
                                JsonDeserializationContext context) {
 
-        builder.setCurrency(Currency.parseAlphaCode(src.get("currency").getAsString()));
-        builder.setFee((Fee) context.deserialize(src.get("fee"), Fee.class));
+        builder.setCurrency(Currency.parseAlphaCode(src.get(MEMBER_CURRENCY).getAsString()));
+        builder.setFee((Fee) context.deserialize(src.get(MEMBER_FEE), Fee.class));
 
         super.deserialize(src, builder, context);
     }
 
     @Override
     protected void serialize(Amount src, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(KEY_CURRENCY, src.currency.alphaCode);
-        to.add(KEY_FEE, context.serialize(src.fee, Fee.class));
+        to.addProperty(MEMBER_CURRENCY, src.currency.alphaCode);
+        to.add(MEMBER_FEE, context.serialize(src.fee, Fee.class));
         super.serialize(src, to, context);
     }
 

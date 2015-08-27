@@ -18,27 +18,27 @@ import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
  */
 public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select, Select.Builder> {
 
-    private static final String KEY_OPTIONS = "options";
-    private static final String KEY_LABEL = "label";
-    private static final String KEY_VALUE = "value";
-    private static final String KEY_STYLE = "style";
-    private static final String KEY_GROUP = "group";
+    private static final String MEMBER_OPTIONS = "options";
+    private static final String MEMBER_LABEL = "label";
+    private static final String MEMBER_VALUE = "value";
+    private static final String MEMBER_STYLE = "style";
+    private static final String MEMBER_GROUP = "group";
 
     @Override
     protected void deserialize(JsonObject src, Select.Builder builder,
                                JsonDeserializationContext context) {
-        for (JsonElement item : src.getAsJsonArray(KEY_OPTIONS)) {
+        for (JsonElement item : src.getAsJsonArray(MEMBER_OPTIONS)) {
             JsonObject itemObject = item.getAsJsonObject();
 
-            Select.Option option = new Select.Option(itemObject.get(KEY_LABEL).getAsString(),
-                    itemObject.get(KEY_VALUE).getAsString());
-            if (itemObject.has(KEY_GROUP)) {
-                option.group = deserializeOptionGroup(itemObject.get(KEY_GROUP).getAsJsonArray(),
+            Select.Option option = new Select.Option(itemObject.get(MEMBER_LABEL).getAsString(),
+                    itemObject.get(MEMBER_VALUE).getAsString());
+            if (itemObject.has(MEMBER_GROUP)) {
+                option.group = deserializeOptionGroup(itemObject.get(MEMBER_GROUP).getAsJsonArray(),
                         context);
             }
             builder.addOption(option);
         }
-        builder.setStyle(Select.Style.parse(JsonUtils.getString(src, KEY_STYLE)));
+        builder.setStyle(Select.Style.parse(JsonUtils.getString(src, MEMBER_STYLE)));
         super.deserialize(src, builder, context);
     }
 
@@ -47,25 +47,25 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
         Select.Option selectedOption = src.getSelectedOption();
 
         if (selectedOption != null) {
-            to.addProperty(KEY_VALUE, selectedOption.value);
+            to.addProperty(MEMBER_VALUE, selectedOption.value);
         }
         if (src.style != null) {
-            to.addProperty(KEY_STYLE, src.style.code);
+            to.addProperty(MEMBER_STYLE, src.style.code);
         }
 
         JsonArray options = new JsonArray();
         for (Select.Option option : src.options) {
             JsonObject optionElement = new JsonObject();
 
-            optionElement.addProperty(KEY_LABEL, option.label);
-            optionElement.addProperty(KEY_VALUE, option.value);
+            optionElement.addProperty(MEMBER_LABEL, option.label);
+            optionElement.addProperty(MEMBER_VALUE, option.value);
 
             if (option.group != null) {
-                optionElement.add(KEY_GROUP, serializeOptionGroup(option.group, context));
+                optionElement.add(MEMBER_GROUP, serializeOptionGroup(option.group, context));
             }
             options.add(optionElement);
         }
-        to.add(KEY_OPTIONS, options);
+        to.add(MEMBER_OPTIONS, options);
         super.serialize(src, to, context);
     }
 

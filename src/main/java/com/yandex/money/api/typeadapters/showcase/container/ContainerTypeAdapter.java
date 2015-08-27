@@ -17,13 +17,16 @@ import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter
 public abstract class ContainerTypeAdapter<T, U extends Container<T>, K extends Container
         .Builder<T>> extends ComponentTypeAdapter<U, K> {
 
+    private static final String MEMBER_LABEL = "label";
+    private static final String MEMBER_ITEMS = "items";
+
     @Override
     protected final void deserialize(JsonObject src, K builder, JsonDeserializationContext
             context) {
-        for (JsonElement item : src.getAsJsonArray("items")) {
+        for (JsonElement item : src.getAsJsonArray(MEMBER_ITEMS)) {
             builder.addItem(deserializeItem(item, context));
         }
-        builder.setLabel(JsonUtils.getString(src, "label"));
+        builder.setLabel(JsonUtils.getString(src, MEMBER_LABEL));
     }
 
     @Override
@@ -33,8 +36,8 @@ public abstract class ContainerTypeAdapter<T, U extends Container<T>, K extends 
         for (T item : src.items) {
             array.add(serializeItem(item, context));
         }
-        to.addProperty("label", src.label);
-        to.add("items", array);
+        to.addProperty(MEMBER_LABEL, src.label);
+        to.add(MEMBER_ITEMS, array);
     }
 
     /**

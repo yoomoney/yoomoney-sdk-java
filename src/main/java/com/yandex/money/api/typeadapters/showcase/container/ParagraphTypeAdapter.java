@@ -16,16 +16,16 @@ import com.yandex.money.api.model.showcase.components.container.Paragraph;
 public final class ParagraphTypeAdapter extends ContainerTypeAdapter<TextBlock, Paragraph,
         Paragraph.Builder> {
 
-    private static final String KEY_LABEL = "label";
-    private static final String KEY_HREF = "href";
+    private static final String MEMBER_LABEL = "label";
+    private static final String MEMBER_HREF = "href";
 
     @Override
     protected JsonElement serializeItem(TextBlock src, JsonSerializationContext context) {
         if (src instanceof TextBlock.WithLink) {
             JsonObject element = new JsonObject();
-            element.addProperty("type", "a");
-            element.addProperty("href", ((TextBlock.WithLink) src).link);
-            element.addProperty("label", src.content);
+            element.addProperty(MEMBER_TYPE, "a");
+            element.addProperty(MEMBER_HREF, ((TextBlock.WithLink) src).link);
+            element.addProperty(MEMBER_LABEL, src.content);
             return element;
         } else {
             return new JsonPrimitive(src.content);
@@ -36,8 +36,8 @@ public final class ParagraphTypeAdapter extends ContainerTypeAdapter<TextBlock, 
     protected TextBlock deserializeItem(JsonElement src, JsonDeserializationContext context) {
         if (src.isJsonObject()) {
             JsonObject jsonObject = src.getAsJsonObject();
-            return new TextBlock.WithLink(jsonObject.get(KEY_LABEL).getAsString(),
-                    jsonObject.get(KEY_HREF).getAsString());
+            return new TextBlock.WithLink(jsonObject.get(MEMBER_LABEL).getAsString(),
+                    jsonObject.get(MEMBER_HREF).getAsString());
         } else {
             return new TextBlock(src.getAsString());
         }

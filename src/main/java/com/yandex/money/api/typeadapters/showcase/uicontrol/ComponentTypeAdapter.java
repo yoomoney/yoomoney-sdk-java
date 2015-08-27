@@ -21,6 +21,8 @@ import java.lang.reflect.Type;
 public abstract class ComponentTypeAdapter<T extends Component, U extends Component.Builder>
         implements JsonSerializer<T>, JsonDeserializer<T> {
 
+    public static final String MEMBER_TYPE = "type";
+
     @Override
     public final T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext
             context) throws
@@ -31,7 +33,7 @@ public abstract class ComponentTypeAdapter<T extends Component, U extends Compon
     @Override
     public final JsonElement serialize(T src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject to = new JsonObject();
-        to.addProperty("type", ComponentsTypeProvider.getTypeFromClass(typeOfSrc));
+        to.addProperty(MEMBER_TYPE, ComponentsTypeProvider.getTypeFromClass(typeOfSrc));
         serialize(src, to, context);
         return to;
     }

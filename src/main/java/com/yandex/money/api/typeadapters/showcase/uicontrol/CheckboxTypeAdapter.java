@@ -13,16 +13,17 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
 public final class CheckboxTypeAdapter extends ParameterControlTypeAdapter<Checkbox, Checkbox
         .Builder> {
 
+    private static final String MEMBER_CHECKED = "checked";
     @Override
     protected void serialize(Checkbox src, JsonObject to, JsonSerializationContext context) {
-        to.addProperty("checked", src.checked);
+        to.addProperty(MEMBER_CHECKED, src.checked);
         super.serialize(src, to, context);
     }
 
     @Override
     protected void deserialize(JsonObject src, Checkbox.Builder builder,
                                JsonDeserializationContext context) {
-        builder.setChecked(src.get("checked").getAsBoolean());
+        builder.setChecked(src.get(MEMBER_CHECKED).getAsBoolean());
         super.deserialize(src, builder, context);
     }
 
