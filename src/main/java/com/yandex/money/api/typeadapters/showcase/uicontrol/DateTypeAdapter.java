@@ -14,8 +14,8 @@ import org.joda.time.format.DateTimeFormatter;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public abstract class DateTypeAdapter<T extends Date, U extends Date.Builder> extends
-        ParameterControlTypeAdapter<T, U> {
+public abstract class DateTypeAdapter<T extends Date, U extends Date.Builder>
+        extends ParameterControlTypeAdapter<T, U> {
 
     /**
      * Type adapter for {@link Date} component.

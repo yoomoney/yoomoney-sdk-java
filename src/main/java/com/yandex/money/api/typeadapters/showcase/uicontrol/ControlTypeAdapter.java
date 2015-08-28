@@ -11,8 +11,8 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Control;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-abstract class ControlTypeAdapter<T extends Control, U extends Control.Builder> extends
-        ComponentTypeAdapter<T, U> {
+abstract class ControlTypeAdapter<T extends Control, U extends Control.Builder>
+        extends ComponentTypeAdapter<T, U> {
 
     private static final String MEMBER_ALERT = "alert";
     private static final String MEMBER_HINT = "hint";

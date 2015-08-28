@@ -57,7 +57,7 @@ public final class ComponentsTypeProvider {
                 ComponentTypeAdapter.MEMBER_TYPE).getAsString()));
     }
 
-    public static String getTypeFromClass(Type clazz) {
-        return REVERSE_TYPE_MAPPING.get(clazz);
+    public static String getTypeFromClass(Type type) {
+        return REVERSE_TYPE_MAPPING.get(type);
     }
 }

@@ -13,8 +13,8 @@ import com.yandex.money.api.model.showcase.components.container.Paragraph;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class ParagraphTypeAdapter extends ContainerTypeAdapter<TextBlock, Paragraph,
-        Paragraph.Builder> {
+public final class ParagraphTypeAdapter
+        extends ContainerTypeAdapter<TextBlock, Paragraph, Paragraph.Builder> {
 
     private static final String MEMBER_LABEL = "label";
     private static final String MEMBER_HREF = "href";

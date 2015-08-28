@@ -14,6 +14,7 @@ public final class CheckboxTypeAdapter extends ParameterControlTypeAdapter<Check
         .Builder> {
 
     private static final String MEMBER_CHECKED = "checked";
+
     @Override
     protected void serialize(Checkbox src, JsonObject to, JsonSerializationContext context) {
         to.addProperty(MEMBER_CHECKED, src.checked);

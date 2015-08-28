@@ -14,8 +14,8 @@ import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public abstract class ContainerTypeAdapter<T, U extends Container<T>, K extends Container
-        .Builder<T>> extends ComponentTypeAdapter<U, K> {
+public abstract class ContainerTypeAdapter<T, U extends Container<T>,
+        K extends Container.Builder<T>> extends ComponentTypeAdapter<U, K> {
 
     private static final String MEMBER_LABEL = "label";
     private static final String MEMBER_ITEMS = "items";
@@ -57,5 +57,4 @@ public abstract class ContainerTypeAdapter<T, U extends Container<T>, K extends 
      * @return {@link Container}'s item
      */
     protected abstract T deserializeItem(JsonElement src, JsonDeserializationContext context);
-
 }

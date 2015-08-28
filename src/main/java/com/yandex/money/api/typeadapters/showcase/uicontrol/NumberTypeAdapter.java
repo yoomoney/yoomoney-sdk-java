@@ -11,8 +11,8 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Number;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public abstract class NumberTypeAdapter<T extends Number, U extends Number.Builder> extends
-        ParameterControlTypeAdapter<T, U> {
+public abstract class NumberTypeAdapter<T extends Number, U extends Number.Builder>
+        extends ParameterControlTypeAdapter<T, U> {
 
     /**
      * Type adapter for {@link Number} component.
