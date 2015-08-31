@@ -49,7 +49,7 @@ public abstract class ParameterControl extends Control implements Parameter {
      * @return default value. May be {@code null}.
      */
     @Override
-    public final String getValue() {
+    public String getValue() {
         return value;
     }
 

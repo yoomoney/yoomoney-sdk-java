@@ -37,10 +37,12 @@ public class TextBlock {
     }
 
     @Override
-    public String toString() {
-        return "TextBlock{" +
-                "text='" + text + '\'' +
-                '}';
+    public final String toString() {
+        return getToStringBuilder().toString();
+    }
+
+    protected ToStringBuilder getToStringBuilder() {
+        return new ToStringBuilder("TextBlock").append("text", text);
     }
 
     /**
@@ -77,11 +79,10 @@ public class TextBlock {
         }
 
         @Override
-        public String toString() {
-            return new ToStringBuilder("WithLink")
-                    .append("link", link)
-                    .append("text", text)
-                    .toString();
+        public ToStringBuilder getToStringBuilder() {
+            return super.getToStringBuilder()
+                    .setName("WithLink")
+                    .append("link", link);
         }
     }
 }
