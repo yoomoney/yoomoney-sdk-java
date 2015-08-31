@@ -56,11 +56,10 @@ public class Text extends TextArea {
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("name")
+        return super.getToStringBuilder()
                 .setName("Text")
                 .append("pattern", pattern)
-                .append("keyboard", keyboard)
-                .append(super.getToStringBuilder());
+                .append("keyboard", keyboard);
     }
 
     /**
@@ -84,13 +83,6 @@ public class Text extends TextArea {
                 }
             }
             return null;
-        }
-
-        @Override
-        public String toString() {
-            return "Keyboard{" +
-                    "code='" + code + '\'' +
-                    "} " + super.toString();
         }
     }
 

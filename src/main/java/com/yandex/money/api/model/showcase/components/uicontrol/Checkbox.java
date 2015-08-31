@@ -21,8 +21,7 @@ public final class Checkbox extends ParameterControl {
 
     @Override
     public boolean isValid(String value) {
-        return super.isValid(value) &&
-                (value == null || value.isEmpty() || "true".equals(value) || "false".equals(value));
+        return super.isValid(value) && (required && checked || !required);
     }
 
     @Override
@@ -44,10 +43,15 @@ public final class Checkbox extends ParameterControl {
     }
 
     @Override
+    public String getValue() {
+        return checked ? super.getValue() : null;
+    }
+
+    @Override
     protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("Checkbox")
-                .append("checked", checked)
-                .append(super.getToStringBuilder());
+        return super.getToStringBuilder()
+                .setName("Checkbox")
+                .append("checked", checked);
     }
 
     /**

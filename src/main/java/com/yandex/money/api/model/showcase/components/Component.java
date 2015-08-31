@@ -11,7 +11,7 @@ import com.yandex.money.api.utils.ToStringBuilder;
 public abstract class Component {
 
     @Override
-    public String toString() {
+    public final String toString() {
         return getToStringBuilder().toString();
     }
 
@@ -49,13 +49,6 @@ public abstract class Component {
                 }
             }
             return null;
-        }
-
-        @Override
-        public String toString() {
-            return "Type{" +
-                    "code='" + code + '\'' +
-                    "} ";
         }
     }
 
