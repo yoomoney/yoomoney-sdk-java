@@ -12,7 +12,7 @@ public final class Checkbox extends ParameterControl {
     /**
      * Initial state. Default is {@code false}.
      */
-    public final boolean checked;
+    public boolean checked;
 
     private Checkbox(Builder builder) {
         super(builder);
@@ -21,7 +21,7 @@ public final class Checkbox extends ParameterControl {
 
     @Override
     public boolean isValid(String value) {
-        return super.isValid(value) && (required && checked || !required);
+        return !required || checked;
     }
 
     @Override
@@ -45,6 +45,20 @@ public final class Checkbox extends ParameterControl {
     @Override
     public String getValue() {
         return checked ? super.getValue() : null;
+    }
+
+    @Override
+    public void setValue(String value) {
+        throw new UnsupportedOperationException("call setChecked(boolean) instead");
+    }
+
+    /**
+     * Sets {@code checked} value. Should be used instead of {@link #setValue(String)}.
+     *
+     * @param checked {@code true} if checked.
+     */
+    public void setChecked(boolean checked) {
+        this.checked = checked;
     }
 
     @Override
