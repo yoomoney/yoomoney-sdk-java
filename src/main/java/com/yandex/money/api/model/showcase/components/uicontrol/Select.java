@@ -1,6 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
 import com.yandex.money.api.model.showcase.components.container.Group;
+import com.yandex.money.api.utils.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,9 +33,6 @@ public final class Select extends ParameterControl {
 
     private Select(Builder builder) {
         super(builder);
-        if (builder.options == null) {
-            throw new NullPointerException("options is null");
-        }
         options = Collections.unmodifiableList(builder.options);
         values = Collections.unmodifiableList(getValues(options));
         style = builder.style;
@@ -47,10 +45,43 @@ public final class Select extends ParameterControl {
     }
 
     /**
-     * Returns default option. May be {@code null}.
+     * @return default option. May be {@code null}.
      */
     public Option getSelectedOption() {
         return selectedOption;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Select select = (Select) o;
+
+        return options.equals(select.options) && values.equals(select.values) &&
+                style == select.style && !(selectedOption != null ?
+                !selectedOption.equals(select.selectedOption) : select.selectedOption != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + options.hashCode();
+        result = 31 * result + values.hashCode();
+        result = 31 * result + (style != null ? style.hashCode() : 0);
+        result = 31 * result + (selectedOption != null ? selectedOption.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return super.getToStringBuilder()
+                .setName("Select")
+                .append("options", options)
+                .append("values", values)
+                .append("style", style)
+                .append("selectedOption", selectedOption);
     }
 
     /**
@@ -146,6 +177,34 @@ public final class Select extends ParameterControl {
          */
         public boolean isValid() {
             return group == null || group.isValid();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Option option = (Option) o;
+
+            return label.equals(option.label) && value.equals(option.value) &&
+                    !(group != null ? !group.equals(option.group) : option.group != null);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = label.hashCode();
+            result = 31 * result + value.hashCode();
+            result = 31 * result + (group != null ? group.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "Option{" +
+                    "label='" + label + '\'' +
+                    ", value='" + value + '\'' +
+                    ", group=" + group +
+                    '}';
         }
     }
 

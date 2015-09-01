@@ -1,6 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
 import com.yandex.money.api.model.showcase.components.Parameter;
+import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
  * Base class for all fields with internal state.
@@ -20,7 +21,7 @@ public abstract class ParameterControl extends Control implements Parameter {
     public final AutoFill valueAutoFill;
 
     /**
-     * Value.
+     * Default value. May be {@code null}.
      */
     private String value;
 
@@ -35,11 +36,9 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * Returns name.
-     * <p/>
      * TODO: remove method field's public modifier.
      *
-     * @return name
+     * @return control's name
      */
     @Override
     public final String getName() {
@@ -47,12 +46,10 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * Returns current value.
-     *
-     * @return field value.
+     * @return default value. May be {@code null}.
      */
     @Override
-    public final String getValue() {
+    public String getValue() {
         return value;
     }
 
@@ -64,13 +61,34 @@ public abstract class ParameterControl extends Control implements Parameter {
      * @param value input value.
      */
     @Override
-    public final void setValue(String value) {
+    public void setValue(String value) {
         if (readonly) {
             throw new IllegalArgumentException("trying to set value for readonly parameter '" +
                     value + "'");
         }
         this.value = value;
         onValueSet(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ParameterControl that = (ParameterControl) o;
+
+        return name.equals(that.name) && valueAutoFill == that.valueAutoFill &&
+                !(value != null ? !value.equals(that.value) : that.value != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (valueAutoFill != null ? valueAutoFill.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        return result;
     }
 
     /**
@@ -92,10 +110,17 @@ public abstract class ParameterControl extends Control implements Parameter {
         return !required || (value != null && !value.isEmpty());
     }
 
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return super.getToStringBuilder()
+                .setName("ParameterControl")
+                .append("name", name)
+                .append("value", value)
+                .append("valueAutoFill", valueAutoFill);
+    }
+
     /**
      * TODO: is this method required?
-     *
-     * @param value
      */
     protected void onValueSet(String value) {
     }

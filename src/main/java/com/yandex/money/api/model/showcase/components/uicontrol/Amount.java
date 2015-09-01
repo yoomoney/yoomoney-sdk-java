@@ -2,6 +2,7 @@ package com.yandex.money.api.model.showcase.components.uicontrol;
 
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.utils.Currency;
+import com.yandex.money.api.utils.ToStringBuilder;
 
 import java.math.BigDecimal;
 
@@ -26,6 +27,33 @@ public final class Amount extends Number {
         super(builder);
         currency = builder.currency;
         fee = builder.fee;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Amount amount = (Amount) o;
+
+        return currency == amount.currency && fee.equals(amount.fee);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + currency.hashCode();
+        result = 31 * result + fee.hashCode();
+        return result;
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return super.getToStringBuilder()
+                .setName("Amount")
+                .append("currency", currency.toString())
+                .append("fee", fee.toString());
     }
 
     /**

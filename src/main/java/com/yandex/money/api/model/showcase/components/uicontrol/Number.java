@@ -1,5 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
+import com.yandex.money.api.utils.ToStringBuilder;
+
 import java.math.BigDecimal;
 
 /**
@@ -37,6 +39,36 @@ public class Number extends ParameterControl {
     @Override
     public boolean isValid(String value) {
         return super.isValid(value) && isValidInner(value);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Number number = (Number) o;
+
+        return !(min != null ? !min.equals(number.min) : number.min != null) && !(max != null ? !max
+                .equals(number.max) : number.max != null) && step.equals(number.step);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (min != null ? min.hashCode() : 0);
+        result = 31 * result + (max != null ? max.hashCode() : 0);
+        result = 31 * result + step.hashCode();
+        return result;
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return super.getToStringBuilder()
+                .setName("Number")
+                .append("min", min)
+                .append("max", max)
+                .append("step", step);
     }
 
     private boolean isValidInner(String value) {

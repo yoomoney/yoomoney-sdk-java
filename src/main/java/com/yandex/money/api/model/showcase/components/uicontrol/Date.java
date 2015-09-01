@@ -1,5 +1,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrol;
 
+import com.yandex.money.api.utils.ToStringBuilder;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -74,10 +76,38 @@ public class Date extends ParameterControl {
     }
 
     /**
-     * Returns control's formatter.
+     * @return control's formatter.
      */
-    protected DateTimeFormatter getFormatter() {
+    public DateTimeFormatter getFormatter() {
         return FORMATTER;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Date date = (Date) o;
+
+        return !(min != null ? !min.equals(date.min) : date.min != null) &&
+                !(max != null ? !max.equals(date.max) : date.max != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (min != null ? min.hashCode() : 0);
+        result = 31 * result + (max != null ? max.hashCode() : 0);
+        return result;
+    }
+
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return super.getToStringBuilder()
+                .setName("Date")
+                .append("min", min)
+                .append("max", max);
     }
 
     private boolean isValidInner(String value) {
