@@ -61,7 +61,7 @@ public abstract class ParameterControl extends Control implements Parameter {
      * @param value input value.
      */
     @Override
-    public final void setValue(String value) {
+    public void setValue(String value) {
         if (readonly) {
             throw new IllegalArgumentException("trying to set value for readonly parameter '" +
                     value + "'");
@@ -121,8 +121,6 @@ public abstract class ParameterControl extends Control implements Parameter {
 
     /**
      * TODO: is this method required?
-     *
-     * @param value
      */
     protected void onValueSet(String value) {
     }
