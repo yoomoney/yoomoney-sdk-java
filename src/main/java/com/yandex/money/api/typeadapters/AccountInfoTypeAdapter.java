@@ -24,17 +24,29 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.*;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.JsonUtils;
-import com.yandex.money.api.model.*;
+import com.yandex.money.api.model.AccountStatus;
+import com.yandex.money.api.model.AccountType;
+import com.yandex.money.api.model.Avatar;
+import com.yandex.money.api.model.BalanceDetails;
+import com.yandex.money.api.model.Card;
+import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.utils.Currency;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.methods.JsonUtils.*;
+import static com.yandex.money.api.methods.JsonUtils.getArray;
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryBigDecimal;
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
 
 /**
  * Type adapter for {@link AccountInfo}.

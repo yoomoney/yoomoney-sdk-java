@@ -34,7 +34,6 @@ import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
-
 import org.joda.time.DateTime;
 
 import java.lang.reflect.Type;

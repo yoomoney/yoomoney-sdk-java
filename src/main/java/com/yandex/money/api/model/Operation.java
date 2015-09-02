@@ -32,7 +32,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.methods.JsonUtils;
-
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;

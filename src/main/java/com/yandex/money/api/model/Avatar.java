@@ -28,7 +28,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.yandex.money.api.typeadapters.AvatarTypeAdapter;
 import com.yandex.money.api.utils.Strings;
-
 import org.joda.time.DateTime;
 
 import java.util.Objects;

@@ -24,10 +24,18 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.yandex.money.api.methods.params.PaymentParams;
-import com.yandex.money.api.model.*;
+import com.yandex.money.api.model.AccountStatus;
+import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.MoneySource;
+import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.CardTypeAdapter;

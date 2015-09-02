@@ -38,28 +38,28 @@ import com.google.gson.JsonSerializer;
 public abstract class BaseTypeAdapter<T>
         implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
 
-    private final Gson GSON = new GsonBuilder()
+    private final Gson gson = new GsonBuilder()
             .registerTypeHierarchyAdapter(getType(), this)
             .create();
 
     @Override
     public final T fromJson(String json) {
-        return GSON.fromJson(json, getType());
+        return gson.fromJson(json, getType());
     }
 
     @Override
     public final T fromJson(JsonElement element) {
-        return GSON.fromJson(element, getType());
+        return gson.fromJson(element, getType());
     }
 
     @Override
     public final String toJson(T value) {
-        return GSON.toJson(value);
+        return gson.toJson(value);
     }
 
     @Override
     public final JsonElement toJsonTree(T value) {
-        return GSON.toJsonTree(value);
+        return gson.toJsonTree(value);
     }
 
     protected abstract Class<T> getType();

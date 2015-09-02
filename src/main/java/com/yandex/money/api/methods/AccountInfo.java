@@ -24,7 +24,12 @@
 
 package com.yandex.money.api.methods;
 
-import com.yandex.money.api.model.*;
+import com.yandex.money.api.model.AccountStatus;
+import com.yandex.money.api.model.AccountType;
+import com.yandex.money.api.model.Avatar;
+import com.yandex.money.api.model.BalanceDetails;
+import com.yandex.money.api.model.Card;
+import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
