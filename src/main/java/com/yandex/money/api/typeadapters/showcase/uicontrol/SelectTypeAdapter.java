@@ -18,11 +18,16 @@ import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
  */
 public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select, Select.Builder> {
 
+    public static final SelectTypeAdapter INSTANCE = new SelectTypeAdapter();
+
     private static final String MEMBER_OPTIONS = "options";
     private static final String MEMBER_LABEL = "label";
     private static final String MEMBER_VALUE = "value";
     private static final String MEMBER_STYLE = "style";
     private static final String MEMBER_GROUP = "group";
+
+    private SelectTypeAdapter() {
+    }
 
     @Override
     protected void deserialize(JsonObject src, Select.Builder builder,

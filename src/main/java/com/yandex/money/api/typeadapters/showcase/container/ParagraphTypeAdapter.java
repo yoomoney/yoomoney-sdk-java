@@ -16,8 +16,13 @@ import com.yandex.money.api.model.showcase.components.container.Paragraph;
 public final class ParagraphTypeAdapter
         extends ContainerTypeAdapter<TextBlock, Paragraph, Paragraph.Builder> {
 
+    public static final ParagraphTypeAdapter INSTANCE = new ParagraphTypeAdapter();
+
     private static final String MEMBER_LABEL = "label";
     private static final String MEMBER_HREF = "href";
+
+    private ParagraphTypeAdapter() {
+    }
 
     @Override
     protected JsonElement serializeItem(TextBlock src, JsonSerializationContext context) {
@@ -25,10 +30,10 @@ public final class ParagraphTypeAdapter
             JsonObject element = new JsonObject();
             element.addProperty(MEMBER_TYPE, "a");
             element.addProperty(MEMBER_HREF, ((TextBlock.WithLink) src).link);
-            element.addProperty(MEMBER_LABEL, src.content);
+            element.addProperty(MEMBER_LABEL, src.text);
             return element;
         } else {
-            return new JsonPrimitive(src.content);
+            return new JsonPrimitive(src.text);
         }
     }
 

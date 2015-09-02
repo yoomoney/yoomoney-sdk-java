@@ -13,7 +13,12 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
 public final class CheckboxTypeAdapter extends ParameterControlTypeAdapter<Checkbox, Checkbox
         .Builder> {
 
+    public static final CheckboxTypeAdapter INSTANCE = new CheckboxTypeAdapter();
+
     private static final String MEMBER_CHECKED = "checked";
+
+    private CheckboxTypeAdapter() {
+    }
 
     @Override
     protected void serialize(Checkbox src, JsonObject to, JsonSerializationContext context) {

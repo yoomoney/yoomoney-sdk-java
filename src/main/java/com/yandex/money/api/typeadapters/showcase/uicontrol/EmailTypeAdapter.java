@@ -9,6 +9,11 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Email;
  */
 public final class EmailTypeAdapter extends ParameterControlTypeAdapter<Email, Email.Builder> {
 
+    public static final EmailTypeAdapter INSTANCE = new EmailTypeAdapter();
+
+    private EmailTypeAdapter() {
+    }
+
     @Override
     protected Email.Builder createBuilderInstance() {
         return new Email.Builder();

@@ -47,20 +47,20 @@ import java.util.Scanner;
 public final class ComponentTypeAdapterTest {
 
     private static final Gson GSON = new GsonBuilder()
-            .registerTypeAdapter(Amount.class, new AmountTypeAdapter())
+            .registerTypeAdapter(Amount.class, AmountTypeAdapter.INSTANCE)
             .registerTypeAdapter(Number.class, NumberTypeAdapter.INSTANCE)
-            .registerTypeAdapter(Month.class, new MonthTypeAdapter())
+            .registerTypeAdapter(Month.class, MonthTypeAdapter.INSTANCE)
             .registerTypeAdapter(Date.class, DateTypeAdapter.INSTANCE)
-            .registerTypeAdapter(Email.class, new EmailTypeAdapter())
+            .registerTypeAdapter(Email.class, EmailTypeAdapter.INSTANCE)
             .registerTypeAdapter(TextArea.class, TextAreaTypeAdapter.INSTANCE)
             .registerTypeAdapter(Text.class, TextTypeAdapter.INSTANCE)
-            .registerTypeAdapter(Checkbox.class, new CheckboxTypeAdapter())
+            .registerTypeAdapter(Checkbox.class, CheckboxTypeAdapter.INSTANCE)
             .registerTypeAdapter(Fee.class, FeeTypeAdapter.getInstance())
-            .registerTypeAdapter(Tel.class, new TelTypeAdapter())
-            .registerTypeAdapter(Select.class, new SelectTypeAdapter())
-            .registerTypeAdapter(Submit.class, new SubmitTypeAdapter())
-            .registerTypeAdapter(Group.class, new GroupTypeAdapter())
-            .registerTypeAdapter(Paragraph.class, new ParagraphTypeAdapter())
+            .registerTypeAdapter(Tel.class, TelTypeAdapter.INSTANCE)
+            .registerTypeAdapter(Select.class, SelectTypeAdapter.INSTANCE)
+            .registerTypeAdapter(Submit.class, SubmitTypeAdapter.INSTANCE)
+            .registerTypeAdapter(Group.class, GroupTypeAdapter.INSTANCE)
+            .registerTypeAdapter(Paragraph.class, ParagraphTypeAdapter.INSTANCE)
             .create();
 
     @Test

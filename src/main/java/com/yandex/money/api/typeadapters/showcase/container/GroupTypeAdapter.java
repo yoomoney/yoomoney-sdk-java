@@ -14,6 +14,11 @@ import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
  */
 public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Group, Group.Builder> {
 
+    public static final GroupTypeAdapter INSTANCE = new GroupTypeAdapter();
+
+    private GroupTypeAdapter() {
+    }
+
     @Override
     protected Group.Builder createBuilderInstance() {
         return new Group.Builder();

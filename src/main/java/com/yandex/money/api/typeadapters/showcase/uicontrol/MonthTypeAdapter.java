@@ -11,6 +11,11 @@ import org.joda.time.format.DateTimeFormatter;
  */
 public final class MonthTypeAdapter extends DateTypeAdapter<Month, Month.Builder> {
 
+    public static final MonthTypeAdapter INSTANCE = new MonthTypeAdapter();
+
+    private MonthTypeAdapter() {
+    }
+
     @Override
     protected Month createInstance(Month.Builder builder) {
         return builder.create();

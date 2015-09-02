@@ -9,6 +9,11 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Tel;
  */
 public final class TelTypeAdapter extends ParameterControlTypeAdapter<Tel, Tel.Builder> {
 
+    public static final TelTypeAdapter INSTANCE = new TelTypeAdapter();
+
+    private TelTypeAdapter() {
+    }
+
     @Override
     protected Tel.Builder createBuilderInstance() {
         return new Tel.Builder();
