@@ -24,11 +24,7 @@
 
 package com.yandex.money.api.methods;
 
-import com.yandex.money.api.model.AccountStatus;
-import com.yandex.money.api.model.AccountType;
-import com.yandex.money.api.model.Avatar;
-import com.yandex.money.api.model.BalanceDetails;
-import com.yandex.money.api.model.Card;
+import com.yandex.money.api.model.*;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
@@ -39,7 +35,6 @@ import com.yandex.money.api.utils.Strings;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Information of user account.
@@ -48,67 +43,115 @@ import java.util.Objects;
  */
 public class AccountInfo implements MethodResponse {
 
+    /**
+     * account number
+     */
     public final String account;
+
+    /**
+     * current balance
+     */
     public final BigDecimal balance;
+
+    /**
+     * account's currency
+     */
     public final Currency currency;
+
+    /**
+     * account's status
+     */
     public final AccountStatus accountStatus;
+
+    /**
+     * account's type
+     */
     public final AccountType accountType;
+
+    /**
+     * avatar
+     */
     public final Avatar avatar;
+
+    /**
+     * balance details
+     */
     public final BalanceDetails balanceDetails;
+
+    /**
+     * list of linked cards
+     */
     public final List<Card> linkedCards;
+
+    /**
+     * list of additional services
+     */
     public final List<String> additionalServices;
 
     /**
-     * Constructor.
-     *
-     * @param account account's number (required)
-     * @param balance current balance (required)
-     * @param currency selected currency
-     * @param accountStatus account's status
-     * @param accountType account's type
-     * @param avatar avatar's info
-     * @param balanceDetails detailed balance if available
-     * @param linkedCards linked cards
-     * @param additionalServices additional services
+     * list of Yandex.Money cards
      */
+    public final List<YandexMoneyCard> yandexMoneyCards;
+
+    /**
+     * @deprecated use {@link com.yandex.money.api.methods.AccountInfo.Builder} instead
+     */
+    @Deprecated
     public AccountInfo(String account, BigDecimal balance, Currency currency,
                        AccountStatus accountStatus, AccountType accountType, Avatar avatar,
                        BalanceDetails balanceDetails, List<Card> linkedCards,
-                       List<String> additionalServices) {
+                       List<String> additionalServices, List<YandexMoneyCard> yandexMoneyCards) {
+        this(new Builder()
+                .setAccount(account)
+                .setBalance(balance)
+                .setCurrency(currency)
+                .setAccountStatus(accountStatus)
+                .setAccountType(accountType)
+                .setAvatar(avatar)
+                .setBalanceDetails(balanceDetails)
+                .setLinkedCards(linkedCards)
+                .setAdditionalServices(additionalServices)
+                .setYandexMoneyCards(yandexMoneyCards));
+    }
 
-        if (Strings.isNullOrEmpty(account)) {
+    private AccountInfo(Builder builder) {
+        if (Strings.isNullOrEmpty(builder.account)) {
             throw new IllegalArgumentException("account is null or empty");
         }
-        if (balance == null) {
+        if (builder.balance == null) {
             throw new NullPointerException("balance is null");
         }
-        if (currency == null) {
+        if (builder.currency == null) {
             throw new NullPointerException("currency is null");
         }
-        if (accountStatus == null) {
+        if (builder.accountStatus == null) {
             throw new NullPointerException("accountStatus is null");
         }
-        if (accountType == null) {
+        if (builder.accountType == null) {
             throw new NullPointerException("accountType is null");
         }
-        if (balanceDetails == null) {
+        if (builder.balanceDetails == null) {
             throw new NullPointerException("balanceDetails is null");
         }
-        if (linkedCards == null) {
+        if (builder.linkedCards == null) {
             throw new NullPointerException("linkedCards is null");
         }
-        if (additionalServices == null) {
+        if (builder.additionalServices == null) {
             throw new NullPointerException("additionalServices is null");
         }
-        this.account = account;
-        this.balance = balance;
-        this.currency = currency;
-        this.accountStatus = accountStatus;
-        this.accountType = accountType;
-        this.avatar = avatar;
-        this.balanceDetails = balanceDetails;
-        this.linkedCards = Collections.unmodifiableList(linkedCards);
-        this.additionalServices = Collections.unmodifiableList(additionalServices);
+        if (builder.yandexMoneyCards == null) {
+            throw new NullPointerException("yandexMoneyCards is null");
+        }
+        account = builder.account;
+        balance = builder.balance;
+        currency = builder.currency;
+        accountStatus = builder.accountStatus;
+        accountType = builder.accountType;
+        avatar = builder.avatar;
+        balanceDetails = builder.balanceDetails;
+        linkedCards = Collections.unmodifiableList(builder.linkedCards);
+        additionalServices = Collections.unmodifiableList(builder.additionalServices);
+        yandexMoneyCards = Collections.unmodifiableList(builder.yandexMoneyCards);
     }
 
     @Override
@@ -123,34 +166,159 @@ public class AccountInfo implements MethodResponse {
                 ", balanceDetails=" + balanceDetails +
                 ", linkedCards=" + linkedCards +
                 ", additionalServices=" + additionalServices +
+                ", yandexMoneyCards=" + yandexMoneyCards +
                 '}';
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj instanceof AccountInfo) {
-            AccountInfo info = (AccountInfo) obj;
-            return account.equals(info.account) && balance.equals(info.balance) &&
-                    currency == info.currency && accountStatus == info.accountStatus &&
-                    accountType == info.accountType && Objects.equals(avatar, info.avatar) &&
-                    balanceDetails.equals(info.balanceDetails) &&
-                    linkedCards.equals(info.linkedCards) &&
-                    additionalServices.equals(info.additionalServices);
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AccountInfo that = (AccountInfo) o;
+
+        return account.equals(that.account) && balance.equals(that.balance) && currency == that.currency &&
+                accountStatus == that.accountStatus && accountType == that.accountType &&
+                !(avatar != null ? !avatar.equals(that.avatar) : that.avatar != null) &&
+                balanceDetails.equals(that.balanceDetails) && linkedCards.equals(that.linkedCards) &&
+                additionalServices.equals(that.additionalServices) && yandexMoneyCards.equals(that.yandexMoneyCards);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(account, balance, currency, accountStatus, accountType, avatar,
-                balanceDetails, linkedCards, additionalServices);
+        int result = account.hashCode();
+        result = 31 * result + balance.hashCode();
+        result = 31 * result + currency.hashCode();
+        result = 31 * result + accountStatus.hashCode();
+        result = 31 * result + accountType.hashCode();
+        result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
+        result = 31 * result + balanceDetails.hashCode();
+        result = 31 * result + linkedCards.hashCode();
+        result = 31 * result + additionalServices.hashCode();
+        result = 31 * result + yandexMoneyCards.hashCode();
+        return result;
     }
 
+    /**
+     * @deprecated use {@link #accountStatus} instead
+     */
+    @Deprecated
     public boolean isIdentified() {
         return accountStatus == AccountStatus.IDENTIFIED;
+    }
+
+    /**
+     * Creates {@link AccountInfo} instance.
+     */
+    public static class Builder {
+
+        private String account;
+        private BigDecimal balance;
+        private Currency currency;
+        private AccountStatus accountStatus;
+        private AccountType accountType;
+        private Avatar avatar;
+        private BalanceDetails balanceDetails;
+        private List<Card> linkedCards;
+        private List<String> additionalServices;
+        private List<YandexMoneyCard> yandexMoneyCards;
+
+        /**
+         * @param account account's number
+         * @return itself
+         */
+        public Builder setAccount(String account) {
+            this.account = account;
+            return this;
+        }
+
+        /**
+         * @param balance current balance
+         * @return itself
+         */
+        public Builder setBalance(BigDecimal balance) {
+            this.balance = balance;
+            return this;
+        }
+
+        /**
+         * @param currency account's currency
+         * @return itself
+         */
+        public Builder setCurrency(Currency currency) {
+            this.currency = currency;
+            return this;
+        }
+
+        /**
+         * @param accountStatus account's status
+         * @return itself
+         */
+        public Builder setAccountStatus(AccountStatus accountStatus) {
+            this.accountStatus = accountStatus;
+            return this;
+        }
+
+        /**
+         * @param accountType account's type
+         * @return itself
+         */
+        public Builder setAccountType(AccountType accountType) {
+            this.accountType = accountType;
+            return this;
+        }
+
+        /**
+         * @param avatar avatar
+         * @return itself
+         */
+        public Builder setAvatar(Avatar avatar) {
+            this.avatar = avatar;
+            return this;
+        }
+
+        /**
+         * @param balanceDetails balance details
+         * @return itself
+         */
+        public Builder setBalanceDetails(BalanceDetails balanceDetails) {
+            this.balanceDetails = balanceDetails;
+            return this;
+        }
+
+        /**
+         * @param linkedCards list of linked cards
+         * @return itself
+         */
+        public Builder setLinkedCards(List<Card> linkedCards) {
+            this.linkedCards = linkedCards;
+            return this;
+        }
+
+        /**
+         * @param additionalServices list of additional services
+         * @return itself
+         */
+        public Builder setAdditionalServices(List<String> additionalServices) {
+            this.additionalServices = additionalServices;
+            return this;
+        }
+
+        /**
+         * @param yandexMoneyCards list of Yandex.Money cards
+         * @return itself
+         */
+        public Builder setYandexMoneyCards(List<YandexMoneyCard> yandexMoneyCards) {
+            this.yandexMoneyCards = yandexMoneyCards;
+            return this;
+        }
+
+        /**
+         * @return {@link AccountInfo} instance
+         */
+        public AccountInfo createAccountInfo() {
+            return new AccountInfo(this);
+        }
     }
 
     /**

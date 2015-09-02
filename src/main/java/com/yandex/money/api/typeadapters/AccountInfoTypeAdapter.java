@@ -24,28 +24,17 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
+import com.google.gson.*;
 import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.JsonUtils;
-import com.yandex.money.api.model.AccountStatus;
-import com.yandex.money.api.model.AccountType;
-import com.yandex.money.api.model.Avatar;
-import com.yandex.money.api.model.BalanceDetails;
-import com.yandex.money.api.model.Card;
+import com.yandex.money.api.model.*;
 import com.yandex.money.api.utils.Currency;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.methods.JsonUtils.getArray;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryBigDecimal;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
-import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
+import static com.yandex.money.api.methods.JsonUtils.*;
 
 /**
  * Type adapter for {@link AccountInfo}.
@@ -65,6 +54,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
     private static final String MEMBER_SERVICES_ADDITIONAL = "services_additional";
     private static final String MEMBER_STATUS = "account_status";
     private static final String MEMBER_TYPE = "account_type";
+    private static final String MEMBER_YANDEX_MONEY_CARDS = "ymoney_cards";
 
     private AccountInfoTypeAdapter() {
     }
@@ -105,17 +95,28 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
 
         List<Card> linkedCards = object.has(MEMBER_CARDS_LINKED) ?
                 getArray(object, MEMBER_CARDS_LINKED, CardTypeAdapter.getInstance()) :
-                new ArrayList<Card>();
+                Collections.<Card>emptyList();
 
         List<String> additionalServices = object.has(MEMBER_SERVICES_ADDITIONAL) ?
                 getArray(object, MEMBER_SERVICES_ADDITIONAL, StringTypeAdapter.getInstance()) :
-                new ArrayList<String>();
+                Collections.<String>emptyList();
 
-        return new AccountInfo(getMandatoryString(object, MEMBER_ACCOUNT),
-                getMandatoryBigDecimal(object, MEMBER_BALANCE), currency,
-                AccountStatus.parse(getMandatoryString(object, MEMBER_STATUS)),
-                AccountType.parse(getMandatoryString(object, MEMBER_TYPE)),
-                avatar, balanceDetails, linkedCards, additionalServices);
+        List<YandexMoneyCard> yandexMoneyCards = object.has(MEMBER_YANDEX_MONEY_CARDS) ?
+                getArray(object, MEMBER_YANDEX_MONEY_CARDS, YandexMoneyCardTypeAdapter.getInstance()) :
+                Collections.<YandexMoneyCard>emptyList();
+
+        return new AccountInfo.Builder()
+                .setAccount(getMandatoryString(object, MEMBER_ACCOUNT))
+                .setBalance(getMandatoryBigDecimal(object, MEMBER_BALANCE))
+                .setCurrency(currency)
+                .setAccountStatus(AccountStatus.parse(getMandatoryString(object, MEMBER_STATUS)))
+                .setAccountType(AccountType.parse(getMandatoryString(object, MEMBER_TYPE)))
+                .setAvatar(avatar)
+                .setBalanceDetails(balanceDetails)
+                .setLinkedCards(linkedCards)
+                .setAdditionalServices(additionalServices)
+                .setYandexMoneyCards(yandexMoneyCards)
+                .createAccountInfo();
     }
 
     @Override
@@ -142,6 +143,11 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         if (!src.additionalServices.isEmpty()) {
             object.add(MEMBER_SERVICES_ADDITIONAL,
                     toJsonArray(src.additionalServices, StringTypeAdapter.getInstance()));
+        }
+
+        if (!src.yandexMoneyCards.isEmpty()) {
+            object.add(MEMBER_YANDEX_MONEY_CARDS,
+                    toJsonArray(src.yandexMoneyCards, YandexMoneyCardTypeAdapter.getInstance()));
         }
 
         return object;

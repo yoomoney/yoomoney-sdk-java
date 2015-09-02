@@ -89,9 +89,18 @@ public class ModelTests {
     }
 
     private static AccountInfo createAccountInfo() {
-        return new AccountInfo("account", BigDecimal.TEN, Currency.RUB,
-                AccountStatus.IDENTIFIED, AccountType.PERSONAL, null, createBalanceDetails(),
-                Arrays.asList(createCard(), createCard()), Arrays.asList("service1", "service2"));
+        return new AccountInfo.Builder()
+                .setAccount("account")
+                .setBalance(BigDecimal.TEN)
+                .setCurrency(Currency.RUB)
+                .setAccountStatus(AccountStatus.IDENTIFIED)
+                .setAccountType(AccountType.PERSONAL)
+                .setAvatar(null)
+                .setBalanceDetails(createBalanceDetails())
+                .setLinkedCards(Arrays.asList(createCard(), createCard()))
+                .setAdditionalServices(Arrays.asList("service1", "service2"))
+                .setYandexMoneyCards(Arrays.asList(createYandexMoneyCard(), createYandexMoneyCard()))
+                .createAccountInfo();
     }
 
     private static Avatar createAvatar() {
