@@ -25,23 +25,12 @@
 package com.yandex.money.test;
 
 import com.yandex.money.api.methods.AccountInfo;
-import com.yandex.money.api.model.AccountStatus;
-import com.yandex.money.api.model.AccountType;
-import com.yandex.money.api.model.Avatar;
-import com.yandex.money.api.model.BalanceDetails;
-import com.yandex.money.api.model.Card;
+import com.yandex.money.api.model.*;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.StdFee;
-import com.yandex.money.api.typeadapters.AccountInfoTypeAdapter;
-import com.yandex.money.api.typeadapters.AvatarTypeAdapter;
-import com.yandex.money.api.typeadapters.BalanceDetailsTypeAdapter;
-import com.yandex.money.api.typeadapters.CardTypeAdapter;
-import com.yandex.money.api.typeadapters.ErrorTypeAdapter;
-import com.yandex.money.api.typeadapters.FeeTypeAdapter;
-import com.yandex.money.api.typeadapters.TypeAdapter;
+import com.yandex.money.api.typeadapters.*;
 import com.yandex.money.api.utils.Currency;
-
 import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -75,6 +64,16 @@ public class ModelTests {
     }
 
     @Test
+    public void testExternalCard() {
+        performTest(createExternalCard(), ExternalCardTypeAdapter.getInstance());
+    }
+
+    @Test
+    public void testYandedMoneyCard() {
+        performTest(createYandexMoneyCard(), YandexMoneyCardTypeAdapter.getInstance());
+    }
+
+    @Test
     public void testError() {
         performTest(Error.TECHNICAL_ERROR, ErrorTypeAdapter.getInstance());
     }
@@ -105,6 +104,28 @@ public class ModelTests {
     }
 
     private static Card createCard() {
-        return new Card("id", "panFragment", Card.Type.MASTER_CARD);
+        Card.Builder builder = (Card.Builder) new Card.Builder()
+                .setPanFragment("panFragment")
+                .setType(Card.Type.MASTER_CARD)
+                .setId("id");
+        return builder.create();
+    }
+
+    private static ExternalCard createExternalCard() {
+        ExternalCard.Builder builder = (ExternalCard.Builder) new ExternalCard.Builder()
+                .setFundingSourceType("fundingSourceType")
+                .setMoneySourceToken("moneySourceToken")
+                .setType(Card.Type.AMERICAN_EXPRESS)
+                .setPanFragment("1234 56** **** 7890");
+        return builder.create();
+    }
+
+    private static YandexMoneyCard createYandexMoneyCard() {
+        YandexMoneyCard.Builder builder = (YandexMoneyCard.Builder) new YandexMoneyCard.Builder()
+                .setState(YandexMoneyCard.State.ACTIVE)
+                .setType(Card.Type.MASTER_CARD)
+                .setPanFragment("1234 56** **** 7890")
+                .setId("id");
+        return builder.create();
     }
 }

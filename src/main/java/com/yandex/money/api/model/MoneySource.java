@@ -36,13 +36,11 @@ public abstract class MoneySource {
      */
     public final String id;
 
-    /**
-     * Constructor.
-     *
-     * @param id unique money source id
-     */
-    protected MoneySource(String id) {
-        this.id = id;
+    MoneySource(Builder builder) {
+        if (builder == null) {
+            throw new NullPointerException("builder is null");
+        }
+        id = builder.id;
     }
 
     @Override
@@ -50,5 +48,32 @@ public abstract class MoneySource {
         return "MoneySource{" +
                 "id='" + id + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MoneySource that = (MoneySource) o;
+
+        return !(id != null ? !id.equals(that.id) : that.id != null);
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
+    }
+
+    public static abstract class Builder {
+
+        private String id;
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public abstract MoneySource create();
     }
 }

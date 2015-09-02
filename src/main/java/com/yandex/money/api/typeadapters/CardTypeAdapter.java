@@ -24,11 +24,7 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
+import com.google.gson.*;
 import com.yandex.money.api.model.Card;
 
 import java.lang.reflect.Type;
@@ -43,10 +39,6 @@ import static com.yandex.money.api.methods.JsonUtils.getString;
 public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
 
     private static final CardTypeAdapter INSTANCE = new CardTypeAdapter();
-
-    private static final String MEMBER_ID = "id";
-    private static final String MEMBER_PAN_FRAGMENT = "pan_fragment";
-    private static final String MEMBER_TYPE = "type";
 
     private CardTypeAdapter() {
     }
@@ -66,18 +58,50 @@ public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
     @Override
     public Card deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
+
         JsonObject object = json.getAsJsonObject();
-        return new Card(getString(object, MEMBER_ID),
-                getString(object, MEMBER_PAN_FRAGMENT),
-                Card.Type.parse(getString(object, MEMBER_TYPE)));
+        Card.Builder builder = new Card.Builder();
+        Delegate.deserialize(object, builder);
+        return builder.create();
     }
 
     @Override
     public JsonElement serialize(Card src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty(MEMBER_ID, src.id);
-        object.addProperty(MEMBER_PAN_FRAGMENT, src.panFragment);
-        object.addProperty(MEMBER_TYPE, src.type.name);
+        Delegate.serialize(object, src);
         return object;
+    }
+
+    static final class Delegate {
+
+        private static final String MEMBER_PAN_FRAGMENT = "pan_fragment";
+        private static final String MEMBER_TYPE = "type";
+
+        private Delegate() {
+        }
+
+        static <T extends Card.Builder> void deserialize(JsonObject object, T builder) {
+            if (object == null) {
+                throw new NullPointerException("object is null");
+            }
+            if (builder == null) {
+                throw new NullPointerException("builder is null");
+            }
+            builder.setPanFragment(getString(object, MEMBER_PAN_FRAGMENT))
+                    .setType(Card.Type.parse(getString(object, MEMBER_TYPE)));
+            MoneySourceTypeAdapter.Delegate.deserialize(object, builder);
+        }
+
+        static <T extends Card> void serialize(JsonObject object, T value) {
+            if (object == null) {
+                throw new NullPointerException("object is null");
+            }
+            if (value == null) {
+                throw new NullPointerException("value is null");
+            }
+            object.addProperty(MEMBER_PAN_FRAGMENT, value.panFragment);
+            object.addProperty(MEMBER_TYPE, value.type.name);
+            MoneySourceTypeAdapter.Delegate.serialize(object, value);
+        }
     }
 }

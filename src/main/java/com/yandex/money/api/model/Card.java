@@ -27,8 +27,6 @@ package com.yandex.money.api.model;
 import com.google.gson.JsonElement;
 import com.yandex.money.api.typeadapters.CardTypeAdapter;
 
-import java.util.Objects;
-
 /**
  * Bank card info.
  *
@@ -52,14 +50,17 @@ public class Card extends MoneySource {
      * @param id unique card id
      * @param panFragment panned fragment of card's number
      * @param type type of a card
+     * @deprecated use {@link com.yandex.money.api.model.Card.Builder} instead
      */
+    @Deprecated
     public Card(String id, String panFragment, Type type) {
-        super(id);
-        if (type == null) {
-            throw new NullPointerException("type is null");
-        }
-        this.panFragment = panFragment;
-        this.type = type;
+        this((Builder) new Builder().setPanFragment(panFragment).setType(type).setId(id));
+    }
+
+    Card(Builder builder) {
+        super(builder);
+        panFragment = builder.panFragment;
+        type = builder.type;
     }
 
     /**
@@ -83,22 +84,30 @@ public class Card extends MoneySource {
     @Override
     public String toString() {
         return "Card{" +
-                "panFragment='" + panFragment + '\'' +
-                ", type='" + type + '\'' +
+                "id='" + id + '\'' +
+                ", panFragment='" + panFragment + '\'' +
+                ", type=" + type +
                 '}';
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj instanceof Card) {
-            Card card = (Card) obj;
-            return id.equals(card.id) && type == card.type &&
-                    Objects.equals(panFragment, card.panFragment);
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        Card card = (Card) o;
+
+        return !(panFragment != null ? !panFragment.equals(card.panFragment) : card.panFragment != null) &&
+                type == card.type;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (panFragment != null ? panFragment.hashCode() : 0);
+        result = 31 * result + type.hashCode();
+        return result;
     }
 
     /**
@@ -139,6 +148,30 @@ public class Card extends MoneySource {
                 }
             }
             return UNKNOWN;
+        }
+    }
+
+    public static class Builder extends MoneySource.Builder {
+
+        private String panFragment;
+        private Type type = Type.UNKNOWN;
+
+        public Builder setPanFragment(String panFragment) {
+            this.panFragment = panFragment;
+            return this;
+        }
+
+        public Builder setType(Type type) {
+            if (type == null) {
+                throw new NullPointerException("type is null");
+            }
+            this.type = type;
+            return this;
+        }
+
+        @Override
+        public Card create() {
+            return new Card(this);
         }
     }
 }

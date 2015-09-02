@@ -24,18 +24,10 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
+import com.google.gson.*;
 import com.yandex.money.api.methods.params.PaymentParams;
-import com.yandex.money.api.model.AccountStatus;
-import com.yandex.money.api.model.AccountType;
+import com.yandex.money.api.model.*;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.MoneySource;
-import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.CardTypeAdapter;
@@ -347,7 +339,7 @@ public class RequestPayment extends BaseRequestPayment {
                 if (moneySource.has(walletMember)) {
                     JsonObject wallet = moneySource.getAsJsonObject(walletMember);
                     if (JsonUtils.getMandatoryBoolean(wallet, "allowed")) {
-                        moneySources.add(new Wallet());
+                        moneySources.add(Wallet.INSTANCE);
                     }
                 }
                 final String cardsMember = "cards";

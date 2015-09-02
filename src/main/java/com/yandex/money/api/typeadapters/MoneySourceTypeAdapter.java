@@ -22,25 +22,46 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model;
+package com.yandex.money.api.typeadapters;
+
+import com.google.gson.JsonObject;
+import com.yandex.money.api.model.MoneySource;
+
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
- * Wallet. It used for payments from user's account.
- *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class Wallet extends MoneySource {
+public final class MoneySourceTypeAdapter {
 
-    public static final Wallet INSTANCE = new Wallet();
-
-    Wallet() {
-        super(new Builder().setId("wallet"));
+    private MoneySourceTypeAdapter() {
     }
 
-    static class Builder extends MoneySource.Builder {
-        @Override
-        public Wallet create() {
-            return INSTANCE;
+    static final class Delegate {
+
+        private static final String MEMBER_ID = "id";
+
+        private Delegate() {
+        }
+
+        static <T extends MoneySource.Builder> void deserialize(JsonObject object, T builder) {
+            if (object == null) {
+                throw new NullPointerException("object is null");
+            }
+            if (builder == null) {
+                throw new NullPointerException("builder is null");
+            }
+            builder.setId(getString(object, MEMBER_ID));
+        }
+
+        static <T extends MoneySource> void serialize(JsonObject object, T value) {
+            if (object == null) {
+                throw new NullPointerException("object is null");
+            }
+            if (value == null) {
+                throw new NullPointerException("builder is null");
+            }
+            object.addProperty(MEMBER_ID, value.id);
         }
     }
 }
