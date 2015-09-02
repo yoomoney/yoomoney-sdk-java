@@ -14,7 +14,7 @@ import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public abstract class ContainerTypeAdapter<T, U extends Container<T>,
+abstract class ContainerTypeAdapter<T, U extends Container<T>,
         K extends Container.Builder<T>> extends ComponentTypeAdapter<U, K> {
 
     private static final String MEMBER_LABEL = "label";
