@@ -24,43 +24,44 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializer;
+import com.google.gson.JsonObject;
+import com.yandex.money.api.model.MoneySource;
+
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
- * Base class for type adapters.
- *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public abstract class BaseTypeAdapter<T>
-        implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
+public final class MoneySourceTypeAdapter {
 
-    private final Gson gson = new GsonBuilder()
-            .registerTypeHierarchyAdapter(getType(), this)
-            .create();
-
-    @Override
-    public final T fromJson(String json) {
-        return gson.fromJson(json, getType());
+    private MoneySourceTypeAdapter() {
     }
 
-    @Override
-    public final T fromJson(JsonElement element) {
-        return gson.fromJson(element, getType());
-    }
+    static final class Delegate {
 
-    @Override
-    public final String toJson(T value) {
-        return gson.toJson(value);
-    }
+        private static final String MEMBER_ID = "id";
 
-    @Override
-    public final JsonElement toJsonTree(T value) {
-        return gson.toJsonTree(value);
-    }
+        private Delegate() {
+        }
 
-    protected abstract Class<T> getType();
+        static <T extends MoneySource.Builder> void deserialize(JsonObject object, T builder) {
+            if (object == null) {
+                throw new NullPointerException("object is null");
+            }
+            if (builder == null) {
+                throw new NullPointerException("builder is null");
+            }
+            builder.setId(getString(object, MEMBER_ID));
+        }
+
+        static <T extends MoneySource> void serialize(JsonObject object, T value) {
+            if (object == null) {
+                throw new NullPointerException("object is null");
+            }
+            if (value == null) {
+                throw new NullPointerException("builder is null");
+            }
+            object.addProperty(MEMBER_ID, value.id);
+        }
+    }
 }

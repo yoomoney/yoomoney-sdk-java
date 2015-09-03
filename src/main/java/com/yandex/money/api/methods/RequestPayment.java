@@ -347,7 +347,7 @@ public class RequestPayment extends BaseRequestPayment {
                 if (moneySource.has(walletMember)) {
                     JsonObject wallet = moneySource.getAsJsonObject(walletMember);
                     if (JsonUtils.getMandatoryBoolean(wallet, "allowed")) {
-                        moneySources.add(new Wallet());
+                        moneySources.add(Wallet.INSTANCE);
                     }
                 }
                 final String cardsMember = "cards";

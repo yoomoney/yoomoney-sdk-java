@@ -30,7 +30,17 @@ package com.yandex.money.api.model;
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class Wallet extends MoneySource {
-    public Wallet() {
-        super("wallet");
+
+    public static final Wallet INSTANCE = new Wallet();
+
+    Wallet() {
+        super(new Builder().setId("wallet"));
+    }
+
+    static class Builder extends MoneySource.Builder {
+        @Override
+        public Wallet create() {
+            return INSTANCE;
+        }
     }
 }
