@@ -18,16 +18,18 @@ import com.yandex.money.api.model.showcase.components.uicontrol.TextArea;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter;
 
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class ComponentsTypeProvider {
 
-    private static final HashMap<Component.Type, Type> TYPE_MAPPING = new HashMap<>();
+    private static Map<Component.Type, Type> TYPE_MAPPING = new HashMap<>();
 
-    private static final HashMap<Type, String> REVERSE_TYPE_MAPPING = new HashMap<>();
+    private static Map<Type, String> REVERSE_TYPE_MAPPING = new HashMap<>();
 
     static {
         TYPE_MAPPING.put(Component.Type.AMOUNT, Amount.class);
@@ -44,9 +46,12 @@ public final class ComponentsTypeProvider {
         TYPE_MAPPING.put(Component.Type.TEXT, Text.class);
         TYPE_MAPPING.put(Component.Type.TEXT_AREA, TextArea.class);
 
+        TYPE_MAPPING = Collections.unmodifiableMap(TYPE_MAPPING);
+
         for (HashMap.Entry<Component.Type, Type> item : TYPE_MAPPING.entrySet()) {
             REVERSE_TYPE_MAPPING.put(item.getValue(), item.getKey().code);
         }
+        REVERSE_TYPE_MAPPING = Collections.unmodifiableMap(REVERSE_TYPE_MAPPING);
     }
 
     private ComponentsTypeProvider() {

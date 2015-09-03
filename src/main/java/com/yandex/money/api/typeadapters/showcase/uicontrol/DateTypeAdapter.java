@@ -33,6 +33,7 @@ public abstract class DateTypeAdapter<T extends Date, U extends Date.Builder>
                     return builder.create();
                 }
             };
+
     private static final String MEMBER_MIN = "min";
     private static final String MEMBER_MAX = "max";
 
