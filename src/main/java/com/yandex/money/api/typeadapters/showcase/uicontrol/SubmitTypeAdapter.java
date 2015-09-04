@@ -2,6 +2,8 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
 import com.yandex.money.api.model.showcase.components.uicontrol.Submit;
 
+import java.lang.reflect.Type;
+
 /**
  * Type adapter for {@link Submit} component.
  *
@@ -22,5 +24,10 @@ public final class SubmitTypeAdapter extends ControlTypeAdapter<Submit, Submit.B
     @Override
     protected Submit.Builder createBuilderInstance() {
         return new Submit.Builder();
+    }
+
+    @Override
+    protected Type getType() {
+        return Submit.class;
     }
 }

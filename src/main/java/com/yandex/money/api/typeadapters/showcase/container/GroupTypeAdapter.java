@@ -7,6 +7,8 @@ import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.container.Group;
 import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
 
+import java.lang.reflect.Type;
+
 /**
  * Type serializer for {@link Group} component container.
  *
@@ -37,5 +39,10 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
     @Override
     protected Component deserializeItem(JsonElement src, JsonDeserializationContext context) {
         return context.deserialize(src, ComponentsTypeProvider.getJsonComponentType(src));
+    }
+
+    @Override
+    protected Type getType() {
+        return Group.class;
     }
 }

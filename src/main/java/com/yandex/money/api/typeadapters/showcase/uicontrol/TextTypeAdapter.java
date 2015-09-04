@@ -6,6 +6,8 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrol.Text;
 
+import java.lang.reflect.Type;
+
 /**
  * Base type adapter for subclasses of {@link Text} component.
  *
@@ -19,6 +21,11 @@ public abstract class TextTypeAdapter<T extends Text, U extends Text.Builder>
      */
     public static final TextTypeAdapter<Text, Text.Builder> INSTANCE = new TextTypeAdapter<Text,
             Text.Builder>() {
+
+        @Override
+        protected Type getType() {
+            return Text.class;
+        }
 
         @Override
         protected Text.Builder createBuilderInstance() {

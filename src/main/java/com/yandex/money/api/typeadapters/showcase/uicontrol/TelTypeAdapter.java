@@ -2,6 +2,8 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
 import com.yandex.money.api.model.showcase.components.uicontrol.Tel;
 
+import java.lang.reflect.Type;
+
 /**
  * Type adapter for {@link Tel} component.
  *
@@ -17,6 +19,11 @@ public final class TelTypeAdapter extends ParameterControlTypeAdapter<Tel, Tel.B
     @Override
     protected Tel.Builder createBuilderInstance() {
         return new Tel.Builder();
+    }
+
+    @Override
+    protected Type getType() {
+        return Tel.class;
     }
 
     @Override

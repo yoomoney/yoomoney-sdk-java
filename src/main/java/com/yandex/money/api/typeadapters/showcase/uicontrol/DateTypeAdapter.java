@@ -8,6 +8,8 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Date;
 
 import org.joda.time.format.DateTimeFormatter;
 
+import java.lang.reflect.Type;
+
 
 /**
  * Base type adapter for subclasses of {@link Date} component.
@@ -31,6 +33,11 @@ public abstract class DateTypeAdapter<T extends Date, U extends Date.Builder>
                 @Override
                 protected Date createInstance(Date.Builder builder) {
                     return builder.create();
+                }
+
+                @Override
+                protected Type getType() {
+                    return Date.class;
                 }
             };
 

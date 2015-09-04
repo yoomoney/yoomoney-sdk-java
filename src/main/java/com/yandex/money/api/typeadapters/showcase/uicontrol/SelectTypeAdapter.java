@@ -11,6 +11,8 @@ import com.yandex.money.api.model.showcase.components.container.Group;
 import com.yandex.money.api.model.showcase.components.uicontrol.Select;
 import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
 
+import java.lang.reflect.Type;
+
 /**
  * Type adapter for {@link @Select} component.
  *
@@ -82,6 +84,11 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
     @Override
     protected Select createInstance(Select.Builder builder) {
         return builder.create();
+    }
+
+    @Override
+    protected Type getType() {
+        return Select.class;
     }
 
     private static JsonArray serializeOptionGroup(Group group, JsonSerializationContext context) {

@@ -6,6 +6,8 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrol.Number;
 
+import java.lang.reflect.Type;
+
 /**
  * Base type adapter for subclasses of {@link Number}.
  *
@@ -28,6 +30,11 @@ public abstract class NumberTypeAdapter<T extends Number, U extends Number.Build
                 @Override
                 protected Number createInstance(Number.Builder builder) {
                     return builder.create();
+                }
+
+                @Override
+                protected Type getType() {
+                    return Number.class;
                 }
             };
 

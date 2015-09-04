@@ -7,6 +7,8 @@ import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.components.uicontrol.Amount;
 import com.yandex.money.api.utils.Currency;
 
+import java.lang.reflect.Type;
+
 /**
  * Type adapter for {@link Amount} component.
  *
@@ -47,5 +49,10 @@ public final class AmountTypeAdapter extends NumberTypeAdapter<Amount, Amount.Bu
     @Override
     protected Amount createInstance(Amount.Builder builder) {
         return builder.create();
+    }
+
+    @Override
+    protected Type getType() {
+        return Amount.class;
     }
 }
