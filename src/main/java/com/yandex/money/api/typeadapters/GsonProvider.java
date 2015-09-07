@@ -22,25 +22,31 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model;
+package com.yandex.money.api.typeadapters;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 /**
- * Wallet. It used for payments from user's account.
- *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class Wallet extends MoneySource {
+public final class GsonProvider {
 
-    public static final Wallet INSTANCE = new Wallet();
+    private static final GsonBuilder BUILDER = new GsonBuilder();
 
-    Wallet() {
-        super(new Builder().setId("wallet"));
+    private static Gson gson = BUILDER.create();
+    private static boolean hasNewTypeAdapter = false;
+
+    public static synchronized Gson getGson() {
+        if (hasNewTypeAdapter) {
+            gson = BUILDER.create();
+            hasNewTypeAdapter = false;
+        }
+        return gson;
     }
 
-    static class Builder extends MoneySource.Builder {
-        @Override
-        public Wallet create() {
-            return INSTANCE;
-        }
+    public static synchronized <T> void registerTypeHierarchyAdapter(Class<T> cls, TypeAdapter<T> typeAdapter) {
+        BUILDER.registerTypeHierarchyAdapter(cls, typeAdapter);
+        hasNewTypeAdapter = true;
     }
 }

@@ -24,14 +24,8 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.yandex.money.api.methods.JsonUtils;
+import com.yandex.money.api.typeadapters.ExternalCardTypeAdapter;
 import com.yandex.money.api.utils.Strings;
 
 /**
@@ -49,50 +43,85 @@ public class ExternalCard extends Card {
      *
      * @param panFragment panned fragment of card's number
      * @param type type of a card
+     * @deprecated use {@link com.yandex.money.api.model.ExternalCard.Builder} instead
      */
+    @Deprecated
     public ExternalCard(String panFragment, Type type, String fundingSourceType,
                         String moneySourceToken) {
 
-        super(null, panFragment, type);
-        if (Strings.isNullOrEmpty(fundingSourceType)) {
-            throw new NullPointerException("fundingSourceType is null or empty");
-        }
-        if (Strings.isNullOrEmpty(moneySourceToken)) {
-            throw new NullPointerException("money source token is null or empty");
-        }
-        this.fundingSourceType = fundingSourceType;
-        this.moneySourceToken = moneySourceToken;
+        this((Builder) new Builder()
+                .setFundingSourceType(fundingSourceType)
+                .setMoneySourceToken(moneySourceToken)
+                .setPanFragment(panFragment)
+                .setType(type));
     }
 
+    ExternalCard(Builder builder) {
+        super(builder);
+        if (Strings.isNullOrEmpty(builder.fundingSourceType)) {
+            throw new NullPointerException("fundingSourceType is null or empty");
+        }
+        if (Strings.isNullOrEmpty(builder.moneySourceToken)) {
+            throw new NullPointerException("money source token is null or empty");
+        }
+        fundingSourceType = builder.fundingSourceType;
+        moneySourceToken = builder.moneySourceToken;
+    }
+
+    @Deprecated
     public static ExternalCard createFromJson(JsonElement jsonElement) {
-        return buildGson().fromJson(jsonElement, ExternalCard.class);
+        return ExternalCardTypeAdapter.getInstance().fromJson(jsonElement);
     }
 
     @Override
     public String toString() {
         return "ExternalCard{" +
-                "fundingSourceType='" + fundingSourceType + '\'' +
+                "id='" + id + '\'' +
+                ", panFragment='" + panFragment + '\'' +
+                ", type=" + type +
+                ", fundingSourceType='" + fundingSourceType + '\'' +
                 ", moneySourceToken='" + moneySourceToken + '\'' +
                 '}';
     }
 
-    private static Gson buildGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(ExternalCard.class, new Deserializer())
-                .create();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ExternalCard that = (ExternalCard) o;
+
+        return fundingSourceType.equals(that.fundingSourceType) &&
+                moneySourceToken.equals(that.moneySourceToken);
     }
 
-    private static final class Deserializer implements JsonDeserializer<ExternalCard> {
-        @Override
-        public ExternalCard deserialize(JsonElement json, java.lang.reflect.Type typeOfT,
-                                        JsonDeserializationContext context)
-                throws JsonParseException {
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + fundingSourceType.hashCode();
+        result = 31 * result + moneySourceToken.hashCode();
+        return result;
+    }
 
-            JsonObject object = json.getAsJsonObject();
-            return new ExternalCard(JsonUtils.getMandatoryString(object, "pan_fragment"),
-                    Type.parse(JsonUtils.getMandatoryString(object, "payment_card_type")),
-                    JsonUtils.getMandatoryString(object, "type"),
-                    JsonUtils.getMandatoryString(object, "money_source_token"));
+    public static class Builder extends Card.Builder {
+
+        private String fundingSourceType;
+        private String moneySourceToken;
+
+        public Builder setFundingSourceType(String fundingSourceType) {
+            this.fundingSourceType = fundingSourceType;
+            return this;
+        }
+
+        public Builder setMoneySourceToken(String moneySourceToken) {
+            this.moneySourceToken = moneySourceToken;
+            return this;
+        }
+
+        @Override
+        public ExternalCard create() {
+            return new ExternalCard(this);
         }
     }
 }

@@ -24,11 +24,12 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializer;
+
+import static com.yandex.money.api.typeadapters.GsonProvider.getGson;
+import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeHierarchyAdapter;
 
 /**
  * Base class for type adapters.
@@ -38,28 +39,28 @@ import com.google.gson.JsonSerializer;
 public abstract class BaseTypeAdapter<T>
         implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
 
-    private final Gson GSON = new GsonBuilder()
-            .registerTypeHierarchyAdapter(getType(), this)
-            .create();
+    public BaseTypeAdapter() {
+        registerTypeHierarchyAdapter(getType(), this);
+    }
 
     @Override
     public final T fromJson(String json) {
-        return GSON.fromJson(json, getType());
+        return getGson().fromJson(json, getType());
     }
 
     @Override
     public final T fromJson(JsonElement element) {
-        return GSON.fromJson(element, getType());
+        return getGson().fromJson(element, getType());
     }
 
     @Override
     public final String toJson(T value) {
-        return GSON.toJson(value);
+        return getGson().toJson(value);
     }
 
     @Override
     public final JsonElement toJsonTree(T value) {
-        return GSON.toJsonTree(value);
+        return getGson().toJsonTree(value);
     }
 
     protected abstract Class<T> getType();

@@ -29,11 +29,10 @@ import com.squareup.okhttp.OkHttpClient;
 import com.yandex.money.api.utils.Language;
 import com.yandex.money.api.utils.Strings;
 
-import java.security.GeneralSecurityException;
-import java.util.concurrent.TimeUnit;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+import java.security.GeneralSecurityException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Default implementation of {@link com.yandex.money.api.net.ApiClient} interface.
