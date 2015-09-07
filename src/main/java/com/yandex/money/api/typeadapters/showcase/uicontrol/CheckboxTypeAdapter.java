@@ -5,8 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
 
-import java.lang.reflect.Type;
-
 /**
  * Type adapter for {@link Checkbox} component.
  *
@@ -46,7 +44,7 @@ public final class CheckboxTypeAdapter extends ParameterControlTypeAdapter<Check
     }
 
     @Override
-    protected Type getType() {
+    protected Class<Checkbox> getType() {
         return Checkbox.class;
     }
 }

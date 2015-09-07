@@ -6,8 +6,6 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrol.TextArea;
 
-import java.lang.reflect.Type;
-
 /**
  * Base type adapter for subclasses of {@link TextArea} component.
  *
@@ -28,7 +26,7 @@ public abstract class TextAreaTypeAdapter<T extends TextArea, U extends TextArea
                 }
 
                 @Override
-                protected Type getType() {
+                protected Class<TextArea> getType() {
                     return TextArea.class;
                 }
 

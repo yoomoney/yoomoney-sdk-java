@@ -5,9 +5,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.components.uicontrol.Amount;
+import com.yandex.money.api.typeadapters.FeeTypeAdapter;
 import com.yandex.money.api.utils.Currency;
-
-import java.lang.reflect.Type;
 
 /**
  * Type adapter for {@link Amount} component.
@@ -22,6 +21,8 @@ public final class AmountTypeAdapter extends NumberTypeAdapter<Amount, Amount.Bu
     private static final String MEMBER_FEE = "fee";
 
     private AmountTypeAdapter() {
+        // register FeeTypeAdapter to GSON
+        FeeTypeAdapter.getInstance();
     }
 
     @Override
@@ -52,7 +53,7 @@ public final class AmountTypeAdapter extends NumberTypeAdapter<Amount, Amount.Bu
     }
 
     @Override
-    protected Type getType() {
+    protected Class<Amount> getType() {
         return Amount.class;
     }
 }

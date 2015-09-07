@@ -8,8 +8,6 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.TextBlock;
 import com.yandex.money.api.model.showcase.components.container.Paragraph;
 
-import java.lang.reflect.Type;
-
 /**
  * Type serializer for {@link Paragraph} component container.
  *
@@ -61,7 +59,7 @@ public final class ParagraphTypeAdapter
     }
 
     @Override
-    protected Type getType() {
+    protected Class<Paragraph> getType() {
         return Paragraph.class;
     }
 }

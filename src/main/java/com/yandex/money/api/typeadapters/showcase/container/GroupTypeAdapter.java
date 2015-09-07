@@ -7,8 +7,6 @@ import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.container.Group;
 import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
 
-import java.lang.reflect.Type;
-
 /**
  * Type serializer for {@link Group} component container.
  *
@@ -42,7 +40,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
     }
 
     @Override
-    protected Type getType() {
+    protected Class<Group> getType() {
         return Group.class;
     }
 }

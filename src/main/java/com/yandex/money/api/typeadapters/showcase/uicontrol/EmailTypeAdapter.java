@@ -2,8 +2,6 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
 import com.yandex.money.api.model.showcase.components.uicontrol.Email;
 
-import java.lang.reflect.Type;
-
 /**
  * Type adapter for {@link Email} component.
  *
@@ -27,7 +25,7 @@ public final class EmailTypeAdapter extends ParameterControlTypeAdapter<Email, E
     }
 
     @Override
-    protected Type getType() {
+    protected Class<Email> getType() {
         return Email.class;
     }
 }
