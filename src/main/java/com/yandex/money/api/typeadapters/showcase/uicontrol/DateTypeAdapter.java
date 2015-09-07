@@ -2,9 +2,8 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
 import com.yandex.money.api.model.showcase.components.uicontrol.Date;
 
-
 /**
- * Base type adapter for subclasses of {@link Date} component.
+ * Type adapter for {@link Date} component.
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */

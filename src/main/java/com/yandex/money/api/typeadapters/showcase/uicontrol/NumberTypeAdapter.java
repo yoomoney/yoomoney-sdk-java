@@ -3,7 +3,7 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 import com.yandex.money.api.model.showcase.components.uicontrol.Number;
 
 /**
- * Base type adapter for subclasses of {@link Number}.
+ * Type adapter for {@link Number} component.
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */

@@ -7,6 +7,8 @@ import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrol.Text;
 
 /**
+ * Base type adapter for subclasses of {@link Text} component.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 abstract class BaseTextTypeAdapter<T extends Text, U extends Text.Builder>

@@ -8,6 +8,8 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Number;
 
 
 /**
+ * Base type adapter for subclasses of {@link Number} component.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 abstract class BaseNumberTypeAdapter<T extends Number, U extends Number.Builder>

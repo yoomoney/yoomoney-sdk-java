@@ -3,7 +3,7 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 import com.yandex.money.api.model.showcase.components.uicontrol.Text;
 
 /**
- * Base type adapter for subclasses of {@link Text} component.
+ * Type adapter for {@link Text} component.
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */

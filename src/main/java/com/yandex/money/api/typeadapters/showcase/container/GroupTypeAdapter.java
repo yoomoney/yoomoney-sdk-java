@@ -31,7 +31,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
 
     @Override
     protected JsonElement serializeItem(Component src, JsonSerializationContext context) {
-        return context.serialize(src, src.getClass());
+        return context.serialize(src);
     }
 
     @Override

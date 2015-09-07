@@ -9,6 +9,8 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Date;
 import org.joda.time.format.DateTimeFormatter;
 
 /**
+ * Base type adapter for subclasses of {@link Date} component.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder>
