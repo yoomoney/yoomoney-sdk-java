@@ -260,7 +260,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
         checkParameters(object, memberName);
         JsonArray array = object.getAsJsonArray(memberName);
         if (array == null) {
-            return null;
+            return new ArrayList<>();
         }
 
         if (converter == null) {
