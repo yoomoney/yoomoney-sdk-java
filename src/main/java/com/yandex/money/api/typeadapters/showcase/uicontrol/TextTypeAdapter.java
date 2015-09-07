@@ -1,9 +1,5 @@
 package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrol.Text;
 
 /**
@@ -11,46 +7,25 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Text;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public abstract class TextTypeAdapter<T extends Text, U extends Text.Builder>
-        extends TextAreaTypeAdapter<T, U> {
+public final class TextTypeAdapter extends BaseTextTypeAdapter<Text, Text.Builder> {
 
-    /**
-     * Type adapter for {@link Text} component.
-     */
-    public static final TextTypeAdapter<Text, Text.Builder> INSTANCE = new TextTypeAdapter<Text,
-            Text.Builder>() {
+    public static final TextTypeAdapter INSTANCE = new TextTypeAdapter();
 
-        @Override
-        protected Class<Text> getType() {
-            return Text.class;
-        }
-
-        @Override
-        protected Text.Builder createBuilderInstance() {
-            return new Text.Builder();
-        }
-
-        @Override
-        protected Text createInstance(Text.Builder builder) {
-            return builder.create();
-        }
-    };
-
-    private static final String MEMBER_PATTERN = "pattern";
-    private static final String MEMBER_MEMBERBOARD_SUGGEST = "keyboard_suggest";
-
-    @Override
-    protected void deserialize(JsonObject src, U builder, JsonDeserializationContext context) {
-        builder.setPattern(JsonUtils.getString(src, MEMBER_PATTERN));
-        builder.setKeyboard(Text.Keyboard.parse(JsonUtils.getString(src,
-                MEMBER_MEMBERBOARD_SUGGEST)));
-        super.deserialize(src, builder, context);
+    private TextTypeAdapter() {
     }
 
     @Override
-    protected void serialize(T src, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(MEMBER_PATTERN, src.pattern);
-        to.addProperty(MEMBER_MEMBERBOARD_SUGGEST, src.keyboard == null ? null : src.keyboard.code);
-        super.serialize(src, to, context);
+    protected Class<Text> getType() {
+        return Text.class;
+    }
+
+    @Override
+    protected Text.Builder createBuilderInstance() {
+        return new Text.Builder();
+    }
+
+    @Override
+    protected Text createInstance(Text.Builder builder) {
+        return builder.create();
     }
 }

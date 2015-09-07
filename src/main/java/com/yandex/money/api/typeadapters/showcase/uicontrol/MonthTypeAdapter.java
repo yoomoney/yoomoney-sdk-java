@@ -9,7 +9,7 @@ import org.joda.time.format.DateTimeFormatter;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class MonthTypeAdapter extends DateTypeAdapter<Month, Month.Builder> {
+public final class MonthTypeAdapter extends BaseDateTypeAdapter<Month, Month.Builder> {
 
     public static final MonthTypeAdapter INSTANCE = new MonthTypeAdapter();
 

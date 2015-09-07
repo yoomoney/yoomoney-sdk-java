@@ -13,7 +13,7 @@ import com.yandex.money.api.utils.Currency;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class AmountTypeAdapter extends NumberTypeAdapter<Amount, Amount.Builder> {
+public final class AmountTypeAdapter extends BaseNumberTypeAdapter<Amount, Amount.Builder> {
 
     public static final AmountTypeAdapter INSTANCE = new AmountTypeAdapter();
 
