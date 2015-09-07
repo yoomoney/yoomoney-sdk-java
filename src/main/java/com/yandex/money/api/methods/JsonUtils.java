@@ -29,6 +29,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.yandex.money.api.typeadapters.TypeAdapter;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -207,8 +208,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
      * @return {@link org.joda.time.DateTime} value
      */
     public static DateTime getDateTime(JsonObject object, String memberName) {
-        JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
-        return primitive == null ? null : DateTime.parse(primitive.getAsString(), ISO_FORMATTER);
+        return getDateTime(object, memberName, ISO_FORMATTER);
     }
 
     /**
@@ -221,6 +221,9 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
      */
     public static DateTime getDateTime(JsonObject object, String memberName,
                                        DateTimeFormatter formatter) {
+        if (formatter == null) {
+            throw new NullPointerException("formatter is null");
+        }
         JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
         return primitive == null ? null : DateTime.parse(primitive.getAsString(), formatter);
     }
