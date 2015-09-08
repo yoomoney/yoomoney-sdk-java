@@ -1,5 +1,6 @@
 package com.yandex.money.api.typeadapters.showcase.container;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -96,5 +97,29 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
     @Override
     protected Class<Group> getType() {
         return Group.class;
+    }
+
+    public static final class GroupListDelegate {
+
+        private GroupListDelegate() {
+        }
+
+        public static JsonArray serialize(Group group, JsonSerializationContext context) {
+            JsonArray jsonArray = new JsonArray();
+            for (Component component : group.items) {
+                jsonArray.add(context.serialize(component));
+            }
+            return jsonArray;
+        }
+
+        public static Group deserialize(JsonArray jsonArray, JsonDeserializationContext context) {
+            Group.Builder builder = new Group.Builder();
+            for (JsonElement item : jsonArray) {
+                builder.addItem((Component) context.deserialize(item,
+                        ComponentsTypeProvider.getJsonComponentType(item)));
+            }
+            return builder.create();
+        }
+
     }
 }

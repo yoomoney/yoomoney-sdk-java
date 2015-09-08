@@ -10,7 +10,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author Aleksandr Ershov (asershov@yamoney.com)
@@ -20,11 +19,11 @@ public final class Showcase {
     public final String title;
     public final Map<String, String> hiddenFields;
     public final Group form;
-    public final Set<AllowedMoneySource> moneySources;
+    public final List<AllowedMoneySource> moneySources;
     public final List<Error> errors;
 
     public Showcase(String title, Map<String, String> hiddenFields, Group form,
-                    Set<AllowedMoneySource> moneySources, List<Error> errors) {
+                    List<AllowedMoneySource> moneySources, List<Error> errors) {
 
         if (title == null) {
             throw new NullPointerException("title is null");
@@ -44,7 +43,7 @@ public final class Showcase {
         this.title = title;
         this.hiddenFields = Collections.unmodifiableMap(hiddenFields);
         this.form = form;
-        this.moneySources = Collections.unmodifiableSet(moneySources);
+        this.moneySources = Collections.unmodifiableList(moneySources);
         this.errors = Collections.unmodifiableList(errors);
     }
 

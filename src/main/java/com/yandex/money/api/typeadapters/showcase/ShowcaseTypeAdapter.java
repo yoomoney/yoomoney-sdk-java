@@ -10,21 +10,18 @@ import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.Showcase.Error;
-import com.yandex.money.api.model.showcase.components.container.Group;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
 
 import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
- * @author raymank26
+ * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
+
+    private static final ShowcaseTypeAdapter INSTANCE = new ShowcaseTypeAdapter();
 
     private static final String ELEMENT_TITLE = "title";
     private static final String ELEMENT_HIDDEN_FIELDS = "hidden_fields";
@@ -32,25 +29,32 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     private static final String ELEMENT_MONEY_SOURCE = "money_source";
     private static final String ELEMENT_ERROR = "error";
 
+    static {
+        // register type adapters to GSON instance.
+        GroupTypeAdapter.getInstance();
+    }
+
+    private ShowcaseTypeAdapter() {
+    }
+
+    public static ShowcaseTypeAdapter getInstance() {
+        return INSTANCE;
+    }
+
     @Override
     public Showcase deserialize(JsonElement json, Type typeOfT,
                                 JsonDeserializationContext context) throws JsonParseException {
 
         JsonObject root = json.getAsJsonObject();
-        String title = JsonUtils.getMandatoryString(root, ELEMENT_TITLE);
 
-        JsonElement hiddenFieldsElement = root.get(ELEMENT_HIDDEN_FIELDS);
-        Map<String, String> hiddenFields = JsonUtils.map(hiddenFieldsElement.getAsJsonObject());
-
-        Set<AllowedMoneySource> moneySource = new HashSet<>(JsonUtils.getArray(root,
-                ELEMENT_MONEY_SOURCE, AllowedMoneySourceTypeAdapter.INSTANCE));
-
-        Group rootGroup = context.deserialize(root.getAsJsonArray(ELEMENT_FORM), Group.class);
-
-        List<Error> fieldsErrors = JsonUtils.getArray(root, ELEMENT_ERROR,
-                ShowcaseErrorTypeAdapter.INSTANCE);
-
-        return new Showcase(title, hiddenFields, rootGroup, moneySource, fieldsErrors);
+        return new Showcase(
+                JsonUtils.getMandatoryString(root, ELEMENT_TITLE),
+                JsonUtils.map(root.get(ELEMENT_HIDDEN_FIELDS).getAsJsonObject()),
+                GroupTypeAdapter.GroupListDelegate.deserialize(root.getAsJsonArray(ELEMENT_FORM),
+                        context),
+                JsonUtils.getArray(root, ELEMENT_MONEY_SOURCE,
+                        AllowedMoneySourceTypeAdapter.INSTANCE),
+                JsonUtils.getArray(root, ELEMENT_ERROR, ShowcaseErrorTypeAdapter.INSTANCE));
     }
 
     @Override
@@ -60,9 +64,11 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         root.addProperty(ELEMENT_TITLE, src.title);
         root.add(ELEMENT_MONEY_SOURCE, JsonUtils.toJsonArray(src.moneySources,
                 AllowedMoneySourceTypeAdapter.INSTANCE));
-        root.add(ELEMENT_ERROR, JsonUtils.toJsonArray(src.errors,
-                ShowcaseErrorTypeAdapter.INSTANCE));
-        root.add(ELEMENT_FORM, GroupTypeAdapter.INSTANCE.toJsonTree(src.form));
+        if (!src.errors.isEmpty()) {
+            root.add(ELEMENT_ERROR, JsonUtils.toJsonArray(src.errors,
+                    ShowcaseErrorTypeAdapter.INSTANCE));
+        }
+        root.add(ELEMENT_FORM, GroupTypeAdapter.GroupListDelegate.serialize(src.form, context));
         root.add(ELEMENT_HIDDEN_FIELDS, GsonProvider.getGson().toJsonTree(src.hiddenFields));
         return root;
     }
