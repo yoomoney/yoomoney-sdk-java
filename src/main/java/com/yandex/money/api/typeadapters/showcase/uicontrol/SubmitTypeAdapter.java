@@ -9,9 +9,16 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Submit;
  */
 public final class SubmitTypeAdapter extends ControlTypeAdapter<Submit, Submit.Builder> {
 
-    public static final SubmitTypeAdapter INSTANCE = new SubmitTypeAdapter();
+    private static final SubmitTypeAdapter INSTANCE = new SubmitTypeAdapter();
 
     private SubmitTypeAdapter() {
+    }
+
+    /**
+     * @return instance of this class
+     */
+    public static SubmitTypeAdapter getInstance() {
+        return INSTANCE;
     }
 
     @Override

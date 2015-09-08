@@ -3,6 +3,7 @@ package com.yandex.money.test;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.yandex.money.api.model.showcase.components.Component;
+import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.ParagraphTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.AmountTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeAdapter;
@@ -32,72 +33,77 @@ public final class ComponentTypeAdapterTest {
 
     @Test
     public void testCheckbox() {
-        check("checkbox.json", CheckboxTypeAdapter.INSTANCE);
+        check("checkbox.json", CheckboxTypeAdapter.getInstance());
     }
 
     @Test
     public void testText() {
-        check("text.json", TextTypeAdapter.INSTANCE);
+        check("text.json", TextTypeAdapter.getInstance());
     }
 
     @Test
     public void testTextArea() {
-        check("textarea.json", TextAreaTypeAdapter.INSTANCE);
+        check("textarea.json", TextAreaTypeAdapter.getInstance());
     }
 
     @Test
     public void testEmail() {
-        check("email.json", EmailTypeAdapter.INSTANCE);
+        check("email.json", EmailTypeAdapter.getInstance());
     }
 
     @Test
     public void testDate() {
-        check("date.json", DateTypeAdapter.INSTANCE);
+        check("date.json", DateTypeAdapter.getInstance());
     }
 
     @Test
     public void testMonth() {
-        check("month.json", MonthTypeAdapter.INSTANCE);
+        check("month.json", MonthTypeAdapter.getInstance());
     }
 
     @Test
     public void testSelectNoGroup() {
-        check("select_nogroup.json", SelectTypeAdapter.INSTANCE);
+        check("select_nogroup.json", SelectTypeAdapter.getInstance());
     }
 
     @Test
     public void testNumber() {
-        check("number.json", NumberTypeAdapter.INSTANCE);
+        check("number.json", NumberTypeAdapter.getInstance());
     }
 
     @Test
     public void testSelect() {
-        check("select_group.json", SelectTypeAdapter.INSTANCE);
+        check("select_group.json", SelectTypeAdapter.getInstance());
     }
 
     @Test
     public void testTel() {
-        check("tel.json", TelTypeAdapter.INSTANCE);
+        check("tel.json", TelTypeAdapter.getInstance());
     }
 
     @Test
     public void testSubmit() {
-        check("submit.json", SubmitTypeAdapter.INSTANCE);
+        check("submit.json", SubmitTypeAdapter.getInstance());
     }
 
     @Test
     public void testParagraph() {
-        check("paragraph.json", ParagraphTypeAdapter.INSTANCE);
+        check("paragraph.json", ParagraphTypeAdapter.getInstance());
+    }
+
+    @Test
+    public void testGroup() {
+        check("group.json", GroupTypeAdapter.getInstance());
     }
 
     @Test
     public void testAmountStdFee() {
-        check("amount_stdfee.json", AmountTypeAdapter.INSTANCE);
+        check("amount_stdfee.json", AmountTypeAdapter.getInstance());
     }
 
     @Test
     public void testAmountCustomFee() {
-        check("amount_customfee.json", AmountTypeAdapter.INSTANCE);
+        check("amount_customfee.json", AmountTypeAdapter.getInstance());
     }
 
     private static String loadComponentJson(String name) {

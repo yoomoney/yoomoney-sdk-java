@@ -12,7 +12,7 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Text;
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 abstract class BaseTextTypeAdapter<T extends Text, U extends Text.Builder>
-        extends TextAreaTypeAdapter<T, U> {
+        extends BaseTextAreaTypeAdapter<T, U> {
 
     private static final String MEMBER_PATTERN = "pattern";
     private static final String MEMBER_MEMBERBOARD_SUGGEST = "keyboard_suggest";

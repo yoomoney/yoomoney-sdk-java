@@ -1,0 +1,27 @@
+{
+  "type": "group",
+  "label": "Получатель перевода",
+  "items": [
+    {
+      "type": "text",
+      "name": "surname",
+      "label": "Фамилия",
+      "maxlength": 50,
+      "alert": "Пожалуйста, укажите фамилию получателя"
+    },
+    {
+      "type": "text",
+      "name": "name",
+      "label": "Имя",
+      "maxlength": 50,
+      "alert": "Пожалуйста, укажите имя получателя"
+    },
+    {
+      "type": "text",
+      "name": "patronymic",
+      "label": "Отчество",
+      "maxlength": 50,
+      "alert": "Пожалуйста, укажите отчество получателя"
+    }
+  ]
+}

@@ -15,7 +15,7 @@ import com.yandex.money.api.utils.Currency;
  */
 public final class AmountTypeAdapter extends BaseNumberTypeAdapter<Amount, Amount.Builder> {
 
-    public static final AmountTypeAdapter INSTANCE = new AmountTypeAdapter();
+    private static final AmountTypeAdapter INSTANCE = new AmountTypeAdapter();
 
     private static final String MEMBER_CURRENCY = "currency";
     private static final String MEMBER_FEE = "fee";
@@ -23,6 +23,13 @@ public final class AmountTypeAdapter extends BaseNumberTypeAdapter<Amount, Amoun
     private AmountTypeAdapter() {
         // register FeeTypeAdapter to GSON
         FeeTypeAdapter.getInstance();
+    }
+
+    /**
+     * @return instance of this class
+     */
+    public static AmountTypeAdapter getInstance() {
+        return INSTANCE;
     }
 
     @Override

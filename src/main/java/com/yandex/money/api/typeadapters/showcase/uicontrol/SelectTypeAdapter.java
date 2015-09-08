@@ -18,7 +18,7 @@ import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
  */
 public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select, Select.Builder> {
 
-    public static final SelectTypeAdapter INSTANCE = new SelectTypeAdapter();
+    private static final SelectTypeAdapter INSTANCE = new SelectTypeAdapter();
 
     private static final String MEMBER_OPTIONS = "options";
     private static final String MEMBER_LABEL = "label";
@@ -27,6 +27,13 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
     private static final String MEMBER_GROUP = "group";
 
     private SelectTypeAdapter() {
+    }
+
+    /**
+     * @return instance of this class
+     */
+    public static SelectTypeAdapter getInstance() {
+        return INSTANCE;
     }
 
     @Override
