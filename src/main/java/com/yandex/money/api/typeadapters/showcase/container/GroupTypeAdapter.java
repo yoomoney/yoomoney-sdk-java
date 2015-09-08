@@ -12,6 +12,7 @@ import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.DateTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.EmailTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.MonthTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.NumberTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.SelectTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.SubmitTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.TelTypeAdapter;
@@ -31,6 +32,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
 
     static {
         // register type adapters to GSON instance.
+        NumberTypeAdapter.getInstance();
         AmountTypeAdapter.getInstance();
         CheckboxTypeAdapter.getInstance();
         DateTypeAdapter.getInstance();

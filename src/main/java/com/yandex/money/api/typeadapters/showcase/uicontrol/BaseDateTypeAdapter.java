@@ -20,7 +20,7 @@ abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder>
     private static final String MEMBER_MAX = "max";
 
     @Override
-    protected void deserialize(JsonObject src, U builder, JsonDeserializationContext
+    protected final void deserialize(JsonObject src, U builder, JsonDeserializationContext
             context) {
         builder.setMin(JsonUtils.getDateTime(src, MEMBER_MIN, getFormatter()));
         builder.setMax(JsonUtils.getDateTime(src, MEMBER_MAX, getFormatter()));
@@ -28,7 +28,7 @@ abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder>
     }
 
     @Override
-    protected void serialize(T src, JsonObject to, JsonSerializationContext context) {
+    protected final void serialize(T src, JsonObject to, JsonSerializationContext context) {
         to.addProperty(MEMBER_MIN, src.min.toString(getFormatter()));
         to.addProperty(MEMBER_MAX, src.max.toString(getFormatter()));
         super.serialize(src, to, context);
