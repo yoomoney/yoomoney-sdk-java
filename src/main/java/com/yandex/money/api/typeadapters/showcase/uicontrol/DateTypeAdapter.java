@@ -9,9 +9,16 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Date;
  */
 public final class DateTypeAdapter extends BaseDateTypeAdapter<Date, Date.Builder> {
 
-    public static final DateTypeAdapter INSTANCE = new DateTypeAdapter();
+    private static final DateTypeAdapter INSTANCE = new DateTypeAdapter();
 
     private DateTypeAdapter() {
+    }
+
+    /**
+     * @return instance of this class
+     */
+    public static DateTypeAdapter getInstance() {
+        return INSTANCE;
     }
 
     @Override

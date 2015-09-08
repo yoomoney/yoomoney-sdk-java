@@ -13,11 +13,18 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
 public final class CheckboxTypeAdapter extends ParameterControlTypeAdapter<Checkbox, Checkbox
         .Builder> {
 
-    public static final CheckboxTypeAdapter INSTANCE = new CheckboxTypeAdapter();
+    private static final CheckboxTypeAdapter INSTANCE = new CheckboxTypeAdapter();
 
     private static final String MEMBER_CHECKED = "checked";
 
     private CheckboxTypeAdapter() {
+    }
+
+    /**
+     * @return instance of this class
+     */
+    public static CheckboxTypeAdapter getInstance() {
+        return INSTANCE;
     }
 
     @Override

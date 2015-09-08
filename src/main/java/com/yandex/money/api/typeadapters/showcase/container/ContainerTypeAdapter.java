@@ -21,8 +21,7 @@ abstract class ContainerTypeAdapter<T, U extends Container<T>,
     private static final String MEMBER_ITEMS = "items";
 
     @Override
-    protected final void deserialize(JsonObject src, K builder, JsonDeserializationContext
-            context) {
+    protected void deserialize(JsonObject src, K builder, JsonDeserializationContext context) {
         for (JsonElement item : src.getAsJsonArray(MEMBER_ITEMS)) {
             builder.addItem(deserializeItem(item, context));
         }
@@ -30,7 +29,7 @@ abstract class ContainerTypeAdapter<T, U extends Container<T>,
     }
 
     @Override
-    protected final void serialize(U src, JsonObject to, JsonSerializationContext context) {
+    protected void serialize(U src, JsonObject to, JsonSerializationContext context) {
         JsonArray array = new JsonArray();
 
         for (T item : src.items) {

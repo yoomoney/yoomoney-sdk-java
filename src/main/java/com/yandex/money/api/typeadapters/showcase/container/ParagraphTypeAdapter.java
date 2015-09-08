@@ -16,12 +16,19 @@ import com.yandex.money.api.model.showcase.components.container.Paragraph;
 public final class ParagraphTypeAdapter
         extends ContainerTypeAdapter<TextBlock, Paragraph, Paragraph.Builder> {
 
-    public static final ParagraphTypeAdapter INSTANCE = new ParagraphTypeAdapter();
+    private static final ParagraphTypeAdapter INSTANCE = new ParagraphTypeAdapter();
 
     private static final String MEMBER_LABEL = "label";
     private static final String MEMBER_HREF = "href";
 
     private ParagraphTypeAdapter() {
+    }
+
+    /**
+     * @return instance of this class
+     */
+    public static ParagraphTypeAdapter getInstance() {
+        return INSTANCE;
     }
 
     @Override

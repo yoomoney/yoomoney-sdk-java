@@ -9,9 +9,16 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Text;
  */
 public final class TextTypeAdapter extends BaseTextTypeAdapter<Text, Text.Builder> {
 
-    public static final TextTypeAdapter INSTANCE = new TextTypeAdapter();
+    private static final TextTypeAdapter INSTANCE = new TextTypeAdapter();
 
     private TextTypeAdapter() {
+    }
+
+    /**
+     * @return instance of this class
+     */
+    public static TextTypeAdapter getInstance() {
+        return INSTANCE;
     }
 
     @Override
