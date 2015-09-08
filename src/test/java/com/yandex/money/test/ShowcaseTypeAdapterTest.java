@@ -107,9 +107,13 @@ public final class ShowcaseTypeAdapterTest {
     }
 
     @Test
-    public void testShowcase() {
-        ShowcaseTypeAdapter showcaseTypeAdapter = ShowcaseTypeAdapter.getInstance();
-        check("showcase.json", showcaseTypeAdapter);
+    public void testShowcaseBills() {
+        check("showcase_bills.json", ShowcaseTypeAdapter.getInstance());
+    }
+
+    @Test
+    public void testShowcaseSkype() {
+        check("showcase_skype.json", ShowcaseTypeAdapter.getInstance());
     }
 
     private static String loadComponentJson(String name) {

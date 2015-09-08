@@ -11,7 +11,6 @@ import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.Showcase.Error;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
-import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
 
 import java.lang.reflect.Type;
@@ -69,7 +68,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
                     ShowcaseErrorTypeAdapter.INSTANCE));
         }
         root.add(ELEMENT_FORM, GroupTypeAdapter.GroupListDelegate.serialize(src.form, context));
-        root.add(ELEMENT_HIDDEN_FIELDS, GsonProvider.getGson().toJsonTree(src.hiddenFields));
+        root.add(ELEMENT_HIDDEN_FIELDS, JsonUtils.toJsonObject(src.hiddenFields));
         return root;
     }
 
