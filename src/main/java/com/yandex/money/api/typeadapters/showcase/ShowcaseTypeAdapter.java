@@ -4,12 +4,11 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
-import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.Showcase.Error;
+import com.yandex.money.api.typeadapters.AllowedMoneySourceTypeAdapter;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
 
@@ -53,7 +52,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
                         context),
                 JsonUtils.getArray(root, ELEMENT_MONEY_SOURCE,
                         AllowedMoneySourceTypeAdapter.INSTANCE),
-                JsonUtils.getArray(root, ELEMENT_ERROR, ShowcaseErrorTypeAdapter.INSTANCE));
+                JsonUtils.getArray(root, ELEMENT_ERROR, ErrorTypeAdapter.INSTANCE));
     }
 
     @Override
@@ -65,7 +64,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
                 AllowedMoneySourceTypeAdapter.INSTANCE));
         if (!src.errors.isEmpty()) {
             root.add(ELEMENT_ERROR, JsonUtils.toJsonArray(src.errors,
-                    ShowcaseErrorTypeAdapter.INSTANCE));
+                    ErrorTypeAdapter.INSTANCE));
         }
         root.add(ELEMENT_FORM, GroupTypeAdapter.GroupListDelegate.serialize(src.form, context));
         root.add(ELEMENT_HIDDEN_FIELDS, JsonUtils.toJsonObject(src.hiddenFields));
@@ -77,37 +76,9 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         return Showcase.class;
     }
 
-    private static final class AllowedMoneySourceTypeAdapter
-            extends BaseTypeAdapter<AllowedMoneySource> {
+    private static final class ErrorTypeAdapter extends BaseTypeAdapter<Showcase.Error> {
 
-        public static final AllowedMoneySourceTypeAdapter INSTANCE =
-                new AllowedMoneySourceTypeAdapter();
-
-        private AllowedMoneySourceTypeAdapter() {
-        }
-
-        @Override
-        public AllowedMoneySource deserialize(JsonElement json, Type typeOfT,
-                                              JsonDeserializationContext context)
-                throws JsonParseException {
-            return AllowedMoneySource.parse(json.getAsJsonPrimitive().getAsString());
-        }
-
-        @Override
-        public JsonElement serialize(AllowedMoneySource src, Type typeOfSrc,
-                                     JsonSerializationContext context) {
-            return new JsonPrimitive(src.code);
-        }
-
-        @Override
-        protected Class<AllowedMoneySource> getType() {
-            return AllowedMoneySource.class;
-        }
-    }
-
-    private static final class ShowcaseErrorTypeAdapter extends BaseTypeAdapter<Showcase.Error> {
-
-        public static final ShowcaseErrorTypeAdapter INSTANCE = new ShowcaseErrorTypeAdapter();
+        public static final ErrorTypeAdapter INSTANCE = new ErrorTypeAdapter();
 
         private static final String MEMBER_NAME = "name";
         private static final String MEMBER_ALERT = "alert";
