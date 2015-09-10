@@ -22,29 +22,28 @@ public final class Showcase {
     public final List<AllowedMoneySource> moneySources;
     public final List<Error> errors;
 
-    public Showcase(String title, Map<String, String> hiddenFields, Group form,
-                    List<AllowedMoneySource> moneySources, List<Error> errors) {
+    private Showcase(Builder builder) {
 
-        if (title == null) {
+        if (builder.title == null) {
             throw new NullPointerException("title is null");
         }
-        if (hiddenFields == null) {
+        if (builder.hiddenFields == null) {
             throw new NullPointerException("hiddenFields is null");
         }
-        if (form == null) {
+        if (builder.form == null) {
             throw new NullPointerException("form is null");
         }
-        if (moneySources == null) {
+        if (builder.moneySources == null) {
             throw new NullPointerException("moneySources is null");
         }
-        if (errors == null) {
+        if (builder.errors == null) {
             throw new NullPointerException("errors is null");
         }
-        this.title = title;
-        this.hiddenFields = Collections.unmodifiableMap(hiddenFields);
-        this.form = form;
-        this.moneySources = Collections.unmodifiableList(moneySources);
-        this.errors = Collections.unmodifiableList(errors);
+        this.title = builder.title;
+        this.hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
+        this.form = builder.form;
+        this.moneySources = Collections.unmodifiableList(builder.moneySources);
+        this.errors = Collections.unmodifiableList(builder.errors);
     }
 
     /**
@@ -73,6 +72,44 @@ public final class Showcase {
                     }
                 }
             }
+        }
+    }
+
+    public static class Builder {
+
+        private String title;
+        private Map<String, String> hiddenFields;
+        private Group form;
+        private List<AllowedMoneySource> moneySources;
+        private List<Error> errors;
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setHiddenFields(Map<String, String> hiddenFields) {
+            this.hiddenFields = hiddenFields;
+            return this;
+        }
+
+        public Builder setForm(Group form) {
+            this.form = form;
+            return this;
+        }
+
+        public Builder setMoneySources(List<AllowedMoneySource> moneySources) {
+            this.moneySources = moneySources;
+            return this;
+        }
+
+        public Builder setErrors(List<Error> errors) {
+            this.errors = errors;
+            return this;
+        }
+
+        public Showcase create() {
+            return new Showcase(this);
         }
     }
 

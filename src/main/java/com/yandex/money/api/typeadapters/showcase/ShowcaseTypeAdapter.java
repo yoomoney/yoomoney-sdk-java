@@ -45,14 +45,15 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
 
         JsonObject root = json.getAsJsonObject();
 
-        return new Showcase(
-                JsonUtils.getMandatoryString(root, ELEMENT_TITLE),
-                JsonUtils.map(root.get(ELEMENT_HIDDEN_FIELDS).getAsJsonObject()),
-                GroupTypeAdapter.GroupListDelegate.deserialize(root.getAsJsonArray(ELEMENT_FORM),
-                        context),
-                JsonUtils.getArray(root, ELEMENT_MONEY_SOURCE,
-                        AllowedMoneySourceTypeAdapter.INSTANCE),
-                JsonUtils.getArray(root, ELEMENT_ERROR, ErrorTypeAdapter.INSTANCE));
+        return new Showcase.Builder()
+                .setTitle(JsonUtils.getMandatoryString(root, ELEMENT_TITLE))
+                .setHiddenFields(JsonUtils.map(root.get(ELEMENT_HIDDEN_FIELDS).getAsJsonObject()))
+                .setForm(GroupTypeAdapter.GroupListDelegate
+                        .deserialize(root.getAsJsonArray(ELEMENT_FORM), context))
+                .setMoneySources(JsonUtils.getArray(root, ELEMENT_MONEY_SOURCE,
+                        AllowedMoneySourceTypeAdapter.INSTANCE))
+                .setErrors(JsonUtils.getArray(root, ELEMENT_ERROR, ErrorTypeAdapter.INSTANCE))
+                .create();
     }
 
     @Override
