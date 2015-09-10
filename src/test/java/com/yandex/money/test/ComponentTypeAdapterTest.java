@@ -57,6 +57,11 @@ public final class ComponentTypeAdapterTest {
     }
 
     @Test
+    public void testDateBoundaries() {
+        check("date_boundaries.json", DateTypeAdapter.getInstance());
+    }
+
+    @Test
     public void testMonth() {
         check("month.json", MonthTypeAdapter.getInstance());
     }

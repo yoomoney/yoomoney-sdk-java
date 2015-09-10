@@ -24,8 +24,7 @@ public abstract class ComponentTypeAdapter<T extends Component, U extends Compon
 
     @Override
     public final T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext
-            context) throws
-            JsonParseException {
+            context) throws JsonParseException {
         return deserializeWithBuilder(json, context);
     }
 

@@ -29,8 +29,13 @@ abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder>
 
     @Override
     protected final void serialize(T src, JsonObject to, JsonSerializationContext context) {
-        to.addProperty(MEMBER_MIN, src.min.toString(getFormatter()));
-        to.addProperty(MEMBER_MAX, src.max.toString(getFormatter()));
+        if(src.min != null) {
+            to.addProperty(MEMBER_MIN, src.min.toString(getFormatter()));
+
+        }
+        if(src.max != null) {
+            to.addProperty(MEMBER_MAX, src.max.toString(getFormatter()));
+        }
         super.serialize(src, to, context);
     }
 
