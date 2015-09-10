@@ -1,3 +1,27 @@
+/*
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2015 NBCO Yandex.Money LLC
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package com.yandex.money.api.typeadapters.showcase;
 
 import com.google.gson.JsonElement;
@@ -27,31 +51,36 @@ import java.util.Map;
  */
 public final class ComponentsTypeProvider {
 
-    private static Map<Component.Type, Type> TYPE_MAPPING = new HashMap<>();
+    private static final Map<Component.Type, Type> TYPE_MAPPING;
 
-    private static Map<Type, String> REVERSE_TYPE_MAPPING = new HashMap<>();
+    private static final Map<Type, String> REVERSE_TYPE_MAPPING;
 
     static {
-        TYPE_MAPPING.put(Component.Type.AMOUNT, Amount.class);
-        TYPE_MAPPING.put(Component.Type.CHECKBOX, Checkbox.class);
-        TYPE_MAPPING.put(Component.Type.DATE, Date.class);
-        TYPE_MAPPING.put(Component.Type.EMAIL, Email.class);
-        TYPE_MAPPING.put(Component.Type.GROUP, Group.class);
-        TYPE_MAPPING.put(Component.Type.MONTH, Month.class);
-        TYPE_MAPPING.put(Component.Type.NUMBER, Number.class);
-        TYPE_MAPPING.put(Component.Type.PARAGRAPH, Paragraph.class);
-        TYPE_MAPPING.put(Component.Type.SELECT, Select.class);
-        TYPE_MAPPING.put(Component.Type.SUBMIT, Submit.class);
-        TYPE_MAPPING.put(Component.Type.TEL, Tel.class);
-        TYPE_MAPPING.put(Component.Type.TEXT, Text.class);
-        TYPE_MAPPING.put(Component.Type.TEXT_AREA, TextArea.class);
+        Map<Component.Type, Type> typeMapping = new HashMap<>();
 
-        TYPE_MAPPING = Collections.unmodifiableMap(TYPE_MAPPING);
+        typeMapping.put(Component.Type.AMOUNT, Amount.class);
+        typeMapping.put(Component.Type.CHECKBOX, Checkbox.class);
+        typeMapping.put(Component.Type.DATE, Date.class);
+        typeMapping.put(Component.Type.EMAIL, Email.class);
+        typeMapping.put(Component.Type.GROUP, Group.class);
+        typeMapping.put(Component.Type.MONTH, Month.class);
+        typeMapping.put(Component.Type.NUMBER, Number.class);
+        typeMapping.put(Component.Type.PARAGRAPH, Paragraph.class);
+        typeMapping.put(Component.Type.SELECT, Select.class);
+        typeMapping.put(Component.Type.SUBMIT, Submit.class);
+        typeMapping.put(Component.Type.TEL, Tel.class);
+        typeMapping.put(Component.Type.TEXT, Text.class);
+        typeMapping.put(Component.Type.TEXT_AREA, TextArea.class);
+
+        TYPE_MAPPING = Collections.unmodifiableMap(typeMapping);
+
+        Map<Type, String> reverseTypeMapping = new HashMap<>();
 
         for (HashMap.Entry<Component.Type, Type> item : TYPE_MAPPING.entrySet()) {
-            REVERSE_TYPE_MAPPING.put(item.getValue(), item.getKey().code);
+            reverseTypeMapping.put(item.getValue(), item.getKey().code);
         }
-        REVERSE_TYPE_MAPPING = Collections.unmodifiableMap(REVERSE_TYPE_MAPPING);
+
+        REVERSE_TYPE_MAPPING = Collections.unmodifiableMap(reverseTypeMapping);
     }
 
     private ComponentsTypeProvider() {
