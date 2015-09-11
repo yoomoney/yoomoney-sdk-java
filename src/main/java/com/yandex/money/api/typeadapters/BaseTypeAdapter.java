@@ -29,7 +29,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializer;
 
 import static com.yandex.money.api.typeadapters.GsonProvider.getGson;
-import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeAdapter;
 import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeHierarchyAdapter;
 
 /**
@@ -41,13 +40,7 @@ public abstract class BaseTypeAdapter<T>
         implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
 
     public BaseTypeAdapter() {
-        final Class<T> type = getType();
-
-        if (registerAsHierarchy()) {
-            registerTypeHierarchyAdapter(type, this);
-        } else {
-            registerTypeAdapter(type, this);
-        }
+        registerTypeHierarchyAdapter(getType(), this);
     }
 
     @Override
@@ -71,8 +64,4 @@ public abstract class BaseTypeAdapter<T>
     }
 
     protected abstract Class<T> getType();
-
-    protected boolean registerAsHierarchy() {
-        return false;
-    }
 }

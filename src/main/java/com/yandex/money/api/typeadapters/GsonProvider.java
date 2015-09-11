@@ -50,10 +50,4 @@ public final class GsonProvider {
         BUILDER.registerTypeHierarchyAdapter(cls, typeAdapter);
         hasNewTypeAdapter = true;
     }
-
-    public static synchronized <T> void registerTypeAdapter(Class<T> cls,
-                                                            TypeAdapter<T> typeAdapter) {
-        BUILDER.registerTypeAdapter(cls, typeAdapter);
-        hasNewTypeAdapter = true;
-    }
 }

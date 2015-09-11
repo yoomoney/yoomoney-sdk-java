@@ -107,7 +107,7 @@ public final class Showcase {
         return result;
     }
 
-    private void fillPaymentParameters(Map<String, String> parameters, Group group) {
+    private static void fillPaymentParameters(Map<String, String> parameters, Group group) {
         for (Component component : group.items) {
             if (component instanceof Group) {
                 fillPaymentParameters(parameters, (Group) component);

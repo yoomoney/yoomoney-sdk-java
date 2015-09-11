@@ -56,7 +56,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
 
     private static final String MEMBER_LAYOUT = "layout";
 
-    static {
+    private GroupTypeAdapter() {
         // register type adapters to GSON instance.
         NumberTypeAdapter.getInstance();
         AmountTypeAdapter.getInstance();
@@ -70,9 +70,6 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
         TextTypeAdapter.getInstance();
         TelTypeAdapter.getInstance();
         ParagraphTypeAdapter.getInstance();
-    }
-
-    private GroupTypeAdapter() {
     }
 
     /**

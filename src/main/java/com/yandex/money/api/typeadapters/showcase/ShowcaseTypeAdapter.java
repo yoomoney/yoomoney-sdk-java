@@ -29,7 +29,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.Showcase.Error;
 import com.yandex.money.api.typeadapters.AllowedMoneySourceTypeAdapter;
@@ -39,6 +38,13 @@ import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.Lis
 
 import java.lang.reflect.Type;
 import java.util.LinkedHashSet;
+
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.methods.JsonUtils.getNotNullArray;
+import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.methods.JsonUtils.map;
+import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
+import static com.yandex.money.api.methods.JsonUtils.toJsonObject;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -53,12 +59,9 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     private static final String ELEMENT_MONEY_SOURCE = "money_source";
     private static final String ELEMENT_ERROR = "error";
 
-    static {
+    private ShowcaseTypeAdapter() {
         // register type adapters to GSON instance.
         GroupTypeAdapter.getInstance();
-    }
-
-    private ShowcaseTypeAdapter() {
     }
 
     public static ShowcaseTypeAdapter getInstance() {
@@ -72,12 +75,12 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         JsonObject root = json.getAsJsonObject();
 
         return new Showcase.Builder()
-                .setTitle(JsonUtils.getMandatoryString(root, ELEMENT_TITLE))
-                .setHiddenFields(JsonUtils.map(root.get(ELEMENT_HIDDEN_FIELDS).getAsJsonObject()))
+                .setTitle(getMandatoryString(root, ELEMENT_TITLE))
+                .setHiddenFields(map(root.get(ELEMENT_HIDDEN_FIELDS).getAsJsonObject()))
                 .setForm(ListDelegate.deserialize(root.getAsJsonArray(ELEMENT_FORM), context))
-                .setMoneySources(new LinkedHashSet<>(JsonUtils.getArray(root, ELEMENT_MONEY_SOURCE,
-                        AllowedMoneySourceTypeAdapter.INSTANCE)))
-                .setErrors(JsonUtils.getArray(root, ELEMENT_ERROR, ErrorTypeAdapter.INSTANCE))
+                .setMoneySources(new LinkedHashSet<>(getNotNullArray(root, ELEMENT_MONEY_SOURCE,
+                        AllowedMoneySourceTypeAdapter.getInstance())))
+                .setErrors(getNotNullArray(root, ELEMENT_ERROR, ErrorTypeAdapter.INSTANCE))
                 .create();
     }
 
@@ -86,13 +89,13 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         JsonObject root = new JsonObject();
 
         root.addProperty(ELEMENT_TITLE, src.title);
-        root.add(ELEMENT_MONEY_SOURCE, JsonUtils.toJsonArray(src.moneySources,
-                AllowedMoneySourceTypeAdapter.INSTANCE));
+        root.add(ELEMENT_MONEY_SOURCE, toJsonArray(src.moneySources,
+                AllowedMoneySourceTypeAdapter.getInstance()));
         if (!src.errors.isEmpty()) {
-            root.add(ELEMENT_ERROR, JsonUtils.toJsonArray(src.errors, ErrorTypeAdapter.INSTANCE));
+            root.add(ELEMENT_ERROR, toJsonArray(src.errors, ErrorTypeAdapter.INSTANCE));
         }
         root.add(ELEMENT_FORM, ListDelegate.serialize(src.form, context));
-        root.add(ELEMENT_HIDDEN_FIELDS, JsonUtils.toJsonObject(src.hiddenFields));
+        root.add(ELEMENT_HIDDEN_FIELDS, toJsonObject(src.hiddenFields));
         return root;
     }
 
@@ -113,15 +116,15 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
                                  JsonDeserializationContext context) throws JsonParseException {
 
             JsonObject jsonObject = json.getAsJsonObject();
-            return new Error(JsonUtils.getMandatoryString(jsonObject, MEMBER_NAME),
-                    JsonUtils.getMandatoryString(jsonObject, MEMBER_ALERT));
+            return new Error(getString(jsonObject, MEMBER_NAME),
+                    getMandatoryString(jsonObject, MEMBER_ALERT));
         }
 
         @Override
         public JsonElement serialize(Error src, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject jsonObject = new JsonObject();
-            jsonObject.addProperty("name", src.name);
-            jsonObject.addProperty("alert", src.alert);
+            jsonObject.addProperty(MEMBER_NAME, src.name);
+            jsonObject.addProperty(MEMBER_ALERT, src.alert);
             return jsonObject;
         }
 

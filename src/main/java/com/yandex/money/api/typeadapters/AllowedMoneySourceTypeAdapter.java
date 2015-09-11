@@ -38,10 +38,14 @@ import java.lang.reflect.Type;
  */
 public final class AllowedMoneySourceTypeAdapter extends BaseTypeAdapter<AllowedMoneySource> {
 
-    public static final AllowedMoneySourceTypeAdapter INSTANCE =
+    private static final AllowedMoneySourceTypeAdapter INSTANCE =
             new AllowedMoneySourceTypeAdapter();
 
     private AllowedMoneySourceTypeAdapter() {
+    }
+
+    public static AllowedMoneySourceTypeAdapter getInstance() {
+        return INSTANCE;
     }
 
     @Override
