@@ -31,7 +31,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrol.Select;
-import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.GroupListDelegate;
 
 /**
  * Type adapter for {@link @Select} component.
@@ -67,7 +67,7 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
             Select.Option option = new Select.Option(itemObject.get(MEMBER_LABEL).getAsString(),
                     itemObject.get(MEMBER_VALUE).getAsString());
             if (itemObject.has(MEMBER_GROUP)) {
-                option.group = GroupTypeAdapter.GroupListDelegate.deserialize(
+                option.group = GroupListDelegate.deserialize(
                         itemObject.getAsJsonArray(MEMBER_GROUP), context);
             }
             builder.addOption(option);
@@ -95,8 +95,7 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
             optionElement.addProperty(MEMBER_VALUE, option.value);
 
             if (option.group != null) {
-                optionElement.add(MEMBER_GROUP, GroupTypeAdapter.GroupListDelegate.serialize(
-                        option.group, context));
+                optionElement.add(MEMBER_GROUP, GroupListDelegate.serialize(option.group, context));
             }
             options.add(optionElement);
         }
