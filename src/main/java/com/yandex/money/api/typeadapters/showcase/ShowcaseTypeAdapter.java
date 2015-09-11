@@ -35,7 +35,7 @@ import com.yandex.money.api.model.showcase.Showcase.Error;
 import com.yandex.money.api.typeadapters.AllowedMoneySourceTypeAdapter;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.GroupListDelegate;
+import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.ListDelegate;
 
 import java.lang.reflect.Type;
 
@@ -73,7 +73,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         return new Showcase.Builder()
                 .setTitle(JsonUtils.getMandatoryString(root, ELEMENT_TITLE))
                 .setHiddenFields(JsonUtils.map(root.get(ELEMENT_HIDDEN_FIELDS).getAsJsonObject()))
-                .setForm(GroupListDelegate.deserialize(root.getAsJsonArray(ELEMENT_FORM), context))
+                .setForm(ListDelegate.deserialize(root.getAsJsonArray(ELEMENT_FORM), context))
                 .setMoneySources(JsonUtils.getArray(root, ELEMENT_MONEY_SOURCE,
                         AllowedMoneySourceTypeAdapter.INSTANCE))
                 .setErrors(JsonUtils.getArray(root, ELEMENT_ERROR, ErrorTypeAdapter.INSTANCE))
@@ -88,10 +88,9 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         root.add(ELEMENT_MONEY_SOURCE, JsonUtils.toJsonArray(src.moneySources,
                 AllowedMoneySourceTypeAdapter.INSTANCE));
         if (!src.errors.isEmpty()) {
-            root.add(ELEMENT_ERROR, JsonUtils.toJsonArray(src.errors,
-                    ErrorTypeAdapter.INSTANCE));
+            root.add(ELEMENT_ERROR, JsonUtils.toJsonArray(src.errors, ErrorTypeAdapter.INSTANCE));
         }
-        root.add(ELEMENT_FORM, GroupListDelegate.serialize(src.form, context));
+        root.add(ELEMENT_FORM, ListDelegate.serialize(src.form, context));
         root.add(ELEMENT_HIDDEN_FIELDS, JsonUtils.toJsonObject(src.hiddenFields));
         return root;
     }
