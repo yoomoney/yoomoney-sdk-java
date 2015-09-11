@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author Aleksandr Ershov (asershov@yamoney.com)
@@ -43,7 +44,7 @@ public final class Showcase {
     public final String title;
     public final Map<String, String> hiddenFields;
     public final Group form;
-    public final List<AllowedMoneySource> moneySources;
+    public final Set<AllowedMoneySource> moneySources;
     public final List<Error> errors;
 
     private Showcase(Builder builder) {
@@ -66,7 +67,7 @@ public final class Showcase {
         this.title = builder.title;
         this.hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
         this.form = builder.form;
-        this.moneySources = Collections.unmodifiableList(builder.moneySources);
+        this.moneySources = Collections.unmodifiableSet(builder.moneySources);
         this.errors = Collections.unmodifiableList(builder.errors);
     }
 
@@ -104,7 +105,7 @@ public final class Showcase {
         private String title;
         private Map<String, String> hiddenFields;
         private Group form;
-        private List<AllowedMoneySource> moneySources;
+        private Set<AllowedMoneySource> moneySources;
         private List<Error> errors;
 
         public Builder setTitle(String title) {
@@ -122,7 +123,7 @@ public final class Showcase {
             return this;
         }
 
-        public Builder setMoneySources(List<AllowedMoneySource> moneySources) {
+        public Builder setMoneySources(Set<AllowedMoneySource> moneySources) {
             this.moneySources = moneySources;
             return this;
         }

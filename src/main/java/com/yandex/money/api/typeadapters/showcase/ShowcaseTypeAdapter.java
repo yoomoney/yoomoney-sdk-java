@@ -38,6 +38,7 @@ import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.ListDelegate;
 
 import java.lang.reflect.Type;
+import java.util.LinkedHashSet;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -74,8 +75,8 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
                 .setTitle(JsonUtils.getMandatoryString(root, ELEMENT_TITLE))
                 .setHiddenFields(JsonUtils.map(root.get(ELEMENT_HIDDEN_FIELDS).getAsJsonObject()))
                 .setForm(ListDelegate.deserialize(root.getAsJsonArray(ELEMENT_FORM), context))
-                .setMoneySources(JsonUtils.getArray(root, ELEMENT_MONEY_SOURCE,
-                        AllowedMoneySourceTypeAdapter.INSTANCE))
+                .setMoneySources(new LinkedHashSet<>(JsonUtils.getArray(root, ELEMENT_MONEY_SOURCE,
+                        AllowedMoneySourceTypeAdapter.INSTANCE)))
                 .setErrors(JsonUtils.getArray(root, ELEMENT_ERROR, ErrorTypeAdapter.INSTANCE))
                 .create();
     }
