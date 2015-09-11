@@ -83,6 +83,30 @@ public final class Showcase {
         return params;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Showcase showcase = (Showcase) o;
+
+        return title.equals(showcase.title)
+                && hiddenFields.equals(showcase.hiddenFields)
+                && form.equals(showcase.form)
+                && moneySources.equals(showcase.moneySources)
+                && errors.equals(showcase.errors);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = title.hashCode();
+        result = 31 * result + hiddenFields.hashCode();
+        result = 31 * result + form.hashCode();
+        result = 31 * result + moneySources.hashCode();
+        result = 31 * result + errors.hashCode();
+        return result;
+    }
+
     private void fillPaymentParameters(Map<String, String> parameters, Group group) {
         for (Component component : group.items) {
             if (component instanceof Group) {
