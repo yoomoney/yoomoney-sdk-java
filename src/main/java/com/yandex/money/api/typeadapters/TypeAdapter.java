@@ -26,6 +26,8 @@ package com.yandex.money.api.typeadapters;
 
 import com.google.gson.JsonElement;
 
+import java.io.InputStream;
+
 /**
  * Serializes and deserializes object to and from JSON.
  *
@@ -41,6 +43,14 @@ public interface TypeAdapter<T> {
      * @return object
      */
     T fromJson(String json);
+
+    /**
+     * Creates object from {@link InputStream}.
+     *
+     * @param inputStream input stream
+     * @return object
+     */
+    T fromJson(InputStream inputStream);
 
     /**
      * Creates object from json element.

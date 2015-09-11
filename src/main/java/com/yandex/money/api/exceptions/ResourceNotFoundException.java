@@ -22,54 +22,18 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters;
+package com.yandex.money.api.exceptions;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-
-import java.io.InputStream;
+import java.net.URL;
 
 /**
- * Type adapter for strings.
+ * Запрошенный ресурс не найден на сервере.
+ * Ресурс не существует или невалиден.
  *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public final class StringTypeAdapter implements TypeAdapter<String> {
-
-    private static final StringTypeAdapter INSTANCE = new StringTypeAdapter();
-
-    private StringTypeAdapter() {
-    }
-
-    /**
-     * @return instance of this class
-     */
-    public static StringTypeAdapter getInstance() {
-        return INSTANCE;
-    }
-
-    @Override
-    public String fromJson(String json) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String fromJson(InputStream inputStream) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String fromJson(JsonElement element) {
-        return element.getAsString();
-    }
-
-    @Override
-    public String toJson(String value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public JsonElement toJsonTree(String value) {
-        return new JsonPrimitive(value);
+public final class ResourceNotFoundException extends Exception {
+    public ResourceNotFoundException(URL resourceURL) {
+        super(resourceURL.toString());
     }
 }

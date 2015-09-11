@@ -29,6 +29,8 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonPrimitive;
 import com.yandex.money.api.model.Error;
 
+import java.io.InputStream;
+
 /**
  * Type adapter for {@link Error}.
  *
@@ -46,6 +48,11 @@ public final class ErrorTypeAdapter implements TypeAdapter<Error> {
 
     @Override
     public Error fromJson(String json) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Error fromJson(InputStream inputStream) {
         throw new UnsupportedOperationException();
     }
 
