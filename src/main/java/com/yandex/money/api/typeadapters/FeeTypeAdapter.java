@@ -54,7 +54,7 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
     private static final String MEMBER_B = "b";
     private static final String MEMBER_C = "c";
     private static final String MEMBER_D = "d";
-    private static final String MEMBER_AMOUNT_TYPE = "amountType";
+    private static final String MEMBER_AMOUNT_TYPE = "amount_type";
 
     private FeeTypeAdapter() {
     }

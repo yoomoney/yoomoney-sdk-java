@@ -40,7 +40,6 @@ import com.yandex.money.api.processes.ExternalPaymentProcess;
 import com.yandex.money.api.processes.PaymentProcess;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -59,7 +58,7 @@ public class PaymentProcessTest {
     private final OAuth2Session session = new OAuth2Session(new DefaultApiClient("stub", false) {
         @Override
         public HostsProvider getHostsProvider() {
-            return new HostsProvider(false) {
+            return new HostsProvider() {
                 @Override
                 public String getMoney() {
                     return server.getUrl("").toString();

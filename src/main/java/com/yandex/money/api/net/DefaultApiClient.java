@@ -60,7 +60,7 @@ public class DefaultApiClient implements ApiClient {
         }
         id = clientId;
         httpClient = createHttpClient();
-        hostsProvider = new HostsProvider(false);
+        hostsProvider = new HostsProvider();
     }
 
     /**

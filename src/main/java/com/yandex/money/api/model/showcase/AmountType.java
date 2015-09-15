@@ -39,7 +39,7 @@ public enum AmountType {
     /**
      * Sum will be credited to a shop.
      */
-    NET_AMOUNT("net_amount");
+    NET_AMOUNT("netAmount");
 
     public final String code;
 
