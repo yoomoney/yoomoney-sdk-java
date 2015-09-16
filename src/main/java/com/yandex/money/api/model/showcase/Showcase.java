@@ -29,6 +29,9 @@ import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.container.Group;
 import com.yandex.money.api.model.showcase.components.uicontrol.Select;
+import com.yandex.money.api.net.BaseApiRequest;
+import com.yandex.money.api.net.HostsProvider;
+import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -107,7 +110,7 @@ public final class Showcase {
         return result;
     }
 
-    private void fillPaymentParameters(Map<String, String> parameters, Group group) {
+    private static void fillPaymentParameters(Map<String, String> parameters, Group group) {
         for (Component component : group.items) {
             if (component instanceof Group) {
                 fillPaymentParameters(parameters, (Group) component);
@@ -168,8 +171,62 @@ public final class Showcase {
         public final String alert;
 
         public Error(String name, String alert) {
+            if (alert == null) {
+                throw new NullPointerException("alert is null");
+            }
             this.name = name;
             this.alert = alert;
+        }
+    }
+
+    /**
+     * Requests showcase.
+     */
+    public static final class Request extends BaseApiRequest<Showcase> {
+
+        private final long scid;
+        private final String url;
+
+        /**
+         * Constructor.
+         *
+         * @param scid showcase id
+         */
+        public Request(long scid) {
+            this(scid, null, null);
+        }
+
+        /**
+         * Constructor.
+         *
+         * @param url    url
+         * @param params post params
+         */
+        public Request(String url, Map<String, String> params) {
+            this(-1l, url, params);
+        }
+
+        private Request(long scid, String url, Map<String, String> params) {
+            super(Showcase.class, ShowcaseTypeAdapter.getInstance());
+            if (url != null) {
+                if (params == null) {
+                    throw new NullPointerException("params is null");
+                } else {
+                    addParameters(params);
+                }
+            }
+            this.scid = scid;
+            this.url = url;
+        }
+
+        @Override
+        public Method getMethod() {
+            return url == null ? Method.GET : Method.POST;
+        }
+
+        @Override
+        public String requestUrl(HostsProvider hostsProvider) {
+            return url == null ? hostsProvider.getMoneyApi() + "/showcase/" + scid : url;
         }
     }
 }

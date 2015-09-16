@@ -104,11 +104,6 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
         return Fee.class;
     }
 
-    @Override
-    protected boolean registerAsHierarchy() {
-        return true;
-    }
-
     private static BigDecimal getValueOrZero(JsonObject object, String member) {
         BigDecimal value = JsonUtils.getBigDecimal(object, member);
         return value == null ? BigDecimal.ZERO : value;
