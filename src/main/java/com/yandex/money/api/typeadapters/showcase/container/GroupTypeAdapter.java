@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.typeadapters.showcase.container;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -33,6 +34,7 @@ import com.yandex.money.api.model.showcase.components.container.Group;
 import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.AmountTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.DateTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.EmailTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.MonthTypeAdapter;
@@ -54,7 +56,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
 
     private static final String MEMBER_LAYOUT = "layout";
 
-    static {
+    private GroupTypeAdapter() {
         // register type adapters to GSON instance.
         NumberTypeAdapter.getInstance();
         AmountTypeAdapter.getInstance();
@@ -68,9 +70,6 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
         TextTypeAdapter.getInstance();
         TelTypeAdapter.getInstance();
         ParagraphTypeAdapter.getInstance();
-    }
-
-    private GroupTypeAdapter() {
     }
 
     /**
@@ -116,11 +115,49 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
 
     @Override
     protected Component deserializeItem(JsonElement src, JsonDeserializationContext context) {
-        return context.deserialize(src, ComponentsTypeProvider.getJsonComponentType(src));
+        return context.deserialize(src, ComponentsTypeProvider.getClassOfComponentType(
+                getTypeFromJsonElement(src)));
     }
 
     @Override
     protected Class<Group> getType() {
         return Group.class;
+    }
+
+    /**
+     * Extracts {@link Component.Type} from {@link JsonElement}.
+     *
+     * @param component JSON component
+     * @return parsed {@link Component.Type}
+     */
+    private static Component.Type getTypeFromJsonElement(JsonElement component) {
+        return Component.Type.parse(component.getAsJsonObject()
+                .get(ComponentTypeAdapter.MEMBER_TYPE).getAsString());
+    }
+
+    /**
+     * Convenient class for parsing and serializing group as list of elements.
+     */
+    public static final class ListDelegate {
+
+        private ListDelegate() {
+        }
+
+        public static JsonArray serialize(Group group, JsonSerializationContext context) {
+            JsonArray jsonArray = new JsonArray();
+            for (Component component : group.items) {
+                jsonArray.add(context.serialize(component));
+            }
+            return jsonArray;
+        }
+
+        public static Group deserialize(JsonArray jsonArray, JsonDeserializationContext context) {
+            Group.Builder builder = new Group.Builder();
+            for (JsonElement item : jsonArray) {
+                builder.addItem((Component) context.deserialize(item, ComponentsTypeProvider
+                        .getClassOfComponentType(getTypeFromJsonElement(item))));
+            }
+            return builder.create();
+        }
     }
 }

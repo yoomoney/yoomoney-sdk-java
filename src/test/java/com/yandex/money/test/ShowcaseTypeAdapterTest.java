@@ -26,12 +26,12 @@ package com.yandex.money.test;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
-import com.yandex.money.api.model.showcase.components.Component;
+import com.yandex.money.api.typeadapters.BaseTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.ParagraphTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.AmountTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.DateTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.EmailTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.MonthTypeAdapter;
@@ -53,7 +53,7 @@ import java.util.Scanner;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class ComponentTypeAdapterTest {
+public final class ShowcaseTypeAdapterTest {
 
     @Test
     public void testCheckbox() {
@@ -135,9 +135,19 @@ public final class ComponentTypeAdapterTest {
         check("amount_customfee.json", AmountTypeAdapter.getInstance());
     }
 
+    @Test
+    public void testShowcaseBills() {
+        check("showcase_bills.json", ShowcaseTypeAdapter.getInstance());
+    }
+
+    @Test
+    public void testShowcaseSkype() {
+        check("showcase_skype.json", ShowcaseTypeAdapter.getInstance());
+    }
+
     private static String loadComponentJson(String name) {
-        return new Scanner(ComponentTypeAdapterTest.class
-                .getResourceAsStream("/components/" + name), "UTF-8").useDelimiter("\\A").next();
+        return new Scanner(ShowcaseTypeAdapterTest.class
+                .getResourceAsStream("/showcase/" + name), "UTF-8").useDelimiter("\\A").next();
     }
 
     /**
@@ -147,11 +157,11 @@ public final class ComponentTypeAdapterTest {
      * @param typeAdapter  type adapter of {@link com.yandex.money.api.model.showcase.components
      * .Component}.
      */
-    private static <T extends Component> void check(String jsonFileName,
-                                                    ComponentTypeAdapter<T, ?> typeAdapter) {
+    private static <T> void check(String jsonFileName,
+                                  BaseTypeAdapter<T> typeAdapter) {
         String json = loadComponentJson(jsonFileName);
-        T deserializedComponent = typeAdapter.fromJson(json);
+        T deserializedObject = typeAdapter.fromJson(json);
         Assert.assertEquals(new JsonParser().parse(json),
-                typeAdapter.toJsonTree(deserializedComponent));
+                typeAdapter.toJsonTree(deserializedObject));
     }
 }

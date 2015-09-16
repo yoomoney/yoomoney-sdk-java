@@ -37,6 +37,7 @@ import org.joda.time.format.ISODateTimeFormat;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -271,6 +272,22 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
             result.add(converter.fromJson(element));
         }
         return result;
+    }
+
+    /**
+     * Gets array from a JSON object. Uses {@link ArrayList} implementation of {@link List}. If
+     * there is no such member in object then returns empty list.
+     *
+     * @param object     json object
+     * @param memberName member's name
+     * @param converter  converter
+     * @param <T>        type of a value in the array
+     * @return list of values
+     */
+    public static <T> List<T> getNotNullArray(JsonObject object, String memberName,
+                                              TypeAdapter<T> converter) {
+        List<T> array = getArray(object, memberName, converter);
+        return array == null ? Collections.<T>emptyList() : array;
     }
 
     /**

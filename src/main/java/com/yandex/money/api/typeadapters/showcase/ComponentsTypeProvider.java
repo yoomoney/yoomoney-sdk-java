@@ -24,7 +24,6 @@
 
 package com.yandex.money.api.typeadapters.showcase;
 
-import com.google.gson.JsonElement;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.container.Group;
 import com.yandex.money.api.model.showcase.components.container.Paragraph;
@@ -39,7 +38,6 @@ import com.yandex.money.api.model.showcase.components.uicontrol.Submit;
 import com.yandex.money.api.model.showcase.components.uicontrol.Tel;
 import com.yandex.money.api.model.showcase.components.uicontrol.Text;
 import com.yandex.money.api.model.showcase.components.uicontrol.TextArea;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -86,11 +84,16 @@ public final class ComponentsTypeProvider {
     private ComponentsTypeProvider() {
     }
 
-    public static Type getJsonComponentType(JsonElement component) {
-        return TYPE_MAPPING.get(Component.Type.parse(component.getAsJsonObject().get(
-                ComponentTypeAdapter.MEMBER_TYPE).getAsString()));
+    /**
+     * @return mapping from {@link Component.Type} to {@link Type}
+     */
+    public static Type getClassOfComponentType(Component.Type componentType) {
+        return TYPE_MAPPING.get(componentType);
     }
 
+    /**
+     * @return mapping from {@link Type} to {@link Component.Type}
+     */
     public static String getTypeFromClass(Type type) {
         return REVERSE_TYPE_MAPPING.get(type);
     }
