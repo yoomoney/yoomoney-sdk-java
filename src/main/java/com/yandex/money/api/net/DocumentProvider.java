@@ -24,9 +24,6 @@
 
 package com.yandex.money.api.net;
 
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
-import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.model.showcase.Showcase;
@@ -92,29 +89,6 @@ public final class DocumentProvider extends AbstractSession {
     private ShowcaseContext getShowcaseInner(ApiRequest<Showcase> request, int requestRemained)
             throws IOException, ResourceNotFoundException {
         return parseResponse(prepareCall(request).execute(), request, requestRemained);
-    }
-
-    private Call getShowcaseInner(final ApiRequest<Showcase> request,
-                                  final OnResponseReady<ShowcaseContext> callback,
-                                  final int requestRemained) {
-
-        Call call = prepareCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                callback.onFailure(e);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                try {
-                    callback.onResponse(parseResponse(response, request, requestRemained));
-                } catch (Exception e) {
-                    callback.onFailure(e);
-                }
-            }
-        });
-        return call;
     }
 
     private <T> HttpResourceResponse<T> parseResponse(ApiRequest<T> request, Response response)

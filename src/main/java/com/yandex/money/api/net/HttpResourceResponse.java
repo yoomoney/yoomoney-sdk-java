@@ -27,22 +27,45 @@ package com.yandex.money.api.net;
 import org.joda.time.DateTime;
 
 /**
- * HTTP-ресурс загруженный с удалённого сервера
- * - авторизация
- * - текущее состояние сессии пользователя
+ * Class which wraps HTTP resource obtained from remove server.
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
 public final class HttpResourceResponse<T> {
 
+    /**
+     * State.
+     */
     public final ResourceState resourceState;
+
+    /**
+     * Content-type header. May be {@code null}.
+     */
     public final String contentType;
+
+    /**
+     * Last modified header.
+     */
     public final DateTime lastModified;
+
+    /**
+     * Expires header.
+     */
     public final DateTime expires;
+
+    /**
+     * Document. May be {@code null}.
+     */
     public final T document;
 
     HttpResourceResponse(ResourceState resourceState, String contentType, DateTime lastModified,
                          DateTime expires, T document) {
+        if (resourceState == null) {
+            throw new NullPointerException("resourceState is null");
+        }
+        if (lastModified == null) {
+            throw new NullPointerException("lastModified is null");
+        }
 
         this.resourceState = resourceState;
         this.contentType = contentType;
@@ -67,10 +90,16 @@ public final class HttpResourceResponse<T> {
     }
 
     public enum ResourceState {
-        // ресурс загружен успешно, требуется разобрать данные
+
+        /**
+         * Resource has been downloaded successfully. It can be processed.
+         */
         DOCUMENT,
-        // сервер сообщил о том что ресурс не менялся, документ в ответе отсутствует, следует
-        // использовать закэшированную копию
+
+        /**
+         * Resource hasn't been changed. Instance doesn't contain document and cached copy should be
+         * used for further processing.
+         */
         NOT_MODIFIED
     }
 }
