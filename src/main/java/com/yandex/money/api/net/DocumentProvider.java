@@ -39,7 +39,6 @@ import org.joda.time.DateTime;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 
 /**
  * Provides various resources from Yandex.Money server.
@@ -62,36 +61,13 @@ public final class DocumentProvider extends AbstractSession {
         return parseResponse(request, prepareCall(request).execute());
     }
 
-    public <T> Call fetch(final ApiRequest<T> request,
-                          final OnResponseReady<HttpResourceResponse<T>> callback)
-            throws MalformedURLException {
-
-        Call call = prepareCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                callback.onFailure(e);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                try {
-                    callback.onResponse(parseResponse(request, response));
-                } catch (Exception e) {
-                    callback.onFailure(e);
-                }
-            }
-        });
-        return call;
-    }
-
     /**
-     * Fetches {@link Showcase} instance from remote server.
+     * Obtains {@link Showcase} instance from remote server in blocking way.
      *
      * @param request {@link ApiRequest} instance
      * @return {@link ShowcaseContext} in initial state.
      * @throws IOException               various I/O errors (timeouts, etc.)
-     * @throws ResourceNotFoundException 404 status code
+     * @throws ResourceNotFoundException 404 status code feedback
      */
     public ShowcaseContext getShowcase(ApiRequest<Showcase> request)
             throws IOException, ResourceNotFoundException {
@@ -99,46 +75,18 @@ public final class DocumentProvider extends AbstractSession {
     }
 
     /**
-     * Fetches {@link Showcase} instance from remote server.
+     * Submits {@link Showcase} wrapped by {@link ShowcaseContext} to next step.
      *
-     * @param request  {@link ApiRequest} instance
-     * @param callback success/fail handler.
-     * @return {@link Call} instance in started state.
-     * @throws MalformedURLException
+     * @param showcaseContext current {@link Showcase} state
+     * @return mutable instance of input parameter
+     * @throws IOException               various I/O errors (timeouts, etc.)
+     * @throws ResourceNotFoundException 404 status code feedback
      */
-    public Call getShowcase(ApiRequest<Showcase> request, OnResponseReady<ShowcaseContext> callback)
-            throws MalformedURLException {
-        return getShowcaseInner(request, callback, 1);
-    }
-
     public ShowcaseContext submitShowcase(ShowcaseContext showcaseContext)
             throws IOException, ResourceNotFoundException {
 
         return parseResponse(prepareCall(showcaseContext.createRequest()).execute(),
                 showcaseContext);
-    }
-
-    public Call submitShowcase(final ShowcaseContext showcaseContext,
-                               final OnResponseReady<ShowcaseContext> callback) {
-
-        Call call = prepareCall(showcaseContext.createRequest());
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                callback.onFailure(e);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                try {
-                    parseResponse(response, showcaseContext);
-                    callback.onResponse(showcaseContext);
-                } catch (ResourceNotFoundException e) {
-                    callback.onFailure(e);
-                }
-            }
-        });
-        return call;
     }
 
     private ShowcaseContext getShowcaseInner(ApiRequest<Showcase> request, int requestRemained)

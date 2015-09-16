@@ -47,15 +47,35 @@ import java.util.Map;
 import java.util.Stack;
 
 /**
+ * This class handles {@link Showcase} submit steps.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public final class ShowcaseContext {
 
+    /**
+     * Processed steps so far.
+     */
     private final Stack<Step> history;
+
+    /**
+     * {@link DateTime} of last showcase changes on remote server. Useful for caching.
+     */
     private final DateTime lastModified;
 
+    /**
+     * Current step.
+     */
     private Step currentStep;
+
+    /**
+     * Complete bundle of payment parameters. It's empty until the last step is reached.
+     */
     private Map<String, String> params = Collections.emptyMap();
+
+    /**
+     * Current state (response code).
+     */
     private State state = State.UNKNOWN;
 
     ShowcaseContext(State state) {
@@ -69,6 +89,15 @@ public final class ShowcaseContext {
         this.lastModified = lastModified;
     }
 
+    /**
+     * Constructor.
+     *
+     * @param history      previous steps
+     * @param lastModified {@link DateTime} of last showcase changes on remote server
+     * @param currentStep  current step
+     * @param params       payment parameters
+     * @param state        status code of current (last) operation
+     */
     public ShowcaseContext(Stack<Step> history, DateTime lastModified, Step currentStep,
                            Map<String, String> params, State state) {
 
@@ -88,6 +117,9 @@ public final class ShowcaseContext {
         this.state = state;
     }
 
+    /**
+     * @return request to move on the next state.
+     */
     public ApiRequest<Showcase> createRequest() {
         if (currentStep == null) {
             throw new IllegalStateException("currentStep is null");
@@ -118,14 +150,23 @@ public final class ShowcaseContext {
         return currentStep;
     }
 
+    /**
+     * @return size of processed steps
+     */
     public int getHistorySize() {
         return history.size();
     }
 
+    /**
+     * @return reached steps
+     */
     public Stack<Step> getHistory() {
         return history;
     }
 
+    /**
+     * @return current step
+     */
     public Step getCurrentStep() {
         return currentStep;
     }
@@ -134,10 +175,20 @@ public final class ShowcaseContext {
         this.currentStep = currentStep;
     }
 
+    /**
+     * @return {@link DateTime} of last showcase changes on remote server
+     */
     public DateTime getLastModified() {
         return lastModified;
     }
 
+    /**
+     * Collection of payment parameters which should be used in
+     * {@link com.yandex.money.api.methods.RequestPayment} or
+     * {@link com.yandex.money.api.methods.RequestExternalPayment}.
+     *
+     * @return payment parameters in case of last step or empty map otherwise
+     */
     public Map<String, String> getParams() {
         return params;
     }
@@ -146,6 +197,9 @@ public final class ShowcaseContext {
         params = Params.createFromJson(inputStream).getParams();
     }
 
+    /**
+     * @return status code of current (last) operation
+     */
     public State getState() {
         return state;
     }
@@ -154,6 +208,9 @@ public final class ShowcaseContext {
         this.state = state;
     }
 
+    /**
+     * Possible states of {@link ShowcaseContext} instance
+     */
     public enum State {
         HAS_NEXT_STEP,
         INVALID_PARAMS,
