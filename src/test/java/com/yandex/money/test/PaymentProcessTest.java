@@ -235,7 +235,7 @@ public class PaymentProcessTest {
     private ExternalPaymentProcess.SavedState createExternalPaymentProcessSavedState() {
         return new ExternalPaymentProcess.SavedState(
                 new RequestExternalPayment(null, null, null, null, null),
-                new ProcessExternalPayment(null, null, null, null, new HashMap<String, String>(),
+                new ProcessExternalPayment(null, null, null, null, null, new HashMap<String, String>(),
                         null, null),
                 3
         );
