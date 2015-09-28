@@ -27,7 +27,7 @@ package com.yandex.money.api.net;
 import org.joda.time.DateTime;
 
 /**
- * Class which wraps HTTP resource obtained from remove server.
+ * This class wraps HTTP resource obtained from remove server.
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
@@ -92,7 +92,7 @@ public final class HttpResourceResponse<T> {
     public enum ResourceState {
 
         /**
-         * Resource has been downloaded successfully. It can be processed.
+         * Resource has been downloaded successfully and can be processed.
          */
         DOCUMENT,
 
@@ -103,4 +103,3 @@ public final class HttpResourceResponse<T> {
         NOT_MODIFIED
     }
 }
-

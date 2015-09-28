@@ -27,7 +27,7 @@ package com.yandex.money.api.exceptions;
 import java.net.URL;
 
 /**
- * Resource not found. It doesn't not exist or invalid.
+ * Resource not found. It doesn't exist or invalid.
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
