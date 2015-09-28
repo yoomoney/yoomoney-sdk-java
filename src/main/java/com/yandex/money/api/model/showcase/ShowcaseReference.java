@@ -34,7 +34,7 @@ import java.util.Map;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public class ShowcaseReference {
+public final class ShowcaseReference {
 
     /**
      * SCID (pattern-id).
@@ -52,7 +52,7 @@ public class ShowcaseReference {
     public final Integer topIndex;
 
     /**
-     * URL to submit params of the first step if applicable (nullable).
+     * URL to submit params of the first step if applicable. Can be null.
      */
     public final String url;
 
@@ -62,7 +62,7 @@ public class ShowcaseReference {
     public final Map<String, String> params;
 
     /**
-     * Showcase format. JSON or unknown.
+     * Showcase format. JSON or unknown one.
      */
     public final Format format;
 

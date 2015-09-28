@@ -26,24 +26,28 @@ package com.yandex.money.api.resources;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
+import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.GetRequest;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseSearchTypeAdapter;
 import com.yandex.money.api.utils.Strings;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
+ * This class wraps result of showcase searching provided by response of
+ * {@link com.yandex.money.api.resources.ShowcaseSearch.Request} call.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class ShowcaseSearch {
+public final class ShowcaseSearch {
 
     public final Error error;
     public final List<ShowcaseReference> result;
     public final String nextPage;
 
-    public ShowcaseSearch(Error error, List<ShowcaseReference> result, String nextPage) {
+    private ShowcaseSearch(Error error, List<ShowcaseReference> result, String nextPage) {
         if (result == null) {
             throw new NullPointerException("result is null");
         }
@@ -52,12 +56,26 @@ public class ShowcaseSearch {
         this.nextPage = nextPage;
     }
 
-    public ShowcaseSearch(Error error) {
-        this(error, new ArrayList<ShowcaseReference>(0), null);
+    /**
+     * Constructs successful search call.
+     *
+     * @param result   obtained items
+     * @param nextPage next page is available if {@code "true"}
+     */
+    public static ShowcaseSearch success(List<ShowcaseReference> result, String nextPage) {
+        return new ShowcaseSearch(null, result, nextPage);
     }
 
-    public ShowcaseSearch(List<ShowcaseReference> result, String nextPage) {
-        this(null, result, nextPage);
+    /**
+     * Constructs failed instance.
+     *
+     * @param error reason
+     */
+    public static ShowcaseSearch failure(Error error) {
+        if (error == null) {
+            throw new NullPointerException("error is null");
+        }
+        return new ShowcaseSearch(error, Collections.<ShowcaseReference>emptyList(), null);
     }
 
     @Override
@@ -66,19 +84,25 @@ public class ShowcaseSearch {
                 nextPage + '\'' + '}';
     }
 
-    public static final class Request extends GetRequest<ShowcaseSearch> {
-        public Request(String query, int records) {
-            this(query, records, null);
-        }
+    /**
+     * This class should be used for obtaining {@link ShowcaseReference} instances in
+     * {@link com.yandex.money.api.net.DocumentProvider#fetch(ApiRequest)} call.
+     */
+    public static class Request extends GetRequest<ShowcaseSearch> {
 
-        public Request(String query, int records, String uid) {
+        /**
+         * Constructor.
+         *
+         * @param query   search terms
+         * @param records number of records to requests from remote server
+         */
+        public Request(String query, int records) {
             super(ShowcaseSearch.class, ShowcaseSearchTypeAdapter.getInstance());
             if (Strings.isNullOrEmpty(query)) {
                 throw new IllegalArgumentException("query is null or empty");
             }
             addParameter("query", query);
             addParameter("records", records);
-            addParameter("uid", uid);
         }
 
         @Override

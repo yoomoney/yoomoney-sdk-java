@@ -39,9 +39,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Type adapter for {@link ShowcaseReference}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<ShowcaseReference> {
+public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<ShowcaseReference> {
 
     public static final ShowcaseReferenceTypeAdapter INSTANCE = new ShowcaseReferenceTypeAdapter();
 

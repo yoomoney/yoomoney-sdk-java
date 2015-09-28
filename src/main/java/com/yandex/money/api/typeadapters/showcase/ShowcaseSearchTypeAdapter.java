@@ -40,9 +40,11 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 /**
+ * Type adapter for {@link ShowcaseSearch}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSearch> {
+public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSearch> {
 
     public static final ShowcaseSearchTypeAdapter INSTANCE = new ShowcaseSearchTypeAdapter();
 
@@ -66,9 +68,9 @@ public class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSearch> {
         if (error == null) {
             List<ShowcaseReference> result = JsonUtils.getMandatoryArray(object,
                     MEMBER_RESULT, ShowcaseReferenceTypeAdapter.getInstance());
-            return new ShowcaseSearch(result, JsonUtils.getString(object, MEMBER_NEXT_PAGE));
+            return ShowcaseSearch.success(result, JsonUtils.getString(object, MEMBER_NEXT_PAGE));
         } else {
-            return new ShowcaseSearch(error);
+            return ShowcaseSearch.failure(error);
         }
     }
 
@@ -77,7 +79,7 @@ public class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSearch> {
                                  JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         Error error = src.error;
-        if (error != null) {
+        if (error == null) {
             JsonArray array = JsonUtils.toJsonArray(src.result,
                     ShowcaseReferenceTypeAdapter.getInstance());
             object.add(MEMBER_RESULT, array);
