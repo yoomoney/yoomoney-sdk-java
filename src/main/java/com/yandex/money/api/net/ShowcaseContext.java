@@ -142,10 +142,11 @@ public final class ShowcaseContext {
      * @return previous step
      */
     public Step popStep() {
-        if (!history.isEmpty()) {
-            currentStep = history.pop();
-            state = State.HAS_NEXT_STEP;
+        if (!params.isEmpty()) {
             params = Collections.emptyMap();
+            state = State.HAS_NEXT_STEP;
+        } else if (!history.isEmpty()) {
+            currentStep = history.pop();
         }
         return currentStep;
     }
