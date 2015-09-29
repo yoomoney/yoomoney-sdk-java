@@ -22,10 +22,13 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
+package com.yandex.money.api.resources;
 
 import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.Showcase;
+import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.HostsProvider;
+import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;

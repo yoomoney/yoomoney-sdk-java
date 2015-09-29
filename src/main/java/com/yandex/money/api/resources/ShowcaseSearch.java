@@ -119,7 +119,7 @@ public final class ShowcaseSearch {
 
     /**
      * This class should be used for obtaining {@link ShowcaseReference} instances in
-     * {@link com.yandex.money.api.net.DocumentProvider#fetch(ApiRequest)} call.
+     * {@link DocumentProvider#fetch(ApiRequest)} call.
      */
     public static class Request extends GetRequest<ShowcaseSearch> {
 
