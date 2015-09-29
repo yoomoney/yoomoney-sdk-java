@@ -27,7 +27,6 @@ package com.yandex.money.test;
 import com.yandex.money.api.exceptions.IllegalAmountException;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.Fee;
-import com.yandex.money.api.model.showcase.StdFee;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -38,7 +37,7 @@ public final class FeeTest {
 
     @Test
     public void testNegativeNetAmount() {
-        final Fee fee = new StdFee(new BigDecimal("0.03"), new BigDecimal("15.00"), BigDecimal.ZERO,
+        final Fee fee = Fee.stdFee(new BigDecimal("0.03"), new BigDecimal("15.00"), BigDecimal.ZERO,
                 null, AmountType.AMOUNT);
         // 15.01 is minimum amount
         try {
@@ -57,7 +56,7 @@ public final class FeeTest {
 
     @Test
     public void testMinimalNetAmount() throws IllegalAmountException {
-        final Fee fee = new StdFee(new BigDecimal("0.03"), new BigDecimal("15.00"), BigDecimal.ZERO,
+        final Fee fee = Fee.stdFee(new BigDecimal("0.03"), new BigDecimal("15.00"), BigDecimal.ZERO,
                 null, AmountType.AMOUNT);
         Assert.assertEquals(fee.amount(new BigDecimal("0.05")), new BigDecimal("15.05"));
         Assert.assertEquals(fee.netAmount(new BigDecimal("15.46")), new BigDecimal("0.45"));
@@ -67,7 +66,7 @@ public final class FeeTest {
     @Test
     public void testNoCommission() throws IllegalAmountException {
         final BigDecimal amount = new BigDecimal("0.099");
-        final Fee fee = new StdFee(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, null,
+        final Fee fee = Fee.stdFee(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, null,
                 AmountType.AMOUNT);
         Assert.assertEquals(amount, fee.amount(amount));
         Assert.assertEquals(amount, fee.netAmount(amount));
@@ -75,7 +74,7 @@ public final class FeeTest {
 
     @Test
     public void testAPercent() throws IllegalAmountException {
-        final Fee fee = new StdFee(new BigDecimal("0.005"), BigDecimal.ZERO, BigDecimal.ZERO, null,
+        final Fee fee = Fee.stdFee(new BigDecimal("0.005"), BigDecimal.ZERO, BigDecimal.ZERO, null,
                 AmountType.AMOUNT);
         test("100.50", "100.00", fee);
         test("0.02", "0.01", fee);
@@ -83,40 +82,40 @@ public final class FeeTest {
 
     @Test
     public void testBFixedCommission() throws IllegalAmountException {
-        test("115.00", "100.00", new StdFee(BigDecimal.ZERO, new BigDecimal("15.00"),
+        test("115.00", "100.00", Fee.stdFee(BigDecimal.ZERO, new BigDecimal("15.00"),
                 BigDecimal.ZERO, null, AmountType.AMOUNT));
-        test("15.01", "0.01", new StdFee(BigDecimal.ZERO, new BigDecimal("15.00"), BigDecimal.ZERO,
+        test("15.01", "0.01", Fee.stdFee(BigDecimal.ZERO, new BigDecimal("15.00"), BigDecimal.ZERO,
                 null, AmountType.AMOUNT));
-        test("1.01", "1.00", new StdFee(BigDecimal.ZERO, new BigDecimal("0.001"), BigDecimal.ZERO,
+        test("1.01", "1.00", Fee.stdFee(BigDecimal.ZERO, new BigDecimal("0.001"), BigDecimal.ZERO,
                 null, AmountType.AMOUNT));
     }
 
     @Test
     public void testCMinCommission() throws IllegalAmountException {
-        test("115.00", "100.00", new StdFee(BigDecimal.ZERO, BigDecimal.ZERO,
+        test("115.00", "100.00", Fee.stdFee(BigDecimal.ZERO, BigDecimal.ZERO,
                 new BigDecimal("15.00"), null, AmountType.AMOUNT));
-        test("15.01", "0.01", new StdFee(BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("15.00"),
+        test("15.01", "0.01", Fee.stdFee(BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("15.00"),
                 null, AmountType.AMOUNT));
-        test("1.01", "1.00", new StdFee(BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("0.001"),
+        test("1.01", "1.00", Fee.stdFee(BigDecimal.ZERO, BigDecimal.ZERO, new BigDecimal("0.001"),
                 null, AmountType.AMOUNT));
-        test("100.60", "100.00", new StdFee(new BigDecimal("0.005"), BigDecimal.ZERO,
+        test("100.60", "100.00", Fee.stdFee(new BigDecimal("0.005"), BigDecimal.ZERO,
                 new BigDecimal("0.60"), null, AmountType.AMOUNT));
     }
 
     @Test
     public void testDMaxCommission() throws IllegalAmountException {
-        test("100.04", "100.00", new StdFee(new BigDecimal("0.005"), BigDecimal.ZERO,
+        test("100.04", "100.00", Fee.stdFee(new BigDecimal("0.005"), BigDecimal.ZERO,
                 BigDecimal.ZERO, new BigDecimal("0.04"), AmountType.AMOUNT));
-        test("100.01", "100.00", new StdFee(new BigDecimal("0.005"), BigDecimal.ZERO,
+        test("100.01", "100.00", Fee.stdFee(new BigDecimal("0.005"), BigDecimal.ZERO,
                 BigDecimal.ZERO, new BigDecimal("0.004"), AmountType.AMOUNT));
     }
 
     @Test
     public void testRounding() throws IllegalAmountException {
         // провоцируем периодические дроби
-        test("3.44", "3.33", new StdFee(new BigDecimal("0.0333"), BigDecimal.ZERO, BigDecimal.ZERO,
+        test("3.44", "3.33", Fee.stdFee(new BigDecimal("0.0333"), BigDecimal.ZERO, BigDecimal.ZERO,
                 null, AmountType.AMOUNT));
-        test("5.30", "5.00", new StdFee(new BigDecimal("0.06"), BigDecimal.ZERO, BigDecimal.ZERO,
+        test("5.30", "5.00", Fee.stdFee(new BigDecimal("0.06"), BigDecimal.ZERO, BigDecimal.ZERO,
                 null, AmountType.AMOUNT));
     }
 
@@ -125,7 +124,7 @@ public final class FeeTest {
      */
     @Test
     public void testP2p() throws IllegalAmountException {
-        final Fee fee = new StdFee(new BigDecimal("0.005"), BigDecimal.ZERO, BigDecimal.ZERO, null,
+        final Fee fee = Fee.stdFee(new BigDecimal("0.005"), BigDecimal.ZERO, BigDecimal.ZERO, null,
                 AmountType.AMOUNT);
         test("3.02", "3.00", fee);
         test("1005.00", "1000.00", fee);
@@ -141,6 +140,16 @@ public final class FeeTest {
         Assert.assertEquals(fee.amount(new BigDecimal("1005.00")), new BigDecimal("1010.03"));
         Assert.assertEquals(fee.amount(new BigDecimal("995.00")), new BigDecimal("999.98"));
         Assert.assertEquals(fee.netAmount(new BigDecimal("999.97")), new BigDecimal("995.00"));
+    }
+
+    @Test
+    public void testNoFee() throws Exception {
+        Fee fee = Fee.noFee();
+        Assert.assertEquals(fee.hasCommission(), false);
+        Assert.assertEquals(fee.isCalculable(), true);
+        BigDecimal amount = new BigDecimal("10.235");
+        Assert.assertEquals(fee.netAmount(amount), amount);
+        Assert.assertEquals(fee.amount(amount), amount);
     }
 
     private void test(String amount, String netAmount, Fee fee) throws IllegalAmountException {

@@ -29,13 +29,15 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.Fee;
-import com.yandex.money.api.model.showcase.StdFee;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+
+import static com.yandex.money.api.methods.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
  * Type adapter for {@link Fee}.
@@ -71,30 +73,31 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        if (TYPE_CUSTOM.equals(JsonUtils.getString(object, MEMBER_TYPE))) {
-            return Fee.CUSTOM_FEE;
+        String feeType = getMandatoryString(object, MEMBER_TYPE);
+
+        if (Fee.Type.CUSTOM_FEE.code.equals(feeType)) {
+            return Fee.customFee();
+        } else if (Fee.Type.STD_FEE.code.equals(feeType)) {
+            return Fee.stdFee(getValueOrZero(object, MEMBER_A), getValueOrZero(object, MEMBER_B),
+                    getValueOrZero(object, MEMBER_C), getBigDecimal(object, MEMBER_D),
+                    AmountType.parse(getString(object, MEMBER_AMOUNT_TYPE)));
         } else {
-            return new StdFee(getValueOrZero(object, MEMBER_A), getValueOrZero(object, MEMBER_B),
-                    getValueOrZero(object, MEMBER_C), JsonUtils.getBigDecimal(object, MEMBER_D),
-                    AmountType.parse(JsonUtils.getString(object, MEMBER_AMOUNT_TYPE)));
+            throw new IllegalArgumentException("unknown fee type: " + feeType);
         }
     }
 
     @Override
     public JsonElement serialize(Fee src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        if (src == Fee.CUSTOM_FEE) {
+        if (src.type == Fee.Type.CUSTOM_FEE) {
             object.addProperty(MEMBER_TYPE, TYPE_CUSTOM);
-        } else if (src instanceof StdFee) {
-            StdFee fee = (StdFee) src;
-            object.addProperty(MEMBER_TYPE, TYPE_STD);
-            object.addProperty(MEMBER_A, fee.a);
-            object.addProperty(MEMBER_B, fee.b);
-            object.addProperty(MEMBER_C, fee.c);
-            object.addProperty(MEMBER_D, fee.d);
-            object.addProperty(MEMBER_AMOUNT_TYPE, fee.getAmountType().code);
         } else {
-            throw new IllegalArgumentException("unknown fee type: " + src.getClass());
+            object.addProperty(MEMBER_TYPE, TYPE_STD);
+            object.addProperty(MEMBER_A, src.a);
+            object.addProperty(MEMBER_B, src.b);
+            object.addProperty(MEMBER_C, src.c);
+            object.addProperty(MEMBER_D, src.d);
+            object.addProperty(MEMBER_AMOUNT_TYPE, src.getAmountType().code);
         }
         return object;
     }
@@ -105,7 +108,7 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
     }
 
     private static BigDecimal getValueOrZero(JsonObject object, String member) {
-        BigDecimal value = JsonUtils.getBigDecimal(object, member);
+        BigDecimal value = getBigDecimal(object, member);
         return value == null ? BigDecimal.ZERO : value;
     }
 }

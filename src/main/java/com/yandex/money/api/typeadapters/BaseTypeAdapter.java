@@ -32,7 +32,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import static com.yandex.money.api.typeadapters.GsonProvider.getGson;
-import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeHierarchyAdapter;
+import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeAdapter;
 
 /**
  * Base class for type adapters.
@@ -43,7 +43,7 @@ public abstract class BaseTypeAdapter<T>
         implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
 
     public BaseTypeAdapter() {
-        registerTypeHierarchyAdapter(getType(), this);
+        registerTypeAdapter(getType(), this);
     }
 
     @Override

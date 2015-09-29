@@ -88,7 +88,7 @@ public final class Amount extends Number {
         private static final BigDecimal PENNY = new BigDecimal("0.01");
 
         private Currency currency = Currency.RUB;
-        private Fee fee = Fee.NO_FEE;
+        private Fee fee = Fee.noFee();
 
         public Builder() {
             super(PENNY, null, PENNY);

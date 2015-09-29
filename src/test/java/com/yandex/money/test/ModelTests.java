@@ -25,12 +25,27 @@
 package com.yandex.money.test;
 
 import com.yandex.money.api.methods.AccountInfo;
-import com.yandex.money.api.model.*;
+import com.yandex.money.api.model.AccountStatus;
+import com.yandex.money.api.model.AccountType;
+import com.yandex.money.api.model.Avatar;
+import com.yandex.money.api.model.BalanceDetails;
+import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.ExternalCard;
+import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.model.showcase.AmountType;
-import com.yandex.money.api.model.showcase.StdFee;
-import com.yandex.money.api.typeadapters.*;
+import com.yandex.money.api.model.showcase.Fee;
+import com.yandex.money.api.typeadapters.AccountInfoTypeAdapter;
+import com.yandex.money.api.typeadapters.AvatarTypeAdapter;
+import com.yandex.money.api.typeadapters.BalanceDetailsTypeAdapter;
+import com.yandex.money.api.typeadapters.CardTypeAdapter;
+import com.yandex.money.api.typeadapters.ErrorTypeAdapter;
+import com.yandex.money.api.typeadapters.ExternalCardTypeAdapter;
+import com.yandex.money.api.typeadapters.FeeTypeAdapter;
+import com.yandex.money.api.typeadapters.TypeAdapter;
+import com.yandex.money.api.typeadapters.YandexMoneyCardTypeAdapter;
 import com.yandex.money.api.utils.Currency;
+
 import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -80,7 +95,7 @@ public class ModelTests {
 
     @Test
     public void testFee() {
-        performTest(new StdFee(BigDecimal.TEN, BigDecimal.ONE, BigDecimal.ZERO, null,
+        performTest(Fee.stdFee(BigDecimal.TEN, BigDecimal.ONE, BigDecimal.ZERO, null,
                 AmountType.NET_AMOUNT), FeeTypeAdapter.getInstance());
     }
 
