@@ -24,15 +24,9 @@
 
 package com.yandex.money.api.net;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.Showcase;
+import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.Strings;
@@ -40,8 +34,6 @@ import com.yandex.money.api.utils.Strings;
 import org.joda.time.DateTime;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Stack;
@@ -121,14 +113,7 @@ public final class ShowcaseContext {
      * @return request to move on the next state.
      */
     public ApiRequest<Showcase> createRequest() {
-        if (currentStep == null) {
-            throw new IllegalStateException("currentStep is null");
-        }
-        if (currentStep.showcase == null) {
-            throw new IllegalStateException("showcase of current step is null");
-        }
-        return new Request(currentStep.submitUrl, lastModified,
-                currentStep.showcase.getPaymentParameters());
+        return new Request(currentStep, lastModified);
     }
 
     /**
@@ -195,7 +180,7 @@ public final class ShowcaseContext {
     }
 
     void setParams(InputStream inputStream) {
-        params = Params.createFromJson(inputStream).getParams();
+        params = JsonUtils.map(GsonProvider.getGson().toJsonTree(inputStream).getAsJsonObject());
     }
 
     /**
@@ -235,56 +220,29 @@ public final class ShowcaseContext {
 
         private final String url;
 
-        public Request(String url, DateTime lastModified, Map<String, String> parameters) {
+        public Request(Step currentStep, DateTime lastModified) {
             super(Showcase.class, ShowcaseTypeAdapter.getInstance());
-            if (Strings.isNullOrEmpty(url)) {
+            if (currentStep == null) {
+                throw new NullPointerException("currentStep is null");
+            }
+            if (currentStep.showcase == null) {
+                throw new NullPointerException("showcase of current step is null");
+            }
+            if (Strings.isNullOrEmpty(currentStep.submitUrl)) {
                 throw new IllegalArgumentException("url is null or empty");
             }
-            if (parameters == null) {
+            if (currentStep.showcase.getPaymentParameters() == null) {
                 throw new NullPointerException("parameters is null");
             }
-            this.url = url;
+            this.url = currentStep.submitUrl;
 
             addHeader(HttpHeaders.IF_MODIFIED_SINCE, lastModified);
-            addParameters(parameters);
+            addParameters(currentStep.showcase.getPaymentParameters());
         }
 
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
             return url;
-        }
-    }
-
-    private static final class Params {
-
-        private final Map<String, String> params;
-
-        private Params(Map<String, String> params) {
-            this.params = params;
-        }
-
-        public static Params createFromJson(InputStream inputStream) {
-            return buildGson().fromJson(new InputStreamReader(inputStream), Params.class);
-        }
-
-        public Map<String, String> getParams() {
-            return params;
-        }
-
-        private static Gson buildGson() {
-            return new GsonBuilder().registerTypeAdapter(Params.class, new Deserializer()).create();
-        }
-
-        private static final class Deserializer implements JsonDeserializer<Params> {
-
-            @Override
-            public Params deserialize(JsonElement json, Type typeOfT,
-                                      JsonDeserializationContext context)
-                    throws JsonParseException {
-
-                JsonObject object = json.getAsJsonObject().getAsJsonObject("params");
-                return new Params(JsonUtils.map(object));
-            }
         }
     }
 
