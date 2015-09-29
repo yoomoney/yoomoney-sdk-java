@@ -184,16 +184,16 @@ public final class Showcase {
      */
     public static final class Request extends BaseApiRequest<Showcase> {
 
-        private final long scid;
+        private final long patternId;
         private final String url;
 
         /**
          * Constructor.
          *
-         * @param scid showcase id
+         * @param patternId payment pattern ID.
          */
-        public Request(long scid) {
-            this(scid, null, null);
+        public Request(long patternId) {
+            this(patternId, null, null);
         }
 
         /**
@@ -206,7 +206,7 @@ public final class Showcase {
             this(-1l, url, params);
         }
 
-        private Request(long scid, String url, Map<String, String> params) {
+        private Request(long patternId, String url, Map<String, String> params) {
             super(Showcase.class, ShowcaseTypeAdapter.getInstance());
             if (url != null) {
                 if (params == null) {
@@ -215,7 +215,7 @@ public final class Showcase {
                     addParameters(params);
                 }
             }
-            this.scid = scid;
+            this.patternId = patternId;
             this.url = url;
         }
 
@@ -226,7 +226,7 @@ public final class Showcase {
 
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
-            return url == null ? hostsProvider.getMoneyApi() + "/showcase/" + scid : url;
+            return url == null ? hostsProvider.getMoneyApi() + "/showcase/" + patternId : url;
         }
     }
 }

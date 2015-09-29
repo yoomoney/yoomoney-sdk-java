@@ -84,7 +84,7 @@ public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<Showcase
         if (!src.params.equals(Collections.emptyMap())) {
             object.add(MEMBER_PARAMS, JsonUtils.toJsonObject(src.params));
         }
-        object.addProperty(MEMBER_ID, src.scid);
+        object.addProperty(MEMBER_ID, src.patternId);
         object.addProperty(MEMBER_TITLE, src.title);
         object.addProperty(MEMBER_TOP, src.topIndex);
         object.addProperty(MEMBER_URL, src.url);

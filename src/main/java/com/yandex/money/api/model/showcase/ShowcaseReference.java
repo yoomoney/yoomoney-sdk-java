@@ -37,9 +37,9 @@ import java.util.Map;
 public final class ShowcaseReference {
 
     /**
-     * SCID (pattern-id).
+     * Payment pattern ID.
      */
-    public final long scid;
+    public final long patternId;
 
     /**
      * Title.
@@ -69,21 +69,21 @@ public final class ShowcaseReference {
     /**
      * Constructor.
      *
-     * @param scid     scid of an item
+     * @param patternId payment pattern ID
      * @param title    title of an item
      * @param topIndex index of an item in list (lower values mean higher ranking, if values are
      *                 equal it is recommended to sort {@link ShowcaseReference}'s by
      *                 title), can be null
      * @param format   showcase format
      */
-    public ShowcaseReference(long scid, String title, Integer topIndex, Format format) {
-        this(scid, title, topIndex, null, format, Collections.<String, String>emptyMap());
+    public ShowcaseReference(long patternId, String title, Integer topIndex, Format format) {
+        this(patternId, title, topIndex, null, format, Collections.<String, String>emptyMap());
     }
 
     /**
      * Constructor.
      *
-     * @param scid     showcase id of an item
+     * @param patternId payment pattern ID
      * @param title    title of an item
      * @param topIndex index of an item in list (lower values mean higher ranking, if values are
      *                 equal it is recommended to sort {@link ShowcaseReference}'s by
@@ -92,9 +92,10 @@ public final class ShowcaseReference {
      * @param format   showcase format
      * @param params   showcase parameters of the first step, can be null
      */
-    public ShowcaseReference(long scid, String title, Integer topIndex, String url, Format format,
+    public ShowcaseReference(long patternId, String title, Integer topIndex, String url, Format
+            format,
                              Map<String, String> params) {
-        this.scid = scid;
+        this.patternId = patternId;
         if (Strings.isNullOrEmpty(title)) {
             throw new IllegalArgumentException("title is null or empty");
         }
@@ -111,7 +112,7 @@ public final class ShowcaseReference {
     @Override
     public String toString() {
         return "Mart{" +
-                "scid=" + scid +
+                "patternId=" + patternId +
                 ", title='" + title + '\'' +
                 ", topIndex=" + topIndex +
                 ", url='" + url + '\'' +
