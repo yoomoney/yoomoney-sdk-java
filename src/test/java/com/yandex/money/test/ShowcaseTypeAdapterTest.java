@@ -45,8 +45,6 @@ import com.yandex.money.api.typeadapters.showcase.uicontrol.TextTypeAdapter;
 import org.junit.Assert;
 import org.testng.annotations.Test;
 
-import java.util.Scanner;
-
 /**
  * Checks {@link com.yandex.money.api.model.showcase.components.Component}'s {@link Gson} type
  * adapters.
@@ -146,8 +144,7 @@ public final class ShowcaseTypeAdapterTest {
     }
 
     private static String loadComponentJson(String name) {
-        return new Scanner(ShowcaseTypeAdapterTest.class
-                .getResourceAsStream("/showcase/" + name), "UTF-8").useDelimiter("\\A").next();
+        return Utils.loadResource("/showcase/" + name);
     }
 
     /**
