@@ -30,14 +30,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
+import com.yandex.money.api.methods.ShowcaseSearch;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
-import com.yandex.money.api.resources.ShowcaseSearch;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
 import java.util.List;
+
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryArray;
+import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
 
 /**
  * Type adapter for {@link ShowcaseSearch}.
@@ -64,11 +67,11 @@ public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSea
                                       JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        Error error = Error.parse(JsonUtils.getString(object, MEMBER_ERROR));
+        Error error = Error.parse(getString(object, MEMBER_ERROR));
         if (error == null) {
-            List<ShowcaseReference> result = JsonUtils.getMandatoryArray(object,
-                    MEMBER_RESULT, ShowcaseReferenceTypeAdapter.getInstance());
-            return ShowcaseSearch.success(result, JsonUtils.getString(object, MEMBER_NEXT_PAGE));
+            List<ShowcaseReference> result = getMandatoryArray(object, MEMBER_RESULT,
+                    ShowcaseReferenceTypeAdapter.getInstance());
+            return ShowcaseSearch.success(result, getString(object, MEMBER_NEXT_PAGE));
         } else {
             return ShowcaseSearch.failure(error);
         }
@@ -80,7 +83,7 @@ public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSea
         JsonObject object = new JsonObject();
         Error error = src.error;
         if (error == null) {
-            JsonArray array = JsonUtils.toJsonArray(src.result,
+            JsonArray array = toJsonArray(src.result,
                     ShowcaseReferenceTypeAdapter.getInstance());
             object.add(MEMBER_RESULT, array);
             object.addProperty(MEMBER_NEXT_PAGE, src.nextPage);

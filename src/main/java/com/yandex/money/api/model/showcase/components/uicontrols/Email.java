@@ -22,55 +22,63 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrol;
+package com.yandex.money.api.model.showcase.components.uicontrols;
 
+import com.yandex.money.api.utils.Patterns;
 import com.yandex.money.api.utils.ToStringBuilder;
 
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.util.Locale;
-
 /**
- * The month and year control.
+ * Email control.
+ * <p/>
+ * TODO: refactor inheritance.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Month extends Date {
+public final class Email extends Text {
 
-    /**
-     * Acceptable pattern.
-     */
-    public static final String PATTERN = "yyyy-MM";
-
-    /**
-     * (De)serialization formatter.
-     */
-    public static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern(PATTERN)
-            .withLocale(Locale.ENGLISH);
-
-    private Month(Builder builder) {
+    private Email(Builder builder) {
         super(builder);
     }
 
     @Override
-    public DateTimeFormatter getFormatter() {
-        return FORMATTER;
-    }
-
-    @Override
     protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Month");
+        return super.getToStringBuilder().setName("Email");
     }
 
     /**
-     * {@link Month} builder.
+     * {@link Email} builder.
      */
-    public static final class Builder extends Date.Builder {
+    public static final class Builder extends Text.Builder {
+
+        public Builder() {
+            super.setPattern(Patterns.EMAIL);
+        }
 
         @Override
-        public Month create() {
-            return new Month(this);
+        public Email create() {
+            return new Email(this);
+        }
+
+        @Override
+        public Builder setMinLength(Integer minLength) {
+            throw new UnsupportedOperationException(
+                    "email min length defined by predefined pattern");
+        }
+
+        @Override
+        public Builder setMaxLength(Integer maxLength) {
+            throw new UnsupportedOperationException(
+                    "email max length defined by predefined pattern");
+        }
+
+        @Override
+        public Builder setPattern(String pattern) {
+            throw new UnsupportedOperationException("email has predefined pattern");
+        }
+
+        @Override
+        public Text.Builder setKeyboard(Keyboard keyboard) {
+            throw new UnsupportedOperationException("only email keyboards");
         }
     }
 }

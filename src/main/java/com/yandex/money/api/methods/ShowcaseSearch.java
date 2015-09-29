@@ -22,11 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.resources;
+package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
 import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.GetRequest;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseSearchTypeAdapter;
@@ -37,7 +38,7 @@ import java.util.List;
 
 /**
  * This class wraps result of showcase searching provided by response of
- * {@link com.yandex.money.api.resources.ShowcaseSearch.Request} call.
+ * {@link ShowcaseSearch.Request} call.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
@@ -54,7 +55,7 @@ public final class ShowcaseSearch {
     public final List<ShowcaseReference> result;
 
     /**
-     * Next page predicate wrapped in {@link String}.
+     * Next page marker.
      */
     public final String nextPage;
 
@@ -71,7 +72,7 @@ public final class ShowcaseSearch {
      * Constructs successful search call.
      *
      * @param result   obtained items
-     * @param nextPage next page is available if {@code "true"}
+     * @param nextPage next page marker
      */
     public static ShowcaseSearch success(List<ShowcaseReference> result, String nextPage) {
         return new ShowcaseSearch(null, result, nextPage);

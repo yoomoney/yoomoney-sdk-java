@@ -22,30 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrol;
+package com.yandex.money.api.model.showcase.components.uicontrols;
 
+import com.yandex.money.api.model.showcase.Fee;
+import com.yandex.money.api.utils.Currency;
 import com.yandex.money.api.utils.ToStringBuilder;
 
+import java.math.BigDecimal;
+
 /**
- * On/off control.
+ * Cost of transaction.
  *
- * @author Aleksandr Ershov (asershov@yamoney.ru)
+ * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Checkbox extends ParameterControl {
+public final class Amount extends Number {
 
     /**
-     * Initial state. Default is {@code false}.
+     * Currency. Default is {@link Currency#RUB}.
      */
-    public boolean checked;
+    public final Currency currency;
 
-    private Checkbox(Builder builder) {
+    /**
+     * Fee. Default is {@link Fee#NO_FEE}.
+     */
+    public final Fee fee;
+
+    private Amount(Builder builder) {
         super(builder);
-        checked = builder.checked;
-    }
-
-    @Override
-    public boolean isValid(String value) {
-        return !required || checked;
+        currency = builder.currency;
+        fee = builder.fee;
     }
 
     @Override
@@ -54,60 +59,63 @@ public final class Checkbox extends ParameterControl {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        Checkbox checkbox = (Checkbox) o;
+        Amount amount = (Amount) o;
 
-        return checked == checkbox.checked;
+        return currency == amount.currency && fee.equals(amount.fee);
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (checked ? 1 : 0);
+        result = 31 * result + currency.hashCode();
+        result = 31 * result + fee.hashCode();
         return result;
-    }
-
-    @Override
-    public String getValue() {
-        return checked ? super.getValue() : null;
-    }
-
-    @Override
-    public void setValue(String value) {
-        throw new UnsupportedOperationException("call setChecked(boolean) instead");
-    }
-
-    /**
-     * Sets {@code checked} value. Should be used instead of {@link #setValue(String)}.
-     *
-     * @param checked {@code true} if checked.
-     */
-    public void setChecked(boolean checked) {
-        this.checked = checked;
     }
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
         return super.getToStringBuilder()
-                .setName("Checkbox")
-                .append("checked", checked);
+                .setName("Amount")
+                .append("currency", currency.toString())
+                .append("fee", fee.toString());
     }
 
     /**
-     * {@link Checkbox} builder.
+     * {@link Amount} builder.
      */
-    public static final class Builder extends ParameterControl.Builder {
+    public static final class Builder extends Number.Builder {
 
-        private boolean checked = false;
+        private static final BigDecimal PENNY = new BigDecimal("0.01");
 
-        @Override
-        public Checkbox create() {
-            return new Checkbox(this);
+        private Currency currency = Currency.RUB;
+        private Fee fee = Fee.NO_FEE;
+
+        public Builder() {
+            super(PENNY, null, PENNY);
         }
 
-        public Builder setChecked(Boolean checked) {
-            if (checked != null) {
-                this.checked = checked;
+        @Override
+        public Amount create() {
+            return new Amount(this);
+        }
+
+        @Override
+        public Builder setMin(BigDecimal min) {
+            if (min != null) {
+                super.setMin(min);
             }
+            return this;
+        }
+
+        public Builder setCurrency(Currency currency) {
+            if (currency != null) {
+                this.currency = currency;
+            }
+            return this;
+        }
+
+        public Builder setFee(Fee fee) {
+            this.fee = fee;
             return this;
         }
     }

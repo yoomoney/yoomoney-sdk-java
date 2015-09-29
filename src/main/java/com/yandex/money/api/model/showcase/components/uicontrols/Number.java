@@ -22,88 +22,47 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrol;
+package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.utils.ToStringBuilder;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import java.util.Locale;
+import java.math.BigDecimal;
 
 /**
- * Date control specified by {@link Date#PATTERN} (for example 2015-05-30).
+ * Numeric control.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public class Date extends ParameterControl {
+public class Number extends ParameterControl {
 
     /**
-     * Date format.
+     * Minimum acceptable number.
      */
-    public static final String PATTERN = "yyyy-MM-dd";
+    public final BigDecimal min;
 
     /**
-     * Date formatter.
-     * <p/>
-     * TODO: refactor this field or {@link Date#getFormatter()}.
+     * Maximum acceptable number.
      */
-    public static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern(PATTERN)
-            .withLocale(Locale.ENGLISH);
+    public final BigDecimal max;
 
     /**
-     * Minimal allowed value.
+     * Step scale factor. The default is {@link BigDecimal#ONE}.
      */
-    public final DateTime min;
+    public final BigDecimal step;
 
-    /**
-     * Maximal allowed value.
-     */
-    public final DateTime max;
-
-    protected Date(Builder builder) {
+    protected Number(Builder builder) {
         super(builder);
-        if (builder.min != null && builder.max != null && builder.min.isAfter(builder.max)) {
+        if (builder.min != null && builder.max != null && builder.min.compareTo(builder.max) > 0) {
             throw new IllegalArgumentException("min > max");
         }
         min = builder.min;
         max = builder.max;
-    }
-
-    /**
-     * Parses a {@link DateTime} from the specified string using a formatter.
-     *
-     * @param date      value to parse.
-     * @param formatter {@link DateTimeFormatter}.
-     */
-    public static DateTime parseDate(String date, DateTimeFormatter formatter) {
-        if (date == null || date.isEmpty()) {
-            return null;
-        }
-        if (formatter == null) {
-            throw new NullPointerException("pattern is null");
-        }
-        return DateTime.parse(date, formatter);
+        step = builder.step;
     }
 
     @Override
     public boolean isValid(String value) {
         return super.isValid(value) && isValidInner(value);
-    }
-
-    /**
-     * Parses internal value to {@link DateTime}.
-     */
-    public DateTime toDateTime() {
-        return parseDate(getValue(), getFormatter());
-    }
-
-    /**
-     * @return control's formatter.
-     */
-    public DateTimeFormatter getFormatter() {
-        return FORMATTER;
     }
 
     @Override
@@ -112,10 +71,10 @@ public class Date extends ParameterControl {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
 
-        Date date = (Date) o;
+        Number number = (Number) o;
 
-        return !(min != null ? !min.equals(date.min) : date.min != null) &&
-                !(max != null ? !max.equals(date.max) : date.max != null);
+        return !(min != null ? !min.equals(number.min) : number.min != null) && !(max != null ? !max
+                .equals(number.max) : number.max != null) && step.equals(number.step);
     }
 
     @Override
@@ -123,48 +82,73 @@ public class Date extends ParameterControl {
         int result = super.hashCode();
         result = 31 * result + (min != null ? min.hashCode() : 0);
         result = 31 * result + (max != null ? max.hashCode() : 0);
+        result = 31 * result + step.hashCode();
         return result;
     }
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
         return super.getToStringBuilder()
-                .setName("Date")
+                .setName("Number")
                 .append("min", min)
-                .append("max", max);
+                .append("max", max)
+                .append("step", step);
     }
 
     private boolean isValidInner(String value) {
+        if (value == null || value.isEmpty()) {
+            return true;
+        }
         try {
-            DateTime dateTime = parseDate(value, getFormatter());
-            return dateTime == null ||
-                    (min == null || min.isBefore(dateTime) || min.isEqual(dateTime)) &&
-                            (max == null || max.isAfter(dateTime) || max.isEqual(dateTime));
-        } catch (IllegalArgumentException e) {
+            BigDecimal v = new BigDecimal(value);
+            BigDecimal quotient = v.divideToIntegralValue(step);
+            return (min == null || v.compareTo(min) >= 0) &&
+                    (max == null || v.compareTo(max) <= 0) &&
+                    v.compareTo(quotient.multiply(step)) == 0;
+        } catch (NumberFormatException e) {
             return false;
         }
     }
 
     /**
-     * {@link Date} builder.
+     * {@link Number} builder.
      */
     public static class Builder extends ParameterControl.Builder {
 
-        private DateTime min;
-        private DateTime max;
+        protected BigDecimal min;
+        protected BigDecimal max;
+        protected BigDecimal step = BigDecimal.ONE;
 
-        @Override
-        public Date create() {
-            return new Date(this);
+        public Builder() {
+            super();
         }
 
-        public Builder setMin(DateTime min) {
+        protected Builder(BigDecimal min, BigDecimal max, BigDecimal step) {
+            super();
+            this.min = min;
+            this.max = max;
+            this.step = step;
+        }
+
+        @Override
+        public Number create() {
+            return new Number(this);
+        }
+
+        public Builder setMin(BigDecimal min) {
             this.min = min;
             return this;
         }
 
-        public Builder setMax(DateTime max) {
+        public Builder setMax(BigDecimal max) {
             this.max = max;
+            return this;
+        }
+
+        public final Builder setStep(BigDecimal step) {
+            if (step != null) {
+                this.step = step;
+            }
             return this;
         }
     }

@@ -22,13 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.resources;
+package com.yandex.money.api.net;
 
 import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.Showcase;
-import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;
@@ -267,6 +264,14 @@ public final class ShowcaseContext {
                     && !(submitUrl != null ? !submitUrl.equals(step.submitUrl)
                     : step.submitUrl != null);
 
+        }
+
+        @Override
+        public String toString() {
+            return "Step{" +
+                    "showcase=" + showcase +
+                    ", submitUrl='" + submitUrl + '\'' +
+                    '}';
         }
 
         @Override

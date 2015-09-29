@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
-import com.yandex.money.api.model.showcase.components.uicontrol.Text;
+import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 
 /**
  * Type adapter for {@link Text} component.

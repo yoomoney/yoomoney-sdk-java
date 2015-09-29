@@ -27,16 +27,16 @@ package com.yandex.money.test.processes;
 import com.squareup.okhttp.OkHttpClient;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.Showcase;
-import com.yandex.money.api.model.showcase.components.container.Group;
-import com.yandex.money.api.model.showcase.components.uicontrol.Select;
-import com.yandex.money.api.model.showcase.components.uicontrol.Text;
+import com.yandex.money.api.model.showcase.components.containers.Group;
+import com.yandex.money.api.model.showcase.components.uicontrols.Select;
+import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.net.ApiClient;
 import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.HostsProvider;
+import com.yandex.money.api.net.ShowcaseContext;
 import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.processes.ShowcaseProcess;
-import com.yandex.money.api.resources.DocumentProvider;
-import com.yandex.money.api.resources.ShowcaseContext;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.Language;
 import com.yandex.money.test.Utils;
@@ -94,7 +94,7 @@ public final class ShowcaseProcessTest extends Assert {
 
     /**
      * Tests that erroneous leads to
-     * {@link com.yandex.money.api.resources.ShowcaseContext.State#INVALID_PARAMS} state.
+     * {@link ShowcaseContext.State#INVALID_PARAMS} state.
      */
     @Test
     public void testProceedFail() throws Exception {

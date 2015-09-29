@@ -24,9 +24,9 @@
 
 package com.yandex.money.test;
 
+import com.yandex.money.api.methods.ShowcaseSearch;
 import com.yandex.money.api.net.DefaultApiClient;
-import com.yandex.money.api.resources.DocumentProvider;
-import com.yandex.money.api.resources.ShowcaseSearch;
+import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseSearchTypeAdapter;
 
 import org.testng.Assert;

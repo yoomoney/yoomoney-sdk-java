@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.resources;
+package com.yandex.money.api.net;
 
 import org.joda.time.DateTime;
 

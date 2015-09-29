@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
-import com.yandex.money.api.model.showcase.components.uicontrol.Tel;
+import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
 
 /**
  * Type adapter for {@link Tel} component.

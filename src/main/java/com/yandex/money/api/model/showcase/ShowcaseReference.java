@@ -24,22 +24,23 @@
 
 package com.yandex.money.api.model.showcase;
 
+import com.yandex.money.api.methods.ShowcaseSearch;
 import com.yandex.money.api.utils.Strings;
 
 import java.util.Collections;
 import java.util.Map;
 
 /**
- * Element of {@link com.yandex.money.api.resources.ShowcaseSearch} class.
+ * Element of {@link ShowcaseSearch} class.
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class ShowcaseReference {
 
     /**
-     * Payment pattern ID.
+     * Showcase ID.
      */
-    public final long patternId;
+    public final long scid;
 
     /**
      * Title.
@@ -69,21 +70,21 @@ public final class ShowcaseReference {
     /**
      * Constructor.
      *
-     * @param patternId payment pattern ID
+     * @param scid showcase ID
      * @param title    title of an item
      * @param topIndex index of an item in list (lower values mean higher ranking, if values are
      *                 equal it is recommended to sort {@link ShowcaseReference}'s by
      *                 title), can be null
      * @param format   showcase format
      */
-    public ShowcaseReference(long patternId, String title, Integer topIndex, Format format) {
-        this(patternId, title, topIndex, null, format, Collections.<String, String>emptyMap());
+    public ShowcaseReference(long scid, String title, Integer topIndex, Format format) {
+        this(scid, title, topIndex, null, format, Collections.<String, String>emptyMap());
     }
 
     /**
      * Constructor.
      *
-     * @param patternId payment pattern ID
+     * @param scid showcase ID
      * @param title    title of an item
      * @param topIndex index of an item in list (lower values mean higher ranking, if values are
      *                 equal it is recommended to sort {@link ShowcaseReference}'s by
@@ -92,9 +93,9 @@ public final class ShowcaseReference {
      * @param format   showcase format
      * @param params   showcase parameters of the first step, can be null
      */
-    public ShowcaseReference(long patternId, String title, Integer topIndex, String url,
+    public ShowcaseReference(long scid, String title, Integer topIndex, String url,
                              Format format, Map<String, String> params) {
-        this.patternId = patternId;
+        this.scid = scid;
         if (Strings.isNullOrEmpty(title)) {
             throw new IllegalArgumentException("title is null or empty");
         }
@@ -115,7 +116,7 @@ public final class ShowcaseReference {
 
         ShowcaseReference that = (ShowcaseReference) o;
 
-        return patternId == that.patternId && title.equals(that.title)
+        return scid == that.scid && title.equals(that.title)
                 && !(topIndex != null ? !topIndex.equals(that.topIndex) : that.topIndex != null)
                 && !(url != null ? !url.equals(that.url) : that.url != null)
                 && params.equals(that.params) && format == that.format;
@@ -124,7 +125,7 @@ public final class ShowcaseReference {
 
     @Override
     public int hashCode() {
-        int result = (int) (patternId ^ (patternId >>> 32));
+        int result = (int) (scid ^ (scid >>> 32));
         result = 31 * result + title.hashCode();
         result = 31 * result + (topIndex != null ? topIndex.hashCode() : 0);
         result = 31 * result + (url != null ? url.hashCode() : 0);
@@ -135,13 +136,13 @@ public final class ShowcaseReference {
 
     @Override
     public String toString() {
-        return "Mart{" +
-                "patternId=" + patternId +
+        return "ShowcaseReference{" +
+                "scid=" + scid +
                 ", title='" + title + '\'' +
                 ", topIndex=" + topIndex +
                 ", url='" + url + '\'' +
                 ", params=" + params +
-                ", format ='" + format + '\'' +
+                ", format=" + format +
                 '}';
     }
 

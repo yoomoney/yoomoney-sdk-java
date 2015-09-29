@@ -30,7 +30,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.Parameter;
-import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl;
+import com.yandex.money.api.model.showcase.components.uicontrols.ParameterControl;
 
 /**
  * Base type adapter for components implementing {@link ParameterControl} interface.

@@ -28,7 +28,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
-import com.yandex.money.api.model.showcase.components.uicontrol.Text;
+import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 
 /**
  * Base type adapter for subclasses of {@link Text} component.

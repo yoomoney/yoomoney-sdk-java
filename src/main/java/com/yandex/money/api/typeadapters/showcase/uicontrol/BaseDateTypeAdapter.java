@@ -28,7 +28,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
-import com.yandex.money.api.model.showcase.components.uicontrol.Date;
+import com.yandex.money.api.model.showcase.components.uicontrols.Date;
 
 import org.joda.time.format.DateTimeFormatter;
 

@@ -30,7 +30,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.model.showcase.components.container.Group;
+import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.typeadapters.showcase.ComponentsTypeProvider;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.AmountTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeAdapter;

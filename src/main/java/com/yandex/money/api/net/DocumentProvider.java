@@ -22,17 +22,11 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.resources;
+package com.yandex.money.api.net;
 
 import com.squareup.okhttp.Response;
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.model.showcase.Showcase;
-import com.yandex.money.api.net.AbstractSession;
-import com.yandex.money.api.net.ApiClient;
-import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.BaseApiRequest;
-import com.yandex.money.api.net.GetRequest;
-import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.Strings;

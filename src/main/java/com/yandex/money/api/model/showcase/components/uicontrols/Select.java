@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrol;
+package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.model.showcase.components.container.Group;
+import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.utils.ToStringBuilder;
 
 import java.util.ArrayList;

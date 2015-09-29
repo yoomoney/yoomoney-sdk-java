@@ -22,35 +22,61 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.container;
+package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.model.showcase.components.TextBlock;
+import com.yandex.money.api.utils.Patterns;
 import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
- * Sequence of text blocks.
+ * Telephone number control.
+ * <p/>
+ * TODO: maybe this class should extend ParameterControl?
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Paragraph extends Container<TextBlock> {
+public final class Tel extends Text {
 
-    private Paragraph(Builder builder) {
+    private Tel(Builder builder) {
         super(builder);
     }
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Paragraph");
+        return super.getToStringBuilder().setName("Tel");
     }
 
     /**
-     * {@link Paragraph} builder.
+     * {@link Tel builder}.
      */
-    public static final class Builder extends Container.Builder<TextBlock> {
+    public static final class Builder extends Text.Builder {
+
+        public Builder() {
+            super.setPattern(Patterns.PHONE);
+        }
 
         @Override
-        public Paragraph create() {
-            return new Paragraph(this);
+        public Tel create() {
+            return new Tel(this);
+        }
+
+        @Override
+        public Builder setMinLength(Integer minLength) {
+            throw new UnsupportedOperationException("tel min length defined by predefined pattern");
+        }
+
+        @Override
+        public Builder setMaxLength(Integer maxLength) {
+            throw new UnsupportedOperationException("tel max length defined by predefined pattern");
+        }
+
+        @Override
+        public Builder setPattern(String pattern) {
+            throw new UnsupportedOperationException("tel has predefined pattern");
+        }
+
+        @Override
+        public Text.Builder setKeyboard(Keyboard keyboard) {
+            throw new UnsupportedOperationException("only tel keyboards");
         }
     }
 }

@@ -29,7 +29,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
@@ -37,6 +36,13 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.yandex.money.api.methods.JsonUtils.getInt;
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryLong;
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.methods.JsonUtils.map;
+import static com.yandex.money.api.methods.JsonUtils.toJsonObject;
 
 /**
  * Type adapter for {@link ShowcaseReference}.
@@ -68,12 +74,12 @@ public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<Showcase
         JsonObject object = json.getAsJsonObject();
         JsonObject paramsObject = object.getAsJsonObject(MEMBER_PARAMS);
         Map<String, String> params = paramsObject == null ? new HashMap<String, String>() :
-                JsonUtils.map(paramsObject);
-        return new ShowcaseReference(JsonUtils.getMandatoryLong(object, MEMBER_ID),
-                JsonUtils.getMandatoryString(object, MEMBER_TITLE),
-                JsonUtils.getInt(object, MEMBER_TOP),
-                JsonUtils.getString(object, MEMBER_URL),
-                ShowcaseReference.Format.parse(JsonUtils.getString(object, MEMBER_FORMAT)),
+                map(paramsObject);
+        return new ShowcaseReference(getMandatoryLong(object, MEMBER_ID),
+                getMandatoryString(object, MEMBER_TITLE),
+                getInt(object, MEMBER_TOP),
+                getString(object, MEMBER_URL),
+                ShowcaseReference.Format.parse(getString(object, MEMBER_FORMAT)),
                 params);
     }
 
@@ -82,9 +88,9 @@ public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<Showcase
                                  JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         if (!src.params.equals(Collections.emptyMap())) {
-            object.add(MEMBER_PARAMS, JsonUtils.toJsonObject(src.params));
+            object.add(MEMBER_PARAMS, toJsonObject(src.params));
         }
-        object.addProperty(MEMBER_ID, src.patternId);
+        object.addProperty(MEMBER_ID, src.scid);
         object.addProperty(MEMBER_TITLE, src.title);
         object.addProperty(MEMBER_TOP, src.topIndex);
         object.addProperty(MEMBER_URL, src.url);

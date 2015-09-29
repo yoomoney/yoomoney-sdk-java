@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
-import com.yandex.money.api.model.showcase.components.uicontrol.Month;
+import com.yandex.money.api.model.showcase.components.uicontrols.Month;
 
 import org.joda.time.format.DateTimeFormatter;
 

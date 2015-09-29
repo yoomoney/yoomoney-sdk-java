@@ -26,8 +26,8 @@ package com.yandex.money.api.processes;
 
 import com.squareup.okhttp.Call;
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
-import com.yandex.money.api.resources.DocumentProvider;
-import com.yandex.money.api.resources.ShowcaseContext;
+import com.yandex.money.api.net.DocumentProvider;
+import com.yandex.money.api.net.ShowcaseContext;
 
 import java.io.IOException;
 
