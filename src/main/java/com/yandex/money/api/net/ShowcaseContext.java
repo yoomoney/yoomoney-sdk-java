@@ -180,7 +180,9 @@ public final class ShowcaseContext {
     }
 
     void setParams(InputStream inputStream) {
-        params = JsonUtils.map(GsonProvider.getGson().toJsonTree(inputStream).getAsJsonObject());
+        params = JsonUtils.map(GsonProvider.getGson().toJsonTree(inputStream)
+                .getAsJsonObject()
+                .getAsJsonObject("params"));
     }
 
     /**
@@ -230,9 +232,6 @@ public final class ShowcaseContext {
             }
             if (Strings.isNullOrEmpty(currentStep.submitUrl)) {
                 throw new IllegalArgumentException("url is null or empty");
-            }
-            if (currentStep.showcase.getPaymentParameters() == null) {
-                throw new NullPointerException("parameters is null");
             }
             this.url = currentStep.submitUrl;
 
