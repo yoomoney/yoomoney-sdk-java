@@ -25,6 +25,7 @@
 package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.Fee;
@@ -61,7 +62,11 @@ public final class AmountTypeAdapter extends BaseNumberTypeAdapter<Amount, Amoun
                                JsonDeserializationContext context) {
 
         builder.setCurrency(Currency.parseAlphaCode(src.get(MEMBER_CURRENCY).getAsString()));
-        builder.setFee((Fee) context.deserialize(src.get(MEMBER_FEE), Fee.class));
+
+        JsonElement fee = src.get(MEMBER_FEE);
+        if (fee != null) {
+            builder.setFee((Fee) context.deserialize(fee, Fee.class));
+        }
 
         super.deserialize(src, builder, context);
     }
@@ -69,7 +74,9 @@ public final class AmountTypeAdapter extends BaseNumberTypeAdapter<Amount, Amoun
     @Override
     protected void serialize(Amount src, JsonObject to, JsonSerializationContext context) {
         to.addProperty(MEMBER_CURRENCY, src.currency.alphaCode);
-        to.add(MEMBER_FEE, context.serialize(src.fee, Fee.class));
+        if (src.fee.type != Fee.Type.NO_FEE) {
+            to.add(MEMBER_FEE, context.serialize(src.fee, Fee.class));
+        }
         super.serialize(src, to, context);
     }
 
