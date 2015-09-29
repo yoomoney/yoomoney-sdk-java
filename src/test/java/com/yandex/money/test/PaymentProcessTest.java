@@ -58,7 +58,7 @@ public class PaymentProcessTest {
     private final OAuth2Session session = new OAuth2Session(new DefaultApiClient("stub", false) {
         @Override
         public HostsProvider getHostsProvider() {
-            return new HostsProvider() {
+            return new HostsProvider(false) {
                 @Override
                 public String getMoney() {
                     return server.getUrl("").toString();

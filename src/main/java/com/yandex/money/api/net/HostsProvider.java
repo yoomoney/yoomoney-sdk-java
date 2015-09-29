@@ -31,18 +31,15 @@ package com.yandex.money.api.net;
  */
 public class HostsProvider {
 
-    public HostsProvider() {
-    }
+    private final boolean mobile;
 
     /**
      * Constructor.
      *
      * @param mobile {@code true} if running on a mobile device
-     * @deprecated use default constructor instead
      */
-    @Deprecated
     public HostsProvider(boolean mobile) {
-        this();
+        this.mobile = mobile;
     }
 
     /**
@@ -60,9 +57,22 @@ public class HostsProvider {
     }
 
     /**
-     * @return {@code https://sp-money.yandex.ru} or {@code https://m.sp-money.yandex.ru} based on
-     * mobile parameter
-     * @deprecated use {@link #getMoney()} instead
+     * @return {@code https://m.money.yandex.ru}
+     */
+    public String getMobileMoney() {
+        return "https://m.money.yandex.ru";
+    }
+
+    /**
+     * @return platform specific url
+     */
+    public final String getWebUrl() {
+        return mobile ? getMobileMoney() : getMoney();
+    }
+
+    /**
+     * @return {@code https://m.money.yandex.ru}
+     * @deprecated use {@link #getMoney()} instead or {@link #getWebUrl()} for platform specific url
      */
     @Deprecated
     public String getSpMoney() {
