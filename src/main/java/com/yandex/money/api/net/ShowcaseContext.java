@@ -180,7 +180,8 @@ public final class ShowcaseContext {
     }
 
     void setParams(InputStream inputStream) {
-        params = JsonUtils.map(GsonProvider.getGson().toJsonTree(inputStream)
+        params = JsonUtils.map(GsonProvider.getGson()
+                .toJsonTree(inputStream)
                 .getAsJsonObject()
                 .getAsJsonObject("params"));
     }
