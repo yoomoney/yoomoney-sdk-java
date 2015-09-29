@@ -79,11 +79,6 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
     }
 
     @Override
-    protected Class<AccountInfo> getType() {
-        return AccountInfo.class;
-    }
-
-    @Override
     public AccountInfo deserialize(JsonElement json, Type typeOfT,
                                    JsonDeserializationContext context) throws JsonParseException {
 
@@ -163,5 +158,10 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         }
 
         return object;
+    }
+
+    @Override
+    protected Class<AccountInfo> getType() {
+        return AccountInfo.class;
     }
 }

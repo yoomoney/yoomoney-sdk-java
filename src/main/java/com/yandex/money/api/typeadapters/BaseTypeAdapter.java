@@ -28,6 +28,9 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializer;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import static com.yandex.money.api.typeadapters.GsonProvider.getGson;
 import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeHierarchyAdapter;
 
@@ -46,6 +49,11 @@ public abstract class BaseTypeAdapter<T>
     @Override
     public final T fromJson(String json) {
         return getGson().fromJson(json, getType());
+    }
+
+    @Override
+    public T fromJson(InputStream inputStream) {
+        return getGson().fromJson(new InputStreamReader(inputStream), getType());
     }
 
     @Override

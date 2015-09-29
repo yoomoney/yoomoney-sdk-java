@@ -24,15 +24,20 @@
 
 package com.yandex.money.api.typeadapters;
 
+import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+
+import java.lang.reflect.Type;
 
 /**
  * Type adapter for strings.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class StringTypeAdapter implements TypeAdapter<String> {
+public final class StringTypeAdapter extends BaseTypeAdapter<String> {
 
     private static final StringTypeAdapter INSTANCE = new StringTypeAdapter();
 
@@ -47,22 +52,18 @@ public final class StringTypeAdapter implements TypeAdapter<String> {
     }
 
     @Override
-    public String fromJson(String json) {
-        throw new UnsupportedOperationException();
+    public String deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        return json.getAsString();
     }
 
     @Override
-    public String fromJson(JsonElement element) {
-        return element.getAsString();
+    public JsonElement serialize(String src, Type typeOfSrc, JsonSerializationContext context) {
+        return new JsonPrimitive(src);
     }
 
     @Override
-    public String toJson(String value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public JsonElement toJsonTree(String value) {
-        return new JsonPrimitive(value);
+    protected Class<String> getType() {
+        return String.class;
     }
 }

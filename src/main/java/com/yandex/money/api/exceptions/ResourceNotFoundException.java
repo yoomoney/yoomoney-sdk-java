@@ -22,45 +22,17 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters;
+package com.yandex.money.api.exceptions;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.model.Error;
-
-import java.lang.reflect.Type;
+import java.net.URL;
 
 /**
- * Type adapter for {@link Error}.
+ * Resource not found. It doesn't exist or invalid.
  *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public final class ErrorTypeAdapter extends BaseTypeAdapter<Error> {
-
-    private static final ErrorTypeAdapter INSTANCE = new ErrorTypeAdapter();
-
-    private ErrorTypeAdapter() {}
-
-    public static ErrorTypeAdapter getInstance() {
-        return INSTANCE;
-    }
-
-    @Override
-    public Error deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException {
-        return Error.parse(json.getAsString());
-    }
-
-    @Override
-    public JsonElement serialize(Error src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(src.code);
-    }
-
-    @Override
-    protected Class<Error> getType() {
-        return Error.class;
+public final class ResourceNotFoundException extends Exception {
+    public ResourceNotFoundException(URL resourceURL) {
+        super(resourceURL.toString());
     }
 }
