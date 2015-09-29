@@ -78,8 +78,8 @@ public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<Showcase
     }
 
     @Override
-    public JsonElement serialize(ShowcaseReference src, Type typeOfSrc, JsonSerializationContext
-            context) {
+    public JsonElement serialize(ShowcaseReference src, Type typeOfSrc,
+                                 JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         if (!src.params.equals(Collections.emptyMap())) {
             object.add(MEMBER_PARAMS, JsonUtils.toJsonObject(src.params));

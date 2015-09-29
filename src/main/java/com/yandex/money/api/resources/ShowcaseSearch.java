@@ -43,8 +43,19 @@ import java.util.List;
  */
 public final class ShowcaseSearch {
 
+    /**
+     * Error code. May be {@code null}.
+     */
     public final Error error;
+
+    /**
+     * List of {@link ShowcaseReference}.
+     */
     public final List<ShowcaseReference> result;
+
+    /**
+     * Next page predicate wrapped in {@link String}.
+     */
     public final String nextPage;
 
     private ShowcaseSearch(Error error, List<ShowcaseReference> result, String nextPage) {
@@ -79,9 +90,31 @@ public final class ShowcaseSearch {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ShowcaseSearch that = (ShowcaseSearch) o;
+
+        return error == that.error && result.equals(that.result)
+                && !(nextPage != null ? !nextPage.equals(that.nextPage) : that.nextPage != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result1 = error != null ? error.hashCode() : 0;
+        result1 = 31 * result1 + result.hashCode();
+        result1 = 31 * result1 + (nextPage != null ? nextPage.hashCode() : 0);
+        return result1;
+    }
+
+    @Override
     public String toString() {
-        return "ShowcaseSearch{" + "error=" + error + ", result=" + result + ", nextPage='" +
-                nextPage + '\'' + '}';
+        return "ShowcaseSearch{" +
+                "error=" + error +
+                ", result=" + result +
+                ", nextPage='" + nextPage + '\'' +
+                '}';
     }
 
     /**

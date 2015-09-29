@@ -51,8 +51,6 @@ public class ShowcaseSearchTest {
 
     /**
      * Checking for serialization/deserialization feature.
-     *
-     * @throws Exception
      */
     @Test
     public void marshallingTest() throws Exception {

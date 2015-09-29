@@ -47,12 +47,12 @@ public final class ShowcaseReference {
     public final String title;
 
     /**
-     * Index of an item in list (lower is higher ranking).
+     * Index of an item in list (lower is higher ranking). May be {@code null}
      */
     public final Integer topIndex;
 
     /**
-     * URL to submit params of the first step if applicable. Can be null.
+     * URL to submit params of the first step if applicable. May be {@code null}.
      */
     public final String url;
 
@@ -92,9 +92,8 @@ public final class ShowcaseReference {
      * @param format   showcase format
      * @param params   showcase parameters of the first step, can be null
      */
-    public ShowcaseReference(long patternId, String title, Integer topIndex, String url, Format
-            format,
-                             Map<String, String> params) {
+    public ShowcaseReference(long patternId, String title, Integer topIndex, String url,
+                             Format format, Map<String, String> params) {
         this.patternId = patternId;
         if (Strings.isNullOrEmpty(title)) {
             throw new IllegalArgumentException("title is null or empty");
@@ -107,6 +106,31 @@ public final class ShowcaseReference {
         this.url = url;
         this.format = format;
         this.params = Collections.unmodifiableMap(params);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ShowcaseReference that = (ShowcaseReference) o;
+
+        return patternId == that.patternId && title.equals(that.title)
+                && !(topIndex != null ? !topIndex.equals(that.topIndex) : that.topIndex != null)
+                && !(url != null ? !url.equals(that.url) : that.url != null)
+                && params.equals(that.params) && format == that.format;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (patternId ^ (patternId >>> 32));
+        result = 31 * result + title.hashCode();
+        result = 31 * result + (topIndex != null ? topIndex.hashCode() : 0);
+        result = 31 * result + (url != null ? url.hashCode() : 0);
+        result = 31 * result + params.hashCode();
+        result = 31 * result + format.hashCode();
+        return result;
     }
 
     @Override
