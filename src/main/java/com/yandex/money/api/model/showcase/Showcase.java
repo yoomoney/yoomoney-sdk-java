@@ -27,8 +27,8 @@ package com.yandex.money.api.model.showcase;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.Parameter;
-import com.yandex.money.api.model.showcase.components.container.Group;
-import com.yandex.money.api.model.showcase.components.uicontrol.Select;
+import com.yandex.money.api.model.showcase.components.containers.Group;
+import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
@@ -75,8 +75,6 @@ public final class Showcase {
     }
 
     /**
-     * See Showcases class.
-     *
      * @return key-value pairs of payment parameters
      */
     public Map<String, String> getPaymentParameters() {
@@ -184,16 +182,25 @@ public final class Showcase {
      */
     public static final class Request extends BaseApiRequest<Showcase> {
 
-        private final long scid;
+        private final String patternId;
         private final String url;
 
         /**
          * Constructor.
          *
-         * @param scid showcase id
+         * @param patternId payment pattern ID.
+         */
+        public Request(String patternId) {
+            this(patternId, null, null);
+        }
+
+        /**
+         * Constructor
+         *
+         * @param scid showcase identifier.
          */
         public Request(long scid) {
-            this(scid, null, null);
+            this(String.valueOf(scid), null, null);
         }
 
         /**
@@ -203,10 +210,10 @@ public final class Showcase {
          * @param params post params
          */
         public Request(String url, Map<String, String> params) {
-            this(-1l, url, params);
+            this(null, url, params);
         }
 
-        private Request(long scid, String url, Map<String, String> params) {
+        private Request(String patternId, String url, Map<String, String> params) {
             super(Showcase.class, ShowcaseTypeAdapter.getInstance());
             if (url != null) {
                 if (params == null) {
@@ -215,7 +222,7 @@ public final class Showcase {
                     addParameters(params);
                 }
             }
-            this.scid = scid;
+            this.patternId = patternId;
             this.url = url;
         }
 
@@ -226,7 +233,7 @@ public final class Showcase {
 
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
-            return url == null ? hostsProvider.getMoneyApi() + "/showcase/" + scid : url;
+            return url == null ? hostsProvider.getMoneyApi() + "/showcase/" + patternId : url;
         }
     }
 }

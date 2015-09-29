@@ -22,34 +22,61 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrol;
+package com.yandex.money.api.model.showcase.components.uicontrols;
 
+import com.yandex.money.api.utils.Patterns;
 import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
- * Submit button.
+ * Telephone number control.
+ * <p/>
+ * TODO: maybe this class should extend ParameterControl?
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Submit extends Control {
+public final class Tel extends Text {
 
-    private Submit(Builder builder) {
+    private Tel(Builder builder) {
         super(builder);
     }
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Submit");
+        return super.getToStringBuilder().setName("Tel");
     }
 
     /**
-     * {@link Submit} builder.
+     * {@link Tel builder}.
      */
-    public static final class Builder extends Control.Builder {
+    public static final class Builder extends Text.Builder {
+
+        public Builder() {
+            super.setPattern(Patterns.PHONE);
+        }
 
         @Override
-        public Submit create() {
-            return new Submit(this);
+        public Tel create() {
+            return new Tel(this);
+        }
+
+        @Override
+        public Builder setMinLength(Integer minLength) {
+            throw new UnsupportedOperationException("tel min length defined by predefined pattern");
+        }
+
+        @Override
+        public Builder setMaxLength(Integer maxLength) {
+            throw new UnsupportedOperationException("tel max length defined by predefined pattern");
+        }
+
+        @Override
+        public Builder setPattern(String pattern) {
+            throw new UnsupportedOperationException("tel has predefined pattern");
+        }
+
+        @Override
+        public Text.Builder setKeyboard(Keyboard keyboard) {
+            throw new UnsupportedOperationException("only tel keyboards");
         }
     }
 }

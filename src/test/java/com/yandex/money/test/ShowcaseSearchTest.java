@@ -22,48 +22,43 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters.showcase.uicontrol;
+package com.yandex.money.test;
 
-import com.yandex.money.api.model.showcase.components.uicontrols.Month;
+import com.yandex.money.api.methods.ShowcaseSearch;
+import com.yandex.money.api.net.DefaultApiClient;
+import com.yandex.money.api.net.DocumentProvider;
+import com.yandex.money.api.typeadapters.showcase.ShowcaseSearchTypeAdapter;
 
-import org.joda.time.format.DateTimeFormatter;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 /**
- * Type adapter for {@link Month} component.
- *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class MonthTypeAdapter extends BaseDateTypeAdapter<Month, Month.Builder> {
+public class ShowcaseSearchTest {
 
-    private static final MonthTypeAdapter INSTANCE = new MonthTypeAdapter();
+    private static final DocumentProvider documentProvider = new DocumentProvider(
+            new DefaultApiClient(""));
 
-    private MonthTypeAdapter() {
+    /**
+     * Checks if exception is thrown and result list is not empty.
+     */
+    @Test
+    public void searchForShowcases() throws Exception {
+        ShowcaseSearch showcaseSearch = getShowcaseSearchInstance();
+        Assert.assertTrue(showcaseSearch.result.size() > 0, "result is empty");
     }
 
     /**
-     * @return instance of this class
+     * Checking for serialization/deserialization feature.
      */
-    public static MonthTypeAdapter getInstance() {
-        return INSTANCE;
+    @Test
+    public void marshallingTest() throws Exception {
+        String json = ShowcaseSearchTypeAdapter.getInstance().toJson(getShowcaseSearchInstance());
+        Assert.assertTrue(!json.isEmpty(), "json should be non empty");
     }
 
-    @Override
-    protected Month createInstance(Month.Builder builder) {
-        return builder.create();
-    }
-
-    @Override
-    protected Month.Builder createBuilderInstance() {
-        return new Month.Builder();
-    }
-
-    @Override
-    protected DateTimeFormatter getFormatter() {
-        return Month.FORMATTER;
-    }
-
-    @Override
-    protected Class<Month> getType() {
-        return Month.class;
+    private static ShowcaseSearch getShowcaseSearchInstance() throws Exception {
+        return documentProvider.fetch(new ShowcaseSearch.Request("Мегафон", 10)).document;
     }
 }

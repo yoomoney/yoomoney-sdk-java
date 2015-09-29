@@ -22,41 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters.showcase.uicontrol;
+package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.model.showcase.components.uicontrols.Submit;
+import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
- * Type adapter for {@link Submit} component.
+ * Submit button.
  *
- * @author Anton Ermak (ermak@yamoney.ru)
+ * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class SubmitTypeAdapter extends ControlTypeAdapter<Submit, Submit.Builder> {
+public final class Submit extends Control {
 
-    private static final SubmitTypeAdapter INSTANCE = new SubmitTypeAdapter();
+    private Submit(Builder builder) {
+        super(builder);
+    }
 
-    private SubmitTypeAdapter() {
+    @Override
+    protected ToStringBuilder getToStringBuilder() {
+        return super.getToStringBuilder().setName("Submit");
     }
 
     /**
-     * @return instance of this class
+     * {@link Submit} builder.
      */
-    public static SubmitTypeAdapter getInstance() {
-        return INSTANCE;
-    }
+    public static final class Builder extends Control.Builder {
 
-    @Override
-    protected Submit createInstance(Submit.Builder builder) {
-        return builder.create();
-    }
-
-    @Override
-    protected Submit.Builder createBuilderInstance() {
-        return new Submit.Builder();
-    }
-
-    @Override
-    protected Class<Submit> getType() {
-        return Submit.class;
+        @Override
+        public Submit create() {
+            return new Submit(this);
+        }
     }
 }

@@ -30,7 +30,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.TextBlock;
-import com.yandex.money.api.model.showcase.components.container.Paragraph;
+import com.yandex.money.api.model.showcase.components.containers.Paragraph;
 
 /**
  * Type serializer for {@link Paragraph} component container.

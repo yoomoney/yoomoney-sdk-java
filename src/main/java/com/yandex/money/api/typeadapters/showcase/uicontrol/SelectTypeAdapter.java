@@ -30,7 +30,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
-import com.yandex.money.api.model.showcase.components.uicontrol.Select;
+import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.ListDelegate;
 
 /**

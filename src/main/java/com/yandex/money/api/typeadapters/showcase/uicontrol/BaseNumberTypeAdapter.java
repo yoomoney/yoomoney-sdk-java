@@ -28,7 +28,7 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
-import com.yandex.money.api.model.showcase.components.uicontrol.Number;
+import com.yandex.money.api.model.showcase.components.uicontrols.Number;
 
 
 /**

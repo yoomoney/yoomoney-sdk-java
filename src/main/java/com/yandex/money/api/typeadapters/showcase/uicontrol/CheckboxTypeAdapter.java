@@ -27,7 +27,7 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
+import com.yandex.money.api.model.showcase.components.uicontrols.Checkbox;
 
 /**
  * Type adapter for {@link Checkbox} component.

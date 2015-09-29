@@ -25,19 +25,19 @@
 package com.yandex.money.api.typeadapters.showcase;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.model.showcase.components.container.Group;
-import com.yandex.money.api.model.showcase.components.container.Paragraph;
-import com.yandex.money.api.model.showcase.components.uicontrol.Amount;
-import com.yandex.money.api.model.showcase.components.uicontrol.Checkbox;
-import com.yandex.money.api.model.showcase.components.uicontrol.Date;
-import com.yandex.money.api.model.showcase.components.uicontrol.Email;
-import com.yandex.money.api.model.showcase.components.uicontrol.Month;
-import com.yandex.money.api.model.showcase.components.uicontrol.Number;
-import com.yandex.money.api.model.showcase.components.uicontrol.Select;
-import com.yandex.money.api.model.showcase.components.uicontrol.Submit;
-import com.yandex.money.api.model.showcase.components.uicontrol.Tel;
-import com.yandex.money.api.model.showcase.components.uicontrol.Text;
-import com.yandex.money.api.model.showcase.components.uicontrol.TextArea;
+import com.yandex.money.api.model.showcase.components.containers.Group;
+import com.yandex.money.api.model.showcase.components.containers.Paragraph;
+import com.yandex.money.api.model.showcase.components.uicontrols.Amount;
+import com.yandex.money.api.model.showcase.components.uicontrols.Checkbox;
+import com.yandex.money.api.model.showcase.components.uicontrols.Date;
+import com.yandex.money.api.model.showcase.components.uicontrols.Email;
+import com.yandex.money.api.model.showcase.components.uicontrols.Month;
+import com.yandex.money.api.model.showcase.components.uicontrols.Number;
+import com.yandex.money.api.model.showcase.components.uicontrols.Select;
+import com.yandex.money.api.model.showcase.components.uicontrols.Submit;
+import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
+import com.yandex.money.api.model.showcase.components.uicontrols.Text;
+import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
 
 import java.lang.reflect.Type;
 import java.util.Collections;

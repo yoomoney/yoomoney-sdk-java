@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.container;
+package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl;
+import com.yandex.money.api.model.showcase.components.uicontrols.ParameterControl;
 import com.yandex.money.api.utils.ToStringBuilder;
 
 /**

@@ -22,35 +22,26 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.container;
+package com.yandex.money.test;
 
-import com.yandex.money.api.model.showcase.components.TextBlock;
-import com.yandex.money.api.utils.ToStringBuilder;
+import java.util.Scanner;
 
 /**
- * Sequence of text blocks.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
+ * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class Paragraph extends Container<TextBlock> {
+public final class Utils {
 
-    private Paragraph(Builder builder) {
-        super(builder);
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Paragraph");
+    private Utils() {
     }
 
     /**
-     * {@link Paragraph} builder.
+     * Loads resouse from classpath specified by {@code fullName} string.
+     *
+     * @param fullName full qualified resource name
+     * @return resource content
      */
-    public static final class Builder extends Container.Builder<TextBlock> {
-
-        @Override
-        public Paragraph create() {
-            return new Paragraph(this);
-        }
+    public static String loadResource(String fullName) {
+        return new Scanner(Utils.class.getResourceAsStream(fullName), "UTF-8")
+                .useDelimiter("\\A").next();
     }
 }

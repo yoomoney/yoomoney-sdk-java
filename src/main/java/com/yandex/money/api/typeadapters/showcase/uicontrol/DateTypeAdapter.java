@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
-import com.yandex.money.api.model.showcase.components.uicontrol.Date;
+import com.yandex.money.api.model.showcase.components.uicontrols.Date;
 
 /**
  * Type adapter for {@link Date} component.

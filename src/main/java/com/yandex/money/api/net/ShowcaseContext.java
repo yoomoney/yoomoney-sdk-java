@@ -197,6 +197,41 @@ public final class ShowcaseContext {
         this.state = state;
     }
 
+    @Override
+    public String toString() {
+        return "ShowcaseContext{" +
+                "history=" + history +
+                ", lastModified=" + lastModified +
+                ", currentStep=" + currentStep +
+                ", params=" + params +
+                ", state=" + state +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ShowcaseContext that = (ShowcaseContext) o;
+
+        return history.equals(that.history) && lastModified.equals(that.lastModified)
+                && currentStep.equals(that.currentStep)
+                && params.equals(that.params)
+                && state == that.state;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = history.hashCode();
+        result = 31 * result + lastModified.hashCode();
+        result = 31 * result + currentStep.hashCode();
+        result = 31 * result + params.hashCode();
+        result = 31 * result + state.hashCode();
+        return result;
+    }
+
     /**
      * Possible states of {@link ShowcaseContext} instance
      */
@@ -216,6 +251,34 @@ public final class ShowcaseContext {
         public Step(Showcase showcase, String submitUrl) {
             this.showcase = showcase;
             this.submitUrl = submitUrl;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            Step step = (Step) o;
+
+            return !(showcase != null ? !showcase.equals(step.showcase) : step.showcase != null)
+                    && !(submitUrl != null ? !submitUrl.equals(step.submitUrl)
+                    : step.submitUrl != null);
+
+        }
+
+        @Override
+        public String toString() {
+            return "Step{" +
+                    "showcase=" + showcase +
+                    ", submitUrl='" + submitUrl + '\'' +
+                    '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int result = showcase != null ? showcase.hashCode() : 0;
+            result = 31 * result + (submitUrl != null ? submitUrl.hashCode() : 0);
+            return result;
         }
     }
 

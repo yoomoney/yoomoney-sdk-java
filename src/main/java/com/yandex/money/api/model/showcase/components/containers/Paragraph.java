@@ -22,61 +22,35 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrol;
+package com.yandex.money.api.model.showcase.components.containers;
 
-import com.yandex.money.api.utils.Patterns;
+import com.yandex.money.api.model.showcase.components.TextBlock;
 import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
- * Telephone number control.
- * <p/>
- * TODO: maybe this class should extend ParameterControl?
+ * Sequence of text blocks.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Tel extends Text {
+public final class Paragraph extends Container<TextBlock> {
 
-    private Tel(Builder builder) {
+    private Paragraph(Builder builder) {
         super(builder);
     }
 
     @Override
     protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Tel");
+        return super.getToStringBuilder().setName("Paragraph");
     }
 
     /**
-     * {@link Tel builder}.
+     * {@link Paragraph} builder.
      */
-    public static final class Builder extends Text.Builder {
-
-        public Builder() {
-            super.setPattern(Patterns.PHONE);
-        }
+    public static final class Builder extends Container.Builder<TextBlock> {
 
         @Override
-        public Tel create() {
-            return new Tel(this);
-        }
-
-        @Override
-        public Builder setMinLength(Integer minLength) {
-            throw new UnsupportedOperationException("tel min length defined by predefined pattern");
-        }
-
-        @Override
-        public Builder setMaxLength(Integer maxLength) {
-            throw new UnsupportedOperationException("tel max length defined by predefined pattern");
-        }
-
-        @Override
-        public Builder setPattern(String pattern) {
-            throw new UnsupportedOperationException("tel has predefined pattern");
-        }
-
-        @Override
-        public Text.Builder setKeyboard(Keyboard keyboard) {
-            throw new UnsupportedOperationException("only tel keyboards");
+        public Paragraph create() {
+            return new Paragraph(this);
         }
     }
 }

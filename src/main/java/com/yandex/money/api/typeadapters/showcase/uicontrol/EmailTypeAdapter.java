@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
-import com.yandex.money.api.model.showcase.components.uicontrol.Email;
+import com.yandex.money.api.model.showcase.components.uicontrols.Email;
 
 /**
  * Type adapter for {@link Email} component.

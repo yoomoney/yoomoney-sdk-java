@@ -27,7 +27,7 @@ package com.yandex.money.api.model.showcase.components;
 /**
  * Parameter.
  * TODO: think about merge this interface with
- * {@link com.yandex.money.api.model.showcase.components.uicontrol.ParameterControl}.
+ * {@link com.yandex.money.api.model.showcase.components.uicontrols.ParameterControl}.
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public interface Parameter {
