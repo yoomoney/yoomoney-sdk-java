@@ -30,73 +30,45 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.JsonUtils;
-import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.Fee;
-import com.yandex.money.api.model.showcase.StdFee;
 
 import java.lang.reflect.Type;
-import java.math.BigDecimal;
 
 /**
- * Type adapter for {@link Fee}.
  *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
 
+    public static final String MEMBER_TYPE = "type";
     private static final FeeTypeAdapter INSTANCE = new FeeTypeAdapter();
 
-    private static final String TYPE_CUSTOM = "custom";
-    private static final String TYPE_STD = "std";
-
-    private static final String MEMBER_TYPE = "type";
-    private static final String MEMBER_A = "a";
-    private static final String MEMBER_B = "b";
-    private static final String MEMBER_C = "c";
-    private static final String MEMBER_D = "d";
-    private static final String MEMBER_AMOUNT_TYPE = "amount_type";
-
     private FeeTypeAdapter() {
+        StdFeeTypeAdapter.getInstance();
+        CustomFeeTypeAdapter.getInstance();
     }
 
-    /**
-     * @return instance of this class
-     */
     public static FeeTypeAdapter getInstance() {
         return INSTANCE;
     }
 
     @Override
-    public Fee deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException {
+    public Fee deserialize(JsonElement json, Type typeOfT,
+                           JsonDeserializationContext context) throws JsonParseException {
+        String type = Helper.getFeeType(json.getAsJsonObject());
 
-        JsonObject object = json.getAsJsonObject();
-        if (TYPE_CUSTOM.equals(JsonUtils.getString(object, MEMBER_TYPE))) {
-            return Fee.CUSTOM_FEE;
+        if (CustomFeeTypeAdapter.TYPE_CUSTOM.equals(type)) {
+            return CustomFeeTypeAdapter.getInstance().fromJson(json);
+        } else if (StdFeeTypeAdapter.TYPE_STD.equals(type)) {
+            return StdFeeTypeAdapter.getInstance().fromJson(json);
         } else {
-            return new StdFee(getValueOrZero(object, MEMBER_A), getValueOrZero(object, MEMBER_B),
-                    getValueOrZero(object, MEMBER_C), JsonUtils.getBigDecimal(object, MEMBER_D),
-                    AmountType.parse(JsonUtils.getString(object, MEMBER_AMOUNT_TYPE)));
+            throw new JsonParseException("unknown fee type = " + type);
         }
     }
 
     @Override
     public JsonElement serialize(Fee src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
-        if (src == Fee.CUSTOM_FEE) {
-            object.addProperty(MEMBER_TYPE, TYPE_CUSTOM);
-        } else if (src instanceof StdFee) {
-            StdFee fee = (StdFee) src;
-            object.addProperty(MEMBER_TYPE, TYPE_STD);
-            object.addProperty(MEMBER_A, fee.a);
-            object.addProperty(MEMBER_B, fee.b);
-            object.addProperty(MEMBER_C, fee.c);
-            object.addProperty(MEMBER_D, fee.d);
-            object.addProperty(MEMBER_AMOUNT_TYPE, fee.getAmountType().code);
-        } else {
-            throw new IllegalArgumentException("unknown fee type: " + src.getClass());
-        }
-        return object;
+        return context.serialize(src);
     }
 
     @Override
@@ -104,8 +76,25 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
         return Fee.class;
     }
 
-    private static BigDecimal getValueOrZero(JsonObject object, String member) {
-        BigDecimal value = JsonUtils.getBigDecimal(object, member);
-        return value == null ? BigDecimal.ZERO : value;
+    static final class Helper {
+
+        private Helper() {
+        }
+
+        public static void checkFeeType(JsonObject fee, String expected) {
+            String type = getFeeType(fee);
+            if (!type.equals(expected)) {
+                throw new IllegalStateException("fee type should be \"" + expected + "\" but \""
+                        + type + "\" given");
+            }
+        }
+
+        private static String getFeeType(JsonObject jsonObject) {
+            String type = JsonUtils.getString(jsonObject, MEMBER_TYPE);
+            if (type == null) {
+                throw new NullPointerException("fee type is null");
+            }
+            return type;
+        }
     }
 }

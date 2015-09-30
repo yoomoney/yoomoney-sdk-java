@@ -22,54 +22,56 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters;
+package com.yandex.money.api.model.showcase;
 
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializer;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import static com.yandex.money.api.typeadapters.GsonProvider.getGson;
-import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeAdapter;
+import java.math.BigDecimal;
 
 /**
- * Base class for type adapters.
+ * No fee.
  *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public abstract class BaseTypeAdapter<T>
-        implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
+public final class NoFee implements Fee {
 
-    public BaseTypeAdapter() {
-        registerTypeAdapter(getType(), this);
+    private static final NoFee INSTANCE = new NoFee();
+
+    private NoFee() {
+    }
+
+    /**
+     * @return instance of this class
+     */
+    public static NoFee getInstance() {
+        return INSTANCE;
     }
 
     @Override
-    public final T fromJson(String json) {
-        return getGson().fromJson(json, getType());
+    public boolean hasCommission() {
+        return false;
     }
 
     @Override
-    public T fromJson(InputStream inputStream) {
-        return getGson().fromJson(new InputStreamReader(inputStream), getType());
+    public boolean isCalculable() {
+        return true;
     }
 
     @Override
-    public final T fromJson(JsonElement element) {
-        return getGson().fromJson(element, getType());
+    public BigDecimal amount(BigDecimal netAmount) {
+        return netAmount;
     }
 
     @Override
-    public final String toJson(T value) {
-        return getGson().toJson(value);
+    public BigDecimal netAmount(BigDecimal amount) {
+        return amount;
     }
 
     @Override
-    public final JsonElement toJsonTree(T value) {
-        return getGson().toJsonTree(value);
+    public AmountType getAmountType() {
+        return AmountType.AMOUNT;
     }
 
-    protected abstract Class<T> getType();
+    @Override
+    public String toString() {
+        return "NO_FEE";
+    }
 }

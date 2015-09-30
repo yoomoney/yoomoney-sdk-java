@@ -22,54 +22,56 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters;
+package com.yandex.money.api.model.showcase;
 
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializer;
-
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import static com.yandex.money.api.typeadapters.GsonProvider.getGson;
-import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeAdapter;
+import java.math.BigDecimal;
 
 /**
- * Base class for type adapters.
+ * Custom fee. Cannot be calculated in an application.
  *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public abstract class BaseTypeAdapter<T>
-        implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
+public final class CustomFee implements Fee {
 
-    public BaseTypeAdapter() {
-        registerTypeAdapter(getType(), this);
+    private static final CustomFee INSTANCE = new CustomFee();
+
+    private CustomFee() {
+    }
+
+    /**
+     * @return instance of this class
+     */
+    public static CustomFee getInstance() {
+        return INSTANCE;
     }
 
     @Override
-    public final T fromJson(String json) {
-        return getGson().fromJson(json, getType());
+    public boolean hasCommission() {
+        return true;
     }
 
     @Override
-    public T fromJson(InputStream inputStream) {
-        return getGson().fromJson(new InputStreamReader(inputStream), getType());
+    public boolean isCalculable() {
+        return false;
     }
 
     @Override
-    public final T fromJson(JsonElement element) {
-        return getGson().fromJson(element, getType());
+    public BigDecimal amount(BigDecimal netAmount) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public final String toJson(T value) {
-        return getGson().toJson(value);
+    public BigDecimal netAmount(BigDecimal amount) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public final JsonElement toJsonTree(T value) {
-        return getGson().toJsonTree(value);
+    public AmountType getAmountType() {
+        throw new UnsupportedOperationException();
     }
 
-    protected abstract Class<T> getType();
+    @Override
+    public String toString() {
+        return "CUSTOM_FEE";
+    }
 }
