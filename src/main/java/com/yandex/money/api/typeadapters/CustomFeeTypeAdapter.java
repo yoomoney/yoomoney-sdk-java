@@ -47,6 +47,9 @@ public final class CustomFeeTypeAdapter extends BaseTypeAdapter<CustomFee> {
     private CustomFeeTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static CustomFeeTypeAdapter getInstance() {
         return INSTANCE;
     }

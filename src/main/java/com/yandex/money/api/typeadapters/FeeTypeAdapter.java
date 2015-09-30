@@ -35,6 +35,7 @@ import com.yandex.money.api.model.showcase.Fee;
 import java.lang.reflect.Type;
 
 /**
+ * Convenient class to serialize/deserialize various {@link Fee} implementations.
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
@@ -48,6 +49,9 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
         CustomFeeTypeAdapter.getInstance();
     }
 
+    /**
+     * @return instance of this class
+     */
     public static FeeTypeAdapter getInstance() {
         return INSTANCE;
     }
