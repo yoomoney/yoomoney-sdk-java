@@ -38,7 +38,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
 
 /**
  * Convenient class to serialize/deserialize various {@link Fee} implementations.
@@ -117,11 +117,7 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
         }
 
         private static String getFeeType(JsonObject jsonObject) {
-            String type = getString(jsonObject, MEMBER_TYPE);
-            if (type == null) {
-                throw new NullPointerException("fee type is null");
-            }
-            return type;
+            return getMandatoryString(jsonObject, MEMBER_TYPE);
         }
     }
 }
