@@ -30,6 +30,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.CustomFee;
+import com.yandex.money.api.typeadapters.FeeTypeAdapter.Delegate;
 
 import java.lang.reflect.Type;
 
@@ -39,8 +40,6 @@ import java.lang.reflect.Type;
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class CustomFeeTypeAdapter extends BaseTypeAdapter<CustomFee> {
-
-    public static final String TYPE_CUSTOM = "custom";
 
     private static final CustomFeeTypeAdapter INSTANCE = new CustomFeeTypeAdapter();
 
@@ -57,14 +56,14 @@ public final class CustomFeeTypeAdapter extends BaseTypeAdapter<CustomFee> {
     @Override
     public CustomFee deserialize(JsonElement json, Type typeOfT,
                                  JsonDeserializationContext context) throws JsonParseException {
-        FeeTypeAdapter.Helper.checkFeeType(json.getAsJsonObject(), TYPE_CUSTOM);
+        Delegate.checkFeeType(json.getAsJsonObject(), getType());
         return CustomFee.getInstance();
     }
 
     @Override
     public JsonElement serialize(CustomFee src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(FeeTypeAdapter.MEMBER_TYPE, TYPE_CUSTOM);
+        Delegate.serialize(jsonObject, getType());
         return jsonObject;
     }
 

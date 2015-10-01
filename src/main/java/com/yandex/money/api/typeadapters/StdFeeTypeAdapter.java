@@ -29,13 +29,16 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.StdFee;
+import com.yandex.money.api.typeadapters.FeeTypeAdapter.Delegate;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
+
+import static com.yandex.money.api.methods.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
  * Type adapter for {@link Fee}.
@@ -44,7 +47,6 @@ import java.math.BigDecimal;
  */
 public final class StdFeeTypeAdapter extends BaseTypeAdapter<StdFee> {
 
-    public static final String TYPE_STD = "std";
     private static final StdFeeTypeAdapter INSTANCE = new StdFeeTypeAdapter();
     private static final String MEMBER_A = "a";
     private static final String MEMBER_B = "b";
@@ -66,16 +68,16 @@ public final class StdFeeTypeAdapter extends BaseTypeAdapter<StdFee> {
     public StdFee deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        FeeTypeAdapter.Helper.checkFeeType(object, TYPE_STD);
+        Delegate.checkFeeType(object, getType());
         return new StdFee(getValueOrZero(object, MEMBER_A), getValueOrZero(object, MEMBER_B),
-                getValueOrZero(object, MEMBER_C), JsonUtils.getBigDecimal(object, MEMBER_D),
-                AmountType.parse(JsonUtils.getString(object, MEMBER_AMOUNT_TYPE)));
+                getValueOrZero(object, MEMBER_C), getBigDecimal(object, MEMBER_D),
+                AmountType.parse(getString(object, MEMBER_AMOUNT_TYPE)));
     }
 
     @Override
     public JsonElement serialize(StdFee src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty(FeeTypeAdapter.MEMBER_TYPE, TYPE_STD);
+        Delegate.serialize(object, getType());
         object.addProperty(MEMBER_A, src.a);
         object.addProperty(MEMBER_B, src.b);
         object.addProperty(MEMBER_C, src.c);
@@ -90,7 +92,7 @@ public final class StdFeeTypeAdapter extends BaseTypeAdapter<StdFee> {
     }
 
     private static BigDecimal getValueOrZero(JsonObject object, String member) {
-        BigDecimal value = JsonUtils.getBigDecimal(object, member);
+        BigDecimal value = getBigDecimal(object, member);
         return value == null ? BigDecimal.ZERO : value;
     }
 }
