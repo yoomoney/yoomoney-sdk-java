@@ -24,52 +24,51 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonSerializer;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.yandex.money.api.model.showcase.CustomFee;
+import com.yandex.money.api.typeadapters.FeeTypeAdapter.Delegate;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import static com.yandex.money.api.typeadapters.GsonProvider.getGson;
-import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeAdapter;
+import java.lang.reflect.Type;
 
 /**
- * Base class for type adapters.
+ * Type adapter for {@link CustomFee} class.
  *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * @author Anton Ermak (ermak@yamoney.ru)
  */
-public abstract class BaseTypeAdapter<T>
-        implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
+public final class CustomFeeTypeAdapter extends BaseTypeAdapter<CustomFee> {
 
-    public BaseTypeAdapter() {
-        registerTypeAdapter(getType(), this);
+    private static final CustomFeeTypeAdapter INSTANCE = new CustomFeeTypeAdapter();
+
+    private CustomFeeTypeAdapter() {
+    }
+
+    /**
+     * @return instance of this class
+     */
+    public static CustomFeeTypeAdapter getInstance() {
+        return INSTANCE;
     }
 
     @Override
-    public final T fromJson(String json) {
-        return getGson().fromJson(json, getType());
+    public CustomFee deserialize(JsonElement json, Type typeOfT,
+                                 JsonDeserializationContext context) throws JsonParseException {
+        Delegate.checkFeeType(json.getAsJsonObject(), getType());
+        return CustomFee.getInstance();
     }
 
     @Override
-    public T fromJson(InputStream inputStream) {
-        return getGson().fromJson(new InputStreamReader(inputStream), getType());
+    public JsonElement serialize(CustomFee src, Type typeOfSrc, JsonSerializationContext context) {
+        JsonObject jsonObject = new JsonObject();
+        Delegate.serialize(jsonObject, getType());
+        return jsonObject;
     }
 
     @Override
-    public final T fromJson(JsonElement element) {
-        return getGson().fromJson(element, getType());
+    protected Class<CustomFee> getType() {
+        return CustomFee.class;
     }
-
-    @Override
-    public final String toJson(T value) {
-        return getGson().toJson(value);
-    }
-
-    @Override
-    public final JsonElement toJsonTree(T value) {
-        return getGson().toJsonTree(value);
-    }
-
-    protected abstract Class<T> getType();
 }

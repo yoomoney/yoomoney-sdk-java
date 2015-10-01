@@ -25,6 +25,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.model.showcase.Fee;
+import com.yandex.money.api.model.showcase.NoFee;
 import com.yandex.money.api.utils.Currency;
 import com.yandex.money.api.utils.ToStringBuilder;
 
@@ -88,7 +89,7 @@ public final class Amount extends Number {
         private static final BigDecimal PENNY = new BigDecimal("0.01");
 
         private Currency currency = Currency.RUB;
-        private Fee fee = Fee.NO_FEE;
+        private Fee fee = NoFee.getInstance();
 
         public Builder() {
             super(PENNY, null, PENNY);
