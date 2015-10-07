@@ -311,6 +311,25 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
     }
 
     /**
+     * Maps JSON object to key-value pairs. Returns {@link Collections#emptyMap()} in case of
+     * nullable field value.
+     *
+     * @see {@link #map(JsonObject)}
+     *
+     * @param object JSON object
+     * @param memberName member's name
+     * @return map of string key-value pairs
+     */
+    public static Map<String, String> getNotNullMap(JsonObject object, String memberName) {
+        JsonElement jsonElement = object.get(memberName);
+        if (jsonElement == null) {
+            return Collections.emptyMap();
+        } else {
+            return map(jsonElement.getAsJsonObject());
+        }
+    }
+
+    /**
      * Build JSON object using provided map. Returns {@code null} if parameter {@code map} is null.
      *
      * @param map key-value pairs

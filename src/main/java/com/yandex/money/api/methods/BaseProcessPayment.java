@@ -37,12 +37,6 @@ import java.util.Map;
  */
 public abstract class BaseProcessPayment implements MethodResponse {
 
-    protected static final String MEMBER_STATUS = "status";
-    protected static final String MEMBER_ERROR = "error";
-    protected static final String MEMBER_ACS_URI = "acs_uri";
-    protected static final String MEMBER_ACS_PARAMS = "acs_params";
-    protected static final String MEMBER_NEXT_RETRY = "next_retry";
-
     public final Status status;
     public final Error error;
     public final String invoiceId;
@@ -52,28 +46,21 @@ public abstract class BaseProcessPayment implements MethodResponse {
 
     /**
      * Constructor.
-     *
-     * @param status status of the operation
-     * @param error error code
-     * @param acsUri address for 3D Secure authorization
-     * @param acsParams POST parameters for 3D Secure authorization (key-value pairs)
-     * @param nextRetry recommended time interval between process payment requests
      */
-    public BaseProcessPayment(Status status, Error error, String invoiceId, String acsUri,
-                              Map<String, String> acsParams, Long nextRetry) {
+    protected BaseProcessPayment(Builder builder) {
 
-        if (status == Status.EXT_AUTH_REQUIRED && acsUri == null) {
+        if (builder.status == Status.EXT_AUTH_REQUIRED && builder.acsUri == null) {
             throw new NullPointerException("acsUri is null when status is ext_auth_required");
         }
-        if (acsParams == null) {
+        if (builder.acsParams == null) {
             throw new NullPointerException("acsParams is null");
         }
-        this.status = status;
-        this.error = error;
-        this.invoiceId = invoiceId;
-        this.acsUri = acsUri;
-        this.acsParams = Collections.unmodifiableMap(acsParams);
-        this.nextRetry = nextRetry;
+        this.status = builder.status;
+        this.error = builder.error;
+        this.invoiceId = builder.invoiceId;
+        this.acsUri = builder.acsUri;
+        this.acsParams = Collections.unmodifiableMap(builder.acsParams);
+        this.nextRetry = builder.nextRetry;
     }
 
     @Override
@@ -109,5 +96,47 @@ public abstract class BaseProcessPayment implements MethodResponse {
             }
             return UNKNOWN;
         }
+    }
+
+    public static abstract class Builder {
+
+        public Status status;
+        private Error error;
+        private String invoiceId;
+        private String acsUri;
+        private Map<String, String> acsParams;
+        private Long nextRetry; // TODO make it long
+
+        public final Builder setStatus(Status status) {
+            this.status = status;
+            return this;
+        }
+
+        public final Builder setError(Error error) {
+            this.error = error;
+            return this;
+        }
+
+        public final Builder setInvoiceId(String invoiceId) {
+            this.invoiceId = invoiceId;
+            return this;
+        }
+
+        public final Builder setAcsUri(String acsUri) {
+            this.acsUri = acsUri;
+            return this;
+        }
+
+        public final Builder setAcsParams(Map<String, String> acsParams) {
+            this.acsParams = acsParams;
+            return this;
+        }
+
+        public final Builder setNextRetry(Long nextRetry) {
+            this.nextRetry = nextRetry;
+            return this;
+        }
+
+        public abstract BaseProcessPayment create();
     }
 }

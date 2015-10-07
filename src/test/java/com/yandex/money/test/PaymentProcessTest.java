@@ -227,7 +227,7 @@ public class PaymentProcessTest {
     private PaymentProcess.SavedState createPaymentProcessSavedState() {
         return new PaymentProcess.SavedState(
                 new RequestPayment.Builder().createRequestPayment(),
-                new ProcessPayment.Builder().createProcessPayment(),
+                new ProcessPayment.Builder().create(),
                 3
         );
     }
@@ -235,8 +235,7 @@ public class PaymentProcessTest {
     private ExternalPaymentProcess.SavedState createExternalPaymentProcessSavedState() {
         return new ExternalPaymentProcess.SavedState(
                 new RequestExternalPayment(null, null, null, null, null),
-                new ProcessExternalPayment(null, null, null, null, new HashMap<String, String>(),
-                        null, null),
+                new ProcessExternalPayment.Builder().create(),
                 3
         );
     }
