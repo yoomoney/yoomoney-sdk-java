@@ -24,9 +24,7 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.yandex.money.api.typeadapters.BalanceDetailsTypeAdapter;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -92,18 +90,6 @@ public class BalanceDetails {
         this.blocked = blocked;
         this.debt = debt;
         this.hold = hold;
-    }
-
-    /**
-     * Creates {@link com.yandex.money.api.model.BalanceDetails} from JSON.
-     *
-     * @param element JSON object
-     * @return {@link com.yandex.money.api.model.BalanceDetails}
-     * @deprecated use {@link BalanceDetailsTypeAdapter#fromJson(JsonElement)} instead
-     */
-    @Deprecated
-    public static BalanceDetails createFromJson(JsonElement element) {
-        return BalanceDetailsTypeAdapter.getInstance().fromJson(element);
     }
 
     @Override

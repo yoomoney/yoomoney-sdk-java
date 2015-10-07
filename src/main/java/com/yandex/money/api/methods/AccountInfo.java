@@ -98,27 +98,6 @@ public class AccountInfo implements MethodResponse {
      */
     public final List<YandexMoneyCard> yandexMoneyCards;
 
-    /**
-     * @deprecated use {@link com.yandex.money.api.methods.AccountInfo.Builder} instead
-     */
-    @Deprecated
-    public AccountInfo(String account, BigDecimal balance, Currency currency,
-                       AccountStatus accountStatus, AccountType accountType, Avatar avatar,
-                       BalanceDetails balanceDetails, List<Card> linkedCards,
-                       List<String> additionalServices, List<YandexMoneyCard> yandexMoneyCards) {
-        this(new Builder()
-                .setAccount(account)
-                .setBalance(balance)
-                .setCurrency(currency)
-                .setAccountStatus(accountStatus)
-                .setAccountType(accountType)
-                .setAvatar(avatar)
-                .setBalanceDetails(balanceDetails)
-                .setLinkedCards(linkedCards)
-                .setAdditionalServices(additionalServices)
-                .setYandexMoneyCards(yandexMoneyCards));
-    }
-
     private AccountInfo(Builder builder) {
         if (Strings.isNullOrEmpty(builder.account)) {
             throw new IllegalArgumentException("account is null or empty");
@@ -202,14 +181,6 @@ public class AccountInfo implements MethodResponse {
         result = 31 * result + additionalServices.hashCode();
         result = 31 * result + yandexMoneyCards.hashCode();
         return result;
-    }
-
-    /**
-     * @deprecated use {@link #accountStatus} instead
-     */
-    @Deprecated
-    public boolean isIdentified() {
-        return accountStatus == AccountStatus.IDENTIFIED;
     }
 
     /**

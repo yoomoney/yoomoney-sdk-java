@@ -24,9 +24,6 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.JsonElement;
-import com.yandex.money.api.typeadapters.CardTypeAdapter;
-
 /**
  * Bank card info.
  *
@@ -44,41 +41,10 @@ public class Card extends MoneySource {
      */
     public final Type type;
 
-    /**
-     * Constructor.
-     *
-     * @param id unique card id
-     * @param panFragment panned fragment of card's number
-     * @param type type of a card
-     * @deprecated use {@link com.yandex.money.api.model.Card.Builder} instead
-     */
-    @Deprecated
-    public Card(String id, String panFragment, Type type) {
-        this((Builder) new Builder().setPanFragment(panFragment).setType(type).setId(id));
-    }
-
-    Card(Builder builder) {
+    protected Card(Builder builder) {
         super(builder);
         panFragment = builder.panFragment;
         type = builder.type;
-    }
-
-    /**
-     * Creates {@link com.yandex.money.api.model.Card} from {@link com.google.gson.JsonElement}.
-     * @deprecated use {@link CardTypeAdapter#fromJson(JsonElement)} instead
-     */
-    @Deprecated
-    public static Card createFromJson(JsonElement element) {
-        return CardTypeAdapter.getInstance().fromJson(element);
-    }
-
-    /**
-     * Creates {@link com.yandex.money.api.model.Card} from JSON.
-     * @deprecated use {@link CardTypeAdapter#fromJson(String)} instead
-     */
-    @Deprecated
-    public static Card createFromJson(String json) {
-        return CardTypeAdapter.getInstance().fromJson(json);
     }
 
     @Override
@@ -108,17 +74,6 @@ public class Card extends MoneySource {
         result = 31 * result + (panFragment != null ? panFragment.hashCode() : 0);
         result = 31 * result + type.hashCode();
         return result;
-    }
-
-    /**
-     * Serializes {@link com.yandex.money.api.model.Card} object to JSON text.
-     *
-     * @return JSON text
-     * @deprecated use {@link CardTypeAdapter#toJson(Object)} instead
-     */
-    @Deprecated
-    public String serializeToJson() {
-        return CardTypeAdapter.getInstance().toJson(this);
     }
 
     public enum Type {

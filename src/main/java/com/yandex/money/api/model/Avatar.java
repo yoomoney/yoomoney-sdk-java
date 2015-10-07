@@ -24,10 +24,9 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.yandex.money.api.typeadapters.AvatarTypeAdapter;
 import com.yandex.money.api.utils.Strings;
+
 import org.joda.time.DateTime;
 
 import java.util.Objects;
@@ -91,15 +90,4 @@ public class Avatar {
         return Objects.hash(url, timestamp);
     }
 
-    /**
-     * Creates {@link com.yandex.money.api.model.Avatar} from a JSON object.
-     *
-     * @param json JSON
-     * @return {@link com.yandex.money.api.model.Avatar}
-     * @deprecated use {@link AvatarTypeAdapter#fromJson(JsonElement)} instead
-     */
-    @Deprecated
-    public static Avatar createFromJson(JsonElement json) {
-        return AvatarTypeAdapter.getInstance().fromJson(json);
-    }
 }
