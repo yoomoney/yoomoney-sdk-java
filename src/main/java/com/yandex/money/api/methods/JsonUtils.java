@@ -52,7 +52,7 @@ import java.util.Map;
  */
 public final class JsonUtils { // TODO read note above and do the stuff in future release
 
-    private static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
+    public static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
             .withOffsetParsed();
 
     /**

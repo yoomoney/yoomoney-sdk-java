@@ -24,14 +24,6 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.yandex.money.api.methods.JsonUtils;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
@@ -205,13 +197,6 @@ public class Operation {
         this.digitalGoods = digitalGoods;
     }
 
-    /**
-     * Creates {@link com.yandex.money.api.model.Operation} from JSON.
-     */
-    public static Operation createFromJson(JsonElement element) {
-        return buildGson().fromJson(element, Operation.class);
-    }
-
     @Override
     public String toString() {
         return "Operation{" +
@@ -264,15 +249,15 @@ public class Operation {
          */
         UNKNOWN("unknown");
 
-        private final String status;
+        public final String code;
 
-        Status(String status) {
-            this.status = status;
+        Status(String code) {
+            this.code = code;
         }
 
         public static Status parse(String status) {
             for (Status value : values()) {
-                if (value.status.equals(status)) {
+                if (value.code.equals(status)) {
                     return value;
                 }
             }
@@ -309,15 +294,15 @@ public class Operation {
          */
         UNKNOWN("unknown");
 
-        private final String type;
+        public final String code;
 
-        Type(String type) {
-            this.type = type;
+        Type(String code) {
+            this.code = code;
         }
 
         public static Type parse(String type) {
             for (Type value : values()) {
-                if (value.type.equals(type)) {
+                if (value.code.equals(type)) {
                     return value;
                 }
             }
@@ -342,15 +327,15 @@ public class Operation {
          */
         UNKNOWN("unknown");
 
-        private final String direction;
+        public final String code;
 
-        Direction(String direction) {
-            this.direction = direction;
+        Direction(String code) {
+            this.code = code;
         }
 
         public static Direction parse(String direction) {
             for (Direction value : values()) {
-                if (value.direction.equals(direction)) {
+                if (value.code.equals(direction)) {
                     return value;
                 }
             }
@@ -518,53 +503,6 @@ public class Operation {
                     datetime, title, sender, recipient, recipientType, message, comment, codepro,
                     protectionCode, expires, answerDatetime, label, details, repeatable,
                     paymentParameters, favorite, type, digitalGoods);
-        }
-    }
-
-    private static Gson buildGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(Operation.class, new Deserializer())
-                .create();
-    }
-
-    private static final class Deserializer implements JsonDeserializer<Operation> {
-
-        @Override
-        public Operation deserialize(JsonElement json, java.lang.reflect.Type typeOfT,
-                                     JsonDeserializationContext context) throws JsonParseException {
-
-            final JsonObject o = json.getAsJsonObject();
-            final String paymentParametersMember = "payment_parameters";
-            return new Builder()
-                    .setOperationId(JsonUtils.getMandatoryString(o, "operation_id"))
-                    .setStatus(Status.parse(JsonUtils.getString(o, "status")))
-                    .setDatetime(JsonUtils.getDateTime(o, "datetime"))
-                    .setTitle(JsonUtils.getMandatoryString(o, "title"))
-                    .setPatternId(JsonUtils.getString(o, "pattern_id"))
-                    .setDirection(Direction.parse(
-                            JsonUtils.getMandatoryString(o, "direction")))
-                    .setAmount(JsonUtils.getBigDecimal(o, "amount"))
-                    .setAmountDue(JsonUtils.getBigDecimal(o, "amount_due"))
-                    .setFee(JsonUtils.getBigDecimal(o, "fee"))
-                    .setLabel(JsonUtils.getString(o, "label"))
-                    .setType(Type.parse(JsonUtils.getString(o, "type")))
-                    .setSender(JsonUtils.getString(o, "sender"))
-                    .setRecipient(JsonUtils.getString(o, "recipient"))
-                    .setRecipientType(PayeeIdentifierType.parse(
-                            JsonUtils.getString(o, "recipient_type")))
-                    .setMessage(JsonUtils.getString(o, "message"))
-                    .setComment(JsonUtils.getString(o, "comment"))
-                    .setCodepro(JsonUtils.getBoolean(o, "codepro"))
-                    .setProtectionCode(JsonUtils.getString(o, "protection_code"))
-                    .setExpires(JsonUtils.getDateTime(o, "expires"))
-                    .setAnswerDatetime(JsonUtils.getDateTime(o, "answer_datetime"))
-                    .setDetails(JsonUtils.getString(o, "details"))
-                    .setRepeatable(JsonUtils.getBoolean(o, "repeatable"))
-                    .setPaymentParameters(o.has(paymentParametersMember) ?
-                            JsonUtils.map(o.getAsJsonObject(paymentParametersMember)) : null)
-                    .setFavorite(JsonUtils.getBoolean(o, "favourite"))
-                    .setDigitalGoods(DigitalGoods.createFromJson(o.get("digital_goods")))
-                    .createOperation();
         }
     }
 }

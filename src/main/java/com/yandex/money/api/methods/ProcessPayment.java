@@ -34,6 +34,7 @@ import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.DigitalGoodsTypeAdapter;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -94,6 +95,30 @@ public class ProcessPayment extends BaseProcessPayment {
                 ", holdForPickupLink='" + holdForPickupLink + '\'' +
                 ", digitalGoods=" + digitalGoods +
                 '}';
+    }
+
+    /**
+     * Available test results.
+     */
+    public enum TestResult {
+
+        SUCCESS("success"),
+        CONTRACT_NOT_FOUND("contract_not_found"),
+        NOT_ENOUGH_FUNDS("not_enough_funds"),
+        LIMIT_EXCEEDED("limit_exceeded"),
+        MONEY_SOURCE_NOT_AVAILABLE("money_source_not_available"),
+        ILLEGAL_PARAM_CSC("illegal_param_csc"),
+        PAYMENT_REFUSED("payment_refused"),
+        AUTHORIZATION_REJECT("authorization_reject"),
+        ACCOUNT_BLOCKED("account_blocked"),
+        ILLEGAL_PARAM_EXT_AUTH_SUCCESS_URI("illegal_param_ext_auth_success_uri"),
+        ILLEGAL_PARAM_EXT_AUTH_FAIL_URI("illegal_param_ext_auth_fail_uri");
+
+        public final String code;
+
+        TestResult(String code) {
+            this.code = code;
+        }
     }
 
     /**
@@ -167,30 +192,6 @@ public class ProcessPayment extends BaseProcessPayment {
             addParameter("test_payment", true);
             addParameter("test_result", testResult.code);
             return this;
-        }
-    }
-
-    /**
-     * Available test results.
-     */
-    public enum TestResult {
-
-        SUCCESS("success"),
-        CONTRACT_NOT_FOUND("contract_not_found"),
-        NOT_ENOUGH_FUNDS("not_enough_funds"),
-        LIMIT_EXCEEDED("limit_exceeded"),
-        MONEY_SOURCE_NOT_AVAILABLE("money_source_not_available"),
-        ILLEGAL_PARAM_CSC("illegal_param_csc"),
-        PAYMENT_REFUSED("payment_refused"),
-        AUTHORIZATION_REJECT("authorization_reject"),
-        ACCOUNT_BLOCKED("account_blocked"),
-        ILLEGAL_PARAM_EXT_AUTH_SUCCESS_URI("illegal_param_ext_auth_success_uri"),
-        ILLEGAL_PARAM_EXT_AUTH_FAIL_URI("illegal_param_ext_auth_fail_uri");
-
-        public final String code;
-
-        TestResult(String code) {
-            this.code = code;
         }
     }
 
@@ -367,7 +368,8 @@ public class ProcessPayment extends BaseProcessPayment {
                     .setAcsParams(object.has(MEMBER_ACS_PARAMS) ?
                             JsonUtils.map(object.getAsJsonObject(MEMBER_ACS_PARAMS)) : null)
                     .setNextRetry(JsonUtils.getLong(object, MEMBER_NEXT_RETRY))
-                    .setDigitalGoods(DigitalGoods.createFromJson(object.get("digital_goods")))
+                    .setDigitalGoods(DigitalGoodsTypeAdapter.getInstance().fromJson(object.get(
+                            "digital_goods")))
                     .createProcessPayment();
         }
     }

@@ -24,18 +24,13 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Scope;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.AuxTokenTypeAdapter;
 
-import java.lang.reflect.Type;
 import java.util.Set;
 
 /**
@@ -79,7 +74,7 @@ public class AuxToken implements MethodResponse {
     public static final class Request extends PostRequest<AuxToken> {
 
         public Request(Set<Scope> scopes) {
-            super(AuxToken.class, new Deserializer());
+            super(AuxToken.class, AuxTokenTypeAdapter.getInstance());
             if (scopes == null || scopes.isEmpty()) {
                 throw new IllegalArgumentException("scopes is null or empty");
             }
@@ -89,18 +84,6 @@ public class AuxToken implements MethodResponse {
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/token-aux";
-        }
-    }
-
-    private static final class Deserializer implements JsonDeserializer<AuxToken> {
-
-        @Override
-        public AuxToken deserialize(JsonElement json, Type typeOfT,
-                                    JsonDeserializationContext context) throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-            return new AuxToken(JsonUtils.getString(object, "aux_token"),
-                    Error.parse(JsonUtils.getString(object, "error")));
         }
     }
 }

@@ -22,53 +22,47 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model;
+package com.yandex.money.api.typeadapters;
+
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.yandex.money.api.methods.Token;
+
+import java.lang.reflect.Type;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
- * Describes digital item, that user can obtain when paying for them.
+ * @author Anton Ermak (ermak@yamoney.ru)
  */
-public class Good {
+public final class RevokeTypeAdapter extends BaseTypeAdapter<Token.Revoke> {
 
-    /**
-     * serial number
-     */
-    public final String serial;
+    private static final RevokeTypeAdapter INSTANCE = new RevokeTypeAdapter();
 
-    /**
-     * secret
-     */
-    public final String secret;
+    private RevokeTypeAdapter() {
+    }
 
-    /**
-     * merchant article id
-     */
-    public final String merchantArticleId;
-
-    /**
-     * Constructor.
-     *
-     * @param serial serial number
-     * @param secret secret
-     * @param merchantArticleId merchant article id
-     */
-    public Good(String serial, String secret, String merchantArticleId) {
-        if (serial == null) {
-            throw new NullPointerException("serial is null");
-        }
-        if (secret == null) {
-            throw new NullPointerException("secret is null");
-        }
-        this.serial = serial;
-        this.secret = secret;
-        this.merchantArticleId = merchantArticleId;
+    public static RevokeTypeAdapter getInstance() {
+        return INSTANCE;
     }
 
     @Override
-    public String toString() {
-        return "Good{" +
-                "serial='" + serial + '\'' +
-                ", secret='" + secret + '\'' +
-                ", merchantArticleId='" + merchantArticleId + '\'' +
-                '}';
+    public Token.Revoke deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext
+            context) throws
+            JsonParseException {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public JsonElement serialize(Token.Revoke src, Type typeOfSrc, JsonSerializationContext
+            context) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    protected Class<Token.Revoke> getType() {
+        return Token.Revoke.class;
     }
 }

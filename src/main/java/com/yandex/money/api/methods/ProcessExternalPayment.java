@@ -33,6 +33,7 @@ import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.ExternalCardTypeAdapter;
 import com.yandex.money.api.utils.Strings;
 
 import java.lang.reflect.Type;
@@ -154,7 +155,8 @@ public class ProcessExternalPayment extends BaseProcessPayment {
 
                 final String moneySourceMember = "money_source";
                 ExternalCard moneySource = o.has(moneySourceMember) ?
-                        ExternalCard.createFromJson(o.get(moneySourceMember)) : null;
+                        ExternalCardTypeAdapter.getInstance().fromJson(o.get(
+                                moneySourceMember)) : null;
 
                 return new ProcessExternalPayment(
                         Status.parse(JsonUtils.getString(o, MEMBER_STATUS)),

@@ -24,17 +24,11 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
-
-import java.lang.reflect.Type;
+import com.yandex.money.api.typeadapters.IncomingTransferAcceptTypeAdapter;
 
 /**
  * Incoming transfer accept result.
@@ -59,6 +53,9 @@ public class IncomingTransferAccept implements MethodResponse {
      */
     public IncomingTransferAccept(Status status, Error error,
                                   Integer protectionCodeAttemptsAvailable, String extActionUri) {
+        if (status == null) {
+            throw new NullPointerException("status is null");
+        }
         this.status = status;
         this.error = error;
         this.protectionCodeAttemptsAvailable = protectionCodeAttemptsAvailable;
@@ -124,7 +121,7 @@ public class IncomingTransferAccept implements MethodResponse {
          * @param protectionCode protection code if transfer is protected
          */
         public Request(String operationId, String protectionCode) {
-            super(IncomingTransferAccept.class, new Deserializer());
+            super(IncomingTransferAccept.class, IncomingTransferAcceptTypeAdapter.getInstance());
             if (operationId == null || operationId.isEmpty()) {
                 throw new IllegalArgumentException("operationId is null or empty");
             }
@@ -135,21 +132,6 @@ public class IncomingTransferAccept implements MethodResponse {
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/incoming-transfer-accept";
-        }
-    }
-
-    private static final class Deserializer implements JsonDeserializer<IncomingTransferAccept> {
-        @Override
-        public IncomingTransferAccept deserialize(JsonElement json, Type typeOfT,
-                                                  JsonDeserializationContext context)
-                throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-            return new IncomingTransferAccept(
-                    Status.parse(JsonUtils.getMandatoryString(object, "status")),
-                    Error.parse(JsonUtils.getString(object, "error")),
-                    JsonUtils.getInt(object, "protection_code_attempts_available"),
-                    JsonUtils.getString(object, "ext_action_uri"));
         }
     }
 }

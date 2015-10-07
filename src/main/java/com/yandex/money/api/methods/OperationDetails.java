@@ -24,18 +24,12 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
-
-import java.lang.reflect.Type;
+import com.yandex.money.api.typeadapters.OperationDetailsTypeAdapter;
 
 /**
  * Operation details result.
@@ -81,25 +75,13 @@ public class OperationDetails implements MethodResponse {
          * @param operationId operation's id
          */
         public Request(String operationId) {
-            super(OperationDetails.class, new Deserializer());
+            super(OperationDetails.class, OperationDetailsTypeAdapter.getInstance());
             addParameter("operation_id", operationId);
         }
 
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/operation-details";
-        }
-    }
-
-    private static final class Deserializer implements JsonDeserializer<OperationDetails> {
-        @Override
-        public OperationDetails deserialize(JsonElement json, Type typeOfT,
-                                            JsonDeserializationContext context)
-                throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-            return new OperationDetails(Error.parse(JsonUtils.getString(object, "error")),
-                    Operation.createFromJson(json));
         }
     }
 }

@@ -24,17 +24,11 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
-
-import java.lang.reflect.Type;
+import com.yandex.money.api.typeadapters.IncomingTransferRejectTypeAdapter;
 
 /**
  * Incoming transfer reject operation.
@@ -53,6 +47,9 @@ public class IncomingTransferReject implements MethodResponse {
      * @param error error code
      */
     public IncomingTransferReject(Status status, Error error) {
+        if (status == null) {
+            throw new NullPointerException("status is null");
+        }
         this.status = status;
         this.error = error;
     }
@@ -113,7 +110,7 @@ public class IncomingTransferReject implements MethodResponse {
          * @param operationId rejecting operation id
          */
         public Request(String operationId) {
-            super(IncomingTransferReject.class, new Deserializer());
+            super(IncomingTransferReject.class, IncomingTransferRejectTypeAdapter.getInstance());
             if (operationId == null || operationId.isEmpty()) {
                 throw new IllegalArgumentException("operationId is null or empty");
             }
@@ -123,19 +120,6 @@ public class IncomingTransferReject implements MethodResponse {
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/incoming-transfer-reject";
-        }
-    }
-
-    private static final class Deserializer implements JsonDeserializer<IncomingTransferReject> {
-        @Override
-        public IncomingTransferReject deserialize(JsonElement json, Type typeOfT,
-                                                  JsonDeserializationContext context)
-                throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-            return new IncomingTransferReject(
-                    Status.parse(JsonUtils.getMandatoryString(object, "status")),
-                    Error.parse(JsonUtils.getString(object, "error")));
         }
     }
 }
