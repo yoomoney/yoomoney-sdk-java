@@ -38,6 +38,8 @@ import static com.yandex.money.api.methods.JsonUtils.getBigDecimal;
 import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
+ * Type adapter for {@link ProcessPayment}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class ProcessPaymentTypeAdapter extends BaseTypeAdapter<ProcessPayment> {

@@ -41,6 +41,8 @@ import static com.yandex.money.api.methods.JsonUtils.getString;
 import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
 
 /**
+ * Type adapter for {@link OperationHistory}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<OperationHistory> {
@@ -53,6 +55,9 @@ public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<Operation
     private OperationHistoryTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static OperationHistoryTypeAdapter getInstance() {
         return INSTANCE;
     }

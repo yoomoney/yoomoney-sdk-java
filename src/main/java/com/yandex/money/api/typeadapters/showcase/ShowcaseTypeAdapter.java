@@ -47,23 +47,27 @@ import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
 import static com.yandex.money.api.methods.JsonUtils.toJsonObject;
 
 /**
+ * Type adapter for {@link Showcase}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
 
-    private static final ShowcaseTypeAdapter INSTANCE = new ShowcaseTypeAdapter();
-
-    private static final String ELEMENT_TITLE = "title";
-    private static final String ELEMENT_HIDDEN_FIELDS = "hidden_fields";
-    private static final String ELEMENT_FORM = "form";
-    private static final String ELEMENT_MONEY_SOURCE = "money_source";
     private static final String ELEMENT_ERROR = "error";
+    private static final String ELEMENT_FORM = "form";
+    private static final String ELEMENT_HIDDEN_FIELDS = "hidden_fields";
+    private static final String ELEMENT_MONEY_SOURCE = "money_source";
+    private static final String ELEMENT_TITLE = "title";
+    private static final ShowcaseTypeAdapter INSTANCE = new ShowcaseTypeAdapter();
 
     private ShowcaseTypeAdapter() {
         // register type adapters to GSON instance.
         GroupTypeAdapter.getInstance();
     }
 
+    /**
+     * @return instance of this class
+     */
     public static ShowcaseTypeAdapter getInstance() {
         return INSTANCE;
     }
@@ -107,9 +111,8 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     private static final class ErrorTypeAdapter extends BaseTypeAdapter<Showcase.Error> {
 
         public static final ErrorTypeAdapter INSTANCE = new ErrorTypeAdapter();
-
-        private static final String MEMBER_NAME = "name";
         private static final String MEMBER_ALERT = "alert";
+        private static final String MEMBER_NAME = "name";
 
         @Override
         public Error deserialize(JsonElement json, Type typeOfT,

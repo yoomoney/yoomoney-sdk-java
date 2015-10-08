@@ -32,9 +32,9 @@ import com.yandex.money.api.methods.Token;
 
 import java.lang.reflect.Type;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
+ * Type adapter for {@link com.yandex.money.api.methods.Token.Revoke}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class RevokeTypeAdapter extends BaseTypeAdapter<Token.Revoke> {
@@ -44,6 +44,9 @@ public final class RevokeTypeAdapter extends BaseTypeAdapter<Token.Revoke> {
     private RevokeTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static RevokeTypeAdapter getInstance() {
         return INSTANCE;
     }
@@ -52,13 +55,13 @@ public final class RevokeTypeAdapter extends BaseTypeAdapter<Token.Revoke> {
     public Token.Revoke deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext
             context) throws
             JsonParseException {
-        throw new NotImplementedException();
+        return null;
     }
 
     @Override
     public JsonElement serialize(Token.Revoke src, Type typeOfSrc, JsonSerializationContext
             context) {
-        throw new NotImplementedException();
+        return null;
     }
 
     @Override

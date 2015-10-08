@@ -37,6 +37,8 @@ import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
+ * Type adapter for {@link Good}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class GoodTypeAdapter extends BaseTypeAdapter<Good> {

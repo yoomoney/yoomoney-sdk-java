@@ -37,6 +37,8 @@ import java.lang.reflect.Type;
 import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
+ * Type adapter for {@link AuxToken}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class AuxTokenTypeAdapter extends BaseTypeAdapter<AuxToken> {

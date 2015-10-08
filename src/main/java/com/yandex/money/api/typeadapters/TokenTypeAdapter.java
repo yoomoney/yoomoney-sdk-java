@@ -37,6 +37,8 @@ import java.lang.reflect.Type;
 import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
+ * Type adapter for {@link Token}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class TokenTypeAdapter extends BaseTypeAdapter<Token> {
@@ -48,6 +50,9 @@ public final class TokenTypeAdapter extends BaseTypeAdapter<Token> {
     private TokenTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static TokenTypeAdapter getInstance() {
         return INSTANCE;
     }

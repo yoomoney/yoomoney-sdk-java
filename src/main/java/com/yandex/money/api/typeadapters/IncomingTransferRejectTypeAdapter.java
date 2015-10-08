@@ -38,6 +38,8 @@ import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
+ * Type adapter for {@link IncomingTransferReject}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class IncomingTransferRejectTypeAdapter extends
@@ -51,6 +53,9 @@ public final class IncomingTransferRejectTypeAdapter extends
     private IncomingTransferRejectTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static IncomingTransferRejectTypeAdapter getInstance() {
         return INSTANCE;
     }

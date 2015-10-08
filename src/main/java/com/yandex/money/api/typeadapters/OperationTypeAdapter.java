@@ -44,6 +44,8 @@ import static com.yandex.money.api.methods.JsonUtils.map;
 import static com.yandex.money.api.methods.JsonUtils.toJsonObject;
 
 /**
+ * Type adapter for {@link Operation}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {

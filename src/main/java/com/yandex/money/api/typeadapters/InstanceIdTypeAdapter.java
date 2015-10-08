@@ -37,11 +37,14 @@ import java.lang.reflect.Type;
 import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
+ * Type adapter for {@link InstanceId}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class InstanceIdTypeAdapter extends BaseTypeAdapter<InstanceId> {
 
     private static final InstanceIdTypeAdapter INSTANCE = new InstanceIdTypeAdapter();
+
     private static final String MEMBER_ERROR = "error";
     private static final String MEMBER_INSTANCE_ID = "instance_id";
     private static final String MEMBER_STATUS = "status";
@@ -49,6 +52,9 @@ public final class InstanceIdTypeAdapter extends BaseTypeAdapter<InstanceId> {
     private InstanceIdTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static InstanceIdTypeAdapter getInstance() {
         return INSTANCE;
     }

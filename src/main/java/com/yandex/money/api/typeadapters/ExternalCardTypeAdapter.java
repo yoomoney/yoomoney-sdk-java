@@ -37,6 +37,8 @@ import java.lang.reflect.Type;
 import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
 
 /**
+ * Type adapter for {@link ExternalCard}.
+ *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public final class ExternalCardTypeAdapter extends BaseTypeAdapter<ExternalCard> {

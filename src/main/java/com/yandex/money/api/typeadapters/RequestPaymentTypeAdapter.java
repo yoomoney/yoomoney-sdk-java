@@ -48,6 +48,8 @@ import static com.yandex.money.api.methods.JsonUtils.getNotNullArray;
 import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
+ * Type adapter for {@link RequestPayment}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPayment> {

@@ -37,6 +37,8 @@ import java.lang.reflect.Type;
 import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
+ * Type adapter for {@link OperationDetails}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<OperationDetails> {
@@ -46,6 +48,9 @@ public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<Operation
     private OperationDetailsTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static OperationDetailsTypeAdapter getInstance() {
         return INSTANCE;
     }

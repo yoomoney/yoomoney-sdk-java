@@ -37,6 +37,8 @@ import static com.yandex.money.api.methods.JsonUtils.getNotNullArray;
 import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
 
 /**
+ * Type adapter for {@link DigitalGoods}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods> {

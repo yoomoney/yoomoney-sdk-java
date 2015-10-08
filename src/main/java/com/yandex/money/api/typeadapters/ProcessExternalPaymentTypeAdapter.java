@@ -36,6 +36,8 @@ import com.yandex.money.api.typeadapters.BaseProcessPaymentTypeAdapter.Delegate;
 import java.lang.reflect.Type;
 
 /**
+ * Type adapter for {@link ProcessExternalPayment}
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class ProcessExternalPaymentTypeAdapter extends
@@ -48,6 +50,9 @@ public final class ProcessExternalPaymentTypeAdapter extends
     private ProcessExternalPaymentTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static ProcessExternalPaymentTypeAdapter getInstance() {
         return INSTANCE;
     }

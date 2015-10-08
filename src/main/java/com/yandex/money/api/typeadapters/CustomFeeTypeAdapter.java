@@ -35,7 +35,7 @@ import com.yandex.money.api.typeadapters.FeeTypeAdapter.Delegate;
 import java.lang.reflect.Type;
 
 /**
- * Type adapter for {@link CustomFee} class.
+ * Type adapter for {@link CustomFee}.
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
