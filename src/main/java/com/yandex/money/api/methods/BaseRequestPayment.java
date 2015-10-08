@@ -36,34 +36,35 @@ import java.math.BigDecimal;
  */
 public abstract class BaseRequestPayment implements MethodResponse {
 
+    /**
+     * Status of the request.
+     */
+    public final Status status;
+    /**
+     * Error code if exists.
+     */
+    public final Error error;
+    /**
+     * Request id.
+     */
+    public final String requestId;
+    /**
+     * Contract amount.
+     */
+    public final BigDecimal contractAmount;
     protected static final String MEMBER_STATUS = "status";
     protected static final String MEMBER_ERROR = "error";
     protected static final String MEMBER_REQUEST_ID = "request_id";
     protected static final String MEMBER_CONTRACT_AMOUNT = "contract_amount";
 
-    public final Status status;
-    public final Error error;
-    public final String requestId;
-    public final BigDecimal contractAmount;
-
-    /**
-     * Constructor.
-     *
-     * @param status status of the request
-     * @param error error code
-     * @param requestId unique request id
-     * @param contractAmount contract amount
-     */
-    protected BaseRequestPayment(Status status, Error error, String requestId,
-                                 BigDecimal contractAmount) {
-
-        if (status == Status.SUCCESS && requestId == null) {
+    protected BaseRequestPayment(Builder builder) {
+        if (builder.status == Status.SUCCESS && builder.requestId == null) {
             throw new IllegalArgumentException("requestId is null when status is success");
         }
-        this.status = status;
-        this.error = error;
-        this.requestId = requestId;
-        this.contractAmount = contractAmount;
+        this.status = builder.status;
+        this.error = builder.error;
+        this.requestId = builder.requestId;
+        this.contractAmount = builder.contractAmount;
     }
 
     @Override
@@ -96,5 +97,35 @@ public abstract class BaseRequestPayment implements MethodResponse {
             }
             return UNKNOWN;
         }
+    }
+
+    public static abstract class Builder {
+
+        private Status status;
+        private String requestId;
+        private Error error;
+        private BigDecimal contractAmount;
+
+        public final Builder setContractAmount(BigDecimal contractAmount) {
+            this.contractAmount = contractAmount;
+            return this;
+        }
+
+        public final Builder setRequestId(String requestId) {
+            this.requestId = requestId;
+            return this;
+        }
+
+        public final Builder setError(Error error) {
+            this.error = error;
+            return this;
+        }
+
+        public final Builder setStatus(Status status) {
+            this.status = status;
+            return this;
+        }
+
+        public abstract BaseRequestPayment create();
     }
 }
