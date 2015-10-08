@@ -29,10 +29,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.Good;
 
 import java.lang.reflect.Type;
+
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -59,9 +61,9 @@ public final class GoodTypeAdapter extends BaseTypeAdapter<Good> {
     public Good deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        return new Good(JsonUtils.getMandatoryString(object, MEMBER_SERIAL),
-                JsonUtils.getMandatoryString(object, MEMBER_SECRET),
-                JsonUtils.getString(object, MEMBER_MERCHANT_ARTICLE_ID));
+        return new Good(getMandatoryString(object, MEMBER_SERIAL),
+                getMandatoryString(object, MEMBER_SECRET),
+                getString(object, MEMBER_MERCHANT_ARTICLE_ID));
     }
 
     @Override

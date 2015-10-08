@@ -30,7 +30,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.AccountInfo;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Avatar;
@@ -46,6 +45,7 @@ import java.util.List;
 import static com.yandex.money.api.methods.JsonUtils.getArray;
 import static com.yandex.money.api.methods.JsonUtils.getMandatoryBigDecimal;
 import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.methods.JsonUtils.getString;
 import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
 
 /**
@@ -86,7 +86,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
 
         Currency currency;
         try {
-            int parsed = Integer.parseInt(JsonUtils.getString(object, MEMBER_CURRENCY));
+            int parsed = Integer.parseInt(getString(object, MEMBER_CURRENCY));
             currency = Currency.parseNumericCode(parsed);
         } catch (NumberFormatException e) {
             currency = Currency.RUB;

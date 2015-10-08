@@ -29,11 +29,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.methods.OperationDetails;
 import com.yandex.money.api.model.Error;
 
 import java.lang.reflect.Type;
+
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -55,7 +56,7 @@ public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<Operation
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new OperationDetails(Error.parse(JsonUtils.getString(object, "error")),
+        return new OperationDetails(Error.parse(getString(object, "error")),
                 OperationTypeAdapter.getInstance().fromJson(json));
     }
 

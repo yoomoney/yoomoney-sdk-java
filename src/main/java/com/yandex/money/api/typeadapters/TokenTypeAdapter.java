@@ -29,11 +29,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.methods.Token;
 import com.yandex.money.api.model.Error;
 
 import java.lang.reflect.Type;
+
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -55,8 +56,8 @@ public final class TokenTypeAdapter extends BaseTypeAdapter<Token> {
     public Token deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        return new Token(JsonUtils.getString(object, MEMBER_ACCESS_TOKEN),
-                Error.parse(JsonUtils.getString(object, MEMBER_ERROR)));
+        return new Token(getString(object, MEMBER_ACCESS_TOKEN),
+                Error.parse(getString(object, MEMBER_ERROR)));
     }
 
     @Override

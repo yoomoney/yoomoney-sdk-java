@@ -30,10 +30,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.InstanceId;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.Error;
 
 import java.lang.reflect.Type;
+
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -59,9 +60,9 @@ public final class InstanceIdTypeAdapter extends BaseTypeAdapter<InstanceId> {
 
         JsonObject o = json.getAsJsonObject();
         return new InstanceId(
-                InstanceId.Status.parse(JsonUtils.getString(o, MEMBER_STATUS)),
-                Error.parse(JsonUtils.getString(o, MEMBER_ERROR)),
-                JsonUtils.getString(o, MEMBER_INSTANCE_ID));
+                InstanceId.Status.parse(getString(o, MEMBER_STATUS)),
+                Error.parse(getString(o, MEMBER_ERROR)),
+                getString(o, MEMBER_INSTANCE_ID));
     }
 
     @Override

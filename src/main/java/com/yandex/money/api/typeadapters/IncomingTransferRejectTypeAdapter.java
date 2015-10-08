@@ -30,10 +30,12 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.IncomingTransferReject;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.Error;
 
 import java.lang.reflect.Type;
+
+import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -60,9 +62,9 @@ public final class IncomingTransferRejectTypeAdapter extends
 
         JsonObject object = json.getAsJsonObject();
         return new IncomingTransferReject(
-                IncomingTransferReject.Status.parse(JsonUtils.getMandatoryString(object,
+                IncomingTransferReject.Status.parse(getMandatoryString(object,
                         MEMBER_STATUS)),
-                Error.parse(JsonUtils.getString(object, MEMBER_ERROR)));
+                Error.parse(getString(object, MEMBER_ERROR)));
     }
 
     @Override

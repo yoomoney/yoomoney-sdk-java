@@ -29,10 +29,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.DigitalGoods;
 
 import java.lang.reflect.Type;
+
+import static com.yandex.money.api.methods.JsonUtils.getNotNullArray;
+import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -55,8 +57,8 @@ public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods>
                                     JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        return new DigitalGoods(JsonUtils.getNotNullArray(object, MEMBER_ARTICLE,
-                GoodTypeAdapter.getInstance()), JsonUtils.getNotNullArray(object, MEMBER_BONUS,
+        return new DigitalGoods(getNotNullArray(object, MEMBER_ARTICLE,
+                GoodTypeAdapter.getInstance()), getNotNullArray(object, MEMBER_BONUS,
                 GoodTypeAdapter.getInstance()));
     }
 
@@ -64,9 +66,9 @@ public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods>
     public JsonElement serialize(DigitalGoods src, Type typeOfSrc,
                                  JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.add(MEMBER_ARTICLE, JsonUtils.toJsonArray(src.article,
+        object.add(MEMBER_ARTICLE, toJsonArray(src.article,
                 GoodTypeAdapter.getInstance()));
-        object.add(MEMBER_BONUS, JsonUtils.toJsonArray(src.bonus, GoodTypeAdapter.getInstance()));
+        object.add(MEMBER_BONUS, toJsonArray(src.bonus, GoodTypeAdapter.getInstance()));
         return null;
     }
 

@@ -30,10 +30,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.AuxToken;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.Error;
 
 import java.lang.reflect.Type;
+
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -55,8 +56,8 @@ public final class AuxTokenTypeAdapter extends BaseTypeAdapter<AuxToken> {
     public AuxToken deserialize(JsonElement json, Type typeOfT,
                                 JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        return new AuxToken(JsonUtils.getString(object, MEMBER_AUX_TOKEN),
-                Error.parse(JsonUtils.getString(object, MEMBER_ERROR)));
+        return new AuxToken(getString(object, MEMBER_AUX_TOKEN),
+                Error.parse(getString(object, MEMBER_ERROR)));
     }
 
     @Override

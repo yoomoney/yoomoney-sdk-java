@@ -27,8 +27,9 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
+
+import static com.yandex.money.api.methods.JsonUtils.getInt;
 
 /**
  * Base type adapter for subclasses of {@link TextArea} component.
@@ -38,14 +39,14 @@ import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
 abstract class BaseTextAreaTypeAdapter<T extends TextArea, U extends TextArea.Builder>
         extends ParameterControlTypeAdapter<T, U> {
 
-    private static final String MEMBER_MINLENGTH = "minlength";
     private static final String MEMBER_MAXLENGTH = "maxlength";
+    private static final String MEMBER_MINLENGTH = "minlength";
 
     @Override
     protected void deserialize(JsonObject src, U builder,
                                JsonDeserializationContext context) {
-        builder.setMinLength(JsonUtils.getInt(src, MEMBER_MINLENGTH));
-        builder.setMaxLength(JsonUtils.getInt(src, MEMBER_MAXLENGTH));
+        builder.setMinLength(getInt(src, MEMBER_MINLENGTH));
+        builder.setMaxLength(getInt(src, MEMBER_MAXLENGTH));
         super.deserialize(src, builder, context);
     }
 

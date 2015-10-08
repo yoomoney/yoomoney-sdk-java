@@ -29,9 +29,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.ListDelegate;
+
+import static com.yandex.money.api.methods.JsonUtils.getString;
 
 /**
  * Type adapter for {@link @Select} component.
@@ -41,12 +42,11 @@ import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.Lis
 public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select, Select.Builder> {
 
     private static final SelectTypeAdapter INSTANCE = new SelectTypeAdapter();
-
-    private static final String MEMBER_OPTIONS = "options";
-    private static final String MEMBER_LABEL = "label";
-    private static final String MEMBER_VALUE = "value";
-    private static final String MEMBER_STYLE = "style";
     private static final String MEMBER_GROUP = "group";
+    private static final String MEMBER_LABEL = "label";
+    private static final String MEMBER_OPTIONS = "options";
+    private static final String MEMBER_STYLE = "style";
+    private static final String MEMBER_VALUE = "value";
 
     private SelectTypeAdapter() {
     }
@@ -72,7 +72,7 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
             }
             builder.addOption(option);
         }
-        builder.setStyle(Select.Style.parse(JsonUtils.getString(src, MEMBER_STYLE)));
+        builder.setStyle(Select.Style.parse(getString(src, MEMBER_STYLE)));
         super.deserialize(src, builder, context);
     }
 
