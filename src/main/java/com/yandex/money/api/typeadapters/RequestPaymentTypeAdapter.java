@@ -52,7 +52,7 @@ import static com.yandex.money.api.methods.JsonUtils.getString;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPayment> {
+public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPayment> {
 
     private static final RequestPaymentTypeAdapter INSTANCE = new RequestPaymentTypeAdapter();
 

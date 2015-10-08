@@ -41,7 +41,8 @@ import static com.yandex.money.api.methods.JsonUtils.getString;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public class RequestExternalPaymentTypeAdapter extends BaseTypeAdapter<RequestExternalPayment> {
+public final class RequestExternalPaymentTypeAdapter extends
+        BaseTypeAdapter<RequestExternalPayment> {
 
     private static final RequestExternalPaymentTypeAdapter INSTANCE = new
             RequestExternalPaymentTypeAdapter();
