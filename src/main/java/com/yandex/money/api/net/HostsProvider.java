@@ -57,10 +57,25 @@ public class HostsProvider {
     }
 
     /**
-     * @return {@code https://sp-money.yandex.ru} or {@code https://m.sp-money.yandex.ru} based on
-     * mobile parameter
+     * @return {@code https://m.money.yandex.ru}
      */
+    public String getMobileMoney() {
+        return "https://m.money.yandex.ru";
+    }
+
+    /**
+     * @return platform specific url
+     */
+    public final String getWebUrl() {
+        return mobile ? getMobileMoney() : getMoney();
+    }
+
+    /**
+     * @return {@code https://m.money.yandex.ru}
+     * @deprecated use {@link #getMoney()} instead or {@link #getWebUrl()} for platform specific url
+     */
+    @Deprecated
     public String getSpMoney() {
-        return mobile ? "https://m.sp-money.yandex.ru" : "https://sp-money.yandex.ru";
+        return getMoney();
     }
 }

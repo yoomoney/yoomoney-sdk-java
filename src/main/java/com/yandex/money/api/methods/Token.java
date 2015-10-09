@@ -102,7 +102,7 @@ public class Token implements MethodResponse {
 
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
-            return hostsProvider.getSpMoney() + "/oauth/token";
+            return hostsProvider.getMoney() + "/oauth/token";
         }
     }
 
