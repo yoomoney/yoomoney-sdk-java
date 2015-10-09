@@ -126,23 +126,23 @@ public final class P2pTransferParams extends PaymentParams {
         private Map<String, String> makeParams() {
             HashMap<String, String> params = new HashMap<>();
 
-            params.put(Params.TO.paramName, to);
+            params.put(Params.TO.code, to);
             setAmount(params);
 
             if (comment != null) {
-                params.put(Params.COMMENT.paramName, comment);
+                params.put(Params.COMMENT.code, comment);
             }
             if (message != null) {
-                params.put(Params.MESSAGE.paramName, message);
+                params.put(Params.MESSAGE.code, message);
             }
             if (label != null) {
-                params.put(Params.LABEL.paramName, label);
+                params.put(Params.LABEL.code, label);
             }
             if (codepro != null) {
-                params.put(Params.CODEPRO.paramName, codepro.toString());
+                params.put(Params.CODEPRO.code, codepro.toString());
             }
             if (expirePeriod != null) {
-                params.put(Params.EXPIRE.paramName, expirePeriod.toString());
+                params.put(Params.EXPIRE.code, expirePeriod.toString());
             }
             return params;
         }
@@ -152,9 +152,9 @@ public final class P2pTransferParams extends PaymentParams {
                 throw new IllegalStateException("One of \"amount\" and \"amountDue\" is mandatory");
             }
             if (amount == null) {
-                params.put(Params.AMOUNT_DUE.paramName, amountDue.toPlainString());
+                params.put(Params.AMOUNT_DUE.code, amountDue.toPlainString());
             } else {
-                params.put(Params.AMOUNT.paramName, amount.toPlainString());
+                params.put(Params.AMOUNT.code, amount.toPlainString());
             }
         }
 
@@ -169,10 +169,10 @@ public final class P2pTransferParams extends PaymentParams {
             MESSAGE("message"),
             TO("to");
 
-            public final String paramName;
+            public final String code;
 
-            Params(String paramName) {
-                this.paramName = paramName;
+            Params(String code) {
+                this.code = code;
             }
         }
     }
