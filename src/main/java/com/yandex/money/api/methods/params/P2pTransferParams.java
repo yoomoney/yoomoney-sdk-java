@@ -119,7 +119,7 @@ public final class P2pTransferParams extends PaymentParams {
             return this;
         }
 
-        public P2pTransferParams build() {
+        public P2pTransferParams create() {
             return new P2pTransferParams(makeParams());
         }
 

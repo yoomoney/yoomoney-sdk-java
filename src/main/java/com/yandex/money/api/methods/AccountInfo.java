@@ -292,7 +292,7 @@ public class AccountInfo implements MethodResponse {
         /**
          * @return {@link AccountInfo} instance
          */
-        public AccountInfo createAccountInfo() {
+        public AccountInfo create() {
             return new AccountInfo(this);
         }
     }

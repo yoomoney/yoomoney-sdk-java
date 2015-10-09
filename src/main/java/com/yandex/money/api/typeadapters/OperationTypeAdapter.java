@@ -124,7 +124,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
                 .setFavorite(getBoolean(o, MEMBER_FAVOURITE))
                 .setDigitalGoods(DigitalGoodsTypeAdapter.getInstance().fromJson(o.get(
                         MEMBER_DIGITAL_GOODS)))
-                .createOperation();
+                .create();
     }
 
     @Override

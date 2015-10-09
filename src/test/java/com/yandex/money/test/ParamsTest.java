@@ -47,7 +47,7 @@ public final class ParamsTest {
      */
     @Test(expectedExceptions = IllegalStateException.class)
     public void testP2pTransferParamsBuilderException() {
-        new P2pTransferParams.Builder(accountNumber).build();
+        new P2pTransferParams.Builder(accountNumber).create();
     }
 
     /**
@@ -56,7 +56,7 @@ public final class ParamsTest {
     @Test
     public void testP2pTransferParamsBuilderCreated() {
         int requiredParamsSize = 2;
-        P2pTransferParams params = createP2pBuilderRequired().build();
+        P2pTransferParams params = createP2pBuilderRequired().create();
         Assert.assertEquals(params.makeParams().size(), requiredParamsSize);
     }
 
@@ -76,7 +76,7 @@ public final class ParamsTest {
                 .setExpirePeriod(expirePeriod)
                 .setLabel(label)
                 .setMessage(message)
-                .build()
+                .create()
                 .makeParams();
 
         HashMap<String, String> expectedParams = new HashMap<>();

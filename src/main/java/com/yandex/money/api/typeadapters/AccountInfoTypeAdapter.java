@@ -123,7 +123,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
                 .setLinkedCards(linkedCards)
                 .setAdditionalServices(additionalServices)
                 .setYandexMoneyCards(yandexMoneyCards)
-                .createAccountInfo();
+                .create();
     }
 
     @Override

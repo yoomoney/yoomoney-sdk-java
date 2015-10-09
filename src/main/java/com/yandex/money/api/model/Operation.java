@@ -498,7 +498,7 @@ public class Operation {
             return this;
         }
 
-        public Operation createOperation() {
+        public Operation create() {
             return new Operation(operationId, status, patternId, direction, amount, amountDue, fee,
                     datetime, title, sender, recipient, recipientType, message, comment, codepro,
                     protectionCode, expires, answerDatetime, label, details, repeatable,

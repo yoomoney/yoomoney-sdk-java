@@ -61,7 +61,7 @@ public class OperationDetailsTest implements ApiTest {
             InvalidRequestException, IOException {
 
         OperationHistory.Request historyRequest = new OperationHistory.Request.Builder()
-                .createRequest();
+                .create();
         OperationHistory history = session.execute(historyRequest);
         Assert.assertNotNull(history);
 
@@ -94,7 +94,7 @@ public class OperationDetailsTest implements ApiTest {
                     .setTill(operations.get(0).datetime.plusSeconds(1))
                     .setDetails(true)
                     .setRecords(operations.size())
-                    .createRequest();
+                    .create();
 
             session.setDebugLogging(true);
             Assert.assertEquals(session.execute(historyRequest).operations.size(),

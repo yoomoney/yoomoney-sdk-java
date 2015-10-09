@@ -247,7 +247,7 @@ public class OperationHistory implements MethodResponse {
              *
              * @return the request
              */
-            public Request createRequest() {
+            public Request create() {
                 return new Request(types == null ? Collections.<FilterType>emptySet() : types,
                         label, from, till, startRecord, records, details);
             }
