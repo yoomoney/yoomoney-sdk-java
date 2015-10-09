@@ -33,7 +33,7 @@ import com.yandex.money.api.model.YandexMoneyCard;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 
 /**
  * Type adapter for {@link YandexMoneyCard} class.

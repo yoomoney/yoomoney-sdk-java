@@ -33,8 +33,8 @@ import com.yandex.money.api.model.DigitalGoods;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.methods.JsonUtils.getNotNullArray;
-import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
 
 /**
  * Type adapter for {@link DigitalGoods}.

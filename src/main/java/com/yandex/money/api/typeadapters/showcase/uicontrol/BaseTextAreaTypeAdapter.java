@@ -29,7 +29,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
 
-import static com.yandex.money.api.methods.JsonUtils.getInt;
+import static com.yandex.money.api.typeadapters.JsonUtils.getInt;
 
 /**
  * Base type adapter for subclasses of {@link TextArea} component.

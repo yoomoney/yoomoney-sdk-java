@@ -32,7 +32,7 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.containers.Container;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter;
 
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Base type adapter for subclasses of {@link Container} component.

@@ -32,7 +32,7 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.ListDelegate;
 
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Type adapter for {@link @Select} component.

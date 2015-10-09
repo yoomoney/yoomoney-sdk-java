@@ -38,9 +38,9 @@ import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryArray;
-import static com.yandex.money.api.methods.JsonUtils.getString;
-import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
 
 /**
  * Type adapter for {@link ShowcaseSearch}.
@@ -52,8 +52,8 @@ public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSea
     public static final ShowcaseSearchTypeAdapter INSTANCE = new ShowcaseSearchTypeAdapter();
 
     private static final String MEMBER_ERROR = "error";
-    private static final String MEMBER_RESULT = "result";
     private static final String MEMBER_NEXT_PAGE = "nextPage";
+    private static final String MEMBER_RESULT = "result";
 
     /**
      * @return instance of this class

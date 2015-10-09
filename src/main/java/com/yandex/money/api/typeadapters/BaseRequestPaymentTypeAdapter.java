@@ -29,9 +29,9 @@ import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.methods.BaseRequestPayment.Status;
 import com.yandex.money.api.model.Error;
 
-import static com.yandex.money.api.methods.JsonUtils.getBigDecimal;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)

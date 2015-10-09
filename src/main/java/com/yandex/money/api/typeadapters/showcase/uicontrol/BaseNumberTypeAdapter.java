@@ -29,7 +29,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrols.Number;
 
-import static com.yandex.money.api.methods.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
 
 
 /**

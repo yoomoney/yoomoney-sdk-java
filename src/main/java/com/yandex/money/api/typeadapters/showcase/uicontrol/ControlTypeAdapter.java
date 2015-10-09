@@ -29,7 +29,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrols.Control;
 
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Base type adapter for components implementing {@link Control} interface.

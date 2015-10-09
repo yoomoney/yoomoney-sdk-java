@@ -31,7 +31,7 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Date;
 
 import org.joda.time.format.DateTimeFormatter;
 
-import static com.yandex.money.api.methods.JsonUtils.getDateTime;
+import static com.yandex.money.api.typeadapters.JsonUtils.getDateTime;
 
 /**
  * Base type adapter for subclasses of {@link Date} component.

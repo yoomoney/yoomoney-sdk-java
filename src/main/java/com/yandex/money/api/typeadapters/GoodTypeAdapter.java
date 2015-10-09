@@ -33,8 +33,8 @@ import com.yandex.money.api.model.Good;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Type adapter for {@link Good}.

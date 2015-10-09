@@ -24,9 +24,9 @@
 
 package com.yandex.money.api.net;
 
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.typeadapters.GsonProvider;
+import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.Strings;

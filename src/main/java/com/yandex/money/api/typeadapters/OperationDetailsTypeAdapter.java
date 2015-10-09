@@ -34,7 +34,7 @@ import com.yandex.money.api.model.Error;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Type adapter for {@link OperationDetails}.
@@ -44,6 +44,7 @@ import static com.yandex.money.api.methods.JsonUtils.getString;
 public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<OperationDetails> {
 
     private static final OperationDetailsTypeAdapter INSTANCE = new OperationDetailsTypeAdapter();
+    private static final String MEMBER_ERROR = "error";
 
     private OperationDetailsTypeAdapter() {
     }
@@ -61,17 +62,16 @@ public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<Operation
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new OperationDetails(Error.parse(getString(object, "error")),
+        return new OperationDetails(Error.parse(getString(object, MEMBER_ERROR)),
                 OperationTypeAdapter.getInstance().fromJson(json));
     }
 
     @Override
     public JsonElement serialize(OperationDetails src, Type typeOfSrc, JsonSerializationContext
             context) {
-        //TODO: write operation
         if (src.error != null) {
             JsonObject object = new JsonObject();
-            object.addProperty("error", src.error.code);
+            object.addProperty(MEMBER_ERROR, src.error.code);
             return object;
         } else {
             return OperationTypeAdapter.getInstance().toJsonTree(src.operation);

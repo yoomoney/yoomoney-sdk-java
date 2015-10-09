@@ -37,8 +37,8 @@ import com.yandex.money.api.typeadapters.FeeTypeAdapter.Delegate;
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
 
-import static com.yandex.money.api.methods.JsonUtils.getBigDecimal;
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Type adapter for {@link Fee}.
@@ -49,10 +49,10 @@ public final class StdFeeTypeAdapter extends BaseTypeAdapter<StdFee> {
 
     private static final StdFeeTypeAdapter INSTANCE = new StdFeeTypeAdapter();
     private static final String MEMBER_A = "a";
+    private static final String MEMBER_AMOUNT_TYPE = "amount_type";
     private static final String MEMBER_B = "b";
     private static final String MEMBER_C = "c";
     private static final String MEMBER_D = "d";
-    private static final String MEMBER_AMOUNT_TYPE = "amount_type";
 
     private StdFeeTypeAdapter() {
     }

@@ -42,11 +42,11 @@ import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.methods.JsonUtils.getArray;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryBigDecimal;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
-import static com.yandex.money.api.methods.JsonUtils.getString;
-import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
 
 /**
  * Type adapter for {@link AccountInfo}.

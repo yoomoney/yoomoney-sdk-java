@@ -42,10 +42,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yandex.money.api.methods.JsonUtils.getBigDecimal;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryBoolean;
-import static com.yandex.money.api.methods.JsonUtils.getNotNullArray;
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBoolean;
+import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Type adapter for {@link RequestPayment}.

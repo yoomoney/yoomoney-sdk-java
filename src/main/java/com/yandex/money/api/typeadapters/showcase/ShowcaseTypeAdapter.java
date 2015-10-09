@@ -39,12 +39,12 @@ import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.Lis
 import java.lang.reflect.Type;
 import java.util.LinkedHashSet;
 
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
-import static com.yandex.money.api.methods.JsonUtils.getNotNullArray;
-import static com.yandex.money.api.methods.JsonUtils.getString;
-import static com.yandex.money.api.methods.JsonUtils.map;
-import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
-import static com.yandex.money.api.methods.JsonUtils.toJsonObject;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.map;
+import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
 
 /**
  * Type adapter for {@link Showcase}.

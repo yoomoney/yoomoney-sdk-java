@@ -31,7 +31,7 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.uicontrols.ParameterControl;
 
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Base type adapter for components implementing {@link ParameterControl} interface.

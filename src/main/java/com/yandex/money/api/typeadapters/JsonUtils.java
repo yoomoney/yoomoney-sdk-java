@@ -22,13 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.methods;
+package com.yandex.money.api.typeadapters;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.yandex.money.api.typeadapters.TypeAdapter;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
@@ -45,12 +44,9 @@ import java.util.Map;
 /**
  * Static class for JSON parsing process.
  *
- * Note: in upcoming major release this class will become package local and will be moved to
- * {@code com.yandex.money.api.typeadapters} package.
- *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class JsonUtils { // TODO read note above and do the stuff in future release
+public final class JsonUtils {
 
     public static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
             .withOffsetParsed();

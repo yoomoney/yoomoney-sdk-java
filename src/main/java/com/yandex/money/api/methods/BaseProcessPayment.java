@@ -100,7 +100,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
 
     public static abstract class Builder {
 
-        public Status status;
+        protected Status status;
         private Error error;
         private String invoiceId;
         private String acsUri;

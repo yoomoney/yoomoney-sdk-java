@@ -34,14 +34,14 @@ import com.yandex.money.api.model.PayeeIdentifierType;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.methods.JsonUtils.ISO_FORMATTER;
-import static com.yandex.money.api.methods.JsonUtils.getBigDecimal;
-import static com.yandex.money.api.methods.JsonUtils.getBoolean;
-import static com.yandex.money.api.methods.JsonUtils.getDateTime;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
-import static com.yandex.money.api.methods.JsonUtils.getString;
-import static com.yandex.money.api.methods.JsonUtils.map;
-import static com.yandex.money.api.methods.JsonUtils.toJsonObject;
+import static com.yandex.money.api.typeadapters.JsonUtils.ISO_FORMATTER;
+import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getBoolean;
+import static com.yandex.money.api.typeadapters.JsonUtils.getDateTime;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.map;
+import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
 
 /**
  * Type adapter for {@link Operation}.

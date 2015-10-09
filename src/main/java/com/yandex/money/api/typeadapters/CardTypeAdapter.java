@@ -33,7 +33,7 @@ import com.yandex.money.api.model.Card;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Type adapter for {@link Card}.
@@ -55,11 +55,6 @@ public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
     }
 
     @Override
-    protected Class<Card> getType() {
-        return Card.class;
-    }
-
-    @Override
     public Card deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
@@ -74,6 +69,11 @@ public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
         JsonObject object = new JsonObject();
         Delegate.serialize(object, src);
         return object;
+    }
+
+    @Override
+    protected Class<Card> getType() {
+        return Card.class;
     }
 
     static final class Delegate {

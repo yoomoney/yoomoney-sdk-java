@@ -37,12 +37,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yandex.money.api.methods.JsonUtils.getInt;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryLong;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
-import static com.yandex.money.api.methods.JsonUtils.getString;
-import static com.yandex.money.api.methods.JsonUtils.map;
-import static com.yandex.money.api.methods.JsonUtils.toJsonObject;
+import static com.yandex.money.api.typeadapters.JsonUtils.getInt;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryLong;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.map;
+import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
 
 /**
  * Type adapter for {@link ShowcaseReference}.
@@ -52,13 +52,12 @@ import static com.yandex.money.api.methods.JsonUtils.toJsonObject;
 public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<ShowcaseReference> {
 
     public static final ShowcaseReferenceTypeAdapter INSTANCE = new ShowcaseReferenceTypeAdapter();
-
-    private static final String MEMBER_TITLE = "title";
+    private static final String MEMBER_FORMAT = "format";
     private static final String MEMBER_ID = "id";
+    private static final String MEMBER_PARAMS = "params";
+    private static final String MEMBER_TITLE = "title";
     private static final String MEMBER_TOP = "top";
     private static final String MEMBER_URL = "url";
-    private static final String MEMBER_FORMAT = "format";
-    private static final String MEMBER_PARAMS = "params";
 
     /**
      * @return instance of this class

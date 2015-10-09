@@ -27,7 +27,7 @@ package com.yandex.money.api.typeadapters;
 import com.google.gson.JsonObject;
 import com.yandex.money.api.model.MoneySource;
 
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
