@@ -60,8 +60,6 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * TODO: remove method field's public modifier.
-     *
      * @return control's name
      */
     @Override
@@ -70,7 +68,7 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * @return default value. May be {@code null}.
+     * @return default value. May be {@code null}
      */
     @Override
     public String getValue() {
@@ -79,10 +77,8 @@ public abstract class ParameterControl extends Control implements Parameter {
 
     /**
      * Sets value.
-     * <p/>
-     * TODO: isValid() call?
      *
-     * @param value input value.
+     * @param value input value
      */
     @Override
     public void setValue(String value) {
@@ -139,15 +135,11 @@ public abstract class ParameterControl extends Control implements Parameter {
                 .append("valueAutoFill", valueAutoFill);
     }
 
-    /**
-     * TODO: is this method required?
-     */
     protected void onValueSet(String value) {
     }
 
     /**
      * Base builder of {@link ParameterControl}'s subclasses.
-     * TODO: protected?
      */
     public static abstract class Builder extends Control.Builder {
 

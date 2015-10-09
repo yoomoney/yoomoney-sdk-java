@@ -29,15 +29,18 @@ import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
  * Email control.
- * <p/>
- * TODO: refactor inheritance.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Email extends Text {
+public final class Email extends ParameterControl {
 
     private Email(Builder builder) {
         super(builder);
+    }
+
+    @Override
+    public boolean isValid(String value) {
+        return value.matches(Patterns.EMAIL) && super.isValid(value);
     }
 
     @Override
@@ -48,37 +51,11 @@ public final class Email extends Text {
     /**
      * {@link Email} builder.
      */
-    public static final class Builder extends Text.Builder {
-
-        public Builder() {
-            super.setPattern(Patterns.EMAIL);
-        }
+    public static final class Builder extends ParameterControl.Builder {
 
         @Override
         public Email create() {
             return new Email(this);
-        }
-
-        @Override
-        public Builder setMinLength(Integer minLength) {
-            throw new UnsupportedOperationException(
-                    "email min length defined by predefined pattern");
-        }
-
-        @Override
-        public Builder setMaxLength(Integer maxLength) {
-            throw new UnsupportedOperationException(
-                    "email max length defined by predefined pattern");
-        }
-
-        @Override
-        public Builder setPattern(String pattern) {
-            throw new UnsupportedOperationException("email has predefined pattern");
-        }
-
-        @Override
-        public Text.Builder setKeyboard(Keyboard keyboard) {
-            throw new UnsupportedOperationException("only email keyboards");
         }
     }
 }

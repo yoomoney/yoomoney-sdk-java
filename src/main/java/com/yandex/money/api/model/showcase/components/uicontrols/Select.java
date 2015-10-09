@@ -108,9 +108,6 @@ public final class Select extends ParameterControl {
                 .append("selectedOption", selectedOption);
     }
 
-    /**
-     * TODO: is this method required?
-     */
     @Override
     protected void onValueSet(String value) {
         selectedOption = options.get(values.indexOf(value));
@@ -173,7 +170,6 @@ public final class Select extends ParameterControl {
         /**
          * Group of elements which have to be visible when {@link Option} is selected. May be
          * {@code null}.
-         * TODO: constructor?
          */
         public Group group;
 
@@ -183,7 +179,7 @@ public final class Select extends ParameterControl {
          * @param label textural representation.
          * @param value actual value.
          */
-        public Option(String label, String value) {
+        public Option(String label, String value, Group group) {
             if (label == null) {
                 throw new NullPointerException("label is null");
             }
@@ -192,6 +188,7 @@ public final class Select extends ParameterControl {
             }
             this.label = label;
             this.value = value;
+            this.group = group;
         }
 
         /**

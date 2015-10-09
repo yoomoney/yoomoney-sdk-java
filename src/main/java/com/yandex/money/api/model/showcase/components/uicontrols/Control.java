@@ -29,9 +29,6 @@ import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
  * Base class for all components that allow user's input.
- * <p/>
- * TODO: think about if 'alert', 'required' and 'readonly' fields should be in ParameterControl
- * class.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */

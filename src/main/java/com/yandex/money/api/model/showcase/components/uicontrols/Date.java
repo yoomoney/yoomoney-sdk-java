@@ -46,8 +46,6 @@ public class Date extends ParameterControl {
 
     /**
      * Date formatter.
-     * <p/>
-     * TODO: refactor this field or {@link Date#getFormatter()}.
      */
     public static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern(PATTERN)
             .withLocale(Locale.ENGLISH);
