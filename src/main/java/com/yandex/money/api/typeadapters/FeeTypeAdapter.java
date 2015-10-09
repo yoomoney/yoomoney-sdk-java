@@ -48,6 +48,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
 
     public static final String MEMBER_TYPE = "type";
+
     private static final FeeTypeAdapter INSTANCE = new FeeTypeAdapter();
     private static final String TYPE_CUSTOM = "custom";
     private static final String TYPE_STD = "std";
