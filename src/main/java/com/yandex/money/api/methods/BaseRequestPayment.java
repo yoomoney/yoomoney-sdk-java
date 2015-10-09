@@ -40,22 +40,21 @@ public abstract class BaseRequestPayment implements MethodResponse {
      * Status of the request.
      */
     public final Status status;
+
     /**
      * Error code if exists.
      */
     public final Error error;
+
     /**
      * Request id.
      */
     public final String requestId;
+
     /**
      * Contract amount.
      */
     public final BigDecimal contractAmount;
-    protected static final String MEMBER_STATUS = "status";
-    protected static final String MEMBER_ERROR = "error";
-    protected static final String MEMBER_REQUEST_ID = "request_id";
-    protected static final String MEMBER_CONTRACT_AMOUNT = "contract_amount";
 
     protected BaseRequestPayment(Builder builder) {
         if (builder.status == Status.SUCCESS && builder.requestId == null) {
