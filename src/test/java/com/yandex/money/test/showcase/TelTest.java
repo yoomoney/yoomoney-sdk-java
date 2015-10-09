@@ -22,41 +22,28 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrols;
+package com.yandex.money.test.showcase;
 
-import com.yandex.money.api.utils.Patterns;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 /**
- * Email control.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class Email extends ParameterControl {
+public class TelTest extends ParameterTest {
 
-    private Email(Builder builder) {
-        super(builder);
-    }
+    @Test
+    public void testValidation() {
+        Tel.Builder builder = new Tel.Builder();
+        prepareParameter(builder);
+        Tel tel = builder.create();
+        Assert.assertTrue(tel.isValid("+79876543210"));
+        Assert.assertTrue(tel.isValid("89876543210"));
+        Assert.assertTrue(tel.isValid("+7 (987) 654-32-10"));
+        Assert.assertFalse(tel.isValid("no tel"));
 
-    @Override
-    public boolean isValid(String value) {
-        return (value == null || value.isEmpty() || value.matches(Patterns.EMAIL))
-                && super.isValid(value);
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Email");
-    }
-
-    /**
-     * {@link Email} builder.
-     */
-    public static final class Builder extends ParameterControl.Builder {
-
-        @Override
-        public Email create() {
-            return new Email(this);
-        }
+        testEmptyValues(builder);
     }
 }

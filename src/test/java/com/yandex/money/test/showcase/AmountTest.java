@@ -22,41 +22,37 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrols;
+package com.yandex.money.test.showcase;
 
-import com.yandex.money.api.utils.Patterns;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.model.showcase.components.uicontrols.Amount;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.math.BigDecimal;
 
 /**
- * Email control.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class Email extends ParameterControl {
+public class AmountTest extends ParameterTest {
 
-    private Email(Builder builder) {
-        super(builder);
+    @Test
+    public void testValidation() {
+        Amount.Builder builder = new Amount.Builder();
+        prepareParameter(builder);
+        checkValues(builder.create());
+
+        builder.setMax(new BigDecimal(1000));
+        checkValues(builder.create());
+
+        testEmptyValues(builder);
     }
 
-    @Override
-    public boolean isValid(String value) {
-        return (value == null || value.isEmpty() || value.matches(Patterns.EMAIL))
-                && super.isValid(value);
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Email");
-    }
-
-    /**
-     * {@link Email} builder.
-     */
-    public static final class Builder extends ParameterControl.Builder {
-
-        @Override
-        public Email create() {
-            return new Email(this);
-        }
+    private void checkValues(Amount amount) {
+        Assert.assertTrue(amount.isValid("0.01"));
+        Assert.assertTrue(amount.isValid("+1000"));
+        Assert.assertFalse(amount.isValid("0.0"));
+        Assert.assertFalse(amount.isValid("1,0"));
+        Assert.assertFalse(amount.isValid("-10"));
     }
 }

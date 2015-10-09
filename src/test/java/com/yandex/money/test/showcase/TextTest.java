@@ -22,41 +22,39 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrols;
+package com.yandex.money.test.showcase;
 
-import com.yandex.money.api.utils.Patterns;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.model.showcase.components.uicontrols.Text;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 /**
- * Email control.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class Email extends ParameterControl {
+public class TextTest extends ParameterTest {
 
-    private Email(Builder builder) {
-        super(builder);
-    }
+    @Test
+    public void testValidation() {
+        Text.Builder builder = new Text.Builder();
+        prepareParameter(builder);
 
-    @Override
-    public boolean isValid(String value) {
-        return (value == null || value.isEmpty() || value.matches(Patterns.EMAIL))
-                && super.isValid(value);
-    }
+        Text text = builder.create();
+        Assert.assertTrue(text.isValid("some random string, no constraints"));
+        Assert.assertFalse(text.isValid("some random string\nno constraints"));
 
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Email");
-    }
+        builder.setPattern("\\d*?")
+                .setMinLength(3)
+                .setMaxLength(5);
 
-    /**
-     * {@link Email} builder.
-     */
-    public static final class Builder extends ParameterControl.Builder {
+        text = builder.create();
+        Assert.assertTrue(text.isValid("123"));
+        Assert.assertTrue(text.isValid("1234"));
+        Assert.assertTrue(text.isValid("12345"));
+        Assert.assertFalse(text.isValid("abc"));
+        Assert.assertFalse(text.isValid("12"));
+        Assert.assertFalse(text.isValid("123456"));
 
-        @Override
-        public Email create() {
-            return new Email(this);
-        }
+        testEmptyValues(builder);
     }
 }

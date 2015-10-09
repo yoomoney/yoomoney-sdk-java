@@ -41,8 +41,8 @@ import java.util.LinkedHashSet;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullMap;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
-import static com.yandex.money.api.typeadapters.JsonUtils.map;
 import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
 import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
 
@@ -80,7 +80,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
 
         return new Showcase.Builder()
                 .setTitle(getMandatoryString(root, ELEMENT_TITLE))
-                .setHiddenFields(map(root.get(ELEMENT_HIDDEN_FIELDS).getAsJsonObject()))
+                .setHiddenFields(getNotNullMap(root, ELEMENT_HIDDEN_FIELDS))
                 .setForm(ListDelegate.deserialize(root.getAsJsonArray(ELEMENT_FORM), context))
                 .setMoneySources(new LinkedHashSet<>(getNotNullArray(root, ELEMENT_MONEY_SOURCE,
                         AllowedMoneySourceTypeAdapter.getInstance())))

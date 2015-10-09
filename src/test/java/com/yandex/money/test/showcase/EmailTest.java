@@ -22,41 +22,26 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrols;
+package com.yandex.money.test.showcase;
 
-import com.yandex.money.api.utils.Patterns;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.model.showcase.components.uicontrols.Email;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 /**
- * Email control.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class Email extends ParameterControl {
+public class EmailTest extends ParameterTest {
 
-    private Email(Builder builder) {
-        super(builder);
-    }
+    @Test
+    public void testValidation() {
+        Email.Builder builder = new Email.Builder();
+        prepareParameter(builder);
+        Email email = builder.create();
+        Assert.assertTrue(email.isValid("vyasevich@yamoney.ru"));
+        Assert.assertFalse(email.isValid("vyasevich@ yamoney.ru"));
 
-    @Override
-    public boolean isValid(String value) {
-        return (value == null || value.isEmpty() || value.matches(Patterns.EMAIL))
-                && super.isValid(value);
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Email");
-    }
-
-    /**
-     * {@link Email} builder.
-     */
-    public static final class Builder extends ParameterControl.Builder {
-
-        @Override
-        public Email create() {
-            return new Email(this);
-        }
+        testEmptyValues(builder);
     }
 }

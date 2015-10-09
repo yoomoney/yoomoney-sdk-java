@@ -22,41 +22,36 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrols;
+package com.yandex.money.test.showcase;
 
-import com.yandex.money.api.utils.Patterns;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.model.showcase.components.uicontrols.Date;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertTrue;
 
 /**
- * Email control.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class Email extends ParameterControl {
+public class MonthTest extends ParameterTest {
 
-    private Email(Builder builder) {
-        super(builder);
-    }
+    @Test
+    public void testValidation() {
+        Date.Builder builder = new Date.Builder();
+        prepareParameter(builder);
+        assertTrue(builder.create().isValid("1987-12-31"));
 
-    @Override
-    public boolean isValid(String value) {
-        return (value == null || value.isEmpty() || value.matches(Patterns.EMAIL))
-                && super.isValid(value);
-    }
+        builder.setMin(Date.parseDate("2000-01-01", Date.FORMATTER))
+                .setMax(Date.parseDate("2010-01-01", Date.FORMATTER));
+        Date date = builder.create();
+        assertTrue(date.isValid("2000-01-01"));
+        assertTrue(date.isValid("2010-01-01"));
+        assertTrue(date.isValid("2005-01-01"));
+        Assert.assertFalse(date.isValid("1999-12-31"));
+        Assert.assertFalse(date.isValid("2010-01-02"));
+        Assert.assertFalse(date.isValid("not a date"));
 
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Email");
-    }
-
-    /**
-     * {@link Email} builder.
-     */
-    public static final class Builder extends ParameterControl.Builder {
-
-        @Override
-        public Email create() {
-            return new Email(this);
-        }
+        testEmptyValues(builder);
     }
 }

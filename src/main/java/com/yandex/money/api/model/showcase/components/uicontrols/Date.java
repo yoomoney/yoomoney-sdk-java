@@ -24,9 +24,11 @@
 
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
+import com.yandex.money.api.utils.Strings;
 import com.yandex.money.api.utils.ToStringBuilder;
 
 import org.joda.time.DateTime;
+import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -76,13 +78,21 @@ public class Date extends ParameterControl {
      * @param formatter {@link DateTimeFormatter}.
      */
     public static DateTime parseDate(String date, DateTimeFormatter formatter) {
-        if (date == null || date.isEmpty()) {
+        if (Strings.isNullOrEmpty(date)) {
             return null;
         }
-        if (formatter == null) {
-            throw new NullPointerException("pattern is null");
+        String[] split = date.split("/");
+        if (split.length > 1) {
+            if (split[0].startsWith("P")) {
+                return parseWithPeriod(split[1], split[0], false, formatter);
+            } else if (split[1].startsWith("P")) {
+                return parseWithPeriod(split[0], split[1], true, formatter);
+            } else {
+                throw new IllegalArgumentException("unable to parse date: " + date);
+            }
+        } else {
+            return parse(date, formatter);
         }
-        return DateTime.parse(date, formatter);
     }
 
     @Override
@@ -130,6 +140,21 @@ public class Date extends ParameterControl {
                 .setName("Date")
                 .append("min", min)
                 .append("max", max);
+    }
+
+    private static DateTime parse(String dateTime, DateTimeFormatter formatter) {
+        return dateTime.equals("now") ?
+                DateTime.parse(formatter.print(DateTime.now()), formatter) :
+                DateTime.parse(dateTime, formatter);
+    }
+
+    private static DateTime parseWithPeriod(String dateTime, String period, boolean add,
+                                            DateTimeFormatter formatter) {
+        return parseWithPeriod(parse(dateTime, formatter), Period.parse(period), add);
+    }
+
+    private static DateTime parseWithPeriod(DateTime dateTime, Period period, boolean add) {
+        return add ? dateTime.plus(period) : dateTime.minus(period);
     }
 
     private boolean isValidInner(String value) {

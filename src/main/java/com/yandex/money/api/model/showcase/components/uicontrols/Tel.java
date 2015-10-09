@@ -40,7 +40,8 @@ public final class Tel extends Text {
 
     @Override
     public boolean isValid(String value) {
-        return value.matches(Patterns.PHONE) && super.isValid(value);
+        return (value == null || value.isEmpty() || value.matches(Patterns.PHONE))
+                && super.isValid(value);
     }
 
     @Override
