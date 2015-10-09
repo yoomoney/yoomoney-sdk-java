@@ -24,14 +24,11 @@
 
 package com.yandex.money.api.processes;
 
-import com.squareup.okhttp.Call;
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.ShowcaseContext;
 
 import java.io.IOException;
-
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * This class connects {@link DocumentProvider} and {@link ShowcaseContext} class and provides
@@ -74,11 +71,6 @@ public class ShowcaseProcess implements Process {
         return isCompleted();
     }
 
-    @Override
-    public Call proceedAsync() {
-        throw new NotImplementedException();
-    }
-
     /**
      * Moves (submits) showcase context to the next step.
      *
@@ -87,11 +79,6 @@ public class ShowcaseProcess implements Process {
     @Override
     public boolean repeat() throws IOException, ResourceNotFoundException {
         return proceed();
-    }
-
-    @Override
-    public Call repeatAsync() {
-        throw new NotImplementedException();
     }
 
     /**

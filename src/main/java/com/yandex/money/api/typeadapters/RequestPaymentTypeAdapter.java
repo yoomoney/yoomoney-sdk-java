@@ -40,6 +40,7 @@ import com.yandex.money.api.typeadapters.BaseRequestPaymentTypeAdapter.Delegate;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
@@ -96,10 +97,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
                 .setAccountUnblockUri(getString(object, MEMBER_ACCOUNT_UNBLOCK_URI))
                 .setExtActionUri(getString(object, MEMBER_EXT_ACTION_URI));
 
-        JsonObject moneySources = object.getAsJsonObject(MEMBER_MS);
-        if (moneySources != null) {
-            deserializeMoneySources(moneySources, builder);
-        }
+        deserializeMoneySources(object, builder);
         Delegate.deserialize(object, builder);
 
         return builder.create();
@@ -158,19 +156,22 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
     private static void deserializeMoneySources(JsonObject object, RequestPayment.Builder builder) {
         List<MoneySource> moneySources = new ArrayList<>();
 
-        JsonObject wallet = object.getAsJsonObject(MEMBER_MS_WALLET);
-        if (wallet != null && getMandatoryBoolean(wallet, MEMBER_MS_ALLOWED)) {
-            moneySources.add(Wallet.INSTANCE);
-        }
+        JsonObject jsonMoneySources = object.getAsJsonObject(MEMBER_MS);
+        if (jsonMoneySources != null) {
+            JsonObject wallet = object.getAsJsonObject(MEMBER_MS_WALLET);
+            if (wallet != null && getMandatoryBoolean(wallet, MEMBER_MS_ALLOWED)) {
+                moneySources.add(Wallet.INSTANCE);
+            }
 
-        JsonObject cards = object.getAsJsonObject(MEMBER_MS_CARDS);
-        if (cards != null) {
-            builder.setCscRequired(getMandatoryBoolean(cards, MEMBER_MS_CSC_REQUIRED));
-            if (getMandatoryBoolean(cards, MEMBER_MS_ALLOWED)) {
-                moneySources.addAll(getNotNullArray(cards, MEMBER_MS_ITEMS,
-                        CardTypeAdapter.getInstance()));
+            JsonObject cards = object.getAsJsonObject(MEMBER_MS_CARDS);
+            if (cards != null) {
+                builder.setCscRequired(getMandatoryBoolean(cards, MEMBER_MS_CSC_REQUIRED));
+                if (getMandatoryBoolean(cards, MEMBER_MS_ALLOWED)) {
+                    moneySources.addAll(getNotNullArray(cards, MEMBER_MS_ITEMS,
+                            CardTypeAdapter.getInstance()));
+                }
             }
         }
-        builder.setMoneySources(moneySources);
+        builder.setMoneySources(Collections.unmodifiableList(moneySources));
     }
 }

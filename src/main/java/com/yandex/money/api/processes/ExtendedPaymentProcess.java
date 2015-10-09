@@ -24,7 +24,6 @@
 
 package com.yandex.money.api.processes;
 
-import com.squareup.okhttp.Call;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.model.ExternalCard;
@@ -74,22 +73,9 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     @Override
-    public Call proceedAsync() throws Exception {
-        switchContextIfRequired();
-        return paymentContext == PaymentContext.PAYMENT ? paymentProcess.proceedAsync() :
-                externalPaymentProcess.proceedAsync();
-    }
-
-    @Override
     public boolean repeat() throws Exception {
         return paymentContext == PaymentContext.PAYMENT ? paymentProcess.repeat() :
                 externalPaymentProcess.repeat();
-    }
-
-    @Override
-    public Call repeatAsync() throws Exception {
-        return paymentContext == PaymentContext.PAYMENT ? paymentProcess.repeatAsync() :
-                externalPaymentProcess.repeatAsync();
     }
 
     @Override
@@ -170,16 +156,6 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
         externalPaymentProcess.setInstanceId(instanceId);
     }
 
-    /**
-     * Sets callbacks for async operations of the process.
-     *
-     * @param callbacks callbacks
-     */
-    public void setCallbacks(Callbacks callbacks) {
-        paymentProcess.setCallbacks(callbacks.getPaymentCallbacks());
-        externalPaymentProcess.setCallbacks(callbacks.getExternalPaymentCallbacks());
-    }
-
     private void invalidatePaymentContext() {
         this.paymentContext = session.isAuthorized() ? PaymentContext.PAYMENT :
                 PaymentContext.EXTERNAL_PAYMENT;
@@ -208,20 +184,18 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     /**
-     * Callbacks for the process.
+     * Payment context.
      */
-    public interface Callbacks {
+    public enum PaymentContext {
         /**
-         * @return payment process callbacks
-         * @see PaymentProcess.Callbacks
+         * {@link PaymentProcess}
          */
-        PaymentProcess.Callbacks getPaymentCallbacks();
+        PAYMENT,
 
         /**
-         * @return external payment process callbacks
-         * @see ExternalPaymentProcess.Callbacks
+         * {@link ExternalPaymentProcess}
          */
-        ExternalPaymentProcess.Callbacks getExternalPaymentCallbacks();
+        EXTERNAL_PAYMENT
     }
 
     /**
@@ -296,20 +270,5 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
             }
             return value == 1;
         }
-    }
-
-    /**
-     * Payment context.
-     */
-    public enum PaymentContext {
-        /**
-         * {@link PaymentProcess}
-         */
-        PAYMENT,
-
-        /**
-         * {@link ExternalPaymentProcess}
-         */
-        EXTERNAL_PAYMENT
     }
 }

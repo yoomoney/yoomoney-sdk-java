@@ -171,16 +171,8 @@ public class PaymentProcessTest {
     private synchronized void checkAsyncPaymentProcess(BasePaymentProcess process)
             throws Exception {
 
-        ThreadSync sync = new ThreadSync();
-
-        //noinspection unchecked
-        process.setCallbacks(new Callbacks(sync));
-
-        process.proceedAsync();
-        sync.doWait();
-
-        process.proceedAsync();
-        sync.doWait();
+        process.proceed();
+        process.proceed();
     }
 
     private ExternalPaymentProcess.ParameterProvider createParameterProviderStub() {
@@ -238,39 +230,5 @@ public class PaymentProcessTest {
                 new ProcessExternalPayment.Builder().create(),
                 3
         );
-    }
-
-    private static final class Callbacks implements BasePaymentProcess.Callbacks {
-
-        private final ThreadSync sync;
-        private final OnResponseReady onResponseReady = new OnResponseReady();
-
-        public Callbacks(ThreadSync sync) {
-            this.sync = sync;
-        }
-
-        @Override
-        public com.yandex.money.api.net.OnResponseReady getOnRequestCallback() {
-            return onResponseReady;
-        }
-
-        @Override
-        public com.yandex.money.api.net.OnResponseReady getOnProcessCallback() {
-            return onResponseReady;
-        }
-
-        private final class OnResponseReady implements com.yandex.money.api.net.OnResponseReady {
-            @Override
-            public void onFailure(Exception exception) {
-                Assert.assertTrue(false);
-                sync.doWait();
-            }
-
-            @Override
-            public void onResponse(Object response) {
-                Assert.assertTrue(true);
-                sync.doNotify();
-            }
-        }
     }
 }

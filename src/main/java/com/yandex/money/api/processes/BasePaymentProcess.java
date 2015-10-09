@@ -24,16 +24,12 @@
 
 package com.yandex.money.api.processes;
 
-import com.squareup.okhttp.Call;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.OAuth2Session;
-import com.yandex.money.api.net.OnResponseReady;
 import com.yandex.money.api.utils.MillisecondsIn;
 import com.yandex.money.api.utils.Threads;
-
-import java.io.IOException;
 
 /**
  * Base implementation for all payment processes.
@@ -44,17 +40,13 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         PP extends BaseProcessPayment> implements IPaymentProcess {
 
     private static final long TIMEOUT = 3 * MillisecondsIn.SECOND;
-
+    private final OAuth2Session session;
     /**
      * Provides parameters for requests.
      */
     protected final ParameterProvider parameterProvider;
-
-    private final OAuth2Session session;
-
     private RP requestPayment;
     private PP processPayment;
-    private Callbacks<RP, PP> callbacks;
     private State state;
 
     /**
@@ -93,21 +85,6 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     }
 
     @Override
-    public final Call proceedAsync() throws Exception {
-        checkCallbacks();
-        switch (state) {
-            case CREATED:
-                return enqueueRequestPayment(callbacks.getOnRequestCallback());
-            case STARTED:
-                return enqueueProcessPayment(callbacks.getOnProcessCallback());
-            case PROCESSING:
-                return enqueueRepeatProcessPayment(callbacks.getOnProcessCallback());
-            default:
-                throw new IllegalStateException("payment process is broken");
-        }
-    }
-
-    @Override
     public final boolean repeat() throws Exception {
         switch (state) {
             case STARTED:
@@ -122,21 +99,6 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         }
 
         return isCompleted();
-    }
-
-    @Override
-    public final Call repeatAsync() throws Exception {
-        checkCallbacks();
-        switch (state) {
-            case STARTED:
-                return enqueueRequestPayment(callbacks.getOnRequestCallback());
-            case PROCESSING:
-                return enqueueProcessPayment(callbacks.getOnProcessCallback());
-            case COMPLETED:
-                return enqueueRepeatProcessPayment(callbacks.getOnProcessCallback());
-            default:
-                throw new IllegalStateException("payment process is broken");
-        }
     }
 
     @Override
@@ -184,22 +146,6 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      */
     public final void setAccessToken(String accessToken) {
         session.setAccessToken(accessToken);
-    }
-
-    /**
-     * Sets callbacks for async operations.
-     *
-     * @param callbacks the callbacks
-     */
-    public void setCallbacks(Callbacks<RP, PP> callbacks) {
-        this.callbacks = callbacks;
-    }
-
-    /**
-     * @return state of payment process
-     */
-    final State getState() {
-        return state;
     }
 
     /**
@@ -256,78 +202,6 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         return session.execute(apiRequest);
     }
 
-    private void checkCallbacks() {
-        if (callbacks == null) {
-            throw new NullPointerException("no callbacks provided");
-        }
-    }
-
-    private Call enqueueRequestPayment(final OnResponseReady<RP> callback)
-            throws IOException {
-
-        return enqueue(createRequestPayment(), new OnResponseReady<RP>() {
-            @Override
-            public void onFailure(Exception exception) {
-                callback.onFailure(exception);
-            }
-
-            @Override
-            public void onResponse(RP response) {
-                requestPayment = response;
-                state = State.STARTED;
-                callback.onResponse(response);
-            }
-        });
-    }
-
-    private Call enqueueProcessPayment(OnResponseReady<PP> callback)
-            throws IOException {
-        return enqueueProcessPayment(createProcessPayment(), callback);
-    }
-
-    private Call enqueueRepeatProcessPayment(OnResponseReady<PP> callback)
-            throws IOException {
-        return enqueueProcessPayment(createRepeatProcessPayment(), callback);
-    }
-
-    private Call enqueueProcessPayment(final ApiRequest<PP> request,
-                                       final OnResponseReady<PP> callback)
-            throws IOException {
-
-        return enqueue(request, new OnResponseReady<PP>() {
-            @Override
-            public void onFailure(Exception exception) {
-                callback.onFailure(exception);
-            }
-
-            @Override
-            public void onResponse(final PP response) {
-                try {
-                    if (processPayment(new ProcessPaymentResolver<PP>() {
-                        @Override
-                        public PP getProcessPayment() {
-                            return response;
-                        }
-
-                        @Override
-                        public void onInProgress() throws Exception {
-                            enqueueProcessPayment(request, callback);
-                        }
-                    })) {
-                        callback.onResponse(response);
-                    }
-                } catch (Exception e) {
-                    callback.onFailure(e);
-                }
-            }
-        });
-    }
-
-    private <T> Call enqueue(ApiRequest<T> apiRequest,
-                             OnResponseReady<T> callback) throws IOException {
-        return session.enqueue(apiRequest, callback);
-    }
-
     /**
      * Processes payment using {@link BasePaymentProcess.ProcessPaymentResolver} to resolve process
      * payment and repeat request as required.
@@ -363,9 +237,31 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         return state == State.COMPLETED;
     }
 
-    public interface Callbacks<RP extends BaseRequestPayment, PP extends BaseProcessPayment> {
-        OnResponseReady<RP> getOnRequestCallback();
-        OnResponseReady<PP> getOnProcessCallback();
+    private interface ProcessPaymentResolver<PP> {
+        PP getProcessPayment() throws Exception;
+        void onInProgress() throws Exception;
+    }
+
+    /**
+     * State of payment process
+     */
+    enum State {
+        /**
+         * Indicates that payment process is created.
+         */
+        CREATED,
+        /**
+         * Indicates that payment process is started.
+         */
+        STARTED,
+        /**
+         * Indicates that payment process is in progress (not completed).
+         */
+        PROCESSING,
+        /**
+         * Indicates that payment process is completed.
+         */
+        COMPLETED
     }
 
     /**
@@ -429,15 +325,6 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
             }
         }
 
-        private static State parseState(int flags) {
-            State[] values = State.values();
-            int index = flags % 10;
-            if (index >= values.length) {
-                throw new IllegalArgumentException("invalid flags: " + flags);
-            }
-            return values[index];
-        }
-
         /**
          * @return request payment
          */
@@ -459,6 +346,15 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
             return state.ordinal();
         }
 
+        private static State parseState(int flags) {
+            State[] values = State.values();
+            int index = flags % 10;
+            if (index >= values.length) {
+                throw new IllegalArgumentException("invalid flags: " + flags);
+            }
+            return values[index];
+        }
+
         /**
          * @return state
          */
@@ -468,29 +364,9 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     }
 
     /**
-     * State of payment process
+     * @return state of payment process
      */
-    enum State {
-        /**
-         * Indicates that payment process is created.
-         */
-        CREATED,
-        /**
-         * Indicates that payment process is started.
-         */
-        STARTED,
-        /**
-         * Indicates that payment process is in progress (not completed).
-         */
-        PROCESSING,
-        /**
-         * Indicates that payment process is completed.
-         */
-        COMPLETED
-    }
-
-    private interface ProcessPaymentResolver<PP> {
-        PP getProcessPayment() throws Exception;
-        void onInProgress() throws Exception;
+    final State getState() {
+        return state;
     }
 }
