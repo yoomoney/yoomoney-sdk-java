@@ -115,11 +115,7 @@ public abstract class ParameterControl extends Control implements Parameter {
         return result;
     }
 
-    /**
-     * Validates control state.
-     *
-     * @return {@code true} if instance is valid and {@code false} otherwise.
-     */
+    @Override
     public final boolean isValid() {
         return isValid(value);
     }

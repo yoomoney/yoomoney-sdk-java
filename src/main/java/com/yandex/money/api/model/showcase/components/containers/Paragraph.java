@@ -39,6 +39,11 @@ public final class Paragraph extends Container<TextBlock> {
     }
 
     @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Override
     protected ToStringBuilder getToStringBuilder() {
         return super.getToStringBuilder().setName("Paragraph");
     }

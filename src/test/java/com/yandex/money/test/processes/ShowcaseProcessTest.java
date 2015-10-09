@@ -192,7 +192,7 @@ public final class ShowcaseProcessTest extends Assert {
     }
 
     private static DocumentProvider getDocumentProvider() {
-        final ApiClient client = getClientByHost("http://money.yandex.ru");
+        final ApiClient client = getClientByHost("https://money.yandex.ru");
         return new DocumentProvider(client);
     }
 

@@ -39,6 +39,13 @@ public abstract class Component {
         return getToStringBuilder().toString();
     }
 
+    /**
+     * Validates component state.
+     *
+     * @return {@code true} if instance is valid and {@code false} otherwise.
+     */
+    public abstract boolean isValid();
+
     protected abstract ToStringBuilder getToStringBuilder();
 
     /**

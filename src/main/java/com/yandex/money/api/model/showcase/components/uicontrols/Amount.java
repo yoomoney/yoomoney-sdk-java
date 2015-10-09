@@ -44,7 +44,7 @@ public final class Amount extends Number {
     public final Currency currency;
 
     /**
-     * Fee. Default is {@link Fee#NO_FEE}.
+     * Fee. Default is {@link NoFee}.
      */
     public final Fee fee;
 
