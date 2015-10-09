@@ -40,7 +40,6 @@ import com.yandex.money.api.processes.ExternalPaymentProcess;
 import com.yandex.money.api.processes.PaymentProcess;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
