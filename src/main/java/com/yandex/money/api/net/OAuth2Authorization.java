@@ -60,7 +60,7 @@ public class OAuth2Authorization {
      * @return URL
      */
     public String getAuthorizeUrl() {
-        return client.getHostsProvider().getWebUrl() + "/oauth/authorize";
+        return client.getHostsProvider().getMoney() + "/oauth/authorize";
     }
 
     /**

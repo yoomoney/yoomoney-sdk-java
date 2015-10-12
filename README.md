@@ -8,9 +8,9 @@ This Java library contains classes that allows you to do payments using Yandex.M
 
 The library uses:
 
-* [OkHttp][1] 2.3.0
-* [Google GSON][2] 2.3.1
-* [Joda-Time][7] 2.7
+* [OkHttp][1] 2.5.0
+* [Google GSON][2] 2.4
+* [Joda-Time][7] 2.8.2
 
 ## Usage
 
@@ -29,7 +29,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.yandex.money.api:yandex-money-sdk-java:4.2.3'
+    compile 'com.yandex.money.api:yandex-money-sdk-java:4.2.4'
 }
 ```
 
