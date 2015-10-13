@@ -29,8 +29,6 @@ import com.yandex.money.api.utils.Strings;
 
 import org.joda.time.DateTime;
 
-import java.util.Objects;
-
 /**
  * Describes avatar from {@link com.yandex.money.api.methods.AccountInfo}.
  *
@@ -74,20 +72,20 @@ public class Avatar {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj instanceof Avatar) {
-            Avatar avatar = (Avatar) obj;
-            return url.equals(avatar.url) && timestamp.isEqual(avatar.timestamp);
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Avatar avatar = (Avatar) o;
+
+        return url.equals(avatar.url) && timestamp.equals(avatar.timestamp);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(url, timestamp);
+        int result = url.hashCode();
+        result = 31 * result + timestamp.hashCode();
+        return result;
     }
-
 }
