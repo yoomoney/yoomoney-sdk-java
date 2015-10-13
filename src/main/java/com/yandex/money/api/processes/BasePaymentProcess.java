@@ -28,7 +28,6 @@ import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.OAuth2Session;
-import com.yandex.money.api.utils.MillisecondsIn;
 import com.yandex.money.api.utils.Threads;
 
 /**
@@ -39,7 +38,6 @@ import com.yandex.money.api.utils.Threads;
 public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         PP extends BaseProcessPayment> implements IPaymentProcess {
 
-    private static final long TIMEOUT = 3 * MillisecondsIn.SECOND;
     private final OAuth2Session session;
     /**
      * Provides parameters for requests.
@@ -222,9 +220,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
                 }
             case IN_PROGRESS:
                 state = State.PROCESSING;
-                Long nextRetry = processPayment.nextRetry;
-                long timeout = nextRetry == null || nextRetry == 0L ? TIMEOUT : nextRetry;
-                Threads.sleep(timeout);
+                Threads.sleep(processPayment.nextRetry);
                 resolver.onInProgress();
                 return false;
         }

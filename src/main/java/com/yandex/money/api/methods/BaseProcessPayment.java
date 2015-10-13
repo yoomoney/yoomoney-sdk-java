@@ -26,6 +26,7 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.MethodResponse;
+import com.yandex.money.api.utils.MillisecondsIn;
 
 import java.util.Collections;
 import java.util.Map;
@@ -42,7 +43,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
     public final String invoiceId;
     public final String acsUri;
     public final Map<String, String> acsParams;
-    public final Long nextRetry; // TODO make it long
+    public final long nextRetry;
 
     /**
      * Constructor.
@@ -105,7 +106,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
         private String invoiceId;
         private String acsUri;
         private Map<String, String> acsParams;
-        private Long nextRetry; // TODO make it long
+        private long nextRetry = 3 * MillisecondsIn.SECOND;
 
         public final Builder setStatus(Status status) {
             this.status = status;
