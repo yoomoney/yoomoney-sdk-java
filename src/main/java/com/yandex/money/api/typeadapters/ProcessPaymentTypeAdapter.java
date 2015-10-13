@@ -88,8 +88,9 @@ public final class ProcessPaymentTypeAdapter extends BaseTypeAdapter<ProcessPaym
     }
 
     @Override
-    public JsonElement serialize(ProcessPayment src, Type typeOfSrc, JsonSerializationContext
-            context) {
+    public JsonElement serialize(ProcessPayment src, Type typeOfSrc,
+                                 JsonSerializationContext context) {
+
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(MEMBER_PAYMENT_ID, src.paymentId);
         jsonObject.addProperty(MEMBER_BALANCE, src.balance);

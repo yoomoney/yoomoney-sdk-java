@@ -40,6 +40,25 @@ public abstract class PaymentParams {
         this.paymentParams = paymentParams;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PaymentParams that = (PaymentParams) o;
+
+        if (!patternId.equals(that.patternId)) return false;
+        return paymentParams.equals(that.paymentParams);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = patternId.hashCode();
+        result = 31 * result + paymentParams.hashCode();
+        return result;
+    }
+
     public String getPatternId() {
         return patternId;
     }

@@ -31,7 +31,7 @@ public class YandexMoneyCard extends Card {
 
     public final State state;
 
-    YandexMoneyCard(Builder builder) {
+    protected YandexMoneyCard(Builder builder) {
         super(builder);
         this.state = builder.state;
     }

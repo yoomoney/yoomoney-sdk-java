@@ -78,12 +78,13 @@ public final class IncomingTransferAcceptTypeAdapter extends
     public JsonElement serialize(IncomingTransferAccept src, Type typeOfSrc,
                                  JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty(MEMBER_STATUS, src.status.code);
         if (src.error != null) {
             object.addProperty(MEMBER_ERROR, src.error.code);
+        } else {
+            object.addProperty(MEMBER_STATUS, src.status.code);
+            object.addProperty(MEMBER_CODE_ATTEMPTS, src.protectionCodeAttemptsAvailable);
+            object.addProperty(MEMBER_EXT_ACTION_URI, src.extActionUri);
         }
-        object.addProperty(MEMBER_CODE_ATTEMPTS, src.protectionCodeAttemptsAvailable);
-        object.addProperty(MEMBER_EXT_ACTION_URI, src.extActionUri);
         return object;
     }
 

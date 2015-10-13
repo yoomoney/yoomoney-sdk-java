@@ -52,15 +52,14 @@ public final class RevokeTypeAdapter extends BaseTypeAdapter<Token.Revoke> {
     }
 
     @Override
-    public Token.Revoke deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext
-            context) throws
-            JsonParseException {
+    public Token.Revoke deserialize(JsonElement json, Type typeOfT,
+                                    JsonDeserializationContext context) throws JsonParseException {
         return null;
     }
 
     @Override
-    public JsonElement serialize(Token.Revoke src, Type typeOfSrc, JsonSerializationContext
-            context) {
+    public JsonElement serialize(Token.Revoke src, Type typeOfSrc,
+                                 JsonSerializationContext context) {
         return null;
     }
 

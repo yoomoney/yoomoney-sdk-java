@@ -66,9 +66,8 @@ public final class IncomingTransferRejectTypeAdapter extends
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new IncomingTransferReject(
-                IncomingTransferReject.Status.parse(getMandatoryString(object,
-                        MEMBER_STATUS)),
+        return new IncomingTransferReject(IncomingTransferReject.Status.parse(
+                getMandatoryString(object, MEMBER_STATUS)),
                 Error.parse(getString(object, MEMBER_ERROR)));
     }
 
@@ -77,9 +76,10 @@ public final class IncomingTransferRejectTypeAdapter extends
                                  JsonSerializationContext context) {
 
         JsonObject object = new JsonObject();
-        object.addProperty(MEMBER_STATUS, src.status.code);
         if (src.error != null) {
             object.addProperty(MEMBER_ERROR, src.error.code);
+        } else {
+            object.addProperty(MEMBER_STATUS, src.status.code);
         }
         return object;
     }

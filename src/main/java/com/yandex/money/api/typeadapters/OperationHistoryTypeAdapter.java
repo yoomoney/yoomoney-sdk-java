@@ -31,10 +31,8 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.OperationHistory;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.Operation;
 
 import java.lang.reflect.Type;
-import java.util.List;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
@@ -68,11 +66,10 @@ public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<Operation
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        List<Operation> operations = getNotNullArray(object, MEMBER_OPERATIONS,
-                OperationTypeAdapter.getInstance());
 
         return new OperationHistory(Error.parse(getString(object, MEMBER_ERROR)),
-                getString(object, MEMBER_NEXT_RECORD), operations);
+                getString(object, MEMBER_NEXT_RECORD), getNotNullArray(object, MEMBER_OPERATIONS,
+                OperationTypeAdapter.getInstance()));
     }
 
     @Override
@@ -81,10 +78,11 @@ public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<Operation
         JsonObject object = new JsonObject();
         if (src.error != null) {
             object.addProperty(MEMBER_ERROR, src.error.code);
+        } else {
+            object.add(MEMBER_OPERATIONS, toJsonArray(src.operations,
+                    OperationTypeAdapter.getInstance()));
+            object.addProperty(MEMBER_NEXT_RECORD, src.nextRecord);
         }
-        object.add(MEMBER_OPERATIONS, toJsonArray(src.operations,
-                OperationTypeAdapter.getInstance()));
-        object.addProperty(MEMBER_NEXT_RECORD, src.nextRecord);
         return object;
     }
 

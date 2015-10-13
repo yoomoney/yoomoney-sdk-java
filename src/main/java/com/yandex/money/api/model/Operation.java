@@ -36,67 +36,67 @@ import java.util.Map;
 public class Operation {
 
     /**
-     * operation id
+     * Operation id.
      */
     public final String operationId;
 
     /**
-     * status of operation
+     * Status of operation.
      */
     public final Status status;
 
     /**
-     * pattern id
+     * Pattern id.
      */
     public final String patternId;
 
     /**
-     * direction of operation
+     * Direction of operation.
      */
     public final Direction direction;
 
     /**
-     * amount
+     * Amount.
      */
     public final BigDecimal amount;
 
     /**
-     * received amount
+     * Received amount.
      */
     public final BigDecimal amountDue;
 
     /**
-     * fee
+     * Fee.
      */
     public final BigDecimal fee;
 
     /**
-     * operation datetime
+     * Operation datetime.
      */
     public final DateTime datetime;
 
     /**
-     * title of operation
+     * Title of operation.
      */
     public final String title;
 
     /**
-     * sender
+     * Sender.
      */
     public final String sender;
 
     /**
-     * recepient
+     * Recipient.
      */
     public final String recipient;
 
     /**
-     * type of recipient identifier
+     * Type of recipient identifier.
      */
     public final PayeeIdentifierType recipientType;
 
     /**
-     * message to recepient
+     * Message to recipient.
      */
     public final String message;
 
@@ -111,90 +111,83 @@ public class Operation {
     public final boolean codepro;
 
     /**
-     * protection code for operation
+     * Protection code for operation.
      */
     public final String protectionCode;
 
     /**
-     * protection code expiration datetime
+     * Protection code expiration datetime.
      */
     public final DateTime expires;
 
     /**
-     * answer datetime of operation acceptance/revoke
+     * Answer datetime of operation acceptance/revoke.
      */
     public final DateTime answerDatetime;
 
     /**
-     * label of operation
+     * Label of operation.
      */
     public final String label;
 
     /**
-     * details of operation
+     * Details of operation.
      */
     public final String details;
 
     /**
-     * {@code true} if operation can be repeated
+     * {@code true} if operation can be repeated.
      */
     public final boolean repeatable;
 
     /**
-     * payment parameters
+     * Payment parameters.
      */
     public final Map<String, String> paymentParameters;
 
     public final boolean favorite;
 
     /**
-     * type of operation
+     * Type of operation.
      */
     public final Type type;
 
     /**
-     * digital goods
+     * Digital goods.
      */
     public final DigitalGoods digitalGoods;
 
     /**
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
      */
-    protected Operation(String operationId, Status status, String patternId, Direction direction,
-                        BigDecimal amount, BigDecimal amountDue, BigDecimal fee, DateTime datetime,
-                        String title, String sender, String recipient,
-                        PayeeIdentifierType recipientType, String message, String comment,
-                        Boolean codepro, String protectionCode, DateTime expires,
-                        DateTime answerDatetime, String label, String details, Boolean repeatable,
-                        Map<String, String> paymentParameters, Boolean favorite, Type type,
-                        DigitalGoods digitalGoods) {
+    protected Operation(Builder builder) {
 
-        this.operationId = operationId;
-        this.status = status;
-        this.patternId = patternId;
-        this.direction = direction;
-        this.amount = amount;
-        this.amountDue = amountDue;
-        this.fee = fee;
-        this.datetime = datetime;
-        this.title = title;
-        this.sender = sender;
-        this.recipient = recipient;
-        this.recipientType = recipientType;
-        this.message = message;
-        this.comment = comment;
-        this.codepro = codepro != null && codepro;
-        this.protectionCode = protectionCode;
-        this.expires = expires;
-        this.answerDatetime = answerDatetime;
-        this.label = label;
-        this.details = details;
-        this.repeatable = repeatable != null && repeatable;
-        this.paymentParameters = paymentParameters == null ? null :
-                Collections.unmodifiableMap(paymentParameters);
-        this.favorite = favorite != null && favorite;
-        this.type = type;
-        this.digitalGoods = digitalGoods;
+        this.operationId = builder.operationId;
+        this.status = builder.status;
+        this.patternId = builder.patternId;
+        this.direction = builder.direction;
+        this.amount = builder.amount;
+        this.amountDue = builder.amountDue;
+        this.fee = builder.fee;
+        this.datetime = builder.datetime;
+        this.title = builder.title;
+        this.sender = builder.sender;
+        this.recipient = builder.recipient;
+        this.recipientType = builder.recipientType;
+        this.message = builder.message;
+        this.comment = builder.comment;
+        this.codepro = builder.codepro != null && builder.codepro;
+        this.protectionCode = builder.protectionCode;
+        this.expires = builder.expires;
+        this.answerDatetime = builder.answerDatetime;
+        this.label = builder.label;
+        this.details = builder.details;
+        this.repeatable = builder.repeatable != null && builder.repeatable;
+        this.paymentParameters = builder.paymentParameters == null ? null :
+                Collections.unmodifiableMap(builder.paymentParameters);
+        this.favorite = builder.favorite != null && builder.favorite;
+        this.type = builder.type;
+        this.digitalGoods = builder.digitalGoods;
     }
 
     @Override
@@ -229,7 +222,7 @@ public class Operation {
     }
 
     /**
-     * Status of opeartion.
+     * Status of operation.
      */
     public enum Status {
         /**
@@ -499,10 +492,7 @@ public class Operation {
         }
 
         public Operation create() {
-            return new Operation(operationId, status, patternId, direction, amount, amountDue, fee,
-                    datetime, title, sender, recipient, recipientType, message, comment, codepro,
-                    protectionCode, expires, answerDatetime, label, details, repeatable,
-                    paymentParameters, favorite, type, digitalGoods);
+            return new Operation(this);
         }
     }
 }
