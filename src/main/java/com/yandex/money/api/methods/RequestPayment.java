@@ -86,13 +86,12 @@ public class RequestPayment extends BaseRequestPayment {
     public final String extActionUri;
 
     private RequestPayment(Builder builder) {
-
         super(builder);
         if (builder.moneySources == null) {
             throw new NullPointerException("moneySources is null");
         }
         this.moneySources = Collections.unmodifiableList(builder.moneySources);
-        this.cscRequired = builder.cscRequired != null && builder.cscRequired;
+        this.cscRequired = builder.cscRequired;
         this.balance = builder.balance;
         this.recipientAccountStatus = builder.recipientAccountStatus;
         this.recipientAccountType = builder.recipientAccountType;
@@ -225,10 +224,10 @@ public class RequestPayment extends BaseRequestPayment {
     /**
      * Builds {@link com.yandex.money.api.methods.RequestPayment} instance.
      */
-    public static class Builder extends BaseRequestPayment.Builder {
+    public final static class Builder extends BaseRequestPayment.Builder {
 
         private List<MoneySource> moneySources;
-        private Boolean cscRequired;
+        private boolean cscRequired;
         private BigDecimal balance;
         private AccountStatus recipientAccountStatus;
         private AccountType recipientAccountType;

@@ -76,10 +76,9 @@ public final class IncomingTransferRejectTypeAdapter extends
                                  JsonSerializationContext context) {
 
         JsonObject object = new JsonObject();
+        object.addProperty(MEMBER_STATUS, src.status.code);
         if (src.error != null) {
             object.addProperty(MEMBER_ERROR, src.error.code);
-        } else {
-            object.addProperty(MEMBER_STATUS, src.status.code);
         }
         return object;
     }

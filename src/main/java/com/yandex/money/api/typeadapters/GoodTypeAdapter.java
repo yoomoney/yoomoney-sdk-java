@@ -74,7 +74,7 @@ public final class GoodTypeAdapter extends BaseTypeAdapter<Good> {
         object.addProperty(MEMBER_SERIAL, src.serial);
         object.addProperty(MEMBER_SECRET, src.secret);
         object.addProperty(MEMBER_MERCHANT_ARTICLE_ID, src.merchantArticleId);
-        return null;
+        return object;
     }
 
     @Override

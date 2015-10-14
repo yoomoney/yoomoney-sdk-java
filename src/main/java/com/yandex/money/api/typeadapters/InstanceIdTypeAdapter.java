@@ -34,6 +34,7 @@ import com.yandex.money.api.model.Error;
 
 import java.lang.reflect.Type;
 
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
@@ -66,7 +67,7 @@ public final class InstanceIdTypeAdapter extends BaseTypeAdapter<InstanceId> {
 
         JsonObject o = json.getAsJsonObject();
         return new InstanceId(
-                InstanceId.Status.parse(getString(o, MEMBER_STATUS)),
+                InstanceId.Status.parse(getMandatoryString(o, MEMBER_STATUS)),
                 Error.parse(getString(o, MEMBER_ERROR)),
                 getString(o, MEMBER_INSTANCE_ID));
     }

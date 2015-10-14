@@ -106,7 +106,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
         private String invoiceId;
         private String acsUri;
         private Map<String, String> acsParams;
-        private long nextRetry = 3 * MillisecondsIn.SECOND;
+        private long nextRetry = 5 * MillisecondsIn.SECOND;
 
         public final Builder setStatus(Status status) {
             this.status = status;
@@ -133,7 +133,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
             return this;
         }
 
-        public final Builder setNextRetry(Long nextRetry) {
+        public final Builder setNextRetry(long nextRetry) {
             this.nextRetry = nextRetry;
             return this;
         }

@@ -134,11 +134,11 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_OPERATION_ID, src.operationId);
         object.addProperty(MEMBER_TITLE, src.title);
         object.addProperty(MEMBER_DIRECTION, src.direction.code);
-
         object.addProperty(MEMBER_DATETIME, src.datetime.toString(ISO_FORMATTER));
-        object.addProperty(MEMBER_STATUS, src.status.code);
+        if (src.status != null) {
+            object.addProperty(MEMBER_STATUS, src.status.code);
+        }
         object.addProperty(MEMBER_PATTERN_ID, src.patternId);
-        object.addProperty(MEMBER_DIRECTION, src.direction.code);
         object.addProperty(MEMBER_AMOUNT, src.amount);
         object.addProperty(MEMBER_AMOUNT_DUE, src.amountDue);
         object.addProperty(MEMBER_FEE, src.fee);
@@ -146,13 +146,19 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_TYPE, src.type.code);
         object.addProperty(MEMBER_SENDER, src.sender);
         object.addProperty(MEMBER_RECIPIENT, src.recipient);
-        object.addProperty(MEMBER_RECIPIENT_TYPE, src.recipientType.code);
+        if (src.recipientType != null) {
+            object.addProperty(MEMBER_RECIPIENT_TYPE, src.recipientType.code);
+        }
         object.addProperty(MEMBER_MESSAGE, src.message);
         object.addProperty(MEMBER_COMMENT, src.comment);
         object.addProperty(MEMBER_CODEPRO, src.codepro);
         object.addProperty(MEMBER_PROTECTION_CODE, src.protectionCode);
-        object.addProperty(MEMBER_EXPIRES, src.expires.toString(ISO_FORMATTER));
-        object.addProperty(MEMBER_ANSWER_DATETIME, src.answerDatetime.toString(ISO_FORMATTER));
+        if (src.expires != null) {
+            object.addProperty(MEMBER_EXPIRES, src.expires.toString(ISO_FORMATTER));
+        }
+        if (src.answerDatetime != null) {
+            object.addProperty(MEMBER_ANSWER_DATETIME, src.answerDatetime.toString(ISO_FORMATTER));
+        }
         object.addProperty(MEMBER_DETAILS, src.details);
         object.addProperty(MEMBER_REPEATABLE, src.repeatable);
         object.add(MEMBER_PAYMENT_PARAMETERS, toJsonObject(src.paymentParameters));

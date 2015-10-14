@@ -134,8 +134,9 @@ public class ProcessExternalPayment extends BaseProcessPayment {
 
         private ExternalCard externalCard;
 
-        public void setExternalCard(ExternalCard externalCard) {
+        public Builder setExternalCard(ExternalCard externalCard) {
             this.externalCard = externalCard;
+            return this;
         }
 
         @Override

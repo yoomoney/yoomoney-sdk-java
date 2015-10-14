@@ -79,13 +79,15 @@ final class BaseProcessPaymentTypeAdapter {
             if (value == null) {
                 throw new NullPointerException("builder is null");
             }
-
-            object.addProperty(MEMBER_STATUS, value.status.code);
-            object.addProperty(MEMBER_ERROR, value.error.code);
-            object.addProperty(MEMBER_ACS_URI, value.acsUri);
-            object.addProperty(MEMBER_INVOICE_ID, value.invoiceId);
-            object.add(MEMBER_ACS_PARAMS, toJsonObject(value.acsParams));
-            object.addProperty(MEMBER_NEXT_RETRY, value.nextRetry);
+            if (value.error != null) {
+                object.addProperty(MEMBER_ERROR, value.error.code);
+            } else {
+                object.addProperty(MEMBER_STATUS, value.status.code);
+                object.addProperty(MEMBER_ACS_URI, value.acsUri);
+                object.addProperty(MEMBER_INVOICE_ID, value.invoiceId);
+                object.add(MEMBER_ACS_PARAMS, toJsonObject(value.acsParams));
+                object.addProperty(MEMBER_NEXT_RETRY, value.nextRetry);
+            }
         }
     }
 }

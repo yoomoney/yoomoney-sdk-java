@@ -171,7 +171,7 @@ public final class Select extends ParameterControl {
          * Group of elements which have to be visible when {@link Option} is selected. May be
          * {@code null}.
          */
-        public Group group;
+        public final Group group;
 
         /**
          * Constructor.

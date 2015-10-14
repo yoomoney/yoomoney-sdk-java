@@ -59,9 +59,9 @@ public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods>
                                     JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        return new DigitalGoods(getNotNullArray(object, MEMBER_ARTICLE,
-                GoodTypeAdapter.getInstance()), getNotNullArray(object, MEMBER_BONUS,
-                GoodTypeAdapter.getInstance()));
+        return new DigitalGoods(
+                getNotNullArray(object, MEMBER_ARTICLE, GoodTypeAdapter.getInstance()),
+                getNotNullArray(object, MEMBER_BONUS, GoodTypeAdapter.getInstance()));
     }
 
     @Override
@@ -71,7 +71,7 @@ public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods>
         object.add(MEMBER_ARTICLE, toJsonArray(src.article,
                 GoodTypeAdapter.getInstance()));
         object.add(MEMBER_BONUS, toJsonArray(src.bonus, GoodTypeAdapter.getInstance()));
-        return null;
+        return object;
     }
 
     @Override
