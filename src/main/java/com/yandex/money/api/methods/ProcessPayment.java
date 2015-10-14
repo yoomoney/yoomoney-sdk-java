@@ -61,12 +61,12 @@ public class ProcessPayment extends BaseProcessPayment {
      * Use {@link com.yandex.money.api.methods.ProcessPayment.Builder} to create an instance.
      */
     private ProcessPayment(Status status, Error error, String paymentId, BigDecimal balance,
-                           String invoiceId, String payer, String payee, BigDecimal creditAmount,
+                           String invoiceId, String paymentCode, String payer, String payee, BigDecimal creditAmount,
                            String accountUnblockUri, String payeeUid, String holdForPickupLink,
                            String acsUri, Map<String, String> acsParams, Long nextRetry,
                            DigitalGoods digitalGoods) {
 
-        super(status, error, invoiceId, acsUri, acsParams, nextRetry);
+        super(status, error, invoiceId, paymentCode, acsUri, acsParams, nextRetry);
         if (status == Status.SUCCESS && paymentId == null) {
             throw new NullPointerException("paymentId is null when status is success");
         }
@@ -203,6 +203,7 @@ public class ProcessPayment extends BaseProcessPayment {
         private String paymentId;
         private BigDecimal balance;
         private String invoiceId;
+        private String paymentCode;
         private String payer;
         private String payee;
         private BigDecimal creditAmount;
@@ -251,6 +252,14 @@ public class ProcessPayment extends BaseProcessPayment {
          */
         public Builder setInvoiceId(String invoiceId) {
             this.invoiceId = invoiceId;
+            return this;
+        }
+
+        /**
+         * @param paymentCode paymentCode of successful operation
+         */
+        public Builder setPaymentCode(String paymentCode) {
+            this.paymentCode = paymentCode;
             return this;
         }
 
@@ -337,7 +346,7 @@ public class ProcessPayment extends BaseProcessPayment {
          * @return {@link ProcessPayment} instance
          */
         public ProcessPayment createProcessPayment() {
-            return new ProcessPayment(status, error, paymentId, balance, invoiceId, payer, payee,
+            return new ProcessPayment(status, error, paymentId, balance, invoiceId, paymentCode, payer, payee,
                     creditAmount, accountUnblockUri, payeeUid, holdForPickupLink, acsUri,
                     acsParams == null ? new HashMap<String, String>() : acsParams, nextRetry,
                     digitalGoods);
@@ -357,6 +366,7 @@ public class ProcessPayment extends BaseProcessPayment {
                     .setPaymentId(JsonUtils.getString(object, "payment_id"))
                     .setBalance(JsonUtils.getBigDecimal(object, "balance"))
                     .setInvoiceId(JsonUtils.getString(object, "invoice_id"))
+                    .setPaymentCode(JsonUtils.getString(object, "payment_code"))
                     .setPayer(JsonUtils.getString(object, "payer"))
                     .setPayee(JsonUtils.getString(object, "payee"))
                     .setCreditAmount(JsonUtils.getBigDecimal(object, "credit_amount"))

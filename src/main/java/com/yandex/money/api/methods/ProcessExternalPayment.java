@@ -55,10 +55,10 @@ public class ProcessExternalPayment extends BaseProcessPayment {
      *
      * @see com.yandex.money.api.methods.BaseProcessPayment
      */
-    public ProcessExternalPayment(Status status, Error error, String invoiceId, String acsUri,
+    public ProcessExternalPayment(Status status, Error error, String invoiceId, String paymentCode, String acsUri,
                                   Map<String, String> acsParams, Long nextRetry,
                                   ExternalCard externalCard) {
-        super(status, error, invoiceId, acsUri, acsParams, nextRetry);
+        super(status, error, invoiceId, paymentCode, acsUri, acsParams, nextRetry);
         this.externalCard = externalCard;
     }
 
@@ -85,7 +85,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
          */
         public Request(String instanceId, String requestId, String extAuthSuccessUri,
                        String extAuthFailUri, boolean requestToken) {
-            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, requestToken, null, null);
+            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, requestToken, null, null, null, null);
         }
 
         /**
@@ -101,12 +101,28 @@ public class ProcessExternalPayment extends BaseProcessPayment {
         public Request(String instanceId, String requestId, String extAuthSuccessUri,
                        String extAuthFailUri, ExternalCard externalCard, String csc) {
             this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, false, externalCard,
-                    csc);
+                    csc, null, null);
+        }
+
+        /**
+         * For paying via sberbank or cash.
+         *
+         * @param instanceId application's instance id
+         * @param requestId request id from {@link com.yandex.money.api.methods.RequestExternalPayment}
+         * @param extAuthSuccessUri success URI to use if payment succeeded
+         * @param extAuthFailUri fail URI to use if payment failed
+         * @param moneySource money source: cash or sberbank
+         * @param phoneNumber mobile phone number (e.g. 79049984736)
+         */
+        public Request(String instanceId, String requestId, String extAuthSuccessUri,
+                       String extAuthFailUri, String moneySource, String phoneNumber) {
+            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, false, null,
+                    null, moneySource, phoneNumber);
         }
 
         private Request(String instanceId, String requestId, String extAuthSuccessUri,
                         String extAuthFailUri, boolean requestToken, ExternalCard externalCard,
-                        String csc) {
+                        String csc, String moneySource, String phoneNumber) {
 
             super(ProcessExternalPayment.class, new Deserializer());
             if (Strings.isNullOrEmpty(instanceId)) {
@@ -130,6 +146,12 @@ public class ProcessExternalPayment extends BaseProcessPayment {
             if (externalCard != null) {
                 addParameter("money_source_token", externalCard.moneySourceToken);
                 addParameter("csc", csc);
+            }
+            if (moneySource != null) {
+                addParameter("money_source", moneySource);
+            }
+            if (phoneNumber != null) {
+                addParameter("phone", phoneNumber);
             }
         }
 
@@ -160,6 +182,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
                         Status.parse(JsonUtils.getString(o, MEMBER_STATUS)),
                         Error.parse(JsonUtils.getString(o, MEMBER_ERROR)),
                         JsonUtils.getString(o, "invoice_id"),
+                        JsonUtils.getString(o, "payment_code"),
                         JsonUtils.getString(o, MEMBER_ACS_URI),
                         acsParams,
                         JsonUtils.getLong(o, MEMBER_NEXT_RETRY),
