@@ -183,17 +183,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     }
 
     private void executeProcessPayment(final ApiRequest<PP> request) throws Exception {
-        processPayment(new ProcessPaymentResolver<PP>() {
-            @Override
-            public PP getProcessPayment() throws Exception {
-                return execute(request);
-            }
-
-            @Override
-            public void onInProgress() throws Exception {
-                executeProcessPayment(request);
-            }
-        });
+        processPayment(request);
     }
 
     private <T> T execute(ApiRequest<T> apiRequest) throws Exception {
@@ -201,16 +191,15 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     }
 
     /**
-     * Processes payment using {@link BasePaymentProcess.ProcessPaymentResolver} to resolve process
-     * payment and repeat request as required.
+     * Processes payment.
      *
-     * @param resolver the resolver
+     * @param request api request
      * @return {@code true} if operation is complete
      */
-    private boolean processPayment(ProcessPaymentResolver<PP> resolver) throws Exception {
+    private boolean processPayment(ApiRequest<PP> request) throws Exception {
         BaseProcessPayment.Status previousStatus = processPayment == null ? null :
                 processPayment.status;
-        processPayment = resolver.getProcessPayment();
+        processPayment = execute(request);
 
         switch (processPayment.status) {
             case EXT_AUTH_REQUIRED:
@@ -221,7 +210,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
             case IN_PROGRESS:
                 state = State.PROCESSING;
                 Threads.sleep(processPayment.nextRetry);
-                resolver.onInProgress();
+                executeProcessPayment(request);
                 return false;
         }
 
@@ -231,11 +220,6 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
 
     private boolean isCompleted() {
         return state == State.COMPLETED;
-    }
-
-    private interface ProcessPaymentResolver<PP> {
-        PP getProcessPayment() throws Exception;
-        void onInProgress() throws Exception;
     }
 
     /**

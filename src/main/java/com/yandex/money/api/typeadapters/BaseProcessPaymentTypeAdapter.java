@@ -68,9 +68,14 @@ final class BaseProcessPaymentTypeAdapter {
                     .setError(Error.parse(getString(object, MEMBER_ERROR)))
                     .setInvoiceId(getString(object, MEMBER_INVOICE_ID))
                     .setAcsUri(getString(object, MEMBER_ACS_URI))
-                    .setAcsParams(getNotNullMap(object, MEMBER_ACS_PARAMS))
-                    .setNextRetry(getLong(object, MEMBER_NEXT_RETRY));
+                    .setAcsParams(getNotNullMap(object, MEMBER_ACS_PARAMS));
+
+            Long nextRetry = getLong(object, MEMBER_NEXT_RETRY);
+            if (nextRetry != null) {
+                builder.setNextRetry(nextRetry);
+            }
         }
+
 
         static <T extends BaseProcessPayment> void serialize(JsonObject object, T value) {
             if (object == null) {

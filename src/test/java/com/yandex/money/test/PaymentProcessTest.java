@@ -40,11 +40,13 @@ import com.yandex.money.api.processes.ExternalPaymentProcess;
 import com.yandex.money.api.processes.PaymentProcess;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -217,16 +219,23 @@ public class PaymentProcessTest {
 
     private PaymentProcess.SavedState createPaymentProcessSavedState() {
         return new PaymentProcess.SavedState(
-                new RequestPayment.Builder().create(),
-                new ProcessPayment.Builder().create(),
+                new RequestPayment.Builder()
+                        .setMoneySources(Collections.<MoneySource>emptyList())
+                        .create(),
+                (ProcessPayment) new ProcessPayment.Builder()
+                        .setAcsParams(Collections.<String, String>emptyMap())
+                        .create(),
                 3
         );
     }
 
     private ExternalPaymentProcess.SavedState createExternalPaymentProcessSavedState() {
         return new ExternalPaymentProcess.SavedState(
-                new RequestExternalPayment.Builder().create(),
-                new ProcessExternalPayment.Builder().create(),
+                new RequestExternalPayment.Builder()
+                        .create(),
+                (ProcessExternalPayment) new ProcessExternalPayment.Builder()
+                        .setAcsParams(Collections.<String, String>emptyMap())
+                        .create(),
                 3
         );
     }
