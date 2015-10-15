@@ -65,9 +65,10 @@ public final class AuxTokenTypeAdapter extends BaseTypeAdapter<AuxToken> {
     @Override
     public JsonElement serialize(AuxToken src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty(MEMBER_AUX_TOKEN, src.auxToken);
         if (src.error != null) {
             object.addProperty(MEMBER_ERROR, src.error.code);
+        } else {
+            object.addProperty(MEMBER_AUX_TOKEN, src.auxToken);
         }
         return object;
     }

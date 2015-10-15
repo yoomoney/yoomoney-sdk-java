@@ -64,8 +64,13 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
                                JsonDeserializationContext context) {
         for (JsonElement item : src.getAsJsonArray(MEMBER_OPTIONS)) {
             JsonObject itemObject = item.getAsJsonObject();
-            Group group = itemObject.has(MEMBER_GROUP) ? ListDelegate.deserialize(
-                    itemObject.getAsJsonArray(MEMBER_GROUP), context) : null;
+
+            JsonElement jsonGroup = itemObject.get(MEMBER_GROUP);
+            Group group = null;
+            if (jsonGroup != null) {
+                group = ListDelegate.deserialize(jsonGroup.getAsJsonArray(), context);
+            }
+
             Select.Option option = new Select.Option(itemObject.get(MEMBER_LABEL).getAsString(),
                     itemObject.get(MEMBER_VALUE).getAsString(), group);
             builder.addOption(option);

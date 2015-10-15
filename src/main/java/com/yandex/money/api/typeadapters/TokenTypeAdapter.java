@@ -68,9 +68,10 @@ public final class TokenTypeAdapter extends BaseTypeAdapter<Token> {
     @Override
     public JsonElement serialize(Token src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty(MEMBER_ACCESS_TOKEN, src.accessToken);
         if (src.error != null) {
             object.addProperty(MEMBER_ERROR, src.error.code);
+        } else {
+            object.addProperty(MEMBER_ACCESS_TOKEN, src.accessToken);
         }
         return object;
     }

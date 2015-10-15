@@ -36,7 +36,6 @@ import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
-import com.yandex.money.api.typeadapters.BaseRequestPaymentTypeAdapter.Delegate;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -98,7 +97,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
                 .setExtActionUri(getString(object, MEMBER_EXT_ACTION_URI));
 
         deserializeMoneySources(object, builder);
-        Delegate.deserialize(object, builder);
+        BaseRequestPaymentTypeAdapter.Delegate.deserialize(object, builder);
 
         return builder.create();
     }
@@ -119,7 +118,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
             jsonObject.add(MEMBER_MS, serializeMoneySources(src.moneySources,
                     src.cscRequired));
         }
-        Delegate.serialize(jsonObject, src);
+        BaseRequestPaymentTypeAdapter.Delegate.serialize(jsonObject, src);
         return jsonObject;
     }
 

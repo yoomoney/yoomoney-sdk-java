@@ -77,10 +77,11 @@ public final class InstanceIdTypeAdapter extends BaseTypeAdapter<InstanceId> {
 
         JsonObject object = new JsonObject();
         object.addProperty(MEMBER_STATUS, src.status.code);
-        object.addProperty(MEMBER_INSTANCE_ID, src.instanceId);
 
         if (src.error != null) {
             object.addProperty(MEMBER_ERROR, src.error.code);
+        } else {
+            object.addProperty(MEMBER_INSTANCE_ID, src.instanceId);
         }
         return object;
     }

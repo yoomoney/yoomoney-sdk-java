@@ -25,6 +25,7 @@
 package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrols.Control;
@@ -50,11 +51,15 @@ abstract class ControlTypeAdapter<T extends Control, U extends Control.Builder>
         builder.setAlert(getString(src, MEMBER_ALERT));
         builder.setHint(getString(src, MEMBER_HINT));
         builder.setLabel(getString(src, MEMBER_LABEL));
-        if (src.has(MEMBER_READONLY)) {
-            builder.setReadonly(src.get(MEMBER_READONLY).getAsBoolean());
+
+        JsonElement readOnly = src.get(MEMBER_READONLY);
+        if (readOnly != null) {
+            builder.setReadonly(readOnly.getAsBoolean());
         }
-        if (src.has(MEMBER_REQUIRED)) {
-            builder.setRequired(src.get(MEMBER_REQUIRED).getAsBoolean());
+
+        JsonElement required = src.get(MEMBER_REQUIRED);
+        if (required != null) {
+            builder.setRequired(required.getAsBoolean());
         }
     }
 

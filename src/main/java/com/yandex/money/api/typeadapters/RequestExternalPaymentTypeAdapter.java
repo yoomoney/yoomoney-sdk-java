@@ -30,7 +30,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.RequestExternalPayment;
-import com.yandex.money.api.typeadapters.BaseRequestPaymentTypeAdapter.Delegate;
 
 import java.lang.reflect.Type;
 
@@ -67,7 +66,7 @@ public final class RequestExternalPaymentTypeAdapter extends
         JsonObject jsonObject = json.getAsJsonObject();
         RequestExternalPayment.Builder builder = new RequestExternalPayment.Builder()
                 .setTitle(getString(jsonObject, MEMBER_TITLE));
-        Delegate.deserialize(jsonObject, builder);
+        BaseRequestPaymentTypeAdapter.Delegate.deserialize(jsonObject, builder);
         return builder.create();
     }
 
@@ -76,7 +75,7 @@ public final class RequestExternalPaymentTypeAdapter extends
                                  JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(MEMBER_TITLE, src.title);
-        Delegate.serialize(jsonObject, src);
+        BaseRequestPaymentTypeAdapter.Delegate.serialize(jsonObject, src);
         return jsonObject;
     }
 

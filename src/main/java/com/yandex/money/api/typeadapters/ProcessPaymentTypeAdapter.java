@@ -114,10 +114,10 @@ public final class ProcessPaymentTypeAdapter extends BaseTypeAdapter<ProcessPaym
     }
 
     private static DigitalGoods deserializeDigitalGoods(JsonObject jsonObject) {
-        if (jsonObject.has(MEMBER_DIGITAL_GOODS)) {
-            JsonObject jsonDigitalGoods = jsonObject.get(MEMBER_DIGITAL_GOODS).getAsJsonObject();
-            return jsonDigitalGoods == null ? null : DigitalGoodsTypeAdapter.getInstance()
-                    .fromJson(jsonDigitalGoods);
+        JsonElement digitalGoods = jsonObject.get(MEMBER_DIGITAL_GOODS);
+        if (digitalGoods != null) {
+            JsonObject jsonDigitalGoods = digitalGoods.getAsJsonObject();
+            return DigitalGoodsTypeAdapter.getInstance().fromJson(jsonDigitalGoods);
         } else {
             return null;
         }
