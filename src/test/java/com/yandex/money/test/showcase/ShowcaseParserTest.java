@@ -325,7 +325,7 @@ public class ShowcaseParserTest {
     private void checkMoneySources(Set<AllowedMoneySource> moneySources) {
         assertNotNull(moneySources);
         for (AllowedMoneySource moneySource : AllowedMoneySource.values()) {
-            if (moneySource == AllowedMoneySource.UNKNOWN) {
+            if (moneySource == AllowedMoneySource.NULL) {
                 continue;
             }
             assertTrue(moneySources.contains(moneySource));

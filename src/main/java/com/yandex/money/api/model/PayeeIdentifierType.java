@@ -49,7 +49,7 @@ public enum PayeeIdentifierType {
     /**
      * Unknown identifier.
      */
-    UNKNOWN("unknown");
+    NULL(null);
 
     public final String code;
 
@@ -57,16 +57,16 @@ public enum PayeeIdentifierType {
         this.code = code;
     }
 
-    public static PayeeIdentifierType parse(String identifier) {
-        if (identifier == null) {
-            return null;
+    public static PayeeIdentifierType parse(String code) {
+        if (code == null) {
+            return NULL;
         }
         for (PayeeIdentifierType value : values()) {
-            if (value.code.equals(identifier)) {
+            if (code.equals(value.code)) {
                 return value;
             }
         }
-        return UNKNOWN;
+        return NULL;
     }
 
     /**
@@ -77,7 +77,7 @@ public enum PayeeIdentifierType {
      */
     public static PayeeIdentifierType determine(String identifier) {
         if (identifier == null || identifier.isEmpty()) {
-            return UNKNOWN;
+            return NULL;
         }
 
         if (identifier.matches(Patterns.ACCOUNT)) {
@@ -87,7 +87,7 @@ public enum PayeeIdentifierType {
         } else if (identifier.matches(Patterns.YANDEX) || identifier.matches(Patterns.EMAIL)) {
             return EMAIL;
         } else {
-            return UNKNOWN;
+            return NULL;
         }
     }
 }

@@ -159,7 +159,7 @@ public final class ShowcaseReference {
         /**
          * Unknown.
          */
-        UNKNOWN("unknown");
+        NULL(null);
 
         public final String code;
 
@@ -169,14 +169,14 @@ public final class ShowcaseReference {
 
         public static Format parse(String code) {
             if (code == null) {
-                return UNKNOWN;
+                return NULL;
             }
             for (Format format : values()) {
                 if (format.code.equals(code)) {
                     return format;
                 }
             }
-            return UNKNOWN;
+            return NULL;
         }
     }
 }

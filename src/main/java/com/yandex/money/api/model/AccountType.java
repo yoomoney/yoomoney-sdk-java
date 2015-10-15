@@ -41,7 +41,7 @@ public enum AccountType {
     /**
      * Unknown.
      */
-    UNKNOWN("unknown");
+    NULL(null);
 
     public final String code;
 
@@ -51,13 +51,13 @@ public enum AccountType {
 
     public static AccountType parse(String code) {
         if (code == null) {
-            return UNKNOWN;
+            return NULL;
         }
         for (AccountType value : values()) {
-            if (value.code.equals(code)) {
+            if (code.equals(value.code)) {
                 return value;
             }
         }
-        return UNKNOWN;
+        return NULL;
     }
 }

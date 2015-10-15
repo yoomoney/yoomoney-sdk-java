@@ -240,7 +240,7 @@ public class Operation {
         /**
          * Status of operation is unknown.
          */
-        UNKNOWN("unknown");
+        NULL(null);
 
         public final String code;
 
@@ -248,13 +248,16 @@ public class Operation {
             this.code = code;
         }
 
-        public static Status parse(String status) {
+        public static Status parse(String code) {
+            if (code == null) {
+                return NULL;
+            }
             for (Status value : values()) {
-                if (value.code.equals(status)) {
+                if (code.equals(value.code)) {
                     return value;
                 }
             }
-            return UNKNOWN;
+            return NULL;
         }
     }
 
@@ -285,7 +288,7 @@ public class Operation {
         /**
          * Unknown.
          */
-        UNKNOWN("unknown");
+        NULL(null);
 
         public final String code;
 
@@ -293,13 +296,13 @@ public class Operation {
             this.code = code;
         }
 
-        public static Type parse(String type) {
+        public static Type parse(String code) {
             for (Type value : values()) {
-                if (value.code.equals(type)) {
+                if (code.equals(value.code)) {
                     return value;
                 }
             }
-            return UNKNOWN;
+            return NULL;
         }
     }
 
@@ -318,7 +321,7 @@ public class Operation {
         /**
          * Unknown.
          */
-        UNKNOWN("unknown");
+        NULL(null);
 
         public final String code;
 
@@ -326,13 +329,16 @@ public class Operation {
             this.code = code;
         }
 
-        public static Direction parse(String direction) {
+        public static Direction parse(String code) {
+            if (code == null) {
+                return NULL;
+            }
             for (Direction value : values()) {
-                if (value.code.equals(direction)) {
+                if (code.equals(value.code)) {
                     return value;
                 }
             }
-            return UNKNOWN;
+            return NULL;
         }
     }
 
