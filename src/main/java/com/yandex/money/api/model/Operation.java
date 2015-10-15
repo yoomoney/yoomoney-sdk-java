@@ -164,6 +164,15 @@ public class Operation {
         if (builder.paymentParameters == null) {
             throw new NullPointerException("payment parameters is null");
         }
+        if (builder.recipientType == null) {
+            throw new NullPointerException("recipient type is null");
+        }
+        if (builder.type == null) {
+            throw new NullPointerException("type is null");
+        }
+        if (builder.direction == null) {
+            throw new NullPointerException("direction is null");
+        }
 
         this.operationId = builder.operationId;
         this.status = builder.status;
@@ -221,6 +230,82 @@ public class Operation {
                 ", type=" + type +
                 ", digitalGoods=" + digitalGoods +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Operation operation = (Operation) o;
+
+        return codepro == operation.codepro &&
+                repeatable == operation.repeatable &&
+                favorite == operation.favorite &&
+                !(operationId != null ? !operationId.equals(operation.operationId) :
+                        operation.operationId != null) &&
+                status == operation.status &&
+                !(patternId != null ? !patternId.equals(operation.patternId)
+                        : operation.patternId != null) &&
+                direction == operation.direction &&
+                !(amount != null ? !amount.equals(operation.amount) : operation.amount != null) &&
+                !(amountDue != null ? !amountDue.equals(operation.amountDue) :
+                        operation.amountDue != null) &&
+                !(fee != null ? !fee.equals(operation.fee) : operation.fee != null) &&
+                !(datetime != null ? !datetime.isEqual(operation.datetime)
+                        : operation.datetime != null) &&
+                !(title != null ? !title.equals(operation.title) : operation.title != null) &&
+                !(sender != null ? !sender.equals(operation.sender) : operation.sender != null) &&
+                !(recipient != null ? !recipient.equals(operation.recipient)
+                        : operation.recipient != null) &&
+                recipientType == operation.recipientType &&
+                !(message != null ? !message.equals(operation.message)
+                        : operation.message != null) &&
+                !(comment != null ? !comment.equals(operation.comment)
+                        : operation.comment != null) &&
+                !(protectionCode != null ? !protectionCode.equals(operation.protectionCode) :
+                        operation.protectionCode != null) &&
+                !(expires != null ? !expires.equals(operation.expires)
+                        : operation.expires != null) &&
+                !(answerDatetime != null ? !answerDatetime.isEqual(operation.answerDatetime)
+                        : operation.answerDatetime != null) &&
+                !(label != null ? !label.equals(operation.label) : operation.label != null) &&
+                !(details != null ? !details.equals(operation.details) :
+                        operation.details != null) &&
+                paymentParameters.equals(operation.paymentParameters) &&
+                type == operation.type &&
+                !(digitalGoods != null ? !digitalGoods.equals(operation.digitalGoods) :
+                        operation.digitalGoods != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = operationId != null ? operationId.hashCode() : 0;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
+        result = 31 * result + (patternId != null ? patternId.hashCode() : 0);
+        result = 31 * result + direction.hashCode();
+        result = 31 * result + (amount != null ? amount.hashCode() : 0);
+        result = 31 * result + (amountDue != null ? amountDue.hashCode() : 0);
+        result = 31 * result + (fee != null ? fee.hashCode() : 0);
+        result = 31 * result + (datetime != null ? datetime.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (sender != null ? sender.hashCode() : 0);
+        result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
+        result = 31 * result + recipientType.hashCode();
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (codepro ? 1 : 0);
+        result = 31 * result + (protectionCode != null ? protectionCode.hashCode() : 0);
+        result = 31 * result + (expires != null ? expires.hashCode() : 0);
+        result = 31 * result + (answerDatetime != null ? answerDatetime.hashCode() : 0);
+        result = 31 * result + (label != null ? label.hashCode() : 0);
+        result = 31 * result + (details != null ? details.hashCode() : 0);
+        result = 31 * result + (repeatable ? 1 : 0);
+        result = 31 * result + paymentParameters.hashCode();
+        result = 31 * result + (favorite ? 1 : 0);
+        result = 31 * result + type.hashCode();
+        result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
+        return result;
     }
 
     /**

@@ -26,6 +26,8 @@ package com.yandex.money.test;
 
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
+import com.yandex.money.api.methods.BaseProcessPayment;
+import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.methods.ProcessExternalPayment;
 import com.yandex.money.api.methods.ProcessPayment;
 import com.yandex.money.api.methods.RequestExternalPayment;
@@ -219,10 +221,12 @@ public class PaymentProcessTest {
 
     private PaymentProcess.SavedState createPaymentProcessSavedState() {
         return new PaymentProcess.SavedState(
-                new RequestPayment.Builder()
+                (RequestPayment) new RequestPayment.Builder()
                         .setMoneySources(Collections.<MoneySource>emptyList())
+                        .setStatus(BaseRequestPayment.Status.UNKNOWN)
                         .create(),
                 (ProcessPayment) new ProcessPayment.Builder()
+                        .setStatus(BaseProcessPayment.Status.UNKNOWN)
                         .setAcsParams(Collections.<String, String>emptyMap())
                         .create(),
                 3
@@ -231,10 +235,12 @@ public class PaymentProcessTest {
 
     private ExternalPaymentProcess.SavedState createExternalPaymentProcessSavedState() {
         return new ExternalPaymentProcess.SavedState(
-                new RequestExternalPayment.Builder()
+                (RequestExternalPayment) new RequestExternalPayment.Builder()
+                        .setStatus(BaseRequestPayment.Status.UNKNOWN)
                         .create(),
                 (ProcessExternalPayment) new ProcessExternalPayment.Builder()
                         .setAcsParams(Collections.<String, String>emptyMap())
+                        .setStatus(BaseProcessPayment.Status.UNKNOWN)
                         .create(),
                 3
         );

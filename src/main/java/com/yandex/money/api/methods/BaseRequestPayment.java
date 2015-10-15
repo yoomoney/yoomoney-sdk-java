@@ -57,6 +57,9 @@ public abstract class BaseRequestPayment implements MethodResponse {
     public final BigDecimal contractAmount;
 
     protected BaseRequestPayment(Builder builder) {
+        if (builder.status == null) {
+            throw new NullPointerException("status is null");
+        }
         if (builder.status == Status.SUCCESS && builder.requestId == null) {
             throw new IllegalArgumentException("requestId is null when status is success");
         }

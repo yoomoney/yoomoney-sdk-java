@@ -78,7 +78,7 @@ public class Avatar {
 
         Avatar avatar = (Avatar) o;
 
-        return url.equals(avatar.url) && timestamp.equals(avatar.timestamp);
+        return url.equals(avatar.url) && timestamp.isEqual(avatar.timestamp);
     }
 
     @Override

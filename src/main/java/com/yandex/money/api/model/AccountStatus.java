@@ -42,7 +42,6 @@ public enum AccountStatus {
      * Identified account.
      */
     IDENTIFIED("identified"),
-
     /**
      * Unknown account.
      */
