@@ -39,6 +39,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBoolean;
 import static com.yandex.money.api.typeadapters.JsonUtils.getDateTime;
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullMap;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
 
@@ -118,7 +119,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
                 .setAnswerDatetime(getDateTime(o, MEMBER_ANSWER_DATETIME))
                 .setDetails(getString(o, MEMBER_DETAILS))
                 .setRepeatable(getBoolean(o, MEMBER_REPEATABLE))
-                .setPaymentParameters(JsonUtils.getNotNullMap(o, MEMBER_PAYMENT_PARAMETERS))
+                .setPaymentParameters(getNotNullMap(o, MEMBER_PAYMENT_PARAMETERS))
                 .setFavorite(getBoolean(o, MEMBER_FAVOURITE))
                 .setDigitalGoods(DigitalGoodsTypeAdapter.getInstance().fromJson(o.get(
                         MEMBER_DIGITAL_GOODS)))

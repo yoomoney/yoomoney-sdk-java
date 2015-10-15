@@ -161,6 +161,9 @@ public class Operation {
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
      */
     protected Operation(Builder builder) {
+        if (builder.paymentParameters == null) {
+            throw new NullPointerException("payment parameters is null");
+        }
 
         this.operationId = builder.operationId;
         this.status = builder.status;
@@ -183,8 +186,7 @@ public class Operation {
         this.label = builder.label;
         this.details = builder.details;
         this.repeatable = builder.repeatable != null && builder.repeatable;
-        this.paymentParameters = builder.paymentParameters == null ? null :
-                Collections.unmodifiableMap(builder.paymentParameters);
+        this.paymentParameters = Collections.unmodifiableMap(builder.paymentParameters);
         this.favorite = builder.favorite != null && builder.favorite;
         this.type = builder.type;
         this.digitalGoods = builder.digitalGoods;
