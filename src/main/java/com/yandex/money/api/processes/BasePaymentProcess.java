@@ -194,9 +194,8 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      * Processes payment.
      *
      * @param request api request
-     * @return {@code true} if operation is complete
      */
-    private boolean processPayment(ApiRequest<PP> request) throws Exception {
+    private void processPayment(ApiRequest<PP> request) throws Exception {
         BaseProcessPayment.Status previousStatus = processPayment == null ? null :
                 processPayment.status;
         processPayment = execute(request);
@@ -205,17 +204,16 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
             case EXT_AUTH_REQUIRED:
                 if (previousStatus != BaseProcessPayment.Status.EXT_AUTH_REQUIRED) {
                     state = State.PROCESSING;
-                    return true;
+                    return;
                 }
             case IN_PROGRESS:
                 state = State.PROCESSING;
                 Threads.sleep(processPayment.nextRetry);
                 executeProcessPayment(request);
-                return false;
+                return;
         }
 
         state = State.COMPLETED;
-        return true;
     }
 
     private boolean isCompleted() {

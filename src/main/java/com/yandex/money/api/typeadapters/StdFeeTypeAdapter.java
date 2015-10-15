@@ -32,7 +32,6 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.StdFee;
-import com.yandex.money.api.typeadapters.FeeTypeAdapter.Delegate;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -68,7 +67,7 @@ public final class StdFeeTypeAdapter extends BaseTypeAdapter<StdFee> {
     public StdFee deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
-        Delegate.checkFeeType(object, getType());
+        FeeTypeAdapter.Delegate.checkFeeType(object, getType());
         return new StdFee(getValueOrZero(object, MEMBER_A), getValueOrZero(object, MEMBER_B),
                 getValueOrZero(object, MEMBER_C), getBigDecimal(object, MEMBER_D),
                 AmountType.parse(getString(object, MEMBER_AMOUNT_TYPE)));
@@ -77,7 +76,7 @@ public final class StdFeeTypeAdapter extends BaseTypeAdapter<StdFee> {
     @Override
     public JsonElement serialize(StdFee src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        Delegate.serialize(object, getType());
+        FeeTypeAdapter.Delegate.serialize(object, getType());
         object.addProperty(MEMBER_A, src.a);
         object.addProperty(MEMBER_B, src.b);
         object.addProperty(MEMBER_C, src.c);
