@@ -59,6 +59,24 @@ public class RequestExternalPayment extends BaseRequestPayment {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        RequestExternalPayment that = (RequestExternalPayment) o;
+
+        return !(title != null ? !title.equals(that.title) : that.title != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        return result;
+    }
+
     /**
      * Requests context of external payment.
      */

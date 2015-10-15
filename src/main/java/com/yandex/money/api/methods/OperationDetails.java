@@ -60,6 +60,24 @@ public class OperationDetails implements MethodResponse {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OperationDetails that = (OperationDetails) o;
+
+        return error == that.error &&
+                !(operation != null ? !operation.equals(that.operation) : that.operation != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = error != null ? error.hashCode() : 0;
+        result = 31 * result + (operation != null ? operation.hashCode() : 0);
+        return result;
+    }
+
     /**
      * Requests for specific operation details.
      * <p/>

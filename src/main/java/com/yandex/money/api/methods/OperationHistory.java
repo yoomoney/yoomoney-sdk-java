@@ -69,6 +69,27 @@ public class OperationHistory implements MethodResponse {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OperationHistory that = (OperationHistory) o;
+
+        return error == that.error &&
+                !(nextRecord != null ? !nextRecord.equals(that.nextRecord)
+                        : that.nextRecord != null) &&
+                operations.equals(that.operations);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = error != null ? error.hashCode() : 0;
+        result = 31 * result + (nextRecord != null ? nextRecord.hashCode() : 0);
+        result = 31 * result + operations.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "OperationHistory{" +
                 "error=" + error +

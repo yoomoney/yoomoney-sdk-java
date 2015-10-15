@@ -47,9 +47,7 @@ public abstract class PaymentParams {
 
         PaymentParams that = (PaymentParams) o;
 
-        if (!patternId.equals(that.patternId)) return false;
-        return paymentParams.equals(that.paymentParams);
-
+        return patternId.equals(that.patternId) && paymentParams.equals(that.paymentParams);
     }
 
     @Override

@@ -102,6 +102,44 @@ public class ProcessPayment extends BaseProcessPayment {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ProcessPayment that = (ProcessPayment) o;
+
+        return !(paymentId != null ? !paymentId.equals(that.paymentId) : that.paymentId != null) &&
+                !(balance != null ? !balance.equals(that.balance) : that.balance != null) &&
+                !(payer != null ? !payer.equals(that.payer) : that.payer != null) &&
+                !(payee != null ? !payee.equals(that.payee) : that.payee != null) &&
+                !(creditAmount != null ? !creditAmount.equals(that.creditAmount) :
+                        that.creditAmount != null) &&
+                !(accountUnblockUri != null ? !accountUnblockUri.equals(that.accountUnblockUri) :
+                        that.accountUnblockUri != null) &&
+                !(payeeUid != null ? !payeeUid.equals(that.payeeUid) : that.payeeUid != null) &&
+                !(holdForPickupLink != null ? !holdForPickupLink.equals(that.holdForPickupLink) :
+                        that.holdForPickupLink != null) &&
+                !(digitalGoods != null ? !digitalGoods.equals(that.digitalGoods) :
+                        that.digitalGoods != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (paymentId != null ? paymentId.hashCode() : 0);
+        result = 31 * result + (balance != null ? balance.hashCode() : 0);
+        result = 31 * result + (payer != null ? payer.hashCode() : 0);
+        result = 31 * result + (payee != null ? payee.hashCode() : 0);
+        result = 31 * result + (creditAmount != null ? creditAmount.hashCode() : 0);
+        result = 31 * result + (accountUnblockUri != null ? accountUnblockUri.hashCode() : 0);
+        result = 31 * result + (payeeUid != null ? payeeUid.hashCode() : 0);
+        result = 31 * result + (holdForPickupLink != null ? holdForPickupLink.hashCode() : 0);
+        result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return super.toString() + "ProcessPayment{" +
                 "paymentId='" + paymentId + '\'' +

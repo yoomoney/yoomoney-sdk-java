@@ -62,6 +62,23 @@ public class IncomingTransferReject implements MethodResponse {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        IncomingTransferReject that = (IncomingTransferReject) o;
+
+        return status == that.status && error == that.error;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = status.hashCode();
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        return result;
+    }
+
     /**
      * Status of rejection.
      */

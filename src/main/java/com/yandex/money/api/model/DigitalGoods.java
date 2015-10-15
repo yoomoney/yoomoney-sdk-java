@@ -62,6 +62,23 @@ public class DigitalGoods {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        DigitalGoods that = (DigitalGoods) o;
+
+        return article.equals(that.article) && bonus.equals(that.bonus);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = article.hashCode();
+        result = 31 * result + bonus.hashCode();
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "DigitalGoods{" +
                 "article=" + article +

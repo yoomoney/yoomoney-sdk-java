@@ -57,6 +57,25 @@ public class ProcessExternalPayment extends BaseProcessPayment {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ProcessExternalPayment that = (ProcessExternalPayment) o;
+
+        return !(externalCard != null ? !externalCard.equals(that.externalCard)
+                : that.externalCard != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (externalCard != null ? externalCard.hashCode() : 0);
+        return result;
+    }
+
     /**
      * Request for processing external payment.
      */

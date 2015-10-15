@@ -97,8 +97,8 @@ public final class ShowcaseSearch {
 
         ShowcaseSearch that = (ShowcaseSearch) o;
 
-        return error == that.error && result.equals(that.result)
-                && !(nextPage != null ? !nextPage.equals(that.nextPage) : that.nextPage != null);
+        return error == that.error && result.equals(that.result) &&
+                !(nextPage != null ? !nextPage.equals(that.nextPage) : that.nextPage != null);
     }
 
     @Override

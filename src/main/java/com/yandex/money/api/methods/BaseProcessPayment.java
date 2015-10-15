@@ -49,7 +49,9 @@ public abstract class BaseProcessPayment implements MethodResponse {
      * Constructor.
      */
     protected BaseProcessPayment(Builder builder) {
-
+        if(builder.status == null) {
+            throw new NullPointerException("status is null");
+        }
         if (builder.status == Status.EXT_AUTH_REQUIRED && builder.acsUri == null) {
             throw new NullPointerException("acsUri is null when status is ext_auth_required");
         }
@@ -74,6 +76,32 @@ public abstract class BaseProcessPayment implements MethodResponse {
                 ", acsParams=" + acsParams +
                 ", nextRetry=" + nextRetry +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BaseProcessPayment that = (BaseProcessPayment) o;
+
+        return nextRetry == that.nextRetry &&
+                status == that.status &&
+                error == that.error &&
+                !(invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) &&
+                !(acsUri != null ? !acsUri.equals(that.acsUri) : that.acsUri != null) &&
+                acsParams.equals(that.acsParams);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = status.hashCode();
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
+        result = 31 * result + (acsUri != null ? acsUri.hashCode() : 0);
+        result = 31 * result + acsParams.hashCode();
+        result = 31 * result + (int) (nextRetry ^ (nextRetry >>> 32));
+        return result;
     }
 
     public enum Status {

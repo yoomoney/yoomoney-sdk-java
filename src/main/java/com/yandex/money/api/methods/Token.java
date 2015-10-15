@@ -61,6 +61,24 @@ public class Token implements MethodResponse {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Token token = (Token) o;
+
+        return !(accessToken != null ? !accessToken.equals(token.accessToken) :
+                token.accessToken != null) && error == token.error;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = accessToken != null ? accessToken.hashCode() : 0;
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        return result;
+    }
+
     /**
      * Request for access token.
      */

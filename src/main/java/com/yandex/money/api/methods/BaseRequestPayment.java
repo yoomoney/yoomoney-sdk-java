@@ -76,6 +76,29 @@ public abstract class BaseRequestPayment implements MethodResponse {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BaseRequestPayment that = (BaseRequestPayment) o;
+
+        return status == that.status &&
+                error == that.error &&
+                !(requestId != null ? !requestId.equals(that.requestId) : that.requestId != null) &&
+                !(contractAmount != null ? !contractAmount.equals(that.contractAmount) :
+                        that.contractAmount != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = status.hashCode();
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        result = 31 * result + (requestId != null ? requestId.hashCode() : 0);
+        result = 31 * result + (contractAmount != null ? contractAmount.hashCode() : 0);
+        return result;
+    }
+
     public enum Status {
         SUCCESS(CODE_SUCCESS),
         REFUSED(CODE_REFUSED),

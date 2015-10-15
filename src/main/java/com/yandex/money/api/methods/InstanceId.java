@@ -67,6 +67,27 @@ public class InstanceId implements MethodResponse {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        InstanceId that = (InstanceId) o;
+
+        return status == that.status &&
+                error == that.error &&
+                !(instanceId != null ? !instanceId.equals(
+                        that.instanceId) : that.instanceId != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = status.hashCode();
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        result = 31 * result + (instanceId != null ? instanceId.hashCode() : 0);
+        return result;
+    }
+
     public boolean isSuccess() {
         return status == Status.SUCCESS;
     }

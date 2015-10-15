@@ -114,6 +114,41 @@ public class RequestPayment extends BaseRequestPayment {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        RequestPayment that = (RequestPayment) o;
+
+        return cscRequired == that.cscRequired && moneySources.equals(that.moneySources) &&
+                !(balance != null ? !balance.equals(that.balance) : that.balance != null) &&
+                recipientAccountStatus == that.recipientAccountStatus &&
+                recipientAccountType == that.recipientAccountType &&
+                !(protectionCode != null ? !protectionCode.equals(that.protectionCode) :
+                        that.protectionCode != null) &&
+                !(accountUnblockUri != null ? !accountUnblockUri.equals(that.accountUnblockUri) :
+                        that.accountUnblockUri != null) &&
+                !(extActionUri != null ? !extActionUri.equals(that.extActionUri) :
+                        that.extActionUri != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + moneySources.hashCode();
+        result = 31 * result + (cscRequired ? 1 : 0);
+        result = 31 * result + (balance != null ? balance.hashCode() : 0);
+        result = 31 * result + (recipientAccountStatus != null ?
+                recipientAccountStatus.hashCode() : 0);
+        result = 31 * result + (recipientAccountType != null ? recipientAccountType.hashCode() : 0);
+        result = 31 * result + (protectionCode != null ? protectionCode.hashCode() : 0);
+        result = 31 * result + (accountUnblockUri != null ? accountUnblockUri.hashCode() : 0);
+        result = 31 * result + (extActionUri != null ? extActionUri.hashCode() : 0);
+        return result;
+    }
+
     /**
      * Test results.
      */

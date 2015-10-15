@@ -64,6 +64,24 @@ public class AuxToken implements MethodResponse {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AuxToken auxToken1 = (AuxToken) o;
+
+        return !(auxToken != null ? !auxToken.equals(auxToken1.auxToken)
+                : auxToken1.auxToken != null) && error == auxToken1.error;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = auxToken != null ? auxToken.hashCode() : 0;
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        return result;
+    }
+
     /**
      * Requests for an auxiliary token.
      * <p/>

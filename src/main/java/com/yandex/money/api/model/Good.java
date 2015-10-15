@@ -64,6 +64,27 @@ public class Good {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Good good = (Good) o;
+
+        return serial.equals(good.serial) &&
+                secret.equals(good.secret) &&
+                !(merchantArticleId != null ? !merchantArticleId.equals(good.merchantArticleId) :
+                        good.merchantArticleId != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = serial.hashCode();
+        result = 31 * result + secret.hashCode();
+        result = 31 * result + (merchantArticleId != null ? merchantArticleId.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Good{" +
                 "serial='" + serial + '\'' +

@@ -45,11 +45,12 @@ public class IncomingTransferAccept implements MethodResponse {
     /**
      * Constructor.
      *
-     * @param status status of an operation
-     * @param error error code
+     * @param status                          status of an operation
+     * @param error                           error code
      * @param protectionCodeAttemptsAvailable number of attempts available after invalid protection
      *                                        code submission
-     * @param extActionUri address to perform external action for successful acceptance
+     * @param extActionUri                    address to perform external action for successful
+     *                                        acceptance
      */
     public IncomingTransferAccept(Status status, Error error,
                                   Integer protectionCodeAttemptsAvailable, String extActionUri) {
@@ -60,6 +61,31 @@ public class IncomingTransferAccept implements MethodResponse {
         this.error = error;
         this.protectionCodeAttemptsAvailable = protectionCodeAttemptsAvailable;
         this.extActionUri = extActionUri;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        IncomingTransferAccept that = (IncomingTransferAccept) o;
+
+        return status == that.status &&
+                error == that.error && !(protectionCodeAttemptsAvailable != null ?
+                !protectionCodeAttemptsAvailable.equals(that.protectionCodeAttemptsAvailable) :
+                    that.protectionCodeAttemptsAvailable != null) &&
+                !(extActionUri != null ? !extActionUri.equals(that.extActionUri) :
+                        that.extActionUri != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = status.hashCode();
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        result = 31 * result + (protectionCodeAttemptsAvailable != null ?
+                protectionCodeAttemptsAvailable.hashCode() : 0);
+        result = 31 * result + (extActionUri != null ? extActionUri.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -117,7 +143,7 @@ public class IncomingTransferAccept implements MethodResponse {
         /**
          * Constructor.
          *
-         * @param operationId unique operation id
+         * @param operationId    unique operation id
          * @param protectionCode protection code if transfer is protected
          */
         public Request(String operationId, String protectionCode) {
