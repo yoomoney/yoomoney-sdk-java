@@ -24,24 +24,21 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.OperationHistoryTypeAdapter;
+
 import org.joda.time.DateTime;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Operation history.
@@ -65,12 +62,31 @@ public class OperationHistory implements MethodResponse {
      * @param operations list of operations
      */
     public OperationHistory(Error error, String nextRecord, List<Operation> operations) {
-        if (operations == null) {
-            throw new NullPointerException("operations is null");
-        }
+        checkNotNull(operations, "operations");
         this.error = error;
         this.nextRecord = nextRecord;
         this.operations = Collections.unmodifiableList(operations);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OperationHistory that = (OperationHistory) o;
+
+        return error == that.error &&
+                !(nextRecord != null ? !nextRecord.equals(that.nextRecord)
+                        : that.nextRecord != null) &&
+                operations.equals(that.operations);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = error != null ? error.hashCode() : 0;
+        result = 31 * result + (nextRecord != null ? nextRecord.hashCode() : 0);
+        result = 31 * result + operations.hashCode();
+        return result;
     }
 
     @Override
@@ -80,6 +96,30 @@ public class OperationHistory implements MethodResponse {
                 ", nextRecord='" + nextRecord + '\'' +
                 ", operations=" + operations +
                 '}';
+    }
+
+    /**
+     * Filter types.
+     */
+    public enum FilterType {
+        /**
+         * Depositions.
+         */
+        DEPOSITION("deposition"),
+        /**
+         * Payments.
+         */
+        PAYMENT("payment"),
+        /**
+         * Unaccepted incoming transfers (e.g. p2p transfer with protection code).
+         */
+        INCOMING_TRANSFER_UNACCEPTED("incoming-transfers-unaccepted");
+
+        public final String code;
+
+        FilterType(String code) {
+            this.code = code;
+        }
     }
 
     /**
@@ -97,10 +137,8 @@ public class OperationHistory implements MethodResponse {
         private Request(Set<FilterType> types, String label, DateTime from, DateTime till,
                         String startRecord, Integer records, Boolean details) {
 
-            super(OperationHistory.class, new Deserializer());
-            if (types == null) {
-                throw new NullPointerException("types is null");
-            }
+            super(OperationHistory.class, OperationHistoryTypeAdapter.getInstance());
+            checkNotNull(types, "types");
             if (from != null && till != null && from.isAfter(till)) {
                 throw new IllegalArgumentException("\'from\' should be before \'till\'");
             }
@@ -228,55 +266,10 @@ public class OperationHistory implements MethodResponse {
              *
              * @return the request
              */
-            public Request createRequest() {
+            public Request create() {
                 return new Request(types == null ? Collections.<FilterType>emptySet() : types,
                         label, from, till, startRecord, records, details);
             }
-        }
-    }
-
-    /**
-     * Filter types.
-     */
-    public enum FilterType {
-        /**
-         * Depositions.
-         */
-        DEPOSITION("deposition"),
-        /**
-         * Payments.
-         */
-        PAYMENT("payment"),
-        /**
-         * Unaccepted incoming transfers (e.g. p2p transfer with protection code).
-         */
-        INCOMING_TRANSFER_UNACCEPTED("incoming-transfers-unaccepted");
-
-        public final String code;
-
-        FilterType(String code) {
-            this.code = code;
-        }
-    }
-
-    private static final class Deserializer implements JsonDeserializer<OperationHistory> {
-        @Override
-        public OperationHistory deserialize(JsonElement json, Type typeOfT,
-                                            JsonDeserializationContext context)
-                throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-
-            final String operationsMember = "operations";
-            List<Operation> operations = new ArrayList<>();
-            if (object.has(operationsMember)) {
-                for (JsonElement element : object.getAsJsonArray(operationsMember)) {
-                    operations.add(Operation.createFromJson(element));
-                }
-            }
-
-            return new OperationHistory(Error.parse(JsonUtils.getString(object, "error")),
-                    JsonUtils.getString(object, "next_record"), operations);
         }
     }
 }

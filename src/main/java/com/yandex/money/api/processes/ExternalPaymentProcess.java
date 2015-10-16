@@ -108,13 +108,6 @@ public final class ExternalPaymentProcess
         boolean isRequestToken();
     }
 
-    /**
-     * @see BasePaymentProcess.Callbacks
-     */
-    public interface Callbacks
-            extends BasePaymentProcess.Callbacks<RequestExternalPayment, ProcessExternalPayment> {
-    }
-
     public static final class SavedState
             extends BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> {
 

@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.utils;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Class implements common numbers operations.
  *
@@ -58,9 +60,7 @@ public final class Numbers {
      * @return string of hex
      */
     public static String bytesToHex(byte[] bytes) {
-        if (bytes == null) {
-            throw new NullPointerException("bytes is null");
-        }
+        checkNotNull(bytes, "bytes");
         StringBuilder result = new StringBuilder();
         for (byte b : bytes) {
             result.append(byteToHex(b));

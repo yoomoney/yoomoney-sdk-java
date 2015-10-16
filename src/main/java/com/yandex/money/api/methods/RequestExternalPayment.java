@@ -24,19 +24,12 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.methods.params.PaymentParams;
-import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.RequestExternalPaymentTypeAdapter;
 import com.yandex.money.api.utils.Strings;
 
-import java.lang.reflect.Type;
-import java.math.BigDecimal;
 import java.util.Map;
 
 /**
@@ -46,18 +39,17 @@ import java.util.Map;
  */
 public class RequestExternalPayment extends BaseRequestPayment {
 
+    /**
+     * Title of payment.
+     */
     public final String title;
 
     /**
      * Constructor.
-     *
-     * @param title title of payment
      */
-    public RequestExternalPayment(Status status, Error error, String requestId,
-                                  BigDecimal contractAmount, String title) {
-
-        super(status, error, requestId, contractAmount);
-        this.title = title;
+    private RequestExternalPayment(Builder builder) {
+        super(builder);
+        this.title = builder.title;
     }
 
     @Override
@@ -65,6 +57,24 @@ public class RequestExternalPayment extends BaseRequestPayment {
         return super.toString() + "RequestExternalPayment{" +
                 "title='" + title + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        RequestExternalPayment that = (RequestExternalPayment) o;
+
+        return !(title != null ? !title.equals(that.title) : that.title != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (title != null ? title.hashCode() : 0);
+        return result;
     }
 
     /**
@@ -77,7 +87,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * {@link com.yandex.money.api.methods.RequestExternalPayment.Request}.
          */
         private Request(String instanceId, String patternId, Map<String, String> params) {
-            super(RequestExternalPayment.class, new Deserializer());
+            super(RequestExternalPayment.class, RequestExternalPaymentTypeAdapter.getInstance());
 
             addParameter("instance_id", instanceId);
             addParameter("pattern_id", patternId);
@@ -130,23 +140,20 @@ public class RequestExternalPayment extends BaseRequestPayment {
         public String requestUrl(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/request-external-payment";
         }
+    }
 
-        private static final class Deserializer
-                implements JsonDeserializer<RequestExternalPayment> {
+    public static final class Builder extends BaseRequestPayment.Builder {
 
-            @Override
-            public RequestExternalPayment deserialize(JsonElement json, Type typeOfT,
-                                                      JsonDeserializationContext context)
-                    throws JsonParseException {
+        private String title;
 
-                JsonObject o = json.getAsJsonObject();
-                return new RequestExternalPayment(
-                        Status.parse(JsonUtils.getString(o, MEMBER_STATUS)),
-                        Error.parse(JsonUtils.getString(o, MEMBER_ERROR)),
-                        JsonUtils.getString(o, MEMBER_REQUEST_ID),
-                        JsonUtils.getBigDecimal(o, MEMBER_CONTRACT_AMOUNT),
-                        JsonUtils.getString(o, "title"));
-            }
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        @Override
+        public RequestExternalPayment create() {
+            return new RequestExternalPayment(this);
         }
     }
 }

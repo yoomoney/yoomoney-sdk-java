@@ -82,7 +82,7 @@ public class Scope {
      */
     protected Scope(String name) {
         if (Strings.isNullOrEmpty(name)) {
-            throw new NullPointerException("scope name can not be null or empty");
+            throw new IllegalArgumentException("scope name can not be null or empty");
         }
         this.name = name;
     }

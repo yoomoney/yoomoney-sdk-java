@@ -24,17 +24,21 @@
 
 package com.yandex.money.api.typeadapters;
 
+import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonNull;
+import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.Error;
+
+import java.lang.reflect.Type;
 
 /**
  * Type adapter for {@link Error}.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class ErrorTypeAdapter implements TypeAdapter<Error> {
+public final class ErrorTypeAdapter extends BaseTypeAdapter<Error> {
 
     private static final ErrorTypeAdapter INSTANCE = new ErrorTypeAdapter();
 
@@ -45,22 +49,18 @@ public final class ErrorTypeAdapter implements TypeAdapter<Error> {
     }
 
     @Override
-    public Error fromJson(String json) {
-        throw new UnsupportedOperationException();
+    public Error deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
+        return Error.parse(json.getAsString());
     }
 
     @Override
-    public Error fromJson(JsonElement element) {
-        return element == null ? null : Error.parse(element.getAsString());
+    public JsonElement serialize(Error src, Type typeOfSrc, JsonSerializationContext context) {
+        return new JsonPrimitive(src.code);
     }
 
     @Override
-    public String toJson(Error value) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public JsonElement toJsonTree(Error value) {
-        return value == null ? JsonNull.INSTANCE : new JsonPrimitive(value.code);
+    protected Class<Error> getType() {
+        return Error.class;
     }
 }

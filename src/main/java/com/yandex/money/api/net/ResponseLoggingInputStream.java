@@ -29,21 +29,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Logging wrapper for server responses
  * Supposes, that responses in UTF-8
  */
 final class ResponseLoggingInputStream extends InputStream {
 
-    private static Logger LOG = Logger.getLogger(ResponseLoggingInputStream.class.getName());
-
     private final InputStream inputStream;
     private final ByteArrayOutputStream buffer;
+    private static Logger LOG = Logger.getLogger(ResponseLoggingInputStream.class.getName());
 
     public ResponseLoggingInputStream(InputStream inputStream) {
-        if (inputStream == null) {
-            throw new NullPointerException("input stream is null");
-        }
+        checkNotNull(inputStream, "input stream");
         this.inputStream = inputStream;
         this.buffer = new ByteArrayOutputStream();
     }

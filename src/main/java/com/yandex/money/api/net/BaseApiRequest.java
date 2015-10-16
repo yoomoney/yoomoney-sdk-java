@@ -27,6 +27,7 @@ package com.yandex.money.api.net;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializer;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -38,6 +39,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Base API request. It is preferable to extend your requests from this class or its descendants
@@ -64,12 +67,8 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param deserializer deserializer used to create a response
      */
     protected BaseApiRequest(Class<T> cls, JsonDeserializer<T> deserializer) {
-        if (cls == null) {
-            throw new NullPointerException("response class is null");
-        }
-        if (deserializer == null) {
-            throw new NullPointerException("response deserializer is null");
-        }
+        checkNotNull(cls, "response class");
+        checkNotNull(deserializer, "response deserializer");
         this.cls = cls;
         gson = new GsonBuilder()
                 .registerTypeAdapter(cls, deserializer)

@@ -24,16 +24,7 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.yandex.money.api.methods.JsonUtils;
-
-import java.lang.reflect.Type;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Describes digital item, that user can obtain when paying for them.
@@ -63,22 +54,32 @@ public class Good {
      * @param merchantArticleId merchant article id
      */
     public Good(String serial, String secret, String merchantArticleId) {
-        if (serial == null) {
-            throw new NullPointerException("serial is null");
-        }
-        if (secret == null) {
-            throw new NullPointerException("secret is null");
-        }
+        checkNotNull(serial, "serial");
+        checkNotNull(secret, "secret");
         this.serial = serial;
         this.secret = secret;
         this.merchantArticleId = merchantArticleId;
     }
 
-    /**
-     * Creates {@link com.yandex.money.api.model.Good} from JSON.
-     */
-    public static Good createFromJson(JsonElement json) {
-        return buildGson().fromJson(json, Good.class);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Good good = (Good) o;
+
+        return serial.equals(good.serial) &&
+                secret.equals(good.secret) &&
+                !(merchantArticleId != null ? !merchantArticleId.equals(good.merchantArticleId) :
+                        good.merchantArticleId != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = serial.hashCode();
+        result = 31 * result + secret.hashCode();
+        result = 31 * result + (merchantArticleId != null ? merchantArticleId.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -88,22 +89,5 @@ public class Good {
                 ", secret='" + secret + '\'' +
                 ", merchantArticleId='" + merchantArticleId + '\'' +
                 '}';
-    }
-
-    private static Gson buildGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(Good.class, new Deserializer())
-                .create();
-    }
-
-    private static final class Deserializer implements JsonDeserializer<Good> {
-        @Override
-        public Good deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-                throws JsonParseException {
-            JsonObject object = json.getAsJsonObject();
-            return new Good(JsonUtils.getMandatoryString(object, "serial"),
-                    JsonUtils.getMandatoryString(object, "secret"),
-                    JsonUtils.getString(object, "merchantArticleId"));
-        }
     }
 }

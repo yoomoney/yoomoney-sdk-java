@@ -1,0 +1,7 @@
+{
+  "type": "text",
+  "name": "kbk",
+  "label": "КБК",
+  "pattern": "[0-9]{20}",
+  "keyboard_suggest": "number"
+}

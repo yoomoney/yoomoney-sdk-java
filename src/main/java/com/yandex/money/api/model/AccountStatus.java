@@ -45,7 +45,7 @@ public enum AccountStatus {
     /**
      * Unknown account.
      */
-    UNKNOWN("unknown");
+    NULL(null);
 
     public final String code;
 
@@ -55,13 +55,13 @@ public enum AccountStatus {
 
     public static AccountStatus parse(String code) {
         if (code == null) {
-            return UNKNOWN;
+            return NULL;
         }
         for (AccountStatus value : values()) {
-            if (value.code.equals(code)) {
+            if (code.equals(value.code)) {
                 return value;
             }
         }
-        return UNKNOWN;
+        return NULL;
     }
 }

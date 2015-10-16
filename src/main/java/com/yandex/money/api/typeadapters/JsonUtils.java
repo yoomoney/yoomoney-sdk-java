@@ -22,13 +22,13 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.methods;
+package com.yandex.money.api.typeadapters;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.yandex.money.api.typeadapters.TypeAdapter;
+
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -36,21 +36,21 @@ import org.joda.time.format.ISODateTimeFormat;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Static class for JSON parsing process.
  *
- * Note: in upcoming major release this class will become package local and will be moved to
- * {@code com.yandex.money.api.typeadapters} package.
- *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class JsonUtils { // TODO read note above and do the stuff in future release
+public final class JsonUtils {
 
-    private static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
+    public static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
             .withOffsetParsed();
 
     /**
@@ -207,8 +207,22 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
      * @return {@link org.joda.time.DateTime} value
      */
     public static DateTime getDateTime(JsonObject object, String memberName) {
+        return getDateTime(object, memberName, ISO_FORMATTER);
+    }
+
+    /**
+     * Gets nullable DateTime from a JSON object using formatter.
+     *
+     * @param object     json object
+     * @param memberName member's name
+     * @param formatter  {@link org.joda.time.DateTime}'s formatter.
+     * @return {@link org.joda.time.DateTime} value
+     */
+    public static DateTime getDateTime(JsonObject object, String memberName,
+                                       DateTimeFormatter formatter) {
+        checkNotNull(formatter, "formatter");
         JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
-        return primitive == null ? null : DateTime.parse(primitive.getAsString(), ISO_FORMATTER);
+        return primitive == null ? null : DateTime.parse(primitive.getAsString(), formatter);
     }
 
     /**
@@ -246,14 +260,28 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
             return null;
         }
 
-        if (converter == null) {
-            throw new NullPointerException("converter is null");
-        }
+        checkNotNull(converter, "converter");
         List<T> result = new ArrayList<>(array.size());
         for (JsonElement element : array) {
             result.add(converter.fromJson(element));
         }
         return result;
+    }
+
+    /**
+     * Gets array from a JSON object. Uses {@link ArrayList} implementation of {@link List}. If
+     * there is no such member in object then returns empty list.
+     *
+     * @param object     json object
+     * @param memberName member's name
+     * @param converter  converter
+     * @param <T>        type of a value in the array
+     * @return list of values
+     */
+    public static <T> List<T> getNotNullArray(JsonObject object, String memberName,
+                                              TypeAdapter<T> converter) {
+        List<T> array = getArray(object, memberName, converter);
+        return array == null ? Collections.<T>emptyList() : array;
     }
 
     /**
@@ -274,6 +302,25 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
             result.put(entry.getKey(), value);
         }
         return result;
+    }
+
+    /**
+     * Maps JSON object to key-value pairs. Returns {@link Collections#emptyMap()} in case of
+     * nullable field value.
+     *
+     * @see {@link #map(JsonObject)}
+     *
+     * @param object JSON object
+     * @param memberName member's name
+     * @return map of string key-value pairs
+     */
+    public static Map<String, String> getNotNullMap(JsonObject object, String memberName) {
+        JsonElement jsonElement = object.get(memberName);
+        if (jsonElement == null) {
+            return Collections.emptyMap();
+        } else {
+            return map(jsonElement.getAsJsonObject());
+        }
     }
 
     /**
@@ -306,9 +353,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
         if (collection == null) {
             return null;
         }
-        if (converter == null) {
-            throw new NullPointerException("converter is null");
-        }
+        checkNotNull(converter, "converter");
         JsonArray array = new JsonArray();
         for (T value : collection) {
             array.add(converter.toJsonTree(value));
@@ -327,23 +372,17 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
     }
 
     private static void checkObject(JsonObject object) {
-        if (object == null) {
-            throw new NullPointerException("JSON object is null.");
-        }
+        checkNotNull(object, "object");
     }
 
     private static void checkMemberName(String memberName) {
-        if (memberName == null) {
-            throw new NullPointerException("Member name is null.");
-        }
+        checkNotNull(memberName, "memberName");
         if (memberName.length() == 0) {
             throw new IllegalArgumentException("Member is an empty string.");
         }
     }
 
     private static void checkMandatoryValue(Object value, String memberName) {
-        if (value == null) {
-            throw new NullPointerException("mandatory value \'" + memberName + "\' is null");
-        }
+        checkNotNull(value, "mandatory value \'" + memberName + "\'");
     }
 }

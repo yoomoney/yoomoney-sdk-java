@@ -33,8 +33,8 @@ import com.yandex.money.api.model.BalanceDetails;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.methods.JsonUtils.getBigDecimal;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBigDecimal;
 
 /**
  * Type adapter for {@link BalanceDetails}.
@@ -63,11 +63,6 @@ public final class BalanceDetailsTypeAdapter extends BaseTypeAdapter<BalanceDeta
     }
 
     @Override
-    protected Class<BalanceDetails> getType() {
-        return BalanceDetails.class;
-    }
-
-    @Override
     public BalanceDetails deserialize(JsonElement json, Type typeOfT,
                                       JsonDeserializationContext context)
             throws JsonParseException {
@@ -93,5 +88,10 @@ public final class BalanceDetailsTypeAdapter extends BaseTypeAdapter<BalanceDeta
         object.addProperty(MEMBER_DEBT, src.debt);
         object.addProperty(MEMBER_HOLD, src.hold);
         return object;
+    }
+
+    @Override
+    protected Class<BalanceDetails> getType() {
+        return BalanceDetails.class;
     }
 }

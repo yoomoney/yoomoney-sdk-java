@@ -24,21 +24,16 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.DigitalGoods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.ProcessPaymentTypeAdapter;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Process payment.
@@ -47,38 +42,111 @@ import java.util.Map;
  */
 public class ProcessPayment extends BaseProcessPayment {
 
+    /**
+     * Payment id.
+     */
     public final String paymentId;
+
+    /**
+     * Account's balance.
+     */
     public final BigDecimal balance;
+
+    /**
+     * Payer's account number.
+     */
     public final String payer;
+
+    /**
+     * Payee's account number.
+     */
     public final String payee;
+
+    /**
+     * Amount payee will receive.
+     */
     public final BigDecimal creditAmount;
+
+    /**
+     * URL for locked accounts URI that can be used to unlock it.
+     */
     public final String accountUnblockUri;
+
     public final String payeeUid;
+
+    /**
+     * Link for payment receiving.
+     */
     public final String holdForPickupLink;
+
+    /**
+     * Received digital goods.
+     */
     public final DigitalGoods digitalGoods;
 
     /**
      * Use {@link com.yandex.money.api.methods.ProcessPayment.Builder} to create an instance.
      */
-    private ProcessPayment(Status status, Error error, String paymentId, BigDecimal balance,
-                           String invoiceId, String payer, String payee, BigDecimal creditAmount,
-                           String accountUnblockUri, String payeeUid, String holdForPickupLink,
-                           String acsUri, Map<String, String> acsParams, Long nextRetry,
-                           DigitalGoods digitalGoods) {
-
-        super(status, error, invoiceId, acsUri, acsParams, nextRetry);
-        if (status == Status.SUCCESS && paymentId == null) {
-            throw new NullPointerException("paymentId is null when status is success");
+    private ProcessPayment(Builder builder) {
+        super(builder);
+        switch (status) {
+            case SUCCESS:
+                checkNotNull(builder.paymentId, "paymentId");
+                checkNotNull(builder.balance, "balance");
+                break;
+            case REFUSED:
+                if(error == Error.ACCOUNT_BLOCKED) {
+                    checkNotNull(builder.accountUnblockUri, "accountUnblockUri");
+                }
+                break;
         }
-        this.paymentId = paymentId;
-        this.balance = balance;
-        this.payer = payer;
-        this.payee = payee;
-        this.creditAmount = creditAmount;
-        this.accountUnblockUri = accountUnblockUri;
-        this.payeeUid = payeeUid;
-        this.holdForPickupLink = holdForPickupLink;
-        this.digitalGoods = digitalGoods;
+        this.paymentId = builder.paymentId;
+        this.balance = builder.balance;
+        this.payer = builder.payer;
+        this.payee = builder.payee;
+        this.creditAmount = builder.creditAmount;
+        this.accountUnblockUri = builder.accountUnblockUri;
+        this.payeeUid = builder.payeeUid;
+        this.holdForPickupLink = builder.holdForPickupLink;
+        this.digitalGoods = builder.digitalGoods;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ProcessPayment that = (ProcessPayment) o;
+
+        return !(paymentId != null ? !paymentId.equals(that.paymentId) : that.paymentId != null) &&
+                !(balance != null ? !balance.equals(that.balance) : that.balance != null) &&
+                !(payer != null ? !payer.equals(that.payer) : that.payer != null) &&
+                !(payee != null ? !payee.equals(that.payee) : that.payee != null) &&
+                !(creditAmount != null ? !creditAmount.equals(that.creditAmount) :
+                        that.creditAmount != null) &&
+                !(accountUnblockUri != null ? !accountUnblockUri.equals(that.accountUnblockUri) :
+                        that.accountUnblockUri != null) &&
+                !(payeeUid != null ? !payeeUid.equals(that.payeeUid) : that.payeeUid != null) &&
+                !(holdForPickupLink != null ? !holdForPickupLink.equals(that.holdForPickupLink) :
+                        that.holdForPickupLink != null) &&
+                !(digitalGoods != null ? !digitalGoods.equals(that.digitalGoods) :
+                        that.digitalGoods != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (paymentId != null ? paymentId.hashCode() : 0);
+        result = 31 * result + (balance != null ? balance.hashCode() : 0);
+        result = 31 * result + (payer != null ? payer.hashCode() : 0);
+        result = 31 * result + (payee != null ? payee.hashCode() : 0);
+        result = 31 * result + (creditAmount != null ? creditAmount.hashCode() : 0);
+        result = 31 * result + (accountUnblockUri != null ? accountUnblockUri.hashCode() : 0);
+        result = 31 * result + (payeeUid != null ? payeeUid.hashCode() : 0);
+        result = 31 * result + (holdForPickupLink != null ? holdForPickupLink.hashCode() : 0);
+        result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -94,6 +162,30 @@ public class ProcessPayment extends BaseProcessPayment {
                 ", holdForPickupLink='" + holdForPickupLink + '\'' +
                 ", digitalGoods=" + digitalGoods +
                 '}';
+    }
+
+    /**
+     * Available test results.
+     */
+    public enum TestResult {
+
+        SUCCESS("success"),
+        CONTRACT_NOT_FOUND("contract_not_found"),
+        NOT_ENOUGH_FUNDS("not_enough_funds"),
+        LIMIT_EXCEEDED("limit_exceeded"),
+        MONEY_SOURCE_NOT_AVAILABLE("money_source_not_available"),
+        ILLEGAL_PARAM_CSC("illegal_param_csc"),
+        PAYMENT_REFUSED("payment_refused"),
+        AUTHORIZATION_REJECT("authorization_reject"),
+        ACCOUNT_BLOCKED("account_blocked"),
+        ILLEGAL_PARAM_EXT_AUTH_SUCCESS_URI("illegal_param_ext_auth_success_uri"),
+        ILLEGAL_PARAM_EXT_AUTH_FAIL_URI("illegal_param_ext_auth_fail_uri");
+
+        public final String code;
+
+        TestResult(String code) {
+            this.code = code;
+        }
     }
 
     /**
@@ -128,7 +220,7 @@ public class ProcessPayment extends BaseProcessPayment {
         public Request(String requestId, MoneySource moneySource, String csc,
                        String extAuthSuccessUri, String extAuthFailUri) {
 
-            super(ProcessPayment.class, new Deserializer());
+            super(ProcessPayment.class, ProcessPaymentTypeAdapter.getInstance());
             if (requestId == null || requestId.isEmpty()) {
                 throw new IllegalArgumentException("requestId is null or empty");
             }
@@ -171,116 +263,45 @@ public class ProcessPayment extends BaseProcessPayment {
     }
 
     /**
-     * Available test results.
-     */
-    public enum TestResult {
-
-        SUCCESS("success"),
-        CONTRACT_NOT_FOUND("contract_not_found"),
-        NOT_ENOUGH_FUNDS("not_enough_funds"),
-        LIMIT_EXCEEDED("limit_exceeded"),
-        MONEY_SOURCE_NOT_AVAILABLE("money_source_not_available"),
-        ILLEGAL_PARAM_CSC("illegal_param_csc"),
-        PAYMENT_REFUSED("payment_refused"),
-        AUTHORIZATION_REJECT("authorization_reject"),
-        ACCOUNT_BLOCKED("account_blocked"),
-        ILLEGAL_PARAM_EXT_AUTH_SUCCESS_URI("illegal_param_ext_auth_success_uri"),
-        ILLEGAL_PARAM_EXT_AUTH_FAIL_URI("illegal_param_ext_auth_fail_uri");
-
-        public final String code;
-
-        TestResult(String code) {
-            this.code = code;
-        }
-    }
-
-    /**
      * Builder for {@link com.yandex.money.api.methods.ProcessPayment}.
      */
-    public static class Builder {
-        private Status status;
-        private Error error;
+    public static final class Builder extends BaseProcessPayment.Builder {
+
         private String paymentId;
         private BigDecimal balance;
-        private String invoiceId;
         private String payer;
         private String payee;
         private BigDecimal creditAmount;
         private String accountUnblockUri;
         private String payeeUid;
         private String holdForPickupLink;
-        private String acsUri;
-        private Map<String, String> acsParams;
-        private Long nextRetry;
         private DigitalGoods digitalGoods;
 
-        /**
-         * @param status status of process payment
-         */
-        public Builder setStatus(Status status) {
-            this.status = status;
-            return this;
-        }
-
-        /**
-         * @param error error code
-         */
-        public Builder setError(Error error) {
-            this.error = error;
-            return this;
-        }
-
-        /**
-         * @param paymentId payment id
-         */
         public Builder setPaymentId(String paymentId) {
             this.paymentId = paymentId;
             return this;
         }
 
-        /**
-         * @param balance account's balance
-         */
         public Builder setBalance(BigDecimal balance) {
             this.balance = balance;
             return this;
         }
 
-        /**
-         * @param invoiceId invoice id of successful operation
-         */
-        public Builder setInvoiceId(String invoiceId) {
-            this.invoiceId = invoiceId;
-            return this;
-        }
-
-        /**
-         * @param payer payer's account number
-         */
         public Builder setPayer(String payer) {
             this.payer = payer;
             return this;
         }
 
-        /**
-         * @param payee payee's account number
-         */
         public Builder setPayee(String payee) {
             this.payee = payee;
             return this;
         }
 
-        /**
-         * @param creditAmount this amount payee will receive
-         */
         public Builder setCreditAmount(BigDecimal creditAmount) {
             this.creditAmount = creditAmount;
             return this;
         }
 
-        /**
-         * @param accountUnblockUri for locked accounts URI that can be used to unlock it
-         */
         public Builder setAccountUnblockUri(String accountUnblockUri) {
             this.accountUnblockUri = accountUnblockUri;
             return this;
@@ -291,41 +312,11 @@ public class ProcessPayment extends BaseProcessPayment {
             return this;
         }
 
-        /**
-         * @param holdForPickupLink link for payment receiving
-         */
         public Builder setHoldForPickupLink(String holdForPickupLink) {
             this.holdForPickupLink = holdForPickupLink;
             return this;
         }
 
-        /**
-         * @param acsUri address for 3D Secure authorization
-         */
-        public Builder setAcsUri(String acsUri) {
-            this.acsUri = acsUri;
-            return this;
-        }
-
-        /**
-         * @param acsParams POST parameters for 3D Secure authorization (key-value pairs)
-         */
-        public Builder setAcsParams(Map<String, String> acsParams) {
-            this.acsParams = acsParams;
-            return this;
-        }
-
-        /**
-         * @param nextRetry recommended time interval between process payment requests
-         */
-        public Builder setNextRetry(Long nextRetry) {
-            this.nextRetry = nextRetry;
-            return this;
-        }
-
-        /**
-         * @param digitalGoods received digital goods
-         */
         public Builder setDigitalGoods(DigitalGoods digitalGoods) {
             this.digitalGoods = digitalGoods;
             return this;
@@ -336,39 +327,8 @@ public class ProcessPayment extends BaseProcessPayment {
          *
          * @return {@link ProcessPayment} instance
          */
-        public ProcessPayment createProcessPayment() {
-            return new ProcessPayment(status, error, paymentId, balance, invoiceId, payer, payee,
-                    creditAmount, accountUnblockUri, payeeUid, holdForPickupLink, acsUri,
-                    acsParams == null ? new HashMap<String, String>() : acsParams, nextRetry,
-                    digitalGoods);
-        }
-    }
-
-    private static final class Deserializer implements JsonDeserializer<ProcessPayment> {
-        @Override
-        public ProcessPayment deserialize(JsonElement json, Type typeOfT,
-                                          JsonDeserializationContext context)
-                throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-            return new Builder()
-                    .setStatus(Status.parse(JsonUtils.getMandatoryString(object, MEMBER_STATUS)))
-                    .setError(Error.parse(JsonUtils.getString(object, MEMBER_ERROR)))
-                    .setPaymentId(JsonUtils.getString(object, "payment_id"))
-                    .setBalance(JsonUtils.getBigDecimal(object, "balance"))
-                    .setInvoiceId(JsonUtils.getString(object, "invoice_id"))
-                    .setPayer(JsonUtils.getString(object, "payer"))
-                    .setPayee(JsonUtils.getString(object, "payee"))
-                    .setCreditAmount(JsonUtils.getBigDecimal(object, "credit_amount"))
-                    .setAccountUnblockUri(JsonUtils.getString(object, "account_unblock_uri"))
-                    .setPayeeUid(JsonUtils.getString(object, "payee_uid"))
-                    .setHoldForPickupLink(JsonUtils.getString(object, "hold_for_pickup_link"))
-                    .setAcsUri(JsonUtils.getString(object, MEMBER_ACS_URI))
-                    .setAcsParams(object.has(MEMBER_ACS_PARAMS) ?
-                            JsonUtils.map(object.getAsJsonObject(MEMBER_ACS_PARAMS)) : null)
-                    .setNextRetry(JsonUtils.getLong(object, MEMBER_NEXT_RETRY))
-                    .setDigitalGoods(DigitalGoods.createFromJson(object.get("digital_goods")))
-                    .createProcessPayment();
+        public ProcessPayment create() {
+            return new ProcessPayment(this);
         }
     }
 }

@@ -34,13 +34,13 @@ import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.net.DefaultApiClient;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.OAuth2Session;
 import com.yandex.money.api.net.OnResponseReady;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
 

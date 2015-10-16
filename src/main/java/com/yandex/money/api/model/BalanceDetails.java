@@ -24,12 +24,9 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.yandex.money.api.typeadapters.BalanceDetailsTypeAdapter;
 
 import java.math.BigDecimal;
-import java.util.Objects;
 
 /**
  * Detailed balance info.
@@ -94,18 +91,6 @@ public class BalanceDetails {
         this.hold = hold;
     }
 
-    /**
-     * Creates {@link com.yandex.money.api.model.BalanceDetails} from JSON.
-     *
-     * @param element JSON object
-     * @return {@link com.yandex.money.api.model.BalanceDetails}
-     * @deprecated use {@link BalanceDetailsTypeAdapter#fromJson(JsonElement)} instead
-     */
-    @Deprecated
-    public static BalanceDetails createFromJson(JsonElement element) {
-        return BalanceDetailsTypeAdapter.getInstance().fromJson(element);
-    }
-
     @Override
     public String toString() {
         return "BalanceDetails{" +
@@ -119,22 +104,29 @@ public class BalanceDetails {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj instanceof BalanceDetails) {
-            BalanceDetails details = (BalanceDetails) obj;
-            return total.equals(details.total) && available.equals(details.available) &&
-                    Objects.equals(depositionPending, details.depositionPending) &&
-                    Objects.equals(blocked, details.blocked) &&
-                    Objects.equals(debt, details.debt) && Objects.equals(hold, details.hold);
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BalanceDetails that = (BalanceDetails) o;
+
+        return total.equals(that.total) &&
+                available.equals(that.available) &&
+                !(depositionPending != null ? !depositionPending.equals(that.depositionPending)
+                        : that.depositionPending != null) &&
+                !(blocked != null ? !blocked.equals(that.blocked) : that.blocked != null) &&
+                !(debt != null ? !debt.equals(that.debt) : that.debt != null) &&
+                !(hold != null ? !hold.equals(that.hold) : that.hold != null);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(total, available, depositionPending, blocked, debt, hold);
+        int result = total.hashCode();
+        result = 31 * result + available.hashCode();
+        result = 31 * result + (depositionPending != null ? depositionPending.hashCode() : 0);
+        result = 31 * result + (blocked != null ? blocked.hashCode() : 0);
+        result = 31 * result + (debt != null ? debt.hashCode() : 0);
+        result = 31 * result + (hold != null ? hold.hashCode() : 0);
+        return result;
     }
 }

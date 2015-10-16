@@ -1,0 +1,5 @@
+{
+  "type": "date",
+  "name": "receipt_date",
+  "label": "Дата постановления"
+}

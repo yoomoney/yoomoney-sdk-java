@@ -29,6 +29,8 @@ import com.yandex.money.api.net.MethodResponse;
 
 import java.math.BigDecimal;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Base class for request payment operations.
  *
@@ -36,34 +38,44 @@ import java.math.BigDecimal;
  */
 public abstract class BaseRequestPayment implements MethodResponse {
 
-    protected static final String MEMBER_STATUS = "status";
-    protected static final String MEMBER_ERROR = "error";
-    protected static final String MEMBER_REQUEST_ID = "request_id";
-    protected static final String MEMBER_CONTRACT_AMOUNT = "contract_amount";
-
+    /**
+     * Status of the request.
+     */
     public final Status status;
-    public final Error error;
-    public final String requestId;
-    public final BigDecimal contractAmount;
 
     /**
-     * Constructor.
-     *
-     * @param status status of the request
-     * @param error error code
-     * @param requestId unique request id
-     * @param contractAmount contract amount
+     * Error code if exists.
      */
-    protected BaseRequestPayment(Status status, Error error, String requestId,
-                                 BigDecimal contractAmount) {
+    public final Error error;
 
-        if (status == Status.SUCCESS && requestId == null) {
-            throw new IllegalArgumentException("requestId is null when status is success");
+    /**
+     * Request id.
+     */
+    public final String requestId;
+
+    /**
+     * Contract amount.
+     */
+    public final BigDecimal contractAmount;
+
+    protected BaseRequestPayment(Builder builder) {
+        checkNotNull(builder.status, "status");
+        switch (builder.status) {
+            case SUCCESS:
+                checkNotNull(builder.requestId, "requestId");
+                checkNotNull(builder.contractAmount, "contractAmount");
+                break;
+            case REFUSED:
+                checkNotNull(builder.error, "error");
+                if(builder.error == Error.NOT_ENOUGH_FUNDS) {
+                    checkNotNull(builder.contractAmount, "contractAmount");
+                }
+                break;
         }
-        this.status = status;
-        this.error = error;
-        this.requestId = requestId;
-        this.contractAmount = contractAmount;
+        this.status = builder.status;
+        this.error = builder.error;
+        this.requestId = builder.requestId;
+        this.contractAmount = builder.contractAmount;
     }
 
     @Override
@@ -74,6 +86,29 @@ public abstract class BaseRequestPayment implements MethodResponse {
                 ", requestId='" + requestId + '\'' +
                 ", contractAmount=" + contractAmount +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BaseRequestPayment that = (BaseRequestPayment) o;
+
+        return status == that.status &&
+                error == that.error &&
+                !(requestId != null ? !requestId.equals(that.requestId) : that.requestId != null) &&
+                !(contractAmount != null ? !contractAmount.equals(that.contractAmount) :
+                        that.contractAmount != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = status.hashCode();
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        result = 31 * result + (requestId != null ? requestId.hashCode() : 0);
+        result = 31 * result + (contractAmount != null ? contractAmount.hashCode() : 0);
+        return result;
     }
 
     public enum Status {
@@ -96,5 +131,35 @@ public abstract class BaseRequestPayment implements MethodResponse {
             }
             return UNKNOWN;
         }
+    }
+
+    public static abstract class Builder {
+
+        private Status status;
+        private String requestId;
+        private Error error;
+        private BigDecimal contractAmount;
+
+        public final Builder setContractAmount(BigDecimal contractAmount) {
+            this.contractAmount = contractAmount;
+            return this;
+        }
+
+        public final Builder setRequestId(String requestId) {
+            this.requestId = requestId;
+            return this;
+        }
+
+        public final Builder setError(Error error) {
+            this.error = error;
+            return this;
+        }
+
+        public final Builder setStatus(Status status) {
+            this.status = status;
+            return this;
+        }
+
+        public abstract BaseRequestPayment create();
     }
 }

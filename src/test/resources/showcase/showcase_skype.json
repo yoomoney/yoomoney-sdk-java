@@ -1,0 +1,43 @@
+{
+  "title": "Skype",
+  "form": [
+    {
+      "type": "text",
+      "name": "FormComment",
+      "value": "Skype",
+      "label": "Название",
+      "required": false
+    },
+    {
+      "type": "text",
+      "name": "skypename",
+      "label": "Логин в Skype"
+    },
+    {
+      "type": "amount",
+      "name": "netSum",
+      "value": "0.00",
+      "label": "Сумма",
+      "min": 0.01,
+      "step": 0.01,
+      "max": 375,
+      "currency": "EUR"
+    },
+    {
+      "type": "submit",
+      "label": "Заплатить"
+    }
+  ],
+  "money_source": [
+    "wallet",
+    "cards",
+    "payment-card",
+    "cash"
+  ],
+  "hidden_fields": {
+    "ContractTemplateID": "525923",
+    "ShopID": "14061",
+    "ShopArticleID": "71747",
+    "ShowCaseID": "6101"
+  }
+}

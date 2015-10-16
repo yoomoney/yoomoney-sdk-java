@@ -1,0 +1,8 @@
+{
+  "type": "number",
+  "name": "qty",
+  "label": "Количество, шт.",
+  "step": 1,
+  "min": 10,
+  "max": 20
+}

@@ -35,7 +35,7 @@ public enum AllowedMoneySource {
     CASH("cash"),
     PAYMENT_CARD("payment-card"),
     WALLET("wallet"),
-    UNKNOWN("unknown");
+    NULL(null);
 
     /**
      * code
@@ -53,11 +53,14 @@ public enum AllowedMoneySource {
      * @return type of money source allowed
      */
     public static AllowedMoneySource parse(String code) {
+        if (code == null) {
+            return NULL;
+        }
         for (AllowedMoneySource value : values()) {
-            if (value.code.equals(code)) {
+            if (code.equals(value.code)) {
                 return value;
             }
         }
-        return UNKNOWN;
+        return NULL;
     }
 }

@@ -24,18 +24,13 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.RevokeTypeAdapter;
+import com.yandex.money.api.typeadapters.TokenTypeAdapter;
 import com.yandex.money.api.utils.Strings;
-
-import java.lang.reflect.Type;
 
 /**
  * Access token.
@@ -51,7 +46,7 @@ public class Token implements MethodResponse {
      * Constructor.
      *
      * @param accessToken access token itself
-     * @param error error code
+     * @param error       error code
      */
     public Token(String accessToken, Error error) {
         this.accessToken = accessToken;
@@ -66,6 +61,24 @@ public class Token implements MethodResponse {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Token token = (Token) o;
+
+        return !(accessToken != null ? !accessToken.equals(token.accessToken) :
+                token.accessToken != null) && error == token.error;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = accessToken != null ? accessToken.hashCode() : 0;
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        return result;
+    }
+
     /**
      * Request for access token.
      */
@@ -74,8 +87,8 @@ public class Token implements MethodResponse {
         /**
          * Constructor.
          *
-         * @param code temporary code
-         * @param clientId application's client id
+         * @param code        temporary code
+         * @param clientId    application's client id
          * @param redirectUri redirect uri
          */
         public Request(String code, String clientId, String redirectUri) {
@@ -85,18 +98,18 @@ public class Token implements MethodResponse {
         /**
          * Constructor.
          *
-         * @param code temporary code
-         * @param clientId application's client id
-         * @param redirectUri redirect uri
+         * @param code         temporary code
+         * @param clientId     application's client id
+         * @param redirectUri  redirect uri
          * @param clientSecret a secret word for verifying application's authenticity.
          */
         public Request(String code, String clientId, String redirectUri, String clientSecret) {
-            super(Token.class, new Deserializer());
+            super(Token.class, TokenTypeAdapter.getInstance());
             if (Strings.isNullOrEmpty(code)) {
-                throw new NullPointerException("code is null or empty");
+                throw new IllegalArgumentException("code is null or empty");
             }
             if (Strings.isNullOrEmpty(clientId)) {
-                throw new NullPointerException("clientId is null or empty");
+                throw new IllegalArgumentException("clientId is null or empty");
             }
             addParameter("code", code);
             addParameter("client_id", clientId);
@@ -114,17 +127,7 @@ public class Token implements MethodResponse {
     /**
      * Revokes access token.
      */
-    public static final class Revoke extends PostRequest<Object> {
-
-        private static final JsonDeserializer<Object> STUB_DESERIALIZER =
-                new JsonDeserializer<Object>() {
-                    @Override
-                    public Object deserialize(JsonElement json, Type typeOfT,
-                                              JsonDeserializationContext context)
-                            throws JsonParseException {
-                        return null;
-                    }
-                };
+    public static final class Revoke extends PostRequest<Revoke> {
 
         /**
          * Revoke only one token.
@@ -139,25 +142,13 @@ public class Token implements MethodResponse {
          * @param revokeAll if {@code true} all bound tokens will be also revoked
          */
         public Revoke(boolean revokeAll) {
-            super(Object.class, STUB_DESERIALIZER);
+            super(Revoke.class, RevokeTypeAdapter.getInstance());
             addParameter("revoke-all", revokeAll);
         }
 
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/revoke";
-        }
-    }
-
-    private static final class Deserializer implements JsonDeserializer<Token> {
-
-        @Override
-        public Token deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-                throws JsonParseException {
-
-            JsonObject object = json.getAsJsonObject();
-            return new Token(JsonUtils.getString(object, "access_token"),
-                    Error.parse(JsonUtils.getString(object, "error")));
         }
     }
 }

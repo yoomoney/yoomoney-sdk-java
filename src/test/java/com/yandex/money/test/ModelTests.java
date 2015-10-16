@@ -25,12 +25,29 @@
 package com.yandex.money.test;
 
 import com.yandex.money.api.methods.AccountInfo;
-import com.yandex.money.api.model.*;
+import com.yandex.money.api.model.AccountStatus;
+import com.yandex.money.api.model.AccountType;
+import com.yandex.money.api.model.Avatar;
+import com.yandex.money.api.model.BalanceDetails;
+import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.ExternalCard;
+import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.model.showcase.AmountType;
+import com.yandex.money.api.model.showcase.CustomFee;
+import com.yandex.money.api.model.showcase.NoFee;
 import com.yandex.money.api.model.showcase.StdFee;
-import com.yandex.money.api.typeadapters.*;
+import com.yandex.money.api.typeadapters.AccountInfoTypeAdapter;
+import com.yandex.money.api.typeadapters.AvatarTypeAdapter;
+import com.yandex.money.api.typeadapters.BalanceDetailsTypeAdapter;
+import com.yandex.money.api.typeadapters.CardTypeAdapter;
+import com.yandex.money.api.typeadapters.ErrorTypeAdapter;
+import com.yandex.money.api.typeadapters.ExternalCardTypeAdapter;
+import com.yandex.money.api.typeadapters.FeeTypeAdapter;
+import com.yandex.money.api.typeadapters.TypeAdapter;
+import com.yandex.money.api.typeadapters.YandexMoneyCardTypeAdapter;
 import com.yandex.money.api.utils.Currency;
+
 import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -84,6 +101,16 @@ public class ModelTests {
                 AmountType.NET_AMOUNT), FeeTypeAdapter.getInstance());
     }
 
+    @Test
+    public void testNoFee() {
+        try {
+            performTest(NoFee.getInstance(), FeeTypeAdapter.getInstance());
+            Assert.fail();
+        } catch (NullPointerException e) {
+            // does nothing
+        }
+    }
+
     private static <T> void performTest(T value, TypeAdapter<T> adapter) {
         Assert.assertEquals(adapter.fromJson(adapter.toJsonTree(value)), value);
     }
@@ -100,7 +127,7 @@ public class ModelTests {
                 .setLinkedCards(Arrays.asList(createCard(), createCard()))
                 .setAdditionalServices(Arrays.asList("service1", "service2"))
                 .setYandexMoneyCards(Arrays.asList(createYandexMoneyCard(), createYandexMoneyCard()))
-                .createAccountInfo();
+                .create();
     }
 
     private static Avatar createAvatar() {
@@ -136,5 +163,10 @@ public class ModelTests {
                 .setPanFragment("1234 56** **** 7890")
                 .setId("id");
         return builder.create();
+    }
+
+    @Test
+    void testCustomFee() {
+        performTest(CustomFee.getInstance(), FeeTypeAdapter.getInstance());
     }
 }

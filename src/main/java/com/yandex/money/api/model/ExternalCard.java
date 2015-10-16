@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.JsonElement;
-import com.yandex.money.api.typeadapters.ExternalCardTypeAdapter;
 import com.yandex.money.api.utils.Strings;
 
 /**
@@ -38,39 +36,16 @@ public class ExternalCard extends Card {
     public final String fundingSourceType;
     public final String moneySourceToken;
 
-    /**
-     * Constructor.
-     *
-     * @param panFragment panned fragment of card's number
-     * @param type type of a card
-     * @deprecated use {@link com.yandex.money.api.model.ExternalCard.Builder} instead
-     */
-    @Deprecated
-    public ExternalCard(String panFragment, Type type, String fundingSourceType,
-                        String moneySourceToken) {
-
-        this((Builder) new Builder()
-                .setFundingSourceType(fundingSourceType)
-                .setMoneySourceToken(moneySourceToken)
-                .setPanFragment(panFragment)
-                .setType(type));
-    }
-
-    ExternalCard(Builder builder) {
+    protected ExternalCard(Builder builder) {
         super(builder);
         if (Strings.isNullOrEmpty(builder.fundingSourceType)) {
-            throw new NullPointerException("fundingSourceType is null or empty");
+            throw new IllegalArgumentException("fundingSourceType is null or empty");
         }
         if (Strings.isNullOrEmpty(builder.moneySourceToken)) {
-            throw new NullPointerException("money source token is null or empty");
+            throw new IllegalArgumentException("money source token is null or empty");
         }
         fundingSourceType = builder.fundingSourceType;
         moneySourceToken = builder.moneySourceToken;
-    }
-
-    @Deprecated
-    public static ExternalCard createFromJson(JsonElement jsonElement) {
-        return ExternalCardTypeAdapter.getInstance().fromJson(jsonElement);
     }
 
     @Override

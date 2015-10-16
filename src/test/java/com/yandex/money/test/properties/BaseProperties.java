@@ -24,6 +24,8 @@
 
 package com.yandex.money.test.properties;
 
+import com.yandex.money.api.utils.Strings;
+
 import java.util.Properties;
 
 /**
@@ -34,8 +36,8 @@ public abstract class BaseProperties {
     private final Properties properties = new Properties();
 
     public BaseProperties(String resource) {
-        if (resource == null || resource.isEmpty()) {
-            throw new NullPointerException("resource is null or empty");
+        if (Strings.isNullOrEmpty(resource)) {
+            throw new IllegalArgumentException("resource is null or empty");
         }
 
         try {

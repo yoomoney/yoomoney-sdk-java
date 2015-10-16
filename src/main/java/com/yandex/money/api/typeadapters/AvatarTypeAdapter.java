@@ -33,8 +33,8 @@ import com.yandex.money.api.model.Avatar;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryDateTime;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryDateTime;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 
 /**
  * Type adapter for {@link Avatar}.
@@ -59,11 +59,6 @@ public final class AvatarTypeAdapter extends BaseTypeAdapter<Avatar> {
     }
 
     @Override
-    protected Class<Avatar> getType() {
-        return Avatar.class;
-    }
-
-    @Override
     public Avatar deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
@@ -77,5 +72,10 @@ public final class AvatarTypeAdapter extends BaseTypeAdapter<Avatar> {
         object.addProperty(MEMBER_URL, src.url);
         object.addProperty(MEMBER_TS, src.timestamp.toString());
         return object;
+    }
+
+    @Override
+    protected Class<Avatar> getType() {
+        return Avatar.class;
     }
 }

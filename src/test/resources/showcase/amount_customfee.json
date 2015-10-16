@@ -1,0 +1,11 @@
+{
+  "type": "amount",
+  "name": "sum",
+  "label": "Сумма",
+  "min": 0.01,
+  "step": 0.01,
+  "currency": "RUB",
+  "fee": {
+    "type": "custom"
+  }
+}

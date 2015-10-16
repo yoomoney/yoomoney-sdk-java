@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.utils;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Common strings operations.
  *
@@ -52,9 +54,7 @@ public final class Strings {
      * @return {@code true} if digits only
      */
     public static boolean containsDigitsOnly(String value) {
-        if (value == null) {
-            throw new NullPointerException("value is null");
-        }
+        checkNotNull(value, "value");
         return value.matches("\\d*");
     }
 
@@ -66,12 +66,8 @@ public final class Strings {
      * @return concatenated string
      */
     public static String concatenate(String[] array, String splitter) {
-        if (array == null) {
-            throw new NullPointerException("array is null");
-        }
-        if (splitter == null) {
-            throw new NullPointerException("splitter is null");
-        }
+        checkNotNull(array, "array");
+        checkNotNull(splitter, "splitter");
         if (array.length == 0) {
             return "";
         }
@@ -92,9 +88,7 @@ public final class Strings {
      * @return array of strings
      */
     public static String[] split(String str, int n) {
-        if (str == null) {
-            throw new NullPointerException("str is null");
-        }
+        checkNotNull(str, "str");
         if (n <= 0) {
             throw new IllegalArgumentException("n should be greater than 0");
         }
