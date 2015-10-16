@@ -48,14 +48,14 @@ public final class Common {
         }
     }
 
-    public static void checkNotEmpty(Collection<?> collection, String name) {
-        if (collection == null || collection.isEmpty()) {
+    public static void checkNotEmpty(Collection<?> value, String name) {
+        if (value == null || value.isEmpty()) {
             throw new IllegalArgumentException(name + " is null or empty");
         }
     }
 
-    public static void checkNotEmpty(Map<?, ?> collection, String name) {
-        if (collection == null || collection.isEmpty()) {
+    public static void checkNotEmpty(Map<?, ?> value, String name) {
+        if (value == null || value.isEmpty()) {
             throw new IllegalArgumentException(name + " is null or empty");
         }
     }
