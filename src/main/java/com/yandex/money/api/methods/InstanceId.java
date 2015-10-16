@@ -29,8 +29,8 @@ import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
-import com.yandex.money.api.utils.Strings;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -61,6 +61,7 @@ public class InstanceId implements MethodResponse {
                 checkNotNull(error, "error");
                 break;
         }
+
         this.status = status;
         this.error = error;
         this.instanceId = instanceId;
@@ -145,9 +146,7 @@ public class InstanceId implements MethodResponse {
          */
         public Request(String clientId) {
             super(InstanceId.class, InstanceIdTypeAdapter.getInstance());
-            if (Strings.isNullOrEmpty(clientId)) {
-                throw new IllegalArgumentException("clientId is null or empty");
-            }
+            checkNotEmpty(clientId, "clientId");
             addParameter("client_id", clientId);
         }
 

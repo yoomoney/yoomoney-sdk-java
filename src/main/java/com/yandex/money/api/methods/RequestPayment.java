@@ -32,13 +32,13 @@ import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.RequestPaymentTypeAdapter;
-import com.yandex.money.api.utils.Strings;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -222,10 +222,8 @@ public class RequestPayment extends BaseRequestPayment {
          * @return new request instance.
          */
         public static Request newInstance(String patternId, Map<String, String> params) {
-            Strings.checkNotNullAndNotEmpty(patternId, "patternId");
-            if (params == null || params.isEmpty()) {
-                throw new IllegalArgumentException("params is null or empty");
-            }
+            checkNotEmpty(patternId, "patternId");
+            checkNotEmpty(params, "params");
             return new Request(patternId, params);
         }
 
@@ -236,9 +234,7 @@ public class RequestPayment extends BaseRequestPayment {
          * @return new request instance.
          */
         public static Request newInstance(PaymentParams paymentParams) {
-            if (paymentParams == null) {
-                throw new IllegalArgumentException("paymentParams is null");
-            }
+            checkNotNull(paymentParams, "paymentParams");
             return newInstance(paymentParams.getPatternId(), paymentParams.makeParams());
         }
 

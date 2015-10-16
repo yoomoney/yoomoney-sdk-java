@@ -31,6 +31,8 @@ import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.OperationDetailsTypeAdapter;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
+
 /**
  * Operation details result.
  *
@@ -94,6 +96,7 @@ public class OperationDetails implements MethodResponse {
          */
         public Request(String operationId) {
             super(OperationDetails.class, OperationDetailsTypeAdapter.getInstance());
+            checkNotEmpty(operationId, "operationId");
             addParameter("operation_id", operationId);
         }
 

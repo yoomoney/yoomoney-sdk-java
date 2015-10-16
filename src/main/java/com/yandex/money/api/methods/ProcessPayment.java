@@ -33,6 +33,7 @@ import com.yandex.money.api.typeadapters.ProcessPaymentTypeAdapter;
 
 import java.math.BigDecimal;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -100,6 +101,7 @@ public class ProcessPayment extends BaseProcessPayment {
                 }
                 break;
         }
+
         this.paymentId = builder.paymentId;
         this.balance = builder.balance;
         this.payer = builder.payer;
@@ -217,13 +219,11 @@ public class ProcessPayment extends BaseProcessPayment {
          *                          successful
          * @param extAuthFailUri uri which will be used for redirection if operation is failed
          */
-        public Request(String requestId, MoneySource moneySource, String csc,
-                       String extAuthSuccessUri, String extAuthFailUri) {
+        public Request(String requestId, MoneySource moneySource, String csc, String extAuthSuccessUri,
+                       String extAuthFailUri) {
 
             super(ProcessPayment.class, ProcessPaymentTypeAdapter.getInstance());
-            if (requestId == null || requestId.isEmpty()) {
-                throw new IllegalArgumentException("requestId is null or empty");
-            }
+            checkNotEmpty(requestId, "requestId");
 
             if (moneySource != null) {
                 addParameter("money_source", moneySource.id);

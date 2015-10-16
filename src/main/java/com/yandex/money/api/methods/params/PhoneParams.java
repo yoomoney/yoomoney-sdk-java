@@ -24,11 +24,12 @@
 
 package com.yandex.money.api.methods.params;
 
-import com.yandex.money.api.utils.Strings;
-
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Convenience class for phone top up parameters.
@@ -37,21 +38,14 @@ import java.util.Map;
  */
 public final class PhoneParams extends PaymentParams {
 
-    public static final String PATTERN_ID = "phone-topup";
-
-    private static final String PARAM_PHONE_NUMBER = "phone-number";
-    private static final String PARAM_AMOUNT = "amount";
-
     public static PhoneParams newInstance(String number, BigDecimal amount) {
-        if (Strings.isNullOrEmpty(number))
-            throw new IllegalArgumentException(PARAM_PHONE_NUMBER + " is null or empty");
-        if (amount == null)
-            throw new IllegalArgumentException(PARAM_AMOUNT + " is null or empty");
+        checkNotEmpty(number, "number");
+        checkNotNull(amount, "amount");
 
         HashMap<String, String> params = new HashMap<>();
-        params.put(PARAM_PHONE_NUMBER, number);
-        params.put(PARAM_AMOUNT, amount.toPlainString());
-        return new PhoneParams(PATTERN_ID, params);
+        params.put("amount", amount.toPlainString());
+        params.put("phone-number", number);
+        return new PhoneParams("phone-topup", params);
     }
 
     private PhoneParams(String patternId, Map<String, String> paymentParams) {

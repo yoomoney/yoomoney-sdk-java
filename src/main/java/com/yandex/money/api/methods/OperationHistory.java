@@ -30,7 +30,6 @@ import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.OperationHistoryTypeAdapter;
-
 import org.joda.time.DateTime;
 
 import java.util.Collections;
@@ -63,6 +62,7 @@ public class OperationHistory implements MethodResponse {
      */
     public OperationHistory(Error error, String nextRecord, List<Operation> operations) {
         checkNotNull(operations, "operations");
+
         this.error = error;
         this.nextRecord = nextRecord;
         this.operations = Collections.unmodifiableList(operations);
@@ -181,6 +181,7 @@ public class OperationHistory implements MethodResponse {
          * Builder for a {@link com.yandex.money.api.methods.OperationHistory.Request}.
          */
         public static class Builder {
+
             private Set<FilterType> types;
             private String label;
             private DateTime from;

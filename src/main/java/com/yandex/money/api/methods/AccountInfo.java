@@ -35,12 +35,12 @@ import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.AccountInfoTypeAdapter;
 import com.yandex.money.api.utils.Currency;
-import com.yandex.money.api.utils.Strings;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -101,9 +101,7 @@ public class AccountInfo implements MethodResponse {
     public final List<YandexMoneyCard> yandexMoneyCards;
 
     private AccountInfo(Builder builder) {
-        if (Strings.isNullOrEmpty(builder.account)) {
-            throw new IllegalArgumentException("account is null or empty");
-        }
+        checkNotEmpty(builder.account, "account");
         checkNotNull(builder.balance, "balance");
         checkNotNull(builder.currency, "currency");
         checkNotNull(builder.accountStatus, "accountStatus");
@@ -112,6 +110,7 @@ public class AccountInfo implements MethodResponse {
         checkNotNull(builder.linkedCards, "linkedCards");
         checkNotNull(builder.additionalServices, "additionalServices");
         checkNotNull(builder.yandexMoneyCards, "yandexMoneyCards");
+
         account = builder.account;
         balance = builder.balance;
         currency = builder.currency;

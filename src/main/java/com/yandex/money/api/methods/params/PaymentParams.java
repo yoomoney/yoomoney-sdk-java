@@ -27,6 +27,9 @@ package com.yandex.money.api.methods.params;
 import java.util.Collections;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * @author Anton Ermak (ermak@yamoney.ru).
  */
@@ -36,6 +39,9 @@ public abstract class PaymentParams {
     public final Map<String, String> paymentParams;
 
     PaymentParams(String patternId, Map<String, String> paymentParams) {
+        checkNotEmpty(patternId, "patternId");
+        checkNotNull(paymentParams, "paymentParams");
+
         this.patternId = patternId;
         this.paymentParams = paymentParams;
     }

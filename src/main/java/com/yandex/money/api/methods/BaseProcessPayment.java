@@ -63,6 +63,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
             case EXT_AUTH_REQUIRED:
                 checkNotNull(builder.acsUri, "acsUri");
         }
+
         this.status = builder.status;
         this.error = builder.error;
         this.invoiceId = builder.invoiceId;

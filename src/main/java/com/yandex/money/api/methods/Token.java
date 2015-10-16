@@ -30,7 +30,8 @@ import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.RevokeTypeAdapter;
 import com.yandex.money.api.typeadapters.TokenTypeAdapter;
-import com.yandex.money.api.utils.Strings;
+
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 
 /**
  * Access token.
@@ -105,12 +106,9 @@ public class Token implements MethodResponse {
          */
         public Request(String code, String clientId, String redirectUri, String clientSecret) {
             super(Token.class, TokenTypeAdapter.getInstance());
-            if (Strings.isNullOrEmpty(code)) {
-                throw new IllegalArgumentException("code is null or empty");
-            }
-            if (Strings.isNullOrEmpty(clientId)) {
-                throw new IllegalArgumentException("clientId is null or empty");
-            }
+            checkNotEmpty(code, "code");
+            checkNotEmpty(code, "clientId");
+
             addParameter("code", code);
             addParameter("client_id", clientId);
             addParameter("grant_type", "authorization_code");

@@ -30,6 +30,7 @@ import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.IncomingTransferRejectTypeAdapter;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -53,6 +54,7 @@ public class IncomingTransferReject implements MethodResponse {
         if (status == Status.REFUSED) {
             checkNotNull(error, "error");
         }
+
         this.status = status;
         this.error = error;
     }
@@ -131,9 +133,7 @@ public class IncomingTransferReject implements MethodResponse {
          */
         public Request(String operationId) {
             super(IncomingTransferReject.class, IncomingTransferRejectTypeAdapter.getInstance());
-            if (operationId == null || operationId.isEmpty()) {
-                throw new IllegalArgumentException("operationId is null or empty");
-            }
+            checkNotEmpty(operationId, "operationId");
             addParameter("operation_id", operationId);
         }
 

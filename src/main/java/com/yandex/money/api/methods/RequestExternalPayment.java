@@ -28,9 +28,11 @@ import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.RequestExternalPaymentTypeAdapter;
-import com.yandex.money.api.utils.Strings;
 
 import java.util.Map;
+
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Context of an external payment.
@@ -104,10 +106,9 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * @param params payment parameters.
          * @return new request instance.
          */
-        public static Request newInstance(String instanceId, String patternId,
-                                          Map<String, String> params) {
-            Strings.checkNotNullAndNotEmpty(instanceId, "instanceId");
-            Strings.checkNotNullAndNotEmpty(patternId, "patternId");
+        public static Request newInstance(String instanceId, String patternId, Map<String, String> params) {
+            checkNotEmpty(instanceId, "instanceId");
+            checkNotEmpty(patternId, "patternId");
 
             if (params == null || params.isEmpty()) {
                 throw new IllegalArgumentException("params is null or empty");
@@ -129,9 +130,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * @return new request instance.
          */
         public static Request newInstance(String instanceId, PaymentParams paymentParams) {
-            if (paymentParams == null) {
-                throw new IllegalArgumentException("paymentParams is null");
-            }
+            checkNotNull(paymentParams, "paymentParams");
             return Request.newInstance(instanceId, paymentParams.getPatternId(),
                     paymentParams.makeParams());
         }

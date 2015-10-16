@@ -28,7 +28,8 @@ import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.ProcessExternalPaymentTypeAdapter;
-import com.yandex.money.api.utils.Strings;
+
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 
 /**
  * Process external payment.
@@ -65,8 +66,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
 
         ProcessExternalPayment that = (ProcessExternalPayment) o;
 
-        return !(externalCard != null ? !externalCard.equals(that.externalCard)
-                : that.externalCard != null);
+        return !(externalCard != null ? !externalCard.equals(that.externalCard) : that.externalCard != null);
     }
 
     @Override
@@ -91,10 +91,9 @@ public class ProcessExternalPayment extends BaseProcessPayment {
          * @param extAuthFailUri    fail URI to use if payment failed
          * @param requestToken      {@code true} if money source token is required
          */
-        public Request(String instanceId, String requestId, String extAuthSuccessUri,
-                       String extAuthFailUri, boolean requestToken) {
-            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, requestToken, null,
-                    null);
+        public Request(String instanceId, String requestId, String extAuthSuccessUri, String extAuthFailUri,
+                       boolean requestToken) {
+            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, requestToken, null, null);
         }
 
         /**
@@ -108,29 +107,20 @@ public class ProcessExternalPayment extends BaseProcessPayment {
          * @param externalCard      money source token of a saved card
          * @param csc               Card Security Code for a saved card.
          */
-        public Request(String instanceId, String requestId, String extAuthSuccessUri,
-                       String extAuthFailUri, ExternalCard externalCard, String csc) {
+        public Request(String instanceId, String requestId, String extAuthSuccessUri, String extAuthFailUri,
+                       ExternalCard externalCard, String csc) {
             this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, false, externalCard,
                     csc);
         }
 
-        private Request(String instanceId, String requestId, String extAuthSuccessUri,
-                        String extAuthFailUri, boolean requestToken, ExternalCard externalCard,
-                        String csc) {
+        private Request(String instanceId, String requestId, String extAuthSuccessUri, String extAuthFailUri,
+                        boolean requestToken, ExternalCard externalCard, String csc) {
 
             super(ProcessExternalPayment.class, ProcessExternalPaymentTypeAdapter.getInstance());
-            if (Strings.isNullOrEmpty(instanceId)) {
-                throw new IllegalArgumentException("instanceId is null or empty");
-            }
-            if (Strings.isNullOrEmpty(requestId)) {
-                throw new IllegalArgumentException("requestId is null or empty");
-            }
-            if (Strings.isNullOrEmpty(extAuthSuccessUri)) {
-                throw new IllegalArgumentException("extAuthSuccessUri is null or empty");
-            }
-            if (Strings.isNullOrEmpty(extAuthFailUri)) {
-                throw new IllegalArgumentException("extAuthFailUri is null or empty");
-            }
+            checkNotEmpty(instanceId, "instanceId");
+            checkNotEmpty(requestId, "requestId");
+            checkNotEmpty(extAuthSuccessUri, "extAuthSuccessUri");
+            checkNotEmpty(extAuthFailUri, "extAuthFailUri");
 
             addParameter("instance_id", instanceId);
             addParameter("request_id", requestId);

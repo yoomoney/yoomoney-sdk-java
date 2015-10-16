@@ -30,6 +30,7 @@ import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.IncomingTransferAcceptTypeAdapter;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -54,8 +55,9 @@ public class IncomingTransferAccept implements MethodResponse {
      * @param extActionUri                    address to perform external action for successful
      *                                        acceptance
      */
-    public IncomingTransferAccept(Status status, Error error,
-                                  Integer protectionCodeAttemptsAvailable, String extActionUri) {
+    public IncomingTransferAccept(Status status, Error error, Integer protectionCodeAttemptsAvailable,
+                                  String extActionUri) {
+
         checkNotNull(status, "status");
         switch (status) {
             case REFUSED:
@@ -68,6 +70,7 @@ public class IncomingTransferAccept implements MethodResponse {
                     checkNotNull(extActionUri, "extActionUri");
                 }
         }
+
         this.status = status;
         this.error = error;
         this.protectionCodeAttemptsAvailable = protectionCodeAttemptsAvailable;
@@ -81,12 +84,11 @@ public class IncomingTransferAccept implements MethodResponse {
 
         IncomingTransferAccept that = (IncomingTransferAccept) o;
 
-        return status == that.status &&
-                error == that.error && !(protectionCodeAttemptsAvailable != null ?
-                !protectionCodeAttemptsAvailable.equals(that.protectionCodeAttemptsAvailable) :
-                    that.protectionCodeAttemptsAvailable != null) &&
-                !(extActionUri != null ? !extActionUri.equals(that.extActionUri) :
-                        that.extActionUri != null);
+        return status == that.status && error == that.error &&
+                !(protectionCodeAttemptsAvailable != null ?
+                        !protectionCodeAttemptsAvailable.equals(that.protectionCodeAttemptsAvailable) :
+                        that.protectionCodeAttemptsAvailable != null) &&
+                !(extActionUri != null ? !extActionUri.equals(that.extActionUri) : that.extActionUri != null);
     }
 
     @Override
@@ -159,9 +161,7 @@ public class IncomingTransferAccept implements MethodResponse {
          */
         public Request(String operationId, String protectionCode) {
             super(IncomingTransferAccept.class, IncomingTransferAcceptTypeAdapter.getInstance());
-            if (operationId == null || operationId.isEmpty()) {
-                throw new IllegalArgumentException("operationId is null or empty");
-            }
+            checkNotEmpty(operationId, "operationId");
             addParameter("operation_id", operationId);
             addParameter("protection_code", protectionCode);
         }

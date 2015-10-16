@@ -24,11 +24,11 @@
 
 package com.yandex.money.api.methods.params;
 
-import com.yandex.money.api.utils.Strings;
-
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 
 /**
  * Convenience class for P2P payment parameters.
@@ -37,10 +37,8 @@ import java.util.Map;
  */
 public final class P2pTransferParams extends PaymentParams {
 
-    public static final String PATTERN_ID = "p2p";
-
     private P2pTransferParams(Map<String, String> paymentParams) {
-        super(PATTERN_ID, paymentParams);
+        super("p2p", paymentParams);
     }
 
     /**
@@ -59,7 +57,7 @@ public final class P2pTransferParams extends PaymentParams {
         private String message;
 
         public Builder(String to) {
-            Strings.checkNotNullAndNotEmpty(to, "to");
+            checkNotEmpty(to, "to");
             this.to = to;
         }
 
@@ -126,53 +124,35 @@ public final class P2pTransferParams extends PaymentParams {
         private Map<String, String> makeParams() {
             HashMap<String, String> params = new HashMap<>();
 
-            params.put(Params.TO.code, to);
+            params.put("to", to);
             setAmount(params);
 
             if (comment != null) {
-                params.put(Params.COMMENT.code, comment);
+                params.put("comment", comment);
             }
             if (message != null) {
-                params.put(Params.MESSAGE.code, message);
+                params.put("message", message);
             }
             if (label != null) {
-                params.put(Params.LABEL.code, label);
+                params.put("label", label);
             }
             if (codepro != null) {
-                params.put(Params.CODEPRO.code, codepro.toString());
+                params.put("codepro", codepro.toString());
             }
             if (expirePeriod != null) {
-                params.put(Params.EXPIRE.code, expirePeriod.toString());
+                params.put("expire_period", expirePeriod.toString());
             }
             return params;
         }
 
         private void setAmount(Map<String, String> params) {
             if (amount == null && amountDue == null) {
-                throw new IllegalStateException("One of \"amount\" and \"amountDue\" is mandatory");
+                throw new IllegalArgumentException("One of \"amount\" and \"amountDue\" is mandatory");
             }
             if (amount == null) {
-                params.put(Params.AMOUNT_DUE.code, amountDue.toPlainString());
+                params.put("amount_due", amountDue.toPlainString());
             } else {
-                params.put(Params.AMOUNT.code, amount.toPlainString());
-            }
-        }
-
-        private enum Params {
-
-            AMOUNT_DUE("amount_due"),
-            AMOUNT("amount"),
-            CODEPRO("codepro"),
-            COMMENT("comment"),
-            EXPIRE("expire_period"),
-            LABEL("label"),
-            MESSAGE("message"),
-            TO("to");
-
-            public final String code;
-
-            Params(String code) {
-                this.code = code;
+                params.put("amount", amount.toPlainString());
             }
         }
     }

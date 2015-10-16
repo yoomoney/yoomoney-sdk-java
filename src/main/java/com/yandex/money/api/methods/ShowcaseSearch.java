@@ -31,11 +31,11 @@ import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.GetRequest;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseSearchTypeAdapter;
-import com.yandex.money.api.utils.Strings;
 
 import java.util.Collections;
 import java.util.List;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -44,7 +44,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class ShowcaseSearch {
+public class ShowcaseSearch {
 
     /**
      * Error code. May be {@code null}.
@@ -130,9 +130,8 @@ public final class ShowcaseSearch {
          */
         public Request(String query, int records) {
             super(ShowcaseSearch.class, ShowcaseSearchTypeAdapter.getInstance());
-            if (Strings.isNullOrEmpty(query)) {
-                throw new IllegalArgumentException("query is null or empty");
-            }
+            checkNotEmpty(query, "query");
+
             addParameter("query", query);
             addParameter("records", records);
         }

@@ -72,6 +72,7 @@ public abstract class BaseRequestPayment implements MethodResponse {
                 }
                 break;
         }
+
         this.status = builder.status;
         this.error = builder.error;
         this.requestId = builder.requestId;

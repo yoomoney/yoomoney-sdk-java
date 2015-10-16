@@ -24,17 +24,39 @@
 
 package com.yandex.money.api.utils;
 
+import java.util.Collection;
+import java.util.Map;
+
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
+ * @author Slava Yaesvich (vyasevich@yamoney.ru)
  */
 public final class Common {
 
     private Common() {
     }
 
-    public static void checkNotNull(Object object, String name) {
-        if (object == null) {
+    public static void checkNotNull(Object value, String name) {
+        if (value == null) {
             throw new NullPointerException(name + " is null");
+        }
+    }
+
+    public static void checkNotEmpty(String value, String name) {
+        if (Strings.isNullOrEmpty(value)) {
+            throw new IllegalArgumentException(name + " is null or empty");
+        }
+    }
+
+    public static void checkNotEmpty(Collection<?> collection, String name) {
+        if (collection == null || collection.isEmpty()) {
+            throw new IllegalArgumentException(name + " is null or empty");
+        }
+    }
+
+    public static void checkNotEmpty(Map<?, ?> collection, String name) {
+        if (collection == null || collection.isEmpty()) {
+            throw new IllegalArgumentException(name + " is null or empty");
         }
     }
 }
