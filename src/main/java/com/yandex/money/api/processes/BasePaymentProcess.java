@@ -30,6 +30,8 @@ import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.OAuth2Session;
 import com.yandex.money.api.utils.Threads;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Base implementation for all payment processes.
  *
@@ -54,12 +56,8 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      * @param parameterProvider parameter's provider
      */
     public BasePaymentProcess(OAuth2Session session, ParameterProvider parameterProvider) {
-        if (session == null) {
-            throw new NullPointerException("session is null");
-        }
-        if (parameterProvider == null) {
-            throw new NullPointerException("parameterProvider is null");
-        }
+        checkNotNull(session, "session");
+        checkNotNull(parameterProvider, "parameterProvider");
         this.session = session;
         this.parameterProvider = parameterProvider;
         this.state = State.CREATED;
@@ -119,9 +117,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      * @param savedState saved state
      */
     public final void restoreSavedState(SavedState<RP, PP> savedState) {
-        if (savedState == null) {
-            throw new NullPointerException("saved state is null");
-        }
+        checkNotNull(savedState, "saved state");
         this.requestPayment = savedState.getRequestPayment();
         this.processPayment = savedState.getProcessPayment();
         this.state = savedState.getState();
@@ -261,9 +257,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
          * @param state state
          */
         protected SavedState(RP requestPayment, PP processPayment, State state) {
-            if (state == null) {
-                throw new NullPointerException("state is null");
-            }
+            checkNotNull(state, "state");
             this.state = state;
 
             switch (state) {
@@ -272,20 +266,14 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
                     this.processPayment = null;
                     break;
                 case STARTED:
-                    if (requestPayment == null) {
-                        throw new NullPointerException("requestPayment is null");
-                    }
+                    checkNotNull(requestPayment, "requestPayment");
                     this.requestPayment = requestPayment;
                     this.processPayment = null;
                     break;
                 case PROCESSING:
                 case COMPLETED:
-                    if (requestPayment == null) {
-                        throw new NullPointerException("requestPayment is null");
-                    }
-                    if (processPayment == null) {
-                        throw new NullPointerException("processPayment is null");
-                    }
+                    checkNotNull(requestPayment, "requestPayment");
+                    checkNotNull(processPayment, "processPayment");
                     this.requestPayment = requestPayment;
                     this.processPayment = processPayment;
                     break;

@@ -52,6 +52,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
      */
     protected BaseProcessPayment(Builder builder) {
         checkNotNull(builder.status, "status");
+        checkNotNull(builder.acsParams, "acsParams");
         switch (builder.status) {
             case SUCCESS:
                 checkNotNull(builder.invoiceId, "invoiceId");
@@ -61,9 +62,6 @@ public abstract class BaseProcessPayment implements MethodResponse {
                 break;
             case EXT_AUTH_REQUIRED:
                 checkNotNull(builder.acsUri, "acsUri");
-        }
-        if (builder.acsParams == null) {
-            throw new NullPointerException("acsParams is null");
         }
         this.status = builder.status;
         this.error = builder.error;

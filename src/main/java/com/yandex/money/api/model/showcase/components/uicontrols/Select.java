@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Control for selecting amongst a set of options.
  *
@@ -180,12 +182,8 @@ public final class Select extends ParameterControl {
          * @param value actual value.
          */
         public Option(String label, String value, Group group) {
-            if (label == null) {
-                throw new NullPointerException("label is null");
-            }
-            if (value == null) {
-                throw new NullPointerException("value is null");
-            }
+            checkNotNull(label, "label");
+            checkNotNull(value, "value");
             this.label = label;
             this.value = value;
             this.group = group;
@@ -248,9 +246,7 @@ public final class Select extends ParameterControl {
         }
 
         public Builder addOption(Option option) {
-            if (option == null) {
-                throw new NullPointerException("option is null");
-            }
+            checkNotNull(option, "option");
             options.add(option);
             return this;
         }

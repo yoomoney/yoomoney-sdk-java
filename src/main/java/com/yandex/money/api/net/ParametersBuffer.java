@@ -37,6 +37,8 @@ import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Buffers request parameters and creates request body for different methods. It also encodes keys
  * and values if needed using UTF-8 charset.
@@ -45,11 +47,10 @@ import java.util.Map;
  */
 public final class ParametersBuffer {
 
-    private static final String UTF8_NAME = "UTF-8";
-    private static final Charset UTF8_CHARSET = Charset.forName(UTF8_NAME);
     private static final MediaType CONTENT_TYPE = MediaType.parse(
             MimeTypes.Application.X_WWW_FORM_URLENCODED);
-
+    private static final String UTF8_NAME = "UTF-8";
+    private static final Charset UTF8_CHARSET = Charset.forName(UTF8_NAME);
     private Map<String, String> params = Collections.emptyMap();
 
     /**
@@ -59,9 +60,7 @@ public final class ParametersBuffer {
      * @return itself
      */
     public ParametersBuffer setParams(Map<String, String> params) {
-        if (params == null) {
-            throw new NullPointerException("params is null");
-        }
+        checkNotNull(params, "params");
         this.params = params;
         return this;
     }
@@ -121,6 +120,10 @@ public final class ParametersBuffer {
         return buffer.getBytes();
     }
 
+    private static String encode(String value) throws UnsupportedEncodingException {
+        return URLEncoder.encode(value, UTF8_NAME);
+    }
+
     private void iterate(Buffer buffer) {
         for (Map.Entry<String, String> param : params.entrySet()) {
             String key = param.getKey();
@@ -135,10 +138,6 @@ public final class ParametersBuffer {
 
             buffer.nextParameter(key, value);
         }
-    }
-
-    private static String encode(String value) throws UnsupportedEncodingException {
-        return URLEncoder.encode(value, UTF8_NAME);
     }
 
     private interface Buffer {

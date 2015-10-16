@@ -75,7 +75,7 @@ public final class ToStringBuilder {
 
     private void checkName(String name) {
         if (Strings.isNullOrEmpty(name)) {
-            throw new NullPointerException("name is null or empty");
+            throw new IllegalArgumentException("name is null or empty");
         }
     }
 }

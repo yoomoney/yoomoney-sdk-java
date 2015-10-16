@@ -26,6 +26,8 @@ package com.yandex.money.api.net;
 
 import org.joda.time.DateTime;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * This class wraps HTTP resource obtained from remove server.
  *
@@ -60,12 +62,8 @@ public final class HttpResourceResponse<T> {
 
     HttpResourceResponse(ResourceState resourceState, String contentType, DateTime lastModified,
                          DateTime expires, T document) {
-        if (resourceState == null) {
-            throw new NullPointerException("resourceState is null");
-        }
-        if (lastModified == null) {
-            throw new NullPointerException("lastModified is null");
-        }
+        checkNotNull(resourceState, "resourceState");
+        checkNotNull(lastModified, "lastModified");
 
         this.resourceState = resourceState;
         this.contentType = contentType;

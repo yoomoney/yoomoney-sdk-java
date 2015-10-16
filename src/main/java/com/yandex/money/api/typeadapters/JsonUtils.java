@@ -41,6 +41,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Static class for JSON parsing process.
  *
@@ -218,9 +220,7 @@ public final class JsonUtils {
      */
     public static DateTime getDateTime(JsonObject object, String memberName,
                                        DateTimeFormatter formatter) {
-        if (formatter == null) {
-            throw new NullPointerException("formatter is null");
-        }
+        checkNotNull(formatter, "formatter");
         JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
         return primitive == null ? null : DateTime.parse(primitive.getAsString(), formatter);
     }
@@ -260,9 +260,7 @@ public final class JsonUtils {
             return null;
         }
 
-        if (converter == null) {
-            throw new NullPointerException("converter is null");
-        }
+        checkNotNull(converter, "converter");
         List<T> result = new ArrayList<>(array.size());
         for (JsonElement element : array) {
             result.add(converter.fromJson(element));
@@ -355,9 +353,7 @@ public final class JsonUtils {
         if (collection == null) {
             return null;
         }
-        if (converter == null) {
-            throw new NullPointerException("converter is null");
-        }
+        checkNotNull(converter, "converter");
         JsonArray array = new JsonArray();
         for (T value : collection) {
             array.add(converter.toJsonTree(value));
@@ -376,23 +372,17 @@ public final class JsonUtils {
     }
 
     private static void checkObject(JsonObject object) {
-        if (object == null) {
-            throw new NullPointerException("JSON object is null.");
-        }
+        checkNotNull(object, "object");
     }
 
     private static void checkMemberName(String memberName) {
-        if (memberName == null) {
-            throw new NullPointerException("Member name is null.");
-        }
+        checkNotNull(memberName, "memberName");
         if (memberName.length() == 0) {
             throw new IllegalArgumentException("Member is an empty string.");
         }
     }
 
     private static void checkMandatoryValue(Object value, String memberName) {
-        if (value == null) {
-            throw new NullPointerException("mandatory value \'" + memberName + "\' is null");
-        }
+        checkNotNull(value, "mandatory value \'" + memberName + "\'");
     }
 }

@@ -37,6 +37,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Provides various resources from Yandex.Money server.
  *
@@ -232,9 +234,7 @@ public final class DocumentProvider extends AbstractSession {
             if (Strings.isNullOrEmpty(url)) {
                 throw new IllegalArgumentException("url is null or empty");
             }
-            if (request == null) {
-                throw new NullPointerException("request is null or empty");
-            }
+            checkNotNull(request, "request");
 
             this.url = url;
             addHeaders(request.getHeaders());

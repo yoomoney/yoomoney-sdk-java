@@ -39,10 +39,10 @@ public class ExternalCard extends Card {
     protected ExternalCard(Builder builder) {
         super(builder);
         if (Strings.isNullOrEmpty(builder.fundingSourceType)) {
-            throw new NullPointerException("fundingSourceType is null or empty");
+            throw new IllegalArgumentException("fundingSourceType is null or empty");
         }
         if (Strings.isNullOrEmpty(builder.moneySourceToken)) {
-            throw new NullPointerException("money source token is null or empty");
+            throw new IllegalArgumentException("money source token is null or empty");
         }
         fundingSourceType = builder.fundingSourceType;
         moneySourceToken = builder.moneySourceToken;

@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.model;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Bank card info.
  *
@@ -117,9 +119,7 @@ public class Card extends MoneySource {
         }
 
         public Builder setType(Type type) {
-            if (type == null) {
-                throw new NullPointerException("type is null");
-            }
+            checkNotNull(type, "type");
             this.type = type;
             return this;
         }

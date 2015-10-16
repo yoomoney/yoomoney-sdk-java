@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.model;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Describes digital item, that user can obtain when paying for them.
  */
@@ -52,12 +54,8 @@ public class Good {
      * @param merchantArticleId merchant article id
      */
     public Good(String serial, String secret, String merchantArticleId) {
-        if (serial == null) {
-            throw new NullPointerException("serial is null");
-        }
-        if (secret == null) {
-            throw new NullPointerException("secret is null");
-        }
+        checkNotNull(serial, "serial");
+        checkNotNull(secret, "secret");
         this.serial = serial;
         this.secret = secret;
         this.merchantArticleId = merchantArticleId;

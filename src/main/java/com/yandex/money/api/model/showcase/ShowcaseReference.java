@@ -30,6 +30,8 @@ import com.yandex.money.api.utils.Strings;
 import java.util.Collections;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Element of {@link ShowcaseSearch} class.
  *
@@ -99,9 +101,7 @@ public final class ShowcaseReference {
         if (Strings.isNullOrEmpty(title)) {
             throw new IllegalArgumentException("title is null or empty");
         }
-        if (format == null) {
-            throw new NullPointerException("format is null");
-        }
+        checkNotNull(format, "format");
         this.title = title;
         this.topIndex = topIndex;
         this.url = url;

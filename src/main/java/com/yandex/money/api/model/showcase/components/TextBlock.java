@@ -26,6 +26,8 @@ package com.yandex.money.api.model.showcase.components;
 
 import com.yandex.money.api.utils.ToStringBuilder;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Block of plain text.
  *
@@ -39,9 +41,7 @@ public class TextBlock {
     public final String text;
 
     public TextBlock(String text) {
-        if (text == null) {
-            throw new NullPointerException("text is null");
-        }
+        checkNotNull(text, "text");
         this.text = text;
     }
 
@@ -78,9 +78,7 @@ public class TextBlock {
 
         public WithLink(String label, String link) {
             super(label);
-            if (link == null) {
-                throw new NullPointerException("link is null");
-            }
+            checkNotNull(link, "link");
             this.link = link;
         }
 

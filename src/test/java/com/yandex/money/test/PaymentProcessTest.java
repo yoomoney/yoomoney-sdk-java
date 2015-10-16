@@ -149,7 +149,25 @@ public class PaymentProcessTest {
     }
 
     private void enqueuePaymentProcess() {
-        enqueueResponse("{\"status\":\"success\",\"wallet\":{\"allowed\":true},\"card\":{\"allowed\":\"true\",\"csc_required\":\"true\",\"id\":\"card-385244400\",\"pan_fragment\":\"5280****7918\",\"type\":\"MasterCard\"},\"cards\":{\"allowed\":true,\"csc_required\":true,\"items\":[{\"id\":\"card-385244400\",\"pan_fragment\":\"5280****7918\",\"type\":\"MasterCard\"},{\"id\":\"card-385244401\",\"pan_fragment\":\"4008****7919\",\"type\":\"Visa\"}]},\"request_id\":\"33373230335f343462363963333932636234633130613062623338323265393136323530336564636130623263375f33303030333539313637\",\"balance\":1000}");
+        enqueueResponse("{\n" +
+                "    \"status\": \"success\",\n" +
+                "    \"contract\": \"\",\n" +
+                "    \"balance\": 8.09,\n" +
+                "    \"request_id\": " +
+                "\"313938393033343938345f393436313038303263393537373537626365313563643232303061616165616431653338393438395f3438383132373336\",\n" +
+                "    \"contract_amount\": 1,\n" +
+                "    \"money_source\": {\n" +
+                "        \"cards\": {\n" +
+                "            \"allowed\": false\n" +
+                "        },\n" +
+                "        \"wallet\": {\n" +
+                "            \"allowed\": true\n" +
+                "        },\n" +
+                "        \"card\": {\n" +
+                "            \"allowed\": \"false\"\n" +
+                "        }\n" +
+                "    }\n" +
+                "}");
         enqueueResponse("{\"status\":\"in_progress\",\"next_retry\":1}");
         enqueueResponse("{\"status\":\"success\",\"payment_id\":\"2ABCDE123456789\",\"invoice_id\":\"1234567890123456789\",\"balance\":1000}");
     }

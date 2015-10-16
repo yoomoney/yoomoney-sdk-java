@@ -30,6 +30,8 @@ import com.yandex.money.api.net.ShowcaseContext;
 
 import java.io.IOException;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * This class connects {@link DocumentProvider} and {@link ShowcaseContext} class and provides
  * convenient methods to work with them.
@@ -45,12 +47,8 @@ public class ShowcaseProcess implements Process {
     private final DocumentProvider documentProvider;
 
     public ShowcaseProcess(DocumentProvider documentProvider, ShowcaseContext showcaseContext) {
-        if (documentProvider == null) {
-            throw new NullPointerException("document provider is null");
-        }
-        if (showcaseContext == null) {
-            throw new NullPointerException("showcaseContext is null");
-        }
+        checkNotNull(documentProvider, "documentProvider");
+        checkNotNull(showcaseContext, "showcaseContext");
         this.documentProvider = documentProvider;
         this.showcaseContext = showcaseContext;
     }

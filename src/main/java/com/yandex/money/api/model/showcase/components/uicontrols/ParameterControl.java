@@ -27,6 +27,8 @@ package com.yandex.money.api.model.showcase.components.uicontrols;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.utils.ToStringBuilder;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Base class for all fields with internal state.
  *
@@ -51,9 +53,7 @@ public abstract class ParameterControl extends Control implements Parameter {
 
     protected ParameterControl(Builder builder) {
         super(builder);
-        if (builder.name == null) {
-            throw new NullPointerException("name is null");
-        }
+        checkNotNull(builder.name, "name");
         name = builder.name;
         value = builder.value;
         valueAutoFill = builder.valueAutoFill;

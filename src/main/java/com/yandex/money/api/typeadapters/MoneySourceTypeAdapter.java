@@ -28,6 +28,7 @@ import com.google.gson.JsonObject;
 import com.yandex.money.api.model.MoneySource;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -45,22 +46,14 @@ public final class MoneySourceTypeAdapter {
         }
 
         static <T extends MoneySource.Builder> void deserialize(JsonObject object, T builder) {
-            if (object == null) {
-                throw new NullPointerException("object is null");
-            }
-            if (builder == null) {
-                throw new NullPointerException("builder is null");
-            }
+            checkNotNull(object, "object");
+            checkNotNull(builder, "builder");
             builder.setId(getString(object, MEMBER_ID));
         }
 
         static <T extends MoneySource> void serialize(JsonObject object, T value) {
-            if (object == null) {
-                throw new NullPointerException("object is null");
-            }
-            if (value == null) {
-                throw new NullPointerException("builder is null");
-            }
+            checkNotNull(object, "object");
+            checkNotNull(value, "builder");
             object.addProperty(MEMBER_ID, value.id);
         }
     }

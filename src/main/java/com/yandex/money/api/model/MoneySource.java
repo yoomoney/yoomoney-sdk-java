@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.model;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Some money source: wallet, card, etc.
  *
@@ -37,9 +39,7 @@ public abstract class MoneySource {
     public final String id;
 
     MoneySource(Builder builder) {
-        if (builder == null) {
-            throw new NullPointerException("builder is null");
-        }
+        checkNotNull(builder, "builder");
         id = builder.id;
     }
 

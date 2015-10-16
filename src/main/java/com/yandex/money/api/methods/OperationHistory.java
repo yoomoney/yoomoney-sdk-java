@@ -38,6 +38,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Operation history.
  * <p/>
@@ -60,9 +62,7 @@ public class OperationHistory implements MethodResponse {
      * @param operations list of operations
      */
     public OperationHistory(Error error, String nextRecord, List<Operation> operations) {
-        if (operations == null) {
-            throw new NullPointerException("operations is null");
-        }
+        checkNotNull(operations, "operations");
         this.error = error;
         this.nextRecord = nextRecord;
         this.operations = Collections.unmodifiableList(operations);
@@ -138,9 +138,7 @@ public class OperationHistory implements MethodResponse {
                         String startRecord, Integer records, Boolean details) {
 
             super(OperationHistory.class, OperationHistoryTypeAdapter.getInstance());
-            if (types == null) {
-                throw new NullPointerException("types is null");
-            }
+            checkNotNull(types, "types");
             if (from != null && till != null && from.isAfter(till)) {
                 throw new IllegalArgumentException("\'from\' should be before \'till\'");
             }

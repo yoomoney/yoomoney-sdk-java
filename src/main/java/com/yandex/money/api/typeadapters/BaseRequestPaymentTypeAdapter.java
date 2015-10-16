@@ -32,6 +32,7 @@ import com.yandex.money.api.model.Error;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -53,12 +54,8 @@ final class BaseRequestPaymentTypeAdapter {
 
         static <T extends BaseRequestPayment.Builder> void deserialize(JsonObject object,
                                                                        T builder) {
-            if (object == null) {
-                throw new NullPointerException("object is null");
-            }
-            if (builder == null) {
-                throw new NullPointerException("builder is null");
-            }
+            checkNotNull(object, "object");
+            checkNotNull(builder, "builder");
             builder.setStatus(Status.parse(getMandatoryString(object, MEMBER_STATUS)))
                     .setError(Error.parse(getString(object, MEMBER_ERROR)))
                     .setContractAmount(getBigDecimal(object, MEMBER_CONTRACT_AMOUNT))
@@ -66,12 +63,8 @@ final class BaseRequestPaymentTypeAdapter {
         }
 
         static <T extends BaseRequestPayment> void serialize(JsonObject object, T value) {
-            if (object == null) {
-                throw new NullPointerException("object is null");
-            }
-            if (value == null) {
-                throw new NullPointerException("builder is null");
-            }
+            checkNotNull(object, "object");
+            checkNotNull(value, "builder");
 
             object.addProperty(MEMBER_STATUS, value.status.code);
             if (value.error != null) {

@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * A generic {@link Container} object is special component that can contain other components
  * (items).
@@ -95,9 +97,7 @@ public abstract class Container<T> extends Component {
         }
 
         public Builder addItem(T component) {
-            if (component == null) {
-                throw new NullPointerException("component is null");
-            }
+            checkNotNull(component, "component");
             components.add(component);
             return this;
         }

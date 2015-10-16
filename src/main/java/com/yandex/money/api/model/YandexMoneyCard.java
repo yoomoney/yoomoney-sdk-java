@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.model;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
@@ -95,9 +97,7 @@ public class YandexMoneyCard extends Card {
         private State state = State.UNKNOWN;
 
         public Builder setState(State state) {
-            if (state == null) {
-                throw new NullPointerException("state is null");
-            }
+            checkNotNull(state, "state");
             this.state = state;
             return this;
         }

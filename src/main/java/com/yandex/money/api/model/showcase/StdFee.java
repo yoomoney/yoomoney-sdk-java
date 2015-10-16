@@ -30,15 +30,14 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Standard fee.
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
 public final class StdFee implements Fee {
-
-    private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT = new BigDecimal("0.01");
-    private static final MathContext UNLIMITED_MODE = new MathContext(34, RoundingMode.HALF_UP);
 
     /**
      * Coefficient of amount due.
@@ -56,7 +55,8 @@ public final class StdFee implements Fee {
      * Max fee per transaction.
      */
     public final BigDecimal d;
-
+    private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT = new BigDecimal("0.01");
+    private static final MathContext UNLIMITED_MODE = new MathContext(34, RoundingMode.HALF_UP);
     private final AmountType amountType;
 
     private final BigDecimal revA; // = 1 / (1 + a)
@@ -75,9 +75,7 @@ public final class StdFee implements Fee {
         if (d != null && d.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Coefficient D is negative");
         }
-        if (amountType == null) {
-            throw new NullPointerException("amountType is null");
-        }
+        checkNotNull(amountType, "amountType");
 
         this.a = a;
         this.b = b;

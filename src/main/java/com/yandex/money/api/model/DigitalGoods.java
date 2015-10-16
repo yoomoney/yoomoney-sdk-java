@@ -27,6 +27,8 @@ package com.yandex.money.api.model;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Digital Goods that can be obtained after payment if available.
  *
@@ -51,12 +53,8 @@ public class DigitalGoods {
      * @param bonus bonuses
      */
     public DigitalGoods(List<Good> article, List<Good> bonus) {
-        if (article == null) {
-            throw new NullPointerException("article is null");
-        }
-        if (bonus == null) {
-            throw new NullPointerException("bonus is null");
-        }
+        checkNotNull(article, "article");
+        checkNotNull(bonus, "bonus");
         this.article = Collections.unmodifiableList(article);
         this.bonus = Collections.unmodifiableList(bonus);
     }

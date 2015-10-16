@@ -106,10 +106,10 @@ public class Token implements MethodResponse {
         public Request(String code, String clientId, String redirectUri, String clientSecret) {
             super(Token.class, TokenTypeAdapter.getInstance());
             if (Strings.isNullOrEmpty(code)) {
-                throw new NullPointerException("code is null or empty");
+                throw new IllegalArgumentException("code is null or empty");
             }
             if (Strings.isNullOrEmpty(clientId)) {
-                throw new NullPointerException("clientId is null or empty");
+                throw new IllegalArgumentException("clientId is null or empty");
             }
             addParameter("code", code);
             addParameter("client_id", clientId);

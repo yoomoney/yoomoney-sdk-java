@@ -52,7 +52,7 @@ public class InstanceId implements MethodResponse {
      * @param instanceId instance id if success
      */
     public InstanceId(Status status, Error error, String instanceId) {
-        checkNotNull(instanceId, "status");
+        checkNotNull(status, "status");
         switch (status) {
             case SUCCESS:
                 checkNotNull(instanceId, "instanceId");

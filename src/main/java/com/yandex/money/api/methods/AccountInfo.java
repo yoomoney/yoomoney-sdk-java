@@ -41,6 +41,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Information of user account.
  *
@@ -102,30 +104,14 @@ public class AccountInfo implements MethodResponse {
         if (Strings.isNullOrEmpty(builder.account)) {
             throw new IllegalArgumentException("account is null or empty");
         }
-        if (builder.balance == null) {
-            throw new NullPointerException("balance is null");
-        }
-        if (builder.currency == null) {
-            throw new NullPointerException("currency is null");
-        }
-        if (builder.accountStatus == null) {
-            throw new NullPointerException("accountStatus is null");
-        }
-        if (builder.accountType == null) {
-            throw new NullPointerException("accountType is null");
-        }
-        if (builder.balanceDetails == null) {
-            throw new NullPointerException("balanceDetails is null");
-        }
-        if (builder.linkedCards == null) {
-            throw new NullPointerException("linkedCards is null");
-        }
-        if (builder.additionalServices == null) {
-            throw new NullPointerException("additionalServices is null");
-        }
-        if (builder.yandexMoneyCards == null) {
-            throw new NullPointerException("yandexMoneyCards is null");
-        }
+        checkNotNull(builder.balance, "balance");
+        checkNotNull(builder.currency, "currency");
+        checkNotNull(builder.accountStatus, "accountStatus");
+        checkNotNull(builder.accountType, "accountType");
+        checkNotNull(builder.balanceDetails, "balanceDetails");
+        checkNotNull(builder.linkedCards, "linkedCards");
+        checkNotNull(builder.additionalServices, "additionalServices");
+        checkNotNull(builder.yandexMoneyCards, "yandexMoneyCards");
         account = builder.account;
         balance = builder.balance;
         currency = builder.currency;
