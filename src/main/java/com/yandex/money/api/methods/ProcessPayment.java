@@ -25,12 +25,15 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.DigitalGoods;
+import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.ProcessPaymentTypeAdapter;
 
 import java.math.BigDecimal;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Process payment.
@@ -86,9 +89,16 @@ public class ProcessPayment extends BaseProcessPayment {
      */
     private ProcessPayment(Builder builder) {
         super(builder);
-
-        if (builder.status == Status.SUCCESS && builder.paymentId == null) {
-            throw new NullPointerException("paymentId is null when status is success");
+        switch (status) {
+            case SUCCESS:
+                checkNotNull(builder.paymentId, "paymentId");
+                checkNotNull(builder.balance, "balance");
+                break;
+            case REFUSED:
+                if(error == Error.ACCOUNT_BLOCKED) {
+                    checkNotNull(builder.accountUnblockUri, "accountUnblockUri");
+                }
+                break;
         }
         this.paymentId = builder.paymentId;
         this.balance = builder.balance;

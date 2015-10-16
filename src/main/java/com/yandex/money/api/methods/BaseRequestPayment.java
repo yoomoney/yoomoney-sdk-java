@@ -29,6 +29,8 @@ import com.yandex.money.api.net.MethodResponse;
 
 import java.math.BigDecimal;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Base class for request payment operations.
  *
@@ -57,11 +59,18 @@ public abstract class BaseRequestPayment implements MethodResponse {
     public final BigDecimal contractAmount;
 
     protected BaseRequestPayment(Builder builder) {
-        if (builder.status == null) {
-            throw new NullPointerException("status is null");
-        }
-        if (builder.status == Status.SUCCESS && builder.requestId == null) {
-            throw new IllegalArgumentException("requestId is null when status is success");
+        checkNotNull(builder.status, "status");
+        switch (builder.status) {
+            case SUCCESS:
+                checkNotNull(builder.requestId, "requestId");
+                checkNotNull(builder.contractAmount, "contractAmount");
+                break;
+            case REFUSED:
+                checkNotNull(builder.error, "error");
+                if(builder.error == Error.NOT_ENOUGH_FUNDS) {
+                    checkNotNull(builder.contractAmount, "contractAmount");
+                }
+                break;
         }
         this.status = builder.status;
         this.error = builder.error;

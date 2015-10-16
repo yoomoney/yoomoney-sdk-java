@@ -32,6 +32,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getLong;
 import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullMap;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)
@@ -56,15 +57,10 @@ final class BaseProcessPaymentTypeAdapter {
 
         static <T extends BaseProcessPayment.Builder> void deserialize(JsonObject object,
                                                                        T builder) {
-            if (object == null) {
-                throw new NullPointerException("object is null");
-            }
-            if (builder == null) {
-                throw new NullPointerException("builder is null");
-            }
+            checkNotNull(object, "object");
+            checkNotNull(builder, "builder");
 
-            builder.setStatus(BaseProcessPayment.Status.parse(
-                    getString(object, MEMBER_STATUS)))
+            builder.setStatus(BaseProcessPayment.Status.parse(getString(object, MEMBER_STATUS)))
                     .setError(Error.parse(getString(object, MEMBER_ERROR)))
                     .setInvoiceId(getString(object, MEMBER_INVOICE_ID))
                     .setAcsUri(getString(object, MEMBER_ACS_URI))
@@ -78,16 +74,13 @@ final class BaseProcessPaymentTypeAdapter {
 
 
         static <T extends BaseProcessPayment> void serialize(JsonObject object, T value) {
-            if (object == null) {
-                throw new NullPointerException("object is null");
-            }
-            if (value == null) {
-                throw new NullPointerException("builder is null");
-            }
+            checkNotNull(object, "object");
+            checkNotNull(value, "value");
+
+            object.addProperty(MEMBER_STATUS, value.status.code);
             if (value.error != null) {
                 object.addProperty(MEMBER_ERROR, value.error.code);
             } else {
-                object.addProperty(MEMBER_STATUS, value.status.code);
                 object.addProperty(MEMBER_ACS_URI, value.acsUri);
                 object.addProperty(MEMBER_INVOICE_ID, value.invoiceId);
                 object.add(MEMBER_ACS_PARAMS, toJsonObject(value.acsParams));

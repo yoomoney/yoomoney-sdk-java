@@ -25,6 +25,7 @@
 package com.yandex.money.api.model;
 
 import com.yandex.money.api.utils.Patterns;
+import com.yandex.money.api.utils.Strings;
 
 /**
  * Type of payee identifier.
@@ -76,7 +77,7 @@ public enum PayeeIdentifierType {
      * @return type
      */
     public static PayeeIdentifierType determine(String identifier) {
-        if (identifier == null || identifier.isEmpty()) {
+        if (Strings.isNullOrEmpty(identifier)) {
             return NULL;
         }
 

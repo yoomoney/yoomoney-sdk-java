@@ -31,6 +31,8 @@ import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
 import com.yandex.money.api.utils.Strings;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Instance ID result.
  *
@@ -50,8 +52,14 @@ public class InstanceId implements MethodResponse {
      * @param instanceId instance id if success
      */
     public InstanceId(Status status, Error error, String instanceId) {
-        if (status == null) {
-            throw new NullPointerException("status is null");
+        checkNotNull(instanceId, "status");
+        switch (status) {
+            case SUCCESS:
+                checkNotNull(instanceId, "instanceId");
+                break;
+            case REFUSED:
+                checkNotNull(error, "error");
+                break;
         }
         this.status = status;
         this.error = error;

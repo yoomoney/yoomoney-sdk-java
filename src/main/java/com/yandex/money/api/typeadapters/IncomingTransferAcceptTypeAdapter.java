@@ -67,8 +67,7 @@ public final class IncomingTransferAcceptTypeAdapter extends
 
         JsonObject object = json.getAsJsonObject();
         return new IncomingTransferAccept(
-                IncomingTransferAccept.Status.parse(getMandatoryString(object,
-                        MEMBER_STATUS)),
+                IncomingTransferAccept.Status.parse(getMandatoryString(object, MEMBER_STATUS)),
                 Error.parse(getString(object, MEMBER_ERROR)),
                 getInt(object, MEMBER_CODE_ATTEMPTS),
                 getString(object, MEMBER_EXT_ACTION_URI));

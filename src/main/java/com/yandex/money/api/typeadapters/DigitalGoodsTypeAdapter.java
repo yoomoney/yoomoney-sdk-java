@@ -68,8 +68,7 @@ public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods>
     public JsonElement serialize(DigitalGoods src, Type typeOfSrc,
                                  JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.add(MEMBER_ARTICLE, toJsonArray(src.article,
-                GoodTypeAdapter.getInstance()));
+        object.add(MEMBER_ARTICLE, toJsonArray(src.article, GoodTypeAdapter.getInstance()));
         object.add(MEMBER_BONUS, toJsonArray(src.bonus, GoodTypeAdapter.getInstance()));
         return object;
     }

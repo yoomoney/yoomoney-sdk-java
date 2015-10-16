@@ -31,6 +31,8 @@ import com.yandex.money.api.utils.MillisecondsIn;
 import java.util.Collections;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Base class for all process payment operations.
  *
@@ -49,11 +51,16 @@ public abstract class BaseProcessPayment implements MethodResponse {
      * Constructor.
      */
     protected BaseProcessPayment(Builder builder) {
-        if(builder.status == null) {
-            throw new NullPointerException("status is null");
-        }
-        if (builder.status == Status.EXT_AUTH_REQUIRED && builder.acsUri == null) {
-            throw new NullPointerException("acsUri is null when status is ext_auth_required");
+        checkNotNull(builder.status, "status");
+        switch (builder.status) {
+            case SUCCESS:
+                checkNotNull(builder.invoiceId, "invoiceId");
+                break;
+            case REFUSED:
+                checkNotNull(builder.error, "error");
+                break;
+            case EXT_AUTH_REQUIRED:
+                checkNotNull(builder.acsUri, "acsUri");
         }
         if (builder.acsParams == null) {
             throw new NullPointerException("acsParams is null");
@@ -129,7 +136,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
 
     public static abstract class Builder {
 
-        protected Status status;
+        private Status status;
         private Error error;
         private String invoiceId;
         private String acsUri;

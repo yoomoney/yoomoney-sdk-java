@@ -44,6 +44,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<OperationDetails> {
 
     private static final OperationDetailsTypeAdapter INSTANCE = new OperationDetailsTypeAdapter();
+
     private static final String MEMBER_ERROR = "error";
 
     private OperationDetailsTypeAdapter() {
@@ -67,8 +68,8 @@ public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<Operation
     }
 
     @Override
-    public JsonElement serialize(OperationDetails src, Type typeOfSrc, JsonSerializationContext
-            context) {
+    public JsonElement serialize(OperationDetails src, Type typeOfSrc,
+                                 JsonSerializationContext context) {
         if (src.error != null) {
             JsonObject object = new JsonObject();
             object.addProperty(MEMBER_ERROR, src.error.code);

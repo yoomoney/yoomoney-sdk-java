@@ -30,6 +30,8 @@ import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.IncomingTransferRejectTypeAdapter;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Incoming transfer reject operation.
  *
@@ -47,8 +49,9 @@ public class IncomingTransferReject implements MethodResponse {
      * @param error error code
      */
     public IncomingTransferReject(Status status, Error error) {
-        if (status == null) {
-            throw new NullPointerException("status is null");
+        checkNotNull(status, "status");
+        if (status == Status.REFUSED) {
+            checkNotNull(error, "error");
         }
         this.status = status;
         this.error = error;

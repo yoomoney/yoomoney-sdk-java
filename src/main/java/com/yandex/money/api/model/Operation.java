@@ -30,6 +30,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Operation details.
  */
@@ -161,18 +163,15 @@ public class Operation {
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
      */
     protected Operation(Builder builder) {
-        if (builder.paymentParameters == null) {
-            throw new NullPointerException("payment parameters is null");
-        }
-        if (builder.recipientType == null) {
-            throw new NullPointerException("recipient type is null");
-        }
-        if (builder.type == null) {
-            throw new NullPointerException("type is null");
-        }
-        if (builder.direction == null) {
-            throw new NullPointerException("direction is null");
-        }
+        checkNotNull(builder.operationId, "operationId");
+        checkNotNull(builder.status, "status");
+        checkNotNull(builder.paymentParameters, "paymentParameters");
+        checkNotNull(builder.recipientType, "recipientType");
+        checkNotNull(builder.type, "type");
+        checkNotNull(builder.direction, "direction");
+        checkNotNull(builder.amount, "amount");
+        checkNotNull(builder.datetime, "datetime");
+        checkNotNull(builder.title, "title");
 
         this.operationId = builder.operationId;
         this.status = builder.status;
@@ -242,33 +241,31 @@ public class Operation {
         return codepro == operation.codepro &&
                 repeatable == operation.repeatable &&
                 favorite == operation.favorite &&
-                !(operationId != null ? !operationId.equals(operation.operationId) :
-                        operation.operationId != null) &&
+                operationId.equals(operation.operationId) &&
                 status == operation.status &&
-                !(patternId != null ? !patternId.equals(operation.patternId)
-                        : operation.patternId != null) &&
+                !(patternId != null ? !patternId.equals(operation.patternId) :
+                        operation.patternId != null) &&
                 direction == operation.direction &&
-                !(amount != null ? !amount.equals(operation.amount) : operation.amount != null) &&
+                amount.equals(operation.amount) &&
                 !(amountDue != null ? !amountDue.equals(operation.amountDue) :
                         operation.amountDue != null) &&
                 !(fee != null ? !fee.equals(operation.fee) : operation.fee != null) &&
-                !(datetime != null ? !datetime.isEqual(operation.datetime)
-                        : operation.datetime != null) &&
-                !(title != null ? !title.equals(operation.title) : operation.title != null) &&
+                datetime.isEqual(operation.datetime) &&
+                title.equals(operation.title) &&
                 !(sender != null ? !sender.equals(operation.sender) : operation.sender != null) &&
-                !(recipient != null ? !recipient.equals(operation.recipient)
-                        : operation.recipient != null) &&
+                !(recipient != null ? !recipient.equals(operation.recipient) :
+                        operation.recipient != null) &&
                 recipientType == operation.recipientType &&
-                !(message != null ? !message.equals(operation.message)
-                        : operation.message != null) &&
-                !(comment != null ? !comment.equals(operation.comment)
-                        : operation.comment != null) &&
+                !(message != null ? !message.equals(operation.message) :
+                        operation.message != null) &&
+                !(comment != null ? !comment.equals(operation.comment) :
+                        operation.comment != null) &&
                 !(protectionCode != null ? !protectionCode.equals(operation.protectionCode) :
                         operation.protectionCode != null) &&
-                !(expires != null ? !expires.equals(operation.expires)
-                        : operation.expires != null) &&
-                !(answerDatetime != null ? !answerDatetime.isEqual(operation.answerDatetime)
-                        : operation.answerDatetime != null) &&
+                !(expires != null ? !expires.isEqual(operation.expires) :
+                        operation.expires != null) &&
+                !(answerDatetime != null ? !answerDatetime.isEqual(operation.answerDatetime) :
+                        operation.answerDatetime != null) &&
                 !(label != null ? !label.equals(operation.label) : operation.label != null) &&
                 !(details != null ? !details.equals(operation.details) :
                         operation.details != null) &&
@@ -280,15 +277,15 @@ public class Operation {
 
     @Override
     public int hashCode() {
-        int result = operationId != null ? operationId.hashCode() : 0;
-        result = 31 * result + (status != null ? status.hashCode() : 0);
+        int result = operationId.hashCode();
+        result = 31 * result + status.hashCode();
         result = 31 * result + (patternId != null ? patternId.hashCode() : 0);
         result = 31 * result + direction.hashCode();
-        result = 31 * result + (amount != null ? amount.hashCode() : 0);
+        result = 31 * result + amount.hashCode();
         result = 31 * result + (amountDue != null ? amountDue.hashCode() : 0);
         result = 31 * result + (fee != null ? fee.hashCode() : 0);
-        result = 31 * result + (datetime != null ? datetime.hashCode() : 0);
-        result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + datetime.hashCode();
+        result = 31 * result + title.hashCode();
         result = 31 * result + (sender != null ? sender.hashCode() : 0);
         result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
         result = 31 * result + recipientType.hashCode();

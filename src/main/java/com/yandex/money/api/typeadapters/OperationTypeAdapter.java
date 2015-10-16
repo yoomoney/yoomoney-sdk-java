@@ -38,6 +38,8 @@ import static com.yandex.money.api.typeadapters.JsonUtils.ISO_FORMATTER;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBoolean;
 import static com.yandex.money.api.typeadapters.JsonUtils.getDateTime;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryDateTime;
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullMap;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
@@ -96,21 +98,19 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         final JsonObject o = json.getAsJsonObject();
         return new Operation.Builder()
                 .setOperationId(getMandatoryString(o, MEMBER_OPERATION_ID))
-                .setStatus(Operation.Status.parse(getString(o, MEMBER_STATUS)))
-                .setDatetime(getDateTime(o, MEMBER_DATETIME))
+                .setStatus(Operation.Status.parse(getMandatoryString(o, MEMBER_STATUS)))
+                .setDatetime(getMandatoryDateTime(o, MEMBER_DATETIME))
                 .setTitle(getMandatoryString(o, MEMBER_TITLE))
                 .setPatternId(getString(o, MEMBER_PATTERN_ID))
-                .setDirection(Operation.Direction.parse(
-                        getMandatoryString(o, MEMBER_DIRECTION)))
-                .setAmount(getBigDecimal(o, MEMBER_AMOUNT))
+                .setDirection(Operation.Direction.parse(getMandatoryString(o, MEMBER_DIRECTION)))
+                .setAmount(getMandatoryBigDecimal(o, MEMBER_AMOUNT))
                 .setAmountDue(getBigDecimal(o, MEMBER_AMOUNT_DUE))
                 .setFee(getBigDecimal(o, MEMBER_FEE))
                 .setLabel(getString(o, MEMBER_LABEL))
-                .setType(Operation.Type.parse(getString(o, MEMBER_TYPE)))
+                .setType(Operation.Type.parse(getMandatoryString(o, MEMBER_TYPE)))
                 .setSender(getString(o, MEMBER_SENDER))
                 .setRecipient(getString(o, MEMBER_RECIPIENT))
-                .setRecipientType(PayeeIdentifierType.parse(
-                        getString(o, MEMBER_RECIPIENT_TYPE)))
+                .setRecipientType(PayeeIdentifierType.parse(getString(o, MEMBER_RECIPIENT_TYPE)))
                 .setMessage(getString(o, MEMBER_MESSAGE))
                 .setComment(getString(o, MEMBER_COMMENT))
                 .setCodepro(getBoolean(o, MEMBER_CODEPRO))
@@ -134,9 +134,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_TITLE, src.title);
         object.addProperty(MEMBER_DIRECTION, src.direction.code);
         object.addProperty(MEMBER_DATETIME, src.datetime.toString(ISO_FORMATTER));
-        if (src.status != null) {
-            object.addProperty(MEMBER_STATUS, src.status.code);
-        }
+        object.addProperty(MEMBER_STATUS, src.status.code);
         object.addProperty(MEMBER_PATTERN_ID, src.patternId);
         object.addProperty(MEMBER_AMOUNT, src.amount);
         object.addProperty(MEMBER_AMOUNT_DUE, src.amountDue);
@@ -145,9 +143,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_TYPE, src.type.code);
         object.addProperty(MEMBER_SENDER, src.sender);
         object.addProperty(MEMBER_RECIPIENT, src.recipient);
-        if (src.recipientType != null) {
-            object.addProperty(MEMBER_RECIPIENT_TYPE, src.recipientType.code);
-        }
+        object.addProperty(MEMBER_RECIPIENT_TYPE, src.recipientType.code);
         object.addProperty(MEMBER_MESSAGE, src.message);
         object.addProperty(MEMBER_COMMENT, src.comment);
         object.addProperty(MEMBER_CODEPRO, src.codepro);

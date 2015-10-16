@@ -68,8 +68,8 @@ public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<Operation
         JsonObject object = json.getAsJsonObject();
 
         return new OperationHistory(Error.parse(getString(object, MEMBER_ERROR)),
-                getString(object, MEMBER_NEXT_RECORD), getNotNullArray(object, MEMBER_OPERATIONS,
-                OperationTypeAdapter.getInstance()));
+                getString(object, MEMBER_NEXT_RECORD),
+                getNotNullArray(object, MEMBER_OPERATIONS, OperationTypeAdapter.getInstance()));
     }
 
     @Override

@@ -140,23 +140,21 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
                 jsonObject.add(MEMBER_MS_WALLET, wallet);
             }
         }
-        if (cards.size() == 0) {
-            return jsonObject;
-        } else {
+        if (cards.size() != 0) {
             JsonObject jsonCards = new JsonObject();
             jsonCards.addProperty(MEMBER_MS_CSC_REQUIRED, cscRequired);
             jsonCards.addProperty(MEMBER_MS_ALLOWED, true);
             jsonCards.add(MEMBER_MS_ITEMS, cards);
             jsonObject.add(MEMBER_MS_CARDS, jsonCards);
-            return jsonObject;
         }
+        return jsonObject;
     }
 
     private static void deserializeMoneySources(JsonObject object, RequestPayment.Builder builder) {
-        List<MoneySource> moneySources = new ArrayList<>();
 
         JsonObject jsonMoneySources = object.getAsJsonObject(MEMBER_MS);
         if (jsonMoneySources != null) {
+            List<MoneySource> moneySources = new ArrayList<>();
             JsonObject wallet = object.getAsJsonObject(MEMBER_MS_WALLET);
             if (wallet != null && getMandatoryBoolean(wallet, MEMBER_MS_ALLOWED)) {
                 moneySources.add(Wallet.INSTANCE);
@@ -170,7 +168,9 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
                             CardTypeAdapter.getInstance()));
                 }
             }
+            builder.setMoneySources(moneySources);
+        } else {
+            builder.setMoneySources(Collections.<MoneySource>emptyList());
         }
-        builder.setMoneySources(Collections.unmodifiableList(moneySources));
     }
 }

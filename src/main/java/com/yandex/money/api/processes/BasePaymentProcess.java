@@ -183,19 +183,6 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     }
 
     private void executeProcessPayment(final ApiRequest<PP> request) throws Exception {
-        processPayment(request);
-    }
-
-    private <T> T execute(ApiRequest<T> apiRequest) throws Exception {
-        return session.execute(apiRequest);
-    }
-
-    /**
-     * Processes payment.
-     *
-     * @param request api request
-     */
-    private void processPayment(ApiRequest<PP> request) throws Exception {
         BaseProcessPayment.Status previousStatus = processPayment == null ? null :
                 processPayment.status;
         processPayment = execute(request);
@@ -214,6 +201,10 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         }
 
         state = State.COMPLETED;
+    }
+
+    private <T> T execute(ApiRequest<T> apiRequest) throws Exception {
+        return session.execute(apiRequest);
     }
 
     private boolean isCompleted() {

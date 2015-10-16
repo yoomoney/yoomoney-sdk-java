@@ -30,6 +30,8 @@ import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.IncomingTransferAcceptTypeAdapter;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Incoming transfer accept result.
  *
@@ -54,8 +56,17 @@ public class IncomingTransferAccept implements MethodResponse {
      */
     public IncomingTransferAccept(Status status, Error error,
                                   Integer protectionCodeAttemptsAvailable, String extActionUri) {
-        if (status == null) {
-            throw new NullPointerException("status is null");
+        checkNotNull(status, "status");
+        switch (status) {
+            case REFUSED:
+                checkNotNull(error, "error");
+                if(error == Error.ILLEGAL_PARAM_PROTECTION_CODE) {
+                    checkNotNull(protectionCodeAttemptsAvailable,
+                            "protectionCodeAttemptsAvailable");
+                }
+                if(error == Error.EXT_ACTION_REQUIRED) {
+                    checkNotNull(extActionUri, "extActionUri");
+                }
         }
         this.status = status;
         this.error = error;

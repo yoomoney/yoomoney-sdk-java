@@ -27,6 +27,7 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
+import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
@@ -37,6 +38,8 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Context of a payment.
@@ -87,8 +90,19 @@ public class RequestPayment extends BaseRequestPayment {
 
     private RequestPayment(Builder builder) {
         super(builder);
-        if (builder.moneySources == null) {
-            throw new NullPointerException("moneySources is null");
+        checkNotNull(builder.moneySources, "moneySource");
+        switch (status) {
+            case SUCCESS:
+                checkNotNull(builder.balance, "balance");
+                break;
+            case REFUSED:
+                if (error == Error.ACCOUNT_BLOCKED) {
+                    checkNotNull(builder.accountUnblockUri, "accountUnblockUri");
+                }
+                if (error == Error.EXT_ACTION_REQUIRED) {
+                    checkNotNull(builder.extActionUri, "extActionUri");
+                }
+                break;
         }
         this.moneySources = Collections.unmodifiableList(builder.moneySources);
         this.cscRequired = builder.cscRequired;
@@ -275,7 +289,7 @@ public class RequestPayment extends BaseRequestPayment {
             return this;
         }
 
-        public Builder setCscRequired(Boolean cscRequired) {
+        public Builder setCscRequired(boolean cscRequired) {
             this.cscRequired = cscRequired;
             return this;
         }

@@ -66,8 +66,8 @@ public final class IncomingTransferRejectTypeAdapter extends
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new IncomingTransferReject(IncomingTransferReject.Status.parse(
-                getMandatoryString(object, MEMBER_STATUS)),
+        return new IncomingTransferReject(
+                IncomingTransferReject.Status.parse(getMandatoryString(object, MEMBER_STATUS)),
                 Error.parse(getString(object, MEMBER_ERROR)));
     }
 

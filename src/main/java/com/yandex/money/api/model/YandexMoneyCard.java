@@ -69,8 +69,7 @@ public class YandexMoneyCard extends Card {
         ACTIVE_NO_PIN("active_no_pin"),
         AWAITING_ACTIVATION("awaiting_activation"),
         BLOCKED("blocked"),
-        UNKNOWN("unknown"),
-        NULL("null");
+        UNKNOWN("unknown");
 
         public final String code;
 
@@ -80,14 +79,14 @@ public class YandexMoneyCard extends Card {
 
         public static State parse(String code) {
             if (code == null) {
-                return NULL;
+                return UNKNOWN;
             }
             for (State value : values()) {
                 if (code.equals(value.code)) {
                     return value;
                 }
             }
-            return NULL;
+            return UNKNOWN;
         }
     }
 
