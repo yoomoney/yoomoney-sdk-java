@@ -30,6 +30,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
+
 /**
  * Helps to deal with urls.
  *
@@ -48,9 +50,7 @@ public final class UrlEncodedUtils {
      * @return key-value pairs
      */
     public static Map<String, String> parse(String url) throws URISyntaxException {
-        if (Strings.isNullOrEmpty(url)) {
-            throw new IllegalArgumentException("redirectUrl is null or empty");
-        }
+        checkNotEmpty(url, "url");
 
         URI uri = new URI(url);
         String query = uri.getQuery();
