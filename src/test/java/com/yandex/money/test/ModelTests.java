@@ -127,7 +127,7 @@ public class ModelTests {
                 .setLinkedCards(Arrays.asList(createCard(), createCard()))
                 .setAdditionalServices(Arrays.asList("service1", "service2"))
                 .setYandexMoneyCards(Arrays.asList(createYandexMoneyCard(), createYandexMoneyCard()))
-                .createAccountInfo();
+                .create();
     }
 
     private static Avatar createAvatar() {

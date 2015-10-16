@@ -32,6 +32,7 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
+import com.yandex.money.api.utils.Common;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,21 +53,11 @@ public final class Showcase {
 
     private Showcase(Builder builder) {
 
-        if (builder.title == null) {
-            throw new NullPointerException("title is null");
-        }
-        if (builder.hiddenFields == null) {
-            throw new NullPointerException("hiddenFields is null");
-        }
-        if (builder.form == null) {
-            throw new NullPointerException("form is null");
-        }
-        if (builder.moneySources == null) {
-            throw new NullPointerException("moneySources is null");
-        }
-        if (builder.errors == null) {
-            throw new NullPointerException("errors is null");
-        }
+        Common.checkNotNull(builder.title, "title");
+        Common.checkNotNull(builder.hiddenFields, "hiddenFields");
+        Common.checkNotNull(builder.form, "form");
+        Common.checkNotNull(builder.moneySources, "moneySources");
+        Common.checkNotNull(builder.errors, "errors");
         this.title = builder.title;
         this.hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
         this.form = builder.form;
@@ -169,9 +160,7 @@ public final class Showcase {
         public final String alert;
 
         public Error(String name, String alert) {
-            if (alert == null) {
-                throw new NullPointerException("alert is null");
-            }
+            Common.checkNotNull(alert, "alert");
             this.name = name;
             this.alert = alert;
         }
@@ -216,11 +205,8 @@ public final class Showcase {
         private Request(String patternId, String url, Map<String, String> params) {
             super(Showcase.class, ShowcaseTypeAdapter.getInstance());
             if (url != null) {
-                if (params == null) {
-                    throw new NullPointerException("params is null");
-                } else {
-                    addParameters(params);
-                }
+                Common.checkNotNull(params, "params");
+                addParameters(params);
             }
             this.patternId = patternId;
             this.url = url;

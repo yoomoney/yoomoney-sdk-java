@@ -24,13 +24,10 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
-import com.yandex.money.api.typeadapters.AvatarTypeAdapter;
 import com.yandex.money.api.utils.Strings;
-import org.joda.time.DateTime;
 
-import java.util.Objects;
+import org.joda.time.DateTime;
 
 /**
  * Describes avatar from {@link com.yandex.money.api.methods.AccountInfo}.
@@ -75,31 +72,19 @@ public class Avatar {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj instanceof Avatar) {
-            Avatar avatar = (Avatar) obj;
-            return url.equals(avatar.url) && timestamp.isEqual(avatar.timestamp);
-        }
-        return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Avatar avatar = (Avatar) o;
+
+        return url.equals(avatar.url) && timestamp.isEqual(avatar.timestamp);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(url, timestamp);
-    }
-
-    /**
-     * Creates {@link com.yandex.money.api.model.Avatar} from a JSON object.
-     *
-     * @param json JSON
-     * @return {@link com.yandex.money.api.model.Avatar}
-     * @deprecated use {@link AvatarTypeAdapter#fromJson(JsonElement)} instead
-     */
-    @Deprecated
-    public static Avatar createFromJson(JsonElement json) {
-        return AvatarTypeAdapter.getInstance().fromJson(json);
+        int result = url.hashCode();
+        result = 31 * result + timestamp.hashCode();
+        return result;
     }
 }

@@ -34,6 +34,8 @@ import com.yandex.money.api.model.AllowedMoneySource;
 import java.lang.reflect.Type;
 
 /**
+ * Type adapter for {@link AllowedMoneySource}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class AllowedMoneySourceTypeAdapter extends BaseTypeAdapter<AllowedMoneySource> {

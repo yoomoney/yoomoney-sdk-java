@@ -39,31 +39,35 @@ import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.Lis
 import java.lang.reflect.Type;
 import java.util.LinkedHashSet;
 
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
-import static com.yandex.money.api.methods.JsonUtils.getNotNullArray;
-import static com.yandex.money.api.methods.JsonUtils.getString;
-import static com.yandex.money.api.methods.JsonUtils.map;
-import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
-import static com.yandex.money.api.methods.JsonUtils.toJsonObject;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullMap;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
 
 /**
+ * Type adapter for {@link Showcase}.
+ *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
 public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
 
     private static final ShowcaseTypeAdapter INSTANCE = new ShowcaseTypeAdapter();
-
-    private static final String ELEMENT_TITLE = "title";
-    private static final String ELEMENT_HIDDEN_FIELDS = "hidden_fields";
-    private static final String ELEMENT_FORM = "form";
-    private static final String ELEMENT_MONEY_SOURCE = "money_source";
-    private static final String ELEMENT_ERROR = "error";
+    private static final String MEMBER_ERROR = "error";
+    private static final String MEMBER_FORM = "form";
+    private static final String MEMBER_HIDDEN_FIELDS = "hidden_fields";
+    private static final String MEMBER_MONEY_SOURCE = "money_source";
+    private static final String MEMBER_TITLE = "title";
 
     private ShowcaseTypeAdapter() {
         // register type adapters to GSON instance.
         GroupTypeAdapter.getInstance();
     }
 
+    /**
+     * @return instance of this class
+     */
     public static ShowcaseTypeAdapter getInstance() {
         return INSTANCE;
     }
@@ -75,12 +79,12 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         JsonObject root = json.getAsJsonObject();
 
         return new Showcase.Builder()
-                .setTitle(getMandatoryString(root, ELEMENT_TITLE))
-                .setHiddenFields(map(root.get(ELEMENT_HIDDEN_FIELDS).getAsJsonObject()))
-                .setForm(ListDelegate.deserialize(root.getAsJsonArray(ELEMENT_FORM), context))
-                .setMoneySources(new LinkedHashSet<>(getNotNullArray(root, ELEMENT_MONEY_SOURCE,
+                .setTitle(getMandatoryString(root, MEMBER_TITLE))
+                .setHiddenFields(getNotNullMap(root, MEMBER_HIDDEN_FIELDS))
+                .setForm(ListDelegate.deserialize(root.getAsJsonArray(MEMBER_FORM), context))
+                .setMoneySources(new LinkedHashSet<>(getNotNullArray(root, MEMBER_MONEY_SOURCE,
                         AllowedMoneySourceTypeAdapter.getInstance())))
-                .setErrors(getNotNullArray(root, ELEMENT_ERROR, ErrorTypeAdapter.INSTANCE))
+                .setErrors(getNotNullArray(root, MEMBER_ERROR, ErrorTypeAdapter.INSTANCE))
                 .create();
     }
 
@@ -88,14 +92,14 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     public JsonElement serialize(Showcase src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject root = new JsonObject();
 
-        root.addProperty(ELEMENT_TITLE, src.title);
-        root.add(ELEMENT_MONEY_SOURCE, toJsonArray(src.moneySources,
+        root.addProperty(MEMBER_TITLE, src.title);
+        root.add(MEMBER_MONEY_SOURCE, toJsonArray(src.moneySources,
                 AllowedMoneySourceTypeAdapter.getInstance()));
         if (!src.errors.isEmpty()) {
-            root.add(ELEMENT_ERROR, toJsonArray(src.errors, ErrorTypeAdapter.INSTANCE));
+            root.add(MEMBER_ERROR, toJsonArray(src.errors, ErrorTypeAdapter.INSTANCE));
         }
-        root.add(ELEMENT_FORM, ListDelegate.serialize(src.form, context));
-        root.add(ELEMENT_HIDDEN_FIELDS, toJsonObject(src.hiddenFields));
+        root.add(MEMBER_FORM, ListDelegate.serialize(src.form, context));
+        root.add(MEMBER_HIDDEN_FIELDS, toJsonObject(src.hiddenFields));
         return root;
     }
 
@@ -107,9 +111,8 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     private static final class ErrorTypeAdapter extends BaseTypeAdapter<Showcase.Error> {
 
         public static final ErrorTypeAdapter INSTANCE = new ErrorTypeAdapter();
-
-        private static final String MEMBER_NAME = "name";
         private static final String MEMBER_ALERT = "alert";
+        private static final String MEMBER_NAME = "name";
 
         @Override
         public Error deserialize(JsonElement json, Type typeOfT,

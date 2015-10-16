@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Control for selecting amongst a set of options.
  *
@@ -108,9 +110,6 @@ public final class Select extends ParameterControl {
                 .append("selectedOption", selectedOption);
     }
 
-    /**
-     * TODO: is this method required?
-     */
     @Override
     protected void onValueSet(String value) {
         selectedOption = options.get(values.indexOf(value));
@@ -173,9 +172,8 @@ public final class Select extends ParameterControl {
         /**
          * Group of elements which have to be visible when {@link Option} is selected. May be
          * {@code null}.
-         * TODO: constructor?
          */
-        public Group group;
+        public final Group group;
 
         /**
          * Constructor.
@@ -183,15 +181,12 @@ public final class Select extends ParameterControl {
          * @param label textural representation.
          * @param value actual value.
          */
-        public Option(String label, String value) {
-            if (label == null) {
-                throw new NullPointerException("label is null");
-            }
-            if (value == null) {
-                throw new NullPointerException("value is null");
-            }
+        public Option(String label, String value, Group group) {
+            checkNotNull(label, "label");
+            checkNotNull(value, "value");
             this.label = label;
             this.value = value;
+            this.group = group;
         }
 
         /**
@@ -251,9 +246,7 @@ public final class Select extends ParameterControl {
         }
 
         public Builder addOption(Option option) {
-            if (option == null) {
-                throw new NullPointerException("option is null");
-            }
+            checkNotNull(option, "option");
             options.add(option);
             return this;
         }

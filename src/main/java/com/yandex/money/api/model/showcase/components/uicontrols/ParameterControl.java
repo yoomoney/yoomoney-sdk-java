@@ -27,6 +27,8 @@ package com.yandex.money.api.model.showcase.components.uicontrols;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.utils.ToStringBuilder;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Base class for all fields with internal state.
  *
@@ -51,17 +53,13 @@ public abstract class ParameterControl extends Control implements Parameter {
 
     protected ParameterControl(Builder builder) {
         super(builder);
-        if (builder.name == null) {
-            throw new NullPointerException("name is null");
-        }
+        checkNotNull(builder.name, "name");
         name = builder.name;
         value = builder.value;
         valueAutoFill = builder.valueAutoFill;
     }
 
     /**
-     * TODO: remove method field's public modifier.
-     *
      * @return control's name
      */
     @Override
@@ -70,7 +68,7 @@ public abstract class ParameterControl extends Control implements Parameter {
     }
 
     /**
-     * @return default value. May be {@code null}.
+     * @return default value. May be {@code null}
      */
     @Override
     public String getValue() {
@@ -79,10 +77,8 @@ public abstract class ParameterControl extends Control implements Parameter {
 
     /**
      * Sets value.
-     * <p/>
-     * TODO: isValid() call?
      *
-     * @param value input value.
+     * @param value input value
      */
     @Override
     public void setValue(String value) {
@@ -115,11 +111,7 @@ public abstract class ParameterControl extends Control implements Parameter {
         return result;
     }
 
-    /**
-     * Validates control state.
-     *
-     * @return {@code true} if instance is valid and {@code false} otherwise.
-     */
+    @Override
     public final boolean isValid() {
         return isValid(value);
     }
@@ -143,15 +135,11 @@ public abstract class ParameterControl extends Control implements Parameter {
                 .append("valueAutoFill", valueAutoFill);
     }
 
-    /**
-     * TODO: is this method required?
-     */
     protected void onValueSet(String value) {
     }
 
     /**
      * Base builder of {@link ParameterControl}'s subclasses.
-     * TODO: protected?
      */
     public static abstract class Builder extends Control.Builder {
 

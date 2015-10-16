@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Implements common streams operation.
  *
@@ -68,9 +70,7 @@ public final class Streams {
      * @param stream source
      */
     public static void readStreamToNull(InputStream stream) throws IOException {
-        if (stream == null) {
-            throw new NullPointerException("stream is null");
-        }
+        checkNotNull(stream, "stream");
 
         try {
             byte[] buffer = new byte[BUFFER_SIZE];

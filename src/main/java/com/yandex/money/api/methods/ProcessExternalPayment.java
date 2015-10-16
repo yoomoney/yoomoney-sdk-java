@@ -24,20 +24,11 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.ProcessExternalPaymentTypeAdapter;
 import com.yandex.money.api.utils.Strings;
-
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Process external payment.
@@ -46,20 +37,17 @@ import java.util.Map;
  */
 public class ProcessExternalPayment extends BaseProcessPayment {
 
+    /**
+     * Money source info if asked for a money source token.
+     */
     public final ExternalCard externalCard;
 
     /**
      * Constructor.
-     *
-     * @param externalCard money source info if asked for a money source token
-     *
-     * @see com.yandex.money.api.methods.BaseProcessPayment
      */
-    public ProcessExternalPayment(Status status, Error error, String invoiceId, String acsUri,
-                                  Map<String, String> acsParams, Long nextRetry,
-                                  ExternalCard externalCard) {
-        super(status, error, invoiceId, acsUri, acsParams, nextRetry);
-        this.externalCard = externalCard;
+    public ProcessExternalPayment(Builder builder) {
+        super(builder);
+        this.externalCard = builder.externalCard;
     }
 
     @Override
@@ -67,6 +55,25 @@ public class ProcessExternalPayment extends BaseProcessPayment {
         return super.toString() + "ProcessExternalPayment{" +
                 "externalCard=" + externalCard +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+
+        ProcessExternalPayment that = (ProcessExternalPayment) o;
+
+        return !(externalCard != null ? !externalCard.equals(that.externalCard)
+                : that.externalCard != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (externalCard != null ? externalCard.hashCode() : 0);
+        return result;
     }
 
     /**
@@ -77,26 +84,29 @@ public class ProcessExternalPayment extends BaseProcessPayment {
         /**
          * For paying with a new card.
          *
-         * @param instanceId application's instance id
-         * @param requestId request id from {@link com.yandex.money.api.methods.RequestExternalPayment}
+         * @param instanceId        application's instance id
+         * @param requestId         request id from {@link com.yandex.money.api.methods
+         * .RequestExternalPayment}
          * @param extAuthSuccessUri success URI to use if payment succeeded
-         * @param extAuthFailUri fail URI to use if payment failed
-         * @param requestToken {@code true} if money source token is required
+         * @param extAuthFailUri    fail URI to use if payment failed
+         * @param requestToken      {@code true} if money source token is required
          */
         public Request(String instanceId, String requestId, String extAuthSuccessUri,
                        String extAuthFailUri, boolean requestToken) {
-            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, requestToken, null, null);
+            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, requestToken, null,
+                    null);
         }
 
         /**
          * For paying with a saved card.
          *
-         * @param instanceId application's instance id
-         * @param requestId request id from {@link com.yandex.money.api.methods.RequestExternalPayment}
+         * @param instanceId        application's instance id
+         * @param requestId         request id from {@link com.yandex.money.api.methods
+         * .RequestExternalPayment}
          * @param extAuthSuccessUri success URI to use if payment succeeded
-         * @param extAuthFailUri fail URI to use if payment failed
-         * @param externalCard money source token of a saved card
-         * @param csc Card Security Code for a saved card.
+         * @param extAuthFailUri    fail URI to use if payment failed
+         * @param externalCard      money source token of a saved card
+         * @param csc               Card Security Code for a saved card.
          */
         public Request(String instanceId, String requestId, String extAuthSuccessUri,
                        String extAuthFailUri, ExternalCard externalCard, String csc) {
@@ -108,7 +118,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
                         String extAuthFailUri, boolean requestToken, ExternalCard externalCard,
                         String csc) {
 
-            super(ProcessExternalPayment.class, new Deserializer());
+            super(ProcessExternalPayment.class, ProcessExternalPaymentTypeAdapter.getInstance());
             if (Strings.isNullOrEmpty(instanceId)) {
                 throw new IllegalArgumentException("instanceId is null or empty");
             }
@@ -137,35 +147,20 @@ public class ProcessExternalPayment extends BaseProcessPayment {
         public String requestUrl(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/process-external-payment";
         }
+    }
 
-        private static final class Deserializer
-                implements JsonDeserializer<ProcessExternalPayment> {
+    public static final class Builder extends BaseProcessPayment.Builder {
 
-            @Override
-            public ProcessExternalPayment deserialize(JsonElement json, Type typeOfT,
-                                                      JsonDeserializationContext context)
-                    throws JsonParseException {
+        private ExternalCard externalCard;
 
-                JsonObject o = json.getAsJsonObject();
+        public Builder setExternalCard(ExternalCard externalCard) {
+            this.externalCard = externalCard;
+            return this;
+        }
 
-                JsonObject paramsObj = o.getAsJsonObject(MEMBER_ACS_PARAMS);
-                Map<String, String> acsParams = paramsObj == null ?
-                        new HashMap<String, String>() : JsonUtils.map(paramsObj);
-
-                final String moneySourceMember = "money_source";
-                ExternalCard moneySource = o.has(moneySourceMember) ?
-                        ExternalCard.createFromJson(o.get(moneySourceMember)) : null;
-
-                return new ProcessExternalPayment(
-                        Status.parse(JsonUtils.getString(o, MEMBER_STATUS)),
-                        Error.parse(JsonUtils.getString(o, MEMBER_ERROR)),
-                        JsonUtils.getString(o, "invoice_id"),
-                        JsonUtils.getString(o, MEMBER_ACS_URI),
-                        acsParams,
-                        JsonUtils.getLong(o, MEMBER_NEXT_RETRY),
-                        moneySource
-                );
-            }
+        @Override
+        public ProcessExternalPayment create() {
+            return new ProcessExternalPayment(this);
         }
     }
 }

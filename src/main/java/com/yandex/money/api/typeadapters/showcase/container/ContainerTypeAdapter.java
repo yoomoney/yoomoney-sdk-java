@@ -29,9 +29,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.containers.Container;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter;
+
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Base type adapter for subclasses of {@link Container} component.
@@ -41,15 +42,15 @@ import com.yandex.money.api.typeadapters.showcase.uicontrol.ComponentTypeAdapter
 abstract class ContainerTypeAdapter<T, U extends Container<T>,
         K extends Container.Builder<T>> extends ComponentTypeAdapter<U, K> {
 
-    private static final String MEMBER_LABEL = "label";
     private static final String MEMBER_ITEMS = "items";
+    private static final String MEMBER_LABEL = "label";
 
     @Override
     protected void deserialize(JsonObject src, K builder, JsonDeserializationContext context) {
         for (JsonElement item : src.getAsJsonArray(MEMBER_ITEMS)) {
             builder.addItem(deserializeItem(item, context));
         }
-        builder.setLabel(JsonUtils.getString(src, MEMBER_LABEL));
+        builder.setLabel(getString(src, MEMBER_LABEL));
     }
 
     @Override

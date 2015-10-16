@@ -25,8 +25,9 @@
 package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.model.showcase.components.uicontrols.ParameterControl;
 import com.yandex.money.api.utils.ToStringBuilder;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * A {@link Group} is implementation of a {@link Component} that can contain only {@link Component}
@@ -48,20 +49,13 @@ public final class Group extends Container<Component> {
 
     /**
      * Validates contained components across constraints.
-     * <p/>
-     * TODO: refactor inheritance.
      *
      * @return {@code true} if group is valid and {@code false} otherwise.
      */
+    @Override
     public boolean isValid() {
         for (Component component : items) {
-            boolean valid = true;
-            if (component instanceof ParameterControl) {
-                valid = ((ParameterControl) component).isValid();
-            } else if (component instanceof Group) {
-                valid = ((Group) component).isValid();
-            }
-            if (!valid) {
+            if (!component.isValid()) {
                 return false;
             }
         }
@@ -137,9 +131,7 @@ public final class Group extends Container<Component> {
         }
 
         public Builder setLayout(Layout layout) {
-            if (layout == null) {
-                throw new NullPointerException("layout is null");
-            }
+            checkNotNull(layout, "layout");
             this.layout = layout;
             return this;
         }

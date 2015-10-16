@@ -22,13 +22,12 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.methods;
+package com.yandex.money.api.typeadapters;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.yandex.money.api.typeadapters.TypeAdapter;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
@@ -42,17 +41,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Static class for JSON parsing process.
  *
- * Note: in upcoming major release this class will become package local and will be moved to
- * {@code com.yandex.money.api.typeadapters} package.
- *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class JsonUtils { // TODO read note above and do the stuff in future release
+public final class JsonUtils {
 
-    private static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
+    public static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
             .withOffsetParsed();
 
     /**
@@ -222,9 +220,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
      */
     public static DateTime getDateTime(JsonObject object, String memberName,
                                        DateTimeFormatter formatter) {
-        if (formatter == null) {
-            throw new NullPointerException("formatter is null");
-        }
+        checkNotNull(formatter, "formatter");
         JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
         return primitive == null ? null : DateTime.parse(primitive.getAsString(), formatter);
     }
@@ -264,9 +260,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
             return null;
         }
 
-        if (converter == null) {
-            throw new NullPointerException("converter is null");
-        }
+        checkNotNull(converter, "converter");
         List<T> result = new ArrayList<>(array.size());
         for (JsonElement element : array) {
             result.add(converter.fromJson(element));
@@ -311,6 +305,25 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
     }
 
     /**
+     * Maps JSON object to key-value pairs. Returns {@link Collections#emptyMap()} in case of
+     * nullable field value.
+     *
+     * @see {@link #map(JsonObject)}
+     *
+     * @param object JSON object
+     * @param memberName member's name
+     * @return map of string key-value pairs
+     */
+    public static Map<String, String> getNotNullMap(JsonObject object, String memberName) {
+        JsonElement jsonElement = object.get(memberName);
+        if (jsonElement == null) {
+            return Collections.emptyMap();
+        } else {
+            return map(jsonElement.getAsJsonObject());
+        }
+    }
+
+    /**
      * Build JSON object using provided map. Returns {@code null} if parameter {@code map} is null.
      *
      * @param map key-value pairs
@@ -340,9 +353,7 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
         if (collection == null) {
             return null;
         }
-        if (converter == null) {
-            throw new NullPointerException("converter is null");
-        }
+        checkNotNull(converter, "converter");
         JsonArray array = new JsonArray();
         for (T value : collection) {
             array.add(converter.toJsonTree(value));
@@ -361,23 +372,17 @@ public final class JsonUtils { // TODO read note above and do the stuff in futur
     }
 
     private static void checkObject(JsonObject object) {
-        if (object == null) {
-            throw new NullPointerException("JSON object is null.");
-        }
+        checkNotNull(object, "object");
     }
 
     private static void checkMemberName(String memberName) {
-        if (memberName == null) {
-            throw new NullPointerException("Member name is null.");
-        }
+        checkNotNull(memberName, "memberName");
         if (memberName.length() == 0) {
             throw new IllegalArgumentException("Member is an empty string.");
         }
     }
 
     private static void checkMandatoryValue(Object value, String memberName) {
-        if (value == null) {
-            throw new NullPointerException("mandatory value \'" + memberName + "\' is null");
-        }
+        checkNotNull(value, "mandatory value \'" + memberName + "\'");
     }
 }

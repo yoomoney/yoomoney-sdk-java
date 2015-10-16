@@ -29,8 +29,6 @@ import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
  * Email control.
- * <p/>
- * TODO: refactor inheritance.
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */

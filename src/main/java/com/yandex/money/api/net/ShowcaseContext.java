@@ -24,9 +24,9 @@
 
 package com.yandex.money.api.net;
 
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.typeadapters.GsonProvider;
+import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.Strings;
@@ -37,6 +37,8 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Stack;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * This class handles {@link Showcase} submit steps.
@@ -93,15 +95,9 @@ public final class ShowcaseContext {
     public ShowcaseContext(Stack<Step> history, DateTime lastModified, Step currentStep,
                            Map<String, String> params, State state) {
 
-        if (history == null) {
-            throw new NullPointerException("history is null");
-        }
-        if (lastModified == null) {
-            throw new NullPointerException("lastModified is null");
-        }
-        if (params == null) {
-            throw new NullPointerException("params is null");
-        }
+        checkNotNull(history, "history");
+        checkNotNull(lastModified, "lastModified");
+        checkNotNull(params, "params");
         this.history = history;
         this.lastModified = lastModified;
         this.currentStep = currentStep;
@@ -288,12 +284,8 @@ public final class ShowcaseContext {
 
         public Request(Step currentStep, DateTime lastModified) {
             super(Showcase.class, ShowcaseTypeAdapter.getInstance());
-            if (currentStep == null) {
-                throw new NullPointerException("currentStep is null");
-            }
-            if (currentStep.showcase == null) {
-                throw new NullPointerException("showcase of current step is null");
-            }
+            checkNotNull(currentStep, "currentStep");
+            checkNotNull(currentStep.showcase, "showcase of current step");
             if (Strings.isNullOrEmpty(currentStep.submitUrl)) {
                 throw new IllegalArgumentException("url is null or empty");
             }
@@ -315,9 +307,7 @@ public final class ShowcaseContext {
      * @param newStep new step
      */
     void pushCurrentStep(Step newStep) {
-        if (newStep == null) {
-            throw new NullPointerException("new step is null");
-        }
+        checkNotNull(newStep, "new step");
         history.push(currentStep);
         currentStep = newStep;
     }

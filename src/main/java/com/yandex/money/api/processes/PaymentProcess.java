@@ -75,13 +75,6 @@ public final class PaymentProcess extends BasePaymentProcess<RequestPayment, Pro
         return new SavedState(requestPayment, processPayment, state);
     }
 
-    /**
-     * @see BasePaymentProcess.Callbacks
-     */
-    public interface Callbacks
-            extends BasePaymentProcess.Callbacks<RequestPayment, ProcessPayment> {
-    }
-
     public static final class SavedState
             extends BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> {
 

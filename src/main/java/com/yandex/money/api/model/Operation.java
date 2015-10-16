@@ -24,19 +24,13 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.yandex.money.api.methods.JsonUtils;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Map;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Operation details.
@@ -44,67 +38,67 @@ import java.util.Map;
 public class Operation {
 
     /**
-     * operation id
+     * Operation id.
      */
     public final String operationId;
 
     /**
-     * status of operation
+     * Status of operation.
      */
     public final Status status;
 
     /**
-     * pattern id
+     * Pattern id.
      */
     public final String patternId;
 
     /**
-     * direction of operation
+     * Direction of operation.
      */
     public final Direction direction;
 
     /**
-     * amount
+     * Amount.
      */
     public final BigDecimal amount;
 
     /**
-     * received amount
+     * Received amount.
      */
     public final BigDecimal amountDue;
 
     /**
-     * fee
+     * Fee.
      */
     public final BigDecimal fee;
 
     /**
-     * operation datetime
+     * Operation datetime.
      */
     public final DateTime datetime;
 
     /**
-     * title of operation
+     * Title of operation.
      */
     public final String title;
 
     /**
-     * sender
+     * Sender.
      */
     public final String sender;
 
     /**
-     * recepient
+     * Recipient.
      */
     public final String recipient;
 
     /**
-     * type of recipient identifier
+     * Type of recipient identifier.
      */
     public final PayeeIdentifierType recipientType;
 
     /**
-     * message to recepient
+     * Message to recipient.
      */
     public final String message;
 
@@ -119,97 +113,91 @@ public class Operation {
     public final boolean codepro;
 
     /**
-     * protection code for operation
+     * Protection code for operation.
      */
     public final String protectionCode;
 
     /**
-     * protection code expiration datetime
+     * Protection code expiration datetime.
      */
     public final DateTime expires;
 
     /**
-     * answer datetime of operation acceptance/revoke
+     * Answer datetime of operation acceptance/revoke.
      */
     public final DateTime answerDatetime;
 
     /**
-     * label of operation
+     * Label of operation.
      */
     public final String label;
 
     /**
-     * details of operation
+     * Details of operation.
      */
     public final String details;
 
     /**
-     * {@code true} if operation can be repeated
+     * {@code true} if operation can be repeated.
      */
     public final boolean repeatable;
 
     /**
-     * payment parameters
+     * Payment parameters.
      */
     public final Map<String, String> paymentParameters;
 
     public final boolean favorite;
 
     /**
-     * type of operation
+     * Type of operation.
      */
     public final Type type;
 
     /**
-     * digital goods
+     * Digital goods.
      */
     public final DigitalGoods digitalGoods;
 
     /**
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
      */
-    protected Operation(String operationId, Status status, String patternId, Direction direction,
-                        BigDecimal amount, BigDecimal amountDue, BigDecimal fee, DateTime datetime,
-                        String title, String sender, String recipient,
-                        PayeeIdentifierType recipientType, String message, String comment,
-                        Boolean codepro, String protectionCode, DateTime expires,
-                        DateTime answerDatetime, String label, String details, Boolean repeatable,
-                        Map<String, String> paymentParameters, Boolean favorite, Type type,
-                        DigitalGoods digitalGoods) {
+    protected Operation(Builder builder) {
+        checkNotNull(builder.operationId, "operationId");
+        checkNotNull(builder.status, "status");
+        checkNotNull(builder.paymentParameters, "paymentParameters");
+        checkNotNull(builder.recipientType, "recipientType");
+        checkNotNull(builder.type, "type");
+        checkNotNull(builder.direction, "direction");
+        checkNotNull(builder.amount, "amount");
+        checkNotNull(builder.datetime, "datetime");
+        checkNotNull(builder.title, "title");
 
-        this.operationId = operationId;
-        this.status = status;
-        this.patternId = patternId;
-        this.direction = direction;
-        this.amount = amount;
-        this.amountDue = amountDue;
-        this.fee = fee;
-        this.datetime = datetime;
-        this.title = title;
-        this.sender = sender;
-        this.recipient = recipient;
-        this.recipientType = recipientType;
-        this.message = message;
-        this.comment = comment;
-        this.codepro = codepro != null && codepro;
-        this.protectionCode = protectionCode;
-        this.expires = expires;
-        this.answerDatetime = answerDatetime;
-        this.label = label;
-        this.details = details;
-        this.repeatable = repeatable != null && repeatable;
-        this.paymentParameters = paymentParameters == null ? null :
-                Collections.unmodifiableMap(paymentParameters);
-        this.favorite = favorite != null && favorite;
-        this.type = type;
-        this.digitalGoods = digitalGoods;
-    }
-
-    /**
-     * Creates {@link com.yandex.money.api.model.Operation} from JSON.
-     */
-    public static Operation createFromJson(JsonElement element) {
-        return buildGson().fromJson(element, Operation.class);
+        this.operationId = builder.operationId;
+        this.status = builder.status;
+        this.patternId = builder.patternId;
+        this.direction = builder.direction;
+        this.amount = builder.amount;
+        this.amountDue = builder.amountDue;
+        this.fee = builder.fee;
+        this.datetime = builder.datetime;
+        this.title = builder.title;
+        this.sender = builder.sender;
+        this.recipient = builder.recipient;
+        this.recipientType = builder.recipientType;
+        this.message = builder.message;
+        this.comment = builder.comment;
+        this.codepro = builder.codepro != null && builder.codepro;
+        this.protectionCode = builder.protectionCode;
+        this.expires = builder.expires;
+        this.answerDatetime = builder.answerDatetime;
+        this.label = builder.label;
+        this.details = builder.details;
+        this.repeatable = builder.repeatable != null && builder.repeatable;
+        this.paymentParameters = Collections.unmodifiableMap(builder.paymentParameters);
+        this.favorite = builder.favorite != null && builder.favorite;
+        this.type = builder.type;
+        this.digitalGoods = builder.digitalGoods;
     }
 
     @Override
@@ -243,8 +231,82 @@ public class Operation {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Operation operation = (Operation) o;
+
+        return codepro == operation.codepro &&
+                repeatable == operation.repeatable &&
+                favorite == operation.favorite &&
+                operationId.equals(operation.operationId) &&
+                status == operation.status &&
+                !(patternId != null ? !patternId.equals(operation.patternId) :
+                        operation.patternId != null) &&
+                direction == operation.direction &&
+                amount.equals(operation.amount) &&
+                !(amountDue != null ? !amountDue.equals(operation.amountDue) :
+                        operation.amountDue != null) &&
+                !(fee != null ? !fee.equals(operation.fee) : operation.fee != null) &&
+                datetime.isEqual(operation.datetime) &&
+                title.equals(operation.title) &&
+                !(sender != null ? !sender.equals(operation.sender) : operation.sender != null) &&
+                !(recipient != null ? !recipient.equals(operation.recipient) :
+                        operation.recipient != null) &&
+                recipientType == operation.recipientType &&
+                !(message != null ? !message.equals(operation.message) :
+                        operation.message != null) &&
+                !(comment != null ? !comment.equals(operation.comment) :
+                        operation.comment != null) &&
+                !(protectionCode != null ? !protectionCode.equals(operation.protectionCode) :
+                        operation.protectionCode != null) &&
+                !(expires != null ? !expires.isEqual(operation.expires) :
+                        operation.expires != null) &&
+                !(answerDatetime != null ? !answerDatetime.isEqual(operation.answerDatetime) :
+                        operation.answerDatetime != null) &&
+                !(label != null ? !label.equals(operation.label) : operation.label != null) &&
+                !(details != null ? !details.equals(operation.details) :
+                        operation.details != null) &&
+                paymentParameters.equals(operation.paymentParameters) &&
+                type == operation.type &&
+                !(digitalGoods != null ? !digitalGoods.equals(operation.digitalGoods) :
+                        operation.digitalGoods != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = operationId.hashCode();
+        result = 31 * result + status.hashCode();
+        result = 31 * result + (patternId != null ? patternId.hashCode() : 0);
+        result = 31 * result + direction.hashCode();
+        result = 31 * result + amount.hashCode();
+        result = 31 * result + (amountDue != null ? amountDue.hashCode() : 0);
+        result = 31 * result + (fee != null ? fee.hashCode() : 0);
+        result = 31 * result + datetime.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + (sender != null ? sender.hashCode() : 0);
+        result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
+        result = 31 * result + recipientType.hashCode();
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (codepro ? 1 : 0);
+        result = 31 * result + (protectionCode != null ? protectionCode.hashCode() : 0);
+        result = 31 * result + (expires != null ? expires.hashCode() : 0);
+        result = 31 * result + (answerDatetime != null ? answerDatetime.hashCode() : 0);
+        result = 31 * result + (label != null ? label.hashCode() : 0);
+        result = 31 * result + (details != null ? details.hashCode() : 0);
+        result = 31 * result + (repeatable ? 1 : 0);
+        result = 31 * result + paymentParameters.hashCode();
+        result = 31 * result + (favorite ? 1 : 0);
+        result = 31 * result + type.hashCode();
+        result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
+        return result;
+    }
+
     /**
-     * Status of opeartion.
+     * Status of operation.
      */
     public enum Status {
         /**
@@ -262,21 +324,24 @@ public class Operation {
         /**
          * Status of operation is unknown.
          */
-        UNKNOWN("unknown");
+        NULL(null);
 
-        private final String status;
+        public final String code;
 
-        Status(String status) {
-            this.status = status;
+        Status(String code) {
+            this.code = code;
         }
 
-        public static Status parse(String status) {
+        public static Status parse(String code) {
+            if (code == null) {
+                return NULL;
+            }
             for (Status value : values()) {
-                if (value.status.equals(status)) {
+                if (code.equals(value.code)) {
                     return value;
                 }
             }
-            return UNKNOWN;
+            return NULL;
         }
     }
 
@@ -307,21 +372,21 @@ public class Operation {
         /**
          * Unknown.
          */
-        UNKNOWN("unknown");
+        NULL(null);
 
-        private final String type;
+        public final String code;
 
-        Type(String type) {
-            this.type = type;
+        Type(String code) {
+            this.code = code;
         }
 
-        public static Type parse(String type) {
+        public static Type parse(String code) {
             for (Type value : values()) {
-                if (value.type.equals(type)) {
+                if (code.equals(value.code)) {
                     return value;
                 }
             }
-            return UNKNOWN;
+            return NULL;
         }
     }
 
@@ -340,21 +405,24 @@ public class Operation {
         /**
          * Unknown.
          */
-        UNKNOWN("unknown");
+        NULL(null);
 
-        private final String direction;
+        public final String code;
 
-        Direction(String direction) {
-            this.direction = direction;
+        Direction(String code) {
+            this.code = code;
         }
 
-        public static Direction parse(String direction) {
+        public static Direction parse(String code) {
+            if (code == null) {
+                return NULL;
+            }
             for (Direction value : values()) {
-                if (value.direction.equals(direction)) {
+                if (code.equals(value.code)) {
                     return value;
                 }
             }
-            return UNKNOWN;
+            return NULL;
         }
     }
 
@@ -513,58 +581,8 @@ public class Operation {
             return this;
         }
 
-        public Operation createOperation() {
-            return new Operation(operationId, status, patternId, direction, amount, amountDue, fee,
-                    datetime, title, sender, recipient, recipientType, message, comment, codepro,
-                    protectionCode, expires, answerDatetime, label, details, repeatable,
-                    paymentParameters, favorite, type, digitalGoods);
-        }
-    }
-
-    private static Gson buildGson() {
-        return new GsonBuilder()
-                .registerTypeAdapter(Operation.class, new Deserializer())
-                .create();
-    }
-
-    private static final class Deserializer implements JsonDeserializer<Operation> {
-
-        @Override
-        public Operation deserialize(JsonElement json, java.lang.reflect.Type typeOfT,
-                                     JsonDeserializationContext context) throws JsonParseException {
-
-            final JsonObject o = json.getAsJsonObject();
-            final String paymentParametersMember = "payment_parameters";
-            return new Builder()
-                    .setOperationId(JsonUtils.getMandatoryString(o, "operation_id"))
-                    .setStatus(Status.parse(JsonUtils.getString(o, "status")))
-                    .setDatetime(JsonUtils.getDateTime(o, "datetime"))
-                    .setTitle(JsonUtils.getMandatoryString(o, "title"))
-                    .setPatternId(JsonUtils.getString(o, "pattern_id"))
-                    .setDirection(Direction.parse(
-                            JsonUtils.getMandatoryString(o, "direction")))
-                    .setAmount(JsonUtils.getBigDecimal(o, "amount"))
-                    .setAmountDue(JsonUtils.getBigDecimal(o, "amount_due"))
-                    .setFee(JsonUtils.getBigDecimal(o, "fee"))
-                    .setLabel(JsonUtils.getString(o, "label"))
-                    .setType(Type.parse(JsonUtils.getString(o, "type")))
-                    .setSender(JsonUtils.getString(o, "sender"))
-                    .setRecipient(JsonUtils.getString(o, "recipient"))
-                    .setRecipientType(PayeeIdentifierType.parse(
-                            JsonUtils.getString(o, "recipient_type")))
-                    .setMessage(JsonUtils.getString(o, "message"))
-                    .setComment(JsonUtils.getString(o, "comment"))
-                    .setCodepro(JsonUtils.getBoolean(o, "codepro"))
-                    .setProtectionCode(JsonUtils.getString(o, "protection_code"))
-                    .setExpires(JsonUtils.getDateTime(o, "expires"))
-                    .setAnswerDatetime(JsonUtils.getDateTime(o, "answer_datetime"))
-                    .setDetails(JsonUtils.getString(o, "details"))
-                    .setRepeatable(JsonUtils.getBoolean(o, "repeatable"))
-                    .setPaymentParameters(o.has(paymentParametersMember) ?
-                            JsonUtils.map(o.getAsJsonObject(paymentParametersMember)) : null)
-                    .setFavorite(JsonUtils.getBoolean(o, "favourite"))
-                    .setDigitalGoods(DigitalGoods.createFromJson(o.get("digital_goods")))
-                    .createOperation();
+        public Operation create() {
+            return new Operation(this);
         }
     }
 }

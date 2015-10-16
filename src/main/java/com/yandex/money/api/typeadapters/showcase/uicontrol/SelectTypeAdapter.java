@@ -29,9 +29,11 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
+import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.ListDelegate;
+
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Type adapter for {@link @Select} component.
@@ -41,12 +43,11 @@ import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.Lis
 public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select, Select.Builder> {
 
     private static final SelectTypeAdapter INSTANCE = new SelectTypeAdapter();
-
-    private static final String MEMBER_OPTIONS = "options";
-    private static final String MEMBER_LABEL = "label";
-    private static final String MEMBER_VALUE = "value";
-    private static final String MEMBER_STYLE = "style";
     private static final String MEMBER_GROUP = "group";
+    private static final String MEMBER_LABEL = "label";
+    private static final String MEMBER_OPTIONS = "options";
+    private static final String MEMBER_STYLE = "style";
+    private static final String MEMBER_VALUE = "value";
 
     private SelectTypeAdapter() {
     }
@@ -64,15 +65,17 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
         for (JsonElement item : src.getAsJsonArray(MEMBER_OPTIONS)) {
             JsonObject itemObject = item.getAsJsonObject();
 
-            Select.Option option = new Select.Option(itemObject.get(MEMBER_LABEL).getAsString(),
-                    itemObject.get(MEMBER_VALUE).getAsString());
-            if (itemObject.has(MEMBER_GROUP)) {
-                option.group = ListDelegate.deserialize(
-                        itemObject.getAsJsonArray(MEMBER_GROUP), context);
+            JsonElement jsonGroup = itemObject.get(MEMBER_GROUP);
+            Group group = null;
+            if (jsonGroup != null) {
+                group = ListDelegate.deserialize(jsonGroup.getAsJsonArray(), context);
             }
+
+            Select.Option option = new Select.Option(itemObject.get(MEMBER_LABEL).getAsString(),
+                    itemObject.get(MEMBER_VALUE).getAsString(), group);
             builder.addOption(option);
         }
-        builder.setStyle(Select.Style.parse(JsonUtils.getString(src, MEMBER_STYLE)));
+        builder.setStyle(Select.Style.parse(getString(src, MEMBER_STYLE)));
         super.deserialize(src, builder, context);
     }
 

@@ -25,10 +25,12 @@
 package com.yandex.money.api.typeadapters.showcase.uicontrol;
 
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrols.Control;
+
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Base type adapter for components implementing {@link Control} interface.
@@ -46,14 +48,18 @@ abstract class ControlTypeAdapter<T extends Control, U extends Control.Builder>
 
     @Override
     protected void deserialize(JsonObject src, U builder, JsonDeserializationContext context) {
-        builder.setAlert(JsonUtils.getString(src, MEMBER_ALERT));
-        builder.setHint(JsonUtils.getString(src, MEMBER_HINT));
-        builder.setLabel(JsonUtils.getString(src, MEMBER_LABEL));
-        if (src.has(MEMBER_READONLY)) {
-            builder.setReadonly(src.get(MEMBER_READONLY).getAsBoolean());
+        builder.setAlert(getString(src, MEMBER_ALERT));
+        builder.setHint(getString(src, MEMBER_HINT));
+        builder.setLabel(getString(src, MEMBER_LABEL));
+
+        JsonElement readOnly = src.get(MEMBER_READONLY);
+        if (readOnly != null) {
+            builder.setReadonly(readOnly.getAsBoolean());
         }
-        if (src.has(MEMBER_REQUIRED)) {
-            builder.setRequired(src.get(MEMBER_REQUIRED).getAsBoolean());
+
+        JsonElement required = src.get(MEMBER_REQUIRED);
+        if (required != null) {
+            builder.setRequired(required.getAsBoolean());
         }
     }
 

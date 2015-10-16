@@ -32,6 +32,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Builds parameters for OAuth2 authorization using application's web browser.
  *
@@ -48,9 +50,7 @@ public class OAuth2Authorization {
      * @see com.yandex.money.api.net.ApiClient
      */
     public OAuth2Authorization(ApiClient client) {
-        if (client == null) {
-            throw new NullPointerException("hostsProvider is null");
-        }
+        checkNotNull(client, "hostsProvider");
         this.client = client;
     }
 

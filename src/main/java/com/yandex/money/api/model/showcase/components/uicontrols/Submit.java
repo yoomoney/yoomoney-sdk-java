@@ -38,6 +38,11 @@ public final class Submit extends Control {
     }
 
     @Override
+    public boolean isValid() {
+        return true;
+    }
+
+    @Override
     protected ToStringBuilder getToStringBuilder() {
         return super.getToStringBuilder().setName("Submit");
     }

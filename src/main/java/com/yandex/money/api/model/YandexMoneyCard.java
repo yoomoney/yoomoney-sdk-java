@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.model;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
@@ -31,7 +33,7 @@ public class YandexMoneyCard extends Card {
 
     public final State state;
 
-    YandexMoneyCard(Builder builder) {
+    protected YandexMoneyCard(Builder builder) {
         super(builder);
         this.state = builder.state;
     }
@@ -79,14 +81,14 @@ public class YandexMoneyCard extends Card {
 
         public static State parse(String code) {
             if (code == null) {
-                throw new NullPointerException("code is null");
+                return UNKNOWN;
             }
             for (State value : values()) {
-                if (value.code.equals(code)) {
+                if (code.equals(value.code)) {
                     return value;
                 }
             }
-            throw new IllegalArgumentException("unknown code: '" + code + "'");
+            return UNKNOWN;
         }
     }
 
@@ -95,9 +97,7 @@ public class YandexMoneyCard extends Card {
         private State state = State.UNKNOWN;
 
         public Builder setState(State state) {
-            if (state == null) {
-                throw new NullPointerException("state is null");
-            }
+            checkNotNull(state, "state");
             this.state = state;
             return this;
         }

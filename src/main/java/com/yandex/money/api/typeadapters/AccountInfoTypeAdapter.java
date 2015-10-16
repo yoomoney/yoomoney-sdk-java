@@ -30,7 +30,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.AccountInfo;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Avatar;
@@ -40,13 +39,13 @@ import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.utils.Currency;
 
 import java.lang.reflect.Type;
-import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.methods.JsonUtils.getArray;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryBigDecimal;
-import static com.yandex.money.api.methods.JsonUtils.getMandatoryString;
-import static com.yandex.money.api.methods.JsonUtils.toJsonArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
 
 /**
  * Type adapter for {@link AccountInfo}.
@@ -86,7 +85,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
 
         Currency currency;
         try {
-            int parsed = Integer.parseInt(JsonUtils.getString(object, MEMBER_CURRENCY));
+            int parsed = Integer.parseInt(getString(object, MEMBER_CURRENCY));
             currency = Currency.parseNumericCode(parsed);
         } catch (NumberFormatException e) {
             currency = Currency.RUB;
@@ -100,17 +99,14 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.getInstance().fromJson(
                 object.get(MEMBER_BALANCE_DETAILS));
 
-        List<Card> linkedCards = object.has(MEMBER_CARDS_LINKED) ?
-                getArray(object, MEMBER_CARDS_LINKED, CardTypeAdapter.getInstance()) :
-                Collections.<Card>emptyList();
+        List<Card> linkedCards = getNotNullArray(object, MEMBER_CARDS_LINKED,
+                CardTypeAdapter.getInstance());
 
-        List<String> additionalServices = object.has(MEMBER_SERVICES_ADDITIONAL) ?
-                getArray(object, MEMBER_SERVICES_ADDITIONAL, StringTypeAdapter.getInstance()) :
-                Collections.<String>emptyList();
+        List<String> additionalServices = getNotNullArray(object,
+                MEMBER_SERVICES_ADDITIONAL, StringTypeAdapter.getInstance());
 
-        List<YandexMoneyCard> yandexMoneyCards = object.has(MEMBER_YANDEX_MONEY_CARDS) ?
-                getArray(object, MEMBER_YANDEX_MONEY_CARDS, YandexMoneyCardTypeAdapter.getInstance()) :
-                Collections.<YandexMoneyCard>emptyList();
+        List<YandexMoneyCard> yandexMoneyCards = getNotNullArray(object,
+                MEMBER_YANDEX_MONEY_CARDS, YandexMoneyCardTypeAdapter.getInstance());
 
         return new AccountInfo.Builder()
                 .setAccount(getMandatoryString(object, MEMBER_ACCOUNT))
@@ -123,7 +119,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
                 .setLinkedCards(linkedCards)
                 .setAdditionalServices(additionalServices)
                 .setYandexMoneyCards(yandexMoneyCards)
-                .createAccountInfo();
+                .create();
     }
 
     @Override

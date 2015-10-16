@@ -27,8 +27,9 @@ package com.yandex.money.api.typeadapters.showcase.uicontrol;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.uicontrols.Number;
+
+import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
 
 
 /**
@@ -46,9 +47,9 @@ abstract class BaseNumberTypeAdapter<T extends Number, U extends Number.Builder>
     @Override
     protected void deserialize(JsonObject src, U builder,
                                JsonDeserializationContext context) {
-        builder.setMax(JsonUtils.getBigDecimal(src, MEMBER_MAX));
-        builder.setMin(JsonUtils.getBigDecimal(src, MEMBER_MIN));
-        builder.setStep(JsonUtils.getBigDecimal(src, MEMBER_STEP));
+        builder.setMax(getBigDecimal(src, MEMBER_MAX));
+        builder.setMin(getBigDecimal(src, MEMBER_MIN));
+        builder.setStep(getBigDecimal(src, MEMBER_STEP));
         super.deserialize(src, builder, context);
     }
 

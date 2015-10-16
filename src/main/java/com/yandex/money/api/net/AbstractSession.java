@@ -36,6 +36,8 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * Abstract session that provides convenience methods to work with requests.
  *
@@ -44,11 +46,8 @@ import java.util.logging.Logger;
 public abstract class AbstractSession {
 
     private static final Logger LOGGER = Logger.getLogger(OAuth2Session.class.getName());
-
-    protected final ApiClient client;
-
     private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
-
+    protected final ApiClient client;
     private boolean debugLogging = false;
 
     /**
@@ -57,9 +56,7 @@ public abstract class AbstractSession {
      * @param client API client used to perform operations
      */
     protected AbstractSession(ApiClient client) {
-        if (client == null) {
-            throw new NullPointerException("client is null");
-        }
+        checkNotNull(client, "client");
         this.client = client;
     }
 
@@ -77,17 +74,13 @@ public abstract class AbstractSession {
     }
 
     protected final Call prepareCall(Request.Builder builder) {
-        if (builder == null) {
-            throw new NullPointerException("builder is null");
-        }
+        checkNotNull(builder, "builder");
         return client.getHttpClient()
                 .newCall(builder.build());
     }
 
     protected final <T> Request.Builder prepareRequestBuilder(ApiRequest<T> request) {
-        if (request == null) {
-            throw new NullPointerException("request is null");
-        }
+        checkNotNull(request, "request");
 
         Request.Builder builder = new Request.Builder()
                 .cacheControl(cacheControl);

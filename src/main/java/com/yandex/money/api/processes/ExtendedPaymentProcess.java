@@ -24,13 +24,14 @@
 
 package com.yandex.money.api.processes;
 
-import com.squareup.okhttp.Call;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.OAuth2Session;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Combined payment process of {@link PaymentProcess} and {@link ExternalPaymentProcess}.
@@ -56,9 +57,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     public ExtendedPaymentProcess(OAuth2Session session,
                                   ExternalPaymentProcess.ParameterProvider parameterProvider) {
 
-        if (session == null) {
-            throw new NullPointerException("session is null");
-        }
+        checkNotNull(session, "session");
         this.session = session;
         this.paymentProcess = new PaymentProcess(session, parameterProvider);
         this.externalPaymentProcess = new ExternalPaymentProcess(session, parameterProvider);
@@ -74,22 +73,9 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     @Override
-    public Call proceedAsync() throws Exception {
-        switchContextIfRequired();
-        return paymentContext == PaymentContext.PAYMENT ? paymentProcess.proceedAsync() :
-                externalPaymentProcess.proceedAsync();
-    }
-
-    @Override
     public boolean repeat() throws Exception {
         return paymentContext == PaymentContext.PAYMENT ? paymentProcess.repeat() :
                 externalPaymentProcess.repeat();
-    }
-
-    @Override
-    public Call repeatAsync() throws Exception {
-        return paymentContext == PaymentContext.PAYMENT ? paymentProcess.repeatAsync() :
-                externalPaymentProcess.repeatAsync();
     }
 
     @Override
@@ -120,9 +106,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      * @throws IllegalStateException if called when process's state is not {@code CREATED}
      */
     public ExtendedPaymentProcess initWithFixedPaymentContext(PaymentContext paymentContext) {
-        if (paymentContext == null) {
-            throw new NullPointerException("paymentContext is null");
-        }
+        checkNotNull(paymentContext, "paymentContext");
         if (getState() != BasePaymentProcess.State.CREATED) {
             throw new IllegalStateException("you should call initWithFixedPaymentContext() after " +
                     "constructor only");
@@ -146,9 +130,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      * @param savedState saved state
      */
     public void restoreSavedState(SavedState savedState) {
-        if (savedState == null) {
-            throw new NullPointerException("saved state is null");
-        }
+        checkNotNull(savedState, "saved state");
         paymentProcess.restoreSavedState(savedState.paymentProcessSavedState);
         externalPaymentProcess.restoreSavedState(savedState.externalPaymentProcessSavedState);
         paymentContext = savedState.paymentContext;
@@ -170,16 +152,6 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
         externalPaymentProcess.setInstanceId(instanceId);
     }
 
-    /**
-     * Sets callbacks for async operations of the process.
-     *
-     * @param callbacks callbacks
-     */
-    public void setCallbacks(Callbacks callbacks) {
-        paymentProcess.setCallbacks(callbacks.getPaymentCallbacks());
-        externalPaymentProcess.setCallbacks(callbacks.getExternalPaymentCallbacks());
-    }
-
     private void invalidatePaymentContext() {
         this.paymentContext = session.isAuthorized() ? PaymentContext.PAYMENT :
                 PaymentContext.EXTERNAL_PAYMENT;
@@ -188,10 +160,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     private void switchContextIfRequired() {
         if (getState() == BasePaymentProcess.State.STARTED && mutablePaymentContext) {
             MoneySource moneySource = parameterProvider.getMoneySource();
-            if (moneySource == null) {
-                throw new NullPointerException("moneySource is null; not provided by " +
-                        "ParameterProvider");
-            }
+            checkNotNull(moneySource, "moneySource");
 
             if (paymentContext == PaymentContext.PAYMENT && moneySource instanceof ExternalCard) {
                 paymentContext = PaymentContext.EXTERNAL_PAYMENT;
@@ -208,20 +177,18 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     /**
-     * Callbacks for the process.
+     * Payment context.
      */
-    public interface Callbacks {
+    public enum PaymentContext {
         /**
-         * @return payment process callbacks
-         * @see PaymentProcess.Callbacks
+         * {@link PaymentProcess}
          */
-        PaymentProcess.Callbacks getPaymentCallbacks();
+        PAYMENT,
 
         /**
-         * @return external payment process callbacks
-         * @see ExternalPaymentProcess.Callbacks
+         * {@link ExternalPaymentProcess}
          */
-        ExternalPaymentProcess.Callbacks getExternalPaymentCallbacks();
+        EXTERNAL_PAYMENT
     }
 
     /**
@@ -296,20 +263,5 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
             }
             return value == 1;
         }
-    }
-
-    /**
-     * Payment context.
-     */
-    public enum PaymentContext {
-        /**
-         * {@link PaymentProcess}
-         */
-        PAYMENT,
-
-        /**
-         * {@link ExternalPaymentProcess}
-         */
-        EXTERNAL_PAYMENT
     }
 }

@@ -36,6 +36,8 @@ import com.yandex.money.api.utils.Strings;
 import java.util.Collections;
 import java.util.List;
 
+import static com.yandex.money.api.utils.Common.checkNotNull;
+
 /**
  * This class wraps result of showcase searching provided by response of
  * {@link ShowcaseSearch.Request} call.
@@ -60,9 +62,7 @@ public final class ShowcaseSearch {
     public final String nextPage;
 
     private ShowcaseSearch(Error error, List<ShowcaseReference> result, String nextPage) {
-        if (result == null) {
-            throw new NullPointerException("result is null");
-        }
+        checkNotNull(result, "result");
         this.error = error;
         this.result = result;
         this.nextPage = nextPage;
@@ -84,9 +84,7 @@ public final class ShowcaseSearch {
      * @param error reason
      */
     public static ShowcaseSearch failure(Error error) {
-        if (error == null) {
-            throw new NullPointerException("error is null");
-        }
+        checkNotNull(error, "error");
         return new ShowcaseSearch(error, Collections.<ShowcaseReference>emptyList(), null);
     }
 
@@ -97,8 +95,8 @@ public final class ShowcaseSearch {
 
         ShowcaseSearch that = (ShowcaseSearch) o;
 
-        return error == that.error && result.equals(that.result)
-                && !(nextPage != null ? !nextPage.equals(that.nextPage) : that.nextPage != null);
+        return error == that.error && result.equals(that.result) &&
+                !(nextPage != null ? !nextPage.equals(that.nextPage) : that.nextPage != null);
     }
 
     @Override

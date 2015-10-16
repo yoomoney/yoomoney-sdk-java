@@ -29,10 +29,13 @@ import com.squareup.okhttp.OkHttpClient;
 import com.yandex.money.api.utils.Language;
 import com.yandex.money.api.utils.Strings;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import java.security.GeneralSecurityException;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Default implementation of {@link com.yandex.money.api.net.ApiClient} interface.
@@ -55,9 +58,7 @@ public class DefaultApiClient implements ApiClient {
      * @param clientId client id to use
      */
     public DefaultApiClient(String clientId) {
-        if (clientId == null) {
-            throw new NullPointerException("client id is null");
-        }
+        checkNotNull(clientId, "client id");
         id = clientId;
         httpClient = createHttpClient();
         hostsProvider = new HostsProvider(false);

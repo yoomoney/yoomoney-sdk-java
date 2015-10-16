@@ -24,18 +24,14 @@
 
 package com.yandex.money.api.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
 import com.yandex.money.api.utils.Strings;
 
-import java.lang.reflect.Type;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Instance ID result.
@@ -56,6 +52,15 @@ public class InstanceId implements MethodResponse {
      * @param instanceId instance id if success
      */
     public InstanceId(Status status, Error error, String instanceId) {
+        checkNotNull(status, "status");
+        switch (status) {
+            case SUCCESS:
+                checkNotNull(instanceId, "instanceId");
+                break;
+            case REFUSED:
+                checkNotNull(error, "error");
+                break;
+        }
         this.status = status;
         this.error = error;
         this.instanceId = instanceId;
@@ -68,6 +73,27 @@ public class InstanceId implements MethodResponse {
                 ", error=" + error +
                 ", instanceId='" + instanceId + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        InstanceId that = (InstanceId) o;
+
+        return status == that.status &&
+                error == that.error &&
+                !(instanceId != null ? !instanceId.equals(
+                        that.instanceId) : that.instanceId != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = status.hashCode();
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        result = 31 * result + (instanceId != null ? instanceId.hashCode() : 0);
+        return result;
     }
 
     public boolean isSuccess() {
@@ -118,7 +144,7 @@ public class InstanceId implements MethodResponse {
          * @param clientId client id of the application
          */
         public Request(String clientId) {
-            super(InstanceId.class, new Deserializer());
+            super(InstanceId.class, InstanceIdTypeAdapter.getInstance());
             if (Strings.isNullOrEmpty(clientId)) {
                 throw new IllegalArgumentException("clientId is null or empty");
             }
@@ -128,21 +154,6 @@ public class InstanceId implements MethodResponse {
         @Override
         public String requestUrl(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/instance-id";
-        }
-    }
-
-    private static final class Deserializer implements JsonDeserializer<InstanceId> {
-
-        @Override
-        public InstanceId deserialize(JsonElement json, Type typeOfT,
-                                      JsonDeserializationContext context)
-                throws JsonParseException {
-
-            JsonObject o = json.getAsJsonObject();
-            return new InstanceId(
-                    Status.parse(JsonUtils.getString(o, "status")),
-                    Error.parse(JsonUtils.getString(o, "error")),
-                    JsonUtils.getString(o, "instance_id"));
         }
     }
 }

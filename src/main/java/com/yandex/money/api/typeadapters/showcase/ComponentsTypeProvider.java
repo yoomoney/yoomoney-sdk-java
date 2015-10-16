@@ -49,9 +49,8 @@ import java.util.Map;
  */
 public final class ComponentsTypeProvider {
 
-    private static final Map<Component.Type, Type> TYPE_MAPPING;
-
     private static final Map<Type, String> REVERSE_TYPE_MAPPING;
+    private static final Map<Component.Type, Type> TYPE_MAPPING;
 
     static {
         Map<Component.Type, Type> typeMapping = new HashMap<>();
@@ -74,7 +73,7 @@ public final class ComponentsTypeProvider {
 
         Map<Type, String> reverseTypeMapping = new HashMap<>();
 
-        for (HashMap.Entry<Component.Type, Type> item : TYPE_MAPPING.entrySet()) {
+        for (Map.Entry<Component.Type, Type> item : TYPE_MAPPING.entrySet()) {
             reverseTypeMapping.put(item.getValue(), item.getKey().code);
         }
 

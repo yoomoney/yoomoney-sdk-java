@@ -33,7 +33,8 @@ import com.yandex.money.api.model.Card;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.methods.JsonUtils.getString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Type adapter for {@link Card}.
@@ -55,11 +56,6 @@ public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
     }
 
     @Override
-    protected Class<Card> getType() {
-        return Card.class;
-    }
-
-    @Override
     public Card deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
@@ -76,6 +72,11 @@ public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
         return object;
     }
 
+    @Override
+    protected Class<Card> getType() {
+        return Card.class;
+    }
+
     static final class Delegate {
 
         private static final String MEMBER_PAN_FRAGMENT = "pan_fragment";
@@ -85,24 +86,16 @@ public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
         }
 
         static <T extends Card.Builder> void deserialize(JsonObject object, T builder) {
-            if (object == null) {
-                throw new NullPointerException("object is null");
-            }
-            if (builder == null) {
-                throw new NullPointerException("builder is null");
-            }
+            checkNotNull(object, "object");
+            checkNotNull(builder, "builder");
             builder.setPanFragment(getString(object, MEMBER_PAN_FRAGMENT))
                     .setType(Card.Type.parse(getString(object, MEMBER_TYPE)));
             MoneySourceTypeAdapter.Delegate.deserialize(object, builder);
         }
 
         static <T extends Card> void serialize(JsonObject object, T value) {
-            if (object == null) {
-                throw new NullPointerException("object is null");
-            }
-            if (value == null) {
-                throw new NullPointerException("value is null");
-            }
+            checkNotNull(object, "object");
+            checkNotNull(value, "value");
             object.addProperty(MEMBER_PAN_FRAGMENT, value.panFragment);
             object.addProperty(MEMBER_TYPE, value.type.name);
             MoneySourceTypeAdapter.Delegate.serialize(object, value);

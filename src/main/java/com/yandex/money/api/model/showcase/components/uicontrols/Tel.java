@@ -29,8 +29,6 @@ import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
  * Telephone number control.
- * <p/>
- * TODO: maybe this class should extend ParameterControl?
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */

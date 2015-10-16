@@ -28,9 +28,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.JsonUtils;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.uicontrols.ParameterControl;
+
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Base type adapter for components implementing {@link ParameterControl} interface.
@@ -46,8 +47,8 @@ abstract class ParameterControlTypeAdapter<T extends ParameterControl,
 
     @Override
     protected void deserialize(JsonObject src, U builder, JsonDeserializationContext context) {
-        builder.setName(JsonUtils.getString(src, MEMBER_NAME));
-        builder.setValue(JsonUtils.getString(src, MEMBER_VALUE));
+        builder.setName(getString(src, MEMBER_NAME));
+        builder.setValue(getString(src, MEMBER_VALUE));
 
         JsonElement autofill = src.get(MEMBER_AUTOFILL);
 
