@@ -29,6 +29,7 @@ import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.IncomingTransferAcceptTypeAdapter;
+import com.yandex.money.api.utils.Enums;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
@@ -114,7 +115,7 @@ public class IncomingTransferAccept implements MethodResponse {
     /**
      * Status of {@link com.yandex.money.api.methods.IncomingTransferAccept}
      */
-    public enum Status {
+    public enum Status implements Enums.WithCode<Status> {
         /**
          * Successful.
          */
@@ -126,7 +127,7 @@ public class IncomingTransferAccept implements MethodResponse {
         /**
          * Unknown status.
          */
-        UNKNOWN(CODE_UNKNOWN);
+        NULL(CODE_NULL);
 
         public final String code;
 
@@ -134,13 +135,18 @@ public class IncomingTransferAccept implements MethodResponse {
             this.code = code;
         }
 
-        public static Status parse(String status) {
-            for (Status value : values()) {
-                if (value.code.equals(status)) {
-                    return value;
-                }
-            }
-            return UNKNOWN;
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Status[] getValues() {
+            return values();
+        }
+
+        public static Status parse(String code) {
+            return Enums.parse(NULL, code);
         }
     }
 

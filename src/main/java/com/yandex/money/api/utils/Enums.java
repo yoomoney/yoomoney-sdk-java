@@ -22,43 +22,34 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model;
+package com.yandex.money.api.utils;
 
-import com.yandex.money.api.utils.Enums;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
- * Type of money sources allowe to make a payment.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * @author Slava Yasevich
  */
-public enum AllowedMoneySource implements Enums.WithCode<AllowedMoneySource> {
+public final class Enums {
 
-    CARDS("cards"),
-    CASH("cash"),
-    PAYMENT_CARD("payment-card"),
-    WALLET("wallet"),
-    NULL(null);
-
-    /**
-     * code
-     */
-    public final String code;
-
-    AllowedMoneySource(String code) {
-        this.code = code;
+    public static <T extends WithCode<T>> T parse(T prototype, String code) {
+        return parse(prototype, prototype, code);
     }
 
-    @Override
-    public String getCode() {
-        return code;
+    public static <T extends WithCode<T>> T parse(T prototype, T defaultValue, String code) {
+        checkNotNull(prototype, "prototype");
+        if (code == null) {
+            return defaultValue;
+        }
+        for (T value : prototype.getValues()) {
+            if (code.equals(value.getCode())) {
+                return value;
+            }
+        }
+        return defaultValue;
     }
 
-    @Override
-    public AllowedMoneySource[] getValues() {
-        return values();
-    }
-
-    public static AllowedMoneySource parse(String code) {
-        return Enums.parse(NULL, code);
+    public interface WithCode<T> {
+        String getCode();
+        T[] getValues();
     }
 }

@@ -24,12 +24,14 @@
 
 package com.yandex.money.api.model.showcase;
 
+import com.yandex.money.api.utils.Enums;
+
 /**
  * Sum type on payment form.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public enum AmountType {
+public enum AmountType implements Enums.WithCode<AmountType> {
 
     /**
      * Sum will be debited from buyer's account.
@@ -47,11 +49,21 @@ public enum AmountType {
         this.code = code;
     }
 
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public AmountType[] getValues() {
+        return values();
+    }
+
     /**
      * Parses amount type. If no matches found the {@link AmountType#AMOUNT} will be
      * returned.
      */
     public static AmountType parse(String code) {
-        return NET_AMOUNT.code.equals(code) ? NET_AMOUNT : AMOUNT;
+        return Enums.parse(AMOUNT, code);
     }
 }

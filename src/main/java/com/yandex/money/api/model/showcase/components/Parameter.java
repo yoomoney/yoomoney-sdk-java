@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.model.showcase.components;
 
+import com.yandex.money.api.utils.Enums;
+
 /**
  * Parameter.
  *
@@ -51,7 +53,7 @@ public interface Parameter {
     /**
      * Auto fill macros.
      */
-    enum AutoFill {
+    enum AutoFill implements Enums.WithCode<AutoFill> {
 
         /**
          * User's name.
@@ -74,6 +76,16 @@ public interface Parameter {
             this.code = code;
         }
 
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public AutoFill[] getValues() {
+            return values();
+        }
+
         /**
          * Parses incoming code to matched enum item.
          *
@@ -81,12 +93,7 @@ public interface Parameter {
          * @return enum item or {@code null}.
          */
         public static AutoFill parse(String code) {
-            for (AutoFill autoFill : AutoFill.values()) {
-                if (autoFill.code.equalsIgnoreCase(code)) {
-                    return autoFill;
-                }
-            }
-            return null;
+            return Enums.parse(CURRENT_USER_ACCOUNT, null, code);
         }
     }
 }

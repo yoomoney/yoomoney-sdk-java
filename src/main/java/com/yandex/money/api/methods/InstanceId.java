@@ -29,6 +29,7 @@ import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
+import com.yandex.money.api.utils.Enums;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
@@ -104,7 +105,7 @@ public class InstanceId implements MethodResponse {
     /**
      * Status of an instance id request.
      */
-    public enum Status {
+    public enum Status implements Enums.WithCode<Status> {
         /**
          * Successful.
          */
@@ -116,7 +117,7 @@ public class InstanceId implements MethodResponse {
         /**
          * Unknown.
          */
-        UNKNOWN(CODE_UNKNOWN);
+        NULL(CODE_NULL);
 
         public final String code;
 
@@ -124,13 +125,18 @@ public class InstanceId implements MethodResponse {
             this.code = code;
         }
 
-        public static Status parse(String status) {
-            for (Status value : values()) {
-                if (value.code.equals(status)) {
-                    return value;
-                }
-            }
-            return UNKNOWN;
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Status[] getValues() {
+            return values();
+        }
+
+        public static Status parse(String code) {
+            return Enums.parse(NULL, code);
         }
     }
 

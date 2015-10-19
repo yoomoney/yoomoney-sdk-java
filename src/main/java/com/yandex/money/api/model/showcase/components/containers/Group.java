@@ -25,6 +25,7 @@
 package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.Component;
+import com.yandex.money.api.utils.Enums;
 import com.yandex.money.api.utils.ToStringBuilder;
 
 import static com.yandex.money.api.utils.Common.checkNotNull;
@@ -90,7 +91,7 @@ public final class Group extends Container<Component> {
     /**
      * Possible options that specifies arrangement of contained {@link Component}s.
      */
-    public enum Layout {
+    public enum Layout implements Enums.WithCode<Layout> {
 
         /**
          * Vertical arrangement.
@@ -108,13 +109,18 @@ public final class Group extends Container<Component> {
             this.code = code;
         }
 
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Layout[] getValues() {
+            return values();
+        }
+
         public static Layout parse(String code) {
-            for (Layout type : values()) {
-                if (type.code.equals(code)) {
-                    return type;
-                }
-            }
-            return VERTICAL;
+            return Enums.parse(VERTICAL, code);
         }
     }
 

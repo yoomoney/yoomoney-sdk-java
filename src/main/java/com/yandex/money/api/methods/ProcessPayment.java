@@ -30,6 +30,7 @@ import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.ProcessPaymentTypeAdapter;
+import com.yandex.money.api.utils.Enums;
 
 import java.math.BigDecimal;
 
@@ -169,7 +170,7 @@ public class ProcessPayment extends BaseProcessPayment {
     /**
      * Available test results.
      */
-    public enum TestResult {
+    public enum TestResult implements Enums.WithCode<TestResult> {
 
         SUCCESS("success"),
         CONTRACT_NOT_FOUND("contract_not_found"),
@@ -187,6 +188,16 @@ public class ProcessPayment extends BaseProcessPayment {
 
         TestResult(String code) {
             this.code = code;
+        }
+
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public TestResult[] getValues() {
+            return values();
         }
     }
 

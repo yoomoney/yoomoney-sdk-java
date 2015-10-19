@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.model;
 
+import com.yandex.money.api.utils.Enums;
+
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -66,7 +68,7 @@ public class YandexMoneyCard extends Card {
         return result;
     }
 
-    public enum State {
+    public enum State implements Enums.WithCode<State> {
         ACTIVE("active"),
         ACTIVE_NO_PIN("active_no_pin"),
         AWAITING_ACTIVATION("awaiting_activation"),
@@ -79,16 +81,18 @@ public class YandexMoneyCard extends Card {
             this.code = code;
         }
 
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public State[] getValues() {
+            return values();
+        }
+
         public static State parse(String code) {
-            if (code == null) {
-                return UNKNOWN;
-            }
-            for (State value : values()) {
-                if (code.equals(value.code)) {
-                    return value;
-                }
-            }
-            return UNKNOWN;
+            return Enums.parse(UNKNOWN, code);
         }
     }
 

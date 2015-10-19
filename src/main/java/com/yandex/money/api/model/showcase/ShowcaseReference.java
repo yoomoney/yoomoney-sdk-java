@@ -25,6 +25,7 @@
 package com.yandex.money.api.model.showcase;
 
 import com.yandex.money.api.methods.ShowcaseSearch;
+import com.yandex.money.api.utils.Enums;
 import com.yandex.money.api.utils.Strings;
 
 import java.util.Collections;
@@ -149,7 +150,7 @@ public final class ShowcaseReference {
     /**
      * Format.
      */
-    public enum Format {
+    public enum Format implements Enums.WithCode<Format> {
 
         /**
          * JSON.
@@ -167,16 +168,18 @@ public final class ShowcaseReference {
             this.code = code;
         }
 
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Format[] getValues() {
+            return values();
+        }
+
         public static Format parse(String code) {
-            if (code == null) {
-                return NULL;
-            }
-            for (Format format : values()) {
-                if (format.code.equals(code)) {
-                    return format;
-                }
-            }
-            return NULL;
+            return Enums.parse(NULL, code);
         }
     }
 }

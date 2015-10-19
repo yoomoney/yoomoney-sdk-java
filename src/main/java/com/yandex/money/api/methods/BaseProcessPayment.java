@@ -26,6 +26,7 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.MethodResponse;
+import com.yandex.money.api.utils.Enums;
 import com.yandex.money.api.utils.MillisecondsIn;
 
 import java.util.Collections;
@@ -110,12 +111,13 @@ public abstract class BaseProcessPayment implements MethodResponse {
         return result;
     }
 
-    public enum Status {
+    public enum Status implements Enums.WithCode<Status> {
+
         SUCCESS(CODE_SUCCESS),
         REFUSED(CODE_REFUSED),
         IN_PROGRESS(CODE_IN_PROGRESS),
         EXT_AUTH_REQUIRED(CODE_EXT_AUTH_REQUIRED),
-        UNKNOWN(CODE_UNKNOWN);
+        NULL(CODE_NULL);
 
         public final String code;
 
@@ -123,13 +125,18 @@ public abstract class BaseProcessPayment implements MethodResponse {
             this.code = code;
         }
 
-        public static Status parse(String status) {
-            for (Status value : values()) {
-                if (value.code.equals(status)) {
-                    return value;
-                }
-            }
-            return UNKNOWN;
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Status[] getValues() {
+            return values();
+        }
+
+        public static Status parse(String code) {
+            return Enums.parse(NULL, code);
         }
     }
 

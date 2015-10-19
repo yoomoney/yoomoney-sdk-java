@@ -37,8 +37,10 @@ import static com.yandex.money.api.utils.Common.checkNotEmpty;
  */
 public final class P2pTransferParams extends PaymentParams {
 
+    public static final String PATTERN_ID = "p2p";
+
     private P2pTransferParams(Map<String, String> paymentParams) {
-        super("p2p", paymentParams);
+        super(PATTERN_ID, paymentParams);
     }
 
     /**

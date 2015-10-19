@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.model;
 
+import com.yandex.money.api.utils.Enums;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
@@ -308,7 +309,7 @@ public class Operation {
     /**
      * Status of operation.
      */
-    public enum Status {
+    public enum Status implements Enums.WithCode<Status> {
         /**
          * Operation succeeded.
          */
@@ -332,23 +333,25 @@ public class Operation {
             this.code = code;
         }
 
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Status[] getValues() {
+            return values();
+        }
+
         public static Status parse(String code) {
-            if (code == null) {
-                return NULL;
-            }
-            for (Status value : values()) {
-                if (code.equals(value.code)) {
-                    return value;
-                }
-            }
-            return NULL;
+            return Enums.parse(NULL, code);
         }
     }
 
     /**
      * Type of operation.
      */
-    public enum Type {
+    public enum Type implements Enums.WithCode<Type> {
         /**
          * Payment to a shop.
          */
@@ -380,20 +383,25 @@ public class Operation {
             this.code = code;
         }
 
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Type[] getValues() {
+            return values();
+        }
+
         public static Type parse(String code) {
-            for (Type value : values()) {
-                if (code.equals(value.code)) {
-                    return value;
-                }
-            }
-            return NULL;
+            return Enums.parse(NULL, code);
         }
     }
 
     /**
      * Direction of operation.
      */
-    public enum Direction {
+    public enum Direction implements Enums.WithCode<Direction> {
         /**
          * Incoming.
          */
@@ -413,16 +421,18 @@ public class Operation {
             this.code = code;
         }
 
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Direction[] getValues() {
+            return values();
+        }
+
         public static Direction parse(String code) {
-            if (code == null) {
-                return NULL;
-            }
-            for (Direction value : values()) {
-                if (code.equals(value.code)) {
-                    return value;
-                }
-            }
-            return NULL;
+            return Enums.parse(NULL, code);
         }
     }
 

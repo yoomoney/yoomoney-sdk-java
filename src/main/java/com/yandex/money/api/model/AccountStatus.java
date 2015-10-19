@@ -24,12 +24,14 @@
 
 package com.yandex.money.api.model;
 
+import com.yandex.money.api.utils.Enums;
+
 /**
  * Account status.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public enum AccountStatus {
+public enum AccountStatus implements Enums.WithCode<AccountStatus> {
     /**
      * Anonymous account.
      */
@@ -53,15 +55,17 @@ public enum AccountStatus {
         this.code = code;
     }
 
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public AccountStatus[] getValues() {
+        return values();
+    }
+
     public static AccountStatus parse(String code) {
-        if (code == null) {
-            return NULL;
-        }
-        for (AccountStatus value : values()) {
-            if (code.equals(value.code)) {
-                return value;
-            }
-        }
-        return NULL;
+        return Enums.parse(NULL, code);
     }
 }

@@ -30,6 +30,7 @@ import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.OperationHistoryTypeAdapter;
+import com.yandex.money.api.utils.Enums;
 import org.joda.time.DateTime;
 
 import java.util.Collections;
@@ -101,7 +102,7 @@ public class OperationHistory implements MethodResponse {
     /**
      * Filter types.
      */
-    public enum FilterType {
+    public enum FilterType implements Enums.WithCode<FilterType> {
         /**
          * Depositions.
          */
@@ -119,6 +120,16 @@ public class OperationHistory implements MethodResponse {
 
         FilterType(String code) {
             this.code = code;
+        }
+
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public FilterType[] getValues() {
+            return values();
         }
     }
 

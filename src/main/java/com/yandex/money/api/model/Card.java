@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.model;
 
+import com.yandex.money.api.utils.Enums;
+
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -78,7 +80,8 @@ public class Card extends MoneySource {
         return result;
     }
 
-    public enum Type {
+    public enum Type implements Enums.WithCode<Type> {
+
         VISA("VISA", "CVV2", 3),
         MASTER_CARD("MasterCard", "CVC2", 3),
         AMERICAN_EXPRESS("AmericanExpress", "CID", 4), // also cscAbbr = 4DBC
@@ -95,16 +98,18 @@ public class Card extends MoneySource {
             this.cscLength = cscLength;
         }
 
+        @Override
+        public String getCode() {
+            return name;
+        }
+
+        @Override
+        public Type[] getValues() {
+            return values();
+        }
+
         public static Type parse(String name) {
-            if (name == null) {
-                return UNKNOWN;
-            }
-            for (Type cardType : values()) {
-                if (cardType.name.equalsIgnoreCase(name)) {
-                    return cardType;
-                }
-            }
-            return UNKNOWN;
+            return Enums.parse(UNKNOWN, name);
         }
     }
 

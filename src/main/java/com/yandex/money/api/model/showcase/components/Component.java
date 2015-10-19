@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.model.showcase.components;
 
+import com.yandex.money.api.utils.Enums;
 import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
@@ -51,7 +52,7 @@ public abstract class Component {
     /**
      * Possible field types.
      */
-    public enum Type {
+    public enum Type implements Enums.WithCode<Type> {
 
         TEXT("text"),
         NUMBER("number"),
@@ -73,13 +74,18 @@ public abstract class Component {
             this.code = code;
         }
 
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Type[] getValues() {
+            return values();
+        }
+
         public static Type parse(String code) {
-            for (Type type : values()) {
-                if (type.code.equalsIgnoreCase(code)) {
-                    return type;
-                }
-            }
-            return null;
+            return Enums.parse(TEXT, null, code);
         }
     }
 

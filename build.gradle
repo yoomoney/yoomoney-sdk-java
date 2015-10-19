@@ -22,7 +22,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.4'
     compile 'joda-time:joda-time:2.8.2'
 
-    testCompile 'org.testng:testng:6.9.7'
+    testCompile 'org.testng:testng:6.9.8'
     testCompile 'com.squareup.okhttp:mockwebserver:2.5.0'
 }
 
@@ -30,7 +30,7 @@ publish {
     userOrg = 'yandex-money'
     groupId = 'com.yandex.money.api'
     artifactId = 'yandex-money-sdk-java'
-    version = '4.2.4'
+    version = '5.0.0'
     website = 'https://github.com/yandex-money/yandex-money-sdk-java'
     issueTracker = "${website}/issues"
     repository = "${website}.git"

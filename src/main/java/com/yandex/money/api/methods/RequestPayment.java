@@ -32,6 +32,7 @@ import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.RequestPaymentTypeAdapter;
+import com.yandex.money.api.utils.Enums;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -166,7 +167,7 @@ public class RequestPayment extends BaseRequestPayment {
     /**
      * Test results.
      */
-    public enum TestResult {
+    public enum TestResult implements Enums.WithCode<TestResult> {
 
         SUCCESS("success"),
         ILLEGAL_PARAMS("illegal_params"),
@@ -189,6 +190,16 @@ public class RequestPayment extends BaseRequestPayment {
 
         TestResult(String code) {
             this.code = code;
+        }
+
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public TestResult[] getValues() {
+            return values();
         }
     }
 

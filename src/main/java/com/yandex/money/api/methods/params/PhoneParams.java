@@ -38,6 +38,8 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public final class PhoneParams extends PaymentParams {
 
+    public static final String PATTERN_ID = "phone-topup";
+
     public static PhoneParams newInstance(String number, BigDecimal amount) {
         checkNotEmpty(number, "number");
         checkNotNull(amount, "amount");
@@ -45,7 +47,7 @@ public final class PhoneParams extends PaymentParams {
         HashMap<String, String> params = new HashMap<>();
         params.put("amount", amount.toPlainString());
         params.put("phone-number", number);
-        return new PhoneParams("phone-topup", params);
+        return new PhoneParams(PATTERN_ID, params);
     }
 
     private PhoneParams(String patternId, Map<String, String> paymentParams) {

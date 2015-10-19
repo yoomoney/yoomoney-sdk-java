@@ -24,12 +24,14 @@
 
 package com.yandex.money.api.model;
 
+import com.yandex.money.api.utils.Enums;
+
 /**
  * Account's type.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public enum AccountType {
+public enum AccountType implements Enums.WithCode<AccountType> {
     /**
      * Personal.
      */
@@ -49,15 +51,17 @@ public enum AccountType {
         this.code = code;
     }
 
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public AccountType[] getValues() {
+        return values();
+    }
+
     public static AccountType parse(String code) {
-        if (code == null) {
-            return NULL;
-        }
-        for (AccountType value : values()) {
-            if (code.equals(value.code)) {
-                return value;
-            }
-        }
-        return NULL;
+        return Enums.parse(NULL, code);
     }
 }

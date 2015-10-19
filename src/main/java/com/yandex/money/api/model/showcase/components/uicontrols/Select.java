@@ -25,6 +25,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.model.showcase.components.containers.Group;
+import com.yandex.money.api.utils.Enums;
 import com.yandex.money.api.utils.ToStringBuilder;
 
 import java.util.ArrayList;
@@ -126,7 +127,7 @@ public final class Select extends ParameterControl {
     /**
      * Style of {@link Select} representation.
      */
-    public enum Style {
+    public enum Style implements Enums.WithCode<Style> {
 
         /**
          * Options should be arranged as group of radio buttons.
@@ -144,13 +145,18 @@ public final class Select extends ParameterControl {
             this.code = code;
         }
 
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Style[] getValues() {
+            return values();
+        }
+
         public static Style parse(String code) {
-            for (Style type : values()) {
-                if (type.code.equalsIgnoreCase(code)) {
-                    return type;
-                }
-            }
-            return SPINNER;
+            return Enums.parse(SPINNER, code);
         }
     }
 

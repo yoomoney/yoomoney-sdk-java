@@ -25,6 +25,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 
+import com.yandex.money.api.utils.Enums;
 import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
@@ -90,7 +91,7 @@ public class Text extends TextArea {
      * Keyboard type. The {@link Keyboard#NUMBER} means that field value can be filled with
      * number keyboard.
      */
-    public enum Keyboard {
+    public enum Keyboard implements Enums.WithCode<Keyboard> {
 
         NUMBER("number");
 
@@ -100,13 +101,18 @@ public class Text extends TextArea {
             this.code = code;
         }
 
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Keyboard[] getValues() {
+            return values();
+        }
+
         public static Keyboard parse(String code) {
-            for (Keyboard keyboard : values()) {
-                if (keyboard.code.equals(code)) {
-                    return keyboard;
-                }
-            }
-            return null;
+            return Enums.parse(NUMBER, null, code);
         }
     }
 

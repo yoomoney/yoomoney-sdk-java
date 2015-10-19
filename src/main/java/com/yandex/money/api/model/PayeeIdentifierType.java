@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.model;
 
+import com.yandex.money.api.utils.Enums;
 import com.yandex.money.api.utils.Patterns;
 import com.yandex.money.api.utils.Strings;
 
@@ -34,7 +35,7 @@ import com.yandex.money.api.utils.Strings;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public enum PayeeIdentifierType {
+public enum PayeeIdentifierType implements Enums.WithCode<PayeeIdentifierType> {
     /**
      * Account number.
      */
@@ -58,16 +59,18 @@ public enum PayeeIdentifierType {
         this.code = code;
     }
 
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public PayeeIdentifierType[] getValues() {
+        return values();
+    }
+
     public static PayeeIdentifierType parse(String code) {
-        if (code == null) {
-            return NULL;
-        }
-        for (PayeeIdentifierType value : values()) {
-            if (code.equals(value.code)) {
-                return value;
-            }
-        }
-        return NULL;
+        return Enums.parse(NULL, code);
     }
 
     /**
