@@ -29,6 +29,7 @@ import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.model.Error;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getLong;
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullMap;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
@@ -55,12 +56,11 @@ final class BaseProcessPaymentTypeAdapter {
         private Delegate() {
         }
 
-        static <T extends BaseProcessPayment.Builder> void deserialize(JsonObject object,
-                                                                       T builder) {
+        static <T extends BaseProcessPayment.Builder> void deserialize(JsonObject object, T builder) {
             checkNotNull(object, "object");
             checkNotNull(builder, "builder");
 
-            builder.setStatus(BaseProcessPayment.Status.parse(getString(object, MEMBER_STATUS)))
+            builder.setStatus(BaseProcessPayment.Status.parse(getMandatoryString(object, MEMBER_STATUS)))
                     .setError(Error.parse(getString(object, MEMBER_ERROR)))
                     .setInvoiceId(getString(object, MEMBER_INVOICE_ID))
                     .setAcsUri(getString(object, MEMBER_ACS_URI))

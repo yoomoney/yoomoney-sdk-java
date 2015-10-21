@@ -37,17 +37,17 @@ public enum AccountStatus implements Enums.WithCode<AccountStatus> {
      */
     ANONYMOUS("anonymous"),
     /**
+     * Account is closed.
+     */
+    CLOSED("closed"),
+    /**
      * Named account.
      */
     NAMED("named"),
     /**
      * Identified account.
      */
-    IDENTIFIED("identified"),
-    /**
-     * Unknown account.
-     */
-    NULL(null);
+    IDENTIFIED("identified");
 
     public final String code;
 
@@ -66,6 +66,6 @@ public enum AccountStatus implements Enums.WithCode<AccountStatus> {
     }
 
     public static AccountStatus parse(String code) {
-        return Enums.parse(NULL, code);
+        return Enums.parse(ANONYMOUS, code);
     }
 }

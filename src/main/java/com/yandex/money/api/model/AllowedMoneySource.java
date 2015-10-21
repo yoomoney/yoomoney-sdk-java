@@ -36,8 +36,7 @@ public enum AllowedMoneySource implements Enums.WithCode<AllowedMoneySource> {
     CARDS("cards"),
     CASH("cash"),
     PAYMENT_CARD("payment-card"),
-    WALLET("wallet"),
-    NULL(null);
+    WALLET("wallet");
 
     /**
      * code
@@ -59,6 +58,6 @@ public enum AllowedMoneySource implements Enums.WithCode<AllowedMoneySource> {
     }
 
     public static AllowedMoneySource parse(String code) {
-        return Enums.parse(NULL, code);
+        return Enums.parseOrThrow(WALLET, code);
     }
 }

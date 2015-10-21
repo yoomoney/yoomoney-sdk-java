@@ -52,10 +52,10 @@ final class BaseRequestPaymentTypeAdapter {
         private Delegate() {
         }
 
-        static <T extends BaseRequestPayment.Builder> void deserialize(JsonObject object,
-                                                                       T builder) {
+        static <T extends BaseRequestPayment.Builder> void deserialize(JsonObject object, T builder) {
             checkNotNull(object, "object");
             checkNotNull(builder, "builder");
+
             builder.setStatus(Status.parse(getMandatoryString(object, MEMBER_STATUS)))
                     .setError(Error.parse(getString(object, MEMBER_ERROR)))
                     .setContractAmount(getBigDecimal(object, MEMBER_CONTRACT_AMOUNT))

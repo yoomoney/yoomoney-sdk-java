@@ -40,8 +40,7 @@ import java.lang.reflect.Type;
  */
 public final class AllowedMoneySourceTypeAdapter extends BaseTypeAdapter<AllowedMoneySource> {
 
-    private static final AllowedMoneySourceTypeAdapter INSTANCE =
-            new AllowedMoneySourceTypeAdapter();
+    private static final AllowedMoneySourceTypeAdapter INSTANCE = new AllowedMoneySourceTypeAdapter();
 
     private AllowedMoneySourceTypeAdapter() {
     }
@@ -51,15 +50,13 @@ public final class AllowedMoneySourceTypeAdapter extends BaseTypeAdapter<Allowed
     }
 
     @Override
-    public AllowedMoneySource deserialize(JsonElement json, Type typeOfT,
-                                          JsonDeserializationContext context)
+    public AllowedMoneySource deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
         return AllowedMoneySource.parse(json.getAsJsonPrimitive().getAsString());
     }
 
     @Override
-    public JsonElement serialize(AllowedMoneySource src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
+    public JsonElement serialize(AllowedMoneySource src, Type typeOfSrc, JsonSerializationContext context) {
         return new JsonPrimitive(src.code);
     }
 

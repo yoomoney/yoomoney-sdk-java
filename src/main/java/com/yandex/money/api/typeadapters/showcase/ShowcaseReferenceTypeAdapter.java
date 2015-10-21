@@ -93,7 +93,9 @@ public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<Showcase
         object.addProperty(MEMBER_TITLE, src.title);
         object.addProperty(MEMBER_TOP, src.topIndex);
         object.addProperty(MEMBER_URL, src.url);
-        object.addProperty(MEMBER_FORMAT, src.format.code);
+        if (src.format != null) {
+            object.addProperty(MEMBER_FORMAT, src.format.code);
+        }
         return object;
     }
 

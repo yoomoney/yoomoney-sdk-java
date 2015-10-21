@@ -61,23 +61,18 @@ public final class InstanceIdTypeAdapter extends BaseTypeAdapter<InstanceId> {
     }
 
     @Override
-    public InstanceId deserialize(JsonElement json, Type typeOfT,
-                                  JsonDeserializationContext context)
+    public InstanceId deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonObject o = json.getAsJsonObject();
-        return new InstanceId(
-                InstanceId.Status.parse(getMandatoryString(o, MEMBER_STATUS)),
-                Error.parse(getString(o, MEMBER_ERROR)),
-                getString(o, MEMBER_INSTANCE_ID));
+        return new InstanceId(InstanceId.Status.parse(getMandatoryString(o, MEMBER_STATUS)),
+                Error.parse(getString(o, MEMBER_ERROR)), getString(o, MEMBER_INSTANCE_ID));
     }
 
     @Override
     public JsonElement serialize(InstanceId src, Type typeOfSrc, JsonSerializationContext context) {
-
         JsonObject object = new JsonObject();
         object.addProperty(MEMBER_STATUS, src.status.code);
-
         if (src.error != null) {
             object.addProperty(MEMBER_ERROR, src.error.code);
         } else {

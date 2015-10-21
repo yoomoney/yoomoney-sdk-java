@@ -93,7 +93,7 @@ public interface Parameter {
          * @return enum item or {@code null}.
          */
         public static AutoFill parse(String code) {
-            return Enums.parse(CURRENT_USER_ACCOUNT, null, code);
+            return Enums.parse(CURRENT_USER_ACCOUNT, code);
         }
     }
 }

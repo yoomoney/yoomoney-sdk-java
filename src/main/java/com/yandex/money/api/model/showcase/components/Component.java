@@ -85,7 +85,7 @@ public abstract class Component {
         }
 
         public static Type parse(String code) {
-            return Enums.parse(TEXT, null, code);
+            return Enums.parseOrThrow(TEXT, code);
         }
     }
 

@@ -78,8 +78,8 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
     }
 
     @Override
-    public AccountInfo deserialize(JsonElement json, Type typeOfT,
-                                   JsonDeserializationContext context) throws JsonParseException {
+    public AccountInfo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
 
@@ -99,8 +99,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.getInstance().fromJson(
                 object.get(MEMBER_BALANCE_DETAILS));
 
-        List<Card> linkedCards = getNotNullArray(object, MEMBER_CARDS_LINKED,
-                CardTypeAdapter.getInstance());
+        List<Card> linkedCards = getNotNullArray(object, MEMBER_CARDS_LINKED, CardTypeAdapter.getInstance());
 
         List<String> additionalServices = getNotNullArray(object,
                 MEMBER_SERVICES_ADDITIONAL, StringTypeAdapter.getInstance());
@@ -123,9 +122,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
     }
 
     @Override
-    public JsonElement serialize(AccountInfo src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
-
+    public JsonElement serialize(AccountInfo src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
 
         object.addProperty(MEMBER_ACCOUNT, src.account);
@@ -135,12 +132,10 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         object.addProperty(MEMBER_TYPE, src.accountType.code);
 
         object.add(MEMBER_AVATAR, AvatarTypeAdapter.getInstance().toJsonTree(src.avatar));
-        object.add(MEMBER_BALANCE_DETAILS, BalanceDetailsTypeAdapter.getInstance().toJsonTree(
-                src.balanceDetails));
+        object.add(MEMBER_BALANCE_DETAILS, BalanceDetailsTypeAdapter.getInstance().toJsonTree(src.balanceDetails));
 
         if (!src.linkedCards.isEmpty()) {
-            object.add(MEMBER_CARDS_LINKED, toJsonArray(src.linkedCards,
-                    CardTypeAdapter.getInstance()));
+            object.add(MEMBER_CARDS_LINKED, toJsonArray(src.linkedCards, CardTypeAdapter.getInstance()));
         }
 
         if (!src.additionalServices.isEmpty()) {

@@ -96,11 +96,7 @@ public class IncomingTransferReject implements MethodResponse {
         /**
          * Refused.
          */
-        REFUSED(CODE_REFUSED),
-        /**
-         * Unknown.
-         */
-        NULL(CODE_NULL);
+        REFUSED(CODE_REFUSED);
 
         public final String code;
 
@@ -119,7 +115,7 @@ public class IncomingTransferReject implements MethodResponse {
         }
 
         public static Status parse(String code) {
-            return Enums.parse(NULL, code);
+            return Enums.parse(SUCCESS, code);
         }
     }
 

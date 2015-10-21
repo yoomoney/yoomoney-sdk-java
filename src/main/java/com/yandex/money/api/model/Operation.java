@@ -167,7 +167,6 @@ public class Operation {
         checkNotNull(builder.operationId, "operationId");
         checkNotNull(builder.status, "status");
         checkNotNull(builder.paymentParameters, "paymentParameters");
-        checkNotNull(builder.recipientType, "recipientType");
         checkNotNull(builder.type, "type");
         checkNotNull(builder.direction, "direction");
         checkNotNull(builder.amount, "amount");
@@ -321,11 +320,7 @@ public class Operation {
         /**
          * Operation is in progress, e.g. P2P with protection code has not been received.
          */
-        IN_PROGRESS("in_progress"),
-        /**
-         * Status of operation is unknown.
-         */
-        NULL(null);
+        IN_PROGRESS("in_progress");
 
         public final String code;
 
@@ -344,7 +339,7 @@ public class Operation {
         }
 
         public static Status parse(String code) {
-            return Enums.parse(NULL, code);
+            return Enums.parseOrThrow(SUCCESS, code);
         }
     }
 
@@ -371,11 +366,7 @@ public class Operation {
         /**
          * Deposition.
          */
-        DEPOSITION("deposition"),
-        /**
-         * Unknown.
-         */
-        NULL(null);
+        DEPOSITION("deposition");
 
         public final String code;
 
@@ -394,7 +385,7 @@ public class Operation {
         }
 
         public static Type parse(String code) {
-            return Enums.parse(NULL, code);
+            return Enums.parseOrThrow(PAYMENT_SHOP, code);
         }
     }
 
@@ -409,11 +400,7 @@ public class Operation {
         /**
          * Outgoing.
          */
-        OUTGOING("out"),
-        /**
-         * Unknown.
-         */
-        NULL(null);
+        OUTGOING("out");
 
         public final String code;
 
@@ -432,7 +419,7 @@ public class Operation {
         }
 
         public static Direction parse(String code) {
-            return Enums.parse(NULL, code);
+            return Enums.parseOrThrow(INCOMING, code);
         }
     }
 

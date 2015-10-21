@@ -156,7 +156,7 @@ public final class Select extends ParameterControl {
         }
 
         public static Style parse(String code) {
-            return Enums.parse(SPINNER, code);
+            return Enums.parse(SPINNER, SPINNER, code);
         }
     }
 

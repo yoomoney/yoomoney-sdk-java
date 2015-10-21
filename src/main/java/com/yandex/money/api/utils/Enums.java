@@ -31,10 +31,47 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public final class Enums {
 
+    /**
+     * Parses {@code code} to using {@code prototype} to get {@code enum}'s declaration.
+     *
+     * Returns {@code null} if found no matches for specified {@code code}.
+     *
+     * @param prototype prototype to use
+     * @param code      code to parse
+     * @param <T>       type of {@code enum}
+     * @return          {@code enum}'s value
+     */
     public static <T extends WithCode<T>> T parse(T prototype, String code) {
-        return parse(prototype, prototype, code);
+        return parse(prototype, null, code);
     }
 
+    /**
+     * Parses {@code code} to using {@code prototype} to get {@code enum}'s declaration.
+     *
+     * Throws {@link NullPointerException} if found no matches for specified {@code code}.
+     *
+     * @param prototype prototype to use
+     * @param code      code to parse
+     * @param <T>       type of {@code enum}
+     * @return          {@code enum}'s value
+     */
+    public static <T extends WithCode<T>> T parseOrThrow(T prototype, String code) {
+        T value = parse(prototype, null, code);
+        checkNotNull(value, "value");
+        return value;
+    }
+
+    /**
+     * Parses {@code code} to using {@code prototype} to get {@code enum}'s declaration.
+     *
+     * Returns {@code defaultValue} if found no matches for specified {@code code}.
+     *
+     * @param prototype    prototype to use
+     * @param defaultValue default value
+     * @param code         code to parse
+     * @param <T>          type of {@code enum}
+     * @return             {@code enum}'s value
+     */
     public static <T extends WithCode<T>> T parse(T prototype, T defaultValue, String code) {
         checkNotNull(prototype, "prototype");
         if (code == null) {

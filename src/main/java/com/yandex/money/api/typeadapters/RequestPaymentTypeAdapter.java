@@ -88,10 +88,8 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
 
         RequestPayment.Builder builder = new RequestPayment.Builder()
                 .setBalance(getBigDecimal(object, MEMBER_BALANCE))
-                .setRecipientAccountStatus(AccountStatus.parse(
-                        getString(object, MEMBER_RECIPIENT_ACCOUNT_STATUS)))
-                .setRecipientAccountType(AccountType.parse(
-                        getString(object, MEMBER_RECIPIENT_ACCOUNT_TYPE)))
+                .setRecipientAccountStatus(AccountStatus.parse(getString(object, MEMBER_RECIPIENT_ACCOUNT_STATUS)))
+                .setRecipientAccountType(AccountType.parse(getString(object, MEMBER_RECIPIENT_ACCOUNT_TYPE)))
                 .setProtectionCode(getString(object, MEMBER_PROTECTION_CODE))
                 .setAccountUnblockUri(getString(object, MEMBER_ACCOUNT_UNBLOCK_URI))
                 .setExtActionUri(getString(object, MEMBER_EXT_ACTION_URI));
@@ -108,11 +106,16 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
         JsonObject jsonObject = new JsonObject();
 
         jsonObject.addProperty(MEMBER_BALANCE, src.balance);
-        jsonObject.addProperty(MEMBER_RECIPIENT_ACCOUNT_STATUS, src.recipientAccountStatus.code);
-        jsonObject.addProperty(MEMBER_RECIPIENT_ACCOUNT_TYPE, src.recipientAccountType.code);
         jsonObject.addProperty(MEMBER_PROTECTION_CODE, src.protectionCode);
         jsonObject.addProperty(MEMBER_ACCOUNT_UNBLOCK_URI, src.accountUnblockUri);
         jsonObject.addProperty(MEMBER_EXT_ACTION_URI, src.extActionUri);
+
+        if (src.recipientAccountStatus != null) {
+            jsonObject.addProperty(MEMBER_RECIPIENT_ACCOUNT_STATUS, src.recipientAccountStatus.code);
+        }
+        if (src.recipientAccountType != null) {
+            jsonObject.addProperty(MEMBER_RECIPIENT_ACCOUNT_TYPE, src.recipientAccountType.code);
+        }
 
         if (!src.moneySources.isEmpty()) {
             jsonObject.add(MEMBER_MS, serializeMoneySources(src.moneySources,

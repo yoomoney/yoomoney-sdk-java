@@ -92,7 +92,7 @@ public class YandexMoneyCard extends Card {
         }
 
         public static State parse(String code) {
-            return Enums.parse(UNKNOWN, code);
+            return Enums.parse(UNKNOWN, UNKNOWN, code);
         }
     }
 

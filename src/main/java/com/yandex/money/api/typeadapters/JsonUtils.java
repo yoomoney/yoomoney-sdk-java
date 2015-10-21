@@ -28,7 +28,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
@@ -251,9 +250,7 @@ public final class JsonUtils {
      * @param <T> type of a value in the array
      * @return list of values
      */
-    public static <T> List<T> getArray(JsonObject object, String memberName,
-                                       TypeAdapter<T> converter) {
-
+    public static <T> List<T> getArray(JsonObject object, String memberName, TypeAdapter<T> converter) {
         checkParameters(object, memberName);
         JsonArray array = object.getAsJsonArray(memberName);
         if (array == null) {
@@ -278,8 +275,7 @@ public final class JsonUtils {
      * @param <T>        type of a value in the array
      * @return list of values
      */
-    public static <T> List<T> getNotNullArray(JsonObject object, String memberName,
-                                              TypeAdapter<T> converter) {
+    public static <T> List<T> getNotNullArray(JsonObject object, String memberName, TypeAdapter<T> converter) {
         List<T> array = getArray(object, memberName, converter);
         return array == null ? Collections.<T>emptyList() : array;
     }

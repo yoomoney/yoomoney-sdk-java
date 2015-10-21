@@ -64,6 +64,6 @@ public enum AmountType implements Enums.WithCode<AmountType> {
      * returned.
      */
     public static AmountType parse(String code) {
-        return Enums.parse(AMOUNT, code);
+        return Enums.parse(AMOUNT, AMOUNT, code);
     }
 }

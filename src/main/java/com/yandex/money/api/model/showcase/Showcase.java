@@ -32,13 +32,14 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
-import com.yandex.money.api.utils.Common;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * @author Aleksandr Ershov (asershov@yamoney.com)
@@ -52,12 +53,12 @@ public final class Showcase {
     public final List<Error> errors;
 
     private Showcase(Builder builder) {
+        checkNotNull(builder.title, "title");
+        checkNotNull(builder.hiddenFields, "hiddenFields");
+        checkNotNull(builder.form, "form");
+        checkNotNull(builder.moneySources, "moneySources");
+        checkNotNull(builder.errors, "errors");
 
-        Common.checkNotNull(builder.title, "title");
-        Common.checkNotNull(builder.hiddenFields, "hiddenFields");
-        Common.checkNotNull(builder.form, "form");
-        Common.checkNotNull(builder.moneySources, "moneySources");
-        Common.checkNotNull(builder.errors, "errors");
         this.title = builder.title;
         this.hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
         this.form = builder.form;
@@ -160,7 +161,7 @@ public final class Showcase {
         public final String alert;
 
         public Error(String name, String alert) {
-            Common.checkNotNull(alert, "alert");
+            checkNotNull(alert, "alert");
             this.name = name;
             this.alert = alert;
         }
@@ -205,7 +206,7 @@ public final class Showcase {
         private Request(String patternId, String url, Map<String, String> params) {
             super(Showcase.class, ShowcaseTypeAdapter.getInstance());
             if (url != null) {
-                Common.checkNotNull(params, "params");
+                checkNotNull(params, "params");
                 addParameters(params);
             }
             this.patternId = patternId;

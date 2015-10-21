@@ -42,12 +42,12 @@ import com.yandex.money.api.processes.ExternalPaymentProcess;
 import com.yandex.money.api.processes.PaymentProcess;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -122,8 +122,7 @@ public class PaymentProcessTest {
 
     @Test
     public void testExternalPaymentProcessStateRestore() {
-        ExternalPaymentProcess paymentProcess = new ExternalPaymentProcess(
-                session, parameterProvider);
+        ExternalPaymentProcess paymentProcess = new ExternalPaymentProcess( session, parameterProvider);
 
         BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> savedState =
                 createExternalPaymentProcessSavedState();
@@ -241,11 +240,17 @@ public class PaymentProcessTest {
         return new PaymentProcess.SavedState(
                 (RequestPayment) new RequestPayment.Builder()
                         .setMoneySources(Collections.<MoneySource>emptyList())
-                        .setStatus(BaseRequestPayment.Status.UNKNOWN)
+                        .setBalance(BigDecimal.TEN)
+                        .setStatus(BaseRequestPayment.Status.SUCCESS)
+                        .setContractAmount(BigDecimal.ONE)
+                        .setRequestId("1234567890")
                         .create(),
                 (ProcessPayment) new ProcessPayment.Builder()
-                        .setStatus(BaseProcessPayment.Status.UNKNOWN)
+                        .setPaymentId("12346890")
+                        .setBalance(BigDecimal.TEN)
+                        .setStatus(BaseProcessPayment.Status.SUCCESS)
                         .setAcsParams(Collections.<String, String>emptyMap())
+                        .setInvoiceId("1234567890")
                         .create(),
                 3
         );
@@ -254,11 +259,14 @@ public class PaymentProcessTest {
     private ExternalPaymentProcess.SavedState createExternalPaymentProcessSavedState() {
         return new ExternalPaymentProcess.SavedState(
                 (RequestExternalPayment) new RequestExternalPayment.Builder()
-                        .setStatus(BaseRequestPayment.Status.UNKNOWN)
+                        .setStatus(BaseRequestPayment.Status.SUCCESS)
+                        .setContractAmount(BigDecimal.ONE)
+                        .setRequestId("1234567890")
                         .create(),
                 (ProcessExternalPayment) new ProcessExternalPayment.Builder()
                         .setAcsParams(Collections.<String, String>emptyMap())
-                        .setStatus(BaseProcessPayment.Status.UNKNOWN)
+                        .setStatus(BaseProcessPayment.Status.SUCCESS)
+                        .setInvoiceId("1234567890")
                         .create(),
                 3
         );

@@ -116,8 +116,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
         SUCCESS(CODE_SUCCESS),
         REFUSED(CODE_REFUSED),
         IN_PROGRESS(CODE_IN_PROGRESS),
-        EXT_AUTH_REQUIRED(CODE_EXT_AUTH_REQUIRED),
-        NULL(CODE_NULL);
+        EXT_AUTH_REQUIRED(CODE_EXT_AUTH_REQUIRED);
 
         public final String code;
 
@@ -136,7 +135,7 @@ public abstract class BaseProcessPayment implements MethodResponse {
         }
 
         public static Status parse(String code) {
-            return Enums.parse(NULL, code);
+            return Enums.parse(SUCCESS, code);
         }
     }
 

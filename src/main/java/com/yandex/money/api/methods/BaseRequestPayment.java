@@ -117,8 +117,7 @@ public abstract class BaseRequestPayment implements MethodResponse {
 
         SUCCESS(CODE_SUCCESS),
         REFUSED(CODE_REFUSED),
-        HOLD_FOR_PICKUP(CODE_HOLD_FOR_PICKUP),
-        NULL(CODE_NULL);
+        HOLD_FOR_PICKUP(CODE_HOLD_FOR_PICKUP);
 
         public final String code;
 
@@ -137,7 +136,7 @@ public abstract class BaseRequestPayment implements MethodResponse {
         }
 
         public static Status parse(String code) {
-            return Enums.parse(NULL, code);
+            return Enums.parse(SUCCESS, code);
         }
     }
 

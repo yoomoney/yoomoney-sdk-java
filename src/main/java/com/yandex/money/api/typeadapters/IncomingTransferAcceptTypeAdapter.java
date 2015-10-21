@@ -61,8 +61,7 @@ public final class IncomingTransferAcceptTypeAdapter extends
     }
 
     @Override
-    public IncomingTransferAccept deserialize(JsonElement json, Type typeOfT,
-                                              JsonDeserializationContext context)
+    public IncomingTransferAccept deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
@@ -74,8 +73,7 @@ public final class IncomingTransferAcceptTypeAdapter extends
     }
 
     @Override
-    public JsonElement serialize(IncomingTransferAccept src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
+    public JsonElement serialize(IncomingTransferAccept src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.addProperty(MEMBER_STATUS, src.status.code);
         if (src.error != null) {

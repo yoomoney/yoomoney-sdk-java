@@ -120,7 +120,7 @@ public final class Group extends Container<Component> {
         }
 
         public static Layout parse(String code) {
-            return Enums.parse(VERTICAL, code);
+            return Enums.parse(VERTICAL, VERTICAL, code);
         }
     }
 

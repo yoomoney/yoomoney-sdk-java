@@ -47,11 +47,7 @@ public enum PayeeIdentifierType implements Enums.WithCode<PayeeIdentifierType> {
     /**
      * Email address.
      */
-    EMAIL("email"),
-    /**
-     * Unknown identifier.
-     */
-    NULL(null);
+    EMAIL("email");
 
     public final String code;
 
@@ -70,18 +66,18 @@ public enum PayeeIdentifierType implements Enums.WithCode<PayeeIdentifierType> {
     }
 
     public static PayeeIdentifierType parse(String code) {
-        return Enums.parse(NULL, code);
+        return Enums.parse(ACCOUNT, code);
     }
 
     /**
      * Determines identifier type by identifier.
      *
      * @param identifier the identifier
-     * @return type
+     * @return type or {@code null} if unable to determine
      */
     public static PayeeIdentifierType determine(String identifier) {
         if (Strings.isNullOrEmpty(identifier)) {
-            return NULL;
+            return null;
         }
 
         if (identifier.matches(Patterns.ACCOUNT)) {
@@ -91,7 +87,7 @@ public enum PayeeIdentifierType implements Enums.WithCode<PayeeIdentifierType> {
         } else if (identifier.matches(Patterns.YANDEX) || identifier.matches(Patterns.EMAIL)) {
             return EMAIL;
         } else {
-            return NULL;
+            return null;
         }
     }
 }

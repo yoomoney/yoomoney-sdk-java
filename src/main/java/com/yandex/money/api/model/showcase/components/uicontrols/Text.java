@@ -112,7 +112,7 @@ public class Text extends TextArea {
         }
 
         public static Keyboard parse(String code) {
-            return Enums.parse(NUMBER, null, code);
+            return Enums.parse(NUMBER, code);
         }
     }
 

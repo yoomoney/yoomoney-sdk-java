@@ -26,7 +26,6 @@ package com.yandex.money.test;
 
 import com.yandex.money.api.methods.params.P2pTransferParams;
 import com.yandex.money.api.methods.params.PhoneParams;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -45,7 +44,7 @@ public final class ParamsTest {
     /**
      * Tests that {@code amount} or {@code amount_due} is required.
      */
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testP2pTransferParamsBuilderException() {
         new P2pTransferParams.Builder(accountNumber).create();
     }

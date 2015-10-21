@@ -76,31 +76,28 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     public Showcase deserialize(JsonElement json, Type typeOfT,
                                 JsonDeserializationContext context) throws JsonParseException {
 
-        JsonObject root = json.getAsJsonObject();
-
+        JsonObject object = json.getAsJsonObject();
         return new Showcase.Builder()
-                .setTitle(getMandatoryString(root, MEMBER_TITLE))
-                .setHiddenFields(getNotNullMap(root, MEMBER_HIDDEN_FIELDS))
-                .setForm(ListDelegate.deserialize(root.getAsJsonArray(MEMBER_FORM), context))
-                .setMoneySources(new LinkedHashSet<>(getNotNullArray(root, MEMBER_MONEY_SOURCE,
+                .setTitle(getMandatoryString(object, MEMBER_TITLE))
+                .setHiddenFields(getNotNullMap(object, MEMBER_HIDDEN_FIELDS))
+                .setForm(ListDelegate.deserialize(object.getAsJsonArray(MEMBER_FORM), context))
+                .setMoneySources(new LinkedHashSet<>(getNotNullArray(object, MEMBER_MONEY_SOURCE,
                         AllowedMoneySourceTypeAdapter.getInstance())))
-                .setErrors(getNotNullArray(root, MEMBER_ERROR, ErrorTypeAdapter.INSTANCE))
+                .setErrors(getNotNullArray(object, MEMBER_ERROR, ErrorTypeAdapter.getInstance()))
                 .create();
     }
 
     @Override
     public JsonElement serialize(Showcase src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject root = new JsonObject();
-
-        root.addProperty(MEMBER_TITLE, src.title);
-        root.add(MEMBER_MONEY_SOURCE, toJsonArray(src.moneySources,
-                AllowedMoneySourceTypeAdapter.getInstance()));
+        JsonObject objects = new JsonObject();
+        objects.addProperty(MEMBER_TITLE, src.title);
+        objects.add(MEMBER_MONEY_SOURCE, toJsonArray(src.moneySources, AllowedMoneySourceTypeAdapter.getInstance()));
         if (!src.errors.isEmpty()) {
-            root.add(MEMBER_ERROR, toJsonArray(src.errors, ErrorTypeAdapter.INSTANCE));
+            objects.add(MEMBER_ERROR, toJsonArray(src.errors, ErrorTypeAdapter.getInstance()));
         }
-        root.add(MEMBER_FORM, ListDelegate.serialize(src.form, context));
-        root.add(MEMBER_HIDDEN_FIELDS, toJsonObject(src.hiddenFields));
-        return root;
+        objects.add(MEMBER_FORM, ListDelegate.serialize(src.form, context));
+        objects.add(MEMBER_HIDDEN_FIELDS, toJsonObject(src.hiddenFields));
+        return objects;
     }
 
     @Override
@@ -110,14 +107,18 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
 
     private static final class ErrorTypeAdapter extends BaseTypeAdapter<Showcase.Error> {
 
-        public static final ErrorTypeAdapter INSTANCE = new ErrorTypeAdapter();
+        private static final ErrorTypeAdapter INSTANCE = new ErrorTypeAdapter();
+
         private static final String MEMBER_ALERT = "alert";
         private static final String MEMBER_NAME = "name";
 
-        @Override
-        public Error deserialize(JsonElement json, Type typeOfT,
-                                 JsonDeserializationContext context) throws JsonParseException {
+        public static ErrorTypeAdapter getInstance() {
+            return INSTANCE;
+        }
 
+        @Override
+        public Error deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
             JsonObject jsonObject = json.getAsJsonObject();
             return new Error(getString(jsonObject, MEMBER_NAME),
                     getMandatoryString(jsonObject, MEMBER_ALERT));

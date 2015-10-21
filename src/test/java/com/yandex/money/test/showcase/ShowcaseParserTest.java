@@ -51,7 +51,6 @@ import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.ShowcaseContext;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.Currency;
-
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
@@ -325,9 +324,6 @@ public class ShowcaseParserTest {
     private void checkMoneySources(Set<AllowedMoneySource> moneySources) {
         assertNotNull(moneySources);
         for (AllowedMoneySource moneySource : AllowedMoneySource.values()) {
-            if (moneySource == AllowedMoneySource.NULL) {
-                continue;
-            }
             assertTrue(moneySources.contains(moneySource));
         }
     }

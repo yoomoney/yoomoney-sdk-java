@@ -26,12 +26,11 @@ package com.yandex.money.api.model.showcase;
 
 import com.yandex.money.api.methods.ShowcaseSearch;
 import com.yandex.money.api.utils.Enums;
-import com.yandex.money.api.utils.Strings;
 
 import java.util.Collections;
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 
 /**
  * Element of {@link ShowcaseSearch} class.
@@ -96,13 +95,11 @@ public final class ShowcaseReference {
      * @param format   showcase format
      * @param params   showcase parameters of the first step, can be null
      */
-    public ShowcaseReference(long scid, String title, Integer topIndex, String url,
-                             Format format, Map<String, String> params) {
+    public ShowcaseReference(long scid, String title, Integer topIndex, String url, Format format,
+                             Map<String, String> params) {
+
+        checkNotEmpty(title, "title");
         this.scid = scid;
-        if (Strings.isNullOrEmpty(title)) {
-            throw new IllegalArgumentException("title is null or empty");
-        }
-        checkNotNull(format, "format");
         this.title = title;
         this.topIndex = topIndex;
         this.url = url;
@@ -155,12 +152,7 @@ public final class ShowcaseReference {
         /**
          * JSON.
          */
-        JSON("json"),
-
-        /**
-         * Unknown.
-         */
-        NULL(null);
+        JSON("json");
 
         public final String code;
 
@@ -179,7 +171,7 @@ public final class ShowcaseReference {
         }
 
         public static Format parse(String code) {
-            return Enums.parse(NULL, code);
+            return Enums.parse(JSON, code);
         }
     }
 }

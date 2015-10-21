@@ -39,11 +39,7 @@ public enum AccountType implements Enums.WithCode<AccountType> {
     /**
      * Professional.
      */
-    PROFESSIONAL("professional"),
-    /**
-     * Unknown.
-     */
-    NULL(null);
+    PROFESSIONAL("professional");
 
     public final String code;
 
@@ -62,6 +58,6 @@ public enum AccountType implements Enums.WithCode<AccountType> {
     }
 
     public static AccountType parse(String code) {
-        return Enums.parse(NULL, code);
+        return Enums.parse(PERSONAL, code);
     }
 }

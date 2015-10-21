@@ -109,7 +109,7 @@ public class Card extends MoneySource {
         }
 
         public static Type parse(String name) {
-            return Enums.parse(UNKNOWN, name);
+            return Enums.parse(UNKNOWN, UNKNOWN, name);
         }
     }
 
