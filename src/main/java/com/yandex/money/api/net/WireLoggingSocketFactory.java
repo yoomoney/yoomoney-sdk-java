@@ -48,7 +48,9 @@ import java.util.logging.Logger;
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
 final class WireLoggingSocketFactory extends SSLSocketFactory {
+
     private static final Logger LOG = Logger.getLogger(WireLoggingSocketFactory.class.getName());
+
     private final SSLSocketFactory delegate;
 
     WireLoggingSocketFactory(SSLSocketFactory sf0) {

@@ -94,7 +94,7 @@ public class AuxToken implements MethodResponse {
     public static final class Request extends PostRequest<AuxToken> {
 
         public Request(Set<Scope> scopes) {
-            super(AuxToken.class, AuxTokenTypeAdapter.getInstance());
+            super(AuxTokenTypeAdapter.getInstance());
             checkNotEmpty(scopes, "scopes");
             addParameter("scope", Scope.createScopeParameter(scopes));
         }

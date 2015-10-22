@@ -116,7 +116,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
         private Request(String instanceId, String requestId, String extAuthSuccessUri, String extAuthFailUri,
                         boolean requestToken, ExternalCard externalCard, String csc) {
 
-            super(ProcessExternalPayment.class, ProcessExternalPaymentTypeAdapter.getInstance());
+            super(ProcessExternalPaymentTypeAdapter.getInstance());
             checkNotEmpty(instanceId, "instanceId");
             checkNotEmpty(requestId, "requestId");
             checkNotEmpty(extAuthSuccessUri, "extAuthSuccessUri");

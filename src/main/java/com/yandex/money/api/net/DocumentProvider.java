@@ -29,14 +29,13 @@ import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;
-import com.yandex.money.api.utils.Strings;
-
 import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -55,8 +54,7 @@ public final class DocumentProvider extends AbstractSession {
         super(client);
     }
 
-    public <T> HttpResourceResponse<T> fetch(ApiRequest<T> request)
-            throws IOException, ResourceNotFoundException {
+    public <T> HttpResourceResponse<T> fetch(ApiRequest<T> request) throws IOException, ResourceNotFoundException {
         return parseResponse(request, prepareCall(request).execute());
     }
 
@@ -68,8 +66,7 @@ public final class DocumentProvider extends AbstractSession {
      * @throws IOException               various I/O errors (timeouts, etc.)
      * @throws ResourceNotFoundException 404 status code feedback
      */
-    public ShowcaseContext getShowcase(ApiRequest<Showcase> request)
-            throws IOException, ResourceNotFoundException {
+    public ShowcaseContext getShowcase(ApiRequest<Showcase> request) throws IOException, ResourceNotFoundException {
         return getShowcaseInner(request, 1);
     }
 
@@ -83,7 +80,6 @@ public final class DocumentProvider extends AbstractSession {
      */
     public ShowcaseContext submitShowcase(ShowcaseContext showcaseContext)
             throws IOException, ResourceNotFoundException {
-
         return parseResponse(prepareCall(showcaseContext.createRequest()).execute(),
                 showcaseContext);
     }
@@ -219,8 +215,7 @@ public final class DocumentProvider extends AbstractSession {
                 BaseApiRequest.DATE_TIME_FORMATTER.parseDateTime(dateHeader);
     }
 
-    private void throwResourceNotFoundException(Response response)
-            throws IOException, ResourceNotFoundException {
+    private void throwResourceNotFoundException(Response response) throws IOException, ResourceNotFoundException {
         processError(response);
         throw new ResourceNotFoundException(response.request().url());
     }
@@ -230,10 +225,8 @@ public final class DocumentProvider extends AbstractSession {
         private final String url;
 
         protected CopyShowcaseRequest(String url, ApiRequest<Showcase> request) {
-            super(Showcase.class, ShowcaseTypeAdapter.getInstance());
-            if (Strings.isNullOrEmpty(url)) {
-                throw new IllegalArgumentException("url is null or empty");
-            }
+            super(ShowcaseTypeAdapter.getInstance());
+            checkNotEmpty(url, "url");
             checkNotNull(request, "request");
 
             this.url = url;

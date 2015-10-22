@@ -24,15 +24,15 @@
 
 package com.yandex.money.api.net;
 
-import com.google.gson.JsonDeserializer;
+import com.yandex.money.api.typeadapters.TypeAdapter;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public abstract class PostRequest<T> extends BaseApiRequest<T> {
 
-    protected PostRequest(Class<T> cls, JsonDeserializer<T> deserializer) {
-        super(cls, deserializer);
+    protected PostRequest(TypeAdapter<T> typeAdapter) {
+        super(typeAdapter);
     }
 
     @Override

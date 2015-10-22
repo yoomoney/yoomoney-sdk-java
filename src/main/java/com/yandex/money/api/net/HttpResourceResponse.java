@@ -62,6 +62,7 @@ public final class HttpResourceResponse<T> {
 
     HttpResourceResponse(ResourceState resourceState, String contentType, DateTime lastModified,
                          DateTime expires, T document) {
+
         checkNotNull(resourceState, "resourceState");
         checkNotNull(lastModified, "lastModified");
 
@@ -74,6 +75,30 @@ public final class HttpResourceResponse<T> {
 
     public boolean hasDocument() {
         return resourceState == HttpResourceResponse.ResourceState.DOCUMENT;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        HttpResourceResponse<?> that = (HttpResourceResponse<?>) o;
+
+        return resourceState == that.resourceState &&
+                !(contentType != null ? !contentType.equals(that.contentType) : that.contentType != null) &&
+                lastModified.equals(that.lastModified) &&
+                !(expires != null ? !expires.equals(that.expires) : that.expires != null) &&
+                !(document != null ? !document.equals(that.document) : that.document != null);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = resourceState.hashCode();
+        result = 31 * result + (contentType != null ? contentType.hashCode() : 0);
+        result = 31 * result + lastModified.hashCode();
+        result = 31 * result + (expires != null ? expires.hashCode() : 0);
+        result = 31 * result + (document != null ? document.hashCode() : 0);
+        return result;
     }
 
     @Override

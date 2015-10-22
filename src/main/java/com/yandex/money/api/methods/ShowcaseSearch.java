@@ -129,7 +129,7 @@ public class ShowcaseSearch {
          * @param records number of records to requests from remote server
          */
         public Request(String query, int records) {
-            super(ShowcaseSearch.class, ShowcaseSearchTypeAdapter.getInstance());
+            super(ShowcaseSearchTypeAdapter.getInstance());
             checkNotEmpty(query, "query");
 
             addParameter("query", query);

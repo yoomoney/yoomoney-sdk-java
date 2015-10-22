@@ -95,7 +95,7 @@ public class OperationDetails implements MethodResponse {
          * @param operationId operation's id
          */
         public Request(String operationId) {
-            super(OperationDetails.class, OperationDetailsTypeAdapter.getInstance());
+            super(OperationDetailsTypeAdapter.getInstance());
             checkNotEmpty(operationId, "operationId");
             addParameter("operation_id", operationId);
         }

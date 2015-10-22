@@ -233,7 +233,7 @@ public class ProcessPayment extends BaseProcessPayment {
         public Request(String requestId, MoneySource moneySource, String csc, String extAuthSuccessUri,
                        String extAuthFailUri) {
 
-            super(ProcessPayment.class, ProcessPaymentTypeAdapter.getInstance());
+            super(ProcessPaymentTypeAdapter.getInstance());
             checkNotEmpty(requestId, "requestId");
 
             if (moneySource != null) {

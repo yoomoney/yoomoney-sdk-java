@@ -292,7 +292,7 @@ public class AccountInfo implements MethodResponse {
     public static final class Request extends PostRequest<AccountInfo> {
 
         public Request() {
-            super(AccountInfo.class, AccountInfoTypeAdapter.getInstance());
+            super(AccountInfoTypeAdapter.getInstance());
         }
 
         @Override

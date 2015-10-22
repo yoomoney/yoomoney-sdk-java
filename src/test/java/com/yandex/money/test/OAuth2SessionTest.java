@@ -25,10 +25,10 @@
 package com.yandex.money.test;
 
 import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
 import com.squareup.okhttp.mockwebserver.MockResponse;
 import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
@@ -40,10 +40,10 @@ import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.OAuth2Session;
 import com.yandex.money.api.net.OnResponseReady;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -195,7 +195,7 @@ public class OAuth2SessionTest {
             }
 
             public Request(URL url, String param) {
-                super(Mock.class, new Deserializer());
+                super(TypeAdapterImpl.INSTANCE);
                 this.url = url;
                 addParameter("param", param);
             }
@@ -206,13 +206,26 @@ public class OAuth2SessionTest {
             }
         }
 
-        private static final class Deserializer implements JsonDeserializer<Mock> {
+        private static final class TypeAdapterImpl extends BaseTypeAdapter<Mock> {
+
+            static final TypeAdapterImpl INSTANCE = new TypeAdapterImpl();
+
             @Override
-            public Mock deserialize(JsonElement json, Type typeOfT,
-                                    JsonDeserializationContext context) throws JsonParseException {
+            protected Class<Mock> getType() {
+                return Mock.class;
+            }
+
+            @Override
+            public Mock deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                    throws JsonParseException {
 
                 JsonObject object = json.getAsJsonObject();
                 return new Mock(JsonUtils.getString(object, "code"));
+            }
+
+            @Override
+            public JsonElement serialize(Mock src, Type typeOfSrc, JsonSerializationContext context) {
+                throw new UnsupportedOperationException();
             }
         }
     }

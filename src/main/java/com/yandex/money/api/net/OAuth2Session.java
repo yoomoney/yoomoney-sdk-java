@@ -67,10 +67,9 @@ public class OAuth2Session extends AbstractSession {
      * @throws InvalidRequestException if server responded with 404 code
      * @throws InvalidTokenException if server responded with 401 code
      * @throws InsufficientScopeException if server responded with 403 code
-     * @see #enqueue(ApiRequest, OnResponseReady)
      */
-    public <T> T execute(ApiRequest<T> request) throws IOException, InvalidRequestException,
-            InvalidTokenException, InsufficientScopeException {
+    public <T> T execute(ApiRequest<T> request)
+            throws IOException, InvalidRequestException, InvalidTokenException, InsufficientScopeException {
         return parseResponse(request, makeCall(request).execute());
     }
 

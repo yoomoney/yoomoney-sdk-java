@@ -24,16 +24,12 @@
 
 package com.yandex.money.api.net;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializer;
-
+import com.yandex.money.api.typeadapters.TypeAdapter;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
@@ -55,24 +51,18 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
             .withLocale(Locale.US)
             .withZoneUTC();
 
-    private final Class<T> cls;
-    private final Gson gson;
+    private final TypeAdapter<T> typeAdapter;
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
 
     /**
      * Constructor.
      *
-     * @param cls class of response
-     * @param deserializer deserializer used to create a response
+     * @param typeAdapter typeAdapter used to parse a response
      */
-    protected BaseApiRequest(Class<T> cls, JsonDeserializer<T> deserializer) {
-        checkNotNull(cls, "response class");
-        checkNotNull(deserializer, "response deserializer");
-        this.cls = cls;
-        gson = new GsonBuilder()
-                .registerTypeAdapter(cls, deserializer)
-                .create();
+    protected BaseApiRequest(TypeAdapter<T> typeAdapter) {
+        checkNotNull(typeAdapter, "response typeAdapter");
+        this.typeAdapter = typeAdapter;
     }
 
     @Override
@@ -87,7 +77,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
 
     @Override
     public final T parseResponse(InputStream inputStream) {
-        return gson.fromJson(new InputStreamReader(inputStream), cls);
+        return typeAdapter.fromJson(inputStream);
     }
 
     /**

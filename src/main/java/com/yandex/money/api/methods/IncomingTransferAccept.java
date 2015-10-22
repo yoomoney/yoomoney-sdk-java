@@ -162,7 +162,7 @@ public class IncomingTransferAccept implements MethodResponse {
          * @param protectionCode protection code if transfer is protected
          */
         public Request(String operationId, String protectionCode) {
-            super(IncomingTransferAccept.class, IncomingTransferAcceptTypeAdapter.getInstance());
+            super(IncomingTransferAcceptTypeAdapter.getInstance());
             checkNotEmpty(operationId, "operationId");
             addParameter("operation_id", operationId);
             addParameter("protection_code", protectionCode);

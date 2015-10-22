@@ -204,7 +204,7 @@ public final class Showcase {
         }
 
         private Request(String patternId, String url, Map<String, String> params) {
-            super(Showcase.class, ShowcaseTypeAdapter.getInstance());
+            super(ShowcaseTypeAdapter.getInstance());
             if (url != null) {
                 checkNotNull(params, "params");
                 addParameters(params);

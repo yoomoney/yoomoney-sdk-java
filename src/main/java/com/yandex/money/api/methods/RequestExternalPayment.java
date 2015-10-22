@@ -89,7 +89,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * {@link com.yandex.money.api.methods.RequestExternalPayment.Request}.
          */
         private Request(String instanceId, String patternId, Map<String, String> params) {
-            super(RequestExternalPayment.class, RequestExternalPaymentTypeAdapter.getInstance());
+            super(RequestExternalPaymentTypeAdapter.getInstance());
 
             addParameter("instance_id", instanceId);
             addParameter("pattern_id", patternId);

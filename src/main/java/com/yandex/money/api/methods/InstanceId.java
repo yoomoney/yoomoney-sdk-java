@@ -147,7 +147,7 @@ public class InstanceId implements MethodResponse {
          * @param clientId client id of the application
          */
         public Request(String clientId) {
-            super(InstanceId.class, InstanceIdTypeAdapter.getInstance());
+            super(InstanceIdTypeAdapter.getInstance());
             checkNotEmpty(clientId, "clientId");
             addParameter("client_id", clientId);
         }

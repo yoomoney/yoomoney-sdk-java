@@ -105,7 +105,7 @@ public class Token implements MethodResponse {
          * @param clientSecret a secret word for verifying application's authenticity.
          */
         public Request(String code, String clientId, String redirectUri, String clientSecret) {
-            super(Token.class, TokenTypeAdapter.getInstance());
+            super(TokenTypeAdapter.getInstance());
             checkNotEmpty(code, "code");
             checkNotEmpty(code, "clientId");
 
@@ -140,7 +140,7 @@ public class Token implements MethodResponse {
          * @param revokeAll if {@code true} all bound tokens will be also revoked
          */
         public Revoke(boolean revokeAll) {
-            super(Revoke.class, RevokeTypeAdapter.getInstance());
+            super(RevokeTypeAdapter.getInstance());
             addParameter("revoke-all", revokeAll);
         }
 

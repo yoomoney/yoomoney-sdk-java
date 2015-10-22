@@ -69,13 +69,4 @@ public class HostsProvider {
     public final String getWebUrl() {
         return mobile ? getMobileMoney() : getMoney();
     }
-
-    /**
-     * @return {@code https://m.money.yandex.ru}
-     * @deprecated use {@link #getMoney()} instead or {@link #getWebUrl()} for platform specific url
-     */
-    @Deprecated
-    public String getSpMoney() {
-        return getMoney();
-    }
 }

@@ -47,10 +47,10 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public final class ParametersBuffer {
 
-    private static final MediaType CONTENT_TYPE = MediaType.parse(
-            MimeTypes.Application.X_WWW_FORM_URLENCODED);
+    private static final MediaType CONTENT_TYPE = MediaType.parse(MimeTypes.Application.X_WWW_FORM_URLENCODED);
     private static final String UTF8_NAME = "UTF-8";
     private static final Charset UTF8_CHARSET = Charset.forName(UTF8_NAME);
+
     private Map<String, String> params = Collections.emptyMap();
 
     /**

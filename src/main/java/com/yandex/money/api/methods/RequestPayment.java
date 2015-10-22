@@ -217,7 +217,7 @@ public class RequestPayment extends BaseRequestPayment {
          * {@link com.yandex.money.api.methods.RequestPayment.Request}.
          */
         private Request(String patternId, Map<String, String> paymentParameters) {
-            super(RequestPayment.class, RequestPaymentTypeAdapter.getInstance());
+            super(RequestPaymentTypeAdapter.getInstance());
 
             addParameter("pattern_id", patternId);
             addParameters(paymentParameters);

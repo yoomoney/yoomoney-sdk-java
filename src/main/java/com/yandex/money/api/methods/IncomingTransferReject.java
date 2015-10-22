@@ -134,7 +134,7 @@ public class IncomingTransferReject implements MethodResponse {
          * @param operationId rejecting operation id
          */
         public Request(String operationId) {
-            super(IncomingTransferReject.class, IncomingTransferRejectTypeAdapter.getInstance());
+            super(IncomingTransferRejectTypeAdapter.getInstance());
             checkNotEmpty(operationId, "operationId");
             addParameter("operation_id", operationId);
         }

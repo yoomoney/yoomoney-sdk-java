@@ -148,7 +148,7 @@ public class OperationHistory implements MethodResponse {
         private Request(Set<FilterType> types, String label, DateTime from, DateTime till,
                         String startRecord, Integer records, Boolean details) {
 
-            super(OperationHistory.class, OperationHistoryTypeAdapter.getInstance());
+            super(OperationHistoryTypeAdapter.getInstance());
             checkNotNull(types, "types");
             if (from != null && till != null && from.isAfter(till)) {
                 throw new IllegalArgumentException("\'from\' should be before \'till\'");

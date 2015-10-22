@@ -29,8 +29,6 @@ import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;
-import com.yandex.money.api.utils.Strings;
-
 import org.joda.time.DateTime;
 
 import java.io.InputStream;
@@ -38,6 +36,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Stack;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -98,6 +97,7 @@ public final class ShowcaseContext {
         checkNotNull(history, "history");
         checkNotNull(lastModified, "lastModified");
         checkNotNull(params, "params");
+
         this.history = history;
         this.lastModified = lastModified;
         this.currentStep = currentStep;
@@ -215,7 +215,6 @@ public final class ShowcaseContext {
                 && currentStep.equals(that.currentStep)
                 && params.equals(that.params)
                 && state == that.state;
-
     }
 
     @Override
@@ -283,12 +282,11 @@ public final class ShowcaseContext {
         private final String url;
 
         public Request(Step currentStep, DateTime lastModified) {
-            super(Showcase.class, ShowcaseTypeAdapter.getInstance());
+            super(ShowcaseTypeAdapter.getInstance());
             checkNotNull(currentStep, "currentStep");
             checkNotNull(currentStep.showcase, "showcase of current step");
-            if (Strings.isNullOrEmpty(currentStep.submitUrl)) {
-                throw new IllegalArgumentException("url is null or empty");
-            }
+            checkNotEmpty(currentStep.submitUrl, "submitUrl");
+
             this.url = currentStep.submitUrl;
 
             addHeader(HttpHeaders.IF_MODIFIED_SINCE, lastModified);

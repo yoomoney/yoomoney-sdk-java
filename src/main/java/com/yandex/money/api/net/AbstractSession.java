@@ -46,8 +46,11 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
 public abstract class AbstractSession {
 
     private static final Logger LOGGER = Logger.getLogger(OAuth2Session.class.getName());
-    private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
+
     protected final ApiClient client;
+
+    private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
+
     private boolean debugLogging = false;
 
     /**
@@ -117,8 +120,7 @@ public abstract class AbstractSession {
                 break;
             }
             default:
-                throw new UnsupportedOperationException("method " + request.getMethod() +
-                        " is not supported");
+                throw new UnsupportedOperationException("method " + request.getMethod() + " is not supported");
         }
 
         return builder;

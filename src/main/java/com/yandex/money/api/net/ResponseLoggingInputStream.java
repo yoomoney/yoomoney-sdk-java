@@ -37,9 +37,10 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 final class ResponseLoggingInputStream extends InputStream {
 
+    private static final Logger LOG = Logger.getLogger(ResponseLoggingInputStream.class.getName());
+
     private final InputStream inputStream;
     private final ByteArrayOutputStream buffer;
-    private static Logger LOG = Logger.getLogger(ResponseLoggingInputStream.class.getName());
 
     public ResponseLoggingInputStream(InputStream inputStream) {
         checkNotNull(inputStream, "input stream");
