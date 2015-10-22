@@ -32,7 +32,7 @@ import com.yandex.money.api.utils.ToStringBuilder;
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Tel extends Text {
+public class Tel extends Text {
 
     private Tel(Builder builder) {
         super(builder);
@@ -46,7 +46,7 @@ public final class Tel extends Text {
     /**
      * {@link Tel builder}.
      */
-    public static final class Builder extends Text.Builder {
+    public static class Builder extends Text.Builder {
 
         public Builder() {
             super.setPattern(Patterns.PHONE);

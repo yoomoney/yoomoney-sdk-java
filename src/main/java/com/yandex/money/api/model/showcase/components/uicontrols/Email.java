@@ -32,7 +32,7 @@ import com.yandex.money.api.utils.ToStringBuilder;
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Email extends Text {
+public class Email extends Text {
 
     private Email(Builder builder) {
         super(builder);
@@ -46,7 +46,7 @@ public final class Email extends Text {
     /**
      * {@link Email} builder.
      */
-    public static final class Builder extends Text.Builder {
+    public static class Builder extends Text.Builder {
 
         public Builder() {
             super.setPattern(Patterns.EMAIL);

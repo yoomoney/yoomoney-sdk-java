@@ -118,7 +118,6 @@ public final class ShowcaseReference {
                 && !(topIndex != null ? !topIndex.equals(that.topIndex) : that.topIndex != null)
                 && !(url != null ? !url.equals(that.url) : that.url != null)
                 && params.equals(that.params) && format == that.format;
-
     }
 
     @Override

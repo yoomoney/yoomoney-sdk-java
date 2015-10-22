@@ -25,7 +25,6 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.utils.ToStringBuilder;
-
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -36,7 +35,7 @@ import java.util.Locale;
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Month extends Date {
+public class Month extends Date {
 
     /**
      * Acceptable pattern.
@@ -66,7 +65,7 @@ public final class Month extends Date {
     /**
      * {@link Month} builder.
      */
-    public static final class Builder extends Date.Builder {
+    public static class Builder extends Date.Builder {
 
         @Override
         public Month create() {

@@ -65,7 +65,6 @@ public abstract class Container<T> extends Component {
 
         return items.equals(container.items) &&
                 !(label != null ? !label.equals(container.label) : container.label != null);
-
     }
 
     @Override

@@ -32,7 +32,7 @@ import com.yandex.money.api.utils.ToStringBuilder;
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Paragraph extends Container<TextBlock> {
+public class Paragraph extends Container<TextBlock> {
 
     private Paragraph(Builder builder) {
         super(builder);
@@ -51,7 +51,7 @@ public final class Paragraph extends Container<TextBlock> {
     /**
      * {@link Paragraph} builder.
      */
-    public static final class Builder extends Container.Builder<TextBlock> {
+    public static class Builder extends Container.Builder<TextBlock> {
 
         @Override
         public Paragraph create() {

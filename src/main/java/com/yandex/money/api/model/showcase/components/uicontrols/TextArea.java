@@ -45,8 +45,7 @@ public class TextArea extends ParameterControl {
 
     protected TextArea(Builder builder) {
         super(builder);
-        if (builder.minLength != null && builder.maxLength != null &&
-                builder.minLength > builder.maxLength) {
+        if (builder.minLength != null && builder.maxLength != null && builder.minLength > builder.maxLength) {
             throw new IllegalArgumentException("minLength > maxLength");
         }
         minLength = builder.minLength;
@@ -55,10 +54,9 @@ public class TextArea extends ParameterControl {
 
     @Override
     public boolean isValid(String value) {
-        return super.isValid(value) &&
-                (value == null || value.isEmpty() ||
-                        (minLength == null || value.length() >= minLength) &&
-                                (maxLength == null || value.length() <= maxLength));
+        return super.isValid(value) && (value == null || value.isEmpty() ||
+                (minLength == null || value.length() >= minLength) &&
+                        (maxLength == null || value.length() <= maxLength));
     }
 
     @Override

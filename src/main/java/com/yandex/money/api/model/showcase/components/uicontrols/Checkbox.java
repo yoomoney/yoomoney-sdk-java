@@ -31,7 +31,7 @@ import com.yandex.money.api.utils.ToStringBuilder;
  *
  * @author Aleksandr Ershov (asershov@yamoney.ru)
  */
-public final class Checkbox extends ParameterControl {
+public class Checkbox extends ParameterControl {
 
     /**
      * Initial state. Default is {@code false}.
@@ -76,15 +76,6 @@ public final class Checkbox extends ParameterControl {
         throw new UnsupportedOperationException("call setChecked(boolean) instead");
     }
 
-    /**
-     * Sets {@code checked} value. Should be used instead of {@link #setValue(String)}.
-     *
-     * @param checked {@code true} if checked.
-     */
-    public void setChecked(boolean checked) {
-        this.checked = checked;
-    }
-
     @Override
     protected ToStringBuilder getToStringBuilder() {
         return super.getToStringBuilder()
@@ -95,7 +86,7 @@ public final class Checkbox extends ParameterControl {
     /**
      * {@link Checkbox} builder.
      */
-    public static final class Builder extends ParameterControl.Builder {
+    public static class Builder extends ParameterControl.Builder {
 
         private boolean checked = false;
 

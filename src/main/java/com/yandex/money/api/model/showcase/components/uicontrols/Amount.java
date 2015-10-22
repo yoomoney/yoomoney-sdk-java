@@ -36,7 +36,7 @@ import java.math.BigDecimal;
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Amount extends Number {
+public class Amount extends Number {
 
     /**
      * Currency. Default is {@link Currency#RUB}.
@@ -84,7 +84,7 @@ public final class Amount extends Number {
     /**
      * {@link Amount} builder.
      */
-    public static final class Builder extends Number.Builder {
+    public static class Builder extends Number.Builder {
 
         private static final BigDecimal PENNY = new BigDecimal("0.01");
 

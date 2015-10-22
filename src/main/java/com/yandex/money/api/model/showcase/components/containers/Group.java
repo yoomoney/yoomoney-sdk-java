@@ -36,7 +36,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Group extends Container<Component> {
+public class Group extends Container<Component> {
 
     /**
      * {@link Layout}.
@@ -77,7 +77,7 @@ public final class Group extends Container<Component> {
     @Override
     public int hashCode() {
         int result = super.hashCode();
-        result = 31 * result + (layout != null ? layout.hashCode() : 0);
+        result = 31 * result + layout.hashCode();
         return result;
     }
 
@@ -127,7 +127,7 @@ public final class Group extends Container<Component> {
     /**
      * {@link Group} builder.
      */
-    public static final class Builder extends Container.Builder<Component> {
+    public static class Builder extends Container.Builder<Component> {
 
         private Layout layout = Layout.VERTICAL;
 

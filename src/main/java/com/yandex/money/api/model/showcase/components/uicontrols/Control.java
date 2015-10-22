@@ -78,7 +78,6 @@ public abstract class Control extends Component {
                 !(hint != null ? !hint.equals(control.hint) : control.hint != null) &&
                 !(label != null ? !label.equals(control.label) : control.label != null) &&
                 !(alert != null ? !alert.equals(control.alert) : control.alert != null);
-
     }
 
     @Override

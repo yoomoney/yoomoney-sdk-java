@@ -39,7 +39,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
  */
-public final class Select extends ParameterControl {
+public class Select extends ParameterControl {
 
     /**
      * Options.
@@ -163,7 +163,7 @@ public final class Select extends ParameterControl {
     /**
      * Label-value container.
      */
-    public static final class Option {
+    public static class Option {
 
         /**
          * Label.
@@ -236,7 +236,7 @@ public final class Select extends ParameterControl {
     /**
      * {@link Select} builder.
      */
-    public static final class Builder extends ParameterControl.Builder {
+    public static class Builder extends ParameterControl.Builder {
 
         private List<Option> options = new ArrayList<>();
         private Style style;

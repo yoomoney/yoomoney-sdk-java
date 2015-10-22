@@ -83,8 +83,7 @@ public abstract class ParameterControl extends Control implements Parameter {
     @Override
     public void setValue(String value) {
         if (readonly) {
-            throw new IllegalArgumentException("trying to set value for readonly parameter '" +
-                    value + "'");
+            throw new IllegalArgumentException("trying to set a value for readonly parameter '" + name + "'");
         }
         this.value = value;
         onValueSet(value);

@@ -137,7 +137,6 @@ public final class StdFee implements Fee {
 
         return a.equals(fee.a) && b.equals(fee.b) && c.equals(fee.c) &&
                 !(d != null ? !d.equals(fee.d) : fee.d != null) && amountType == fee.amountType;
-
     }
 
     @Override
