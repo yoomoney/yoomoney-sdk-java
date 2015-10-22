@@ -43,20 +43,23 @@ public final class Common {
     }
 
     public static void checkNotEmpty(String value, String name) {
-        if (Strings.isNullOrEmpty(value)) {
-            throw new IllegalArgumentException(name + " is null or empty");
+        checkNotNull(value, name);
+        if (value.length() == 0) {
+            throw new IllegalArgumentException(name + " is empty");
         }
     }
 
     public static void checkNotEmpty(Collection<?> value, String name) {
-        if (value == null || value.isEmpty()) {
-            throw new IllegalArgumentException(name + " is null or empty");
+        checkNotNull(value, name);
+        if (value.isEmpty()) {
+            throw new IllegalArgumentException(name + " is empty");
         }
     }
 
     public static void checkNotEmpty(Map<?, ?> value, String name) {
-        if (value == null || value.isEmpty()) {
-            throw new IllegalArgumentException(name + " is null or empty");
+        checkNotNull(value, name);
+        if (value.isEmpty()) {
+            throw new IllegalArgumentException(name + " is empty");
         }
     }
 }

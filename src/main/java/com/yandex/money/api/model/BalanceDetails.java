@@ -24,9 +24,9 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.JsonParseException;
-
 import java.math.BigDecimal;
+
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Detailed balance info.
@@ -65,30 +65,16 @@ public class BalanceDetails {
      */
     public final BigDecimal hold;
 
-    /**
-     * Constructor
-     *
-     * @param total total balance
-     * @param available available balance
-     * @param depositionPending  pending deposition
-     * @param blocked money blocked
-     * @param debt account's debt
-     */
-    public BalanceDetails(BigDecimal total, BigDecimal available, BigDecimal depositionPending,
-                          BigDecimal blocked, BigDecimal debt, BigDecimal hold) {
+    private BalanceDetails(Builder builder) {
+        checkNotNull(builder.total, "total");
+        checkNotNull(builder.available, "available");
 
-        if (total == null) {
-            throw new JsonParseException("balance total is null");
-        }
-        if (available == null) {
-            throw new JsonParseException("balance available is null");
-        }
-        this.total = total;
-        this.available = available;
-        this.depositionPending = depositionPending;
-        this.blocked = blocked;
-        this.debt = debt;
-        this.hold = hold;
+        this.total = builder.total;
+        this.available = builder.available;
+        this.depositionPending = builder.depositionPending;
+        this.blocked = builder.blocked;
+        this.debt = builder.debt;
+        this.hold = builder.hold;
     }
 
     @Override
@@ -128,5 +114,49 @@ public class BalanceDetails {
         result = 31 * result + (debt != null ? debt.hashCode() : 0);
         result = 31 * result + (hold != null ? hold.hashCode() : 0);
         return result;
+    }
+
+    public static final class Builder {
+
+        private BigDecimal total;
+        private BigDecimal available;
+        private BigDecimal depositionPending;
+        private BigDecimal blocked;
+        private BigDecimal debt;
+        private BigDecimal hold;
+
+        public Builder setTotal(BigDecimal total) {
+            this.total = total;
+            return this;
+        }
+
+        public Builder setAvailable(BigDecimal available) {
+            this.available = available;
+            return this;
+        }
+
+        public Builder setDepositionPending(BigDecimal depositionPending) {
+            this.depositionPending = depositionPending;
+            return this;
+        }
+
+        public Builder setBlocked(BigDecimal blocked) {
+            this.blocked = blocked;
+            return this;
+        }
+
+        public Builder setDebt(BigDecimal debt) {
+            this.debt = debt;
+            return this;
+        }
+
+        public Builder setHold(BigDecimal hold) {
+            this.hold = hold;
+            return this;
+        }
+
+        public BalanceDetails create() {
+            return new BalanceDetails(this);
+        }
     }
 }

@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.utils.Strings;
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 
 /**
  * Represents card that not bound to an account.
@@ -38,12 +38,9 @@ public class ExternalCard extends Card {
 
     protected ExternalCard(Builder builder) {
         super(builder);
-        if (Strings.isNullOrEmpty(builder.fundingSourceType)) {
-            throw new IllegalArgumentException("fundingSourceType is null or empty");
-        }
-        if (Strings.isNullOrEmpty(builder.moneySourceToken)) {
-            throw new IllegalArgumentException("money source token is null or empty");
-        }
+        checkNotEmpty(builder.fundingSourceType, "fundingSourceType");
+        checkNotEmpty(builder.moneySourceToken, "moneySourceToken");
+
         fundingSourceType = builder.fundingSourceType;
         moneySourceToken = builder.moneySourceToken;
     }

@@ -26,7 +26,6 @@ package com.yandex.money.test;
 
 import com.yandex.money.api.methods.InstanceId;
 import com.yandex.money.api.model.Error;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -35,7 +34,7 @@ import org.testng.annotations.Test;
  */
 public class InstanceIdTest {
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
+    @Test(expectedExceptions = NullPointerException.class)
     public void testRequestClientIdNull() {
         new InstanceId.Request(null);
     }

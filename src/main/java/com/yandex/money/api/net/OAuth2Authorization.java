@@ -145,7 +145,7 @@ public class OAuth2Authorization {
             final String scopeName = "scope";
             if (Strings.isNullOrEmpty(rawScope)) {
                 if (scopes != null) {
-                    params.put(scopeName, Scope.createScopeParameter(scopes.iterator()));
+                    params.put(scopeName, Scope.createScopeParameter(scopes));
                 }
             } else {
                 params.put(scopeName, rawScope);

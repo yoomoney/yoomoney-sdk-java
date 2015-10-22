@@ -68,12 +68,14 @@ public final class BalanceDetailsTypeAdapter extends BaseTypeAdapter<BalanceDeta
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new BalanceDetails(getMandatoryBigDecimal(object, MEMBER_TOTAL),
-                getMandatoryBigDecimal(object, MEMBER_AVAILABLE),
-                getBigDecimal(object, MEMBER_DEPOSITION_PENDING),
-                getBigDecimal(object, MEMBER_BLOCKED),
-                getBigDecimal(object, MEMBER_DEBT),
-                getBigDecimal(object, MEMBER_HOLD));
+        return new BalanceDetails.Builder()
+                .setTotal(getMandatoryBigDecimal(object, MEMBER_TOTAL))
+                .setAvailable(getMandatoryBigDecimal(object, MEMBER_AVAILABLE))
+                .setDepositionPending(getBigDecimal(object, MEMBER_DEPOSITION_PENDING))
+                .setBlocked(getBigDecimal(object, MEMBER_BLOCKED))
+                .setDebt(getBigDecimal(object, MEMBER_DEBT))
+                .setHold(getBigDecimal(object, MEMBER_HOLD))
+                .create();
     }
 
     @Override

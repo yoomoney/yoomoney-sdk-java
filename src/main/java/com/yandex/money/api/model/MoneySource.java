@@ -38,7 +38,7 @@ public abstract class MoneySource {
      */
     public final String id;
 
-    MoneySource(Builder builder) {
+    protected MoneySource(Builder builder) {
         checkNotNull(builder, "builder");
         id = builder.id;
     }

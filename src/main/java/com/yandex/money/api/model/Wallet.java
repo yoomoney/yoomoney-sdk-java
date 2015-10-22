@@ -33,11 +33,11 @@ public class Wallet extends MoneySource {
 
     public static final Wallet INSTANCE = new Wallet();
 
-    Wallet() {
+    private Wallet() {
         super(new Builder().setId("wallet"));
     }
 
-    static class Builder extends MoneySource.Builder {
+    private static class Builder extends MoneySource.Builder {
         @Override
         public Wallet create() {
             return INSTANCE;

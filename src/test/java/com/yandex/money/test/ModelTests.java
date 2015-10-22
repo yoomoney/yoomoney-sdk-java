@@ -47,7 +47,6 @@ import com.yandex.money.api.typeadapters.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.typeadapters.YandexMoneyCardTypeAdapter;
 import com.yandex.money.api.utils.Currency;
-
 import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -135,8 +134,10 @@ public class ModelTests {
     }
 
     private static BalanceDetails createBalanceDetails() {
-        return new BalanceDetails(BigDecimal.ONE, BigDecimal.TEN, null, null,
-                null, null);
+        return new BalanceDetails.Builder()
+                .setTotal(BigDecimal.ONE)
+                .setAvailable(BigDecimal.TEN)
+                .create();
     }
 
     private static Card createCard() {

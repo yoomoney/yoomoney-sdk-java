@@ -56,6 +56,7 @@ public class Good {
     public Good(String serial, String secret, String merchantArticleId) {
         checkNotNull(serial, "serial");
         checkNotNull(secret, "secret");
+
         this.serial = serial;
         this.secret = secret;
         this.merchantArticleId = merchantArticleId;

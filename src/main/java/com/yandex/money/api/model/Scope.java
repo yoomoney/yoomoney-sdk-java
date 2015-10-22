@@ -27,7 +27,10 @@ package com.yandex.money.api.model;
 import com.yandex.money.api.utils.Strings;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 import java.util.Iterator;
+
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 
 /**
  * Access token's scope. Provides simple and customizable scopes for every occasion. Complete list
@@ -73,7 +76,7 @@ public class Scope {
      */
     public static final Scope PAYMENT_SHOP = new Scope("payment-shop");
 
-    private final String name;
+    public final String name;
 
     /**
      * Constructor.
@@ -81,9 +84,7 @@ public class Scope {
      * @param name the name of a scope
      */
     protected Scope(String name) {
-        if (Strings.isNullOrEmpty(name)) {
-            throw new IllegalArgumentException("scope name can not be null or empty");
-        }
+        checkNotEmpty(name, "name");
         this.name = name;
     }
 
@@ -140,26 +141,36 @@ public class Scope {
      * @param scopes some scopes
      * @return parameter's value
      */
-    public static String createScopeParameter(Iterator<Scope> scopes) {
-        if (scopes == null || !scopes.hasNext()) {
-            throw new IllegalArgumentException("scopes is null or empty");
-        }
-
-        StringBuilder builder = new StringBuilder(scopes.next().getQualifiedName());
-        while (scopes.hasNext()) {
-            builder.append(" ").append(scopes.next().getQualifiedName());
+    public static String createScopeParameter(Collection<Scope> scopes) {
+        checkNotEmpty(scopes, "scopes");
+        Iterator<Scope> iterator = scopes.iterator();
+        StringBuilder builder = new StringBuilder(iterator.next().getQualifiedName());
+        while (iterator.hasNext()) {
+            builder.append(" ").append(iterator.next().getQualifiedName());
         }
         return builder.toString();
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj instanceof Scope) {
-            Scope scope = (Scope) obj;
-            return name.equals(scope.name);
-        } else {
-            return false;
-        }
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Scope scope = (Scope) o;
+
+        return name.equals(scope.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "Scope{" +
+                "name='" + name + '\'' +
+                '}';
     }
 
     /**
@@ -198,13 +209,31 @@ public class Scope {
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof MoneySourceScope) {
-                MoneySourceScope scope = (MoneySourceScope) obj;
-                return wallet == scope.wallet && cards == scope.cards;
-            } else {
-                return false;
-            }
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            if (!super.equals(o)) return false;
+
+            MoneySourceScope that = (MoneySourceScope) o;
+
+            return wallet == that.wallet && cards == that.cards;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = super.hashCode();
+            result = 31 * result + (wallet ? 1 : 0);
+            result = 31 * result + (cards ? 1 : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "MoneySourceScope{" +
+                    "name='" + name + '\'' +
+                    ", wallet=" + wallet +
+                    ", cards=" + cards +
+                    '}';
         }
 
         @Override
@@ -224,6 +253,35 @@ public class Scope {
         }
 
         @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            if (!super.equals(o)) return false;
+
+            LimitedScope that = (LimitedScope) o;
+
+            return !(duration != null ? !duration.equals(that.duration) : that.duration != null) &&
+                    !(sum != null ? !sum.equals(that.sum) : that.sum != null);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = super.hashCode();
+            result = 31 * result + (duration != null ? duration.hashCode() : 0);
+            result = 31 * result + (sum != null ? sum.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "LimitedScope{" +
+                    "name='" + name + '\'' +
+                    ", duration=" + duration +
+                    ", sum=" + sum +
+                    '}';
+        }
+
+        @Override
         public String getQualifiedName() {
             return super.getQualifiedName() + getLimit();
         }
@@ -236,8 +294,7 @@ public class Scope {
          */
         public LimitedScope setDuration(Integer duration) {
             if (duration != null && duration < 1) {
-                throw new IllegalArgumentException("duration must have positive value: " +
-                        duration);
+                throw new IllegalArgumentException("duration must be a positive number: " + duration);
             }
             this.duration = duration;
             return this;
@@ -251,8 +308,7 @@ public class Scope {
          */
         public LimitedScope setSum(BigDecimal sum) {
             if (sum != null && sum.doubleValue() < 0) {
-                throw new IllegalArgumentException("sum must have positive value:" +
-                        sum.toPlainString());
+                throw new IllegalArgumentException("sum must be a positive number:" + sum.toPlainString());
             }
             this.sum = sum;
             return this;
@@ -279,38 +335,48 @@ public class Scope {
         }
 
         public static PaymentScope createPaymentToPattern(String patternId) {
-            if (Strings.isNullOrEmpty(patternId)) {
-                throw new IllegalArgumentException("pattern id is null or empty");
-            }
+            checkNotEmpty(patternId, "patternId");
             return new PaymentScope(patternId, null);
         }
 
         public static PaymentScope createPaymentToAccount(String account) {
-            if (Strings.isNullOrEmpty(account)) {
-                throw new IllegalArgumentException("account is null or empty");
-            }
+            checkNotEmpty(account, "account");
             return new PaymentScope(null, account);
         }
 
         @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof PaymentScope) {
-                PaymentScope scope = (PaymentScope) obj;
-                if (patternId == null) {
-                    return scope.patternId == null && account.equals(scope.account);
-                } else {
-                    return scope.account == null && patternId.equals(scope.patternId);
-                }
-            } else {
-                return false;
-            }
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            if (!super.equals(o)) return false;
+
+            PaymentScope that = (PaymentScope) o;
+
+            return !(patternId != null ? !patternId.equals(that.patternId) : that.patternId != null) &&
+                    !(account != null ? !account.equals(that.account) : that.account != null);
+        }
+
+        @Override
+        public int hashCode() {
+            int result = super.hashCode();
+            result = 31 * result + (patternId != null ? patternId.hashCode() : 0);
+            result = 31 * result + (account != null ? account.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "PaymentScope{" +
+                    "name='" + name + '\'' +
+                    ", patternId='" + patternId + '\'' +
+                    ", account='" + account + '\'' +
+                    '}';
         }
 
         @Override
         public String getQualifiedName() {
-            return super.getQualifiedName() + (Strings.isNullOrEmpty(patternId) ?
-                    "to-account(\"" + account + "\")" : "to-pattern(\"" + patternId + "\")") +
-                    getLimit();
+            return super.getQualifiedName() + (Strings.isNullOrEmpty(patternId) ? "to-account(\"" + account + "\")" :
+                    "to-pattern(\"" + patternId + "\")") + getLimit();
         }
     }
 }

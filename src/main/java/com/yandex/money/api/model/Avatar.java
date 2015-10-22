@@ -24,10 +24,10 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.JsonParseException;
-import com.yandex.money.api.utils.Strings;
-
 import org.joda.time.DateTime;
+
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Describes avatar from {@link com.yandex.money.api.methods.AccountInfo}.
@@ -53,12 +53,9 @@ public class Avatar {
      * @param timestamp avatar change time
      */
     public Avatar(String url, DateTime timestamp) {
-        if (Strings.isNullOrEmpty(url)) {
-            throw new JsonParseException("avatar url is null or empty");
-        }
-        if (timestamp == null) {
-            throw new JsonParseException("avatar timestamp is null");
-        }
+        checkNotEmpty(url, "url");
+        checkNotNull(timestamp, "timestamp");
+
         this.url = url;
         this.timestamp = timestamp;
     }
