@@ -39,7 +39,6 @@ import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.DefaultApiClient;
 import com.yandex.money.api.net.OAuth2Session;
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
@@ -167,7 +166,7 @@ public class YandexMoneyTest implements ApiTest {
 
     @BeforeClass
     private void setUp() {
-        session = new OAuth2Session(new DefaultApiClient(CLIENT_ID));
+        session = new OAuth2Session(new DefaultApiClient(CLIENT_ID, true));
         session.setDebugLogging(true);
     }
 
