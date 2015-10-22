@@ -58,8 +58,7 @@ public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<Operation
     }
 
     @Override
-    public OperationDetails deserialize(JsonElement json, Type typeOfT,
-                                        JsonDeserializationContext context)
+    public OperationDetails deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
@@ -68,8 +67,7 @@ public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<Operation
     }
 
     @Override
-    public JsonElement serialize(OperationDetails src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
+    public JsonElement serialize(OperationDetails src, Type typeOfSrc, JsonSerializationContext context) {
         if (src.error != null) {
             JsonObject object = new JsonObject();
             object.addProperty(MEMBER_ERROR, src.error.code);

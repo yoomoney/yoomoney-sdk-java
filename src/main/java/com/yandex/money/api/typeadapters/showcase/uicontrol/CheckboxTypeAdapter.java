@@ -34,8 +34,7 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Checkbox;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class CheckboxTypeAdapter extends ParameterControlTypeAdapter<Checkbox,
-        Checkbox.Builder> {
+public final class CheckboxTypeAdapter extends ParameterControlTypeAdapter<Checkbox, Checkbox.Builder> {
 
     private static final CheckboxTypeAdapter INSTANCE = new CheckboxTypeAdapter();
 
@@ -58,8 +57,7 @@ public final class CheckboxTypeAdapter extends ParameterControlTypeAdapter<Check
     }
 
     @Override
-    protected void deserialize(JsonObject src, Checkbox.Builder builder,
-                               JsonDeserializationContext context) {
+    protected void deserialize(JsonObject src, Checkbox.Builder builder, JsonDeserializationContext context) {
         builder.setChecked(src.get(MEMBER_CHECKED).getAsBoolean());
         super.deserialize(src, builder, context);
     }

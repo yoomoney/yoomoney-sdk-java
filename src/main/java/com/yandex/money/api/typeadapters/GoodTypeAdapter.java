@@ -62,6 +62,7 @@ public final class GoodTypeAdapter extends BaseTypeAdapter<Good> {
     @Override
     public Good deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
+
         JsonObject object = json.getAsJsonObject();
         return new Good(getMandatoryString(object, MEMBER_SERIAL),
                 getMandatoryString(object, MEMBER_SECRET),

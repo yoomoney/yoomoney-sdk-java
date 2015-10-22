@@ -45,8 +45,7 @@ public final class GsonProvider {
         return gson;
     }
 
-    public static synchronized <T> void registerTypeAdapter(Class<T> cls,
-                                                            TypeAdapter<T> typeAdapter) {
+    public static synchronized <T> void registerTypeAdapter(Class<T> cls, TypeAdapter<T> typeAdapter) {
         BUILDER.registerTypeAdapter(cls, typeAdapter);
         hasNewTypeAdapter = true;
     }

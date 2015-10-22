@@ -36,8 +36,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-abstract class BaseTextTypeAdapter<T extends Text, U extends Text.Builder>
-        extends BaseTextAreaTypeAdapter<T, U> {
+abstract class BaseTextTypeAdapter<T extends Text, U extends Text.Builder> extends BaseTextAreaTypeAdapter<T, U> {
 
     private static final String MEMBER_KEYBOARD_SUGGEST = "keyboard_suggest";
     private static final String MEMBER_PATTERN = "pattern";

@@ -80,8 +80,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
     }
 
     @Override
-    public RequestPayment deserialize(JsonElement json, Type typeOfT,
-                                      JsonDeserializationContext context)
+    public RequestPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
@@ -101,8 +100,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
     }
 
     @Override
-    public JsonElement serialize(RequestPayment src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
+    public JsonElement serialize(RequestPayment src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
 
         jsonObject.addProperty(MEMBER_BALANCE, src.balance);
@@ -130,8 +128,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
         return RequestPayment.class;
     }
 
-    private static JsonElement serializeMoneySources(List<MoneySource> moneySources,
-                                                     boolean cscRequired) {
+    private static JsonElement serializeMoneySources(List<MoneySource> moneySources, boolean cscRequired) {
         JsonArray cards = new JsonArray();
         JsonObject jsonObject = new JsonObject();
         for (MoneySource moneySource : moneySources) {
@@ -154,7 +151,6 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
     }
 
     private static void deserializeMoneySources(JsonObject object, RequestPayment.Builder builder) {
-
         JsonObject jsonMoneySources = object.getAsJsonObject(MEMBER_MS);
         if (jsonMoneySources != null) {
             List<MoneySource> moneySources = new ArrayList<>();

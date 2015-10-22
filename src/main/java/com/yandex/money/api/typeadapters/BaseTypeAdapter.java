@@ -39,8 +39,7 @@ import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeAdapter
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public abstract class BaseTypeAdapter<T>
-        implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
+public abstract class BaseTypeAdapter<T> implements TypeAdapter<T>, JsonSerializer<T>, JsonDeserializer<T> {
 
     public BaseTypeAdapter() {
         registerTypeAdapter(getType(), this);

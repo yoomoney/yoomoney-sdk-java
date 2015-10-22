@@ -54,6 +54,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
 public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
 
     private static final ShowcaseTypeAdapter INSTANCE = new ShowcaseTypeAdapter();
+
     private static final String MEMBER_ERROR = "error";
     private static final String MEMBER_FORM = "form";
     private static final String MEMBER_HIDDEN_FIELDS = "hidden_fields";
@@ -73,8 +74,8 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     }
 
     @Override
-    public Showcase deserialize(JsonElement json, Type typeOfT,
-                                JsonDeserializationContext context) throws JsonParseException {
+    public Showcase deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
         return new Showcase.Builder()
@@ -119,6 +120,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         @Override
         public Error deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
                 throws JsonParseException {
+
             JsonObject jsonObject = json.getAsJsonObject();
             return new Error(getString(jsonObject, MEMBER_NAME),
                     getMandatoryString(jsonObject, MEMBER_ALERT));

@@ -44,12 +44,16 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 public final class AuxTokenTypeAdapter extends BaseTypeAdapter<AuxToken> {
 
     private static final AuxTokenTypeAdapter INSTANCE = new AuxTokenTypeAdapter();
+
     private static final String MEMBER_AUX_TOKEN = "aux_token";
     private static final String MEMBER_ERROR = "error";
 
     private AuxTokenTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static AuxTokenTypeAdapter getInstance() {
         return INSTANCE;
     }

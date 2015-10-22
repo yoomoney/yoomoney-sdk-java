@@ -45,6 +45,9 @@ public final class AllowedMoneySourceTypeAdapter extends BaseTypeAdapter<Allowed
     private AllowedMoneySourceTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static AllowedMoneySourceTypeAdapter getInstance() {
         return INSTANCE;
     }

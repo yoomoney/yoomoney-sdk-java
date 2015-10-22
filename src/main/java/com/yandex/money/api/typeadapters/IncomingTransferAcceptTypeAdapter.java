@@ -43,11 +43,10 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class IncomingTransferAcceptTypeAdapter extends
-        BaseTypeAdapter<IncomingTransferAccept> {
+public final class IncomingTransferAcceptTypeAdapter extends BaseTypeAdapter<IncomingTransferAccept> {
 
-    private static final IncomingTransferAcceptTypeAdapter INSTANCE =
-            new IncomingTransferAcceptTypeAdapter();
+    private static final IncomingTransferAcceptTypeAdapter INSTANCE = new IncomingTransferAcceptTypeAdapter();
+
     private static final String MEMBER_CODE_ATTEMPTS = "protection_code_attempts_available";
     private static final String MEMBER_ERROR = "error";
     private static final String MEMBER_EXT_ACTION_URI = "ext_action_uri";
@@ -56,6 +55,9 @@ public final class IncomingTransferAcceptTypeAdapter extends
     private IncomingTransferAcceptTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static IncomingTransferAcceptTypeAdapter getInstance() {
         return INSTANCE;
     }

@@ -52,6 +52,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
 public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<ShowcaseReference> {
 
     public static final ShowcaseReferenceTypeAdapter INSTANCE = new ShowcaseReferenceTypeAdapter();
+
     private static final String MEMBER_FORMAT = "format";
     private static final String MEMBER_ID = "id";
     private static final String MEMBER_PARAMS = "params";
@@ -67,13 +68,12 @@ public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<Showcase
     }
 
     @Override
-    public ShowcaseReference deserialize(JsonElement json, Type typeOfT,
-                                         JsonDeserializationContext context)
+    public ShowcaseReference deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
+
         JsonObject object = json.getAsJsonObject();
         JsonObject paramsObject = object.getAsJsonObject(MEMBER_PARAMS);
-        Map<String, String> params = paramsObject == null ? new HashMap<String, String>() :
-                map(paramsObject);
+        Map<String, String> params = paramsObject == null ? new HashMap<String, String>() : map(paramsObject);
         return new ShowcaseReference(getMandatoryLong(object, MEMBER_ID),
                 getMandatoryString(object, MEMBER_TITLE),
                 getInt(object, MEMBER_TOP),
@@ -83,8 +83,7 @@ public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<Showcase
     }
 
     @Override
-    public JsonElement serialize(ShowcaseReference src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
+    public JsonElement serialize(ShowcaseReference src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         if (!src.params.equals(Collections.emptyMap())) {
             object.add(MEMBER_PARAMS, toJsonObject(src.params));

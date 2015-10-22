@@ -44,6 +44,9 @@ public final class ErrorTypeAdapter extends BaseTypeAdapter<Error> {
 
     private ErrorTypeAdapter() {}
 
+    /**
+     * @return instance of this class
+     */
     public static ErrorTypeAdapter getInstance() {
         return INSTANCE;
     }

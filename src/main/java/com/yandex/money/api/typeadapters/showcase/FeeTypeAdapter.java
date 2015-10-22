@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters;
+package com.yandex.money.api.typeadapters.showcase;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -32,6 +32,7 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.CustomFee;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.StdFee;
+import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -50,6 +51,7 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
     public static final String MEMBER_TYPE = "type";
 
     private static final FeeTypeAdapter INSTANCE = new FeeTypeAdapter();
+
     private static final String TYPE_CUSTOM = "custom";
     private static final String TYPE_STD = "std";
 
@@ -66,10 +68,10 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
     }
 
     @Override
-    public Fee deserialize(JsonElement json, Type typeOfT,
-                           JsonDeserializationContext context) throws JsonParseException {
-        String type = Delegate.getFeeType(json.getAsJsonObject());
+    public Fee deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
 
+        String type = Delegate.getFeeType(json.getAsJsonObject());
         switch (type) {
             case TYPE_CUSTOM:
                 return CustomFeeTypeAdapter.getInstance().fromJson(json);

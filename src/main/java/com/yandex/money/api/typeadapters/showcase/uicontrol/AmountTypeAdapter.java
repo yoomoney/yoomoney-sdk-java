@@ -29,7 +29,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.components.uicontrols.Amount;
-import com.yandex.money.api.typeadapters.FeeTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.FeeTypeAdapter;
 import com.yandex.money.api.utils.Currency;
 
 /**
@@ -57,12 +57,9 @@ public final class AmountTypeAdapter extends BaseNumberTypeAdapter<Amount, Amoun
     }
 
     @Override
-    protected void deserialize(JsonObject src, Amount.Builder builder,
-                               JsonDeserializationContext context) {
-
+    protected void deserialize(JsonObject src, Amount.Builder builder, JsonDeserializationContext context) {
         builder.setCurrency(Currency.parseAlphaCode(src.get(MEMBER_CURRENCY).getAsString()));
         builder.setFee((Fee) context.deserialize(src.get(MEMBER_FEE), Fee.class));
-
         super.deserialize(src, builder, context);
     }
 

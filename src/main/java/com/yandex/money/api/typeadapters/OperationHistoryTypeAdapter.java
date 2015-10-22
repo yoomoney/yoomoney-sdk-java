@@ -46,6 +46,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
 public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<OperationHistory> {
 
     private static final OperationHistoryTypeAdapter INSTANCE = new OperationHistoryTypeAdapter();
+
     private static final String MEMBER_ERROR = "error";
     private static final String MEMBER_NEXT_RECORD = "next_record";
     private static final String MEMBER_OPERATIONS = "operations";
@@ -61,20 +62,17 @@ public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<Operation
     }
 
     @Override
-    public OperationHistory deserialize(JsonElement json, Type typeOfT,
-                                        JsonDeserializationContext context)
+    public OperationHistory deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-
         return new OperationHistory(Error.parse(getString(object, MEMBER_ERROR)),
                 getString(object, MEMBER_NEXT_RECORD),
                 getNotNullArray(object, MEMBER_OPERATIONS, OperationTypeAdapter.getInstance()));
     }
 
     @Override
-    public JsonElement serialize(OperationHistory src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
+    public JsonElement serialize(OperationHistory src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         if (src.error != null) {
             object.addProperty(MEMBER_ERROR, src.error.code);

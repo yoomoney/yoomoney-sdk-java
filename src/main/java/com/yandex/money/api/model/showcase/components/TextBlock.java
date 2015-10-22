@@ -72,7 +72,7 @@ public class TextBlock {
     /**
      * Link.
      */
-    public static final class WithLink extends TextBlock {
+    public static class WithLink extends TextBlock {
 
         public final String link;
 

@@ -38,11 +38,10 @@ import java.lang.reflect.Type;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class ProcessExternalPaymentTypeAdapter extends
-        BaseTypeAdapter<ProcessExternalPayment> {
+public final class ProcessExternalPaymentTypeAdapter extends BaseTypeAdapter<ProcessExternalPayment> {
 
-    private static final ProcessExternalPaymentTypeAdapter INSTANCE =
-            new ProcessExternalPaymentTypeAdapter();
+    private static final ProcessExternalPaymentTypeAdapter INSTANCE = new ProcessExternalPaymentTypeAdapter();
+
     private static final String MEMBER_MONEY_SOURCE = "money_source";
 
     private ProcessExternalPaymentTypeAdapter() {
@@ -56,12 +55,10 @@ public final class ProcessExternalPaymentTypeAdapter extends
     }
 
     @Override
-    public ProcessExternalPayment deserialize(JsonElement json, Type typeOfT,
-                                              JsonDeserializationContext context)
+    public ProcessExternalPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonObject jsonObject = json.getAsJsonObject();
-
         ProcessExternalPayment.Builder builder = new ProcessExternalPayment.Builder();
 
         JsonElement moneySource = jsonObject.get(MEMBER_MONEY_SOURCE);
@@ -74,8 +71,7 @@ public final class ProcessExternalPaymentTypeAdapter extends
     }
 
     @Override
-    public JsonElement serialize(ProcessExternalPayment src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
+    public JsonElement serialize(ProcessExternalPayment src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
         if (src.externalCard != null) {
             jsonObject.add(MEMBER_MONEY_SOURCE, ExternalCardTypeAdapter.getInstance()

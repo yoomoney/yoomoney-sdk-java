@@ -43,6 +43,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select, Select.Builder> {
 
     private static final SelectTypeAdapter INSTANCE = new SelectTypeAdapter();
+
     private static final String MEMBER_GROUP = "group";
     private static final String MEMBER_LABEL = "label";
     private static final String MEMBER_OPTIONS = "options";
@@ -60,8 +61,7 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
     }
 
     @Override
-    protected void deserialize(JsonObject src, Select.Builder builder,
-                               JsonDeserializationContext context) {
+    protected void deserialize(JsonObject src, Select.Builder builder, JsonDeserializationContext context) {
         for (JsonElement item : src.getAsJsonArray(MEMBER_OPTIONS)) {
             JsonObject itemObject = item.getAsJsonObject();
 

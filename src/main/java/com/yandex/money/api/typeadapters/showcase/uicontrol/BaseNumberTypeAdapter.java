@@ -45,8 +45,7 @@ abstract class BaseNumberTypeAdapter<T extends Number, U extends Number.Builder>
     private static final String MEMBER_STEP = "step";
 
     @Override
-    protected void deserialize(JsonObject src, U builder,
-                               JsonDeserializationContext context) {
+    protected void deserialize(JsonObject src, U builder, JsonDeserializationContext context) {
         builder.setMax(getBigDecimal(src, MEMBER_MAX));
         builder.setMin(getBigDecimal(src, MEMBER_MIN));
         builder.setStep(getBigDecimal(src, MEMBER_STEP));

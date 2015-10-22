@@ -47,8 +47,8 @@ public abstract class ComponentTypeAdapter<T extends Component, U extends Compon
     public static final String MEMBER_TYPE = "type";
 
     @Override
-    public final T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext
-            context) throws JsonParseException {
+    public final T deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
         return deserializeWithBuilder(json, context);
     }
 
@@ -67,8 +67,7 @@ public abstract class ComponentTypeAdapter<T extends Component, U extends Compon
      * @param builder destination builder
      * @param context proxy for deserialization of complicated (nested) hierarchies
      */
-    protected abstract void deserialize(JsonObject src, U builder,
-                                        JsonDeserializationContext context);
+    protected abstract void deserialize(JsonObject src, U builder, JsonDeserializationContext context);
 
     /**
      * Serializes source object to {@link JsonObject}.

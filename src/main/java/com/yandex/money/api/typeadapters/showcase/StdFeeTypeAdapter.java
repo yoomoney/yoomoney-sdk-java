@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters;
+package com.yandex.money.api.typeadapters.showcase;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -32,6 +32,7 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.StdFee;
+import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;
@@ -47,6 +48,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 public final class StdFeeTypeAdapter extends BaseTypeAdapter<StdFee> {
 
     private static final StdFeeTypeAdapter INSTANCE = new StdFeeTypeAdapter();
+
     private static final String MEMBER_A = "a";
     private static final String MEMBER_AMOUNT_TYPE = "amount_type";
     private static final String MEMBER_B = "b";
@@ -66,6 +68,7 @@ public final class StdFeeTypeAdapter extends BaseTypeAdapter<StdFee> {
     @Override
     public StdFee deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
+
         JsonObject object = json.getAsJsonObject();
         FeeTypeAdapter.Delegate.checkFeeType(object, getType());
         return new StdFee(getValueOrZero(object, MEMBER_A), getValueOrZero(object, MEMBER_B),

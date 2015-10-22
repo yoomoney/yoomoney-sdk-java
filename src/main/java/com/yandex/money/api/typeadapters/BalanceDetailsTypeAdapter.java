@@ -63,8 +63,7 @@ public final class BalanceDetailsTypeAdapter extends BaseTypeAdapter<BalanceDeta
     }
 
     @Override
-    public BalanceDetails deserialize(JsonElement json, Type typeOfT,
-                                      JsonDeserializationContext context)
+    public BalanceDetails deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
@@ -79,9 +78,7 @@ public final class BalanceDetailsTypeAdapter extends BaseTypeAdapter<BalanceDeta
     }
 
     @Override
-    public JsonElement serialize(BalanceDetails src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
-
+    public JsonElement serialize(BalanceDetails src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.addProperty(MEMBER_TOTAL, src.total);
         object.addProperty(MEMBER_AVAILABLE, src.available);

@@ -44,6 +44,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 public final class TokenTypeAdapter extends BaseTypeAdapter<Token> {
 
     private static final TokenTypeAdapter INSTANCE = new TokenTypeAdapter();
+
     private static final String MEMBER_ACCESS_TOKEN = "access_token";
     private static final String MEMBER_ERROR = "error";
 
@@ -60,6 +61,7 @@ public final class TokenTypeAdapter extends BaseTypeAdapter<Token> {
     @Override
     public Token deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
+
         JsonObject object = json.getAsJsonObject();
         return new Token(getString(object, MEMBER_ACCESS_TOKEN),
                 Error.parse(getString(object, MEMBER_ERROR)));

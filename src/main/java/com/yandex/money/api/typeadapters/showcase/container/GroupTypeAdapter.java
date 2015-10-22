@@ -80,9 +80,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
     }
 
     @Override
-    protected void deserialize(JsonObject src, Group.Builder builder,
-                               JsonDeserializationContext context) {
-
+    protected void deserialize(JsonObject src, Group.Builder builder, JsonDeserializationContext context) {
         JsonElement layout = src.getAsJsonPrimitive(MEMBER_LAYOUT);
         if (layout != null) {
             builder.setLayout(Group.Layout.parse(layout.getAsString()));

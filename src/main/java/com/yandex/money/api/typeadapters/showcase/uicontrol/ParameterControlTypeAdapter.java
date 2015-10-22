@@ -38,8 +38,8 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-abstract class ParameterControlTypeAdapter<T extends ParameterControl,
-        U extends ParameterControl.Builder> extends ControlTypeAdapter<T, U> {
+abstract class ParameterControlTypeAdapter<T extends ParameterControl, U extends ParameterControl.Builder>
+        extends ControlTypeAdapter<T, U> {
 
     private final String MEMBER_NAME = "name";
     private final String MEMBER_VALUE = "value";
@@ -51,7 +51,6 @@ abstract class ParameterControlTypeAdapter<T extends ParameterControl,
         builder.setValue(getString(src, MEMBER_VALUE));
 
         JsonElement autofill = src.get(MEMBER_AUTOFILL);
-
         if (autofill != null) {
             builder.setValueAutoFill(Parameter.AutoFill.parse(autofill.getAsString()));
         }

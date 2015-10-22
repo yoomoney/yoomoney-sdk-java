@@ -28,7 +28,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrols.Date;
-
 import org.joda.time.format.DateTimeFormatter;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getDateTime;
@@ -38,15 +37,13 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getDateTime;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder>
-        extends ParameterControlTypeAdapter<T, U> {
+abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder> extends ParameterControlTypeAdapter<T, U> {
 
     private static final String MEMBER_MAX = "max";
     private static final String MEMBER_MIN = "min";
 
     @Override
-    protected final void deserialize(JsonObject src, U builder, JsonDeserializationContext
-            context) {
+    protected final void deserialize(JsonObject src, U builder, JsonDeserializationContext context) {
         builder.setMin(getDateTime(src, MEMBER_MIN, getFormatter()));
         builder.setMax(getDateTime(src, MEMBER_MAX, getFormatter()));
         super.deserialize(src, builder, context);
@@ -56,7 +53,6 @@ abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder>
     protected final void serialize(T src, JsonObject to, JsonSerializationContext context) {
         if(src.min != null) {
             to.addProperty(MEMBER_MIN, src.min.toString(getFormatter()));
-
         }
         if(src.max != null) {
             to.addProperty(MEMBER_MAX, src.max.toString(getFormatter()));

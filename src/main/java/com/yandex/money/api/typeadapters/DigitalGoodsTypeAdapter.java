@@ -44,20 +44,24 @@ import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
 public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods> {
 
     private static final DigitalGoodsTypeAdapter INSTANCE = new DigitalGoodsTypeAdapter();
+
     private static final String MEMBER_ARTICLE = "article";
     private static final String MEMBER_BONUS = "bonus";
 
     private DigitalGoodsTypeAdapter() {
     }
 
+    /**
+     * @return instance of this class
+     */
     public static DigitalGoodsTypeAdapter getInstance() {
         return INSTANCE;
     }
 
     @Override
-    public DigitalGoods deserialize(JsonElement json, Type typeOfT,
-                                    JsonDeserializationContext context)
+    public DigitalGoods deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
+
         JsonObject object = json.getAsJsonObject();
         return new DigitalGoods(
                 getNotNullArray(object, MEMBER_ARTICLE, GoodTypeAdapter.getInstance()),
@@ -65,8 +69,7 @@ public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods>
     }
 
     @Override
-    public JsonElement serialize(DigitalGoods src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
+    public JsonElement serialize(DigitalGoods src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         object.add(MEMBER_ARTICLE, toJsonArray(src.article, GoodTypeAdapter.getInstance()));
         object.add(MEMBER_BONUS, toJsonArray(src.bonus, GoodTypeAdapter.getInstance()));

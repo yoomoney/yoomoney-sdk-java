@@ -67,12 +67,10 @@ public final class ProcessPaymentTypeAdapter extends BaseTypeAdapter<ProcessPaym
     }
 
     @Override
-    public ProcessPayment deserialize(JsonElement json, Type typeOfT,
-                                      JsonDeserializationContext context)
+    public ProcessPayment deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-
         ProcessPayment.Builder builder = new ProcessPayment.Builder()
                 .setPaymentId(getString(object, MEMBER_PAYMENT_ID))
                 .setBalance(getBigDecimal(object, MEMBER_BALANCE))
@@ -88,9 +86,7 @@ public final class ProcessPaymentTypeAdapter extends BaseTypeAdapter<ProcessPaym
     }
 
     @Override
-    public JsonElement serialize(ProcessPayment src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
-
+    public JsonElement serialize(ProcessPayment src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty(MEMBER_PAYMENT_ID, src.paymentId);
         jsonObject.addProperty(MEMBER_BALANCE, src.balance);

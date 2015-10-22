@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters;
+package com.yandex.money.api.typeadapters.showcase;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
@@ -30,6 +30,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.CustomFee;
+import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
 
@@ -53,8 +54,8 @@ public final class CustomFeeTypeAdapter extends BaseTypeAdapter<CustomFee> {
     }
 
     @Override
-    public CustomFee deserialize(JsonElement json, Type typeOfT,
-                                 JsonDeserializationContext context) throws JsonParseException {
+    public CustomFee deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
         FeeTypeAdapter.Delegate.checkFeeType(json.getAsJsonObject(), getType());
         return CustomFee.getInstance();
     }

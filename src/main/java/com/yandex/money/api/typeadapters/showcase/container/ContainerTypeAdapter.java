@@ -39,8 +39,8 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-abstract class ContainerTypeAdapter<T, U extends Container<T>,
-        K extends Container.Builder<T>> extends ComponentTypeAdapter<U, K> {
+abstract class ContainerTypeAdapter<T, U extends Container<T>, K extends Container.Builder<T>>
+        extends ComponentTypeAdapter<U, K> {
 
     private static final String MEMBER_ITEMS = "items";
     private static final String MEMBER_LABEL = "label";
@@ -56,7 +56,6 @@ abstract class ContainerTypeAdapter<T, U extends Container<T>,
     @Override
     protected void serialize(U src, JsonObject to, JsonSerializationContext context) {
         JsonArray array = new JsonArray();
-
         for (T item : src.items) {
             array.add(serializeItem(item, context));
         }

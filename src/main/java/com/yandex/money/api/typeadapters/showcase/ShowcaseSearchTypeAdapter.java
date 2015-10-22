@@ -63,9 +63,9 @@ public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSea
     }
 
     @Override
-    public ShowcaseSearch deserialize(JsonElement json, Type typeOfT,
-                                      JsonDeserializationContext context)
+    public ShowcaseSearch deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
+
         JsonObject object = json.getAsJsonObject();
         Error error = Error.parse(getString(object, MEMBER_ERROR));
         if (error == null) {
@@ -78,8 +78,7 @@ public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSea
     }
 
     @Override
-    public JsonElement serialize(ShowcaseSearch src, Type typeOfSrc,
-                                 JsonSerializationContext context) {
+    public JsonElement serialize(ShowcaseSearch src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
         Error error = src.error;
         if (error == null) {

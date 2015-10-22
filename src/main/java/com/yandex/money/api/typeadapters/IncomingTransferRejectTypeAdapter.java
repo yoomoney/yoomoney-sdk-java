@@ -42,11 +42,9 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class IncomingTransferRejectTypeAdapter extends
-        BaseTypeAdapter<IncomingTransferReject> {
+public final class IncomingTransferRejectTypeAdapter extends BaseTypeAdapter<IncomingTransferReject> {
 
-    private static final IncomingTransferRejectTypeAdapter INSTANCE =
-            new IncomingTransferRejectTypeAdapter();
+    private static final IncomingTransferRejectTypeAdapter INSTANCE = new IncomingTransferRejectTypeAdapter();
     private static final String MEMBER_ERROR = "error";
     private static final String MEMBER_STATUS = "status";
 

@@ -43,8 +43,7 @@ abstract class BaseTextAreaTypeAdapter<T extends TextArea, U extends TextArea.Bu
     private static final String MEMBER_MINLENGTH = "minlength";
 
     @Override
-    protected void deserialize(JsonObject src, U builder,
-                               JsonDeserializationContext context) {
+    protected void deserialize(JsonObject src, U builder, JsonDeserializationContext context) {
         builder.setMinLength(getInt(src, MEMBER_MINLENGTH));
         builder.setMaxLength(getInt(src, MEMBER_MAXLENGTH));
         super.deserialize(src, builder, context);

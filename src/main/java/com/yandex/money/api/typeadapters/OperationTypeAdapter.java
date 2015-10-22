@@ -91,8 +91,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
     }
 
     @Override
-    public Operation deserialize(JsonElement json, Type typeOfT,
-                                 JsonDeserializationContext context)
+    public Operation deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
         final JsonObject o = json.getAsJsonObject();

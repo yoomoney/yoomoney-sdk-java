@@ -37,8 +37,7 @@ import com.yandex.money.api.model.showcase.components.containers.Paragraph;
  *
  * @author Anton Ermak (ermak@yamoney.ru)
  */
-public final class ParagraphTypeAdapter
-        extends ContainerTypeAdapter<TextBlock, Paragraph, Paragraph.Builder> {
+public final class ParagraphTypeAdapter extends ContainerTypeAdapter<TextBlock, Paragraph, Paragraph.Builder> {
 
     private static final ParagraphTypeAdapter INSTANCE = new ParagraphTypeAdapter();
 
@@ -57,7 +56,7 @@ public final class ParagraphTypeAdapter
 
     @Override
     protected JsonElement serializeItem(TextBlock src, JsonSerializationContext context) {
-        if (src instanceof TextBlock.WithLink) {
+        if (src.getClass() == TextBlock.WithLink.class) {
             JsonObject element = new JsonObject();
             element.addProperty(MEMBER_TYPE, "a");
             element.addProperty(MEMBER_HREF, ((TextBlock.WithLink) src).link);
