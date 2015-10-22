@@ -28,7 +28,6 @@ import com.yandex.money.api.methods.ShowcaseSearch;
 import com.yandex.money.api.net.DefaultApiClient;
 import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseSearchTypeAdapter;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -59,6 +58,6 @@ public class ShowcaseSearchTest {
     }
 
     private static ShowcaseSearch getShowcaseSearchInstance() throws Exception {
-        return documentProvider.fetch(new ShowcaseSearch.Request("Мегафон", 10)).document;
+        return documentProvider.fetch(new ShowcaseSearch.Request("Megafon", 10)).document;
     }
 }
