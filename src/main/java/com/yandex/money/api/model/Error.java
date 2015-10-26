@@ -97,6 +97,7 @@ public enum Error implements Enums.WithCode<Error> {
     SUBSCRIPTION_REFUSED("subscription_refused"),
     TECHNICAL_ERROR("technical_error"),
     TOO_MANY_RECORDS("too_many_records"),
+    TWO_FA_REQUIRED("2fa_required"),
     UNAUTHORIZED_CLIENT("unauthorized_client"),
     UNKNOWN("unknown");
 
