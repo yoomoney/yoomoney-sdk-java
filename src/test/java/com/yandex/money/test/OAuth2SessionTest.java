@@ -36,7 +36,6 @@ import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.net.DefaultApiClient;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.OAuth2Session;
 import com.yandex.money.api.net.OnResponseReady;
 import com.yandex.money.api.net.PostRequest;
@@ -178,7 +177,7 @@ public class OAuth2SessionTest {
         Assert.assertEquals(response.code, "ok");
     }
 
-    private static final class Mock implements MethodResponse {
+    private static final class Mock {
 
         public final String code;
 

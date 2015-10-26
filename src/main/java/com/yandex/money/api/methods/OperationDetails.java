@@ -27,7 +27,6 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.OperationDetailsTypeAdapter;
 
@@ -38,7 +37,7 @@ import static com.yandex.money.api.utils.Common.checkNotEmpty;
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public class OperationDetails implements MethodResponse {
+public class OperationDetails {
 
     public final Error error;
     public final Operation operation;

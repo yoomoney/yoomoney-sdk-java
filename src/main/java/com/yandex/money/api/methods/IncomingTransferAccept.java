@@ -25,11 +25,10 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.IncomingTransferAcceptTypeAdapter;
-import com.yandex.money.api.utils.Enums;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
@@ -39,9 +38,9 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class IncomingTransferAccept implements MethodResponse {
+public class IncomingTransferAccept {
 
-    public final Status status;
+    public final SimpleStatus status;
     public final Error error;
     public final Integer protectionCodeAttemptsAvailable;
     public final String extActionUri;
@@ -56,7 +55,7 @@ public class IncomingTransferAccept implements MethodResponse {
      * @param extActionUri                    address to perform external action for successful
      *                                        acceptance
      */
-    public IncomingTransferAccept(Status status, Error error, Integer protectionCodeAttemptsAvailable,
+    public IncomingTransferAccept(SimpleStatus status, Error error, Integer protectionCodeAttemptsAvailable,
                                   String extActionUri) {
 
         checkNotNull(status, "status");
@@ -110,40 +109,6 @@ public class IncomingTransferAccept implements MethodResponse {
                 ", protectionCodeAttemptsAvailable=" + protectionCodeAttemptsAvailable +
                 ", extActionUri='" + extActionUri + '\'' +
                 '}';
-    }
-
-    /**
-     * Status of {@link com.yandex.money.api.methods.IncomingTransferAccept}
-     */
-    public enum Status implements Enums.WithCode<Status> {
-        /**
-         * Successful.
-         */
-        SUCCESS(CODE_SUCCESS),
-        /**
-         * Operation refused.
-         */
-        REFUSED(CODE_REFUSED);
-
-        public final String code;
-
-        Status(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String getCode() {
-            return code;
-        }
-
-        @Override
-        public Status[] getValues() {
-            return values();
-        }
-
-        public static Status parse(String code) {
-            return Enums.parse(SUCCESS, code);
-        }
     }
 
     /**

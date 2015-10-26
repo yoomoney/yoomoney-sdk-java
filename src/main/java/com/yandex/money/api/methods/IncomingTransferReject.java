@@ -25,11 +25,10 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.IncomingTransferRejectTypeAdapter;
-import com.yandex.money.api.utils.Enums;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
@@ -39,9 +38,9 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class IncomingTransferReject implements MethodResponse {
+public class IncomingTransferReject {
 
-    public final Status status;
+    public final SimpleStatus status;
     public final Error error;
 
     /**
@@ -50,9 +49,9 @@ public class IncomingTransferReject implements MethodResponse {
      * @param status status of an operation
      * @param error error code
      */
-    public IncomingTransferReject(Status status, Error error) {
+    public IncomingTransferReject(SimpleStatus status, Error error) {
         checkNotNull(status, "status");
-        if (status == Status.REFUSED) {
+        if (status == SimpleStatus.REFUSED) {
             checkNotNull(error, "error");
         }
 
@@ -83,40 +82,6 @@ public class IncomingTransferReject implements MethodResponse {
         int result = status.hashCode();
         result = 31 * result + (error != null ? error.hashCode() : 0);
         return result;
-    }
-
-    /**
-     * Status of rejection.
-     */
-    public enum Status implements Enums.WithCode<Status> {
-        /**
-         * Successful.
-         */
-        SUCCESS(CODE_SUCCESS),
-        /**
-         * Refused.
-         */
-        REFUSED(CODE_REFUSED);
-
-        public final String code;
-
-        Status(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String getCode() {
-            return code;
-        }
-
-        @Override
-        public Status[] getValues() {
-            return values();
-        }
-
-        public static Status parse(String code) {
-            return Enums.parse(SUCCESS, code);
-        }
     }
 
     /**

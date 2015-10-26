@@ -25,7 +25,7 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.net.MethodResponse;
+import com.yandex.money.api.utils.Constants;
 import com.yandex.money.api.utils.Enums;
 
 import java.math.BigDecimal;
@@ -37,7 +37,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public abstract class BaseRequestPayment implements MethodResponse {
+public abstract class BaseRequestPayment {
 
     /**
      * Status of the request.
@@ -115,9 +115,9 @@ public abstract class BaseRequestPayment implements MethodResponse {
 
     public enum Status implements Enums.WithCode<Status> {
 
-        SUCCESS(CODE_SUCCESS),
-        REFUSED(CODE_REFUSED),
-        HOLD_FOR_PICKUP(CODE_HOLD_FOR_PICKUP);
+        SUCCESS(Constants.Status.SUCCESS),
+        REFUSED(Constants.Status.REFUSED),
+        HOLD_FOR_PICKUP(Constants.Status.HOLD_FOR_PICKUP);
 
         public final String code;
 

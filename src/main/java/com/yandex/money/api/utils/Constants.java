@@ -22,17 +22,25 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
+package com.yandex.money.api.utils;
 
 /**
- * API responses implement this interface.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * @author Slava Yasevich
  */
-public interface MethodResponse {
-    String CODE_SUCCESS = "success";
-    String CODE_REFUSED = "refused";
-    String CODE_HOLD_FOR_PICKUP = "hold_for_pickup";
-    String CODE_IN_PROGRESS = "in_progress";
-    String CODE_EXT_AUTH_REQUIRED = "ext_auth_required";
+public final class Constants {
+
+    private Constants() {
+    }
+
+    public static final class Status {
+
+        private Status() {
+        }
+
+        public static final String EXT_AUTH_REQUIRED = "ext_auth_required";
+        public static final String HOLD_FOR_PICKUP = "hold_for_pickup";
+        public static final String IN_PROGRESS = "in_progress";
+        public static final String REFUSED = "refused";
+        public static final String SUCCESS = "success";
+    }
 }

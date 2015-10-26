@@ -27,7 +27,6 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.OperationHistoryTypeAdapter;
 import com.yandex.money.api.utils.Enums;
@@ -48,7 +47,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public class OperationHistory implements MethodResponse {
+public class OperationHistory {
 
     public final Error error;
     public final String nextRecord;

@@ -22,41 +22,36 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.test;
+package com.yandex.money.api.model;
 
-import com.yandex.money.api.methods.InstanceId;
-import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.SimpleStatus;
-import org.testng.Assert;
-import org.testng.annotations.Test;
+import com.yandex.money.api.utils.Constants;
+import com.yandex.money.api.utils.Enums;
 
 /**
- *
+ * @author Slava Yasevich
  */
-public class InstanceIdTest {
+public enum SimpleStatus implements Enums.WithCode<SimpleStatus> {
 
-    @Test(expectedExceptions = NullPointerException.class)
-    public void testRequestClientIdNull() {
-        new InstanceId.Request(null);
+    SUCCESS(Constants.Status.SUCCESS),
+    REFUSED(Constants.Status.REFUSED);
+
+    public final String code;
+
+    SimpleStatus(String code) {
+        this.code = code;
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testRequestClientIdEmpty() {
-        new InstanceId.Request("");
+    @Override
+    public String getCode() {
+        return code;
     }
 
-    @Test()
-    public void testRequestClient() {
-        InstanceId.Request request = new InstanceId.Request(" ");
-        Assert.assertNotNull(request);
+    @Override
+    public SimpleStatus[] getValues() {
+        return values();
     }
 
-    @Test
-    public void testIsSuccess() {
-        InstanceId instanceId = new InstanceId(SimpleStatus.SUCCESS, null, "id");
-        Assert.assertTrue(instanceId.isSuccess());
-
-        instanceId = new InstanceId(SimpleStatus.REFUSED, Error.UNKNOWN, null);
-        Assert.assertFalse(instanceId.isSuccess());
+    public static SimpleStatus parse(String code) {
+        return Enums.parse(SUCCESS, code);
     }
 }

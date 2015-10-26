@@ -31,6 +31,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.IncomingTransferAccept;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleStatus;
 
 import java.lang.reflect.Type;
 
@@ -67,10 +68,8 @@ public final class IncomingTransferAcceptTypeAdapter extends BaseTypeAdapter<Inc
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new IncomingTransferAccept(
-                IncomingTransferAccept.Status.parse(getMandatoryString(object, MEMBER_STATUS)),
-                Error.parse(getString(object, MEMBER_ERROR)),
-                getInt(object, MEMBER_CODE_ATTEMPTS),
+        return new IncomingTransferAccept(SimpleStatus.parse(getMandatoryString(object, MEMBER_STATUS)),
+                Error.parse(getString(object, MEMBER_ERROR)), getInt(object, MEMBER_CODE_ATTEMPTS),
                 getString(object, MEMBER_EXT_ACTION_URI));
     }
 

@@ -31,6 +31,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.InstanceId;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleStatus;
 
 import java.lang.reflect.Type;
 
@@ -65,7 +66,7 @@ public final class InstanceIdTypeAdapter extends BaseTypeAdapter<InstanceId> {
             throws JsonParseException {
 
         JsonObject o = json.getAsJsonObject();
-        return new InstanceId(InstanceId.Status.parse(getMandatoryString(o, MEMBER_STATUS)),
+        return new InstanceId(SimpleStatus.parse(getMandatoryString(o, MEMBER_STATUS)),
                 Error.parse(getString(o, MEMBER_ERROR)), getString(o, MEMBER_INSTANCE_ID));
     }
 

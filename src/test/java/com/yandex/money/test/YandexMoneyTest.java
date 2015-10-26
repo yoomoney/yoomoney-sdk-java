@@ -36,6 +36,7 @@ import com.yandex.money.api.methods.RequestExternalPayment;
 import com.yandex.money.api.methods.RequestPayment;
 import com.yandex.money.api.methods.params.PhoneParams;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.DefaultApiClient;
 import com.yandex.money.api.net.OAuth2Session;
@@ -72,7 +73,7 @@ public class YandexMoneyTest implements ApiTest {
         reqInstanceId = new InstanceId.Request(CLIENT_ID);
         respInstanceId = session.execute(reqInstanceId);
 
-        Assert.assertEquals(respInstanceId.status, InstanceId.Status.SUCCESS);
+        Assert.assertEquals(respInstanceId.status, SimpleStatus.SUCCESS);
         Assert.assertNotNull(respInstanceId.instanceId);
         Assert.assertNull(respInstanceId.error);
     }
@@ -84,7 +85,7 @@ public class YandexMoneyTest implements ApiTest {
         reqInstanceId = new InstanceId.Request(" ");
         respInstanceId = session.execute(reqInstanceId);
 
-        Assert.assertEquals(respInstanceId.status, InstanceId.Status.REFUSED);
+        Assert.assertEquals(respInstanceId.status, SimpleStatus.REFUSED);
         Assert.assertNotNull(respInstanceId.error);
         Assert.assertEquals(respInstanceId.error, Error.ILLEGAL_PARAM_CLIENT_ID);
         Assert.assertNull(respInstanceId.instanceId);

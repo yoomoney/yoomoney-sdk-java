@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.model;
 
+import com.yandex.money.api.utils.Constants;
 import com.yandex.money.api.utils.Enums;
 import org.joda.time.DateTime;
 
@@ -312,15 +313,15 @@ public class Operation {
         /**
          * Operation succeeded.
          */
-        SUCCESS("success"),
+        SUCCESS(Constants.Status.SUCCESS),
         /**
          * Operation refused.
          */
-        REFUSED("refused"),
+        REFUSED(Constants.Status.REFUSED),
         /**
          * Operation is in progress, e.g. P2P with protection code has not been received.
          */
-        IN_PROGRESS("in_progress");
+        IN_PROGRESS(Constants.Status.IN_PROGRESS);
 
         public final String code;
 

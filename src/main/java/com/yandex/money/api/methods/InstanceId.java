@@ -25,11 +25,10 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
-import com.yandex.money.api.utils.Enums;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
@@ -39,9 +38,9 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
-public class InstanceId implements MethodResponse {
+public class InstanceId {
 
-    public final Status status;
+    public final SimpleStatus status;
     public final Error error;
     public final String instanceId;
 
@@ -52,7 +51,7 @@ public class InstanceId implements MethodResponse {
      * @param error error code
      * @param instanceId instance id if success
      */
-    public InstanceId(Status status, Error error, String instanceId) {
+    public InstanceId(SimpleStatus status, Error error, String instanceId) {
         checkNotNull(status, "status");
         switch (status) {
             case SUCCESS:
@@ -99,41 +98,7 @@ public class InstanceId implements MethodResponse {
     }
 
     public boolean isSuccess() {
-        return status == Status.SUCCESS;
-    }
-
-    /**
-     * Status of an instance id request.
-     */
-    public enum Status implements Enums.WithCode<Status> {
-        /**
-         * Successful.
-         */
-        SUCCESS(CODE_SUCCESS),
-        /**
-         * Refused due to various reasons.
-         */
-        REFUSED(CODE_REFUSED);
-
-        public final String code;
-
-        Status(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String getCode() {
-            return code;
-        }
-
-        @Override
-        public Status[] getValues() {
-            return values();
-        }
-
-        public static Status parse(String code) {
-            return Enums.parse(SUCCESS, code);
-        }
+        return status == SimpleStatus.SUCCESS;
     }
 
     /**

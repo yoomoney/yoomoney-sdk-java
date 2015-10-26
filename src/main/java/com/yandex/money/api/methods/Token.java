@@ -26,7 +26,6 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.RevokeTypeAdapter;
 import com.yandex.money.api.typeadapters.TokenTypeAdapter;
@@ -38,7 +37,7 @@ import static com.yandex.money.api.utils.Common.checkNotEmpty;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class Token implements MethodResponse {
+public class Token {
 
     public final String accessToken;
     public final Error error;

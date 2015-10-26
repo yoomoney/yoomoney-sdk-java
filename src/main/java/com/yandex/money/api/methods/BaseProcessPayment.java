@@ -25,7 +25,7 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.net.MethodResponse;
+import com.yandex.money.api.utils.Constants;
 import com.yandex.money.api.utils.Enums;
 import com.yandex.money.api.utils.MillisecondsIn;
 
@@ -39,7 +39,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public abstract class BaseProcessPayment implements MethodResponse {
+public abstract class BaseProcessPayment {
 
     public final Status status;
     public final Error error;
@@ -113,10 +113,10 @@ public abstract class BaseProcessPayment implements MethodResponse {
 
     public enum Status implements Enums.WithCode<Status> {
 
-        SUCCESS(CODE_SUCCESS),
-        REFUSED(CODE_REFUSED),
-        IN_PROGRESS(CODE_IN_PROGRESS),
-        EXT_AUTH_REQUIRED(CODE_EXT_AUTH_REQUIRED);
+        SUCCESS(Constants.Status.SUCCESS),
+        REFUSED(Constants.Status.REFUSED),
+        IN_PROGRESS(Constants.Status.IN_PROGRESS),
+        EXT_AUTH_REQUIRED(Constants.Status.EXT_AUTH_REQUIRED);
 
         public final String code;
 

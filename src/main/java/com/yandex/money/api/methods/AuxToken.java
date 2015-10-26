@@ -27,7 +27,6 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Scope;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.AuxTokenTypeAdapter;
 
@@ -41,7 +40,7 @@ import static com.yandex.money.api.utils.Common.checkNotEmpty;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class AuxToken implements MethodResponse {
+public class AuxToken {
 
     /**
      * auxiliary token

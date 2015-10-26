@@ -31,7 +31,6 @@ import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.MethodResponse;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.AccountInfoTypeAdapter;
 import com.yandex.money.api.utils.Currency;
@@ -48,7 +47,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public class AccountInfo implements MethodResponse {
+public class AccountInfo {
 
     /**
      * account number
