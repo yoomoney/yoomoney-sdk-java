@@ -38,6 +38,7 @@ public enum Error implements Enums.WithCode<Error> {
     ACCESS_DENIED("access_denied"),
     ACCOUNT_BLOCKED("account_blocked"),
     ACTIVATION_REFUSED("activation_refused"),
+    ACTIVATION_TOO_MANY_YCARD("activation_too_many_ycard"),
     ALREADY_ACCEPTED("already_accepted"),
     ALREADY_REJECTED("already_rejected"),
     AUTHORIZATION_REJECT("authorization_reject"),
