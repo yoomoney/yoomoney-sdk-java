@@ -101,14 +101,6 @@ public class AccountInfo {
 
     private AccountInfo(Builder builder) {
         checkNotEmpty(builder.account, "account");
-        checkNotNull(builder.balance, "balance");
-        checkNotNull(builder.currency, "currency");
-        checkNotNull(builder.accountStatus, "accountStatus");
-        checkNotNull(builder.accountType, "accountType");
-        checkNotNull(builder.balanceDetails, "balanceDetails");
-        checkNotNull(builder.linkedCards, "linkedCards");
-        checkNotNull(builder.additionalServices, "additionalServices");
-        checkNotNull(builder.yandexMoneyCards, "yandexMoneyCards");
 
         account = builder.account;
         balance = builder.balance;
@@ -173,15 +165,15 @@ public class AccountInfo {
     public static class Builder {
 
         private String account;
-        private BigDecimal balance;
-        private Currency currency;
-        private AccountStatus accountStatus;
-        private AccountType accountType;
+        private BigDecimal balance = BigDecimal.ZERO;
+        private Currency currency = Currency.RUB;
+        private AccountStatus accountStatus = AccountStatus.ANONYMOUS;
+        private AccountType accountType = AccountType.PERSONAL;
         private Avatar avatar;
-        private BalanceDetails balanceDetails;
-        private List<Card> linkedCards;
-        private List<String> additionalServices;
-        private List<YandexMoneyCard> yandexMoneyCards;
+        private BalanceDetails balanceDetails = BalanceDetails.ZERO;
+        private List<Card> linkedCards = Collections.emptyList();
+        private List<String> additionalServices = Collections.emptyList();
+        private List<YandexMoneyCard> yandexMoneyCards = Collections.emptyList();
 
         /**
          * @param account account's number
@@ -197,6 +189,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setBalance(BigDecimal balance) {
+            checkNotNull(balance, "balance");
             this.balance = balance;
             return this;
         }
@@ -206,6 +199,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setCurrency(Currency currency) {
+            checkNotNull(currency, "currency");
             this.currency = currency;
             return this;
         }
@@ -215,6 +209,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setAccountStatus(AccountStatus accountStatus) {
+            checkNotNull(accountStatus, "accountStatus");
             this.accountStatus = accountStatus;
             return this;
         }
@@ -224,6 +219,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setAccountType(AccountType accountType) {
+            checkNotNull(accountType, "accountType");
             this.accountType = accountType;
             return this;
         }
@@ -242,6 +238,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setBalanceDetails(BalanceDetails balanceDetails) {
+            checkNotNull(balanceDetails, "balanceDetails");
             this.balanceDetails = balanceDetails;
             return this;
         }
@@ -251,6 +248,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setLinkedCards(List<Card> linkedCards) {
+            checkNotNull(linkedCards, "linkedCards");
             this.linkedCards = linkedCards;
             return this;
         }
@@ -260,6 +258,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setAdditionalServices(List<String> additionalServices) {
+            checkNotNull(additionalServices, "additionalServices");
             this.additionalServices = additionalServices;
             return this;
         }
@@ -269,6 +268,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setYandexMoneyCards(List<YandexMoneyCard> yandexMoneyCards) {
+            checkNotNull(yandexMoneyCards, "yandexMoneyCards");
             this.yandexMoneyCards = yandexMoneyCards;
             return this;
         }

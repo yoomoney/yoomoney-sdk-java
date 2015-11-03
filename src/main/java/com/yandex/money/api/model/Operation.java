@@ -167,11 +167,8 @@ public class Operation {
     protected Operation(Builder builder) {
         checkNotNull(builder.operationId, "operationId");
         checkNotNull(builder.status, "status");
-        checkNotNull(builder.paymentParameters, "paymentParameters");
         checkNotNull(builder.type, "type");
         checkNotNull(builder.direction, "direction");
-        checkNotNull(builder.amount, "amount");
-        checkNotNull(builder.datetime, "datetime");
         checkNotNull(builder.title, "title");
 
         this.operationId = builder.operationId;
@@ -432,10 +429,10 @@ public class Operation {
         private Status status;
         private String patternId;
         private Direction direction;
-        private BigDecimal amount;
+        private BigDecimal amount = BigDecimal.ZERO;
         private BigDecimal amountDue;
         private BigDecimal fee;
-        private DateTime datetime;
+        private DateTime datetime = DateTime.now();
         private String title;
         private String sender;
         private String recipient;
@@ -449,7 +446,7 @@ public class Operation {
         private String label;
         private String details;
         private Boolean repeatable;
-        private Map<String, String> paymentParameters;
+        private Map<String, String> paymentParameters = Collections.emptyMap();
         private Boolean favorite;
         private Type type;
         private DigitalGoods digitalGoods;
@@ -475,6 +472,7 @@ public class Operation {
         }
 
         public Builder setAmount(BigDecimal amount) {
+            checkNotNull(amount, "amount");
             this.amount = amount;
             return this;
         }
@@ -490,6 +488,7 @@ public class Operation {
         }
 
         public Builder setDatetime(DateTime datetime) {
+            checkNotNull(datetime, "datetime");
             this.datetime = datetime;
             return this;
         }
@@ -560,6 +559,7 @@ public class Operation {
         }
 
         public Builder setPaymentParameters(Map<String, String> paymentParameters) {
+            checkNotNull(paymentParameters, "paymentParameters");
             this.paymentParameters = paymentParameters;
             return this;
         }

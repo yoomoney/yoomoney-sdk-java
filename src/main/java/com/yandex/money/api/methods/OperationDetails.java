@@ -30,8 +30,6 @@ import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.OperationDetailsTypeAdapter;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-
 /**
  * Operation details result.
  *
@@ -95,7 +93,6 @@ public class OperationDetails {
          */
         public Request(String operationId) {
             super(OperationDetailsTypeAdapter.getInstance());
-            checkNotEmpty(operationId, "operationId");
             addParameter("operation_id", operationId);
         }
 

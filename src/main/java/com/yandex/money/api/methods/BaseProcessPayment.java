@@ -53,7 +53,6 @@ public abstract class BaseProcessPayment {
      */
     protected BaseProcessPayment(Builder builder) {
         checkNotNull(builder.status, "status");
-        checkNotNull(builder.acsParams, "acsParams");
         switch (builder.status) {
             case SUCCESS:
                 checkNotNull(builder.invoiceId, "invoiceId");
@@ -145,7 +144,7 @@ public abstract class BaseProcessPayment {
         private Error error;
         private String invoiceId;
         private String acsUri;
-        private Map<String, String> acsParams;
+        private Map<String, String> acsParams = Collections.emptyMap();
         private long nextRetry = 5 * MillisecondsIn.SECOND;
 
         public final Builder setStatus(Status status) {
@@ -169,6 +168,7 @@ public abstract class BaseProcessPayment {
         }
 
         public final Builder setAcsParams(Map<String, String> acsParams) {
+            checkNotNull(acsParams, "acsParams");
             this.acsParams = acsParams;
             return this;
         }

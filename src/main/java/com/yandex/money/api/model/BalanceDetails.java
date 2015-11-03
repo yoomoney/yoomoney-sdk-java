@@ -35,6 +35,8 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public class BalanceDetails {
 
+    public static final BalanceDetails ZERO = new Builder().create();
+
     /**
      * total balance
      */
@@ -66,9 +68,6 @@ public class BalanceDetails {
     public final BigDecimal hold;
 
     private BalanceDetails(Builder builder) {
-        checkNotNull(builder.total, "total");
-        checkNotNull(builder.available, "available");
-
         this.total = builder.total;
         this.available = builder.available;
         this.depositionPending = builder.depositionPending;
@@ -118,19 +117,21 @@ public class BalanceDetails {
 
     public static final class Builder {
 
-        private BigDecimal total;
-        private BigDecimal available;
+        private BigDecimal total = BigDecimal.ZERO;
+        private BigDecimal available = BigDecimal.ZERO;
         private BigDecimal depositionPending;
         private BigDecimal blocked;
         private BigDecimal debt;
         private BigDecimal hold;
 
         public Builder setTotal(BigDecimal total) {
+            checkNotNull(total, "total");
             this.total = total;
             return this;
         }
 
         public Builder setAvailable(BigDecimal available) {
+            checkNotNull(available, "available");
             this.available = available;
             return this;
         }

@@ -54,10 +54,7 @@ public final class Showcase {
 
     private Showcase(Builder builder) {
         checkNotNull(builder.title, "title");
-        checkNotNull(builder.hiddenFields, "hiddenFields");
         checkNotNull(builder.form, "form");
-        checkNotNull(builder.moneySources, "moneySources");
-        checkNotNull(builder.errors, "errors");
 
         this.title = builder.title;
         this.hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
@@ -120,10 +117,10 @@ public final class Showcase {
     public static class Builder {
 
         private String title;
-        private Map<String, String> hiddenFields;
+        private Map<String, String> hiddenFields = Collections.emptyMap();
         private Group form;
-        private Set<AllowedMoneySource> moneySources;
-        private List<Error> errors;
+        private Set<AllowedMoneySource> moneySources = Collections.emptySet();
+        private List<Error> errors = Collections.emptyList();
 
         public Builder setTitle(String title) {
             this.title = title;
@@ -131,6 +128,7 @@ public final class Showcase {
         }
 
         public Builder setHiddenFields(Map<String, String> hiddenFields) {
+            checkNotNull(hiddenFields, "hiddenFields");
             this.hiddenFields = hiddenFields;
             return this;
         }
@@ -141,11 +139,13 @@ public final class Showcase {
         }
 
         public Builder setMoneySources(Set<AllowedMoneySource> moneySources) {
+            checkNotNull(moneySources, "moneySources");
             this.moneySources = moneySources;
             return this;
         }
 
         public Builder setErrors(List<Error> errors) {
+            checkNotNull(errors, "errors");
             this.errors = errors;
             return this;
         }

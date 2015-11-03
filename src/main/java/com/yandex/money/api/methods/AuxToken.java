@@ -32,8 +32,6 @@ import com.yandex.money.api.typeadapters.AuxTokenTypeAdapter;
 
 import java.util.Set;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-
 /**
  * Auxiliary token. Has scopes which are subset of {@link com.yandex.money.api.methods.Token}'s
  * scopes.
@@ -94,7 +92,6 @@ public class AuxToken {
 
         public Request(Set<Scope> scopes) {
             super(AuxTokenTypeAdapter.getInstance());
-            checkNotEmpty(scopes, "scopes");
             addParameter("scope", Scope.createScopeParameter(scopes));
         }
 

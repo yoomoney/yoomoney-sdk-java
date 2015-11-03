@@ -91,7 +91,6 @@ public class RequestPayment extends BaseRequestPayment {
 
     private RequestPayment(Builder builder) {
         super(builder);
-        checkNotNull(builder.moneySources, "moneySource");
         switch (status) {
             case SUCCESS:
                 checkNotNull(builder.balance, "balance");
@@ -282,7 +281,7 @@ public class RequestPayment extends BaseRequestPayment {
      */
     public final static class Builder extends BaseRequestPayment.Builder {
 
-        private List<MoneySource> moneySources;
+        private List<MoneySource> moneySources = Collections.emptyList();
         private boolean cscRequired;
         private BigDecimal balance;
         private AccountStatus recipientAccountStatus;
@@ -292,6 +291,7 @@ public class RequestPayment extends BaseRequestPayment {
         private String extActionUri;
 
         public Builder setMoneySources(List<MoneySource> moneySources) {
+            checkNotNull(moneySources, "moneySource");
             this.moneySources = moneySources;
             return this;
         }
