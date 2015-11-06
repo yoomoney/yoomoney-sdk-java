@@ -54,9 +54,6 @@ public abstract class BaseProcessPayment {
     protected BaseProcessPayment(Builder builder) {
         checkNotNull(builder.status, "status");
         switch (builder.status) {
-            case SUCCESS:
-                checkNotNull(builder.invoiceId, "invoiceId");
-                break;
             case REFUSED:
                 checkNotNull(builder.error, "error");
                 break;
