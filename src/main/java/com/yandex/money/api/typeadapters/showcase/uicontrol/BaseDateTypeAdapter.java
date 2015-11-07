@@ -28,14 +28,16 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrols.Date;
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getDateTime;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Base type adapter for subclasses of {@link Date} component.
  *
  * @author Anton Ermak (ermak@yamoney.ru)
+ * @author Slava Yasevich
  */
 abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder> extends ParameterControlTypeAdapter<T, U> {
 
@@ -44,8 +46,8 @@ abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder> exten
 
     @Override
     protected final void deserialize(JsonObject src, U builder, JsonDeserializationContext context) {
-        builder.setMin(getDateTime(src, MEMBER_MIN, getFormatter()));
-        builder.setMax(getDateTime(src, MEMBER_MAX, getFormatter()));
+        builder.setMin(parseDate(src, MEMBER_MIN));
+        builder.setMax(parseDate(src, MEMBER_MAX));
         super.deserialize(src, builder, context);
     }
 
@@ -63,5 +65,8 @@ abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder> exten
     protected DateTimeFormatter getFormatter() {
         return Date.FORMATTER;
     }
-}
 
+    private DateTime parseDate(JsonObject src, String memberName) {
+        return Date.parseDate(getString(src, memberName), getFormatter());
+    }
+}
