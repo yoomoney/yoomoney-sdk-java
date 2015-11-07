@@ -74,12 +74,14 @@ public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<Showcase
         JsonObject object = json.getAsJsonObject();
         JsonObject paramsObject = object.getAsJsonObject(MEMBER_PARAMS);
         Map<String, String> params = paramsObject == null ? new HashMap<String, String>() : map(paramsObject);
-        return new ShowcaseReference(getMandatoryLong(object, MEMBER_ID),
-                getMandatoryString(object, MEMBER_TITLE),
-                getInt(object, MEMBER_TOP),
-                getString(object, MEMBER_URL),
-                ShowcaseReference.Format.parse(getString(object, MEMBER_FORMAT)),
-                params);
+        return new ShowcaseReference.Builder()
+                .setScid(getMandatoryLong(object, MEMBER_ID))
+                .setTitle(getMandatoryString(object, MEMBER_TITLE))
+                .setTopIndex(getInt(object, MEMBER_TOP))
+                .setUrl(getString(object, MEMBER_URL))
+                .setFormat(ShowcaseReference.Format.parse(getString(object, MEMBER_FORMAT)))
+                .setParams(params)
+                .create();
     }
 
     @Override

@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
  * Element of {@link ShowcaseSearch} class.
@@ -78,9 +79,14 @@ public final class ShowcaseReference {
      *                 equal it is recommended to sort {@link ShowcaseReference}'s by
      *                 title), can be null
      * @param format   showcase format
+     * @deprecated     use {@link com.yandex.money.api.model.showcase.ShowcaseReference.Builder} instead
      */
+    @Deprecated
     public ShowcaseReference(long scid, String title, Integer topIndex, Format format) {
-        this(scid, title, topIndex, null, format, Collections.<String, String>emptyMap());
+        this(new Builder().setScid(scid)
+                .setTitle(title)
+                .setTopIndex(topIndex)
+                .setFormat(format));
     }
 
     /**
@@ -94,17 +100,28 @@ public final class ShowcaseReference {
      * @param url      url to submit {@code params} of the first step if applicable, can be null
      * @param format   showcase format
      * @param params   showcase parameters of the first step, can be null
+     * @deprecated     use {@link com.yandex.money.api.model.showcase.ShowcaseReference.Builder} instead
      */
+    @Deprecated
     public ShowcaseReference(long scid, String title, Integer topIndex, String url, Format format,
                              Map<String, String> params) {
 
-        checkNotEmpty(title, "title");
-        this.scid = scid;
-        this.title = title;
-        this.topIndex = topIndex;
-        this.url = url;
-        this.format = format;
-        this.params = Collections.unmodifiableMap(params);
+        this(new Builder().setScid(scid)
+                .setTitle(title)
+                .setTopIndex(topIndex)
+                .setUrl(url)
+                .setFormat(format)
+                .setParams(params));
+    }
+
+    private ShowcaseReference(Builder builder) {
+        checkNotEmpty(builder.title, "title");
+        scid = builder.scid;
+        title = builder.title;
+        topIndex = builder.topIndex;
+        url = builder.url;
+        format = builder.format;
+        params = Collections.unmodifiableMap(builder.params);
     }
 
     @Override
@@ -171,6 +188,51 @@ public final class ShowcaseReference {
 
         public static Format parse(String code) {
             return Enums.parse(JSON, code);
+        }
+    }
+
+    public final static class Builder {
+
+        private long scid;
+        private String title;
+        private Integer topIndex;
+        private Format format;
+        private String url = null;
+        private Map<String, String> params = Collections.emptyMap();
+
+        public Builder setScid(long scid) {
+            this.scid = scid;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public Builder setTopIndex(Integer topIndex) {
+            this.topIndex = topIndex;
+            return this;
+        }
+
+        public Builder setFormat(Format format) {
+            this.format = format;
+            return this;
+        }
+
+        public Builder setUrl(String url) {
+            this.url = url;
+            return this;
+        }
+
+        public Builder setParams(Map<String, String> params) {
+            checkNotNull(params, "params");
+            this.params = params;
+            return this;
+        }
+
+        public ShowcaseReference create() {
+            return new ShowcaseReference(this);
         }
     }
 }
