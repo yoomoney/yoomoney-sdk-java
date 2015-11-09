@@ -24,14 +24,19 @@
 
 package com.yandex.money.api.net;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.Showcase;
-import com.yandex.money.api.typeadapters.GsonProvider;
+import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;
 import org.joda.time.DateTime;
 
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Stack;
@@ -175,24 +180,6 @@ public final class ShowcaseContext {
         return params;
     }
 
-    void setParams(InputStream inputStream) {
-        params = JsonUtils.map(GsonProvider.getGson()
-                .toJsonTree(inputStream)
-                .getAsJsonObject()
-                .getAsJsonObject("params"));
-    }
-
-    /**
-     * @return status code of current (last) operation
-     */
-    public State getState() {
-        return state;
-    }
-
-    void setState(State state) {
-        this.state = state;
-    }
-
     @Override
     public String toString() {
         return "ShowcaseContext{" +
@@ -225,6 +212,34 @@ public final class ShowcaseContext {
         result = 31 * result + params.hashCode();
         result = 31 * result + state.hashCode();
         return result;
+    }
+
+    void setParams(InputStream inputStream) {
+        params = ParamsTypeAdapter.getInstance()
+                .fromJson(inputStream)
+                .params;
+    }
+
+    /**
+     * @return status code of current (last) operation
+     */
+    public State getState() {
+        return state;
+    }
+
+    void setState(State state) {
+        this.state = state;
+    }
+
+    /**
+     * Pushes current step to {@code history} using new step as current step.
+     *
+     * @param newStep new step
+     */
+    void pushCurrentStep(Step newStep) {
+        checkNotNull(newStep, "new step");
+        history.push(currentStep);
+        currentStep = newStep;
     }
 
     /**
@@ -299,14 +314,39 @@ public final class ShowcaseContext {
         }
     }
 
-    /**
-     * Pushes current step to {@code history} using new step as current step.
-     *
-     * @param newStep new step
-     */
-    void pushCurrentStep(Step newStep) {
-        checkNotNull(newStep, "new step");
-        history.push(currentStep);
-        currentStep = newStep;
+    private static final class Params {
+        final Map<String, String> params;
+
+        Params(Map<String, String> params) {
+            checkNotNull(params, "params");
+            this.params = Collections.unmodifiableMap(params);
+        }
+    }
+
+    private static final class ParamsTypeAdapter extends BaseTypeAdapter<Params> {
+
+        private static final ParamsTypeAdapter INSTANCE = new ParamsTypeAdapter();
+
+        private ParamsTypeAdapter() {
+        }
+
+        public static ParamsTypeAdapter getInstance() {
+            return INSTANCE;
+        }
+
+        @Override
+        public Params deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+                throws JsonParseException {
+            return new Params(JsonUtils.map(json.getAsJsonObject().getAsJsonObject("params")));
+        }
+
+        @Override
+        public JsonElement serialize(Params src, Type typeOfSrc, JsonSerializationContext context) {
+            throw new UnsupportedOperationException("not implemented");
+        }
+        @Override
+        protected Class<Params> getType() {
+            return Params.class;
+        }
     }
 }
