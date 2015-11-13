@@ -172,6 +172,6 @@ public class OAuth2Session extends AbstractSession {
 
     private boolean isJsonType(Response response) {
         String field = response.header(HttpHeaders.CONTENT_TYPE);
-        return field != null && field.startsWith(MimeTypes.Application.JSON);
+        return field != null && (field.startsWith(MimeTypes.Application.JSON) || field.startsWith(MimeTypes.Text.JSON));
     }
 }

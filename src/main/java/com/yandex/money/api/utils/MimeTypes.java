@@ -48,6 +48,7 @@ public final class MimeTypes {
 
     public static final class Text {
         public static final String XML = "text/xml";
+        public static final String JSON = "text/json";
 
         private Text() {
             // prevents instantiating of this class
