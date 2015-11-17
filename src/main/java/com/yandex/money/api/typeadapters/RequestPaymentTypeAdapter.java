@@ -39,7 +39,6 @@ import com.yandex.money.api.model.Wallet;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
@@ -59,12 +58,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
     private static final String MEMBER_ACCOUNT_UNBLOCK_URI = "account_unblock_uri";
     private static final String MEMBER_BALANCE = "balance";
     private static final String MEMBER_EXT_ACTION_URI = "ext_action_uri";
-    private static final String MEMBER_MS = "money_sources";
-    private static final String MEMBER_MS_ALLOWED = "allowed";
-    private static final String MEMBER_MS_CARDS = "cards";
-    private static final String MEMBER_MS_CSC_REQUIRED = "csc_required";
-    private static final String MEMBER_MS_ITEMS = "items";
-    private static final String MEMBER_MS_WALLET = "wallet";
+    private static final String MEMBER_MONEY_SOURCE = "money_source";
     private static final String MEMBER_PROTECTION_CODE = "protection_code";
     private static final String MEMBER_RECIPIENT_ACCOUNT_STATUS = "recipient_account_status";
     private static final String MEMBER_RECIPIENT_ACCOUNT_TYPE = "recipient_account_type";
@@ -93,9 +87,12 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
                 .setAccountUnblockUri(getString(object, MEMBER_ACCOUNT_UNBLOCK_URI))
                 .setExtActionUri(getString(object, MEMBER_EXT_ACTION_URI));
 
-        deserializeMoneySources(object, builder);
-        BaseRequestPaymentTypeAdapter.Delegate.deserialize(object, builder);
+        JsonObject moneySourceObject = object.getAsJsonObject(MEMBER_MONEY_SOURCE);
+        if (moneySourceObject != null) {
+            builder.setMoneySources(MoneySourceListTypeAdapter.Delegate.deserialize(moneySourceObject, builder));
+        }
 
+        BaseRequestPaymentTypeAdapter.Delegate.deserialize(object, builder);
         return builder.create();
     }
 
@@ -114,11 +111,11 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
         if (src.recipientAccountType != null) {
             jsonObject.addProperty(MEMBER_RECIPIENT_ACCOUNT_TYPE, src.recipientAccountType.code);
         }
-
         if (!src.moneySources.isEmpty()) {
-            jsonObject.add(MEMBER_MS, serializeMoneySources(src.moneySources,
-                    src.cscRequired));
+            jsonObject.add(MEMBER_MONEY_SOURCE, MoneySourceListTypeAdapter.Delegate.serialize(
+                    src.moneySources, src.cscRequired));
         }
+
         BaseRequestPaymentTypeAdapter.Delegate.serialize(jsonObject, src);
         return jsonObject;
     }
@@ -128,48 +125,63 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
         return RequestPayment.class;
     }
 
-    private static JsonElement serializeMoneySources(List<MoneySource> moneySources, boolean cscRequired) {
-        JsonArray cards = new JsonArray();
-        JsonObject jsonObject = new JsonObject();
-        for (MoneySource moneySource : moneySources) {
-            if (moneySource instanceof Card) {
-                cards.add(CardTypeAdapter.getInstance().toJsonTree((Card) moneySource));
-            } else if (moneySource instanceof Wallet) {
-                JsonObject wallet = new JsonObject();
-                wallet.addProperty(MEMBER_MS_ALLOWED, true);
-                jsonObject.add(MEMBER_MS_WALLET, wallet);
-            }
-        }
-        if (cards.size() != 0) {
-            JsonObject jsonCards = new JsonObject();
-            jsonCards.addProperty(MEMBER_MS_CSC_REQUIRED, cscRequired);
-            jsonCards.addProperty(MEMBER_MS_ALLOWED, true);
-            jsonCards.add(MEMBER_MS_ITEMS, cards);
-            jsonObject.add(MEMBER_MS_CARDS, jsonCards);
-        }
-        return jsonObject;
-    }
+    private static final class MoneySourceListTypeAdapter {
 
-    private static void deserializeMoneySources(JsonObject object, RequestPayment.Builder builder) {
-        JsonObject jsonMoneySources = object.getAsJsonObject(MEMBER_MS);
-        if (jsonMoneySources != null) {
-            List<MoneySource> moneySources = new ArrayList<>();
-            JsonObject wallet = object.getAsJsonObject(MEMBER_MS_WALLET);
-            if (wallet != null && getMandatoryBoolean(wallet, MEMBER_MS_ALLOWED)) {
-                moneySources.add(Wallet.INSTANCE);
+        private static final String MEMBER_ALLOWED = "allowed";
+        private static final String MEMBER_CARDS = "cards";
+        private static final String MEMBER_CSC_REQUIRED = "csc_required";
+        private static final String MEMBER_ITEMS = "items";
+        private static final String MEMBER_WALLET = "wallet";
+
+        private MoneySourceListTypeAdapter() {
+        }
+
+        static final class Delegate {
+
+            private Delegate() {
             }
 
-            JsonObject cards = object.getAsJsonObject(MEMBER_MS_CARDS);
-            if (cards != null) {
-                builder.setCscRequired(getMandatoryBoolean(cards, MEMBER_MS_CSC_REQUIRED));
-                if (getMandatoryBoolean(cards, MEMBER_MS_ALLOWED)) {
-                    moneySources.addAll(getNotNullArray(cards, MEMBER_MS_ITEMS,
-                            CardTypeAdapter.getInstance()));
+            static List<MoneySource> deserialize(JsonObject object, RequestPayment.Builder builder) {
+                List<MoneySource> list = new ArrayList<>();
+
+                JsonObject walletObject = object.getAsJsonObject(MEMBER_WALLET);
+                if (walletObject != null && getMandatoryBoolean(walletObject, MEMBER_ALLOWED)) {
+                    list.add(Wallet.INSTANCE);
                 }
+
+                JsonObject cardsObject = object.getAsJsonObject(MEMBER_CARDS);
+                if (cardsObject != null && getMandatoryBoolean(cardsObject, MEMBER_ALLOWED)) {
+                    builder.setCscRequired(getMandatoryBoolean(cardsObject, MEMBER_CSC_REQUIRED));
+                    list.addAll(getNotNullArray(cardsObject, MEMBER_ITEMS, CardTypeAdapter.getInstance()));
+                }
+
+                return list;
             }
-            builder.setMoneySources(moneySources);
-        } else {
-            builder.setMoneySources(Collections.<MoneySource>emptyList());
+
+            static JsonElement serialize(List<MoneySource> src, boolean cscRequired) {
+                JsonObject object = new JsonObject();
+                JsonArray itemsArray = new JsonArray();
+                for (MoneySource moneySource : src) {
+                    Class<? extends MoneySource> cls = moneySource.getClass();
+                    if (cls == Card.class) {
+                        itemsArray.add(CardTypeAdapter.getInstance().toJsonTree((Card) moneySource));
+                    } else if (cls == Wallet.class) {
+                        JsonObject walletObject = new JsonObject();
+                        walletObject.addProperty(MEMBER_ALLOWED, true);
+                        object.add(MEMBER_WALLET, walletObject);
+                    }
+                }
+
+                if (itemsArray.size() > 0) {
+                    JsonObject cardsObject = new JsonObject();
+                    cardsObject.addProperty(MEMBER_ALLOWED, true);
+                    cardsObject.addProperty(MEMBER_CSC_REQUIRED, cscRequired);
+                    cardsObject.add(MEMBER_ITEMS, itemsArray);
+                    object.add(MEMBER_CARDS, cardsObject);
+                }
+
+                return object;
+            }
         }
     }
 }
