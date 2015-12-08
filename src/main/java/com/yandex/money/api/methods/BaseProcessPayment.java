@@ -52,8 +52,8 @@ public abstract class BaseProcessPayment {
      * Constructor.
      */
     protected BaseProcessPayment(Builder builder) {
-        checkNotNull(builder.status, "status");
-        switch (builder.status) {
+        status = checkNotNull(builder.status, "status");
+        switch (status) {
             case REFUSED:
                 checkNotNull(builder.error, "error");
                 break;
@@ -61,12 +61,11 @@ public abstract class BaseProcessPayment {
                 checkNotNull(builder.acsUri, "acsUri");
         }
 
-        this.status = builder.status;
-        this.error = builder.error;
-        this.invoiceId = builder.invoiceId;
-        this.acsUri = builder.acsUri;
-        this.acsParams = Collections.unmodifiableMap(builder.acsParams);
-        this.nextRetry = builder.nextRetry;
+        error = builder.error;
+        invoiceId = builder.invoiceId;
+        acsUri = builder.acsUri;
+        acsParams = Collections.unmodifiableMap(builder.acsParams);
+        nextRetry = builder.nextRetry;
     }
 
     @Override
@@ -165,8 +164,7 @@ public abstract class BaseProcessPayment {
         }
 
         public final Builder setAcsParams(Map<String, String> acsParams) {
-            checkNotNull(acsParams, "acsParams");
-            this.acsParams = acsParams;
+            this.acsParams = checkNotNull(acsParams, "acsParams");
             return this;
         }
 

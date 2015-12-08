@@ -56,10 +56,8 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      * @param parameterProvider parameter's provider
      */
     public BasePaymentProcess(OAuth2Session session, ParameterProvider parameterProvider) {
-        checkNotNull(session, "session");
-        checkNotNull(parameterProvider, "parameterProvider");
-        this.session = session;
-        this.parameterProvider = parameterProvider;
+        this.session = checkNotNull(session, "session");
+        this.parameterProvider = checkNotNull(parameterProvider, "parameterProvider");
         this.state = State.CREATED;
     }
 
@@ -257,8 +255,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
          * @param state state
          */
         protected SavedState(RP requestPayment, PP processPayment, State state) {
-            checkNotNull(state, "state");
-            this.state = state;
+            this.state = checkNotNull(state, "state");
 
             switch (state) {
                 case CREATED:
@@ -266,16 +263,13 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
                     this.processPayment = null;
                     break;
                 case STARTED:
-                    checkNotNull(requestPayment, "requestPayment");
-                    this.requestPayment = requestPayment;
+                    this.requestPayment = checkNotNull(requestPayment, "requestPayment");
                     this.processPayment = null;
                     break;
                 case PROCESSING:
                 case COMPLETED:
-                    checkNotNull(requestPayment, "requestPayment");
-                    checkNotNull(processPayment, "processPayment");
-                    this.requestPayment = requestPayment;
-                    this.processPayment = processPayment;
+                    this.requestPayment = checkNotNull(requestPayment, "requestPayment");
+                    this.processPayment = checkNotNull(processPayment, "processPayment");
                     break;
                 default:
                     throw new IllegalArgumentException("unknown state: " + state);

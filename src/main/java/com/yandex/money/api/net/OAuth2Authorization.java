@@ -50,8 +50,7 @@ public class OAuth2Authorization {
      * @see com.yandex.money.api.net.ApiClient
      */
     public OAuth2Authorization(ApiClient client) {
-        checkNotNull(client, "hostsProvider");
-        this.client = client;
+        this.client = checkNotNull(client, "client");
     }
 
     /**

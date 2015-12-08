@@ -60,8 +60,8 @@ public abstract class BaseRequestPayment {
     public final BigDecimal contractAmount;
 
     protected BaseRequestPayment(Builder builder) {
-        checkNotNull(builder.status, "status");
-        switch (builder.status) {
+        status = checkNotNull(builder.status, "status");
+        switch (status) {
             case SUCCESS:
                 checkNotNull(builder.requestId, "requestId");
                 checkNotNull(builder.contractAmount, "contractAmount");
@@ -74,10 +74,9 @@ public abstract class BaseRequestPayment {
                 break;
         }
 
-        this.status = builder.status;
-        this.error = builder.error;
-        this.requestId = builder.requestId;
-        this.contractAmount = builder.contractAmount;
+        error = builder.error;
+        requestId = builder.requestId;
+        contractAmount = builder.contractAmount;
     }
 
     @Override

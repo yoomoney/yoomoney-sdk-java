@@ -232,9 +232,7 @@ public class RequestPayment extends BaseRequestPayment {
          * @return new request instance.
          */
         public static Request newInstance(String patternId, Map<String, String> params) {
-            checkNotEmpty(patternId, "patternId");
-            checkNotEmpty(params, "params");
-            return new Request(patternId, params);
+            return new Request(checkNotEmpty(patternId, "patternId"), checkNotEmpty(params, "params"));
         }
 
         /**
@@ -244,8 +242,7 @@ public class RequestPayment extends BaseRequestPayment {
          * @return new request instance.
          */
         public static Request newInstance(PaymentParams paymentParams) {
-            checkNotNull(paymentParams, "paymentParams");
-            return newInstance(paymentParams.getPatternId(), paymentParams.makeParams());
+            return newInstance(checkNotNull(paymentParams, "paymentParams").patternId, paymentParams.paymentParams);
         }
 
         @Override
@@ -291,8 +288,7 @@ public class RequestPayment extends BaseRequestPayment {
         private String extActionUri;
 
         public Builder setMoneySources(List<MoneySource> moneySources) {
-            checkNotNull(moneySources, "moneySource");
-            this.moneySources = moneySources;
+            this.moneySources = checkNotNull(moneySources, "moneySource");
             return this;
         }
 

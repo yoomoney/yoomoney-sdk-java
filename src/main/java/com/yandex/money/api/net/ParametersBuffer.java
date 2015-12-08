@@ -60,8 +60,7 @@ public final class ParametersBuffer {
      * @return itself
      */
     public ParametersBuffer setParams(Map<String, String> params) {
-        checkNotNull(params, "params");
-        this.params = params;
+        this.params = checkNotNull(params, "params");
         return this;
     }
 

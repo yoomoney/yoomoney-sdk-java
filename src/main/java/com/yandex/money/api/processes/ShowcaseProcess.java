@@ -47,10 +47,8 @@ public class ShowcaseProcess implements Process {
     private final DocumentProvider documentProvider;
 
     public ShowcaseProcess(DocumentProvider documentProvider, ShowcaseContext showcaseContext) {
-        checkNotNull(documentProvider, "documentProvider");
-        checkNotNull(showcaseContext, "showcaseContext");
-        this.documentProvider = documentProvider;
-        this.showcaseContext = showcaseContext;
+        this.documentProvider = checkNotNull(documentProvider, "documentProvider");
+        this.showcaseContext = checkNotNull(showcaseContext, "showcaseContext");
     }
 
     /**

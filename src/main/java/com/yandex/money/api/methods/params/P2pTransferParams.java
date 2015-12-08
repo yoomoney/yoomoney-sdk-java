@@ -59,8 +59,7 @@ public final class P2pTransferParams extends PaymentParams {
         private String message;
 
         public Builder(String to) {
-            checkNotEmpty(to, "to");
-            this.to = to;
+            this.to = checkNotEmpty(to, "to");
         }
 
         /**

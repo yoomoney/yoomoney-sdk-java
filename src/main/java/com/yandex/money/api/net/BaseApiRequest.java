@@ -61,8 +61,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param typeAdapter typeAdapter used to parse a response
      */
     protected BaseApiRequest(TypeAdapter<T> typeAdapter) {
-        checkNotNull(typeAdapter, "response typeAdapter");
-        this.typeAdapter = typeAdapter;
+        this.typeAdapter = checkNotNull(typeAdapter, "typeAdapter");
     }
 
     @Override

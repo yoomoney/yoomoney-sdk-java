@@ -52,8 +52,8 @@ public class InstanceId {
      * @param instanceId instance id if success
      */
     public InstanceId(SimpleStatus status, Error error, String instanceId) {
-        checkNotNull(status, "status");
-        switch (status) {
+        this.status = checkNotNull(status, "status");
+        switch (this.status) {
             case SUCCESS:
                 checkNotNull(instanceId, "instanceId");
                 break;
@@ -62,7 +62,6 @@ public class InstanceId {
                 break;
         }
 
-        this.status = status;
         this.error = error;
         this.instanceId = instanceId;
     }
@@ -113,8 +112,7 @@ public class InstanceId {
          */
         public Request(String clientId) {
             super(InstanceIdTypeAdapter.getInstance());
-            checkNotEmpty(clientId, "clientId");
-            addParameter("client_id", clientId);
+            addParameter("client_id", checkNotEmpty(clientId, "clientId"));
         }
 
         @Override

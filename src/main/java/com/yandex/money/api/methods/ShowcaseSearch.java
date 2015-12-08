@@ -62,9 +62,8 @@ public class ShowcaseSearch {
     public final String nextPage;
 
     private ShowcaseSearch(Error error, List<ShowcaseReference> result, String nextPage) {
-        checkNotNull(result, "result");
         this.error = error;
-        this.result = result;
+        this.result = Collections.unmodifiableList(checkNotNull(result, "result"));
         this.nextPage = nextPage;
     }
 
@@ -84,8 +83,7 @@ public class ShowcaseSearch {
      * @param error reason
      */
     public static ShowcaseSearch failure(Error error) {
-        checkNotNull(error, "error");
-        return new ShowcaseSearch(error, Collections.<ShowcaseReference>emptyList(), null);
+        return new ShowcaseSearch(checkNotNull(error, "error"), Collections.<ShowcaseReference>emptyList(), null);
     }
 
     @Override
@@ -130,9 +128,7 @@ public class ShowcaseSearch {
          */
         public Request(String query, int records) {
             super(ShowcaseSearchTypeAdapter.getInstance());
-            checkNotEmpty(query, "query");
-
-            addParameter("query", query);
+            addParameter("query", checkNotEmpty(query, "query"));
             addParameter("records", records);
         }
 

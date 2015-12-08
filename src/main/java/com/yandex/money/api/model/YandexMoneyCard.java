@@ -101,8 +101,7 @@ public class YandexMoneyCard extends Card {
         private State state = State.UNKNOWN;
 
         public Builder setState(State state) {
-            checkNotNull(state, "state");
-            this.state = state;
+            this.state = checkNotNull(state, "state");
             return this;
         }
 

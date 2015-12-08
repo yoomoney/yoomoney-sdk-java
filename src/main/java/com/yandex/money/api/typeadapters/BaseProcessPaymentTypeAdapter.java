@@ -57,10 +57,9 @@ final class BaseProcessPaymentTypeAdapter {
         }
 
         static <T extends BaseProcessPayment.Builder> void deserialize(JsonObject object, T builder) {
-            checkNotNull(object, "object");
-            checkNotNull(builder, "builder");
-
-            builder.setStatus(BaseProcessPayment.Status.parse(getMandatoryString(object, MEMBER_STATUS)))
+            checkNotNull(builder, "builder")
+                    .setStatus(BaseProcessPayment.Status.parse(
+                            getMandatoryString(checkNotNull(object, "object"), MEMBER_STATUS)))
                     .setError(Error.parse(getString(object, MEMBER_ERROR)))
                     .setInvoiceId(getString(object, MEMBER_INVOICE_ID))
                     .setAcsUri(getString(object, MEMBER_ACS_URI))
@@ -74,10 +73,8 @@ final class BaseProcessPaymentTypeAdapter {
 
 
         static <T extends BaseProcessPayment> void serialize(JsonObject object, T value) {
-            checkNotNull(object, "object");
-            checkNotNull(value, "value");
-
-            object.addProperty(MEMBER_STATUS, value.status.code);
+            checkNotNull(object, "object")
+                    .addProperty(MEMBER_STATUS, checkNotNull(value, "value").status.code);
             if (value.error != null) {
                 object.addProperty(MEMBER_ERROR, value.error.code);
             } else {

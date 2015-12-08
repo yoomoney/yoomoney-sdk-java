@@ -41,8 +41,7 @@ public class TextBlock {
     public final String text;
 
     public TextBlock(String text) {
-        checkNotNull(text, "text");
-        this.text = text;
+        this.text = checkNotNull(text, "text");
     }
 
     @Override
@@ -78,8 +77,7 @@ public class TextBlock {
 
         public WithLink(String label, String link) {
             super(label);
-            checkNotNull(link, "link");
-            this.link = link;
+            this.link = checkNotNull(link, "link");
         }
 
         @Override

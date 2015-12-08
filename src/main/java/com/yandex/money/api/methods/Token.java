@@ -105,11 +105,8 @@ public class Token {
          */
         public Request(String code, String clientId, String redirectUri, String clientSecret) {
             super(TokenTypeAdapter.getInstance());
-            checkNotEmpty(code, "code");
-            checkNotEmpty(code, "clientId");
-
-            addParameter("code", code);
-            addParameter("client_id", clientId);
+            addParameter("code", checkNotEmpty(code, "code"));
+            addParameter("client_id", checkNotEmpty(clientId, "clientId"));
             addParameter("grant_type", "authorization_code");
             addParameter("redirect_uri", redirectUri);
             addParameter("client_secret", clientSecret);

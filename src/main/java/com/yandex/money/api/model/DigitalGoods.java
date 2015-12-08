@@ -53,10 +53,8 @@ public class DigitalGoods {
      * @param bonus bonuses
      */
     public DigitalGoods(List<Good> article, List<Good> bonus) {
-        checkNotNull(article, "article");
-        checkNotNull(bonus, "bonus");
-        this.article = Collections.unmodifiableList(article);
-        this.bonus = Collections.unmodifiableList(bonus);
+        this.article = Collections.unmodifiableList(checkNotNull(article, "article"));
+        this.bonus = Collections.unmodifiableList(checkNotNull(bonus, "bonus"));
     }
 
     @Override

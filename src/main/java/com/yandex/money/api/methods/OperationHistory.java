@@ -61,11 +61,9 @@ public class OperationHistory {
      * @param operations list of operations
      */
     public OperationHistory(Error error, String nextRecord, List<Operation> operations) {
-        checkNotNull(operations, "operations");
-
         this.error = error;
         this.nextRecord = nextRecord;
-        this.operations = Collections.unmodifiableList(operations);
+        this.operations = Collections.unmodifiableList(checkNotNull(operations, "operations"));
     }
 
     @Override
@@ -148,7 +146,6 @@ public class OperationHistory {
                         String startRecord, Integer records, Boolean details) {
 
             super(OperationHistoryTypeAdapter.getInstance());
-            checkNotNull(types, "types");
             if (from != null && till != null && from.isAfter(till)) {
                 throw new IllegalArgumentException("\'from\' should be before \'till\'");
             }
@@ -160,7 +157,7 @@ public class OperationHistory {
                 }
             }
 
-            addParameter("type", prepareTypeValue(types));
+            addParameter("type", prepareTypeValue(checkNotNull(types, "types")));
             addParameter("label", label);
             addParameter("from", from);
             addParameter("till", till);

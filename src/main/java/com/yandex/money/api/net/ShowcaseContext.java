@@ -99,14 +99,10 @@ public final class ShowcaseContext {
     public ShowcaseContext(Stack<Step> history, DateTime lastModified, Step currentStep,
                            Map<String, String> params, State state) {
 
-        checkNotNull(history, "history");
-        checkNotNull(lastModified, "lastModified");
-        checkNotNull(params, "params");
-
-        this.history = history;
-        this.lastModified = lastModified;
+        this.history = checkNotNull(history, "history");
+        this.lastModified = checkNotNull(lastModified, "lastModified");
+        this.params = checkNotNull(params, "params");
         this.currentStep = currentStep;
-        this.params = params;
         this.state = state;
     }
 
@@ -298,14 +294,10 @@ public final class ShowcaseContext {
 
         public Request(Step currentStep, DateTime lastModified) {
             super(ShowcaseTypeAdapter.getInstance());
-            checkNotNull(currentStep, "currentStep");
-            checkNotNull(currentStep.showcase, "showcase of current step");
-            checkNotEmpty(currentStep.submitUrl, "submitUrl");
-
-            this.url = currentStep.submitUrl;
+            this.url = checkNotEmpty(checkNotNull(currentStep, "currentStep").submitUrl, "submitUrl");
 
             addHeader(HttpHeaders.IF_MODIFIED_SINCE, lastModified);
-            addParameters(currentStep.showcase.getPaymentParameters());
+            addParameters(checkNotNull(currentStep.showcase, "showcase of current step").getPaymentParameters());
         }
 
         @Override
@@ -318,8 +310,7 @@ public final class ShowcaseContext {
         final Map<String, String> params;
 
         Params(Map<String, String> params) {
-            checkNotNull(params, "params");
-            this.params = Collections.unmodifiableMap(params);
+            this.params = Collections.unmodifiableMap(checkNotNull(params, "params"));
         }
     }
 

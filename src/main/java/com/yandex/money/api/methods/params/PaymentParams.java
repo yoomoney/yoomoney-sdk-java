@@ -24,11 +24,11 @@
 
 package com.yandex.money.api.methods.params;
 
-import java.util.Collections;
 import java.util.Map;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
+import static java.util.Collections.unmodifiableMap;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru).
@@ -39,11 +39,8 @@ public abstract class PaymentParams {
     public final Map<String, String> paymentParams;
 
     PaymentParams(String patternId, Map<String, String> paymentParams) {
-        checkNotEmpty(patternId, "patternId");
-        checkNotNull(paymentParams, "paymentParams");
-
-        this.patternId = patternId;
-        this.paymentParams = paymentParams;
+        this.patternId = checkNotEmpty(patternId, "patternId");
+        this.paymentParams = unmodifiableMap(checkNotNull(paymentParams, "paymentParams"));
     }
 
     @Override
@@ -63,11 +60,13 @@ public abstract class PaymentParams {
         return result;
     }
 
+    @Deprecated
     public String getPatternId() {
         return patternId;
     }
 
+    @Deprecated
     public Map<String, String> makeParams() {
-        return Collections.unmodifiableMap(paymentParams);
+        return unmodifiableMap(paymentParams);
     }
 }

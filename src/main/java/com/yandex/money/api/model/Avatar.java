@@ -53,11 +53,8 @@ public class Avatar {
      * @param timestamp avatar change time
      */
     public Avatar(String url, DateTime timestamp) {
-        checkNotEmpty(url, "url");
-        checkNotNull(timestamp, "timestamp");
-
-        this.url = url;
-        this.timestamp = timestamp;
+        this.url = checkNotEmpty(url, "url");
+        this.timestamp = checkNotNull(timestamp, "timestamp");
     }
 
     @Override

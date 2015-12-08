@@ -226,11 +226,8 @@ public final class DocumentProvider extends AbstractSession {
 
         protected CopyShowcaseRequest(String url, ApiRequest<Showcase> request) {
             super(ShowcaseTypeAdapter.getInstance());
-            checkNotEmpty(url, "url");
-            checkNotNull(request, "request");
-
-            this.url = url;
-            addHeaders(request.getHeaders());
+            this.url = checkNotEmpty(url, "url");
+            addHeaders(checkNotNull(request, "request").getHeaders());
             addParameters(request.getParameters());
         }
 

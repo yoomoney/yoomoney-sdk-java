@@ -46,15 +46,13 @@ public final class MoneySourceTypeAdapter {
         }
 
         static <T extends MoneySource.Builder> void deserialize(JsonObject object, T builder) {
-            checkNotNull(object, "object");
-            checkNotNull(builder, "builder");
-            builder.setId(getString(object, MEMBER_ID));
+            checkNotNull(builder, "builder")
+                    .setId(getString(checkNotNull(object, "object"), MEMBER_ID));
         }
 
         static <T extends MoneySource> void serialize(JsonObject object, T value) {
-            checkNotNull(object, "object");
-            checkNotNull(value, "builder");
-            object.addProperty(MEMBER_ID, value.id);
+            checkNotNull(object, "object")
+                    .addProperty(MEMBER_ID, checkNotNull(value, "value").id);
         }
     }
 }

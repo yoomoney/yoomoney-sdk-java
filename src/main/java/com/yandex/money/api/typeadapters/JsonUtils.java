@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
 /**
@@ -67,9 +68,7 @@ public final class JsonUtils {
      * @return int value
      */
     public static int getMandatoryInt(JsonObject object, String memberName) {
-        Integer integer = getInt(object, memberName);
-        checkMandatoryValue(integer, memberName);
-        return integer;
+        return checkMandatoryValue(getInt(object, memberName), memberName);
     }
 
     /**
@@ -92,9 +91,7 @@ public final class JsonUtils {
      * @return long value
      */
     public static long getMandatoryLong(JsonObject object, String memberName) {
-        Long l = getLong(object, memberName);
-        checkMandatoryValue(l, memberName);
-        return l;
+        return checkMandatoryValue(getLong(object, memberName), memberName);
     }
 
     /**
@@ -117,9 +114,7 @@ public final class JsonUtils {
      * @return boolean value
      */
     public static boolean getMandatoryBoolean(JsonObject object, String memberName) {
-        Boolean bool = getBoolean(object, memberName);
-        checkMandatoryValue(bool, memberName);
-        return bool;
+        return checkMandatoryValue(getBoolean(object, memberName), memberName);
     }
 
     /**
@@ -142,9 +137,7 @@ public final class JsonUtils {
      * @return {@link String} value
      */
     public static String getMandatoryString(JsonObject object, String memberName) {
-        String string = getString(object, memberName);
-        checkMandatoryValue(string, memberName);
-        return string;
+        return checkMandatoryValue(getString(object, memberName), memberName);
     }
 
     /**
@@ -167,9 +160,7 @@ public final class JsonUtils {
      * @return {@link java.math.BigDecimal} value
      */
     public static BigDecimal getMandatoryBigDecimal(JsonObject object, String memberName) {
-        BigDecimal bigDecimal = getBigDecimal(object, memberName);
-        checkMandatoryValue(bigDecimal, memberName);
-        return bigDecimal;
+        return checkMandatoryValue(getBigDecimal(object, memberName), memberName);
     }
 
     /**
@@ -192,9 +183,7 @@ public final class JsonUtils {
      * @return {@link org.joda.time.DateTime} value
      */
     public static DateTime getMandatoryDateTime(JsonObject object, String memberName) {
-        DateTime dateTime = getDateTime(object, memberName);
-        checkMandatoryValue(dateTime, memberName);
-        return dateTime;
+        return checkMandatoryValue(getDateTime(object, memberName), memberName);
     }
 
 
@@ -217,11 +206,9 @@ public final class JsonUtils {
      * @param formatter  {@link org.joda.time.DateTime}'s formatter.
      * @return {@link org.joda.time.DateTime} value
      */
-    public static DateTime getDateTime(JsonObject object, String memberName,
-                                       DateTimeFormatter formatter) {
-        checkNotNull(formatter, "formatter");
-        JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
-        return primitive == null ? null : DateTime.parse(primitive.getAsString(), formatter);
+    public static DateTime getDateTime(JsonObject object, String memberName, DateTimeFormatter formatter) {
+        String value = getString(object, memberName);
+        return value == null ? null : DateTime.parse(value, checkNotNull(formatter, "formatter"));
     }
 
     /**
@@ -233,11 +220,8 @@ public final class JsonUtils {
      * @param <T> type of a value in the array
      * @return list of values
      */
-    public static <T> List<T> getMandatoryArray(JsonObject object, String memberName,
-                                                TypeAdapter<T> converter) {
-        List<T> value = getArray(object, memberName, converter);
-        checkMandatoryValue(value, memberName);
-        return value;
+    public static <T> List<T> getMandatoryArray(JsonObject object, String memberName, TypeAdapter<T> converter) {
+        return checkMandatoryValue(getArray(object, memberName, converter), memberName);
     }
 
     /**
@@ -251,8 +235,8 @@ public final class JsonUtils {
      * @return list of values
      */
     public static <T> List<T> getArray(JsonObject object, String memberName, TypeAdapter<T> converter) {
-        checkParameters(object, memberName);
-        JsonArray array = object.getAsJsonArray(memberName);
+        JsonArray array = checkObject(object)
+                .getAsJsonArray(checkMemberName(memberName));
         if (array == null) {
             return null;
         }
@@ -358,27 +342,19 @@ public final class JsonUtils {
     }
 
     private static JsonPrimitive getPrimitiveChecked(JsonObject object, String memberName) {
-        checkParameters(object, memberName);
-        return object.getAsJsonPrimitive(memberName);
+        return checkObject(object)
+                .getAsJsonPrimitive(checkMemberName(memberName));
     }
 
-    private static void checkParameters(JsonObject object, String memberName) {
-        checkObject(object);
-        checkMemberName(memberName);
+    private static JsonObject checkObject(JsonObject object) {
+        return checkNotNull(object, "object");
     }
 
-    private static void checkObject(JsonObject object) {
-        checkNotNull(object, "object");
+    private static String checkMemberName(String memberName) {
+        return checkNotEmpty(memberName, "memberName");
     }
 
-    private static void checkMemberName(String memberName) {
-        checkNotNull(memberName, "memberName");
-        if (memberName.length() == 0) {
-            throw new IllegalArgumentException("Member is an empty string.");
-        }
-    }
-
-    private static void checkMandatoryValue(Object value, String memberName) {
-        checkNotNull(value, "mandatory value \'" + memberName + "\'");
+    private static <T> T checkMandatoryValue(T value, String memberName) {
+        return checkNotNull(value, "mandatory value \'" + memberName + "\'");
     }
 }

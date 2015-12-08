@@ -188,10 +188,8 @@ public class Select extends ParameterControl {
          * @param value actual value.
          */
         public Option(String label, String value, Group group) {
-            checkNotNull(label, "label");
-            checkNotNull(value, "value");
-            this.label = label;
-            this.value = value;
+            this.label = checkNotNull(label, "label");
+            this.value = checkNotNull(value, "value");
             this.group = group;
         }
 
@@ -252,8 +250,7 @@ public class Select extends ParameterControl {
         }
 
         public Builder addOption(Option option) {
-            checkNotNull(option, "option");
-            options.add(option);
+            options.add(checkNotNull(option, "option"));
             return this;
         }
     }

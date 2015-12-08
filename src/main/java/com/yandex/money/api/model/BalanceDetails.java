@@ -125,14 +125,12 @@ public class BalanceDetails {
         private BigDecimal hold;
 
         public Builder setTotal(BigDecimal total) {
-            checkNotNull(total, "total");
-            this.total = total;
+            this.total = checkNotNull(total, "total");
             return this;
         }
 
         public Builder setAvailable(BigDecimal available) {
-            checkNotNull(available, "available");
-            this.available = available;
+            this.available = checkNotNull(available, "available");
             return this;
         }
 

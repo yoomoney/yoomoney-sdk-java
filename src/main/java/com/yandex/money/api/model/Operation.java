@@ -165,37 +165,31 @@ public class Operation {
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
      */
     protected Operation(Builder builder) {
-        checkNotNull(builder.operationId, "operationId");
-        checkNotNull(builder.status, "status");
-        checkNotNull(builder.type, "type");
-        checkNotNull(builder.direction, "direction");
-        checkNotNull(builder.title, "title");
-
-        this.operationId = builder.operationId;
-        this.status = builder.status;
-        this.patternId = builder.patternId;
-        this.direction = builder.direction;
-        this.amount = builder.amount;
-        this.amountDue = builder.amountDue;
-        this.fee = builder.fee;
-        this.datetime = builder.datetime;
-        this.title = builder.title;
-        this.sender = builder.sender;
-        this.recipient = builder.recipient;
-        this.recipientType = builder.recipientType;
-        this.message = builder.message;
-        this.comment = builder.comment;
-        this.codepro = builder.codepro != null && builder.codepro;
-        this.protectionCode = builder.protectionCode;
-        this.expires = builder.expires;
-        this.answerDatetime = builder.answerDatetime;
-        this.label = builder.label;
-        this.details = builder.details;
-        this.repeatable = builder.repeatable != null && builder.repeatable;
-        this.paymentParameters = Collections.unmodifiableMap(builder.paymentParameters);
-        this.favorite = builder.favorite != null && builder.favorite;
-        this.type = builder.type;
-        this.digitalGoods = builder.digitalGoods;
+        operationId = checkNotNull(builder.operationId, "operationId");
+        status = checkNotNull(builder.status, "status");
+        type = checkNotNull(builder.type, "type");
+        direction = checkNotNull(builder.direction, "direction");
+        title = checkNotNull(builder.title, "title");
+        patternId = builder.patternId;
+        amount = builder.amount;
+        amountDue = builder.amountDue;
+        fee = builder.fee;
+        datetime = builder.datetime;
+        sender = builder.sender;
+        recipient = builder.recipient;
+        recipientType = builder.recipientType;
+        message = builder.message;
+        comment = builder.comment;
+        codepro = builder.codepro != null && builder.codepro;
+        protectionCode = builder.protectionCode;
+        expires = builder.expires;
+        answerDatetime = builder.answerDatetime;
+        label = builder.label;
+        details = builder.details;
+        repeatable = builder.repeatable != null && builder.repeatable;
+        paymentParameters = Collections.unmodifiableMap(builder.paymentParameters);
+        favorite = builder.favorite != null && builder.favorite;
+        digitalGoods = builder.digitalGoods;
     }
 
     @Override
@@ -472,8 +466,7 @@ public class Operation {
         }
 
         public Builder setAmount(BigDecimal amount) {
-            checkNotNull(amount, "amount");
-            this.amount = amount;
+            this.amount = checkNotNull(amount, "amount");
             return this;
         }
 
@@ -488,8 +481,7 @@ public class Operation {
         }
 
         public Builder setDatetime(DateTime datetime) {
-            checkNotNull(datetime, "datetime");
-            this.datetime = datetime;
+            this.datetime = checkNotNull(datetime, "datetime");
             return this;
         }
 
@@ -559,8 +551,7 @@ public class Operation {
         }
 
         public Builder setPaymentParameters(Map<String, String> paymentParameters) {
-            checkNotNull(paymentParameters, "paymentParameters");
-            this.paymentParameters = paymentParameters;
+            this.paymentParameters = checkNotNull(paymentParameters, "paymentParameters");
             return this;
         }
 

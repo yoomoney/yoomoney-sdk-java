@@ -137,8 +137,7 @@ public class Group extends Container<Component> {
         }
 
         public Builder setLayout(Layout layout) {
-            checkNotNull(layout, "layout");
-            this.layout = layout;
+            this.layout = checkNotNull(layout, "layout");
             return this;
         }
     }

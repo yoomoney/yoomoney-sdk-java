@@ -50,9 +50,7 @@ public final class UrlEncodedUtils {
      * @return key-value pairs
      */
     public static Map<String, String> parse(String url) throws URISyntaxException {
-        checkNotEmpty(url, "url");
-
-        URI uri = new URI(url);
+        URI uri = new URI(checkNotEmpty(url, "url"));
         String query = uri.getQuery();
         if (query == null) {
             return Collections.unmodifiableMap(new HashMap<String, String>());

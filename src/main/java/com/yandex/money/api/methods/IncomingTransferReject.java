@@ -50,12 +50,10 @@ public class IncomingTransferReject {
      * @param error error code
      */
     public IncomingTransferReject(SimpleStatus status, Error error) {
-        checkNotNull(status, "status");
-        if (status == SimpleStatus.REFUSED) {
+        this.status = checkNotNull(status, "status");
+        if (this.status == SimpleStatus.REFUSED) {
             checkNotNull(error, "error");
         }
-
-        this.status = status;
         this.error = error;
     }
 
@@ -100,8 +98,7 @@ public class IncomingTransferReject {
          */
         public Request(String operationId) {
             super(IncomingTransferRejectTypeAdapter.getInstance());
-            checkNotEmpty(operationId, "operationId");
-            addParameter("operation_id", operationId);
+            addParameter("operation_id", checkNotEmpty(operationId, "operationId"));
         }
 
         @Override

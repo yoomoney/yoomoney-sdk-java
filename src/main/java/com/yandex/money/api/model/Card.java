@@ -124,8 +124,7 @@ public class Card extends MoneySource {
         }
 
         public Builder setType(Type type) {
-            checkNotNull(type, "type");
-            this.type = type;
+            this.type = checkNotNull(type, "type");
             return this;
         }
 

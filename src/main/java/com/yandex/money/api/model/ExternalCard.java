@@ -38,11 +38,8 @@ public class ExternalCard extends Card {
 
     protected ExternalCard(Builder builder) {
         super(builder);
-        checkNotEmpty(builder.fundingSourceType, "fundingSourceType");
-        checkNotEmpty(builder.moneySourceToken, "moneySourceToken");
-
-        fundingSourceType = builder.fundingSourceType;
-        moneySourceToken = builder.moneySourceToken;
+        fundingSourceType = checkNotEmpty(builder.fundingSourceType, "fundingSourceType");
+        moneySourceToken = checkNotEmpty(builder.moneySourceToken, "moneySourceToken");
     }
 
     @Override

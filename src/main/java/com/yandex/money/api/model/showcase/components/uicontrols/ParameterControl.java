@@ -53,8 +53,7 @@ public abstract class ParameterControl extends Control implements Parameter {
 
     protected ParameterControl(Builder builder) {
         super(builder);
-        checkNotNull(builder.name, "name");
-        name = builder.name;
+        name = checkNotNull(builder.name, "name");
         value = builder.value;
         valueAutoFill = builder.valueAutoFill;
     }

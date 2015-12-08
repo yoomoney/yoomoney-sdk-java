@@ -117,15 +117,10 @@ public class ProcessExternalPayment extends BaseProcessPayment {
                         boolean requestToken, ExternalCard externalCard, String csc) {
 
             super(ProcessExternalPaymentTypeAdapter.getInstance());
-            checkNotEmpty(instanceId, "instanceId");
-            checkNotEmpty(requestId, "requestId");
-            checkNotEmpty(extAuthSuccessUri, "extAuthSuccessUri");
-            checkNotEmpty(extAuthFailUri, "extAuthFailUri");
-
-            addParameter("instance_id", instanceId);
-            addParameter("request_id", requestId);
-            addParameter("ext_auth_success_uri", extAuthSuccessUri);
-            addParameter("ext_auth_fail_uri", extAuthFailUri);
+            addParameter("instance_id", checkNotEmpty(instanceId, "instanceId"));
+            addParameter("request_id", checkNotEmpty(requestId, "requestId"));
+            addParameter("ext_auth_success_uri", checkNotEmpty(extAuthSuccessUri, "extAuthSuccessUri"));
+            addParameter("ext_auth_fail_uri", checkNotEmpty(extAuthFailUri, "extAuthFailUri"));
             addParameter("request_token", requestToken);
             if (externalCard != null) {
                 addParameter("money_source_token", externalCard.moneySourceToken);

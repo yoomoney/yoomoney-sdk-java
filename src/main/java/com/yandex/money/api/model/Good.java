@@ -54,11 +54,8 @@ public class Good {
      * @param merchantArticleId merchant article id
      */
     public Good(String serial, String secret, String merchantArticleId) {
-        checkNotNull(serial, "serial");
-        checkNotNull(secret, "secret");
-
-        this.serial = serial;
-        this.secret = secret;
+        this.serial = checkNotNull(serial, "serial");
+        this.secret = checkNotNull(secret, "secret");
         this.merchantArticleId = merchantArticleId;
     }
 

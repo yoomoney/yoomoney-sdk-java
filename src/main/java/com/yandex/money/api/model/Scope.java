@@ -84,8 +84,7 @@ public class Scope {
      * @param name the name of a scope
      */
     protected Scope(String name) {
-        checkNotEmpty(name, "name");
-        this.name = name;
+        this.name = checkNotEmpty(name, "name");
     }
 
     /**
@@ -335,13 +334,11 @@ public class Scope {
         }
 
         public static PaymentScope createPaymentToPattern(String patternId) {
-            checkNotEmpty(patternId, "patternId");
-            return new PaymentScope(patternId, null);
+            return new PaymentScope(checkNotEmpty(patternId, "patternId"), null);
         }
 
         public static PaymentScope createPaymentToAccount(String account) {
-            checkNotEmpty(account, "account");
-            return new PaymentScope(null, account);
+            return new PaymentScope(null, checkNotEmpty(account, "account"));
         }
 
         @Override

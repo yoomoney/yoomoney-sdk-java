@@ -41,12 +41,9 @@ public final class PhoneParams extends PaymentParams {
     public static final String PATTERN_ID = "phone-topup";
 
     public static PhoneParams newInstance(String number, BigDecimal amount) {
-        checkNotEmpty(number, "number");
-        checkNotNull(amount, "amount");
-
         HashMap<String, String> params = new HashMap<>();
-        params.put("amount", amount.toPlainString());
-        params.put("phone-number", number);
+        params.put("phone-number", checkNotEmpty(number, "number"));
+        params.put("amount", checkNotNull(amount, "amount").toPlainString());
         return new PhoneParams(PATTERN_ID, params);
     }
 

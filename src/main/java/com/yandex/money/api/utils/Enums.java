@@ -56,9 +56,7 @@ public final class Enums {
      * @return          {@code enum}'s value
      */
     public static <T extends WithCode<T>> T parseOrThrow(T prototype, String code) {
-        T value = parse(prototype, null, code);
-        checkNotNull(value, "value");
-        return value;
+        return checkNotNull(parse(prototype, null, code), "value");
     }
 
     /**
@@ -73,11 +71,10 @@ public final class Enums {
      * @return             {@code enum}'s value
      */
     public static <T extends WithCode<T>> T parse(T prototype, T defaultValue, String code) {
-        checkNotNull(prototype, "prototype");
         if (code == null) {
             return defaultValue;
         }
-        for (T value : prototype.getValues()) {
+        for (T value : checkNotNull(prototype, "prototype").getValues()) {
             if (code.equals(value.getCode())) {
                 return value;
             }

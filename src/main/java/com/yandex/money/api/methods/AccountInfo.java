@@ -100,9 +100,7 @@ public class AccountInfo {
     public final List<YandexMoneyCard> yandexMoneyCards;
 
     private AccountInfo(Builder builder) {
-        checkNotEmpty(builder.account, "account");
-
-        account = builder.account;
+        account = checkNotEmpty(builder.account, "account");
         balance = builder.balance;
         currency = builder.currency;
         accountStatus = builder.accountStatus;
@@ -189,8 +187,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setBalance(BigDecimal balance) {
-            checkNotNull(balance, "balance");
-            this.balance = balance;
+            this.balance = checkNotNull(balance, "balance");
             return this;
         }
 
@@ -199,8 +196,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setCurrency(Currency currency) {
-            checkNotNull(currency, "currency");
-            this.currency = currency;
+            this.currency = checkNotNull(currency, "currency");
             return this;
         }
 
@@ -209,8 +205,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setAccountStatus(AccountStatus accountStatus) {
-            checkNotNull(accountStatus, "accountStatus");
-            this.accountStatus = accountStatus;
+            this.accountStatus = checkNotNull(accountStatus, "accountStatus");
             return this;
         }
 
@@ -219,8 +214,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setAccountType(AccountType accountType) {
-            checkNotNull(accountType, "accountType");
-            this.accountType = accountType;
+            this.accountType = checkNotNull(accountType, "accountType");
             return this;
         }
 
@@ -238,8 +232,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setBalanceDetails(BalanceDetails balanceDetails) {
-            checkNotNull(balanceDetails, "balanceDetails");
-            this.balanceDetails = balanceDetails;
+            this.balanceDetails = checkNotNull(balanceDetails, "balanceDetails");
             return this;
         }
 
@@ -248,8 +241,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setLinkedCards(List<Card> linkedCards) {
-            checkNotNull(linkedCards, "linkedCards");
-            this.linkedCards = linkedCards;
+            this.linkedCards = checkNotNull(linkedCards, "linkedCards");
             return this;
         }
 
@@ -258,8 +250,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setAdditionalServices(List<String> additionalServices) {
-            checkNotNull(additionalServices, "additionalServices");
-            this.additionalServices = additionalServices;
+            this.additionalServices = checkNotNull(additionalServices, "additionalServices");
             return this;
         }
 
@@ -268,8 +259,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setYandexMoneyCards(List<YandexMoneyCard> yandexMoneyCards) {
-            checkNotNull(yandexMoneyCards, "yandexMoneyCards");
-            this.yandexMoneyCards = yandexMoneyCards;
+            this.yandexMoneyCards = checkNotNull(yandexMoneyCards, "yandexMoneyCards");
             return this;
         }
 

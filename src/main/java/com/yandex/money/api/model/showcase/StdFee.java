@@ -75,13 +75,12 @@ public final class StdFee implements Fee {
         if (d != null && d.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Coefficient D is negative");
         }
-        checkNotNull(amountType, "amountType");
 
         this.a = a;
         this.b = b;
         this.c = c;
         this.d = d;
-        this.amountType = amountType;
+        this.amountType = checkNotNull(amountType, "amountType");
 
         hasCommission = !(a.equals(BigDecimal.ZERO) && b.equals(BigDecimal.ZERO) &&
                 c.equals(BigDecimal.ZERO));

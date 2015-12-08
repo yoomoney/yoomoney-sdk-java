@@ -34,8 +34,7 @@ public class DefaultUserAgent implements UserAgent {
     private final String platform;
 
     public DefaultUserAgent(String platform) {
-        checkNotEmpty(platform, "platform");
-        this.platform = platform;
+        this.platform = checkNotEmpty(platform, "platform");
     }
 
     @Override

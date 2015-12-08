@@ -56,7 +56,7 @@ public final class ParamsTest {
     public void testP2pTransferParamsBuilderCreated() {
         int requiredParamsSize = 2;
         P2pTransferParams params = createP2pBuilderRequired().create();
-        Assert.assertEquals(params.makeParams().size(), requiredParamsSize);
+        Assert.assertEquals(params.paymentParams.size(), requiredParamsSize);
     }
 
     /**
@@ -76,7 +76,7 @@ public final class ParamsTest {
                 .setLabel(label)
                 .setMessage(message)
                 .create()
-                .makeParams();
+                .paymentParams;
 
         HashMap<String, String> expectedParams = new HashMap<>();
         expectedParams.put("to", accountNumber);
@@ -101,7 +101,7 @@ public final class ParamsTest {
         HashMap<String, String> expectedParams = new HashMap<>();
         expectedParams.put("phone-number", phoneNumber);
         expectedParams.put("amount", amount.toPlainString());
-        Assert.assertEquals(phoneParams.makeParams(), expectedParams);
+        Assert.assertEquals(phoneParams.paymentParams, expectedParams);
     }
 
     private static P2pTransferParams.Builder createP2pBuilderRequired() {

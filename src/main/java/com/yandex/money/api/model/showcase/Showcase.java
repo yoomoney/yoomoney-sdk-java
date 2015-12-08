@@ -53,14 +53,11 @@ public final class Showcase {
     public final List<Error> errors;
 
     private Showcase(Builder builder) {
-        checkNotNull(builder.title, "title");
-        checkNotNull(builder.form, "form");
-
-        this.title = builder.title;
-        this.hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
-        this.form = builder.form;
-        this.moneySources = Collections.unmodifiableSet(builder.moneySources);
-        this.errors = Collections.unmodifiableList(builder.errors);
+        title = checkNotNull(builder.title, "title");
+        form = checkNotNull(builder.form, "form");
+        hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
+        moneySources = Collections.unmodifiableSet(builder.moneySources);
+        errors = Collections.unmodifiableList(builder.errors);
     }
 
     /**
@@ -128,8 +125,7 @@ public final class Showcase {
         }
 
         public Builder setHiddenFields(Map<String, String> hiddenFields) {
-            checkNotNull(hiddenFields, "hiddenFields");
-            this.hiddenFields = hiddenFields;
+            this.hiddenFields = checkNotNull(hiddenFields, "hiddenFields");
             return this;
         }
 
@@ -139,14 +135,12 @@ public final class Showcase {
         }
 
         public Builder setMoneySources(Set<AllowedMoneySource> moneySources) {
-            checkNotNull(moneySources, "moneySources");
-            this.moneySources = moneySources;
+            this.moneySources = checkNotNull(moneySources, "moneySources");
             return this;
         }
 
         public Builder setErrors(List<Error> errors) {
-            checkNotNull(errors, "errors");
-            this.errors = errors;
+            this.errors = checkNotNull(errors, "errors");
             return this;
         }
 
@@ -161,9 +155,8 @@ public final class Showcase {
         public final String alert;
 
         public Error(String name, String alert) {
-            checkNotNull(alert, "alert");
             this.name = name;
-            this.alert = alert;
+            this.alert = checkNotNull(alert, "alert");
         }
     }
 
@@ -206,8 +199,7 @@ public final class Showcase {
         private Request(String patternId, String url, Map<String, String> params) {
             super(ShowcaseTypeAdapter.getInstance());
             if (url != null) {
-                checkNotNull(params, "params");
-                addParameters(params);
+                addParameters(checkNotNull(params, "params"));
             }
             this.patternId = patternId;
             this.url = url;

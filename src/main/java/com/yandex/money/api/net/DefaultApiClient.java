@@ -29,11 +29,10 @@ import com.squareup.okhttp.OkHttpClient;
 import com.yandex.money.api.utils.Language;
 import com.yandex.money.api.utils.Strings;
 
-import java.security.GeneralSecurityException;
-import java.util.concurrent.TimeUnit;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+import java.security.GeneralSecurityException;
+import java.util.concurrent.TimeUnit;
 
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
@@ -58,8 +57,7 @@ public class DefaultApiClient implements ApiClient {
      * @param clientId client id to use
      */
     public DefaultApiClient(String clientId) {
-        checkNotNull(clientId, "client id");
-        id = clientId;
+        id = checkNotNull(clientId, "client id");
         httpClient = createHttpClient();
         hostsProvider = new HostsProvider(false);
     }

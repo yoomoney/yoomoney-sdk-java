@@ -234,15 +234,13 @@ public class ProcessPayment extends BaseProcessPayment {
                        String extAuthFailUri) {
 
             super(ProcessPaymentTypeAdapter.getInstance());
-            checkNotEmpty(requestId, "requestId");
-
-            if (moneySource != null) {
-                addParameter("money_source", moneySource.id);
-            }
-            addParameter("request_id", requestId);
+            addParameter("request_id", checkNotEmpty(requestId, "requestId"));
             addParameter("csc", csc);
             addParameter("ext_auth_success_uri", extAuthSuccessUri);
             addParameter("ext_auth_fail_uri", extAuthFailUri);
+            if (moneySource != null) {
+                addParameter("money_source", moneySource.id);
+            }
         }
 
         @Override

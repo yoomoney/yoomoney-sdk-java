@@ -63,12 +63,9 @@ public final class HttpResourceResponse<T> {
     HttpResourceResponse(ResourceState resourceState, String contentType, DateTime lastModified,
                          DateTime expires, T document) {
 
-        checkNotNull(resourceState, "resourceState");
-        checkNotNull(lastModified, "lastModified");
-
-        this.resourceState = resourceState;
+        this.resourceState = checkNotNull(resourceState, "resourceState");
+        this.lastModified = checkNotNull(lastModified, "lastModified");
         this.contentType = contentType;
-        this.lastModified = lastModified;
         this.expires = expires;
         this.document = document;
     }

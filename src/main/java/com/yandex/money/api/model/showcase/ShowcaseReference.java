@@ -115,9 +115,8 @@ public final class ShowcaseReference {
     }
 
     private ShowcaseReference(Builder builder) {
-        checkNotEmpty(builder.title, "title");
         scid = builder.scid;
-        title = builder.title;
+        title = checkNotEmpty(builder.title, "title");
         topIndex = builder.topIndex;
         url = builder.url;
         format = builder.format;
@@ -226,8 +225,7 @@ public final class ShowcaseReference {
         }
 
         public Builder setParams(Map<String, String> params) {
-            checkNotNull(params, "params");
-            this.params = params;
+            this.params = checkNotNull(params, "params");
             return this;
         }
 

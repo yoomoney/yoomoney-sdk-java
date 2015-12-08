@@ -96,8 +96,7 @@ public abstract class Container<T> extends Component {
         }
 
         public Builder addItem(T component) {
-            checkNotNull(component, "component");
-            components.add(component);
+            components.add(checkNotNull(component, "component"));
             return this;
         }
     }

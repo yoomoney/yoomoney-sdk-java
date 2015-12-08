@@ -58,20 +58,20 @@ public class IncomingTransferAccept {
     public IncomingTransferAccept(SimpleStatus status, Error error, Integer protectionCodeAttemptsAvailable,
                                   String extActionUri) {
 
-        checkNotNull(status, "status");
-        switch (status) {
+        this.status = checkNotNull(status, "status");
+        switch (this.status) {
             case REFUSED:
-                checkNotNull(error, "error");
-                if(error == Error.ILLEGAL_PARAM_PROTECTION_CODE) {
-                    checkNotNull(protectionCodeAttemptsAvailable,
-                            "protectionCodeAttemptsAvailable");
+                switch (checkNotNull(error, "error")) {
+                    case ILLEGAL_PARAM_PROTECTION_CODE:
+                        checkNotNull(protectionCodeAttemptsAvailable, "protectionCodeAttemptsAvailable");
+                        break;
+                    case EXT_ACTION_REQUIRED:
+                        checkNotNull(extActionUri, "extActionUri");
+                        break;
                 }
-                if(error == Error.EXT_ACTION_REQUIRED) {
-                    checkNotNull(extActionUri, "extActionUri");
-                }
+                break;
         }
 
-        this.status = status;
         this.error = error;
         this.protectionCodeAttemptsAvailable = protectionCodeAttemptsAvailable;
         this.extActionUri = extActionUri;
@@ -128,8 +128,7 @@ public class IncomingTransferAccept {
          */
         public Request(String operationId, String protectionCode) {
             super(IncomingTransferAcceptTypeAdapter.getInstance());
-            checkNotEmpty(operationId, "operationId");
-            addParameter("operation_id", operationId);
+            addParameter("operation_id", checkNotEmpty(operationId, "operationId"));
             addParameter("protection_code", protectionCode);
         }
 

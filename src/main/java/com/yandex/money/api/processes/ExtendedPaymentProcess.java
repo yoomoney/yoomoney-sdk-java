@@ -54,11 +54,8 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      * @param session session to run the process on
      * @param parameterProvider parameter's provider
      */
-    public ExtendedPaymentProcess(OAuth2Session session,
-                                  ExternalPaymentProcess.ParameterProvider parameterProvider) {
-
-        checkNotNull(session, "session");
-        this.session = session;
+    public ExtendedPaymentProcess(OAuth2Session session, ExternalPaymentProcess.ParameterProvider parameterProvider) {
+        this.session = checkNotNull(session, "session");
         this.paymentProcess = new PaymentProcess(session, parameterProvider);
         this.externalPaymentProcess = new ExternalPaymentProcess(session, parameterProvider);
         this.parameterProvider = parameterProvider;
@@ -106,12 +103,11 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      * @throws IllegalStateException if called when process's state is not {@code CREATED}
      */
     public ExtendedPaymentProcess initWithFixedPaymentContext(PaymentContext paymentContext) {
-        checkNotNull(paymentContext, "paymentContext");
         if (getState() != BasePaymentProcess.State.CREATED) {
             throw new IllegalStateException("you should call initWithFixedPaymentContext() after " +
                     "constructor only");
         }
-        this.paymentContext = paymentContext;
+        this.paymentContext = checkNotNull(paymentContext, "paymentContext");
         this.mutablePaymentContext = false;
         return this;
     }
@@ -130,8 +126,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      * @param savedState saved state
      */
     public void restoreSavedState(SavedState savedState) {
-        checkNotNull(savedState, "saved state");
-        paymentProcess.restoreSavedState(savedState.paymentProcessSavedState);
+        paymentProcess.restoreSavedState(checkNotNull(savedState, "saved state").paymentProcessSavedState);
         externalPaymentProcess.restoreSavedState(savedState.externalPaymentProcessSavedState);
         paymentContext = savedState.paymentContext;
         mutablePaymentContext = savedState.mutablePaymentContext;
@@ -159,8 +154,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
 
     private void switchContextIfRequired() {
         if (getState() == BasePaymentProcess.State.STARTED && mutablePaymentContext) {
-            MoneySource moneySource = parameterProvider.getMoneySource();
-            checkNotNull(moneySource, "moneySource");
+            MoneySource moneySource = checkNotNull(parameterProvider.getMoneySource(), "moneySource");
 
             if (paymentContext == PaymentContext.PAYMENT && moneySource instanceof ExternalCard) {
                 paymentContext = PaymentContext.EXTERNAL_PAYMENT;

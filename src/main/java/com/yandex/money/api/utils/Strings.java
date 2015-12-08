@@ -54,8 +54,7 @@ public final class Strings {
      * @return {@code true} if digits only
      */
     public static boolean containsDigitsOnly(String value) {
-        checkNotNull(value, "value");
-        return value.matches("\\d*");
+        return checkNotNull(value, "value").matches("\\d*");
     }
 
     /**
@@ -66,9 +65,8 @@ public final class Strings {
      * @return concatenated string
      */
     public static String concatenate(String[] array, String splitter) {
-        checkNotNull(array, "array");
         checkNotNull(splitter, "splitter");
-        if (array.length == 0) {
+        if (checkNotNull(array, "array").length == 0) {
             return "";
         }
 
@@ -88,12 +86,11 @@ public final class Strings {
      * @return array of strings
      */
     public static String[] split(String str, int n) {
-        checkNotNull(str, "str");
         if (n <= 0) {
             throw new IllegalArgumentException("n should be greater than 0");
         }
 
-        final int length = str.length();
+        final int length = checkNotNull(str, "str").length();
         String[] result = new String[length / n + (length % n == 0 ? 0 : 1)];
         for (int i = 0; i < result.length; ++i) {
             int beginIndex = i * n;

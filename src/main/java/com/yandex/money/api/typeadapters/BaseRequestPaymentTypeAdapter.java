@@ -53,20 +53,16 @@ final class BaseRequestPaymentTypeAdapter {
         }
 
         static <T extends BaseRequestPayment.Builder> void deserialize(JsonObject object, T builder) {
-            checkNotNull(object, "object");
-            checkNotNull(builder, "builder");
-
-            builder.setStatus(Status.parse(getMandatoryString(object, MEMBER_STATUS)))
+            checkNotNull(builder, "builder")
+                    .setStatus(Status.parse(getMandatoryString(checkNotNull(object, "object"), MEMBER_STATUS)))
                     .setError(Error.parse(getString(object, MEMBER_ERROR)))
                     .setContractAmount(getBigDecimal(object, MEMBER_CONTRACT_AMOUNT))
                     .setRequestId(getString(object, MEMBER_REQUEST_ID));
         }
 
         static <T extends BaseRequestPayment> void serialize(JsonObject object, T value) {
-            checkNotNull(object, "object");
-            checkNotNull(value, "builder");
-
-            object.addProperty(MEMBER_STATUS, value.status.code);
+            checkNotNull(object, "object")
+                    .addProperty(MEMBER_STATUS, checkNotNull(value, "value").status.code);
             if (value.error != null) {
                 object.addProperty(MEMBER_ERROR, value.error.code);
             } else {

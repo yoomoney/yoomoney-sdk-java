@@ -59,8 +59,7 @@ public abstract class AbstractSession {
      * @param client API client used to perform operations
      */
     protected AbstractSession(ApiClient client) {
-        checkNotNull(client, "client");
-        this.client = client;
+        this.client = checkNotNull(client, "client");
     }
 
     /**
@@ -77,9 +76,8 @@ public abstract class AbstractSession {
     }
 
     protected final Call prepareCall(Request.Builder builder) {
-        checkNotNull(builder, "builder");
         return client.getHttpClient()
-                .newCall(builder.build());
+                .newCall(checkNotNull(builder, "builder").build());
     }
 
     protected final <T> Request.Builder prepareRequestBuilder(ApiRequest<T> request) {

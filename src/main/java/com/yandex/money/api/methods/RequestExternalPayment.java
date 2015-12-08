@@ -107,13 +107,10 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * @return new request instance.
          */
         public static Request newInstance(String instanceId, String patternId, Map<String, String> params) {
-            checkNotEmpty(instanceId, "instanceId");
-            checkNotEmpty(patternId, "patternId");
-
             if (params == null || params.isEmpty()) {
                 throw new IllegalArgumentException("params is null or empty");
             }
-            return new Request(instanceId, patternId, params);
+            return new Request(checkNotEmpty(instanceId, "instanceId"), checkNotEmpty(patternId, "patternId"), params);
         }
 
         /**
@@ -130,9 +127,8 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * @return new request instance.
          */
         public static Request newInstance(String instanceId, PaymentParams paymentParams) {
-            checkNotNull(paymentParams, "paymentParams");
-            return Request.newInstance(instanceId, paymentParams.getPatternId(),
-                    paymentParams.makeParams());
+            return Request.newInstance(instanceId, checkNotNull(paymentParams, "paymentParams").patternId,
+                    paymentParams.paymentParams);
         }
 
         @Override
