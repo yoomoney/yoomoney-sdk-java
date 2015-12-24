@@ -116,7 +116,9 @@ public class Amount extends Number {
         }
 
         public Builder setFee(Fee fee) {
-            this.fee = fee;
+            if (fee != null) {
+                this.fee = fee;
+            }
             return this;
         }
     }
