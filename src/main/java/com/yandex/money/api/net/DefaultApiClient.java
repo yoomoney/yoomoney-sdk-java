@@ -27,6 +27,7 @@ package com.yandex.money.api.net;
 import com.squareup.okhttp.ConnectionPool;
 import com.squareup.okhttp.OkHttpClient;
 import com.yandex.money.api.utils.Language;
+import com.yandex.money.api.utils.MillisecondsIn;
 import com.yandex.money.api.utils.Strings;
 
 import javax.net.ssl.SSLContext;
@@ -118,11 +119,16 @@ public class DefaultApiClient implements ApiClient {
         return Language.getDefault();
     }
 
-    private static OkHttpClient createHttpClient() {
+    /**
+     * Creates HTTP client to use.
+     *
+     * @return HTTP client
+     */
+    protected OkHttpClient createHttpClient() {
         OkHttpClient client = new OkHttpClient();
         client.setReadTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         client.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        client.setConnectionPool(new ConnectionPool(4, 10 * 60 * 1000L));
+        client.setConnectionPool(new ConnectionPool(4, 10 * MillisecondsIn.MINUTE));
         client.setFollowSslRedirects(false);
         client.setFollowRedirects(false);
         return client;
