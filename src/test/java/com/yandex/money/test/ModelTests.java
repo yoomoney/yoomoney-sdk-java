@@ -25,6 +25,9 @@
 package com.yandex.money.test;
 
 import com.yandex.money.api.methods.AccountInfo;
+import com.yandex.money.api.methods.IncomingTransferAccept;
+import com.yandex.money.api.methods.IncomingTransferReject;
+import com.yandex.money.api.methods.InstanceId;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Avatar;
@@ -32,6 +35,8 @@ import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.ExternalCard;
+import com.yandex.money.api.model.SimpleStatus;
+import com.yandex.money.api.model.StatusInfo;
 import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.CustomFee;
@@ -43,6 +48,9 @@ import com.yandex.money.api.typeadapters.BalanceDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.CardTypeAdapter;
 import com.yandex.money.api.typeadapters.ErrorTypeAdapter;
 import com.yandex.money.api.typeadapters.ExternalCardTypeAdapter;
+import com.yandex.money.api.typeadapters.IncomingTransferAcceptTypeAdapter;
+import com.yandex.money.api.typeadapters.IncomingTransferRejectTypeAdapter;
+import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.typeadapters.YandexMoneyCardTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.FeeTypeAdapter;
@@ -53,6 +61,8 @@ import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+
+import static com.yandex.money.test.Utils.checkTypeAdapter;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -82,6 +92,41 @@ public class ModelTests {
     @Test
     public void testExternalCard() {
         performTest(createExternalCard(), ExternalCardTypeAdapter.getInstance());
+    }
+
+    @Test
+    public void testIncomingTransferAccept() {
+        IncomingTransferAcceptTypeAdapter adapter = IncomingTransferAcceptTypeAdapter.getInstance();
+
+        checkTypeAdapter("/methods/incoming-transfer-accept-success.json", adapter);
+        checkTypeAdapter("/methods/incoming-transfer-accept-refused-1.json", adapter);
+        checkTypeAdapter("/methods/incoming-transfer-accept-refused-2.json", adapter);
+
+        performTest(new IncomingTransferAccept(StatusInfo.from(SimpleStatus.SUCCESS, null), null, null), adapter);
+        performTest(new IncomingTransferAccept(StatusInfo.from(SimpleStatus.REFUSED, Error.TECHNICAL_ERROR), null, null),
+                adapter);
+    }
+
+    @Test
+    public void testIncomingTransferReject() {
+        IncomingTransferRejectTypeAdapter adapter = IncomingTransferRejectTypeAdapter.getInstance();
+
+        checkTypeAdapter("/methods/incoming-transfer-reject-success.json", adapter);
+        checkTypeAdapter("/methods/incoming-transfer-reject-refused.json", adapter);
+
+        performTest(new IncomingTransferReject(StatusInfo.from(SimpleStatus.SUCCESS, null)), adapter);
+        performTest(new IncomingTransferReject(StatusInfo.from(SimpleStatus.REFUSED, Error.TECHNICAL_ERROR)), adapter);
+    }
+
+    @Test
+    public void testInstanceId() {
+        InstanceIdTypeAdapter adapter = InstanceIdTypeAdapter.getInstance();
+
+        checkTypeAdapter("/methods/instance-id-success.json", adapter);
+        checkTypeAdapter("/methods/instance-id-refused.json", adapter);
+
+        performTest(new InstanceId(StatusInfo.from(SimpleStatus.SUCCESS, null), "123"), adapter);
+        performTest(new InstanceId(StatusInfo.from(SimpleStatus.REFUSED, Error.TECHNICAL_ERROR), null), adapter);
     }
 
     @Test

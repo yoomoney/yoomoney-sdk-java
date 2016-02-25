@@ -26,6 +26,7 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.SimpleStatus;
+import com.yandex.money.api.model.StatusInfo;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
@@ -40,7 +41,10 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public class InstanceId {
 
+    public final StatusInfo statusInfo;
+    @Deprecated
     public final SimpleStatus status;
+    @Deprecated
     public final Error error;
     public final String instanceId;
 
@@ -50,29 +54,21 @@ public class InstanceId {
      * @param status status of an operation
      * @param error error code
      * @param instanceId instance id if success
+     * @deprecated use {@link #InstanceId(StatusInfo, String)} instead
      */
+    @Deprecated
     public InstanceId(SimpleStatus status, Error error, String instanceId) {
-        this.status = checkNotNull(status, "status");
-        switch (this.status) {
-            case SUCCESS:
-                checkNotNull(instanceId, "instanceId");
-                break;
-            case REFUSED:
-                checkNotNull(error, "error");
-                break;
-        }
-
-        this.error = error;
-        this.instanceId = instanceId;
+        this(StatusInfo.from(status, error), instanceId);
     }
 
-    @Override
-    public String toString() {
-        return "InstanceId{" +
-                "status=" + status +
-                ", error=" + error +
-                ", instanceId='" + instanceId + '\'' +
-                '}';
+    public InstanceId(StatusInfo statusInfo, String instanceId) {
+        this.statusInfo = checkNotNull(statusInfo, "statusInfo");
+        if (statusInfo.isSuccessful()) {
+            checkNotNull(instanceId, "instanceId");
+        }
+        this.instanceId = instanceId;
+        this.status = statusInfo.status;
+        this.error = statusInfo.error;
     }
 
     @Override
@@ -82,22 +78,28 @@ public class InstanceId {
 
         InstanceId that = (InstanceId) o;
 
-        return status == that.status &&
-                error == that.error &&
-                !(instanceId != null ? !instanceId.equals(
-                        that.instanceId) : that.instanceId != null);
+        return statusInfo.equals(that.statusInfo) &&
+                !(instanceId != null ? !instanceId.equals(that.instanceId) : that.instanceId != null);
     }
 
     @Override
     public int hashCode() {
-        int result = status.hashCode();
-        result = 31 * result + (error != null ? error.hashCode() : 0);
+        int result = statusInfo.hashCode();
         result = 31 * result + (instanceId != null ? instanceId.hashCode() : 0);
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "InstanceId{" +
+                "statusInfo=" + statusInfo +
+                ", instanceId='" + instanceId + '\'' +
+                '}';
+    }
+
+    @Deprecated
     public boolean isSuccess() {
-        return status == SimpleStatus.SUCCESS;
+        return statusInfo.isSuccessful();
     }
 
     /**

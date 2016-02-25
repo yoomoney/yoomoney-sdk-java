@@ -73,9 +73,9 @@ public class YandexMoneyTest implements ApiTest {
         reqInstanceId = new InstanceId.Request(CLIENT_ID);
         respInstanceId = session.execute(reqInstanceId);
 
-        Assert.assertEquals(respInstanceId.status, SimpleStatus.SUCCESS);
+        Assert.assertEquals(respInstanceId.statusInfo.status, SimpleStatus.SUCCESS);
         Assert.assertNotNull(respInstanceId.instanceId);
-        Assert.assertNull(respInstanceId.error);
+        Assert.assertNull(respInstanceId.statusInfo.error);
     }
 
     @Test
@@ -85,9 +85,9 @@ public class YandexMoneyTest implements ApiTest {
         reqInstanceId = new InstanceId.Request(" ");
         respInstanceId = session.execute(reqInstanceId);
 
-        Assert.assertEquals(respInstanceId.status, SimpleStatus.REFUSED);
-        Assert.assertNotNull(respInstanceId.error);
-        Assert.assertEquals(respInstanceId.error, Error.ILLEGAL_PARAM_CLIENT_ID);
+        Assert.assertEquals(respInstanceId.statusInfo.status, SimpleStatus.REFUSED);
+        Assert.assertNotNull(respInstanceId.statusInfo.error);
+        Assert.assertEquals(respInstanceId.statusInfo.error, Error.ILLEGAL_PARAM_CLIENT_ID);
         Assert.assertNull(respInstanceId.instanceId);
     }
 
