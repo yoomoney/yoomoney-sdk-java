@@ -57,6 +57,7 @@ public final class P2pTransferParams extends PaymentParams {
         private Integer expirePeriod;
         private String label;
         private String message;
+        private Boolean holdForPickup;
 
         public Builder(String to) {
             this.to = checkNotEmpty(to, "to");
@@ -83,6 +84,14 @@ public final class P2pTransferParams extends PaymentParams {
          */
         public Builder setComment(String comment) {
             this.comment = comment;
+            return this;
+        }
+
+        /**
+         * @param holdForPickup hold for pickup attribute value
+         */
+        public Builder setHoldForPickup(Boolean holdForPickup) {
+            this.holdForPickup = holdForPickup;
             return this;
         }
 
@@ -142,6 +151,9 @@ public final class P2pTransferParams extends PaymentParams {
             }
             if (expirePeriod != null) {
                 params.put("expire_period", expirePeriod.toString());
+            }
+            if (holdForPickup != null) {
+                params.put("hold_for_pickup", holdForPickup.toString());
             }
             return params;
         }
