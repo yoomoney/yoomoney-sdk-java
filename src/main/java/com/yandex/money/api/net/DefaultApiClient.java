@@ -55,11 +55,22 @@ public class DefaultApiClient implements ApiClient {
      * Constructor.
      *
      * @param clientId client id to use
+     * @param hostsProvider necessary hosts provider
+     */
+    protected DefaultApiClient(String clientId, HostsProvider hostsProvider) {
+        id = checkNotNull(clientId, "client id");
+        hostsProvider = checkNotNull(hostsProvider, "hostsProvider");
+        this.hostsProvider = hostsProvider;
+        httpClient = createHttpClient();
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param clientId client id to use
      */
     public DefaultApiClient(String clientId) {
-        id = checkNotNull(clientId, "client id");
-        httpClient = createHttpClient();
-        hostsProvider = new HostsProvider(false);
+        this(clientId, new HostsProvider(false));
     }
 
     /**

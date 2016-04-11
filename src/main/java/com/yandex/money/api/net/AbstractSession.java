@@ -24,16 +24,13 @@
 
 package com.yandex.money.api.net;
 
-import com.squareup.okhttp.CacheControl;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.yandex.money.api.utils.HttpHeaders;
-import com.yandex.money.api.utils.Language;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import static com.yandex.money.api.utils.Common.checkNotNull;
@@ -48,8 +45,6 @@ public abstract class AbstractSession {
     private static final Logger LOGGER = Logger.getLogger(OAuth2Session.class.getName());
 
     protected final ApiClient client;
-
-    private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
 
     private boolean debugLogging = false;
 
@@ -80,49 +75,7 @@ public abstract class AbstractSession {
                 .newCall(checkNotNull(builder, "builder").build());
     }
 
-    protected final <T> Request.Builder prepareRequestBuilder(ApiRequest<T> request) {
-        checkNotNull(request, "request");
-
-        Request.Builder builder = new Request.Builder()
-                .cacheControl(cacheControl);
-
-        UserAgent userAgent = client.getUserAgent();
-        if (userAgent != null) {
-            builder.addHeader(HttpHeaders.USER_AGENT, userAgent.getName());
-        }
-
-        Language language = client.getLanguage();
-        if (language != null) {
-            builder.addHeader(HttpHeaders.ACCEPT_LANGUAGE, language.iso6391Code);
-        }
-
-        for (Map.Entry<String, String> entry : request.getHeaders().entrySet()) {
-            String value = entry.getValue();
-            if (value != null) {
-                builder.addHeader(entry.getKey(), value);
-            }
-        }
-
-        ParametersBuffer parametersBuffer = new ParametersBuffer()
-                .setParams(request.getParameters());
-
-        switch (request.getMethod()) {
-            case GET: {
-                builder.url(request.requestUrl(client.getHostsProvider()) +
-                        parametersBuffer.prepareGet());
-                break;
-            }
-            case POST: {
-                builder.url(request.requestUrl(client.getHostsProvider()))
-                        .post(parametersBuffer.prepareBody());
-                break;
-            }
-            default:
-                throw new UnsupportedOperationException("method " + request.getMethod() + " is not supported");
-        }
-
-        return builder;
-    }
+    protected abstract <T> Request.Builder prepareRequestBuilder(ApiRequest<T> request);
 
     /**
      * Gets input stream from response. Logging can be applied if

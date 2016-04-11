@@ -43,7 +43,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class DocumentProvider extends AbstractSession {
+public final class DocumentProvider extends Session {
 
     /**
      * Constructor.

@@ -44,7 +44,7 @@ import java.net.HttpURLConnection;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class OAuth2Session extends AbstractSession {
+public class OAuth2Session extends Session {
 
     private String accessToken;
 
