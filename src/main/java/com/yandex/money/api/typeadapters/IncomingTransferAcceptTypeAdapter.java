@@ -30,13 +30,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.IncomingTransferAccept;
-import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.SimpleStatus;
 
 import java.lang.reflect.Type;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getInt;
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
@@ -49,9 +47,7 @@ public final class IncomingTransferAcceptTypeAdapter extends BaseTypeAdapter<Inc
     private static final IncomingTransferAcceptTypeAdapter INSTANCE = new IncomingTransferAcceptTypeAdapter();
 
     private static final String MEMBER_CODE_ATTEMPTS = "protection_code_attempts_available";
-    private static final String MEMBER_ERROR = "error";
     private static final String MEMBER_EXT_ACTION_URI = "ext_action_uri";
-    private static final String MEMBER_STATUS = "status";
 
     private IncomingTransferAcceptTypeAdapter() {
     }
@@ -68,20 +64,24 @@ public final class IncomingTransferAcceptTypeAdapter extends BaseTypeAdapter<Inc
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new IncomingTransferAccept(SimpleStatus.parse(getMandatoryString(object, MEMBER_STATUS)),
-                Error.parse(getString(object, MEMBER_ERROR)), getInt(object, MEMBER_CODE_ATTEMPTS),
-                getString(object, MEMBER_EXT_ACTION_URI));
+        return new IncomingTransferAccept(StatusInfoTypeAdapter.getInstance().deserialize(json, typeOfT, context),
+                getInt(object, MEMBER_CODE_ATTEMPTS), getString(object, MEMBER_EXT_ACTION_URI));
     }
 
     @Override
     public JsonElement serialize(IncomingTransferAccept src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
-        object.addProperty(MEMBER_STATUS, src.status.code);
-        if (src.error != null) {
-            object.addProperty(MEMBER_ERROR, src.error.code);
-        } else {
-            object.addProperty(MEMBER_CODE_ATTEMPTS, src.protectionCodeAttemptsAvailable);
-            object.addProperty(MEMBER_EXT_ACTION_URI, src.extActionUri);
+        JsonObject object = StatusInfoTypeAdapter.getInstance()
+                .serialize(src.statusInfo, typeOfSrc, context)
+                .getAsJsonObject();
+        if (src.statusInfo.status == SimpleStatus.REFUSED) {
+            switch (src.statusInfo.error) {
+                case ILLEGAL_PARAM_PROTECTION_CODE:
+                    object.addProperty(MEMBER_CODE_ATTEMPTS, src.protectionCodeAttemptsAvailable);
+                    break;
+                case EXT_ACTION_REQUIRED:
+                    object.addProperty(MEMBER_EXT_ACTION_URI, src.extActionUri);
+                    break;
+            }
         }
         return object;
     }

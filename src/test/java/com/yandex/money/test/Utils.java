@@ -24,6 +24,10 @@
 
 package com.yandex.money.test;
 
+import com.google.gson.JsonParser;
+import com.yandex.money.api.typeadapters.TypeAdapter;
+import org.junit.Assert;
+
 import java.util.Scanner;
 
 /**
@@ -43,5 +47,18 @@ public final class Utils {
     public static String loadResource(String fullName) {
         return new Scanner(Utils.class.getResourceAsStream(fullName), "UTF-8")
                 .useDelimiter("\\A").next();
+    }
+
+    /**
+     * Reads JSON path and asserts it for equality after deserialization and serialization steps.
+     *
+     * @param path JSON path name in resources
+     * @param typeAdapter type adapter to check
+     */
+    public static <T> void checkTypeAdapter(String path, TypeAdapter<T> typeAdapter) {
+        String json = loadResource(path);
+        T deserializedObject = typeAdapter.fromJson(json);
+        Assert.assertEquals(new JsonParser().parse(json),
+                typeAdapter.toJsonTree(deserializedObject));
     }
 }

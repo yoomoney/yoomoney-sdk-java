@@ -25,8 +25,7 @@
 package com.yandex.money.test;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
-import com.yandex.money.api.typeadapters.BaseTypeAdapter;
+import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.ParagraphTypeAdapter;
@@ -41,8 +40,6 @@ import com.yandex.money.api.typeadapters.showcase.uicontrol.SubmitTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.TelTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.TextAreaTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.uicontrol.TextTypeAdapter;
-
-import org.junit.Assert;
 import org.testng.annotations.Test;
 
 /**
@@ -143,22 +140,7 @@ public final class ShowcaseTypeAdapterTest {
         check("showcase_skype.json", ShowcaseTypeAdapter.getInstance());
     }
 
-    private static String loadComponentJson(String name) {
-        return Utils.loadResource("/showcase/" + name);
-    }
-
-    /**
-     * Reads JSON file and asserts it for equality after deserialization and serialization steps.
-     *
-     * @param jsonFileName JSON file name in resources.
-     * @param typeAdapter  type adapter of {@link com.yandex.money.api.model.showcase.components
-     * .Component}.
-     */
-    private static <T> void check(String jsonFileName,
-                                  BaseTypeAdapter<T> typeAdapter) {
-        String json = loadComponentJson(jsonFileName);
-        T deserializedObject = typeAdapter.fromJson(json);
-        Assert.assertEquals(new JsonParser().parse(json),
-                typeAdapter.toJsonTree(deserializedObject));
+    private static <T> void check(String fileName, TypeAdapter<T> typeAdapter) {
+        Utils.checkTypeAdapter("/showcase/" + fileName, typeAdapter);
     }
 }

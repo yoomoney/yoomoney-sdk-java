@@ -58,6 +58,6 @@ public class ShowcaseSearchTest {
     }
 
     private static ShowcaseSearch getShowcaseSearchInstance() throws Exception {
-        return documentProvider.fetch(new ShowcaseSearch.Request("Megafon", 10)).document;
+        return documentProvider.fetch(new ShowcaseSearch.Request("skynet", 10)).document;
     }
 }

@@ -26,6 +26,7 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.SimpleStatus;
+import com.yandex.money.api.model.StatusInfo;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.IncomingTransferAcceptTypeAdapter;
@@ -40,7 +41,10 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public class IncomingTransferAccept {
 
+    public final StatusInfo statusInfo;
+    @Deprecated
     public final SimpleStatus status;
+    @Deprecated
     public final Error error;
     public final Integer protectionCodeAttemptsAvailable;
     public final String extActionUri;
@@ -54,14 +58,25 @@ public class IncomingTransferAccept {
      *                                        code submission
      * @param extActionUri                    address to perform external action for successful
      *                                        acceptance
+     * @deprecated use {@link #IncomingTransferAccept(StatusInfo, Integer, String)} instead
      */
     public IncomingTransferAccept(SimpleStatus status, Error error, Integer protectionCodeAttemptsAvailable,
                                   String extActionUri) {
+        this(StatusInfo.from(status, error), protectionCodeAttemptsAvailable, extActionUri);
+    }
 
-        this.status = checkNotNull(status, "status");
-        switch (this.status) {
+    /**
+     * Constructor.
+     *
+     * @param statusInfo status of operation
+     * @param protectionCodeAttemptsAvailable number of attempts available after invalid protection code submission
+     * @param extActionUri address to perform external action for successful acceptance
+     */
+    public IncomingTransferAccept(StatusInfo statusInfo, Integer protectionCodeAttemptsAvailable, String extActionUri) {
+        this.statusInfo = checkNotNull(statusInfo, "statusInfo");
+        switch (statusInfo.status) {
             case REFUSED:
-                switch (checkNotNull(error, "error")) {
+                switch (statusInfo.error) {
                     case ILLEGAL_PARAM_PROTECTION_CODE:
                         checkNotNull(protectionCodeAttemptsAvailable, "protectionCodeAttemptsAvailable");
                         break;
@@ -71,8 +86,8 @@ public class IncomingTransferAccept {
                 }
                 break;
         }
-
-        this.error = error;
+        this.error = statusInfo.error;
+        this.status = statusInfo.status;
         this.protectionCodeAttemptsAvailable = protectionCodeAttemptsAvailable;
         this.extActionUri = extActionUri;
     }
@@ -84,7 +99,7 @@ public class IncomingTransferAccept {
 
         IncomingTransferAccept that = (IncomingTransferAccept) o;
 
-        return status == that.status && error == that.error &&
+        return statusInfo.equals(that.statusInfo) &&
                 !(protectionCodeAttemptsAvailable != null ?
                         !protectionCodeAttemptsAvailable.equals(that.protectionCodeAttemptsAvailable) :
                         that.protectionCodeAttemptsAvailable != null) &&
@@ -93,10 +108,8 @@ public class IncomingTransferAccept {
 
     @Override
     public int hashCode() {
-        int result = status.hashCode();
-        result = 31 * result + (error != null ? error.hashCode() : 0);
-        result = 31 * result + (protectionCodeAttemptsAvailable != null ?
-                protectionCodeAttemptsAvailable.hashCode() : 0);
+        int result = statusInfo.hashCode();
+        result = 31 * result + (protectionCodeAttemptsAvailable != null ? protectionCodeAttemptsAvailable.hashCode() : 0);
         result = 31 * result + (extActionUri != null ? extActionUri.hashCode() : 0);
         return result;
     }
@@ -104,8 +117,7 @@ public class IncomingTransferAccept {
     @Override
     public String toString() {
         return "IncomingTransferAccept{" +
-                "status=" + status +
-                ", error=" + error +
+                "statusInfo=" + statusInfo +
                 ", protectionCodeAttemptsAvailable=" + protectionCodeAttemptsAvailable +
                 ", extActionUri='" + extActionUri + '\'' +
                 '}';

@@ -26,6 +26,7 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.SimpleStatus;
+import com.yandex.money.api.model.StatusInfo;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.typeadapters.IncomingTransferRejectTypeAdapter;
@@ -40,7 +41,10 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public class IncomingTransferReject {
 
+    public final StatusInfo statusInfo;
+    @Deprecated
     public final SimpleStatus status;
+    @Deprecated
     public final Error error;
 
     /**
@@ -48,21 +52,17 @@ public class IncomingTransferReject {
      *
      * @param status status of an operation
      * @param error error code
+     * @deprecated use {@link #IncomingTransferReject(StatusInfo)} instead
      */
+    @Deprecated
     public IncomingTransferReject(SimpleStatus status, Error error) {
-        this.status = checkNotNull(status, "status");
-        if (this.status == SimpleStatus.REFUSED) {
-            checkNotNull(error, "error");
-        }
-        this.error = error;
+        this(StatusInfo.from(status, error));
     }
 
-    @Override
-    public String toString() {
-        return "IncomingTransferReject{" +
-                "status=" + status +
-                ", error=" + error +
-                '}';
+    public IncomingTransferReject(StatusInfo statusInfo) {
+        this.statusInfo = checkNotNull(statusInfo, "statusInfo");
+        this.status = statusInfo.status;
+        this.error = statusInfo.error;
     }
 
     @Override
@@ -72,14 +72,19 @@ public class IncomingTransferReject {
 
         IncomingTransferReject that = (IncomingTransferReject) o;
 
-        return status == that.status && error == that.error;
+        return statusInfo.equals(that.statusInfo);
     }
 
     @Override
     public int hashCode() {
-        int result = status.hashCode();
-        result = 31 * result + (error != null ? error.hashCode() : 0);
-        return result;
+        return statusInfo.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return "IncomingTransferReject{" +
+                "statusInfo=" + statusInfo +
+                '}';
     }
 
     /**

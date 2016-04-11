@@ -1,0 +1,5 @@
+{
+  "status": "refused",
+  "error": "illegal_param_protection_code",
+  "protection_code_attempts_available": 2
+}

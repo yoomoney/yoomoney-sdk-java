@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,44 +26,59 @@ package com.yandex.money.api.typeadapters;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.methods.IncomingTransferReject;
+import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleStatus;
+import com.yandex.money.api.model.StatusInfo;
 
 import java.lang.reflect.Type;
 
+import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
+
 /**
- * Type adapter for {@link IncomingTransferReject}.
- *
- * @author Anton Ermak (ermak@yamoney.ru)
+ * @author Slava Yasevich
  */
-public final class IncomingTransferRejectTypeAdapter extends BaseTypeAdapter<IncomingTransferReject> {
+public final class StatusInfoTypeAdapter extends BaseTypeAdapter<StatusInfo> {
 
-    private static final IncomingTransferRejectTypeAdapter INSTANCE = new IncomingTransferRejectTypeAdapter();
+    private static final StatusInfoTypeAdapter INSTANCE = new StatusInfoTypeAdapter();
 
-    private IncomingTransferRejectTypeAdapter() {
+    private static final String MEMBER_ERROR = "error";
+    private static final String MEMBER_STATUS = "status";
+
+    private StatusInfoTypeAdapter() {
     }
 
     /**
      * @return instance of this class
      */
-    public static IncomingTransferRejectTypeAdapter getInstance() {
+    public static StatusInfoTypeAdapter getInstance() {
         return INSTANCE;
     }
 
     @Override
-    public IncomingTransferReject deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+    public StatusInfo deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        return new IncomingTransferReject(StatusInfoTypeAdapter.getInstance().deserialize(json, typeOfT, context));
+
+        JsonObject object = json.getAsJsonObject();
+        return StatusInfo.from(SimpleStatus.parse(getMandatoryString(object, MEMBER_STATUS)),
+                Error.parse(getString(object, MEMBER_ERROR)));
     }
 
     @Override
-    public JsonElement serialize(IncomingTransferReject src, Type typeOfSrc, JsonSerializationContext context) {
-        return StatusInfoTypeAdapter.getInstance().serialize(src.statusInfo, typeOfSrc, context);
+    public JsonElement serialize(StatusInfo src, Type typeOfSrc, JsonSerializationContext context) {
+        JsonObject object = new JsonObject();
+        object.addProperty(MEMBER_STATUS, src.status.code);
+        if (src.error != null) {
+            object.addProperty(MEMBER_ERROR, src.error.code);
+        }
+        return object;
     }
 
     @Override
-    protected Class<IncomingTransferReject> getType() {
-        return IncomingTransferReject.class;
+    protected Class<StatusInfo> getType() {
+        return StatusInfo.class;
     }
 }

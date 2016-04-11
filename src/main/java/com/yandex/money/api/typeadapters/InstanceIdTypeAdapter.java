@@ -30,12 +30,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.InstanceId;
-import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.SimpleStatus;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
@@ -47,9 +44,7 @@ public final class InstanceIdTypeAdapter extends BaseTypeAdapter<InstanceId> {
 
     private static final InstanceIdTypeAdapter INSTANCE = new InstanceIdTypeAdapter();
 
-    private static final String MEMBER_ERROR = "error";
     private static final String MEMBER_INSTANCE_ID = "instance_id";
-    private static final String MEMBER_STATUS = "status";
 
     private InstanceIdTypeAdapter() {
     }
@@ -65,18 +60,16 @@ public final class InstanceIdTypeAdapter extends BaseTypeAdapter<InstanceId> {
     public InstanceId deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
 
-        JsonObject o = json.getAsJsonObject();
-        return new InstanceId(SimpleStatus.parse(getMandatoryString(o, MEMBER_STATUS)),
-                Error.parse(getString(o, MEMBER_ERROR)), getString(o, MEMBER_INSTANCE_ID));
+        return new InstanceId(StatusInfoTypeAdapter.getInstance().deserialize(json, typeOfT, context),
+                getString(json.getAsJsonObject(), MEMBER_INSTANCE_ID));
     }
 
     @Override
     public JsonElement serialize(InstanceId src, Type typeOfSrc, JsonSerializationContext context) {
-        JsonObject object = new JsonObject();
-        object.addProperty(MEMBER_STATUS, src.status.code);
-        if (src.error != null) {
-            object.addProperty(MEMBER_ERROR, src.error.code);
-        } else {
+        JsonObject object = StatusInfoTypeAdapter.getInstance()
+                .serialize(src.statusInfo, typeOfSrc, context)
+                .getAsJsonObject();
+        if (src.statusInfo.isSuccessful()) {
             object.addProperty(MEMBER_INSTANCE_ID, src.instanceId);
         }
         return object;

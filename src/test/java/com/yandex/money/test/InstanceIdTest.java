@@ -27,6 +27,7 @@ package com.yandex.money.test;
 import com.yandex.money.api.methods.InstanceId;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.SimpleStatus;
+import com.yandex.money.api.model.StatusInfo;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -53,10 +54,10 @@ public class InstanceIdTest {
 
     @Test
     public void testIsSuccess() {
-        InstanceId instanceId = new InstanceId(SimpleStatus.SUCCESS, null, "id");
-        Assert.assertTrue(instanceId.isSuccess());
+        InstanceId instanceId = new InstanceId(StatusInfo.from(SimpleStatus.SUCCESS, null), "id");
+        Assert.assertTrue(instanceId.statusInfo.isSuccessful());
 
-        instanceId = new InstanceId(SimpleStatus.REFUSED, Error.UNKNOWN, null);
-        Assert.assertFalse(instanceId.isSuccess());
+        instanceId = new InstanceId(StatusInfo.from(SimpleStatus.REFUSED, Error.UNKNOWN), null);
+        Assert.assertFalse(instanceId.statusInfo.isSuccessful());
     }
 }
