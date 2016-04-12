@@ -33,7 +33,7 @@ import java.util.Map;
  * @param <T> response
  * @see BaseApiRequest
  */
-public interface ApiRequest<T> {
+public interface ApiRequest<T, E> {
 
     /**
      * Gets method for a request.
@@ -62,7 +62,7 @@ public interface ApiRequest<T> {
      *
      * @return parameters for a request
      */
-    Map<String, String> getParameters();
+    Map<String, E> getParameters();
 
     /**
      * Parses API response from stream.

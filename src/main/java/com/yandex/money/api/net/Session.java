@@ -12,7 +12,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
 /**
  * @author Arutyun Agababyan (agababyanh@yamoney.ru)
  */
-public class Session extends AbstractSession {
+public class Session extends AbstractSession<BaseApiRequest> {
 
     private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
 
@@ -26,7 +26,7 @@ public class Session extends AbstractSession {
     }
 
     @Override
-    protected final <T> Request.Builder prepareRequestBuilder(ApiRequest<T> request) {
+    protected Request.Builder prepareRequestBuilder(BaseApiRequest request) {
         checkNotNull(request, "request");
 
         Request.Builder builder = new Request.Builder()
@@ -41,8 +41,8 @@ public class Session extends AbstractSession {
         if (language != null) {
             builder.addHeader(HttpHeaders.ACCEPT_LANGUAGE, language.iso6391Code);
         }
-
-        for (Map.Entry<String, String> entry : request.getHeaders().entrySet()) {
+        final Map<String, String> headers = request.getHeaders();
+        for (Map.Entry<String, String> entry : headers.entrySet()) {
             String value = entry.getValue();
             if (value != null) {
                 builder.addHeader(entry.getKey(), value);

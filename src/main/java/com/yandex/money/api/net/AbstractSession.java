@@ -27,10 +27,15 @@ package com.yandex.money.api.net;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.yandex.money.api.exceptions.InsufficientScopeException;
+import com.yandex.money.api.exceptions.InvalidRequestException;
+import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.utils.HttpHeaders;
+import com.yandex.money.api.utils.MimeTypes;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.logging.Logger;
 
 import static com.yandex.money.api.utils.Common.checkNotNull;
@@ -40,7 +45,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public abstract class AbstractSession {
+public abstract class AbstractSession<T extends ApiRequest> {
 
     private static final Logger LOGGER = Logger.getLogger(OAuth2Session.class.getName());
 
@@ -66,7 +71,7 @@ public abstract class AbstractSession {
         this.debugLogging = debugLogging;
     }
 
-    protected final <T> Call prepareCall(ApiRequest<T> request) {
+    protected final Call prepareCall(T request) {
         return prepareCall(prepareRequestBuilder(request));
     }
 
@@ -75,7 +80,7 @@ public abstract class AbstractSession {
                 .newCall(checkNotNull(builder, "builder").build());
     }
 
-    protected abstract <T> Request.Builder prepareRequestBuilder(ApiRequest<T> request);
+    protected abstract Request.Builder prepareRequestBuilder(T request);
 
     /**
      * Gets input stream from response. Logging can be applied if
@@ -102,6 +107,40 @@ public abstract class AbstractSession {
                 HttpHeaders.WWW_AUTHENTICATE + ": " + field);
         LOGGER.warning(response.body().string());
         return field;
+    }
+
+    protected <T, E> T parseResponse(ApiRequest<T, E> request, Response response) throws IOException,
+            InvalidRequestException, InvalidTokenException, InsufficientScopeException {
+
+        InputStream inputStream = null;
+        try {
+            switch (response.code()) {
+                case HttpURLConnection.HTTP_OK:
+                case HttpURLConnection.HTTP_ACCEPTED:
+                case HttpURLConnection.HTTP_BAD_REQUEST:
+                    inputStream = getInputStream(response);
+                    if (isJsonType(response)) {
+                        return request.parseResponse(inputStream);
+                    } else {
+                        throw new InvalidRequestException(processError(response));
+                    }
+                case HttpURLConnection.HTTP_UNAUTHORIZED:
+                    throw new InvalidTokenException(processError(response));
+                case HttpURLConnection.HTTP_FORBIDDEN:
+                    throw new InsufficientScopeException(processError(response));
+                default:
+                    throw new IOException(processError(response));
+            }
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+        }
+    }
+
+    private boolean isJsonType(Response response) {
+        String field = response.header(HttpHeaders.CONTENT_TYPE);
+        return field != null && (field.startsWith(MimeTypes.Application.JSON) || field.startsWith(MimeTypes.Text.JSON));
     }
 
     private String getError(Response response) {

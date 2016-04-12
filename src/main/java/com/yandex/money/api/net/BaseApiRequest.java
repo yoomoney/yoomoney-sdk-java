@@ -44,7 +44,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public abstract class BaseApiRequest<T> implements ApiRequest<T> {
+public abstract class BaseApiRequest<T> implements ApiRequest<T, String> {
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat
             .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT")

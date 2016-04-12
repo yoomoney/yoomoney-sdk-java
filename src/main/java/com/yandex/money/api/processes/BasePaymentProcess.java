@@ -26,7 +26,7 @@ package com.yandex.money.api.processes;
 
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
-import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.OAuth2Session;
 import com.yandex.money.api.utils.Threads;
 
@@ -145,21 +145,21 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      *
      * @return method request
      */
-    protected abstract ApiRequest<RP> createRequestPayment();
+    protected abstract BaseApiRequest<RP> createRequestPayment();
 
     /**
      * Creates process payment method.
      *
      * @return method request
      */
-    protected abstract ApiRequest<PP> createProcessPayment();
+    protected abstract BaseApiRequest<PP> createProcessPayment();
 
     /**
      * Creates repeat process payment method.
      *
      * @return method request
      */
-    protected abstract ApiRequest<PP> createRepeatProcessPayment();
+    protected abstract BaseApiRequest<PP> createRepeatProcessPayment();
 
     protected abstract SavedState<RP, PP> createSavedState(RP requestPayment, PP processPayment, State state);
 
@@ -176,7 +176,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         executeProcessPayment(createRepeatProcessPayment());
     }
 
-    private void executeProcessPayment(final ApiRequest<PP> request) throws Exception {
+    private void executeProcessPayment(final BaseApiRequest<PP> request) throws Exception {
         BaseProcessPayment.Status previousStatus = processPayment == null ? null :
                 processPayment.status;
         processPayment = execute(request);
@@ -197,7 +197,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         state = State.COMPLETED;
     }
 
-    private <T> T execute(ApiRequest<T> apiRequest) throws Exception {
+    private <T> T execute(BaseApiRequest<T> apiRequest) throws Exception {
         return session.execute(apiRequest);
     }
 

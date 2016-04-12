@@ -28,7 +28,7 @@ import com.yandex.money.api.methods.ProcessExternalPayment;
 import com.yandex.money.api.methods.RequestExternalPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.MoneySource;
-import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.OAuth2Session;
 import com.yandex.money.api.utils.Strings;
 
@@ -60,18 +60,18 @@ public final class ExternalPaymentProcess
     }
 
     @Override
-    protected ApiRequest<RequestExternalPayment> createRequestPayment() {
+    protected BaseApiRequest<RequestExternalPayment> createRequestPayment() {
         return RequestExternalPayment.Request.newInstance(instanceId,
                 parameterProvider.getPatternId(), parameterProvider.getPaymentParameters());
     }
 
     @Override
-    protected ApiRequest<ProcessExternalPayment> createProcessPayment() {
+    protected BaseApiRequest<ProcessExternalPayment> createProcessPayment() {
         return createProcessExternalPayment();
     }
 
     @Override
-    protected ApiRequest<ProcessExternalPayment> createRepeatProcessPayment() {
+    protected BaseApiRequest<ProcessExternalPayment> createRepeatProcessPayment() {
         return createProcessExternalPayment();
     }
 
