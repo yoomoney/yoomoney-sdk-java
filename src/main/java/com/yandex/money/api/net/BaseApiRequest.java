@@ -26,14 +26,11 @@ package com.yandex.money.api.net;
 
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 import static com.yandex.money.api.utils.Common.checkNotNull;
@@ -45,11 +42,6 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public abstract class BaseApiRequest<T> extends ApiRequest<T, String> {
-
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat
-            .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT")
-            .withLocale(Locale.US)
-            .withZoneUTC();
 
     private final TypeAdapter<T> typeAdapter;
     private final Map<String, String> parameters = new HashMap<>();
@@ -71,17 +63,6 @@ public abstract class BaseApiRequest<T> extends ApiRequest<T, String> {
     @Override
     public final T parseResponse(InputStream inputStream) {
         return typeAdapter.fromJson(inputStream);
-    }
-
-
-    /**
-     * Adds {@link DateTime} header to this request.
-     *
-     * @param key key
-     * @param value value
-     */
-    protected final void addHeader(String key, DateTime value) {
-        addHeader(key, value == null ? null : DATE_TIME_FORMATTER.print(value));
     }
 
     /**

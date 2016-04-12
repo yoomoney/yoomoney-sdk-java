@@ -24,9 +24,14 @@
 
 package com.yandex.money.api.net;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -37,6 +42,11 @@ import java.util.Map;
  * @see BaseApiRequest
  */
 public abstract class ApiRequest<T, E> {
+
+    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat
+            .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT")
+            .withLocale(Locale.US)
+            .withZoneUTC();
 
     private final Map<String, String> headers = new HashMap<>();
 
@@ -66,6 +76,16 @@ public abstract class ApiRequest<T, E> {
      */
     protected final void addHeaders(Map<String, String> headers) {
         this.headers.putAll(headers);
+    }
+
+    /**
+     * Adds {@link DateTime} header to this request.
+     *
+     * @param key key
+     * @param value value
+     */
+    protected final void addHeader(String key, DateTime value) {
+        addHeader(key, value == null ? null : DATE_TIME_FORMATTER.print(value));
     }
 
     /**
