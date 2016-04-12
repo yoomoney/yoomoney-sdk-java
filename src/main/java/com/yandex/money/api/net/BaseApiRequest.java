@@ -44,7 +44,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public abstract class BaseApiRequest<T> implements ApiRequest<T, String> {
+public abstract class BaseApiRequest<T> extends ApiRequest<T, String> {
 
     public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat
             .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT")
@@ -52,7 +52,6 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T, String> {
             .withZoneUTC();
 
     private final TypeAdapter<T> typeAdapter;
-    private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
 
     /**
@@ -65,11 +64,6 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T, String> {
     }
 
     @Override
-    public final Map<String, String> getHeaders() {
-        return Collections.unmodifiableMap(headers);
-    }
-
-    @Override
     public final Map<String, String> getParameters() {
         return Collections.unmodifiableMap(parameters);
     }
@@ -79,15 +73,6 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T, String> {
         return typeAdapter.fromJson(inputStream);
     }
 
-    /**
-     * Adds {@link String} header to this request.
-     *
-     * @param key key
-     * @param value value
-     */
-    protected final void addHeader(String key, String value) {
-        headers.put(key, value);
-    }
 
     /**
      * Adds {@link DateTime} header to this request.
@@ -97,15 +82,6 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T, String> {
      */
     protected final void addHeader(String key, DateTime value) {
         addHeader(key, value == null ? null : DATE_TIME_FORMATTER.print(value));
-    }
-
-    /**
-     * Adds collection of headers.
-     *
-     * @param headers headers to add
-     */
-    protected final void addHeaders(Map<String, String> headers) {
-        this.headers.putAll(headers);
     }
 
     /**
