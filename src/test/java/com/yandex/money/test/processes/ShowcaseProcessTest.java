@@ -31,7 +31,7 @@ import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.net.ApiClient;
-import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.ShowcaseContext;
@@ -40,7 +40,6 @@ import com.yandex.money.api.processes.ShowcaseProcess;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.Language;
 import com.yandex.money.test.Utils;
-
 import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -197,7 +196,7 @@ public final class ShowcaseProcessTest extends Assert {
     }
 
     private static ShowcaseProcess initShowcaseProcess() throws Exception {
-        final ApiRequest<Showcase> resReq = new Showcase.Request(5551);
+        final BaseApiRequest<Showcase> resReq = new Showcase.Request(5551);
         final DocumentProvider documentProvider = getDocumentProvider();
         final ShowcaseContext showcaseContext = documentProvider.getShowcase(resReq);
         return new ShowcaseProcess(documentProvider, showcaseContext);

@@ -109,7 +109,7 @@ public final class ShowcaseContext {
     /**
      * @return request to move on the next state.
      */
-    public ApiRequest<Showcase> createRequest() {
+    public BaseApiRequest<Showcase> createRequest() {
         return new Request(currentStep, lastModified);
     }
 

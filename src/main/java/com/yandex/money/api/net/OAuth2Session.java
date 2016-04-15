@@ -32,19 +32,16 @@ import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.utils.HttpHeaders;
-import com.yandex.money.api.utils.MimeTypes;
 import com.yandex.money.api.utils.Strings;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
 
 /**
  * OAuth2 session that can be used to perform API requests and retrieve responses.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class OAuth2Session extends AbstractSession {
+public class OAuth2Session extends Session {
 
     private String accessToken;
 
@@ -68,7 +65,7 @@ public class OAuth2Session extends AbstractSession {
      * @throws InvalidTokenException if server responded with 401 code
      * @throws InsufficientScopeException if server responded with 403 code
      */
-    public <T> T execute(ApiRequest<T> request)
+    public <T> T execute(BaseApiRequest<T> request)
             throws IOException, InvalidRequestException, InvalidTokenException, InsufficientScopeException {
         return parseResponse(request, makeCall(request).execute());
     }
@@ -82,7 +79,7 @@ public class OAuth2Session extends AbstractSession {
      * @return a {@link Call} object that can be canceled
      * @throws IOException if something went wrong during IO operations
      */
-    public <T> Call enqueue(final ApiRequest<T> request, final OnResponseReady<T> callback)
+    public <T> Call enqueue(final BaseApiRequest<T> request, final OnResponseReady<T> callback)
             throws IOException {
 
         Call call = makeCall(request);
@@ -133,7 +130,7 @@ public class OAuth2Session extends AbstractSession {
         return new OAuth2Authorization(client);
     }
 
-    private <T> Call makeCall(ApiRequest<T> request) {
+    private <T> Call makeCall(BaseApiRequest<T> request) {
         final Request.Builder builder = prepareRequestBuilder(request);
         if (isAuthorized()) {
             builder.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
@@ -141,37 +138,4 @@ public class OAuth2Session extends AbstractSession {
         return prepareCall(builder);
     }
 
-    private <T> T parseResponse(ApiRequest<T> request, Response response) throws IOException,
-            InvalidRequestException, InvalidTokenException, InsufficientScopeException {
-
-        InputStream inputStream = null;
-        try {
-            switch (response.code()) {
-                case HttpURLConnection.HTTP_OK:
-                case HttpURLConnection.HTTP_ACCEPTED:
-                case HttpURLConnection.HTTP_BAD_REQUEST:
-                    inputStream = getInputStream(response);
-                    if (isJsonType(response)) {
-                        return request.parseResponse(inputStream);
-                    } else {
-                        throw new InvalidRequestException(processError(response));
-                    }
-                case HttpURLConnection.HTTP_UNAUTHORIZED:
-                    throw new InvalidTokenException(processError(response));
-                case HttpURLConnection.HTTP_FORBIDDEN:
-                    throw new InsufficientScopeException(processError(response));
-                default:
-                    throw new IOException(processError(response));
-            }
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
-    }
-
-    private boolean isJsonType(Response response) {
-        String field = response.header(HttpHeaders.CONTENT_TYPE);
-        return field != null && (field.startsWith(MimeTypes.Application.JSON) || field.startsWith(MimeTypes.Text.JSON));
-    }
 }

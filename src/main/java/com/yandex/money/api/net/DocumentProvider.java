@@ -43,7 +43,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class DocumentProvider extends AbstractSession {
+public final class DocumentProvider extends Session {
 
     /**
      * Constructor.
@@ -54,7 +54,7 @@ public final class DocumentProvider extends AbstractSession {
         super(client);
     }
 
-    public <T> HttpResourceResponse<T> fetch(ApiRequest<T> request) throws IOException, ResourceNotFoundException {
+    public <T> HttpResourceResponse<T> fetch(BaseApiRequest<T> request) throws IOException, ResourceNotFoundException {
         return parseResponse(request, prepareCall(request).execute());
     }
 
@@ -66,7 +66,7 @@ public final class DocumentProvider extends AbstractSession {
      * @throws IOException               various I/O errors (timeouts, etc.)
      * @throws ResourceNotFoundException 404 status code feedback
      */
-    public ShowcaseContext getShowcase(ApiRequest<Showcase> request) throws IOException, ResourceNotFoundException {
+    public ShowcaseContext getShowcase(BaseApiRequest<Showcase> request) throws IOException, ResourceNotFoundException {
         return getShowcaseInner(request, 1);
     }
 
@@ -84,12 +84,12 @@ public final class DocumentProvider extends AbstractSession {
                 showcaseContext);
     }
 
-    private ShowcaseContext getShowcaseInner(ApiRequest<Showcase> request, int requestRemained)
+    private ShowcaseContext getShowcaseInner(BaseApiRequest<Showcase> request, int requestRemained)
             throws IOException, ResourceNotFoundException {
         return parseResponse(prepareCall(request).execute(), request, requestRemained);
     }
 
-    private <T> HttpResourceResponse<T> parseResponse(ApiRequest<T> request, Response response)
+    private <T> HttpResourceResponse<T> parseResponse(BaseApiRequest<T> request, Response response)
             throws IOException, ResourceNotFoundException {
 
         InputStream inputStream = null;
@@ -127,7 +127,7 @@ public final class DocumentProvider extends AbstractSession {
         }
     }
 
-    private ShowcaseContext parseResponse(Response response, ApiRequest<Showcase> request,
+    private ShowcaseContext parseResponse(Response response, ApiRequest<Showcase, String> request,
                                           int requestRemained)
             throws IOException, ResourceNotFoundException {
 
@@ -224,7 +224,7 @@ public final class DocumentProvider extends AbstractSession {
 
         private final String url;
 
-        protected CopyShowcaseRequest(String url, ApiRequest<Showcase> request) {
+        protected CopyShowcaseRequest(String url, ApiRequest<Showcase, String> request) {
             super(ShowcaseTypeAdapter.getInstance());
             this.url = checkNotEmpty(url, "url");
             addHeaders(checkNotNull(request, "request").getHeaders());
