@@ -58,6 +58,7 @@ public final class P2pTransferParams extends PaymentParams {
         private String label;
         private String message;
         private Boolean holdForPickup;
+        private Boolean recipientAutoselect;
 
         public Builder(String to) {
             this.to = checkNotEmpty(to, "to");
@@ -127,6 +128,14 @@ public final class P2pTransferParams extends PaymentParams {
             return this;
         }
 
+        /**
+         * @param recipientAutoselect - if receiver (cellphone, email) has few accounts choose newest
+         */
+        public Builder setRecipientAutoselect(Boolean recipientAutoselect){
+            this.recipientAutoselect = recipientAutoselect;
+            return this;
+        }
+
         public P2pTransferParams create() {
             return new P2pTransferParams(makeParams());
         }
@@ -154,6 +163,9 @@ public final class P2pTransferParams extends PaymentParams {
             }
             if (holdForPickup != null) {
                 params.put("hold_for_pickup", holdForPickup.toString());
+            }
+            if (recipientAutoselect != null){
+                params.put("recipient_autoselect", recipientAutoselect.toString());
             }
             return params;
         }
