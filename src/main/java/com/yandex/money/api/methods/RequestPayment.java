@@ -89,6 +89,11 @@ public class RequestPayment extends BaseRequestPayment {
      */
     public final String extActionUri;
 
+    /**
+     * {@code true} if Yandex.Money choose the last attached account for p2p payment.
+     */
+    public final Boolean multipleRecipientsFound;
+
     private RequestPayment(Builder builder) {
         super(builder);
         switch (status) {
@@ -112,6 +117,7 @@ public class RequestPayment extends BaseRequestPayment {
         this.protectionCode = builder.protectionCode;
         this.accountUnblockUri = builder.accountUnblockUri;
         this.extActionUri = builder.extActionUri;
+        this.multipleRecipientsFound = builder.multipleRecipientsFound;
     }
 
     @Override
@@ -125,6 +131,7 @@ public class RequestPayment extends BaseRequestPayment {
                 ", protectionCode='" + protectionCode + '\'' +
                 ", accountUnblockUri='" + accountUnblockUri + '\'' +
                 ", extActionUri='" + extActionUri + '\'' +
+                ", multipleRecipientsFound='" + multipleRecipientsFound + '\'' +
                 '}';
     }
 
@@ -145,7 +152,10 @@ public class RequestPayment extends BaseRequestPayment {
                 !(accountUnblockUri != null ? !accountUnblockUri.equals(that.accountUnblockUri) :
                         that.accountUnblockUri != null) &&
                 !(extActionUri != null ? !extActionUri.equals(that.extActionUri) :
-                        that.extActionUri != null);
+                        that.extActionUri != null) &&
+                !(multipleRecipientsFound != null ? !multipleRecipientsFound.equals(that.multipleRecipientsFound) :
+                        that.multipleRecipientsFound != null);
+
     }
 
     @Override
@@ -160,6 +170,7 @@ public class RequestPayment extends BaseRequestPayment {
         result = 31 * result + (protectionCode != null ? protectionCode.hashCode() : 0);
         result = 31 * result + (accountUnblockUri != null ? accountUnblockUri.hashCode() : 0);
         result = 31 * result + (extActionUri != null ? extActionUri.hashCode() : 0);
+        result = 31 * result + (multipleRecipientsFound != null ? multipleRecipientsFound.hashCode() : 0);
         return result;
     }
 
@@ -286,6 +297,7 @@ public class RequestPayment extends BaseRequestPayment {
         private String protectionCode;
         private String accountUnblockUri;
         private String extActionUri;
+        public Boolean multipleRecipientsFound;
 
         public Builder setMoneySources(List<MoneySource> moneySources) {
             this.moneySources = checkNotNull(moneySources, "moneySource");
@@ -324,6 +336,11 @@ public class RequestPayment extends BaseRequestPayment {
 
         public Builder setExtActionUri(String extActionUri) {
             this.extActionUri = extActionUri;
+            return this;
+        }
+
+        public Builder setMultipleRecipientsFound(Boolean multipleRecipientsFound) {
+            this.multipleRecipientsFound = multipleRecipientsFound;
             return this;
         }
 

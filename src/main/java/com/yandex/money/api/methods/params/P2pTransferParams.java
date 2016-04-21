@@ -129,9 +129,9 @@ public final class P2pTransferParams extends PaymentParams {
         }
 
         /**
-         * @param recipientAutoselect - if receiver (cellphone, email) has few accounts choose newest
+         * “@param recipientAutoselect {@code true} to inform Yandex.Money to choose the last attached account
          */
-        public Builder setRecipientAutoselect(Boolean recipientAutoselect){
+        public Builder setRecipientAutoselect (Boolean recipientAutoselect){
             this.recipientAutoselect = recipientAutoselect;
             return this;
         }
