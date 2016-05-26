@@ -142,7 +142,9 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_TYPE, src.type.code);
         object.addProperty(MEMBER_SENDER, src.sender);
         object.addProperty(MEMBER_RECIPIENT, src.recipient);
-        object.addProperty(MEMBER_RECIPIENT_TYPE, src.recipientType.code);
+        if (src.recipientType != null) {
+            object.addProperty(MEMBER_RECIPIENT_TYPE, src.recipientType.code);
+        }
         object.addProperty(MEMBER_MESSAGE, src.message);
         object.addProperty(MEMBER_COMMENT, src.comment);
         object.addProperty(MEMBER_CODEPRO, src.codepro);
