@@ -42,5 +42,6 @@ public final class Constants {
         public static final String IN_PROGRESS = "in_progress";
         public static final String REFUSED = "refused";
         public static final String SUCCESS = "success";
+        public static final String UNKNOWN = "unknown";
     }
 }

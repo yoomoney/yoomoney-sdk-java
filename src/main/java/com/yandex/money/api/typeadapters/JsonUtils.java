@@ -50,7 +50,9 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public final class JsonUtils {
 
-    public static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
+    public static final DateTimeFormatter ISO_FORMATTER = new DateTimeFormatter(
+            ISODateTimeFormat.dateTime().getPrinter(),
+            ISODateTimeFormat.dateTimeParser().getParser())
             .withOffsetParsed();
 
     /**

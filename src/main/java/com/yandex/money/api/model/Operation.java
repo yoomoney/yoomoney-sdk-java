@@ -165,8 +165,10 @@ public class Operation {
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
      */
     protected Operation(Builder builder) {
+        Status tempStatus = builder.status;
+
         operationId = checkNotNull(builder.operationId, "operationId");
-        status = checkNotNull(builder.status, "status");
+        status = tempStatus != null ? tempStatus : Status.UNKNOWN;
         type = checkNotNull(builder.type, "type");
         direction = checkNotNull(builder.direction, "direction");
         title = checkNotNull(builder.title, "title");
@@ -312,7 +314,11 @@ public class Operation {
         /**
          * Operation is in progress, e.g. P2P with protection code has not been received.
          */
-        IN_PROGRESS(Constants.Status.IN_PROGRESS);
+        IN_PROGRESS(Constants.Status.IN_PROGRESS),
+        /**
+         * Operation status is unknown.
+         */
+        UNKNOWN(Constants.Status.UNKNOWN);
 
         public final String code;
 
