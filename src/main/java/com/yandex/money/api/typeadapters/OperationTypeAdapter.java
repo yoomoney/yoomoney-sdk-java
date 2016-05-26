@@ -142,7 +142,9 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_TYPE, src.type.code);
         object.addProperty(MEMBER_SENDER, src.sender);
         object.addProperty(MEMBER_RECIPIENT, src.recipient);
-        object.addProperty(MEMBER_RECIPIENT_TYPE, src.recipientType.code);
+        if (src.recipientType != null) {
+            object.addProperty(MEMBER_RECIPIENT_TYPE, src.recipientType.code);
+        }
         object.addProperty(MEMBER_MESSAGE, src.message);
         object.addProperty(MEMBER_COMMENT, src.comment);
         object.addProperty(MEMBER_CODEPRO, src.codepro);
@@ -155,10 +157,13 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         }
         object.addProperty(MEMBER_DETAILS, src.details);
         object.addProperty(MEMBER_REPEATABLE, src.repeatable);
-        object.add(MEMBER_PAYMENT_PARAMETERS, toJsonObject(src.paymentParameters));
+        if (src.paymentParameters.size() > 0) {
+            object.add(MEMBER_PAYMENT_PARAMETERS, toJsonObject(src.paymentParameters));
+        }
         object.addProperty(MEMBER_FAVOURITE, src.favorite);
-        object.addProperty(MEMBER_DIGITAL_GOODS, DigitalGoodsTypeAdapter.getInstance()
-                .toJson(src.digitalGoods));
+        if (src.digitalGoods != null) {
+            object.addProperty(MEMBER_DIGITAL_GOODS, DigitalGoodsTypeAdapter.getInstance().toJson(src.digitalGoods));
+        }
         return object;
     }
 

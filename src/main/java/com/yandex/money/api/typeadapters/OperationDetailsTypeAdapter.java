@@ -62,8 +62,9 @@ public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<Operation
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new OperationDetails(Error.parse(getString(object, MEMBER_ERROR)),
-                OperationTypeAdapter.getInstance().fromJson(json));
+        Error error = Error.parse(getString(object, MEMBER_ERROR));
+        return error == null ? new OperationDetails(null, OperationTypeAdapter.getInstance().fromJson(json)) :
+                new OperationDetails(error, null);
     }
 
     @Override

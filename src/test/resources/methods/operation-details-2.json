@@ -1,0 +1,21 @@
+{
+  "operation_id": "1234567",
+  "status": "success",
+  "pattern_id": "p2p",
+  "direction": "out",
+  "amount": 50.25,
+  "datetime": "2011-07-11T20:43:00.000+04:00",
+  "title": "Перевод на счет 4100123456789",
+  "recipient": "4100123456789",
+  "recipient_type": "account",
+  "message": "Купите бублики",
+  "comment": "Перевод от пользователя Яндекс.Денег",
+  "codepro": false,
+  "details": "Счет получателя:\n4100123456789\nСумма к получению: 50,00 руб.",
+  "repeatable": true,
+  "type": "outgoing-transfer",
+  "payment_parameters": {
+    "is-repeat-payment": "true",
+    "source-favorite-id": "12345678"
+  }
+}

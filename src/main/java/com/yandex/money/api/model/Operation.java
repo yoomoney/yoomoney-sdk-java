@@ -112,7 +112,7 @@ public class Operation {
     /**
      * {@code true} if operation is protected with a code
      */
-    public final boolean codepro;
+    public final Boolean codepro;
 
     /**
      * Protection code for operation.
@@ -142,14 +142,14 @@ public class Operation {
     /**
      * {@code true} if operation can be repeated.
      */
-    public final boolean repeatable;
+    public final Boolean repeatable;
 
     /**
      * Payment parameters.
      */
     public final Map<String, String> paymentParameters;
 
-    public final boolean favorite;
+    public final Boolean favorite;
 
     /**
      * Type of operation.
@@ -180,16 +180,28 @@ public class Operation {
         recipientType = builder.recipientType;
         message = builder.message;
         comment = builder.comment;
-        codepro = builder.codepro != null && builder.codepro;
+        codepro = builder.codepro;
         protectionCode = builder.protectionCode;
         expires = builder.expires;
         answerDatetime = builder.answerDatetime;
         label = builder.label;
         details = builder.details;
-        repeatable = builder.repeatable != null && builder.repeatable;
+        repeatable = builder.repeatable;
         paymentParameters = Collections.unmodifiableMap(builder.paymentParameters);
-        favorite = builder.favorite != null && builder.favorite;
+        favorite = builder.favorite;
         digitalGoods = builder.digitalGoods;
+    }
+
+    public boolean isCodepro() {
+        return codepro != null && codepro;
+    }
+
+    public boolean isRepeatable() {
+        return repeatable != null && repeatable;
+    }
+
+    public boolean isFavorite() {
+        return favorite != null && favorite;
     }
 
     @Override

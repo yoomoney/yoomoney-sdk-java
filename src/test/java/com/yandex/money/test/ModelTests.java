@@ -51,6 +51,8 @@ import com.yandex.money.api.typeadapters.ExternalCardTypeAdapter;
 import com.yandex.money.api.typeadapters.IncomingTransferAcceptTypeAdapter;
 import com.yandex.money.api.typeadapters.IncomingTransferRejectTypeAdapter;
 import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
+import com.yandex.money.api.typeadapters.OperationDetailsTypeAdapter;
+import com.yandex.money.api.typeadapters.OperationHistoryTypeAdapter;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.typeadapters.YandexMoneyCardTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.FeeTypeAdapter;
@@ -127,6 +129,23 @@ public class ModelTests {
 
         performTest(new InstanceId(StatusInfo.from(SimpleStatus.SUCCESS, null), "123"), adapter);
         performTest(new InstanceId(StatusInfo.from(SimpleStatus.REFUSED, Error.TECHNICAL_ERROR), null), adapter);
+    }
+
+    @Test
+    public void testOperationDetails() {
+        OperationDetailsTypeAdapter adapter = OperationDetailsTypeAdapter.getInstance();
+        checkTypeAdapter("/methods/operation-details-1.json", adapter);
+        checkTypeAdapter("/methods/operation-details-2.json", adapter);
+        checkTypeAdapter("/methods/operation-details-3.json", adapter);
+    }
+
+    @Test
+    public void testOperationHistory() {
+        OperationHistoryTypeAdapter adapter = OperationHistoryTypeAdapter.getInstance();
+        checkTypeAdapter("/methods/operation-history-1.json", adapter);
+        checkTypeAdapter("/methods/operation-history-2.json", adapter);
+        checkTypeAdapter("/methods/operation-history-3.json", adapter);
+        checkTypeAdapter("/methods/operation-history-4.json", adapter);
     }
 
     @Test
