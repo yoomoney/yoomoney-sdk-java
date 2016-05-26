@@ -95,9 +95,15 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
             throws JsonParseException {
 
         final JsonObject o = json.getAsJsonObject();
+
+        final String statusString = getString(o, MEMBER_STATUS);
+        final Operation.Status status = (statusString == null)
+                ? Operation.Status.UNKNOWN
+                : Operation.Status.parse(statusString);
+
         return new Operation.Builder()
                 .setOperationId(getMandatoryString(o, MEMBER_OPERATION_ID))
-                .setStatus(Operation.Status.parse(getMandatoryString(o, MEMBER_STATUS)))
+                .setStatus(status)
                 .setDatetime(getMandatoryDateTime(o, MEMBER_DATETIME))
                 .setTitle(getMandatoryString(o, MEMBER_TITLE))
                 .setPatternId(getString(o, MEMBER_PATTERN_ID))
