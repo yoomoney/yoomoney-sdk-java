@@ -39,8 +39,7 @@ import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.processes.ShowcaseProcess;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.Language;
-import com.yandex.money.test.Utils;
-
+import com.yandex.money.test.Resources;
 import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -188,7 +187,7 @@ public final class ShowcaseProcessTest extends Assert {
 
     private static Showcase loadFromResource() throws Exception {
         return ShowcaseTypeAdapter.getInstance().fromJson(
-                Utils.loadResource("/showcase/showcase_bills_novalidation.json"));
+                Resources.load("/showcase/showcase_bills_novalidation.json"));
     }
 
     private static DocumentProvider getDocumentProvider() {

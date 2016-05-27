@@ -24,6 +24,7 @@
 
 package com.yandex.money.test;
 
+import com.google.gson.JsonParser;
 import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.IncomingTransferAccept;
 import com.yandex.money.api.methods.IncomingTransferReject;
@@ -61,10 +62,13 @@ import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.Arrays;
 
-import static com.yandex.money.test.Utils.checkTypeAdapter;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -174,8 +178,25 @@ public class ModelTests {
         }
     }
 
+    /**
+     * Reads JSON path and asserts it for equality after deserialization and serialization steps.
+     *
+     * @param path JSON path name in resources
+     * @param typeAdapter type adapter to check
+     */
+    static <T> void checkTypeAdapter(String path, TypeAdapter<T> typeAdapter) {
+        try {
+            String json = Resources.load(path);
+            T deserializedObject = typeAdapter.fromJson(json);
+            assertNotEquals(0, deserializedObject.hashCode());
+            assertEquals(new JsonParser().parse(json), typeAdapter.toJsonTree(deserializedObject));
+        } catch (FileNotFoundException e) {
+            assertFalse(true);
+        }
+    }
+
     private static <T> void performTest(T value, TypeAdapter<T> adapter) {
-        Assert.assertEquals(adapter.fromJson(adapter.toJsonTree(value)), value);
+        assertEquals(adapter.fromJson(adapter.toJsonTree(value)), value);
     }
 
     private static AccountInfo createAccountInfo() {

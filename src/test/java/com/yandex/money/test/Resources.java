@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,41 +24,26 @@
 
 package com.yandex.money.test;
 
-import com.google.gson.JsonParser;
-import com.yandex.money.api.typeadapters.TypeAdapter;
-import org.junit.Assert;
-
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 /**
- * @author Anton Ermak (ermak@yamoney.ru)
+ * @author Slava Yasevich
  */
-public final class Utils {
+public final class Resources {
 
-    private Utils() {
+    private Resources() {
     }
 
-    /**
-     * Loads resouse from classpath specified by {@code fullName} string.
-     *
-     * @param fullName full qualified resource name
-     * @return resource content
-     */
-    public static String loadResource(String fullName) {
-        return new Scanner(Utils.class.getResourceAsStream(fullName), "UTF-8")
-                .useDelimiter("\\A").next();
+    public static String load(String path) throws FileNotFoundException {
+        return new Scanner(loadStream(path), "UTF-8")
+                .useDelimiter("\\A")
+                .next();
     }
 
-    /**
-     * Reads JSON path and asserts it for equality after deserialization and serialization steps.
-     *
-     * @param path JSON path name in resources
-     * @param typeAdapter type adapter to check
-     */
-    public static <T> void checkTypeAdapter(String path, TypeAdapter<T> typeAdapter) {
-        String json = loadResource(path);
-        T deserializedObject = typeAdapter.fromJson(json);
-        Assert.assertEquals(new JsonParser().parse(json),
-                typeAdapter.toJsonTree(deserializedObject));
+    static InputStream loadStream(String path) throws FileNotFoundException {
+        return new FileInputStream("./src/test/resources" + path);
     }
 }

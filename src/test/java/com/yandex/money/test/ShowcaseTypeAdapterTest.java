@@ -141,6 +141,6 @@ public final class ShowcaseTypeAdapterTest {
     }
 
     private static <T> void check(String fileName, TypeAdapter<T> typeAdapter) {
-        Utils.checkTypeAdapter("/showcase/" + fileName, typeAdapter);
+        ModelTests.checkTypeAdapter("/showcase/" + fileName, typeAdapter);
     }
 }

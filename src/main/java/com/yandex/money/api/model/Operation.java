@@ -242,41 +242,33 @@ public class Operation {
 
         Operation operation = (Operation) o;
 
-        return codepro == operation.codepro &&
-                repeatable == operation.repeatable &&
-                favorite == operation.favorite &&
-                operationId.equals(operation.operationId) &&
-                status == operation.status &&
-                !(patternId != null ? !patternId.equals(operation.patternId) :
-                        operation.patternId != null) &&
-                direction == operation.direction &&
-                amount.equals(operation.amount) &&
-                !(amountDue != null ? !amountDue.equals(operation.amountDue) :
-                        operation.amountDue != null) &&
-                !(fee != null ? !fee.equals(operation.fee) : operation.fee != null) &&
-                datetime.isEqual(operation.datetime) &&
-                title.equals(operation.title) &&
-                !(sender != null ? !sender.equals(operation.sender) : operation.sender != null) &&
-                !(recipient != null ? !recipient.equals(operation.recipient) :
-                        operation.recipient != null) &&
-                recipientType == operation.recipientType &&
-                !(message != null ? !message.equals(operation.message) :
-                        operation.message != null) &&
-                !(comment != null ? !comment.equals(operation.comment) :
-                        operation.comment != null) &&
-                !(protectionCode != null ? !protectionCode.equals(operation.protectionCode) :
-                        operation.protectionCode != null) &&
-                !(expires != null ? !expires.isEqual(operation.expires) :
-                        operation.expires != null) &&
-                !(answerDatetime != null ? !answerDatetime.isEqual(operation.answerDatetime) :
-                        operation.answerDatetime != null) &&
-                !(label != null ? !label.equals(operation.label) : operation.label != null) &&
-                !(details != null ? !details.equals(operation.details) :
-                        operation.details != null) &&
-                paymentParameters.equals(operation.paymentParameters) &&
-                type == operation.type &&
-                !(digitalGoods != null ? !digitalGoods.equals(operation.digitalGoods) :
-                        operation.digitalGoods != null);
+        if (!operationId.equals(operation.operationId)) return false;
+        if (status != operation.status) return false;
+        if (patternId != null ? !patternId.equals(operation.patternId) : operation.patternId != null) return false;
+        if (direction != operation.direction) return false;
+        if (!amount.equals(operation.amount)) return false;
+        if (amountDue != null ? !amountDue.equals(operation.amountDue) : operation.amountDue != null) return false;
+        if (fee != null ? !fee.equals(operation.fee) : operation.fee != null) return false;
+        if (!datetime.equals(operation.datetime)) return false;
+        if (!title.equals(operation.title)) return false;
+        if (sender != null ? !sender.equals(operation.sender) : operation.sender != null) return false;
+        if (recipient != null ? !recipient.equals(operation.recipient) : operation.recipient != null) return false;
+        if (recipientType != operation.recipientType) return false;
+        if (message != null ? !message.equals(operation.message) : operation.message != null) return false;
+        if (comment != null ? !comment.equals(operation.comment) : operation.comment != null) return false;
+        if (codepro != null ? !codepro.equals(operation.codepro) : operation.codepro != null) return false;
+        if (protectionCode != null ? !protectionCode.equals(operation.protectionCode) : operation.protectionCode != null)
+            return false;
+        if (expires != null ? !expires.equals(operation.expires) : operation.expires != null) return false;
+        if (answerDatetime != null ? !answerDatetime.equals(operation.answerDatetime) : operation.answerDatetime != null)
+            return false;
+        if (label != null ? !label.equals(operation.label) : operation.label != null) return false;
+        if (details != null ? !details.equals(operation.details) : operation.details != null) return false;
+        if (repeatable != null ? !repeatable.equals(operation.repeatable) : operation.repeatable != null) return false;
+        if (!paymentParameters.equals(operation.paymentParameters)) return false;
+        if (favorite != null ? !favorite.equals(operation.favorite) : operation.favorite != null) return false;
+        if (type != operation.type) return false;
+        return digitalGoods != null ? digitalGoods.equals(operation.digitalGoods) : operation.digitalGoods == null;
     }
 
     @Override
