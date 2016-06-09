@@ -51,6 +51,7 @@ public enum Error implements Enums.WithCode<Error> {
     ILLEGAL_PARAM_APPLICATION_NAME("illegal_param_application_name"),
     ILLEGAL_PARAM_CLIENT_ID("illegal_param_client_id"),
     ILLEGAL_PARAM_COMMENT("illegal_param_comment"),
+    ILLEGAL_PARAM_CONTENTS("illegal_param_contents"),
     ILLEGAL_PARAM_CSC("illegal_param_csc"),
     ILLEGAL_PARAM_DEVICE_ID("illegal_param_deviceId"),
     ILLEGAL_PARAM_DRIVER_LICENSE("illegal_param_driver_license"),
