@@ -26,13 +26,19 @@ package com.yandex.money.api.typeadapters;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
+import com.google.gson.stream.JsonWriter;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -340,6 +346,24 @@ public final class JsonUtils {
             array.add(converter.toJsonTree(value));
         }
         return array;
+    }
+
+    /**
+     * Gets UTF-8 bytes of JSON element
+     *
+     * @param element JSON element
+     * @return byte array
+     */
+    public static byte[] getBytes(JsonElement element) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        JsonWriter writer = new JsonWriter(new OutputStreamWriter(stream, Charset.forName("UTF-8")));
+        GsonProvider.getGson().toJson(checkNotNull(element, "element"), writer);
+        try {
+            writer.close();
+        } catch (IOException e) {
+            throw new JsonIOException(e);
+        }
+        return stream.toByteArray();
     }
 
     private static JsonPrimitive getPrimitiveChecked(JsonObject object, String memberName) {

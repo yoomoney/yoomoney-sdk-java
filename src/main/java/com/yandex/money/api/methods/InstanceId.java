@@ -27,8 +27,8 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.model.StatusInfo;
-import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
@@ -118,7 +118,7 @@ public class InstanceId {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/instance-id";
         }
     }

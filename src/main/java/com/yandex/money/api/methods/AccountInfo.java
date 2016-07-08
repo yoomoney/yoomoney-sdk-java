@@ -30,8 +30,8 @@ import com.yandex.money.api.model.Avatar;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.YandexMoneyCard;
-import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.AccountInfoTypeAdapter;
 import com.yandex.money.api.utils.Currency;
 
@@ -285,7 +285,7 @@ public class AccountInfo {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/account-info";
         }
     }

@@ -22,64 +22,42 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
-
-import com.yandex.money.api.net.providers.HostsProvider;
-
-import java.io.InputStream;
-import java.util.Map;
+package com.yandex.money.api;
 
 /**
- * API requests implement this interface. Consider to use {@link BaseApiRequest} as your base class.
+ * You can use it for simple syncing of threads.
  *
- * @param <T> response
- * @see BaseApiRequest
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public interface ApiRequest<T> {
+final class ThreadSync {
+
+    private final Object lock = new Object();
+
+    private boolean notified = false;
 
     /**
-     * Gets method for a request.
-     *
-     * @return method
+     * @see #wait()
      */
-    Method getMethod();
+    public void doWait() {
+        synchronized (lock) {
+            if (!notified) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    // do nothing
+                }
+            }
+            notified = false;
+        }
+    }
 
     /**
-     * Builds URL with using specified hosts provider.
-     *
-     * @param hostsProvider hosts provider
-     * @return complete URL
+     * @see #notifyAll()
      */
-    String requestUrl(HostsProvider hostsProvider);
-
-    /**
-     * Gets headers for a request. Must not be null.
-     *
-     * @return headers for a request
-     */
-    Map<String, String> getHeaders();
-
-    /**
-     * Gets a body of a request. Must not be null.
-     *
-     * @return body of a request
-     */
-    byte[] getBody();
-
-    /**
-     * Parses API response from stream.
-     *
-     * @param inputStream input stream
-     * @return response
-     */
-    T parseResponse(InputStream inputStream);
-
-    /**
-     * Methods enum.
-     */
-    enum Method {
-        GET,
-        POST,
-        PUT
+    public void doNotify() {
+        synchronized (lock) {
+            lock.notifyAll();
+            notified = true;
+        }
     }
 }

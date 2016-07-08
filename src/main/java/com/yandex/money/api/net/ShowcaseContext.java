@@ -29,6 +29,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.Showcase;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
@@ -301,7 +302,7 @@ public final class ShowcaseContext {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return url;
         }
     }

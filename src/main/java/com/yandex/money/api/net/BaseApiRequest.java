@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.net;
 
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -54,6 +55,9 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     private final TypeAdapter<T> typeAdapter;
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
+    private final ParametersBuffer buffer = new ParametersBuffer();
+
+    private byte[] body;
 
     /**
      * Constructor.
@@ -65,19 +69,34 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     }
 
     @Override
-    public final Map<String, String> getHeaders() {
-        return Collections.unmodifiableMap(headers);
+    public final String requestUrl(HostsProvider hostsProvider) {
+        String url = requestUrlBase(hostsProvider);
+        return getMethod() == Method.GET ? url + buffer.setParams(parameters).prepareGet() : url;
     }
 
     @Override
-    public final Map<String, String> getParameters() {
-        return Collections.unmodifiableMap(parameters);
+    public final Map<String, String> getHeaders() {
+        return Collections.unmodifiableMap(headers);
     }
 
     @Override
     public final T parseResponse(InputStream inputStream) {
         return typeAdapter.fromJson(inputStream);
     }
+
+    @Override
+    public final byte[] getBody() {
+        return body == null ? buffer.setParams(parameters).prepareBytes() : body;
+    }
+
+    /**
+     * Creates base URL of a request. For instance base URL for https://money.yandex.ru/api/method?param=value is
+     * https://money.yandex.ru/api/method.
+     *
+     * @param hostsProvider hosts provider
+     * @return base URL of a request
+     */
+    protected abstract String requestUrlBase(HostsProvider hostsProvider);
 
     /**
      * Adds {@link String} header to this request.
@@ -175,5 +194,14 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      */
     protected final void addParameters(Map<String, String> parameters) {
         this.parameters.putAll(parameters);
+    }
+
+    /**
+     * Sets a body for a request. Will override any added parameters if not {code null}.
+     *
+     * @param body body of a request
+     */
+    protected final void setBody(byte[] body) {
+        this.body = body;
     }
 }

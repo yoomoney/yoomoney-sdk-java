@@ -29,7 +29,7 @@ import com.yandex.money.api.model.showcase.ShowcaseReference;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.GetRequest;
-import com.yandex.money.api.net.HostsProvider;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseSearchTypeAdapter;
 
 import java.util.Collections;
@@ -133,7 +133,7 @@ public class ShowcaseSearch {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/showcase-search";
         }
     }

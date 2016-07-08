@@ -25,8 +25,8 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.ExternalCard;
-import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.ProcessExternalPaymentTypeAdapter;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
@@ -129,7 +129,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/process-external-payment";
         }
     }

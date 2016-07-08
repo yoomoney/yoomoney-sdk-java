@@ -27,6 +27,8 @@ package com.yandex.money.api.net;
 import com.squareup.okhttp.Response;
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.model.showcase.Showcase;
+import com.yandex.money.api.net.clients.ApiClient;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;
 import org.joda.time.DateTime;
@@ -224,15 +226,15 @@ public final class DocumentProvider extends AbstractSession {
 
         private final String url;
 
-        protected CopyShowcaseRequest(String url, ApiRequest<Showcase> request) {
+        private CopyShowcaseRequest(String url, ApiRequest<Showcase> request) {
             super(ShowcaseTypeAdapter.getInstance());
             this.url = checkNotEmpty(url, "url");
             addHeaders(checkNotNull(request, "request").getHeaders());
-            addParameters(request.getParameters());
+            setBody(request.getBody());
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return url;
         }
     }

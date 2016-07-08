@@ -25,8 +25,8 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.methods.params.PaymentParams;
-import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.RequestExternalPaymentTypeAdapter;
 
 import java.util.Map;
@@ -132,7 +132,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/request-external-payment";
         }
     }

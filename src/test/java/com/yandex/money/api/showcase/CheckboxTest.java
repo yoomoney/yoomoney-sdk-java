@@ -22,64 +22,30 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
+package com.yandex.money.api.showcase;
 
-import com.yandex.money.api.net.providers.HostsProvider;
-
-import java.io.InputStream;
-import java.util.Map;
+import com.yandex.money.api.model.showcase.components.uicontrols.Checkbox;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 /**
- * API requests implement this interface. Consider to use {@link BaseApiRequest} as your base class.
- *
- * @param <T> response
- * @see BaseApiRequest
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public interface ApiRequest<T> {
+public class CheckboxTest extends ParameterTest {
 
-    /**
-     * Gets method for a request.
-     *
-     * @return method
-     */
-    Method getMethod();
+    @Test
+    public void testValidationRequired() {
+        Checkbox.Builder builder = new Checkbox.Builder();
+        prepareParameter(builder);
 
-    /**
-     * Builds URL with using specified hosts provider.
-     *
-     * @param hostsProvider hosts provider
-     * @return complete URL
-     */
-    String requestUrl(HostsProvider hostsProvider);
+        Assert.assertFalse(builder.create().isValid(""));
+    }
 
-    /**
-     * Gets headers for a request. Must not be null.
-     *
-     * @return headers for a request
-     */
-    Map<String, String> getHeaders();
+    @Test
+    public void testValidationOk() {
+        Checkbox.Builder builder = new Checkbox.Builder();
+        prepareParameter(builder);
 
-    /**
-     * Gets a body of a request. Must not be null.
-     *
-     * @return body of a request
-     */
-    byte[] getBody();
-
-    /**
-     * Parses API response from stream.
-     *
-     * @param inputStream input stream
-     * @return response
-     */
-    T parseResponse(InputStream inputStream);
-
-    /**
-     * Methods enum.
-     */
-    enum Method {
-        GET,
-        POST,
-        PUT
+        Assert.assertTrue(builder.setChecked(true).create().isValid(""));
     }
 }

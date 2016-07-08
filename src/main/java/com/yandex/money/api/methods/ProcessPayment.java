@@ -27,8 +27,8 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.DigitalGoods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
-import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.ProcessPaymentTypeAdapter;
 import com.yandex.money.api.utils.Enums;
 
@@ -244,7 +244,7 @@ public class ProcessPayment extends BaseProcessPayment {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/process-payment";
         }
 

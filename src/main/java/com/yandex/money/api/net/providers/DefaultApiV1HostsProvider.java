@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,64 +22,55 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
-
-import com.yandex.money.api.net.providers.HostsProvider;
-
-import java.io.InputStream;
-import java.util.Map;
+package com.yandex.money.api.net.providers;
 
 /**
- * API requests implement this interface. Consider to use {@link BaseApiRequest} as your base class.
+ * Provides necessary hosts. They are used to perform API requests.
  *
- * @param <T> response
- * @see BaseApiRequest
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public interface ApiRequest<T> {
+public class DefaultApiV1HostsProvider implements HostsProvider {
+
+    private final boolean mobile;
 
     /**
-     * Gets method for a request.
+     * Constructor.
      *
-     * @return method
+     * @param mobile {@code true} if running on a mobile device
      */
-    Method getMethod();
+    public DefaultApiV1HostsProvider(boolean mobile) {
+        this.mobile = mobile;
+    }
 
     /**
-     * Builds URL with using specified hosts provider.
-     *
-     * @param hostsProvider hosts provider
-     * @return complete URL
+     * @return {@code https://money.yandex.ru}
      */
-    String requestUrl(HostsProvider hostsProvider);
+    @Override
+    public String getMoney() {
+        return "https://money.yandex.ru";
+    }
 
     /**
-     * Gets headers for a request. Must not be null.
-     *
-     * @return headers for a request
+     * @return {@code https://money.yandex.ru/api}
      */
-    Map<String, String> getHeaders();
+    @Override
+    public String getMoneyApi() {
+        return getMoney() + "/api";
+    }
 
     /**
-     * Gets a body of a request. Must not be null.
-     *
-     * @return body of a request
+     * @return {@code https://m.money.yandex.ru}
      */
-    byte[] getBody();
+    @Override
+    public String getMobileMoney() {
+        return "https://m.money.yandex.ru";
+    }
 
     /**
-     * Parses API response from stream.
-     *
-     * @param inputStream input stream
-     * @return response
+     * @return platform specific url
      */
-    T parseResponse(InputStream inputStream);
-
-    /**
-     * Methods enum.
-     */
-    enum Method {
-        GET,
-        POST,
-        PUT
+    @Override
+    public final String getWebUrl() {
+        return mobile ? getMobileMoney() : getMoney();
     }
 }

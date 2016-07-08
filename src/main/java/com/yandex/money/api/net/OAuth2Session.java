@@ -25,12 +25,12 @@
 package com.yandex.money.api.net;
 
 import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
+import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.MimeTypes;
 import com.yandex.money.api.utils.Strings;
@@ -71,37 +71,6 @@ public class OAuth2Session extends AbstractSession {
     public <T> T execute(ApiRequest<T> request)
             throws IOException, InvalidRequestException, InvalidTokenException, InsufficientScopeException {
         return parseResponse(request, makeCall(request).execute());
-    }
-
-    /**
-     * Asynchronous execution of a request.
-     *
-     * @param request the request
-     * @param callback called when response is ready or if error occurred
-     * @param <T> response type
-     * @return a {@link Call} object that can be canceled
-     * @throws IOException if something went wrong during IO operations
-     */
-    public <T> Call enqueue(final ApiRequest<T> request, final OnResponseReady<T> callback)
-            throws IOException {
-
-        Call call = makeCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Request request, IOException e) {
-                callback.onFailure(e);
-            }
-
-            @Override
-            public void onResponse(Response response) throws IOException {
-                try {
-                    callback.onResponse(parseResponse(request, response));
-                } catch (Exception e) {
-                    callback.onFailure(e);
-                }
-            }
-        });
-        return call;
     }
 
     /**

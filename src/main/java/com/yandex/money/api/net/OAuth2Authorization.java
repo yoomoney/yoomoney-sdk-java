@@ -25,6 +25,7 @@
 package com.yandex.money.api.net;
 
 import com.yandex.money.api.model.Scope;
+import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.utils.Strings;
 
 import java.util.HashMap;
@@ -47,7 +48,7 @@ public class OAuth2Authorization {
      * Constructor.
      *
      * @param client API client
-     * @see com.yandex.money.api.net.ApiClient
+     * @see com.yandex.money.api.net.clients.ApiClient
      */
     public OAuth2Authorization(ApiClient client) {
         this.client = checkNotNull(client, "client");

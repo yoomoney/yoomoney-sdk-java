@@ -30,7 +30,7 @@ import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.net.BaseApiRequest;
-import com.yandex.money.api.net.HostsProvider;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 
 import java.util.Collections;
@@ -211,7 +211,7 @@ public final class Showcase {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return url == null ? hostsProvider.getMoneyApi() + "/showcase/" + patternId : url;
         }
     }

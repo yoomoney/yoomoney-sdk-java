@@ -26,10 +26,14 @@ package com.yandex.money.api.net;
 
 import com.squareup.okhttp.CacheControl;
 import com.squareup.okhttp.Call;
+import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.Language;
+import com.yandex.money.api.utils.MimeTypes;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,6 +50,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
 public abstract class AbstractSession {
 
     private static final Logger LOGGER = Logger.getLogger(OAuth2Session.class.getName());
+    private static final MediaType CONTENT_TYPE = MediaType.parse(MimeTypes.Application.X_WWW_FORM_URLENCODED);
 
     protected final ApiClient client;
 
@@ -103,22 +108,9 @@ public abstract class AbstractSession {
             }
         }
 
-        ParametersBuffer parametersBuffer = new ParametersBuffer()
-                .setParams(request.getParameters());
-
-        switch (request.getMethod()) {
-            case GET: {
-                builder.url(request.requestUrl(client.getHostsProvider()) +
-                        parametersBuffer.prepareGet());
-                break;
-            }
-            case POST: {
-                builder.url(request.requestUrl(client.getHostsProvider()))
-                        .post(parametersBuffer.prepareBody());
-                break;
-            }
-            default:
-                throw new UnsupportedOperationException("method " + request.getMethod() + " is not supported");
+        builder.url(request.requestUrl(client.getHostsProvider()));
+        if (request.getMethod() == ApiRequest.Method.POST) {
+            builder.post(RequestBody.create(CONTENT_TYPE, request.getBody()));
         }
 
         return builder;

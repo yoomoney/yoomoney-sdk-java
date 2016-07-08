@@ -25,8 +25,8 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.RevokeTypeAdapter;
 import com.yandex.money.api.typeadapters.TokenTypeAdapter;
 
@@ -113,7 +113,7 @@ public class Token {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoney() + "/oauth/token";
         }
     }
@@ -141,7 +141,7 @@ public class Token {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/revoke";
         }
     }

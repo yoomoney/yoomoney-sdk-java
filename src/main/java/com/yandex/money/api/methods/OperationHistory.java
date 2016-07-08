@@ -26,8 +26,8 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
-import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.OperationHistoryTypeAdapter;
 import com.yandex.money.api.utils.Enums;
 import org.joda.time.DateTime;
@@ -167,7 +167,7 @@ public class OperationHistory {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/operation-history";
         }
 

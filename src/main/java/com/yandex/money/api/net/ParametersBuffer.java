@@ -24,9 +24,6 @@
 
 package com.yandex.money.api.net;
 
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.RequestBody;
-import com.yandex.money.api.utils.MimeTypes;
 import com.yandex.money.api.utils.Strings;
 
 import java.io.ByteArrayOutputStream;
@@ -47,11 +44,18 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public final class ParametersBuffer {
 
-    private static final MediaType CONTENT_TYPE = MediaType.parse(MimeTypes.Application.X_WWW_FORM_URLENCODED);
     private static final String UTF8_NAME = "UTF-8";
     private static final Charset UTF8_CHARSET = Charset.forName(UTF8_NAME);
 
     private Map<String, String> params = Collections.emptyMap();
+
+    public static byte[] encodeUtf8(String value) {
+        try {
+            return encode(value).getBytes(UTF8_CHARSET);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Sets parameters.
@@ -81,23 +85,6 @@ public final class ParametersBuffer {
         GetBuffer buffer = new GetBuffer();
         iterate(buffer);
         return buffer.toString();
-    }
-
-    /**
-     * Prepares body for a request.
-     * <p>
-     * For example, there are two parameters provided:
-     * <p>
-     * {@code Map<String, String> params = new HashMap<>();}
-     * {@code params.put("key1", "value1");}<br/>
-     * {@code params.put("key2", "value2");}
-     * <p>
-     * Then the method will return a body "key1=value1&key2=value2".
-     *
-     * @return body
-     */
-    public RequestBody prepareBody() {
-        return RequestBody.create(CONTENT_TYPE, prepareBytes());
     }
 
     /**
@@ -178,9 +165,9 @@ public final class ParametersBuffer {
                 if (stream.size() > 0) {
                     stream.write(AMPERSAND);
                 }
-                stream.write(encode(key).getBytes(UTF8_CHARSET));
+                stream.write(encodeUtf8(key));
                 stream.write(EQUALS_SIGN);
-                stream.write(encode(value).getBytes(UTF8_CHARSET));
+                stream.write(encodeUtf8(value));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }

@@ -22,64 +22,32 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
+package com.yandex.money.api.properties;
 
-import com.yandex.money.api.net.providers.HostsProvider;
-
-import java.io.InputStream;
-import java.util.Map;
+import java.math.BigDecimal;
 
 /**
- * API requests implement this interface. Consider to use {@link BaseApiRequest} as your base class.
- *
- * @param <T> response
- * @see BaseApiRequest
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public interface ApiRequest<T> {
+public final class LocalProperties extends BaseProperties {
 
-    /**
-     * Gets method for a request.
-     *
-     * @return method
-     */
-    Method getMethod();
+    public LocalProperties() {
+        super("/local.properties");
+    }
 
-    /**
-     * Builds URL with using specified hosts provider.
-     *
-     * @param hostsProvider hosts provider
-     * @return complete URL
-     */
-    String requestUrl(HostsProvider hostsProvider);
+    public String getClientId() {
+        return get("client.id");
+    }
 
-    /**
-     * Gets headers for a request. Must not be null.
-     *
-     * @return headers for a request
-     */
-    Map<String, String> getHeaders();
+    public String getAccessToken() {
+        return get("access.token");
+    }
 
-    /**
-     * Gets a body of a request. Must not be null.
-     *
-     * @return body of a request
-     */
-    byte[] getBody();
+    public String getPhoneNumber() {
+        return get("params.phone");
+    }
 
-    /**
-     * Parses API response from stream.
-     *
-     * @param inputStream input stream
-     * @return response
-     */
-    T parseResponse(InputStream inputStream);
-
-    /**
-     * Methods enum.
-     */
-    enum Method {
-        GET,
-        POST,
-        PUT
+    public BigDecimal getAmount() {
+        return new BigDecimal(get("params.amount"));
     }
 }

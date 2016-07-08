@@ -26,8 +26,8 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Scope;
-import com.yandex.money.api.net.HostsProvider;
 import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.AuxTokenTypeAdapter;
 
 import java.util.Set;
@@ -96,7 +96,7 @@ public class AuxToken {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/token-aux";
         }
     }

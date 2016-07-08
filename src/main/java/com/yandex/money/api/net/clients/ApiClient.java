@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,64 +22,59 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
+package com.yandex.money.api.net.clients;
 
+import com.squareup.okhttp.OkHttpClient;
+import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.net.providers.HostsProvider;
-
-import java.io.InputStream;
-import java.util.Map;
+import com.yandex.money.api.utils.Language;
 
 /**
- * API requests implement this interface. Consider to use {@link BaseApiRequest} as your base class.
+ * Yandex.Money API client. Provides necessary information for sessions.
  *
- * @param <T> response
- * @see BaseApiRequest
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public interface ApiRequest<T> {
+public interface ApiClient {
 
     /**
-     * Gets method for a request.
+     * @return client id
+     */
+    String getClientId();
+
+    /**
+     * @return HTTP client to use when executing API requests
+     */
+    OkHttpClient getHttpClient();
+
+    /**
+     * @return hosts provider
+     */
+    HostsProvider getHostsProvider();
+
+    /**
+     * @return specific HTTP user agent
+     */
+    UserAgent getUserAgent();
+
+    /**
+     * @return language of API responses
+     */
+    Language getLanguage();
+
+    /**
+     * Prepares {@link ApiRequest} to meet {@link ApiClient} requirements.
      *
-     * @return method
+     * @param request base request
+     * @param <T> type of response
+     * @return modified request
      */
-    Method getMethod();
+    <T> ApiRequest<T> prepare(ApiRequest<T> request);
 
     /**
-     * Builds URL with using specified hosts provider.
+     * Checks if debug mode is enabled for this client.
      *
-     * @param hostsProvider hosts provider
-     * @return complete URL
+     * @return {@code true} if debug mode is enabled
      */
-    String requestUrl(HostsProvider hostsProvider);
-
-    /**
-     * Gets headers for a request. Must not be null.
-     *
-     * @return headers for a request
-     */
-    Map<String, String> getHeaders();
-
-    /**
-     * Gets a body of a request. Must not be null.
-     *
-     * @return body of a request
-     */
-    byte[] getBody();
-
-    /**
-     * Parses API response from stream.
-     *
-     * @param inputStream input stream
-     * @return response
-     */
-    T parseResponse(InputStream inputStream);
-
-    /**
-     * Methods enum.
-     */
-    enum Method {
-        GET,
-        POST,
-        PUT
-    }
+    boolean isDebugEnabled();
 }
