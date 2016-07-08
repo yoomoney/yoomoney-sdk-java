@@ -139,12 +139,14 @@ public class YandexMoneyTest implements ApiTest {
         reqRequestExternalPayment = createRequestExternalPayment();
         respRequestExternalPayment = session.execute(reqRequestExternalPayment);
 
-        String successUri = "https://elbrus.yandex.ru/success";
-        String failUri = "https://elbrus.yandex.ru/fail";
-        reqProcessExternalPayment = new ProcessExternalPayment.Request(
-                respInstanceId.instanceId, respRequestExternalPayment.requestId,
-                successUri, failUri, false);
-        testProcessPayment(reqProcessExternalPayment);
+        if (respRequestExternalPayment.status == BaseRequestPayment.Status.SUCCESS) {
+            String successUri = "https://elbrus.yandex.ru/success";
+            String failUri = "https://elbrus.yandex.ru/fail";
+            reqProcessExternalPayment = new ProcessExternalPayment.Request(
+                    respInstanceId.instanceId, respRequestExternalPayment.requestId,
+                    successUri, failUri, false);
+            testProcessPayment(reqProcessExternalPayment);
+        }
     }
 
     @Test
