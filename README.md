@@ -29,7 +29,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.yandex.money.api:yandex-money-sdk-java:5.1.3'
+    compile 'com.yandex.money.api:yandex-money-sdk-java:5.1.4'
 }
 ```
 
