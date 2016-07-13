@@ -24,9 +24,12 @@
 
 package com.yandex.money.api.typeadapters;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 
 import java.io.InputStream;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Serializes and deserializes object to and from JSON.
@@ -61,6 +64,14 @@ public interface TypeAdapter<T> {
     T fromJson(JsonElement element);
 
     /**
+     * Creates list of elements from {@link JsonArray}.
+     *
+     * @param array array to parse
+     * @return list of elements or {@code null}, if {@code array} is {@code null}
+     */
+    List<T> fromJson(JsonArray array);
+
+    /**
      * Serializes object to json string.
      *
      * @param value object
@@ -75,4 +86,12 @@ public interface TypeAdapter<T> {
      * @return json element
      */
     JsonElement toJsonTree(T value);
+
+    /**
+     * Serializes collection of values to {@link JsonArray}.
+     *
+     * @param values values to serialize
+     * @return {@link JsonArray} object or {@code null}, if {@code values} is {@code null}
+     */
+    JsonArray toJsonArray(Collection<T> values);
 }

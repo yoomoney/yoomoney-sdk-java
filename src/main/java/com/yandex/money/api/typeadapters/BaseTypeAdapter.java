@@ -24,12 +24,16 @@
 
 package com.yandex.money.api.typeadapters;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSerializer;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static com.yandex.money.api.typeadapters.GsonProvider.getGson;
 import static com.yandex.money.api.typeadapters.GsonProvider.registerTypeAdapter;
@@ -61,6 +65,18 @@ public abstract class BaseTypeAdapter<T> implements TypeAdapter<T>, JsonSerializ
     }
 
     @Override
+    public final List<T> fromJson(JsonArray array) {
+        if (array == null) {
+            return null;
+        }
+        List<T> items = new ArrayList<>(array.size());
+        for (JsonElement element : array) {
+            items.add(fromJson(element));
+        }
+        return items;
+    }
+
+    @Override
     public final String toJson(T value) {
         return getGson().toJson(value);
     }
@@ -68,6 +84,18 @@ public abstract class BaseTypeAdapter<T> implements TypeAdapter<T>, JsonSerializ
     @Override
     public final JsonElement toJsonTree(T value) {
         return getGson().toJsonTree(value);
+    }
+
+    @Override
+    public JsonArray toJsonArray(Collection<T> values) {
+        if (values == null) {
+            return null;
+        }
+        JsonArray array = new JsonArray();
+        for (T value : values) {
+            array.add(toJsonTree(value));
+        }
+        return array;
     }
 
     protected abstract Class<T> getType();
