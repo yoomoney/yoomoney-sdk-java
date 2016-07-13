@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static com.yandex.money.api.typeadapters.GsonProvider.getGson;
@@ -96,6 +97,14 @@ public abstract class BaseTypeAdapter<T> implements TypeAdapter<T>, JsonSerializ
             array.add(toJsonTree(value));
         }
         return array;
+    }
+
+    protected static <T> List<T> toEmptyListIfNull(List<T> list) {
+        return list == null ? Collections.<T>emptyList() : list;
+    }
+
+    protected static JsonArray toNullIfEmpty(JsonArray array) {
+        return array.size() == 0 ? null : array;
     }
 
     protected abstract Class<T> getType();

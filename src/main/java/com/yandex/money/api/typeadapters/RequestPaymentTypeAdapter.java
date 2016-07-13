@@ -43,7 +43,6 @@ import java.util.List;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBoolean;
-import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
@@ -152,7 +151,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
                 JsonObject cardsObject = object.getAsJsonObject(MEMBER_CARDS);
                 if (cardsObject != null && getMandatoryBoolean(cardsObject, MEMBER_ALLOWED)) {
                     builder.setCscRequired(getMandatoryBoolean(cardsObject, MEMBER_CSC_REQUIRED));
-                    list.addAll(getNotNullArray(cardsObject, MEMBER_ITEMS, CardTypeAdapter.getInstance()));
+                    list.addAll(CardTypeAdapter.getInstance().fromJson(cardsObject.getAsJsonArray(MEMBER_ITEMS)));
                 }
 
                 return list;

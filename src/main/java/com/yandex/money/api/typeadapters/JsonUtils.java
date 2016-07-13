@@ -24,7 +24,6 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
@@ -39,11 +38,8 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
@@ -219,59 +215,6 @@ public final class JsonUtils {
     }
 
     /**
-     * Gets array from a JSON object. Uses {@link ArrayList} implementation of {@link List}.
-     *
-     * @param object json object
-     * @param memberName member's name
-     * @param converter converter
-     * @param <T> type of a value in the array
-     * @return list of values
-     */
-    public static <T> List<T> getMandatoryArray(JsonObject object, String memberName, TypeAdapter<T> converter) {
-        return checkMandatoryValue(getArray(object, memberName, converter), memberName);
-    }
-
-    /**
-     * Gets nullable array from a JSON object. Uses {@link ArrayList} implementation of
-     * {@link List}.
-     *
-     * @param object json object
-     * @param memberName member's name
-     * @param converter converter
-     * @param <T> type of a value in the array
-     * @return list of values
-     */
-    public static <T> List<T> getArray(JsonObject object, String memberName, TypeAdapter<T> converter) {
-        JsonArray array = checkObject(object)
-                .getAsJsonArray(checkMemberName(memberName));
-        if (array == null) {
-            return null;
-        }
-
-        checkNotNull(converter, "converter");
-        List<T> result = new ArrayList<>(array.size());
-        for (JsonElement element : array) {
-            result.add(converter.fromJson(element));
-        }
-        return result;
-    }
-
-    /**
-     * Gets array from a JSON object. Uses {@link ArrayList} implementation of {@link List}. If
-     * there is no such member in object then returns empty list.
-     *
-     * @param object     json object
-     * @param memberName member's name
-     * @param converter  converter
-     * @param <T>        type of a value in the array
-     * @return list of values
-     */
-    public static <T> List<T> getNotNullArray(JsonObject object, String memberName, TypeAdapter<T> converter) {
-        List<T> array = getArray(object, memberName, converter);
-        return array == null ? Collections.<T>emptyList() : array;
-    }
-
-    /**
      * Maps JSON object to key-value pairs. If the object contains non-primitive entries they are
      * ignored and {@code null} value added using specified key.
      *
@@ -325,27 +268,6 @@ public final class JsonUtils {
             object.addProperty(entry.getKey(), entry.getValue());
         }
         return object;
-    }
-
-    /**
-     * Creates JSON array with collection values using provided converter to create JSON elements.
-     * Returns {@code null} if parameter {@code map} is null.
-     *
-     * @param collection the collection
-     * @param converter converter for values
-     * @param <T> type of value
-     * @return JSON array
-     */
-    public static <T> JsonArray toJsonArray(Collection<T> collection, TypeAdapter<T> converter) {
-        if (collection == null) {
-            return null;
-        }
-        checkNotNull(converter, "converter");
-        JsonArray array = new JsonArray();
-        for (T value : collection) {
-            array.add(converter.toJsonTree(value));
-        }
-        return array;
     }
 
     /**

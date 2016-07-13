@@ -43,9 +43,6 @@ import java.util.List;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBigDecimal;
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
-import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
-import static com.yandex.money.api.typeadapters.JsonUtils.getString;
-import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
 
 /**
  * Type adapter for {@link AccountInfo}.
@@ -85,7 +82,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
 
         Currency currency;
         try {
-            int parsed = Integer.parseInt(getString(object, MEMBER_CURRENCY));
+            int parsed = Integer.parseInt(getMandatoryString(object, MEMBER_CURRENCY));
             currency = Currency.parseNumericCode(parsed);
         } catch (NumberFormatException e) {
             currency = Currency.RUB;
@@ -99,13 +96,13 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.getInstance().fromJson(
                 object.get(MEMBER_BALANCE_DETAILS));
 
-        List<Card> linkedCards = getNotNullArray(object, MEMBER_CARDS_LINKED, CardTypeAdapter.getInstance());
+        List<Card> linkedCards = CardTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_CARDS_LINKED));
 
-        List<String> additionalServices = getNotNullArray(object,
-                MEMBER_SERVICES_ADDITIONAL, StringTypeAdapter.getInstance());
+        List<String> additionalServices = StringTypeAdapter.getInstance()
+                .fromJson(object.getAsJsonArray(MEMBER_SERVICES_ADDITIONAL));
 
-        List<YandexMoneyCard> yandexMoneyCards = getNotNullArray(object,
-                MEMBER_YANDEX_MONEY_CARDS, YandexMoneyCardTypeAdapter.getInstance());
+        List<YandexMoneyCard> yandexMoneyCards = YandexMoneyCardTypeAdapter.getInstance()
+                .fromJson(object.getAsJsonArray(MEMBER_YANDEX_MONEY_CARDS));
 
         return new AccountInfo.Builder()
                 .setAccount(getMandatoryString(object, MEMBER_ACCOUNT))
@@ -115,9 +112,9 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
                 .setAccountType(AccountType.parse(getMandatoryString(object, MEMBER_TYPE)))
                 .setAvatar(avatar)
                 .setBalanceDetails(balanceDetails)
-                .setLinkedCards(linkedCards)
-                .setAdditionalServices(additionalServices)
-                .setYandexMoneyCards(yandexMoneyCards)
+                .setLinkedCards(toEmptyListIfNull(linkedCards))
+                .setAdditionalServices(toEmptyListIfNull(additionalServices))
+                .setYandexMoneyCards(toEmptyListIfNull(yandexMoneyCards))
                 .create();
     }
 
@@ -135,17 +132,15 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         object.add(MEMBER_BALANCE_DETAILS, BalanceDetailsTypeAdapter.getInstance().toJsonTree(src.balanceDetails));
 
         if (!src.linkedCards.isEmpty()) {
-            object.add(MEMBER_CARDS_LINKED, toJsonArray(src.linkedCards, CardTypeAdapter.getInstance()));
+            object.add(MEMBER_CARDS_LINKED, CardTypeAdapter.getInstance().toJsonArray(src.linkedCards));
         }
 
         if (!src.additionalServices.isEmpty()) {
-            object.add(MEMBER_SERVICES_ADDITIONAL,
-                    toJsonArray(src.additionalServices, StringTypeAdapter.getInstance()));
+            object.add(MEMBER_SERVICES_ADDITIONAL, StringTypeAdapter.getInstance().toJsonArray(src.additionalServices));
         }
 
         if (!src.yandexMoneyCards.isEmpty()) {
-            object.add(MEMBER_YANDEX_MONEY_CARDS,
-                    toJsonArray(src.yandexMoneyCards, YandexMoneyCardTypeAdapter.getInstance()));
+            object.add(MEMBER_YANDEX_MONEY_CARDS, YandexMoneyCardTypeAdapter.getInstance().toJsonArray(src.yandexMoneyCards));
         }
 
         return object;

@@ -330,10 +330,9 @@ public class ShowcaseParserTest {
 
     private void checkHiddenFields(Map<String, String> hiddenFields) {
         assertNotNull(hiddenFields);
-        // TODO uncomment when ready
-        /*assertEquals(hiddenFields.size(), 2);
+        assertEquals(hiddenFields.size(), 2);
         assertTrue("value1".equals(hiddenFields.get("field1")));
-        assertTrue("value2".equals(hiddenFields.get("field2")));*/
+        assertTrue("value2".equals(hiddenFields.get("field2")));
     }
 
     private void checkErrors(List<Showcase.Error> errors) {

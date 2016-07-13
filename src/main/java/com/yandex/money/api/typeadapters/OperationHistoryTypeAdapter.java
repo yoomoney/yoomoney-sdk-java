@@ -34,9 +34,7 @@ import com.yandex.money.api.model.Error;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
-import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
 
 /**
  * Type adapter for {@link OperationHistory}.
@@ -68,7 +66,7 @@ public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<Operation
         JsonObject object = json.getAsJsonObject();
         return new OperationHistory(Error.parse(getString(object, MEMBER_ERROR)),
                 getString(object, MEMBER_NEXT_RECORD),
-                getNotNullArray(object, MEMBER_OPERATIONS, OperationTypeAdapter.getInstance()));
+                toEmptyListIfNull(OperationTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_OPERATIONS))));
     }
 
     @Override
@@ -77,8 +75,7 @@ public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<Operation
         if (src.error != null) {
             object.addProperty(MEMBER_ERROR, src.error.code);
         } else {
-            object.add(MEMBER_OPERATIONS, toJsonArray(src.operations,
-                    OperationTypeAdapter.getInstance()));
+            object.add(MEMBER_OPERATIONS, OperationTypeAdapter.getInstance().toJsonArray(src.operations));
             object.addProperty(MEMBER_NEXT_RECORD, src.nextRecord);
         }
         return object;

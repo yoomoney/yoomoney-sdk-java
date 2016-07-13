@@ -24,7 +24,6 @@
 
 package com.yandex.money.api.typeadapters.showcase;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -38,9 +37,7 @@ import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryArray;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
-import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
 
 /**
  * Type adapter for {@link ShowcaseSearch}.
@@ -69,8 +66,8 @@ public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSea
         JsonObject object = json.getAsJsonObject();
         Error error = Error.parse(getString(object, MEMBER_ERROR));
         if (error == null) {
-            List<ShowcaseReference> result = getMandatoryArray(object, MEMBER_RESULT,
-                    ShowcaseReferenceTypeAdapter.getInstance());
+            List<ShowcaseReference> result = ShowcaseReferenceTypeAdapter.getInstance()
+                    .fromJson(object.getAsJsonArray(MEMBER_RESULT));
             return ShowcaseSearch.success(result, getString(object, MEMBER_NEXT_PAGE));
         } else {
             return ShowcaseSearch.failure(error);
@@ -82,9 +79,7 @@ public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSea
         JsonObject object = new JsonObject();
         Error error = src.error;
         if (error == null) {
-            JsonArray array = toJsonArray(src.result,
-                    ShowcaseReferenceTypeAdapter.getInstance());
-            object.add(MEMBER_RESULT, array);
+            object.add(MEMBER_RESULT, ShowcaseReferenceTypeAdapter.getInstance().toJsonArray(src.result));
             object.addProperty(MEMBER_NEXT_PAGE, src.nextPage);
         } else {
             object.addProperty(MEMBER_ERROR, error.code);

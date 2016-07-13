@@ -33,9 +33,6 @@ import com.yandex.money.api.model.DigitalGoods;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
-import static com.yandex.money.api.typeadapters.JsonUtils.toJsonArray;
-
 /**
  * Type adapter for {@link DigitalGoods}.
  *
@@ -63,16 +60,15 @@ public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods>
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new DigitalGoods(
-                getNotNullArray(object, MEMBER_ARTICLE, GoodTypeAdapter.getInstance()),
-                getNotNullArray(object, MEMBER_BONUS, GoodTypeAdapter.getInstance()));
+        return new DigitalGoods(GoodTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_ARTICLE)),
+                GoodTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_BONUS)));
     }
 
     @Override
     public JsonElement serialize(DigitalGoods src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.add(MEMBER_ARTICLE, toJsonArray(src.article, GoodTypeAdapter.getInstance()));
-        object.add(MEMBER_BONUS, toJsonArray(src.bonus, GoodTypeAdapter.getInstance()));
+        object.add(MEMBER_ARTICLE, GoodTypeAdapter.getInstance().toJsonArray(src.article));
+        object.add(MEMBER_BONUS, GoodTypeAdapter.getInstance().toJsonArray(src.bonus));
         return object;
     }
 
