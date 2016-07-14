@@ -57,7 +57,7 @@ public enum AllowedMoneySource implements Enums.WithCode<AllowedMoneySource> {
         return values();
     }
 
-    public static AllowedMoneySource parse(String code) {
+    public static AllowedMoneySource parseOrThrow(String code) {
         return Enums.parseOrThrow(WALLET, code);
     }
 }

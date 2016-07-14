@@ -334,7 +334,7 @@ public class Operation {
             return values();
         }
 
-        public static Status parse(String code) {
+        public static Status parseOrThrow(String code) {
             return Enums.parseOrThrow(SUCCESS, code);
         }
     }
@@ -380,7 +380,7 @@ public class Operation {
             return values();
         }
 
-        public static Type parse(String code) {
+        public static Type parseOrThrow(String code) {
             return Enums.parseOrThrow(PAYMENT_SHOP, code);
         }
     }
@@ -414,7 +414,7 @@ public class Operation {
             return values();
         }
 
-        public static Direction parse(String code) {
+        public static Direction parseOrThrow(String code) {
             return Enums.parseOrThrow(INCOMING, code);
         }
     }

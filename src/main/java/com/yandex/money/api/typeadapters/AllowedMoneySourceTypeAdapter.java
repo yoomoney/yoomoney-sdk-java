@@ -55,7 +55,7 @@ public final class AllowedMoneySourceTypeAdapter extends BaseTypeAdapter<Allowed
     @Override
     public AllowedMoneySource deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
             throws JsonParseException {
-        return AllowedMoneySource.parse(json.getAsJsonPrimitive().getAsString());
+        return AllowedMoneySource.parseOrThrow(json.getAsJsonPrimitive().getAsString());
     }
 
     @Override

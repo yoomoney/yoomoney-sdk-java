@@ -55,8 +55,12 @@ public final class Enums {
      * @param <T>       type of {@code enum}
      * @return          {@code enum}'s value
      */
-    public static <T extends WithCode<T>> T parseOrThrow(T prototype, String code) {
-        return checkNotNull(parse(prototype, null, code), "value");
+    public static <T extends Enum & WithCode<T>> T parseOrThrow(T prototype, String code) {
+        T value = parse(prototype, null, code);
+        if (value == null) {
+            throw new EnumConstantNotPresentException(prototype.getClass(), code);
+        }
+        return value;
     }
 
     /**
