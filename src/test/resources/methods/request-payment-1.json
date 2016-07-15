@@ -1,0 +1,27 @@
+{
+  "status": "success",
+  "contract_amount": 10,
+  "money_source": {
+    "wallet": {
+      "allowed": true
+    },
+    "cards": {
+      "allowed": true,
+      "csc_required": true,
+      "items": [
+        {
+          "id": "card-385244400",
+          "pan_fragment": "5280****7918",
+          "type": "MasterCard"
+        },
+        {
+          "id": "card-385244401",
+          "pan_fragment": "4008****7919",
+          "type": "VISA"
+        }
+      ]
+    }
+  },
+  "request_id": "33373230335f343462363963333932636234633130613062623338323265393136323530336564636130623263375f33303030333539313637",
+  "balance": 1000
+}
