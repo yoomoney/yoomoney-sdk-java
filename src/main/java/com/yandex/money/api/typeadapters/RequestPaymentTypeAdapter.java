@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getBoolean;
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBoolean;
 import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullArray;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
@@ -62,6 +63,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
     private static final String MEMBER_PROTECTION_CODE = "protection_code";
     private static final String MEMBER_RECIPIENT_ACCOUNT_STATUS = "recipient_account_status";
     private static final String MEMBER_RECIPIENT_ACCOUNT_TYPE = "recipient_account_type";
+    private static final String MEMBER_MULTIPLE_RECIPIENTS_FOUND = "multiple_recipients_found";
 
     private RequestPaymentTypeAdapter() {
     }
@@ -85,7 +87,8 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
                 .setRecipientAccountType(AccountType.parse(getString(object, MEMBER_RECIPIENT_ACCOUNT_TYPE)))
                 .setProtectionCode(getString(object, MEMBER_PROTECTION_CODE))
                 .setAccountUnblockUri(getString(object, MEMBER_ACCOUNT_UNBLOCK_URI))
-                .setExtActionUri(getString(object, MEMBER_EXT_ACTION_URI));
+                .setExtActionUri(getString(object, MEMBER_EXT_ACTION_URI))
+                .setMultipleRecipientsFound(getBoolean(object, MEMBER_MULTIPLE_RECIPIENTS_FOUND));
 
         JsonObject moneySourceObject = object.getAsJsonObject(MEMBER_MONEY_SOURCE);
         if (moneySourceObject != null) {
@@ -104,6 +107,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
         jsonObject.addProperty(MEMBER_PROTECTION_CODE, src.protectionCode);
         jsonObject.addProperty(MEMBER_ACCOUNT_UNBLOCK_URI, src.accountUnblockUri);
         jsonObject.addProperty(MEMBER_EXT_ACTION_URI, src.extActionUri);
+        jsonObject.addProperty(MEMBER_MULTIPLE_RECIPIENTS_FOUND, src.multipleRecipientsFound);
 
         if (src.recipientAccountStatus != null) {
             jsonObject.addProperty(MEMBER_RECIPIENT_ACCOUNT_STATUS, src.recipientAccountStatus.code);

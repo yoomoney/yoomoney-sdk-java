@@ -54,6 +54,7 @@ import com.yandex.money.api.typeadapters.IncomingTransferRejectTypeAdapter;
 import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
 import com.yandex.money.api.typeadapters.OperationDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.OperationHistoryTypeAdapter;
+import com.yandex.money.api.typeadapters.RequestPaymentTypeAdapter;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.typeadapters.YandexMoneyCardTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.FeeTypeAdapter;
@@ -153,6 +154,13 @@ public class ModelTests {
     }
 
     @Test
+    public void testRequestPayment() {
+        RequestPaymentTypeAdapter adapter = RequestPaymentTypeAdapter.getInstance();
+        checkTypeAdapter("/methods/request-payment-1.json", adapter);
+        checkTypeAdapter("/methods/request-payment-2.json", adapter);
+    }
+
+    @Test
     public void testYandedMoneyCard() {
         performTest(createYandexMoneyCard(), YandexMoneyCardTypeAdapter.getInstance());
     }
@@ -189,7 +197,7 @@ public class ModelTests {
             String json = Resources.load(path);
             T deserializedObject = typeAdapter.fromJson(json);
             assertNotEquals(0, deserializedObject.hashCode());
-            assertEquals(new JsonParser().parse(json), typeAdapter.toJsonTree(deserializedObject));
+            assertEquals(typeAdapter.toJsonTree(deserializedObject), new JsonParser().parse(json));
         } catch (FileNotFoundException e) {
             assertFalse(true);
         }
