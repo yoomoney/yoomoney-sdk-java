@@ -54,6 +54,7 @@ import com.yandex.money.api.typeadapters.IncomingTransferRejectTypeAdapter;
 import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
 import com.yandex.money.api.typeadapters.OperationDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.OperationHistoryTypeAdapter;
+import com.yandex.money.api.typeadapters.RequestExternalPaymentTypeAdapter;
 import com.yandex.money.api.typeadapters.RequestPaymentTypeAdapter;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.typeadapters.YandexMoneyCardTypeAdapter;
@@ -151,6 +152,13 @@ public class ModelTests {
         checkTypeAdapter("/methods/operation-history-2.json", adapter);
         checkTypeAdapter("/methods/operation-history-3.json", adapter);
         checkTypeAdapter("/methods/operation-history-4.json", adapter);
+    }
+
+    @Test
+    public void testRequestExternalPayment() {
+        RequestExternalPaymentTypeAdapter adapter = RequestExternalPaymentTypeAdapter.getInstance();
+        checkTypeAdapter("/methods/request-external-payment-1.json", adapter);
+        checkTypeAdapter("/methods/request-external-payment-2.json", adapter);
     }
 
     @Test

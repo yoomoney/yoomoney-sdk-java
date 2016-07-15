@@ -42,41 +42,10 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
 public class RequestExternalPayment extends BaseRequestPayment {
 
     /**
-     * Title of payment.
-     */
-    public final String title;
-
-    /**
      * Constructor.
      */
     private RequestExternalPayment(Builder builder) {
         super(builder);
-        this.title = builder.title;
-    }
-
-    @Override
-    public String toString() {
-        return super.toString() + "RequestExternalPayment{" +
-                "title='" + title + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
-        RequestExternalPayment that = (RequestExternalPayment) o;
-
-        return !(title != null ? !title.equals(that.title) : that.title != null);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (title != null ? title.hashCode() : 0);
-        return result;
     }
 
     /**
@@ -138,14 +107,6 @@ public class RequestExternalPayment extends BaseRequestPayment {
     }
 
     public static final class Builder extends BaseRequestPayment.Builder {
-
-        private String title;
-
-        public Builder setTitle(String title) {
-            this.title = title;
-            return this;
-        }
-
         @Override
         public RequestExternalPayment create() {
             return new RequestExternalPayment(this);
