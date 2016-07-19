@@ -86,6 +86,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
 
     @Override
     public final byte[] getBody() {
+        prepareBody();
         return body == null ? buffer.setParams(parameters).prepareBytes() : body;
     }
 
@@ -203,5 +204,12 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      */
     protected final void setBody(byte[] body) {
         this.body = body;
+    }
+
+    /**
+     * Allows you to lazily prepare request body before {@link #getBody()} method returns. You can use
+     * {@link #setBody(byte[])} or any of {@code addParameter*} methods here.
+     */
+    protected void prepareBody() {
     }
 }
