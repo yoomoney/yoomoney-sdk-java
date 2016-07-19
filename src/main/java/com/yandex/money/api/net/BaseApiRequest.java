@@ -24,7 +24,9 @@
 
 package com.yandex.money.api.net;
 
+import com.google.gson.JsonElement;
 import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -204,6 +206,16 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      */
     protected final void setBody(byte[] body) {
         this.body = body;
+    }
+
+    /**
+     * Sets a JSON body. Will override any added parameters if not {code null}.
+     *
+     * @param json JSON body
+     * @see #setBody(byte[])
+     */
+    protected final void setBody(JsonElement json) {
+        setBody(JsonUtils.getBytes(json));
     }
 
     /**
