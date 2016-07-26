@@ -32,7 +32,6 @@ import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.utils.Language;
-import com.yandex.money.api.utils.MillisecondsIn;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -116,7 +115,7 @@ public class DefaultApiClient implements ApiClient {
         OkHttpClient client = new OkHttpClient();
         client.setReadTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
         client.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        client.setConnectionPool(new ConnectionPool(4, 10 * MillisecondsIn.MINUTE));
+        client.setConnectionPool(new ConnectionPool(4, TimeUnit.MINUTES.toMillis(10L)));
         client.setFollowSslRedirects(false);
         client.setFollowRedirects(false);
         return client;

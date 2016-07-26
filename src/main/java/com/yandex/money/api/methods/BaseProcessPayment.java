@@ -27,10 +27,10 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.utils.Constants;
 import com.yandex.money.api.utils.Enums;
-import com.yandex.money.api.utils.MillisecondsIn;
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
@@ -141,7 +141,7 @@ public abstract class BaseProcessPayment {
         private String invoiceId;
         private String acsUri;
         private Map<String, String> acsParams = Collections.emptyMap();
-        private long nextRetry = 5 * MillisecondsIn.SECOND;
+        private long nextRetry = TimeUnit.SECONDS.toMillis(5L);
 
         public final Builder setStatus(Status status) {
             this.status = status;
