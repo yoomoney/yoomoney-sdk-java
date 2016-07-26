@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.typeadapters.showcase;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -31,6 +32,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.Showcase.Error;
+import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.typeadapters.AllowedMoneySourceTypeAdapter;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
@@ -78,10 +80,17 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
+
+        Group form = null;
+        JsonArray array = object.getAsJsonArray(MEMBER_FORM);
+        if (array != null) {
+            form = ListDelegate.deserialize(array, context);
+        }
+
         return new Showcase.Builder()
                 .setTitle(getMandatoryString(object, MEMBER_TITLE))
                 .setHiddenFields(getNotNullMap(object, MEMBER_HIDDEN_FIELDS))
-                .setForm(ListDelegate.deserialize(object.getAsJsonArray(MEMBER_FORM), context))
+                .setForm(form)
                 .setMoneySources(new LinkedHashSet<>(getNotNullArray(object, MEMBER_MONEY_SOURCE,
                         AllowedMoneySourceTypeAdapter.getInstance())))
                 .setErrors(getNotNullArray(object, MEMBER_ERROR, ErrorTypeAdapter.getInstance()))
@@ -96,7 +105,9 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         if (!src.errors.isEmpty()) {
             objects.add(MEMBER_ERROR, toJsonArray(src.errors, ErrorTypeAdapter.getInstance()));
         }
-        objects.add(MEMBER_FORM, ListDelegate.serialize(src.form, context));
+        if (src.form != null) {
+            objects.add(MEMBER_FORM, ListDelegate.serialize(src.form, context));
+        }
         objects.add(MEMBER_HIDDEN_FIELDS, toJsonObject(src.hiddenFields));
         return objects;
     }

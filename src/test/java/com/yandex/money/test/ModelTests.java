@@ -59,6 +59,7 @@ import com.yandex.money.api.typeadapters.RequestPaymentTypeAdapter;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.typeadapters.YandexMoneyCardTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.FeeTypeAdapter;
+import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.Currency;
 import org.joda.time.DateTime;
 import org.testng.Assert;
@@ -166,6 +167,12 @@ public class ModelTests {
         RequestPaymentTypeAdapter adapter = RequestPaymentTypeAdapter.getInstance();
         checkTypeAdapter("/methods/request-payment-1.json", adapter);
         checkTypeAdapter("/methods/request-payment-2.json", adapter);
+    }
+
+    @Test
+    public void testShowcase() {
+        ShowcaseTypeAdapter adapter = ShowcaseTypeAdapter.getInstance();
+        checkTypeAdapter("/showcase/showcase-1.json", adapter);
     }
 
     @Test

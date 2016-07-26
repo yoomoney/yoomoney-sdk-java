@@ -54,7 +54,7 @@ public final class Showcase {
 
     private Showcase(Builder builder) {
         title = checkNotNull(builder.title, "title");
-        form = checkNotNull(builder.form, "form");
+        form = builder.form;
         hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
         moneySources = Collections.unmodifiableSet(builder.moneySources);
         errors = Collections.unmodifiableList(builder.errors);
@@ -77,18 +77,18 @@ public final class Showcase {
 
         Showcase showcase = (Showcase) o;
 
-        return title.equals(showcase.title)
-                && hiddenFields.equals(showcase.hiddenFields)
-                && form.equals(showcase.form)
-                && moneySources.equals(showcase.moneySources)
-                && errors.equals(showcase.errors);
+        if (!title.equals(showcase.title)) return false;
+        if (!hiddenFields.equals(showcase.hiddenFields)) return false;
+        if (form != null ? !form.equals(showcase.form) : showcase.form != null) return false;
+        if (!moneySources.equals(showcase.moneySources)) return false;
+        return errors.equals(showcase.errors);
     }
 
     @Override
     public int hashCode() {
         int result = title.hashCode();
         result = 31 * result + hiddenFields.hashCode();
-        result = 31 * result + form.hashCode();
+        result = 31 * result + (form != null ? form.hashCode() : 0);
         result = 31 * result + moneySources.hashCode();
         result = 31 * result + errors.hashCode();
         return result;
