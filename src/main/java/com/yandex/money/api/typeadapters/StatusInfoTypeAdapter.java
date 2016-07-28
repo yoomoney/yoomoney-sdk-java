@@ -63,7 +63,7 @@ public final class StatusInfoTypeAdapter extends BaseTypeAdapter<StatusInfo> {
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return StatusInfo.from(SimpleStatus.parse(getMandatoryString(object, MEMBER_STATUS)),
+        return StatusInfo.from(SimpleStatus.parseOrThrow(getMandatoryString(object, MEMBER_STATUS)),
                 Error.parse(getString(object, MEMBER_ERROR)));
     }
 
