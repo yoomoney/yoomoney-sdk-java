@@ -161,6 +161,16 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     }
 
     /**
+     * Adds {@link Double} parameter to this request.
+     *
+     * @param key key
+     * @param value value
+     */
+    protected final void addParameter(String key, Double value) {
+        addParameter(key, value == null ? null : value.toString());
+    }
+
+    /**
      * Adds {@link Boolean} parameter to this request.
      *
      * @param key key
