@@ -54,4 +54,8 @@ public enum SimpleStatus implements Enums.WithCode<SimpleStatus> {
     public static SimpleStatus parse(String code) {
         return Enums.parse(SUCCESS, code);
     }
+
+    public static SimpleStatus parseOrThrow(String code) {
+        return Enums.parseOrThrow(SUCCESS, code);
+    }
 }
