@@ -33,8 +33,6 @@ import com.yandex.money.api.methods.RequestExternalPayment;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getString;
-
 /**
  * Type adapter for {@link RequestExternalPayment}.
  *
@@ -43,8 +41,6 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 public final class RequestExternalPaymentTypeAdapter extends BaseTypeAdapter<RequestExternalPayment> {
 
     private static final RequestExternalPaymentTypeAdapter INSTANCE = new RequestExternalPaymentTypeAdapter();
-
-    private static final String MEMBER_TITLE = "title";
 
     private RequestExternalPaymentTypeAdapter() {
     }
@@ -61,8 +57,7 @@ public final class RequestExternalPaymentTypeAdapter extends BaseTypeAdapter<Req
             throws JsonParseException {
 
         JsonObject jsonObject = json.getAsJsonObject();
-        RequestExternalPayment.Builder builder = new RequestExternalPayment.Builder()
-                .setTitle(getString(jsonObject, MEMBER_TITLE));
+        RequestExternalPayment.Builder builder = new RequestExternalPayment.Builder();
         BaseRequestPaymentTypeAdapter.Delegate.deserialize(jsonObject, builder);
         return builder.create();
     }
@@ -70,7 +65,6 @@ public final class RequestExternalPaymentTypeAdapter extends BaseTypeAdapter<Req
     @Override
     public JsonElement serialize(RequestExternalPayment src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty(MEMBER_TITLE, src.title);
         BaseRequestPaymentTypeAdapter.Delegate.serialize(jsonObject, src);
         return jsonObject;
     }

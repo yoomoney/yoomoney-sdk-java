@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.typeadapters.showcase;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -32,6 +33,7 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.Showcase.Error;
+import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.typeadapters.AllowedMoneySourceTypeAdapter;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
@@ -78,15 +80,20 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        List<AllowedMoneySource> moneySources = AllowedMoneySourceTypeAdapter.getInstance()
-                .fromJson(object.getAsJsonArray(MEMBER_MONEY_SOURCE));
-        List<Error> errors = ErrorTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_ERROR));
+
+        Group form = null;
+        JsonArray array = object.getAsJsonArray(MEMBER_FORM);
+        if (array != null) {
+            form = ListDelegate.deserialize(array, context);
+        }
+
         return new Showcase.Builder()
                 .setTitle(getMandatoryString(object, MEMBER_TITLE))
                 .setHiddenFields(getNotNullMap(object, MEMBER_HIDDEN_FIELDS))
-                .setForm(ListDelegate.deserialize(object.getAsJsonArray(MEMBER_FORM), context))
-                .setMoneySources(new LinkedHashSet<>(toEmptyListIfNull(moneySources)))
-                .setErrors(toEmptyListIfNull(errors))
+                .setForm(form)
+                .setMoneySources(new LinkedHashSet<>(getNotNullArray(object, MEMBER_MONEY_SOURCE,
+                        AllowedMoneySourceTypeAdapter.getInstance())))
+                .setErrors(getNotNullArray(object, MEMBER_ERROR, ErrorTypeAdapter.getInstance()))
                 .create();
     }
 
@@ -98,7 +105,9 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         if (!src.errors.isEmpty()) {
             objects.add(MEMBER_ERROR, ErrorTypeAdapter.getInstance().toJsonArray(src.errors));
         }
-        objects.add(MEMBER_FORM, ListDelegate.serialize(src.form, context));
+        if (src.form != null) {
+            objects.add(MEMBER_FORM, ListDelegate.serialize(src.form, context));
+        }
         objects.add(MEMBER_HIDDEN_FIELDS, toJsonObject(src.hiddenFields));
         return objects;
     }

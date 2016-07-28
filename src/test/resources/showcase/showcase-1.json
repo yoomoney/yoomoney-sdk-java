@@ -1,0 +1,13 @@
+{
+  "title": "Test_YaShop",
+  "hidden_fields": {
+    "ShopID": "62333",
+    "ShowCaseID": "1010"
+  },
+  "money_source": [
+    "wallet",
+    "cards",
+    "payment-card",
+    "cash"
+  ]
+}

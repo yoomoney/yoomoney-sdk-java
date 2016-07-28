@@ -59,6 +59,11 @@ public abstract class BaseRequestPayment {
      */
     public final BigDecimal contractAmount;
 
+    /**
+     * Title of payment.
+     */
+    public final String title;
+
     protected BaseRequestPayment(Builder builder) {
         status = checkNotNull(builder.status, "status");
         switch (status) {
@@ -77,16 +82,7 @@ public abstract class BaseRequestPayment {
         error = builder.error;
         requestId = builder.requestId;
         contractAmount = builder.contractAmount;
-    }
-
-    @Override
-    public String toString() {
-        return "BaseRequestPayment{" +
-                "status=" + status +
-                ", error=" + error +
-                ", requestId='" + requestId + '\'' +
-                ", contractAmount=" + contractAmount +
-                '}';
+        title = builder.title;
     }
 
     @Override
@@ -96,11 +92,12 @@ public abstract class BaseRequestPayment {
 
         BaseRequestPayment that = (BaseRequestPayment) o;
 
-        return status == that.status &&
-                error == that.error &&
-                !(requestId != null ? !requestId.equals(that.requestId) : that.requestId != null) &&
-                !(contractAmount != null ? !contractAmount.equals(that.contractAmount) :
-                        that.contractAmount != null);
+        if (status != that.status) return false;
+        if (error != that.error) return false;
+        if (requestId != null ? !requestId.equals(that.requestId) : that.requestId != null) return false;
+        if (contractAmount != null ? !contractAmount.equals(that.contractAmount) : that.contractAmount != null)
+            return false;
+        return title != null ? title.equals(that.title) : that.title == null;
     }
 
     @Override
@@ -109,7 +106,19 @@ public abstract class BaseRequestPayment {
         result = 31 * result + (error != null ? error.hashCode() : 0);
         result = 31 * result + (requestId != null ? requestId.hashCode() : 0);
         result = 31 * result + (contractAmount != null ? contractAmount.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "BaseRequestPayment{" +
+                "status=" + status +
+                ", error=" + error +
+                ", requestId='" + requestId + '\'' +
+                ", contractAmount=" + contractAmount +
+                ", title='" + title + '\'' +
+                '}';
     }
 
     public enum Status implements Enums.WithCode<Status> {
@@ -145,6 +154,7 @@ public abstract class BaseRequestPayment {
         private String requestId;
         private Error error;
         private BigDecimal contractAmount;
+        private String title;
 
         public final Builder setContractAmount(BigDecimal contractAmount) {
             this.contractAmount = contractAmount;
@@ -163,6 +173,11 @@ public abstract class BaseRequestPayment {
 
         public final Builder setStatus(Status status) {
             this.status = status;
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            this.title = title;
             return this;
         }
 

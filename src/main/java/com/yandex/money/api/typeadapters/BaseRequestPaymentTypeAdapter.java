@@ -43,6 +43,7 @@ final class BaseRequestPaymentTypeAdapter {
     private static final String MEMBER_ERROR = "error";
     private static final String MEMBER_REQUEST_ID = "request_id";
     private static final String MEMBER_STATUS = "status";
+    private static final String MEMBER_TITLE = "title";
 
     private BaseRequestPaymentTypeAdapter() {
     }
@@ -57,7 +58,8 @@ final class BaseRequestPaymentTypeAdapter {
                     .setStatus(Status.parse(getMandatoryString(checkNotNull(object, "object"), MEMBER_STATUS)))
                     .setError(Error.parse(getString(object, MEMBER_ERROR)))
                     .setContractAmount(getBigDecimal(object, MEMBER_CONTRACT_AMOUNT))
-                    .setRequestId(getString(object, MEMBER_REQUEST_ID));
+                    .setRequestId(getString(object, MEMBER_REQUEST_ID))
+                    .setTitle(getString(object, MEMBER_TITLE));
         }
 
         static <T extends BaseRequestPayment> void serialize(JsonObject object, T value) {
@@ -68,6 +70,7 @@ final class BaseRequestPaymentTypeAdapter {
             } else {
                 object.addProperty(MEMBER_REQUEST_ID, value.requestId);
                 object.addProperty(MEMBER_CONTRACT_AMOUNT, value.contractAmount);
+                object.addProperty(MEMBER_TITLE, value.title);
             }
         }
     }
