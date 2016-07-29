@@ -60,7 +60,6 @@ import java.math.BigDecimal;
 import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -321,7 +320,7 @@ public class ShowcaseParserTest {
         assertTrue(control.readonly);
     }
 
-    private void checkMoneySources(Set<AllowedMoneySource> moneySources) {
+    private void checkMoneySources(List<AllowedMoneySource> moneySources) {
         assertNotNull(moneySources);
         for (AllowedMoneySource moneySource : AllowedMoneySource.values()) {
             assertTrue(moneySources.contains(moneySource));

@@ -40,7 +40,6 @@ import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
 import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter.ListDelegate;
 
 import java.lang.reflect.Type;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
@@ -87,13 +86,16 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
             form = ListDelegate.deserialize(array, context);
         }
 
+        List<AllowedMoneySource> moneySources = AllowedMoneySourceTypeAdapter.getInstance()
+                .fromJson(object.getAsJsonArray(MEMBER_MONEY_SOURCE));
+        List<Error> errors = ErrorTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_ERROR));
+
         return new Showcase.Builder()
                 .setTitle(getMandatoryString(object, MEMBER_TITLE))
                 .setHiddenFields(getNotNullMap(object, MEMBER_HIDDEN_FIELDS))
                 .setForm(form)
-                .setMoneySources(new LinkedHashSet<>(getNotNullArray(object, MEMBER_MONEY_SOURCE,
-                        AllowedMoneySourceTypeAdapter.getInstance())))
-                .setErrors(getNotNullArray(object, MEMBER_ERROR, ErrorTypeAdapter.getInstance()))
+                .setMoneySources(toEmptyListIfNull(moneySources))
+                .setErrors(toEmptyListIfNull(errors))
                 .create();
     }
 

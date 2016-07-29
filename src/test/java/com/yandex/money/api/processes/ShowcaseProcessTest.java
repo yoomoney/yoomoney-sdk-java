@@ -176,7 +176,7 @@ public final class ShowcaseProcessTest extends Assert {
                 .setErrors(Collections.<Showcase.Error>emptyList())
                 .setForm(group)
                 .setHiddenFields(Collections.<String, String>emptyMap())
-                .setMoneySources(Collections.<AllowedMoneySource>emptySet())
+                .setMoneySources(Collections.<AllowedMoneySource>emptyList())
                 .create();
     }
 

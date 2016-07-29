@@ -37,7 +37,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
@@ -49,14 +48,14 @@ public final class Showcase {
     public final String title;
     public final Map<String, String> hiddenFields;
     public final Group form;
-    public final Set<AllowedMoneySource> moneySources;
+    public final List<AllowedMoneySource> moneySources;
     public final List<Error> errors;
 
     private Showcase(Builder builder) {
         title = checkNotNull(builder.title, "title");
         form = builder.form;
         hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
-        moneySources = Collections.unmodifiableSet(builder.moneySources);
+        moneySources = Collections.unmodifiableList(builder.moneySources);
         errors = Collections.unmodifiableList(builder.errors);
     }
 
@@ -116,7 +115,7 @@ public final class Showcase {
         private String title;
         private Map<String, String> hiddenFields = Collections.emptyMap();
         private Group form;
-        private Set<AllowedMoneySource> moneySources = Collections.emptySet();
+        private List<AllowedMoneySource> moneySources = Collections.emptyList();
         private List<Error> errors = Collections.emptyList();
 
         public Builder setTitle(String title) {
@@ -134,7 +133,7 @@ public final class Showcase {
             return this;
         }
 
-        public Builder setMoneySources(Set<AllowedMoneySource> moneySources) {
+        public Builder setMoneySources(List<AllowedMoneySource> moneySources) {
             this.moneySources = checkNotNull(moneySources, "moneySources");
             return this;
         }
