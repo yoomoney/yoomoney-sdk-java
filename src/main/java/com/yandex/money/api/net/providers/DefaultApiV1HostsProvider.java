@@ -58,6 +58,11 @@ public class DefaultApiV1HostsProvider implements HostsProvider {
         return getMoney() + "/api";
     }
 
+    @Override
+    public String getPaymentApi() {
+        return getMoneyApi();
+    }
+
     /**
      * @return {@code https://m.money.yandex.ru}
      */

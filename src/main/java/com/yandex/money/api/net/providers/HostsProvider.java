@@ -32,6 +32,8 @@ public interface HostsProvider {
 
     String getMoneyApi();
 
+    String getPaymentApi();
+
     String getMobileMoney();
 
     String getWebUrl();
