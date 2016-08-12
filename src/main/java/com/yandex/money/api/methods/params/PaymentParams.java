@@ -59,14 +59,4 @@ public abstract class PaymentParams {
         result = 31 * result + paymentParams.hashCode();
         return result;
     }
-
-    @Deprecated
-    public String getPatternId() {
-        return patternId;
-    }
-
-    @Deprecated
-    public Map<String, String> makeParams() {
-        return unmodifiableMap(paymentParams);
-    }
 }

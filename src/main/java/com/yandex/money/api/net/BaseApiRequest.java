@@ -82,14 +82,19 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     }
 
     @Override
-    public final T parseResponse(InputStream inputStream) {
-        return typeAdapter.fromJson(inputStream);
+    public final Map<String, String> getParameters() {
+        return Collections.unmodifiableMap(parameters);
     }
 
     @Override
     public final byte[] getBody() {
         prepareBody();
         return body == null ? buffer.setParams(parameters).prepareBytes() : body;
+    }
+
+    @Override
+    public final T parseResponse(InputStream inputStream) {
+        return typeAdapter.fromJson(inputStream);
     }
 
     /**

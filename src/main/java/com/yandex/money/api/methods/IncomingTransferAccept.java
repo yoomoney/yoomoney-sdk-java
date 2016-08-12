@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.model.StatusInfo;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
@@ -42,28 +40,8 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
 public class IncomingTransferAccept {
 
     public final StatusInfo statusInfo;
-    @Deprecated
-    public final SimpleStatus status;
-    @Deprecated
-    public final Error error;
     public final Integer protectionCodeAttemptsAvailable;
     public final String extActionUri;
-
-    /**
-     * Constructor.
-     *
-     * @param status                          status of an operation
-     * @param error                           error code
-     * @param protectionCodeAttemptsAvailable number of attempts available after invalid protection
-     *                                        code submission
-     * @param extActionUri                    address to perform external action for successful
-     *                                        acceptance
-     * @deprecated use {@link #IncomingTransferAccept(StatusInfo, Integer, String)} instead
-     */
-    public IncomingTransferAccept(SimpleStatus status, Error error, Integer protectionCodeAttemptsAvailable,
-                                  String extActionUri) {
-        this(StatusInfo.from(status, error), protectionCodeAttemptsAvailable, extActionUri);
-    }
 
     /**
      * Constructor.
@@ -86,8 +64,6 @@ public class IncomingTransferAccept {
                 }
                 break;
         }
-        this.error = statusInfo.error;
-        this.status = statusInfo.status;
         this.protectionCodeAttemptsAvailable = protectionCodeAttemptsAvailable;
         this.extActionUri = extActionUri;
     }

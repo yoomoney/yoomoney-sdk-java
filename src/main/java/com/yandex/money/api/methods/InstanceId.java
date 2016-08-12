@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.methods;
 
-import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.model.StatusInfo;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
@@ -42,24 +40,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
 public class InstanceId {
 
     public final StatusInfo statusInfo;
-    @Deprecated
-    public final SimpleStatus status;
-    @Deprecated
-    public final Error error;
     public final String instanceId;
-
-    /**
-     * Constructor.
-     *
-     * @param status status of an operation
-     * @param error error code
-     * @param instanceId instance id if success
-     * @deprecated use {@link #InstanceId(StatusInfo, String)} instead
-     */
-    @Deprecated
-    public InstanceId(SimpleStatus status, Error error, String instanceId) {
-        this(StatusInfo.from(status, error), instanceId);
-    }
 
     public InstanceId(StatusInfo statusInfo, String instanceId) {
         this.statusInfo = checkNotNull(statusInfo, "statusInfo");
@@ -67,8 +48,6 @@ public class InstanceId {
             checkNotNull(instanceId, "instanceId");
         }
         this.instanceId = instanceId;
-        this.status = statusInfo.status;
-        this.error = statusInfo.error;
     }
 
     @Override
@@ -95,11 +74,6 @@ public class InstanceId {
                 "statusInfo=" + statusInfo +
                 ", instanceId='" + instanceId + '\'' +
                 '}';
-    }
-
-    @Deprecated
-    public boolean isSuccess() {
-        return statusInfo.isSuccessful();
     }
 
     /**

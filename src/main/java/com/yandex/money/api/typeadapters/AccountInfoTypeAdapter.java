@@ -39,6 +39,7 @@ import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.utils.Currency;
 
 import java.lang.reflect.Type;
+import java.math.BigDecimal;
 import java.util.List;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBigDecimal;
@@ -93,8 +94,15 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
             avatar = AvatarTypeAdapter.getInstance().fromJson(object.get(MEMBER_AVATAR));
         }
 
-        BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.getInstance().fromJson(
-                object.get(MEMBER_BALANCE_DETAILS));
+        BigDecimal balance = getMandatoryBigDecimal(object, MEMBER_BALANCE);
+        BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.getInstance()
+                .fromJson(object.get(MEMBER_BALANCE_DETAILS));
+        if (balanceDetails == null) {
+            balanceDetails = new BalanceDetails.Builder()
+                    .setTotal(balance)
+                    .setAvailable(balance)
+                    .create();
+        }
 
         List<Card> linkedCards = CardTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_CARDS_LINKED));
 
@@ -106,7 +114,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
 
         return new AccountInfo.Builder()
                 .setAccount(getMandatoryString(object, MEMBER_ACCOUNT))
-                .setBalance(getMandatoryBigDecimal(object, MEMBER_BALANCE))
+                .setBalance(balance)
                 .setCurrency(currency)
                 .setAccountStatus(AccountStatus.parse(getMandatoryString(object, MEMBER_STATUS)))
                 .setAccountType(AccountType.parse(getMandatoryString(object, MEMBER_TYPE)))

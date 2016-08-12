@@ -60,6 +60,13 @@ public interface ApiRequest<T> {
     Map<String, String> getHeaders();
 
     /**
+     * Gets parameters represented as key-value pairs. Must not be null
+     *
+     * @return parameters
+     */
+    Map<String, String> getParameters();
+
+    /**
      * Gets a body of a request. Must not be null.
      *
      * @return body of a request

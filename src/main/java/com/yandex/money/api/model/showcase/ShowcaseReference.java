@@ -70,50 +70,6 @@ public final class ShowcaseReference {
      */
     public final Format format;
 
-    /**
-     * Constructor.
-     *
-     * @param scid showcase ID
-     * @param title    title of an item
-     * @param topIndex index of an item in list (lower values mean higher ranking, if values are
-     *                 equal it is recommended to sort {@link ShowcaseReference}'s by
-     *                 title), can be null
-     * @param format   showcase format
-     * @deprecated     use {@link com.yandex.money.api.model.showcase.ShowcaseReference.Builder} instead
-     */
-    @Deprecated
-    public ShowcaseReference(long scid, String title, Integer topIndex, Format format) {
-        this(new Builder().setScid(scid)
-                .setTitle(title)
-                .setTopIndex(topIndex)
-                .setFormat(format));
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param scid showcase ID
-     * @param title    title of an item
-     * @param topIndex index of an item in list (lower values mean higher ranking, if values are
-     *                 equal it is recommended to sort {@link ShowcaseReference}'s by
-     *                 title), can be null
-     * @param url      url to submit {@code params} of the first step if applicable, can be null
-     * @param format   showcase format
-     * @param params   showcase parameters of the first step, can be null
-     * @deprecated     use {@link com.yandex.money.api.model.showcase.ShowcaseReference.Builder} instead
-     */
-    @Deprecated
-    public ShowcaseReference(long scid, String title, Integer topIndex, String url, Format format,
-                             Map<String, String> params) {
-
-        this(new Builder().setScid(scid)
-                .setTitle(title)
-                .setTopIndex(topIndex)
-                .setUrl(url)
-                .setFormat(format)
-                .setParams(params));
-    }
-
     private ShowcaseReference(Builder builder) {
         scid = builder.scid;
         title = checkNotEmpty(builder.title, "title");
