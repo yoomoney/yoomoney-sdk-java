@@ -94,6 +94,7 @@ public enum Error implements Enums.WithCode<Error> {
     ILLEGAL_PARAM_UUID("illegal_param_uuid"),
     ILLEGAL_PARAM_VEHICLE_REG_CERTIFICATE("illegal_param_vehicle_reg_certificate"),
     ILLEGAL_PARAMS("illegal_params"),
+    ILLEGAL_REQUEST_ID("illegal_request_id"),
     INVALID_GRANT("invalid_grant"),
     INVALID_IMAGE("invalid_image"),
     INVALID_REQUEST("invalid_request"),
