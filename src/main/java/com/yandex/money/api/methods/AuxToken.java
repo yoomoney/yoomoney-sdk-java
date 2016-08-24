@@ -28,7 +28,7 @@ import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Scope;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.AuxTokenTypeAdapter;
+import com.yandex.money.api.typeadapters.methods.AuxTokenTypeAdapter;
 
 import java.util.Set;
 

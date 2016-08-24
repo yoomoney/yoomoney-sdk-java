@@ -27,7 +27,7 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.StatusInfo;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
+import com.yandex.money.api.typeadapters.methods.InstanceIdTypeAdapter;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
 import static com.yandex.money.api.utils.Common.checkNotNull;

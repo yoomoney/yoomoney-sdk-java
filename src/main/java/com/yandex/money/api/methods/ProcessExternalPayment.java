@@ -27,7 +27,7 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.ProcessExternalPaymentTypeAdapter;
+import com.yandex.money.api.typeadapters.methods.ProcessExternalPaymentTypeAdapter;
 
 import static com.yandex.money.api.utils.Common.checkNotEmpty;
 

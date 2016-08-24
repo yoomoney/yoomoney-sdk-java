@@ -26,20 +26,20 @@ package com.yandex.money.api;
 
 import com.google.gson.Gson;
 import com.yandex.money.api.typeadapters.TypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.container.GroupTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.container.ParagraphTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.AmountTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.CheckboxTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.DateTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.EmailTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.MonthTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.NumberTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.SelectTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.SubmitTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.TelTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.TextAreaTypeAdapter;
-import com.yandex.money.api.typeadapters.showcase.uicontrol.TextTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.container.GroupTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.container.ParagraphTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.AmountTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.CheckboxTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.DateTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.EmailTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.MonthTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.NumberTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.SelectTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.SubmitTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TelTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TextAreaTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TextTypeAdapter;
 import org.testng.annotations.Test;
 
 /**

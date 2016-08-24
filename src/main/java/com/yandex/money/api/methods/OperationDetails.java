@@ -28,7 +28,7 @@ import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.OperationDetailsTypeAdapter;
+import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
 
 /**
  * Operation details result.

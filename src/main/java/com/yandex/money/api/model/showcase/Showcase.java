@@ -31,7 +31,7 @@ import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 
 import java.util.Collections;
 import java.util.HashMap;

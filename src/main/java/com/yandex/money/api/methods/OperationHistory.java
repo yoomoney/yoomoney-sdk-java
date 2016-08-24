@@ -28,7 +28,7 @@ import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.OperationHistoryTypeAdapter;
+import com.yandex.money.api.typeadapters.methods.OperationHistoryTypeAdapter;
 import com.yandex.money.api.utils.Enums;
 import org.joda.time.DateTime;
 

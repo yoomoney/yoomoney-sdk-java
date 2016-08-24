@@ -29,7 +29,7 @@ import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.utils.HttpHeaders;
 import org.joda.time.DateTime;
 

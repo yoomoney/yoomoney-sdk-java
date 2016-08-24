@@ -30,7 +30,7 @@ import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.GetRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.showcase.ShowcaseSearchTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.ShowcaseSearchTypeAdapter;
 
 import java.util.Collections;
 import java.util.List;

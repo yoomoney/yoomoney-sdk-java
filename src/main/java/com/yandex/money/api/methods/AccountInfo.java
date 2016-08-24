@@ -32,7 +32,7 @@ import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.AccountInfoTypeAdapter;
+import com.yandex.money.api.typeadapters.methods.AccountInfoTypeAdapter;
 import com.yandex.money.api.utils.Currency;
 
 import java.math.BigDecimal;

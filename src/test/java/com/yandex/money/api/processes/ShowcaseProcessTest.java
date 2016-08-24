@@ -34,7 +34,7 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.ShowcaseContext;
-import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;

@@ -27,7 +27,7 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.RequestExternalPaymentTypeAdapter;
+import com.yandex.money.api.typeadapters.methods.RequestExternalPaymentTypeAdapter;
 
 import java.util.Map;
 
