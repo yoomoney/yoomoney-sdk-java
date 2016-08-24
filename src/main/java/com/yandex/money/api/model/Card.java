@@ -25,6 +25,7 @@
 package com.yandex.money.api.model;
 
 import com.yandex.money.api.utils.Enums;
+import org.joda.time.YearMonth;
 
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
@@ -33,7 +34,7 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class Card extends MoneySource {
+public class Card extends MoneySource implements BankCardInfo {
 
     /**
      * panned fragment of card's number
@@ -49,6 +50,31 @@ public class Card extends MoneySource {
         super(builder);
         panFragment = builder.panFragment;
         type = builder.type;
+    }
+
+    @Override
+    public CharSequence getCardholderName() {
+        return null;
+    }
+
+    @Override
+    public CharSequence getCardNumber() {
+        return panFragment;
+    }
+
+    @Override
+    public Type getType() {
+        return type;
+    }
+
+    @Override
+    public YearMonth getExpiry() {
+        return null;
+    }
+
+    @Override
+    public boolean isContactless() {
+        return false;
     }
 
     @Override
