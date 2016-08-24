@@ -34,12 +34,12 @@ public interface BankCardInfo {
     /**
      * @return name of cardholder
      */
-    CharSequence getCardholderName();
+    String getCardholderName();
 
     /**
      * @return card number
      */
-    CharSequence getCardNumber();
+    String getCardNumber();
 
     /**
      * @return card type

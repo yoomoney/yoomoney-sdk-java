@@ -53,12 +53,12 @@ public class Card extends MoneySource implements BankCardInfo {
     }
 
     @Override
-    public CharSequence getCardholderName() {
+    public String getCardholderName() {
         return null;
     }
 
     @Override
-    public CharSequence getCardNumber() {
+    public String getCardNumber() {
         return panFragment;
     }
 
