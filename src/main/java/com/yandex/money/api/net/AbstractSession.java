@@ -33,7 +33,6 @@ import com.squareup.okhttp.Response;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.utils.HttpHeaders;
 import com.yandex.money.api.utils.Language;
-import com.yandex.money.api.utils.MimeTypes;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +49,6 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
 public abstract class AbstractSession {
 
     private static final Logger LOGGER = Logger.getLogger(OAuth2Session.class.getName());
-    private static final MediaType CONTENT_TYPE = MediaType.parse(MimeTypes.Application.X_WWW_FORM_URLENCODED);
 
     protected final ApiClient client;
 
@@ -110,7 +108,7 @@ public abstract class AbstractSession {
 
         builder.url(request.requestUrl(client.getHostsProvider()));
         if (request.getMethod() == ApiRequest.Method.POST) {
-            builder.post(RequestBody.create(CONTENT_TYPE, request.getBody()));
+            builder.post(RequestBody.create(MediaType.parse(request.getContentType()), request.getBody()));
         }
 
         return builder;

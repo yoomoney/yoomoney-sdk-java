@@ -28,6 +28,7 @@ import com.google.gson.JsonElement;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.typeadapters.TypeAdapter;
+import com.yandex.money.api.utils.MimeTypes;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -90,6 +91,11 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     public final byte[] getBody() {
         prepareBody();
         return body == null ? buffer.setParams(parameters).prepareBytes() : body;
+    }
+
+    @Override
+    public String getContentType() {
+        return MimeTypes.Application.X_WWW_FORM_URLENCODED;
     }
 
     @Override

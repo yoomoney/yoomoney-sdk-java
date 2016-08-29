@@ -74,6 +74,13 @@ public interface ApiRequest<T> {
     byte[] getBody();
 
     /**
+     * Gets content type of a body as described in https://www.w3.org/Protocols/rfc1341/4_Content-Type.html
+     *
+     * @return content type
+     */
+    String getContentType();
+
+    /**
      * Parses API response from stream.
      *
      * @param inputStream input stream
