@@ -48,8 +48,8 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBigDecimal;
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Type adapter for {@link AccountInfo}.
@@ -87,12 +87,18 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
 
         JsonObject object = json.getAsJsonObject();
 
-        Currency currency;
+        Currency currency = null;
         try {
-            int parsed = Integer.parseInt(getMandatoryString(object, MEMBER_CURRENCY));
-            currency = Currency.parseNumericCode(parsed);
+            String c = getString(object, MEMBER_CURRENCY);
+            if (c != null) {
+                int parsed = Integer.parseInt(c);
+                currency = Currency.parseNumericCode(parsed);
+            }
         } catch (NumberFormatException e) {
-            currency = Currency.RUB;
+            // see code below
+        }
+        if (currency == null) {
+            currency = Currency.XXX;
         }
 
         Avatar avatar = null;
@@ -100,7 +106,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
             avatar = AvatarTypeAdapter.getInstance().fromJson(object.get(MEMBER_AVATAR));
         }
 
-        BigDecimal balance = getMandatoryBigDecimal(object, MEMBER_BALANCE);
+        BigDecimal balance = getBigDecimal(object, MEMBER_BALANCE);
         BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.getInstance()
                 .fromJson(object.get(MEMBER_BALANCE_DETAILS));
         if (balanceDetails == null) {
@@ -119,11 +125,11 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
                 .fromJson(object.getAsJsonArray(MEMBER_YANDEX_MONEY_CARDS));
 
         return new AccountInfo.Builder()
-                .setAccount(getMandatoryString(object, MEMBER_ACCOUNT))
+                .setAccount(getString(object, MEMBER_ACCOUNT))
                 .setBalance(balance)
                 .setCurrency(currency)
-                .setAccountStatus(AccountStatus.parse(getMandatoryString(object, MEMBER_STATUS)))
-                .setAccountType(AccountType.parse(getMandatoryString(object, MEMBER_TYPE)))
+                .setAccountStatus(AccountStatus.parse(getString(object, MEMBER_STATUS)))
+                .setAccountType(AccountType.parse(getString(object, MEMBER_TYPE)))
                 .setAvatar(avatar)
                 .setBalanceDetails(balanceDetails)
                 .setLinkedCards(toEmptyListIfNull(linkedCards))

@@ -36,7 +36,6 @@ import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
@@ -64,7 +63,7 @@ public final class StatusInfoTypeAdapter extends BaseTypeAdapter<StatusInfo> {
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return StatusInfo.from(SimpleStatus.parseOrThrow(getMandatoryString(object, MEMBER_STATUS)),
+        return StatusInfo.from(SimpleStatus.parseOrThrow(getString(object, MEMBER_STATUS)),
                 Error.parse(getString(object, MEMBER_ERROR)));
     }
 

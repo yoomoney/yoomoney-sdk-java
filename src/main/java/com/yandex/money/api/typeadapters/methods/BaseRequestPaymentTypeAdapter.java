@@ -30,7 +30,6 @@ import com.yandex.money.api.methods.BaseRequestPayment.Status;
 import com.yandex.money.api.model.Error;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 import static com.yandex.money.api.utils.Common.checkNotNull;
 
@@ -55,7 +54,7 @@ final class BaseRequestPaymentTypeAdapter {
 
         static <T extends BaseRequestPayment.Builder> void deserialize(JsonObject object, T builder) {
             checkNotNull(builder, "builder")
-                    .setStatus(Status.parse(getMandatoryString(checkNotNull(object, "object"), MEMBER_STATUS)))
+                    .setStatus(Status.parse(getString(checkNotNull(object, "object"), MEMBER_STATUS)))
                     .setError(Error.parse(getString(object, MEMBER_ERROR)))
                     .setContractAmount(getBigDecimal(object, MEMBER_CONTRACT_AMOUNT))
                     .setRequestId(getString(object, MEMBER_REQUEST_ID))

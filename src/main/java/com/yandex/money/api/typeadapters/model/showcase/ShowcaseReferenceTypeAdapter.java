@@ -39,7 +39,6 @@ import java.util.Map;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getInt;
 import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryLong;
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 import static com.yandex.money.api.typeadapters.JsonUtils.map;
 import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
@@ -76,7 +75,7 @@ public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<Showcase
         Map<String, String> params = paramsObject == null ? new HashMap<String, String>() : map(paramsObject);
         return new ShowcaseReference.Builder()
                 .setScid(getMandatoryLong(object, MEMBER_ID))
-                .setTitle(getMandatoryString(object, MEMBER_TITLE))
+                .setTitle(getString(object, MEMBER_TITLE))
                 .setTopIndex(getInt(object, MEMBER_TOP))
                 .setUrl(getString(object, MEMBER_URL))
                 .setFormat(ShowcaseReference.Format.parse(getString(object, MEMBER_FORMAT)))

@@ -39,7 +39,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Convenient class to serialize/deserialize various {@link Fee} implementations.
@@ -48,7 +48,7 @@ import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
  */
 public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
 
-    public static final String MEMBER_TYPE = "type";
+    private static final String MEMBER_TYPE = "type";
 
     private static final FeeTypeAdapter INSTANCE = new FeeTypeAdapter();
 
@@ -106,10 +106,10 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
         private Delegate() {
         }
 
-        public static void checkFeeType(JsonObject fee, Class<? extends Fee> clazz) {
+        static void checkFeeType(JsonObject fee, Class<? extends Fee> clazz) {
             String actual = getFeeType(fee);
             String expected = FEE_TYPE_MAPPING.get(clazz);
-            if (!actual.equals(expected)) {
+            if (actual == null || !actual.equals(expected)) {
                 throw new IllegalStateException("fee type should be \"" + expected + "\" but \""
                         + actual + "\" given");
             }
@@ -120,7 +120,7 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
         }
 
         private static String getFeeType(JsonObject jsonObject) {
-            return getMandatoryString(jsonObject, MEMBER_TYPE);
+            return getString(jsonObject, MEMBER_TYPE);
         }
     }
 }

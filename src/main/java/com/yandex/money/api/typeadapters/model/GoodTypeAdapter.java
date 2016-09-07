@@ -34,7 +34,6 @@ import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
@@ -65,8 +64,7 @@ public final class GoodTypeAdapter extends BaseTypeAdapter<Good> {
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new Good(getMandatoryString(object, MEMBER_SERIAL),
-                getMandatoryString(object, MEMBER_SECRET),
+        return new Good(getString(object, MEMBER_SERIAL), getString(object, MEMBER_SECRET),
                 getString(object, MEMBER_MERCHANT_ARTICLE_ID));
     }
 

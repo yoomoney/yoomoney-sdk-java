@@ -42,7 +42,6 @@ import com.yandex.money.api.typeadapters.model.showcase.container.GroupTypeAdapt
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullMap;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
@@ -91,7 +90,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         List<Error> errors = ErrorTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_ERROR));
 
         return new Showcase.Builder()
-                .setTitle(getMandatoryString(object, MEMBER_TITLE))
+                .setTitle(getString(object, MEMBER_TITLE))
                 .setHiddenFields(getNotNullMap(object, MEMBER_HIDDEN_FIELDS))
                 .setForm(form)
                 .setMoneySources(toEmptyListIfNull(moneySources))
@@ -135,8 +134,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
                 throws JsonParseException {
 
             JsonObject jsonObject = json.getAsJsonObject();
-            return new Error(getString(jsonObject, MEMBER_NAME),
-                    getMandatoryString(jsonObject, MEMBER_ALERT));
+            return new Error(getString(jsonObject, MEMBER_NAME), getString(jsonObject, MEMBER_ALERT));
         }
 
         @Override

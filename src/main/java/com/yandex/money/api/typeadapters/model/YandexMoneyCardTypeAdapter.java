@@ -34,7 +34,7 @@ import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Type adapter for {@link YandexMoneyCard} class.
@@ -63,7 +63,7 @@ public final class YandexMoneyCardTypeAdapter extends BaseTypeAdapter<YandexMone
 
         JsonObject object = json.getAsJsonObject();
         YandexMoneyCard.Builder builder = new YandexMoneyCard.Builder();
-        builder.setState(YandexMoneyCard.State.parse(getMandatoryString(object, MEMBER_STATE)));
+        builder.setState(YandexMoneyCard.State.parse(getString(object, MEMBER_STATE)));
         CardTypeAdapter.Delegate.deserialize(object, builder);
         return builder.create();
     }

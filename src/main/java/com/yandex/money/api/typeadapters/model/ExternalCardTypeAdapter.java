@@ -35,7 +35,7 @@ import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
+import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
 /**
  * Type adapter for {@link ExternalCard}.
@@ -67,9 +67,9 @@ public final class ExternalCardTypeAdapter extends BaseTypeAdapter<ExternalCard>
         JsonObject object = json.getAsJsonObject();
         ExternalCard.Builder builder = new ExternalCard.Builder();
         CardTypeAdapter.Delegate.deserialize(object, builder);
-        builder.setFundingSourceType(getMandatoryString(object, MEMBER_FUNDING_SOURCE_TYPE))
-                .setMoneySourceToken(getMandatoryString(object, MEMBER_MONEY_SOURCE_TOKEN))
-                .setType(Card.Type.parse(getMandatoryString(object, MEMBER_TYPE)));
+        builder.setFundingSourceType(getString(object, MEMBER_FUNDING_SOURCE_TYPE))
+                .setMoneySourceToken(getString(object, MEMBER_MONEY_SOURCE_TOKEN))
+                .setType(Card.Type.parse(getString(object, MEMBER_TYPE)));
         return builder.create();
     }
 

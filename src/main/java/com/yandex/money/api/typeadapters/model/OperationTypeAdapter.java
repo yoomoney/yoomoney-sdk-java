@@ -39,9 +39,6 @@ import static com.yandex.money.api.typeadapters.JsonUtils.ISO_FORMATTER;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBoolean;
 import static com.yandex.money.api.typeadapters.JsonUtils.getDateTime;
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBigDecimal;
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryDateTime;
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryString;
 import static com.yandex.money.api.typeadapters.JsonUtils.getNotNullMap;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 import static com.yandex.money.api.typeadapters.JsonUtils.toJsonObject;
@@ -97,17 +94,17 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
 
         final JsonObject o = json.getAsJsonObject();
         return new Operation.Builder()
-                .setOperationId(getMandatoryString(o, MEMBER_OPERATION_ID))
-                .setStatus(Operation.Status.parseOrThrow(getMandatoryString(o, MEMBER_STATUS)))
-                .setDatetime(getMandatoryDateTime(o, MEMBER_DATETIME))
-                .setTitle(getMandatoryString(o, MEMBER_TITLE))
+                .setOperationId(getString(o, MEMBER_OPERATION_ID))
+                .setStatus(Operation.Status.parseOrThrow(getString(o, MEMBER_STATUS)))
+                .setDatetime(getDateTime(o, MEMBER_DATETIME))
+                .setTitle(getString(o, MEMBER_TITLE))
                 .setPatternId(getString(o, MEMBER_PATTERN_ID))
-                .setDirection(Operation.Direction.parseOrThrow(getMandatoryString(o, MEMBER_DIRECTION)))
-                .setAmount(getMandatoryBigDecimal(o, MEMBER_AMOUNT))
+                .setDirection(Operation.Direction.parseOrThrow(getString(o, MEMBER_DIRECTION)))
+                .setAmount(getBigDecimal(o, MEMBER_AMOUNT))
                 .setAmountDue(getBigDecimal(o, MEMBER_AMOUNT_DUE))
                 .setFee(getBigDecimal(o, MEMBER_FEE))
                 .setLabel(getString(o, MEMBER_LABEL))
-                .setType(Operation.Type.parseOrThrow(getMandatoryString(o, MEMBER_TYPE)))
+                .setType(Operation.Type.parseOrThrow(getString(o, MEMBER_TYPE)))
                 .setSender(getString(o, MEMBER_SENDER))
                 .setRecipient(getString(o, MEMBER_RECIPIENT))
                 .setRecipientType(PayeeIdentifierType.parse(getString(o, MEMBER_RECIPIENT_TYPE)))

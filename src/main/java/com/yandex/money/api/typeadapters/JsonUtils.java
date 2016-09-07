@@ -138,7 +138,10 @@ public final class JsonUtils {
      * @param object json object
      * @param memberName member's name
      * @return {@link String} value
+     * @deprecated avoid using this method, checks should be made during object's initialization (use
+     * {@link #getString(JsonObject, String)} instead)
      */
+    @Deprecated
     public static String getMandatoryString(JsonObject object, String memberName) {
         return checkMandatoryValue(getString(object, memberName), memberName);
     }
@@ -161,7 +164,10 @@ public final class JsonUtils {
      * @param object json object
      * @param memberName member's name
      * @return {@link java.math.BigDecimal} value
+     * @deprecated avoid using this method, checks should be made during object's initialization (use
+     * {@link #getBigDecimal(JsonObject, String)} instead)
      */
+    @Deprecated
     public static BigDecimal getMandatoryBigDecimal(JsonObject object, String memberName) {
         return checkMandatoryValue(getBigDecimal(object, memberName), memberName);
     }
@@ -184,11 +190,13 @@ public final class JsonUtils {
      * @param object json object
      * @param memberName member's name
      * @return {@link org.joda.time.DateTime} value
+     * @deprecated avoid using this method, checks should be made during object's initialization (use
+     * {@link #getDateTime(JsonObject, String)} instead)
      */
+    @Deprecated
     public static DateTime getMandatoryDateTime(JsonObject object, String memberName) {
         return checkMandatoryValue(getDateTime(object, memberName), memberName);
     }
-
 
     /**
      * Gets nullable DateTime from a JSON object.
@@ -238,7 +246,7 @@ public final class JsonUtils {
      * Maps JSON object to key-value pairs. Returns {@link Collections#emptyMap()} in case of
      * nullable field value.
      *
-     * @see {@link #map(JsonObject)}
+     * @see #map(JsonObject)
      *
      * @param object JSON object
      * @param memberName member's name

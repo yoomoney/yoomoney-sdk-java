@@ -35,7 +35,6 @@ import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import java.lang.reflect.Type;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
-import static com.yandex.money.api.typeadapters.JsonUtils.getMandatoryBigDecimal;
 
 /**
  * Type adapter for {@link BalanceDetails}.
@@ -69,8 +68,8 @@ public final class BalanceDetailsTypeAdapter extends BaseTypeAdapter<BalanceDeta
 
         JsonObject object = json.getAsJsonObject();
         return new BalanceDetails.Builder()
-                .setTotal(getMandatoryBigDecimal(object, MEMBER_TOTAL))
-                .setAvailable(getMandatoryBigDecimal(object, MEMBER_AVAILABLE))
+                .setTotal(getBigDecimal(object, MEMBER_TOTAL))
+                .setAvailable(getBigDecimal(object, MEMBER_AVAILABLE))
                 .setDepositionPending(getBigDecimal(object, MEMBER_DEPOSITION_PENDING))
                 .setBlocked(getBigDecimal(object, MEMBER_BLOCKED))
                 .setDebt(getBigDecimal(object, MEMBER_DEBT))
