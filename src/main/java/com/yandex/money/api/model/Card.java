@@ -112,7 +112,7 @@ public class Card extends MoneySource implements BankCardInfo {
         MASTER_CARD("MasterCard", "CVC2", 3),
         AMERICAN_EXPRESS("AmericanExpress", "CID", 4), // also cscAbbr = 4DBC
         JCB("JCB", "CAV2", 3),
-        UNKNOWN("UNKNOWN", "CSC", 4);
+        UNKNOWN("Unknown", "CSC", 4);
 
         public final String name;
         public final String cscAbbr;
