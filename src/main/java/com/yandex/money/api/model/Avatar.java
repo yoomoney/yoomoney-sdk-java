@@ -26,8 +26,8 @@ package com.yandex.money.api.model;
 
 import org.joda.time.DateTime;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Describes avatar from {@link com.yandex.money.api.methods.AccountInfo}.

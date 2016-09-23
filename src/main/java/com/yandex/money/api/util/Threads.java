@@ -22,36 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.utils;
+package com.yandex.money.api.util;
 
 /**
- * This is not complete list of types.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * @author vyasevich
  */
-public final class MimeTypes {
+public final class Threads {
 
-    private MimeTypes() {
+    private Threads() {
         // prevents instantiating of this class
     }
 
-    public static final class Application {
-
-        public static final String JSON = "application/json";
-        public static final String X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
-        public static final String XML = "application/xml";
-
-        private Application() {
-            // prevents instantiating of this class
-        }
-    }
-
-    public static final class Text {
-        public static final String XML = "text/xml";
-        public static final String JSON = "text/json";
-
-        private Text() {
-            // prevents instantiating of this class
+    /**
+     * Causes the current thread to sleep on specified amount of milliseconds.
+     *
+     * @param time milliseconds
+     */
+    public static void sleep(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            // do nothing
         }
     }
 }

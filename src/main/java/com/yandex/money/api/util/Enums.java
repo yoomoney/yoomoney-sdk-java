@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.utils;
+package com.yandex.money.api.util;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * @author Slava Yasevich

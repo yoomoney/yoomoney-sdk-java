@@ -35,8 +35,8 @@ import com.yandex.money.api.typeadapters.model.showcase.ShowcaseSearchTypeAdapte
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * This class wraps result of showcase searching provided by response of

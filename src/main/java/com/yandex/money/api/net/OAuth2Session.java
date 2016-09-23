@@ -31,9 +31,9 @@ import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.net.clients.ApiClient;
-import com.yandex.money.api.utils.HttpHeaders;
-import com.yandex.money.api.utils.MimeTypes;
-import com.yandex.money.api.utils.Strings;
+import com.yandex.money.api.util.HttpHeaders;
+import com.yandex.money.api.util.MimeTypes;
+import com.yandex.money.api.util.Strings;
 
 import java.io.IOException;
 import java.io.InputStream;

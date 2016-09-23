@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.model;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
 
 /**
  * Represents card that not bound to an account.

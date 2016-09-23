@@ -22,63 +22,36 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.utils;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import static com.yandex.money.api.utils.Common.checkNotNull;
+package com.yandex.money.api.util;
 
 /**
- * Implements common streams operation.
+ * This is not complete list of types.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class Streams {
+public final class MimeTypes {
 
-    private static final int BUFFER_SIZE = 0x1000;
-
-    private Streams() {
+    private MimeTypes() {
         // prevents instantiating of this class
     }
 
-    /**
-     * Copies input stream to output stream.
-     *
-     * @param from source
-     * @param to target
-     * @return bytes copied
-     */
-    public static long copy(InputStream from, OutputStream to) throws IOException {
-        byte[] buf = new byte[BUFFER_SIZE];
-        long total = 0;
-        while (true) {
-            int r = from.read(buf);
-            if (r == -1) {
-                break;
-            }
-            to.write(buf, 0, r);
-            total += r;
+    public static final class Application {
+
+        public static final String JSON = "application/json";
+        public static final String X_WWW_FORM_URLENCODED = "application/x-www-form-urlencoded";
+        public static final String XML = "application/xml";
+
+        private Application() {
+            // prevents instantiating of this class
         }
-        return total;
     }
 
-    /**
-     * Just reads input stream. No target.
-     *
-     * @param stream source
-     */
-    public static void readStreamToNull(InputStream stream) throws IOException {
-        checkNotNull(stream, "stream");
+    public static final class Text {
+        public static final String XML = "text/xml";
+        public static final String JSON = "text/json";
 
-        try {
-            byte[] buffer = new byte[BUFFER_SIZE];
-            //noinspection StatementWithEmptyBody
-            while (stream.read(buffer) > 0) {
-            }
-        } finally {
-            stream.close();
+        private Text() {
+            // prevents instantiating of this class
         }
     }
 }

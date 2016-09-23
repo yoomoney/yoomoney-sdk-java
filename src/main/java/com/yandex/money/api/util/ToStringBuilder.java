@@ -1,4 +1,4 @@
-package com.yandex.money.api.utils;
+package com.yandex.money.api.util;
 
 /**
  * Utility class for {@code toString} method definition.

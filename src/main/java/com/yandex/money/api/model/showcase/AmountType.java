@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.model.showcase;
 
-import com.yandex.money.api.utils.Enums;
+import com.yandex.money.api.util.Enums;
 
 /**
  * Sum type on payment form.

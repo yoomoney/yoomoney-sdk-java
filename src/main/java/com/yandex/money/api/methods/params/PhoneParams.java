@@ -28,8 +28,8 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Convenience class for phone top up parameters.

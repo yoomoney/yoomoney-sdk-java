@@ -24,8 +24,8 @@
 
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.utils.Patterns;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.Patterns;
+import com.yandex.money.api.util.ToStringBuilder;
 
 /**
  * Email control.

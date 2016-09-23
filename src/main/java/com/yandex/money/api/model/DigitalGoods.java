@@ -27,7 +27,7 @@ package com.yandex.money.api.model;
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Digital Goods that can be obtained after payment if available.

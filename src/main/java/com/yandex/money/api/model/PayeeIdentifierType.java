@@ -24,9 +24,9 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.utils.Enums;
-import com.yandex.money.api.utils.Patterns;
-import com.yandex.money.api.utils.Strings;
+import com.yandex.money.api.util.Enums;
+import com.yandex.money.api.util.Patterns;
+import com.yandex.money.api.util.Strings;
 
 /**
  * Type of payee identifier.

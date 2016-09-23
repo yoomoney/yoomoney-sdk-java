@@ -35,7 +35,7 @@ import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import java.lang.reflect.Type;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Type adapter for {@link Card}.

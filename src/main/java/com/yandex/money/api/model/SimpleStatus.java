@@ -24,8 +24,8 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.utils.Constants;
-import com.yandex.money.api.utils.Enums;
+import com.yandex.money.api.util.Constants;
+import com.yandex.money.api.util.Enums;
 
 /**
  * @author Slava Yasevich

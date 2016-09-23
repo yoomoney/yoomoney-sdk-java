@@ -22,27 +22,48 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.utils;
+package com.yandex.money.api.util;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static com.yandex.money.api.util.Common.checkNotEmpty;
 
 /**
- * @author vyasevich
+ * Helps to deal with urls.
+ *
+ * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class Threads {
+public final class UrlEncodedUtils {
 
-    private Threads() {
+    private UrlEncodedUtils() {
         // prevents instantiating of this class
     }
 
     /**
-     * Causes the current thread to sleep on specified amount of milliseconds.
+     * Parses url to key-value pairs of its parameters.
      *
-     * @param time milliseconds
+     * @param url url
+     * @return key-value pairs
      */
-    public static void sleep(long time) {
-        try {
-            Thread.sleep(time);
-        } catch (InterruptedException e) {
-            // do nothing
+    public static Map<String, String> parse(String url) throws URISyntaxException {
+        URI uri = new URI(checkNotEmpty(url, "url"));
+        String query = uri.getQuery();
+        if (query == null) {
+            return Collections.unmodifiableMap(new HashMap<String, String>());
         }
+
+        Map<String, String> map = new HashMap<>();
+        String[] params = query.split("&");
+        for (String param : params) {
+            String[] keyValue = param.split("=");
+            if (keyValue.length == 2) {
+                map.put(keyValue[0], keyValue[1]);
+            }
+        }
+        return Collections.unmodifiableMap(map);
     }
 }

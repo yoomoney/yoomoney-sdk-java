@@ -28,9 +28,9 @@ import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.OAuth2Session;
-import com.yandex.money.api.utils.Threads;
+import com.yandex.money.api.util.Threads;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Base implementation for all payment processes.

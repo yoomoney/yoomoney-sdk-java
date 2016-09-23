@@ -24,10 +24,10 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.utils.Enums;
+import com.yandex.money.api.util.Enums;
 import org.joda.time.YearMonth;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Bank card info.

@@ -26,8 +26,8 @@ package com.yandex.money.api.methods.params;
 
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 import static java.util.Collections.unmodifiableMap;
 
 /**

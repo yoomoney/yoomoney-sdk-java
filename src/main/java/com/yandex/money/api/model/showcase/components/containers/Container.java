@@ -25,13 +25,13 @@
 package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * A generic {@link Container} object is special component that can contain other components

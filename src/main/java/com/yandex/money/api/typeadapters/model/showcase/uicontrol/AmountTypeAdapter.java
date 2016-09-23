@@ -31,7 +31,7 @@ import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.NoFee;
 import com.yandex.money.api.model.showcase.components.uicontrols.Amount;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
-import com.yandex.money.api.utils.Currency;
+import com.yandex.money.api.util.Currency;
 
 /**
  * Type adapter for {@link Amount} component.

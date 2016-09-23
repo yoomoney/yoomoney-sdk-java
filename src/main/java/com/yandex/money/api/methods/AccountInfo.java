@@ -33,14 +33,14 @@ import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.AccountInfoTypeAdapter;
-import com.yandex.money.api.utils.Currency;
+import com.yandex.money.api.util.Currency;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Information of user account.

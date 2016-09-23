@@ -31,7 +31,7 @@ import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.OAuth2Session;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Combined payment process of {@link PaymentProcess} and {@link ExternalPaymentProcess}.

@@ -28,7 +28,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.utils.Language;
+import com.yandex.money.api.util.Language;
 
 /**
  * Yandex.Money API client. Provides necessary information for sessions.

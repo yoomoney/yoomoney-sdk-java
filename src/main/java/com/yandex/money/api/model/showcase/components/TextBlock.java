@@ -24,9 +24,9 @@
 
 package com.yandex.money.api.model.showcase.components;
 
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.ToStringBuilder;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Block of plain text.

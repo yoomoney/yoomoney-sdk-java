@@ -50,7 +50,7 @@ import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
 import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.ShowcaseContext;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
-import com.yandex.money.api.utils.Currency;
+import com.yandex.money.api.util.Currency;
 import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 

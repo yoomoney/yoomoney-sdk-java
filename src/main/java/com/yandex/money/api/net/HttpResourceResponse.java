@@ -26,7 +26,7 @@ package com.yandex.money.api.net;
 
 import org.joda.time.DateTime;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * This class wraps HTTP resource obtained from remove server.

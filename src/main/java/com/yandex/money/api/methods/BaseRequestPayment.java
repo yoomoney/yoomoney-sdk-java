@@ -25,12 +25,12 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.utils.Constants;
-import com.yandex.money.api.utils.Enums;
+import com.yandex.money.api.util.Constants;
+import com.yandex.money.api.util.Enums;
 
 import java.math.BigDecimal;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Base class for request payment operations.

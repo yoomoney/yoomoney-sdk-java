@@ -60,7 +60,7 @@ import com.yandex.money.api.typeadapters.model.ExternalCardTypeAdapter;
 import com.yandex.money.api.typeadapters.model.YandexMoneyCardTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
-import com.yandex.money.api.utils.Currency;
+import com.yandex.money.api.util.Currency;
 import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;

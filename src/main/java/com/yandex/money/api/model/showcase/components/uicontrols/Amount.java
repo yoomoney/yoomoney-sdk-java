@@ -26,8 +26,8 @@ package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.NoFee;
-import com.yandex.money.api.utils.Currency;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.Currency;
+import com.yandex.money.api.util.ToStringBuilder;
 
 import java.math.BigDecimal;
 

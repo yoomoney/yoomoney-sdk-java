@@ -28,7 +28,7 @@ import com.google.gson.JsonElement;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.typeadapters.TypeAdapter;
-import com.yandex.money.api.utils.MimeTypes;
+import com.yandex.money.api.util.MimeTypes;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -40,7 +40,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Base API request. It is preferable to extend your requests from this class or its descendants

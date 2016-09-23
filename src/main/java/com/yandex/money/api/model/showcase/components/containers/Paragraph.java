@@ -25,7 +25,7 @@
 package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.TextBlock;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.ToStringBuilder;
 
 /**
  * Sequence of text blocks.

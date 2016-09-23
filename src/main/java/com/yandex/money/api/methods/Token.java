@@ -30,7 +30,7 @@ import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.RevokeTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.TokenTypeAdapter;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
 
 /**
  * Access token.

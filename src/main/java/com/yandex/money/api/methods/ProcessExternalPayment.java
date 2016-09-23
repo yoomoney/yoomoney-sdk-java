@@ -29,7 +29,7 @@ import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.ProcessExternalPaymentTypeAdapter;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
 
 /**
  * Process external payment.

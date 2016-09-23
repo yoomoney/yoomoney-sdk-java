@@ -31,15 +31,15 @@ import com.yandex.money.api.net.DefaultUserAgent;
 import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.utils.Language;
+import com.yandex.money.api.util.Language;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import java.security.GeneralSecurityException;
 import java.util.concurrent.TimeUnit;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Default implementation of {@link ApiClient} interface.

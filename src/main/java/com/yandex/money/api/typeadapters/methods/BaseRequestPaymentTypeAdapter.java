@@ -31,7 +31,7 @@ import com.yandex.money.api.model.Error;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * @author Anton Ermak (ermak@yamoney.ru)

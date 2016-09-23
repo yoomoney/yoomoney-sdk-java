@@ -30,12 +30,12 @@ import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.ProcessPaymentTypeAdapter;
-import com.yandex.money.api.utils.Enums;
+import com.yandex.money.api.util.Enums;
 
 import java.math.BigDecimal;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Process payment.

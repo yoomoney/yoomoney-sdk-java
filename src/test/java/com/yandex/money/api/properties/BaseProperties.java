@@ -25,7 +25,7 @@
 package com.yandex.money.api.properties;
 
 import com.yandex.money.api.Resources;
-import com.yandex.money.api.utils.Strings;
+import com.yandex.money.api.util.Strings;
 
 import java.util.Properties;
 

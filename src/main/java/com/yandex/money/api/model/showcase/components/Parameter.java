@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.model.showcase.components;
 
-import com.yandex.money.api.utils.Enums;
+import com.yandex.money.api.util.Enums;
 
 /**
  * Parameter.

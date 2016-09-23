@@ -25,14 +25,14 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.utils.Constants;
-import com.yandex.money.api.utils.Enums;
+import com.yandex.money.api.util.Constants;
+import com.yandex.money.api.util.Enums;
 
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Base class for all process payment operations.

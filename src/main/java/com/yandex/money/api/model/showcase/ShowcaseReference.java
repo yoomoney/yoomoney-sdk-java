@@ -25,13 +25,13 @@
 package com.yandex.money.api.model.showcase;
 
 import com.yandex.money.api.methods.ShowcaseSearch;
-import com.yandex.money.api.utils.Enums;
+import com.yandex.money.api.util.Enums;
 
 import java.util.Collections;
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Element of {@link ShowcaseSearch} class.

@@ -30,7 +30,7 @@ import com.yandex.money.api.net.ShowcaseContext;
 
 import java.io.IOException;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * This class connects {@link DocumentProvider} and {@link ShowcaseContext} class and provides

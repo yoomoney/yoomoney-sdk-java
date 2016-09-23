@@ -42,7 +42,7 @@ import com.yandex.money.api.typeadapters.model.AvatarTypeAdapter;
 import com.yandex.money.api.typeadapters.model.BalanceDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.model.CardTypeAdapter;
 import com.yandex.money.api.typeadapters.model.YandexMoneyCardTypeAdapter;
-import com.yandex.money.api.utils.Currency;
+import com.yandex.money.api.util.Currency;
 
 import java.lang.reflect.Type;
 import java.math.BigDecimal;

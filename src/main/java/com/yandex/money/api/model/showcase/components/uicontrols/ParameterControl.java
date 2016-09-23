@@ -25,9 +25,9 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.model.showcase.components.Parameter;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.ToStringBuilder;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Base class for all fields with internal state.

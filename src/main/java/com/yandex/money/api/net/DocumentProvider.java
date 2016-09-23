@@ -30,15 +30,15 @@ import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
-import com.yandex.money.api.utils.HttpHeaders;
+import com.yandex.money.api.util.HttpHeaders;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Provides various resources from Yandex.Money server.

@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.net.clients;
 
-import com.yandex.money.api.utils.Numbers;
+import com.yandex.money.api.util.Numbers;
 
 import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.SSLSession;

@@ -25,7 +25,7 @@
 package com.yandex.money.api.net;
 
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.utils.UrlEncodedUtils;
+import com.yandex.money.api.util.UrlEncodedUtils;
 
 import java.net.URISyntaxException;
 import java.util.Map;

@@ -25,7 +25,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.ToStringBuilder;
 
 /**
  * Base class for all components that allow user's input.

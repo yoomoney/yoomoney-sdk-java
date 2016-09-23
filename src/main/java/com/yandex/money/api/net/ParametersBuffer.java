@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.net;
 
-import com.yandex.money.api.utils.Strings;
+import com.yandex.money.api.util.Strings;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -34,7 +34,7 @@ import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Buffers request parameters and creates request body for different methods. It also encodes keys

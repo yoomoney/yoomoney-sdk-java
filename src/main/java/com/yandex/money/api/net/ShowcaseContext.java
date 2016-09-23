@@ -33,7 +33,7 @@ import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
-import com.yandex.money.api.utils.HttpHeaders;
+import com.yandex.money.api.util.HttpHeaders;
 import org.joda.time.DateTime;
 
 import java.io.InputStream;
@@ -42,8 +42,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Stack;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * This class handles {@link Showcase} submit steps.

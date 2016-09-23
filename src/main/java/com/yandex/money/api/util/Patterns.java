@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.utils;
+package com.yandex.money.api.util;
 
 /**
  * Common patterns.

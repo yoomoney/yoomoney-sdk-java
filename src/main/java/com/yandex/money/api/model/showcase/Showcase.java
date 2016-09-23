@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * @author Aleksandr Ershov (asershov@yamoney.com)

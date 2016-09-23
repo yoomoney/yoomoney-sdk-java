@@ -26,14 +26,14 @@ package com.yandex.money.api.net;
 
 import com.yandex.money.api.model.Scope;
 import com.yandex.money.api.net.clients.ApiClient;
-import com.yandex.money.api.utils.Strings;
+import com.yandex.money.api.util.Strings;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Builds parameters for OAuth2 authorization using application's web browser.

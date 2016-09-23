@@ -42,8 +42,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Static class for JSON parsing process.

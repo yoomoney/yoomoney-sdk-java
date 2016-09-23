@@ -29,7 +29,7 @@ import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.OperationHistoryTypeAdapter;
-import com.yandex.money.api.utils.Enums;
+import com.yandex.money.api.util.Enums;
 import org.joda.time.DateTime;
 
 import java.util.Collections;
@@ -37,7 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Operation history.

@@ -31,8 +31,8 @@ import com.yandex.money.api.typeadapters.methods.RequestExternalPaymentTypeAdapt
 
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Context of an external payment.

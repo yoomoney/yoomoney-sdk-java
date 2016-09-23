@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.logging.Logger;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Logging wrapper for server responses

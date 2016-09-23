@@ -25,14 +25,14 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.model.showcase.components.containers.Group;
-import com.yandex.money.api.utils.Enums;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.Enums;
+import com.yandex.money.api.util.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Control for selecting amongst a set of options.

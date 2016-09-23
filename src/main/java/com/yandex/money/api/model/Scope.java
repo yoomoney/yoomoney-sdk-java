@@ -24,13 +24,13 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.utils.Strings;
+import com.yandex.money.api.util.Strings;
 
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
 
 /**
  * Access token's scope. Provides simple and customizable scopes for every occasion. Complete list

@@ -26,7 +26,7 @@ package com.yandex.money.api.model;
 
 import java.math.BigDecimal;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Detailed balance info.

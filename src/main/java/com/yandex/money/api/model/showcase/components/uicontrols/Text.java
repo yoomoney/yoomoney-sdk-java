@@ -25,8 +25,8 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 
-import com.yandex.money.api.utils.Enums;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.Enums;
+import com.yandex.money.api.util.ToStringBuilder;
 
 /**
  * Text field. Specializes {@link TextArea} with optional keyboard layout and pattern.

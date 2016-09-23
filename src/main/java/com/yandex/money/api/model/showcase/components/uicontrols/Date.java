@@ -24,9 +24,8 @@
 
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.utils.Strings;
-import com.yandex.money.api.utils.ToStringBuilder;
-
+import com.yandex.money.api.util.Strings;
+import com.yandex.money.api.util.ToStringBuilder;
 import org.joda.time.DateTime;
 import org.joda.time.Period;
 import org.joda.time.format.DateTimeFormat;

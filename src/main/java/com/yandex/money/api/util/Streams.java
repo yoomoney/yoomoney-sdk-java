@@ -22,48 +22,63 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.utils;
+package com.yandex.money.api.util;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * Helps to deal with urls.
+ * Implements common streams operation.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public final class UrlEncodedUtils {
+public final class Streams {
 
-    private UrlEncodedUtils() {
+    private static final int BUFFER_SIZE = 0x1000;
+
+    private Streams() {
         // prevents instantiating of this class
     }
 
     /**
-     * Parses url to key-value pairs of its parameters.
+     * Copies input stream to output stream.
      *
-     * @param url url
-     * @return key-value pairs
+     * @param from source
+     * @param to target
+     * @return bytes copied
      */
-    public static Map<String, String> parse(String url) throws URISyntaxException {
-        URI uri = new URI(checkNotEmpty(url, "url"));
-        String query = uri.getQuery();
-        if (query == null) {
-            return Collections.unmodifiableMap(new HashMap<String, String>());
-        }
-
-        Map<String, String> map = new HashMap<>();
-        String[] params = query.split("&");
-        for (String param : params) {
-            String[] keyValue = param.split("=");
-            if (keyValue.length == 2) {
-                map.put(keyValue[0], keyValue[1]);
+    public static long copy(InputStream from, OutputStream to) throws IOException {
+        byte[] buf = new byte[BUFFER_SIZE];
+        long total = 0;
+        while (true) {
+            int r = from.read(buf);
+            if (r == -1) {
+                break;
             }
+            to.write(buf, 0, r);
+            total += r;
         }
-        return Collections.unmodifiableMap(map);
+        return total;
+    }
+
+    /**
+     * Just reads input stream. No target.
+     *
+     * @param stream source
+     */
+    public static void readStreamToNull(InputStream stream) throws IOException {
+        checkNotNull(stream, "stream");
+
+        try {
+            byte[] buffer = new byte[BUFFER_SIZE];
+            //noinspection StatementWithEmptyBody
+            while (stream.read(buffer) > 0) {
+            }
+        } finally {
+            stream.close();
+        }
     }
 }

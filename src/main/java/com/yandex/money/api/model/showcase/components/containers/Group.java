@@ -25,10 +25,10 @@
 package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.utils.Enums;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.Enums;
+import com.yandex.money.api.util.ToStringBuilder;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * A {@link Group} is implementation of a {@link Component} that can contain only {@link Component}

@@ -31,15 +31,15 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import com.yandex.money.api.net.clients.ApiClient;
-import com.yandex.money.api.utils.HttpHeaders;
-import com.yandex.money.api.utils.Language;
+import com.yandex.money.api.util.HttpHeaders;
+import com.yandex.money.api.util.Language;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Abstract session that provides convenience methods to work with requests.
