@@ -29,8 +29,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
@@ -41,6 +39,9 @@ import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.MimeTypes;
+import okhttp3.HttpUrl;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -48,7 +49,6 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
-import java.net.URL;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -113,7 +113,7 @@ public class OAuth2SessionTest {
     }
 
     private Mock.Request createRequest(boolean withParam) {
-        URL url = server.getUrl("/abc");
+        HttpUrl url = server.url("/abc");
         return withParam ? new Mock.Request(url, "param") : new Mock.Request(url);
     }
 
@@ -128,21 +128,21 @@ public class OAuth2SessionTest {
 
     private static final class Mock {
 
-        public final String code;
+        final String code;
 
-        public Mock(String code) {
+        Mock(String code) {
             this.code = code;
         }
 
-        public static final class Request extends PostRequest<Mock> {
+        static final class Request extends PostRequest<Mock> {
 
-            private final URL url;
+            private final HttpUrl url;
 
-            public Request(URL url) {
+            Request(HttpUrl url) {
                 this(url, null);
             }
 
-            public Request(URL url, String param) {
+            Request(HttpUrl url, String param) {
                 super(TypeAdapterImpl.INSTANCE);
                 this.url = url;
                 addParameter("param", param);

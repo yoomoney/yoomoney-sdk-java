@@ -24,9 +24,6 @@
 
 package com.yandex.money.api.net;
 
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
@@ -34,6 +31,9 @@ import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.MimeTypes;
 import com.yandex.money.api.util.Strings;
+import okhttp3.Call;
+import okhttp3.Request;
+import okhttp3.Response;
 
 import java.io.IOException;
 import java.io.InputStream;

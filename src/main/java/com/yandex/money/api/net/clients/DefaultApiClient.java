@@ -24,14 +24,14 @@
 
 package com.yandex.money.api.net.clients;
 
-import com.squareup.okhttp.ConnectionPool;
-import com.squareup.okhttp.OkHttpClient;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.DefaultUserAgent;
 import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.Language;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -59,16 +59,17 @@ public class DefaultApiClient implements ApiClient {
 
     protected DefaultApiClient(Builder builder) {
         clientId = checkNotNull(builder.clientId, "clientId");
-        httpClient = createHttpClient();
         hostsProvider = builder.hostsProvider;
         userAgent = new DefaultUserAgent(checkNotNull(builder, "builder").platform);
         language = Language.getDefault();
         debugMode = builder.debugMode;
 
+        OkHttpClient.Builder httpClientBuilder = getHttpClientBuilder();
         if (debugMode) {
             SSLSocketFactory sslSocketFactory = createSslSocketFactory();
-            httpClient.setSslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
+            httpClientBuilder.sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
         }
+        httpClient = httpClientBuilder.build();
     }
 
     @Override
@@ -111,14 +112,13 @@ public class DefaultApiClient implements ApiClient {
      *
      * @return HTTP client
      */
-    protected OkHttpClient createHttpClient() {
-        OkHttpClient client = new OkHttpClient();
-        client.setReadTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        client.setConnectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS);
-        client.setConnectionPool(new ConnectionPool(4, TimeUnit.MINUTES.toMillis(10L)));
-        client.setFollowSslRedirects(false);
-        client.setFollowRedirects(false);
-        return client;
+    protected OkHttpClient.Builder getHttpClientBuilder() {
+        return new OkHttpClient.Builder()
+                .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .connectionPool(new ConnectionPool(4, 10L, TimeUnit.MINUTES))
+                .followSslRedirects(false)
+                .followRedirects(false);
     }
 
     private static SSLSocketFactory createSslSocketFactory() {

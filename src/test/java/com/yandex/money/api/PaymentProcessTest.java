@@ -24,8 +24,6 @@
 
 package com.yandex.money.api;
 
-import com.squareup.okhttp.mockwebserver.MockResponse;
-import com.squareup.okhttp.mockwebserver.MockWebServer;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.methods.ProcessExternalPayment;
@@ -42,6 +40,8 @@ import com.yandex.money.api.processes.ExternalPaymentProcess;
 import com.yandex.money.api.processes.PaymentProcess;
 import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.MimeTypes;
+import okhttp3.mockwebserver.MockResponse;
+import okhttp3.mockwebserver.MockWebServer;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -64,7 +64,7 @@ public class PaymentProcessTest {
             .setHostsProvider(new DefaultApiV1HostsProvider(false) {
                 @Override
                 public String getMoney() {
-                    return server.getUrl("").toString();
+                    return server.url("").toString();
                 }
             })
             .create());

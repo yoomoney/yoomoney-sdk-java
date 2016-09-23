@@ -24,13 +24,13 @@
 
 package com.yandex.money.api.net;
 
-import com.squareup.okhttp.Response;
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.util.HttpHeaders;
+import okhttp3.Response;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -219,7 +219,7 @@ public final class DocumentProvider extends AbstractSession {
 
     private void throwResourceNotFoundException(Response response) throws IOException, ResourceNotFoundException {
         processError(response);
-        throw new ResourceNotFoundException(response.request().url());
+        throw new ResourceNotFoundException(response.request().url().url());
     }
 
     private static final class CopyShowcaseRequest extends GetRequest<Showcase> {

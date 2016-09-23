@@ -24,15 +24,15 @@
 
 package com.yandex.money.api.net;
 
-import com.squareup.okhttp.CacheControl;
-import com.squareup.okhttp.Call;
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
-import com.squareup.okhttp.Response;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.Language;
+import okhttp3.CacheControl;
+import okhttp3.Call;
+import okhttp3.MediaType;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import java.io.IOException;
 import java.io.InputStream;
