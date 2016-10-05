@@ -234,6 +234,7 @@ public class ModelTests {
                 .setLinkedCards(Arrays.asList(createCard(), createCard()))
                 .setAdditionalServices(Arrays.asList("service1", "service2"))
                 .setYandexMoneyCards(Arrays.asList(createYandexMoneyCard(), createYandexMoneyCard()))
+                .setVirtualCards(Arrays.asList(createYandexMoneyCard(), createYandexMoneyCard()))
                 .create();
     }
 

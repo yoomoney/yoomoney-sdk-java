@@ -70,6 +70,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
     private static final String MEMBER_STATUS = "account_status";
     private static final String MEMBER_TYPE = "account_type";
     private static final String MEMBER_YANDEX_MONEY_CARDS = "ymoney_cards";
+    private static final String MEMBER_VIRTUAL_CARDS = "virtual_cards";
 
     private AccountInfoTypeAdapter() {
     }
@@ -124,6 +125,9 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         List<YandexMoneyCard> yandexMoneyCards = YandexMoneyCardTypeAdapter.getInstance()
                 .fromJson(object.getAsJsonArray(MEMBER_YANDEX_MONEY_CARDS));
 
+        List<YandexMoneyCard> virtualCards = YandexMoneyCardTypeAdapter.getInstance()
+                .fromJson(object.getAsJsonArray(MEMBER_VIRTUAL_CARDS));
+
         return new AccountInfo.Builder()
                 .setAccount(getString(object, MEMBER_ACCOUNT))
                 .setBalance(balance)
@@ -135,6 +139,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
                 .setLinkedCards(toEmptyListIfNull(linkedCards))
                 .setAdditionalServices(toEmptyListIfNull(additionalServices))
                 .setYandexMoneyCards(toEmptyListIfNull(yandexMoneyCards))
+                .setVirtualCards(virtualCards)
                 .create();
     }
 
@@ -161,6 +166,10 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
 
         if (!src.yandexMoneyCards.isEmpty()) {
             object.add(MEMBER_YANDEX_MONEY_CARDS, YandexMoneyCardTypeAdapter.getInstance().toJsonArray(src.yandexMoneyCards));
+        }
+
+        if (!src.virtualCards.isEmpty()) {
+            object.add(MEMBER_VIRTUAL_CARDS, YandexMoneyCardTypeAdapter.getInstance().toJsonArray(src.virtualCards));
         }
 
         return object;

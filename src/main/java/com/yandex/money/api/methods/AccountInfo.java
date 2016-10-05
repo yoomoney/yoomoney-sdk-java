@@ -99,6 +99,12 @@ public class AccountInfo {
      */
     public final List<YandexMoneyCard> yandexMoneyCards;
 
+    /**
+     * list of Yandex.Money virtual cards
+     */
+    public final List<YandexMoneyCard> virtualCards;
+
+
     private AccountInfo(Builder builder) {
         account = checkNotEmpty(builder.account, "account");
         balance = builder.balance;
@@ -110,6 +116,7 @@ public class AccountInfo {
         linkedCards = Collections.unmodifiableList(builder.linkedCards);
         additionalServices = Collections.unmodifiableList(builder.additionalServices);
         yandexMoneyCards = Collections.unmodifiableList(builder.yandexMoneyCards);
+        virtualCards = Collections.unmodifiableList(builder.virtualCards);
     }
 
     @Override
@@ -125,6 +132,7 @@ public class AccountInfo {
                 ", linkedCards=" + linkedCards +
                 ", additionalServices=" + additionalServices +
                 ", yandexMoneyCards=" + yandexMoneyCards +
+                ", virtualCards=" + virtualCards +
                 '}';
     }
 
@@ -139,7 +147,9 @@ public class AccountInfo {
                 accountStatus == that.accountStatus && accountType == that.accountType &&
                 !(avatar != null ? !avatar.equals(that.avatar) : that.avatar != null) &&
                 balanceDetails.equals(that.balanceDetails) && linkedCards.equals(that.linkedCards) &&
-                additionalServices.equals(that.additionalServices) && yandexMoneyCards.equals(that.yandexMoneyCards);
+                additionalServices.equals(that.additionalServices) &&
+                yandexMoneyCards.equals(that.yandexMoneyCards) &&
+                virtualCards.equals(that.virtualCards);
     }
 
     @Override
@@ -154,6 +164,7 @@ public class AccountInfo {
         result = 31 * result + linkedCards.hashCode();
         result = 31 * result + additionalServices.hashCode();
         result = 31 * result + yandexMoneyCards.hashCode();
+        result = 31 * result + virtualCards.hashCode();
         return result;
     }
 
@@ -172,6 +183,7 @@ public class AccountInfo {
         private List<Card> linkedCards = Collections.emptyList();
         private List<String> additionalServices = Collections.emptyList();
         private List<YandexMoneyCard> yandexMoneyCards = Collections.emptyList();
+        private List<YandexMoneyCard> virtualCards = Collections.emptyList();
 
         /**
          * @param account account's number
@@ -260,6 +272,15 @@ public class AccountInfo {
          */
         public Builder setYandexMoneyCards(List<YandexMoneyCard> yandexMoneyCards) {
             this.yandexMoneyCards = checkNotNull(yandexMoneyCards, "yandexMoneyCards");
+            return this;
+        }
+
+        /**
+         * @param virtualCards list of Yandex.Money virtual cards
+         * @return itself
+         */
+        public Builder setVirtualCards(List<YandexMoneyCard> virtualCards) {
+            this.virtualCards = checkNotNull(virtualCards, "virtualCards");
             return this;
         }
 
