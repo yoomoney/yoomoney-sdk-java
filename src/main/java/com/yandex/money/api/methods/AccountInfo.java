@@ -26,18 +26,13 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
-import com.yandex.money.api.model.Avatar;
 import com.yandex.money.api.model.BalanceDetails;
-import com.yandex.money.api.model.Card;
-import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.AccountInfoTypeAdapter;
 import com.yandex.money.api.util.Currency;
 
 import java.math.BigDecimal;
-import java.util.Collections;
-import java.util.List;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
 import static com.yandex.money.api.util.Common.checkNotNull;
@@ -75,41 +70,18 @@ public class AccountInfo {
     public final AccountType accountType;
 
     /**
-     * avatar
-     */
-    public final Avatar avatar;
-
-    /**
      * balance details
      */
     public final BalanceDetails balanceDetails;
 
-    /**
-     * list of linked cards
-     */
-    public final List<Card> linkedCards;
 
-    /**
-     * list of additional services
-     */
-    public final List<String> additionalServices;
-
-    /**
-     * list of Yandex.Money cards
-     */
-    public final List<YandexMoneyCard> yandexMoneyCards;
-
-    private AccountInfo(Builder builder) {
+    protected AccountInfo(Builder builder) {
         account = checkNotEmpty(builder.account, "account");
         balance = builder.balance;
         currency = builder.currency;
         accountStatus = builder.accountStatus;
         accountType = builder.accountType;
-        avatar = builder.avatar;
         balanceDetails = builder.balanceDetails;
-        linkedCards = Collections.unmodifiableList(builder.linkedCards);
-        additionalServices = Collections.unmodifiableList(builder.additionalServices);
-        yandexMoneyCards = Collections.unmodifiableList(builder.yandexMoneyCards);
     }
 
     @Override
@@ -120,11 +92,7 @@ public class AccountInfo {
                 ", currency=" + currency +
                 ", accountStatus=" + accountStatus +
                 ", accountType=" + accountType +
-                ", avatar=" + avatar +
                 ", balanceDetails=" + balanceDetails +
-                ", linkedCards=" + linkedCards +
-                ", additionalServices=" + additionalServices +
-                ", yandexMoneyCards=" + yandexMoneyCards +
                 '}';
     }
 
@@ -137,9 +105,7 @@ public class AccountInfo {
 
         return account.equals(that.account) && balance.equals(that.balance) && currency == that.currency &&
                 accountStatus == that.accountStatus && accountType == that.accountType &&
-                !(avatar != null ? !avatar.equals(that.avatar) : that.avatar != null) &&
-                balanceDetails.equals(that.balanceDetails) && linkedCards.equals(that.linkedCards) &&
-                additionalServices.equals(that.additionalServices) && yandexMoneyCards.equals(that.yandexMoneyCards);
+                balanceDetails.equals(that.balanceDetails);
     }
 
     @Override
@@ -149,11 +115,7 @@ public class AccountInfo {
         result = 31 * result + currency.hashCode();
         result = 31 * result + accountStatus.hashCode();
         result = 31 * result + accountType.hashCode();
-        result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
         result = 31 * result + balanceDetails.hashCode();
-        result = 31 * result + linkedCards.hashCode();
-        result = 31 * result + additionalServices.hashCode();
-        result = 31 * result + yandexMoneyCards.hashCode();
         return result;
     }
 
@@ -167,11 +129,7 @@ public class AccountInfo {
         private Currency currency = Currency.RUB;
         private AccountStatus accountStatus = AccountStatus.ANONYMOUS;
         private AccountType accountType = AccountType.PERSONAL;
-        private Avatar avatar;
         private BalanceDetails balanceDetails = BalanceDetails.ZERO;
-        private List<Card> linkedCards = Collections.emptyList();
-        private List<String> additionalServices = Collections.emptyList();
-        private List<YandexMoneyCard> yandexMoneyCards = Collections.emptyList();
 
         /**
          * @param account account's number
@@ -219,47 +177,11 @@ public class AccountInfo {
         }
 
         /**
-         * @param avatar avatar
-         * @return itself
-         */
-        public Builder setAvatar(Avatar avatar) {
-            this.avatar = avatar;
-            return this;
-        }
-
-        /**
          * @param balanceDetails balance details
          * @return itself
          */
         public Builder setBalanceDetails(BalanceDetails balanceDetails) {
             this.balanceDetails = checkNotNull(balanceDetails, "balanceDetails");
-            return this;
-        }
-
-        /**
-         * @param linkedCards list of linked cards
-         * @return itself
-         */
-        public Builder setLinkedCards(List<Card> linkedCards) {
-            this.linkedCards = checkNotNull(linkedCards, "linkedCards");
-            return this;
-        }
-
-        /**
-         * @param additionalServices list of additional services
-         * @return itself
-         */
-        public Builder setAdditionalServices(List<String> additionalServices) {
-            this.additionalServices = checkNotNull(additionalServices, "additionalServices");
-            return this;
-        }
-
-        /**
-         * @param yandexMoneyCards list of Yandex.Money cards
-         * @return itself
-         */
-        public Builder setYandexMoneyCards(List<YandexMoneyCard> yandexMoneyCards) {
-            this.yandexMoneyCards = checkNotNull(yandexMoneyCards, "yandexMoneyCards");
             return this;
         }
 
