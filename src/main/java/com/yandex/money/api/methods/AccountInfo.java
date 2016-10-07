@@ -24,12 +24,7 @@
 
 package com.yandex.money.api.methods;
 
-import com.yandex.money.api.model.AccountStatus;
-import com.yandex.money.api.model.AccountType;
-import com.yandex.money.api.model.Avatar;
-import com.yandex.money.api.model.BalanceDetails;
-import com.yandex.money.api.model.Card;
-import com.yandex.money.api.model.YandexMoneyCard;
+import com.yandex.money.api.model.*;
 import com.yandex.money.api.net.PostRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.AccountInfoTypeAdapter;
@@ -102,7 +97,7 @@ public class AccountInfo {
     /**
      * list of Yandex.Money virtual cards
      */
-    public final List<YandexMoneyCard> virtualCards;
+    public final List<VirtualCard> virtualCards;
 
 
     private AccountInfo(Builder builder) {
@@ -183,7 +178,7 @@ public class AccountInfo {
         private List<Card> linkedCards = Collections.emptyList();
         private List<String> additionalServices = Collections.emptyList();
         private List<YandexMoneyCard> yandexMoneyCards = Collections.emptyList();
-        private List<YandexMoneyCard> virtualCards = Collections.emptyList();
+        private List<VirtualCard> virtualCards = Collections.emptyList();
 
         /**
          * @param account account's number
@@ -279,8 +274,10 @@ public class AccountInfo {
          * @param virtualCards list of Yandex.Money virtual cards
          * @return itself
          */
-        public Builder setVirtualCards(List<YandexMoneyCard> virtualCards) {
-            this.virtualCards = checkNotNull(virtualCards, "virtualCards");
+        public Builder setVirtualCards(List<VirtualCard> virtualCards) {
+            if (virtualCards != null) {
+                this.virtualCards = virtualCards;
+            }
             return this;
         }
 

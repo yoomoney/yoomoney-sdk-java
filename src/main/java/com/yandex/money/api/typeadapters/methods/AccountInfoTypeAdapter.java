@@ -24,24 +24,12 @@
 
 package com.yandex.money.api.typeadapters.methods;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
+import com.google.gson.*;
 import com.yandex.money.api.methods.AccountInfo;
-import com.yandex.money.api.model.AccountStatus;
-import com.yandex.money.api.model.AccountType;
-import com.yandex.money.api.model.Avatar;
-import com.yandex.money.api.model.BalanceDetails;
-import com.yandex.money.api.model.Card;
-import com.yandex.money.api.model.YandexMoneyCard;
+import com.yandex.money.api.model.*;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.StringTypeAdapter;
-import com.yandex.money.api.typeadapters.model.AvatarTypeAdapter;
-import com.yandex.money.api.typeadapters.model.BalanceDetailsTypeAdapter;
-import com.yandex.money.api.typeadapters.model.CardTypeAdapter;
-import com.yandex.money.api.typeadapters.model.YandexMoneyCardTypeAdapter;
+import com.yandex.money.api.typeadapters.model.*;
 import com.yandex.money.api.util.Currency;
 
 import java.lang.reflect.Type;
@@ -110,6 +98,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         BigDecimal balance = getBigDecimal(object, MEMBER_BALANCE);
         BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.getInstance()
                 .fromJson(object.get(MEMBER_BALANCE_DETAILS));
+
         if (balanceDetails == null) {
             balanceDetails = new BalanceDetails.Builder()
                     .setTotal(balance)
@@ -125,7 +114,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         List<YandexMoneyCard> yandexMoneyCards = YandexMoneyCardTypeAdapter.getInstance()
                 .fromJson(object.getAsJsonArray(MEMBER_YANDEX_MONEY_CARDS));
 
-        List<YandexMoneyCard> virtualCards = YandexMoneyCardTypeAdapter.getInstance()
+        List<VirtualCard> virtualCards = VirtualCardTypeAdapter.getInstance()
                 .fromJson(object.getAsJsonArray(MEMBER_VIRTUAL_CARDS));
 
         return new AccountInfo.Builder()
@@ -149,7 +138,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
 
         object.addProperty(MEMBER_ACCOUNT, src.account);
         object.addProperty(MEMBER_BALANCE, src.balance);
-        object.addProperty(MEMBER_CURRENCY, src.currency.numericCode);
+        object.addProperty(MEMBER_CURRENCY, src.currency.numericCode.toString());
         object.addProperty(MEMBER_STATUS, src.accountStatus.code);
         object.addProperty(MEMBER_TYPE, src.accountType.code);
 
@@ -169,7 +158,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         }
 
         if (!src.virtualCards.isEmpty()) {
-            object.add(MEMBER_VIRTUAL_CARDS, YandexMoneyCardTypeAdapter.getInstance().toJsonArray(src.virtualCards));
+            object.add(MEMBER_VIRTUAL_CARDS, VirtualCardTypeAdapter.getInstance().toJsonArray(src.virtualCards));
         }
 
         return object;
