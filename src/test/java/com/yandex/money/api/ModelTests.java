@@ -25,53 +25,28 @@
 package com.yandex.money.api;
 
 import com.google.gson.JsonParser;
-import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.IncomingTransferAccept;
 import com.yandex.money.api.methods.IncomingTransferReject;
 import com.yandex.money.api.methods.InstanceId;
-import com.yandex.money.api.model.AccountStatus;
-import com.yandex.money.api.model.AccountType;
-import com.yandex.money.api.model.Avatar;
-import com.yandex.money.api.model.BalanceDetails;
-import com.yandex.money.api.model.Card;
+import com.yandex.money.api.model.*;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.ExternalCard;
-import com.yandex.money.api.model.SimpleStatus;
-import com.yandex.money.api.model.StatusInfo;
-import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.CustomFee;
 import com.yandex.money.api.model.showcase.NoFee;
 import com.yandex.money.api.model.showcase.StdFee;
 import com.yandex.money.api.typeadapters.TypeAdapter;
-import com.yandex.money.api.typeadapters.methods.AccountInfoTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.IncomingTransferAcceptTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.IncomingTransferRejectTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.InstanceIdTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.OperationHistoryTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.RequestExternalPaymentTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.RequestPaymentTypeAdapter;
-import com.yandex.money.api.typeadapters.model.AvatarTypeAdapter;
-import com.yandex.money.api.typeadapters.model.BalanceDetailsTypeAdapter;
-import com.yandex.money.api.typeadapters.model.CardTypeAdapter;
-import com.yandex.money.api.typeadapters.model.ErrorTypeAdapter;
-import com.yandex.money.api.typeadapters.model.ExternalCardTypeAdapter;
-import com.yandex.money.api.typeadapters.model.YandexMoneyCardTypeAdapter;
+import com.yandex.money.api.typeadapters.methods.*;
+import com.yandex.money.api.typeadapters.model.*;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
-import com.yandex.money.api.util.Currency;
 import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
-import java.util.Arrays;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
-import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.*;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -80,7 +55,10 @@ public class ModelTests {
 
     @Test
     public void testAccountInfo() {
-        performTest(createAccountInfo(), AccountInfoTypeAdapter.getInstance());
+        AccountInfoTypeAdapter adapter = AccountInfoTypeAdapter.getInstance();
+
+        checkTypeAdapter("/methods/account-info-1.json", adapter);
+        checkTypeAdapter("/methods/account-info-2.json", adapter);
     }
 
     @Test
@@ -220,21 +198,6 @@ public class ModelTests {
 
     private static <T> void performTest(T value, TypeAdapter<T> adapter) {
         assertEquals(adapter.fromJson(adapter.toJsonTree(value)), value);
-    }
-
-    private static AccountInfo createAccountInfo() {
-        return new AccountInfo.Builder()
-                .setAccount("account")
-                .setBalance(BigDecimal.TEN)
-                .setCurrency(Currency.RUB)
-                .setAccountStatus(AccountStatus.IDENTIFIED)
-                .setAccountType(AccountType.PERSONAL)
-                .setAvatar(null)
-                .setBalanceDetails(createBalanceDetails())
-                .setLinkedCards(Arrays.asList(createCard(), createCard()))
-                .setAdditionalServices(Arrays.asList("service1", "service2"))
-                .setYandexMoneyCards(Arrays.asList(createYandexMoneyCard(), createYandexMoneyCard()))
-                .create();
     }
 
     private static Avatar createAvatar() {
