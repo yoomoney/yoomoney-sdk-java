@@ -47,8 +47,8 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Submit;
 import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
 import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
-import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.ShowcaseContext;
+import com.yandex.money.api.net.v1.DefaultApiClient;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.util.Currency;
 import org.joda.time.DateTime;
@@ -74,8 +74,8 @@ public class ShowcaseParserTest {
 
     @Test
     public void testParsing() throws Exception {
-        DocumentProvider documentProvider = new DocumentProvider(ApiTest.DEFAULT_API_CLIENT);
-        testShowcase(documentProvider, 5551L);
+        DefaultApiClient client = ApiTest.DEFAULT_API_CLIENT_BUILDER.create();
+        testShowcase(client, 5551L);
     }
 
     @Test
@@ -129,8 +129,8 @@ public class ShowcaseParserTest {
         ShowcaseTypeAdapter.getInstance().fromJson(inputStream);
     }
 
-    private void testShowcase(DocumentProvider documentProvider, long scid) throws Exception {
-        ShowcaseContext showcaseContext = documentProvider.getShowcase(new Showcase.Request(scid));
+    private void testShowcase(DefaultApiClient client, long scid) throws Exception {
+        ShowcaseContext showcaseContext = client.getShowcase(new Showcase.Request(scid));
         assertNotNull(showcaseContext);
         assertNotNull(showcaseContext.getCurrentStep().showcase);
     }

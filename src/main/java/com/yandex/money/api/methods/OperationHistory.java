@@ -134,8 +134,6 @@ public class OperationHistory {
      * Requests for a list of operations in user's history.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
     public static class Request extends PostRequest<OperationHistory> {
 

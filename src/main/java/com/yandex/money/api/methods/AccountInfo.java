@@ -197,8 +197,6 @@ public class AccountInfo {
      * Requests for {@link com.yandex.money.api.methods.AccountInfo}.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
     public static final class Request extends PostRequest<AccountInfo> {
 

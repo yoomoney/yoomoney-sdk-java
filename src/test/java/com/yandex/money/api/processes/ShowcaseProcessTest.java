@@ -32,8 +32,8 @@ import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.DocumentProvider;
 import com.yandex.money.api.net.ShowcaseContext;
+import com.yandex.money.api.net.v1.DefaultApiClient;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import org.joda.time.DateTime;
 import org.testng.Assert;
@@ -102,8 +102,7 @@ public final class ShowcaseProcessTest extends Assert {
                 currentStep,
                 Collections.<String, String>emptyMap(),
                 ShowcaseContext.State.UNKNOWN);
-        final ShowcaseProcess showcaseProcess = new ShowcaseProcess(getDocumentProvider(),
-                showcaseContext);
+        final ShowcaseProcess showcaseProcess = new ShowcaseProcess(getClient(), showcaseContext);
 
         showcaseProcess.proceed();
         assertEquals(showcaseContext.getState(), ShowcaseContext.State.INVALID_PARAMS);
@@ -126,8 +125,7 @@ public final class ShowcaseProcessTest extends Assert {
                 Collections.<String, String>emptyMap(),
                 ShowcaseContext.State.UNKNOWN
         );
-        final ShowcaseProcess showcaseProcess = new ShowcaseProcess(getDocumentProvider(),
-                showcaseContext);
+        final ShowcaseProcess showcaseProcess = new ShowcaseProcess(getClient(), showcaseContext);
 
         Text inn = (Text) showcase.form.items.get(0);
         inn.setValue("erroneous input");
@@ -153,8 +151,7 @@ public final class ShowcaseProcessTest extends Assert {
                 new DateTime(),
                 new ShowcaseContext.Step(getEmptyShowcase(), "http://foobar.foo"),
                 Collections.<String, String>emptyMap(), ShowcaseContext.State.COMPLETED);
-        final ShowcaseProcess showcaseProcess = new ShowcaseProcess(getDocumentProvider(),
-                completedShowcaseContext);
+        final ShowcaseProcess showcaseProcess = new ShowcaseProcess(getClient(), completedShowcaseContext);
 
         assertTrue(showcaseProcess.proceed());
     }
@@ -185,14 +182,14 @@ public final class ShowcaseProcessTest extends Assert {
                 Resources.load("/showcase/showcase_bills_novalidation.json"));
     }
 
-    private static DocumentProvider getDocumentProvider() {
-        return new DocumentProvider(ApiTest.DEFAULT_API_CLIENT);
+    private static DefaultApiClient getClient() {
+        return ApiTest.DEFAULT_API_CLIENT_BUILDER.create();
     }
 
     private static ShowcaseProcess initShowcaseProcess() throws Exception {
         final ApiRequest<Showcase> resReq = new Showcase.Request(5551);
-        final DocumentProvider documentProvider = getDocumentProvider();
-        final ShowcaseContext showcaseContext = documentProvider.getShowcase(resReq);
-        return new ShowcaseProcess(documentProvider, showcaseContext);
+        final DefaultApiClient client = getClient();
+        final ShowcaseContext showcaseContext = client.getShowcase(resReq);
+        return new ShowcaseProcess(client, showcaseContext);
     }
 }

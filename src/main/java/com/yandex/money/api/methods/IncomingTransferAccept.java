@@ -103,8 +103,6 @@ public class IncomingTransferAccept {
      * Requests to perform {@link com.yandex.money.api.methods.IncomingTransferAccept}.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
     public static final class Request extends PostRequest<IncomingTransferAccept> {
 

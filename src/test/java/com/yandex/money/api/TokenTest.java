@@ -30,7 +30,7 @@ import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.AuxToken;
 import com.yandex.money.api.model.Scope;
-import com.yandex.money.api.net.OAuth2Session;
+import com.yandex.money.api.net.v1.DefaultApiClient;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -47,19 +47,18 @@ public class TokenTest implements ApiTest {
     public void testAuxToken() throws InvalidTokenException, InsufficientScopeException,
             InvalidRequestException, IOException {
 
-        OAuth2Session session = new OAuth2Session(DEFAULT_API_CLIENT);
-        session.setDebugLogging(true);
-        session.setAccessToken(ACCESS_TOKEN);
+        DefaultApiClient client = DEFAULT_API_CLIENT_BUILDER.create();
+        client.setAccessToken(ACCESS_TOKEN);
 
         Set<Scope> scopes = new HashSet<>();
         scopes.add(Scope.ACCOUNT_INFO);
 
-        AuxToken auxToken = session.execute(new AuxToken.Request(scopes));
+        AuxToken auxToken = client.execute(new AuxToken.Request(scopes));
         String token = auxToken.auxToken;
         Assert.assertNotNull(token);
-        session.setAccessToken(token);
+        client.setAccessToken(token);
 
-        AccountInfo accountInfo = session.execute(new AccountInfo.Request());
+        AccountInfo accountInfo = client.execute(new AccountInfo.Request());
         Assert.assertNotNull(accountInfo.account);
         Assert.assertNotNull(accountInfo.balance);
     }

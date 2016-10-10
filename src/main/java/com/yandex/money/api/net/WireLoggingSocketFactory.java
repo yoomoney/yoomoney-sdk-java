@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net.clients;
+package com.yandex.money.api.net;
 
 import com.yandex.money.api.util.Numbers;
 

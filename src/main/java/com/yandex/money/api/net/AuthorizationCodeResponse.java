@@ -34,7 +34,7 @@ import java.util.Map;
  * This is a convenience class to parse OAuth2 response after user authentication.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
- * @see com.yandex.money.api.net.OAuth2Authorization
+ * @see com.yandex.money.api.authorization.AuthorizationData
  */
 public class AuthorizationCodeResponse {
 

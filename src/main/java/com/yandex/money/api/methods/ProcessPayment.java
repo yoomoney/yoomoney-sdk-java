@@ -205,8 +205,6 @@ public class ProcessPayment extends BaseProcessPayment {
      * Request for payment processing.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
     public static final class Request extends PostRequest<ProcessPayment> {
 

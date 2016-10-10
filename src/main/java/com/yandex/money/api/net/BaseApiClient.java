@@ -22,20 +22,28 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net.clients;
+package com.yandex.money.api.net;
 
-import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.DefaultUserAgent;
-import com.yandex.money.api.net.UserAgent;
+import com.yandex.money.api.exceptions.ResourceNotFoundException;
+import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
 import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.Language;
+import com.yandex.money.api.util.Strings;
+import okhttp3.CacheControl;
 import okhttp3.ConnectionPool;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
@@ -46,25 +54,30 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class DefaultApiClient implements ApiClient {
+public abstract class BaseApiClient implements ApiClient {
 
     private static final long DEFAULT_TIMEOUT = 30;
 
-    private final String clientId;
-    private final OkHttpClient httpClient;
-    private final HostsProvider hostsProvider;
-    private final Language language;
-    private final UserAgent userAgent;
-    private final boolean debugMode;
+    private final DocumentProvider documentProvider = new DocumentProvider();
+    private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
 
-    protected DefaultApiClient(Builder builder) {
+    private final String clientId;
+    private final HostsProvider hostsProvider;
+    private final UserAgent userAgent;
+    private final Language language;
+    private final boolean debugMode;
+    private final OkHttpClient httpClient;
+
+    private String accessToken;
+
+    protected BaseApiClient(Builder builder) {
         clientId = checkNotNull(builder.clientId, "clientId");
         hostsProvider = builder.hostsProvider;
         userAgent = new DefaultUserAgent(checkNotNull(builder, "builder").platform);
         language = Language.getDefault();
         debugMode = builder.debugMode;
 
-        OkHttpClient.Builder httpClientBuilder = getHttpClientBuilder();
+        OkHttpClient.Builder httpClientBuilder = createHttpClientBuilder();
         if (debugMode) {
             SSLSocketFactory sslSocketFactory = createSslSocketFactory();
             httpClientBuilder.sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
@@ -78,28 +91,18 @@ public class DefaultApiClient implements ApiClient {
     }
 
     @Override
-    public OkHttpClient getHttpClient() {
-        return httpClient;
-    }
-
-    @Override
     public HostsProvider getHostsProvider() {
         return hostsProvider;
     }
 
     @Override
-    public UserAgent getUserAgent() {
-        return userAgent;
+    public Response call(ApiRequest<?> request) throws IOException {
+        return httpClient.newCall(prepareRequest(request)).execute();
     }
 
     @Override
-    public Language getLanguage() {
-        return language;
-    }
-
-    @Override
-    public <T> ApiRequest<T> prepare(ApiRequest<T> request) {
-        return request;
+    public final boolean isAuthorized() {
+        return !Strings.isNullOrEmpty(accessToken);
     }
 
     @Override
@@ -107,18 +110,62 @@ public class DefaultApiClient implements ApiClient {
         return debugMode;
     }
 
+    public <T> HttpResourceResponse<T> fetch(ApiRequest<T> request) throws IOException, ResourceNotFoundException {
+        return documentProvider.fetch(request, this);
+    }
+
+    public ShowcaseContext getShowcase(ApiRequest<Showcase> request) throws IOException, ResourceNotFoundException {
+        return documentProvider.getShowcase(request, this);
+    }
+
+    public ShowcaseContext submitShowcase(ShowcaseContext showcaseContext)
+            throws IOException, ResourceNotFoundException {
+        return documentProvider.submitShowcase(showcaseContext, this);
+    }
+
+    public final void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
     /**
      * Creates HTTP client to use.
      *
      * @return HTTP client
      */
-    protected OkHttpClient.Builder getHttpClientBuilder() {
+    protected OkHttpClient.Builder createHttpClientBuilder() {
         return new OkHttpClient.Builder()
                 .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .connectionPool(new ConnectionPool(4, 10L, TimeUnit.MINUTES))
                 .followSslRedirects(false)
                 .followRedirects(false);
+    }
+
+    private Request prepareRequest(ApiRequest<?> request) {
+        checkNotNull(request, "request");
+
+        Request.Builder builder = new Request.Builder()
+                .cacheControl(cacheControl)
+                .addHeader(HttpHeaders.USER_AGENT, userAgent.getName())
+                .addHeader(HttpHeaders.ACCEPT_LANGUAGE, language.iso6391Code);
+
+        if (isAuthorized()) {
+            builder.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+        }
+
+        for (Map.Entry<String, String> entry : request.getHeaders().entrySet()) {
+            String value = entry.getValue();
+            if (value != null) {
+                builder.addHeader(entry.getKey(), value);
+            }
+        }
+
+        builder.url(request.requestUrl(hostsProvider));
+        if (request.getMethod() == ApiRequest.Method.POST) {
+            builder.post(RequestBody.create(MediaType.parse(request.getContentType()), request.getBody()));
+        }
+
+        return builder.build();
     }
 
     private static SSLSocketFactory createSslSocketFactory() {
@@ -131,7 +178,7 @@ public class DefaultApiClient implements ApiClient {
         }
     }
 
-    public static class Builder {
+    public static abstract class Builder {
 
         private boolean debugMode = false;
         private String clientId;
@@ -158,8 +205,6 @@ public class DefaultApiClient implements ApiClient {
             return this;
         }
 
-        public DefaultApiClient create() {
-            return new DefaultApiClient(this);
-        }
+        public abstract ApiClient create();
     }
 }

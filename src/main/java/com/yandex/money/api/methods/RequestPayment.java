@@ -217,8 +217,6 @@ public class RequestPayment extends BaseRequestPayment {
      * Requests for a payment context.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
     public static final class Request extends PostRequest<RequestPayment> {
 

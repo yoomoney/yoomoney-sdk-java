@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,20 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.exceptions;
+package com.yandex.money.api.authorization;
 
 /**
- * Token is invalid.
- * <p/>
- * Possible causes:
- * <ul>
- *     <li>token does not exist;</li>
- *     <li>token is overdue;</li>
- *     <li>token has been revoked.</li>
- * </ul>
- * <p/>
- * The app should ask for a new token.
- *
- * @author Roman Tsirulnikov (romanvt@yamoney.ru)
- * @see com.yandex.money.api.authorization.AuthorizationData
+ * Authorization data.
  */
-public final class InvalidTokenException extends Exception {
-    public InvalidTokenException(String error) {
-        super(error);
-    }
+public interface AuthorizationData {
+
+    /**
+     * @return url to open
+     */
+    String getUrl();
+
+    /**
+     * @return parameters to pass as POST body
+     */
+    byte[] getParameters();
 }

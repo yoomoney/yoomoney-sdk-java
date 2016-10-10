@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,30 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api;
+package com.yandex.money.api.net.v1;
+
+import com.yandex.money.api.authorization.AuthorizationData;
 
 /**
- * You can use it for simple syncing of threads.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * @author Slava Yasevich
  */
-final class ThreadSync {
+final class AuthorizationDataImpl implements AuthorizationData {
 
-    private final Object lock = new Object();
+    private final String url;
+    private final byte[] parameters;
 
-    private boolean notified = false;
-
-    /**
-     * @see #wait()
-     */
-    public void doWait() {
-        synchronized (lock) {
-            if (!notified) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    // do nothing
-                }
-            }
-            notified = false;
-        }
+    AuthorizationDataImpl(String host, byte[] parameters) {
+        this.url = host + "/oauth/authorize";
+        this.parameters = parameters;
     }
 
-    /**
-     * @see #notifyAll()
-     */
-    public void doNotify() {
-        synchronized (lock) {
-            lock.notifyAll();
-            notified = true;
-        }
+    @Override
+    public String getUrl() {
+        return url;
+    }
+
+    @Override
+    public byte[] getParameters() {
+        return parameters;
     }
 }

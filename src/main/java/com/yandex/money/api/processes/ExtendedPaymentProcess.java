@@ -29,7 +29,7 @@ import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
-import com.yandex.money.api.net.OAuth2Session;
+import com.yandex.money.api.net.v1.DefaultApiClient;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
@@ -40,7 +40,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  */
 public final class ExtendedPaymentProcess implements IPaymentProcess {
 
-    private final OAuth2Session session;
+    private final DefaultApiClient client;
     private final PaymentProcess paymentProcess;
     private final ExternalPaymentProcess externalPaymentProcess;
     private final ExternalPaymentProcess.ParameterProvider parameterProvider;
@@ -51,13 +51,13 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     /**
      * Constructor.
      *
-     * @param session session to run the process on
+     * @param client client to run the process on
      * @param parameterProvider parameter's provider
      */
-    public ExtendedPaymentProcess(OAuth2Session session, ExternalPaymentProcess.ParameterProvider parameterProvider) {
-        this.session = checkNotNull(session, "session");
-        this.paymentProcess = new PaymentProcess(session, parameterProvider);
-        this.externalPaymentProcess = new ExternalPaymentProcess(session, parameterProvider);
+    public ExtendedPaymentProcess(DefaultApiClient client, ExternalPaymentProcess.ParameterProvider parameterProvider) {
+        this.client = checkNotNull(client, "client");
+        this.paymentProcess = new PaymentProcess(client, parameterProvider);
+        this.externalPaymentProcess = new ExternalPaymentProcess(client, parameterProvider);
         this.parameterProvider = parameterProvider;
         invalidatePaymentContext();
     }
@@ -136,7 +136,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      * @see {@link BasePaymentProcess#setAccessToken(String)}
      */
     public void setAccessToken(String accessToken) {
-        session.setAccessToken(accessToken);
+        client.setAccessToken(accessToken);
         invalidatePaymentContext();
     }
 
@@ -148,7 +148,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     private void invalidatePaymentContext() {
-        this.paymentContext = session.isAuthorized() ? PaymentContext.PAYMENT :
+        this.paymentContext = client.isAuthorized() ? PaymentContext.PAYMENT :
                 PaymentContext.EXTERNAL_PAYMENT;
     }
 

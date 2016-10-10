@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,25 +22,32 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.exceptions;
+package com.yandex.money.api.authorization;
+
+import com.yandex.money.api.net.ParametersBuffer;
+
+import java.util.Map;
 
 /**
- * Token is invalid.
- * <p/>
- * Possible causes:
- * <ul>
- *     <li>token does not exist;</li>
- *     <li>token is overdue;</li>
- *     <li>token has been revoked.</li>
- * </ul>
- * <p/>
- * The app should ask for a new token.
- *
- * @author Roman Tsirulnikov (romanvt@yamoney.ru)
- * @see com.yandex.money.api.authorization.AuthorizationData
+ * Basic implementation of {@link AuthorizationParameters}.
  */
-public final class InvalidTokenException extends Exception {
-    public InvalidTokenException(String error) {
-        super(error);
+final class AuthorizationParametersImpl implements AuthorizationParameters {
+
+    private final Map<String, String> parameters;
+
+    AuthorizationParametersImpl(Map<String, String> parameters) {
+        this.parameters = parameters;
+    }
+
+    @Override
+    public void add(String name, String value) {
+        parameters.put(name, value);
+    }
+
+    @Override
+    public byte[] build() {
+        return new ParametersBuffer()
+                .setParameters(parameters)
+                .prepareBytes();
     }
 }

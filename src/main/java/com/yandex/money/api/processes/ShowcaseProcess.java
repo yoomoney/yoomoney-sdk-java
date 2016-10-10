@@ -25,7 +25,7 @@
 package com.yandex.money.api.processes;
 
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
-import com.yandex.money.api.net.DocumentProvider;
+import com.yandex.money.api.net.BaseApiClient;
 import com.yandex.money.api.net.ShowcaseContext;
 
 import java.io.IOException;
@@ -33,8 +33,8 @@ import java.io.IOException;
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * This class connects {@link DocumentProvider} and {@link ShowcaseContext} class and provides
- * convenient methods to work with them.
+ * This class connects {@link BaseApiClient} and {@link ShowcaseContext} class and provides convenient methods to work
+ * with them.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
@@ -44,10 +44,11 @@ public class ShowcaseProcess implements Process {
      * Related context which encapsulates current step and overall state
      */
     public final ShowcaseContext showcaseContext;
-    private final DocumentProvider documentProvider;
 
-    public ShowcaseProcess(DocumentProvider documentProvider, ShowcaseContext showcaseContext) {
-        this.documentProvider = checkNotNull(documentProvider, "documentProvider");
+    private final BaseApiClient apiClient;
+
+    public ShowcaseProcess(BaseApiClient apiClient, ShowcaseContext showcaseContext) {
+        this.apiClient = checkNotNull(apiClient, "apiClient");
         this.showcaseContext = checkNotNull(showcaseContext, "showcaseContext");
     }
 
@@ -63,7 +64,7 @@ public class ShowcaseProcess implements Process {
         if (isCompleted()) {
             return true;
         }
-        documentProvider.submitShowcase(showcaseContext);
+        apiClient.submitShowcase(showcaseContext);
         return isCompleted();
     }
 

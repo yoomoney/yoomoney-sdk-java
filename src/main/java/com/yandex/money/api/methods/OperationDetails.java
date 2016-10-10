@@ -81,8 +81,6 @@ public class OperationDetails {
      * Requests for specific operation details.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
     public static class Request extends PostRequest<OperationDetails> {
 

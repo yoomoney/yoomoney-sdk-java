@@ -63,7 +63,7 @@ public final class ParametersBuffer {
      * @param params key-value pairs of parameters (not null)
      * @return itself
      */
-    public ParametersBuffer setParams(Map<String, String> params) {
+    public ParametersBuffer setParameters(Map<String, String> params) {
         this.params = checkNotNull(params, "params");
         return this;
     }

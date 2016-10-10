@@ -85,8 +85,6 @@ public class AuxToken {
      * Requests for an auxiliary token.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
     public static final class Request extends PostRequest<AuxToken> {
 

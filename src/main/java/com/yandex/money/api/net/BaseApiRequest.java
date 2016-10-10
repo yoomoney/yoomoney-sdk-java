@@ -74,7 +74,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     @Override
     public final String requestUrl(HostsProvider hostsProvider) {
         String url = requestUrlBase(hostsProvider);
-        return getMethod() == Method.GET ? url + buffer.setParams(parameters).prepareGet() : url;
+        return getMethod() == Method.GET ? url + buffer.setParameters(parameters).prepareGet() : url;
     }
 
     @Override
@@ -90,7 +90,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     @Override
     public final byte[] getBody() {
         prepareBody();
-        return body == null ? buffer.setParams(parameters).prepareBytes() : body;
+        return body == null ? buffer.setParameters(parameters).prepareBytes() : body;
     }
 
     @Override

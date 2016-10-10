@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,39 +22,39 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
+package com.yandex.money.api.net.v1;
 
+import com.yandex.money.api.authorization.AuthorizationData;
+import com.yandex.money.api.authorization.AuthorizationParameters;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
-import com.yandex.money.api.net.clients.ApiClient;
+import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.BaseApiClient;
 import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.MimeTypes;
-import com.yandex.money.api.util.Strings;
-import okhttp3.Call;
-import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 
+import static com.yandex.money.api.net.ResponseHandler.getInputStream;
+import static com.yandex.money.api.net.ResponseHandler.processError;
+
 /**
- * OAuth2 session that can be used to perform API requests and retrieve responses.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Default client for API v1.
  */
-public class OAuth2Session extends AbstractSession {
+public class DefaultApiClient extends BaseApiClient {
 
-    private String accessToken;
+    protected DefaultApiClient(Builder builder) {
+        super(builder);
+    }
 
-    /**
-     * Constructor.
-     *
-     * @param client API client used to perform operations
-     */
-    public OAuth2Session(ApiClient client) {
-        super(client);
+    @Override
+    public AuthorizationData createAuthorizationData(AuthorizationParameters parameters) {
+        parameters.add("client_id", getClientId());
+        return new AuthorizationDataImpl(getHostsProvider().getWebUrl(), parameters.build());
     }
 
     /**
@@ -70,56 +70,16 @@ public class OAuth2Session extends AbstractSession {
      */
     public <T> T execute(ApiRequest<T> request)
             throws IOException, InvalidRequestException, InvalidTokenException, InsufficientScopeException {
-        return parseResponse(request, makeCall(request).execute());
-    }
 
-    /**
-     * Sets access token to perform authorized operations. Can be set to {@code null}, if no
-     * access token is required to execute a request.
-     *
-     * @param accessToken access token
-     */
-    public void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
-    }
-
-    /**
-     * Checks if session is authorized.
-     *
-     * @return {@code true} if authorized
-     */
-    public boolean isAuthorized() {
-        return !Strings.isNullOrEmpty(accessToken);
-    }
-
-    /**
-     * Convenience method to create {@link com.yandex.money.api.net.OAuth2Authorization} object for
-     * user authentication.
-     *
-     * @return authorization parameters
-     */
-    public OAuth2Authorization createOAuth2Authorization() {
-        return new OAuth2Authorization(client);
-    }
-
-    private <T> Call makeCall(ApiRequest<T> request) {
-        final Request.Builder builder = prepareRequestBuilder(request);
-        if (isAuthorized()) {
-            builder.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-        }
-        return prepareCall(builder);
-    }
-
-    private <T> T parseResponse(ApiRequest<T> request, Response response) throws IOException,
-            InvalidRequestException, InvalidTokenException, InsufficientScopeException {
-
+        Response response = call(request);
         InputStream inputStream = null;
+
         try {
             switch (response.code()) {
                 case HttpURLConnection.HTTP_OK:
                 case HttpURLConnection.HTTP_ACCEPTED:
                 case HttpURLConnection.HTTP_BAD_REQUEST:
-                    inputStream = getInputStream(response);
+                    inputStream = getInputStream(response, isDebugEnabled());
                     if (isJsonType(response)) {
                         return request.parseResponse(inputStream);
                     } else {
@@ -139,8 +99,15 @@ public class OAuth2Session extends AbstractSession {
         }
     }
 
-    private boolean isJsonType(Response response) {
+    private static boolean isJsonType(Response response) {
         String field = response.header(HttpHeaders.CONTENT_TYPE);
         return field != null && (field.startsWith(MimeTypes.Application.JSON) || field.startsWith(MimeTypes.Text.JSON));
+    }
+
+    public static class Builder extends BaseApiClient.Builder {
+        @Override
+        public DefaultApiClient create() {
+            return new DefaultApiClient(this);
+        }
     }
 }

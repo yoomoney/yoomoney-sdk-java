@@ -22,54 +22,57 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net.clients;
+package com.yandex.money.api.net;
 
-import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.UserAgent;
+import com.yandex.money.api.authorization.AuthorizationData;
+import com.yandex.money.api.authorization.AuthorizationParameters;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.util.Language;
-import okhttp3.OkHttpClient;
+import okhttp3.Response;
+
+import java.io.IOException;
 
 /**
- * Yandex.Money API client. Provides necessary information for sessions.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Yandex.Money API client.
  */
 public interface ApiClient {
 
     /**
+     * Returns client id.
+     *
      * @return client id
      */
     String getClientId();
 
     /**
-     * @return HTTP client to use when executing API requests
-     */
-    OkHttpClient getHttpClient();
-
-    /**
-     * @return hosts provider
+     * Returns instance of {@link HostsProvider}
+     *
+     * @return host's provider
      */
     HostsProvider getHostsProvider();
 
     /**
-     * @return specific HTTP user agent
-     */
-    UserAgent getUserAgent();
-
-    /**
-     * @return language of API responses
-     */
-    Language getLanguage();
-
-    /**
-     * Prepares {@link ApiRequest} to meet {@link ApiClient} requirements.
+     * Executes {@link ApiRequest}.
      *
-     * @param request base request
-     * @param <T> type of response
-     * @return modified request
+     * @param request API request
+     * @return OkHttp response
+     * @throws IOException if request is failed due to I/O-related errors
      */
-    <T> ApiRequest<T> prepare(ApiRequest<T> request);
+    Response call(ApiRequest<?> request) throws IOException;
+
+    /**
+     * Creates {@link AuthorizationData} based on a client's configuration and provided {@link AuthorizationParameters}.
+     *
+     * @param parameters parameters to use
+     * @return authorization data
+     */
+    AuthorizationData createAuthorizationData(AuthorizationParameters parameters);
+
+    /**
+     * Checks if client is in authorized state.
+     *
+     * @return {@code true}, if client is authorized
+     */
+    boolean isAuthorized();
 
     /**
      * Checks if debug mode is enabled for this client.
