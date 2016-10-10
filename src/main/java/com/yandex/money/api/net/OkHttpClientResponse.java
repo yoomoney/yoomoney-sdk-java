@@ -24,48 +24,54 @@
 
 package com.yandex.money.api.net;
 
-import com.yandex.money.api.util.HttpHeaders;
-import com.yandex.money.api.util.Log;
 import okhttp3.Response;
 
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * @author Slava Yasevich
- */
-public final class ResponseHandler {
+import static com.yandex.money.api.util.Common.checkNotNull;
 
-    private ResponseHandler() {
+/**
+ * Implementation of {@link HttpClientResponse} for OkHttp.
+ */
+final class OkHttpClientResponse implements HttpClientResponse {
+
+    private final Response response;
+    private final boolean debug;
+
+    OkHttpClientResponse(Response response, boolean debug) {
+        this.response = checkNotNull(response, "response");
+        this.debug = debug;
     }
 
-    /**
-     * Gets input stream from response. Logging can be applied if debug parameter is set to {@code true}.
-     *
-     * @param response response reference
-     * @param debug {@code true} if debug is enabled
-     * @return input stream
-     */
-    public static InputStream getInputStream(Response response, boolean debug) throws IOException {
+    @Override
+    public int getCode() {
+        return response.code();
+    }
+
+    @Override
+    public String getMessage() {
+        return response.message();
+    }
+
+    @Override
+    public String getUrl() {
+        return response.request().url().toString();
+    }
+
+    @Override
+    public String getHeader(String name) {
+        return response.header(name);
+    }
+
+    @Override
+    public String getBody() throws IOException {
+        return response.body().string();
+    }
+
+    @Override
+    public InputStream getByteStream() {
         InputStream stream = response.body().byteStream();
         return debug ? new ResponseLoggingInputStream(stream) : stream;
-    }
-
-    /**
-     * Processes connection errors.
-     *
-     * @param response response reference
-     * @return WWW-Authenticate field of connection
-     */
-    public static String processError(Response response) throws IOException {
-        String field = response.header(HttpHeaders.WWW_AUTHENTICATE);
-        Log.w("Server has responded with a error: " + getError(response) + "\n" +
-                HttpHeaders.WWW_AUTHENTICATE + ": " + field);
-        Log.w(response.body().string());
-        return field;
-    }
-
-    private static String getError(Response response) {
-        return "HTTP " + response.code() + " " + response.message();
     }
 }

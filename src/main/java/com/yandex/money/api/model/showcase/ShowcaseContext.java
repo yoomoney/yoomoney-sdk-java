@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,16 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
+package com.yandex.money.api.model.showcase;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.model.showcase.Showcase;
+import com.yandex.money.api.exceptions.ResourceNotFoundException;
+import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.BaseApiRequest;
+import com.yandex.money.api.net.HttpClientResponse;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.JsonUtils;
@@ -36,14 +39,17 @@ import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.util.HttpHeaders;
 import org.joda.time.DateTime;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Stack;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
 import static com.yandex.money.api.util.Common.checkNotNull;
+import static com.yandex.money.api.util.Responses.processError;
 
 /**
  * This class handles {@link Showcase} submit steps.
@@ -110,8 +116,8 @@ public final class ShowcaseContext {
     /**
      * @return request to move on the next state.
      */
-    public ApiRequest<Showcase> createRequest() {
-        return new Request(currentStep, lastModified);
+    public ApiRequest<ShowcaseContext> createRequest() {
+        return new Request(this, lastModified);
     }
 
     /**
@@ -289,21 +295,67 @@ public final class ShowcaseContext {
         }
     }
 
-    private static final class Request extends PostRequest<Showcase> {
+    private static final class Request extends BaseApiRequest<ShowcaseContext> {
 
-        private final String url;
+        private final ShowcaseContext context;
 
-        public Request(Step currentStep, DateTime lastModified) {
-            super(ShowcaseTypeAdapter.getInstance());
-            this.url = checkNotEmpty(checkNotNull(currentStep, "currentStep").submitUrl, "submitUrl");
+        public Request(ShowcaseContext context, DateTime lastModified) {
+            this.context = checkNotNull(context, "context");
+            checkNotEmpty(context.currentStep.submitUrl, "currentStep.submitUrl");
 
             addHeader(HttpHeaders.IF_MODIFIED_SINCE, lastModified);
-            addParameters(checkNotNull(currentStep.showcase, "showcase of current step").getPaymentParameters());
+            addParameters(checkNotNull(context.currentStep.showcase, "currentStep.showcase").getPaymentParameters());
+        }
+
+        @Override
+        public Method getMethod() {
+            return Method.POST;
         }
 
         @Override
         protected String requestUrlBase(HostsProvider hostsProvider) {
-            return url;
+            return context.currentStep.submitUrl;
+        }
+
+        @Override
+        public ShowcaseContext parse(HttpClientResponse response) throws Exception {
+            InputStream inputStream = null;
+
+            try {
+                int responseCode = response.getCode();
+                switch (responseCode) {
+                    case HttpURLConnection.HTTP_OK:
+                        inputStream = response.getByteStream();
+                        context.setParams(inputStream);
+                        context.setState(ShowcaseContext.State.COMPLETED);
+                        return context;
+                    case HttpURLConnection.HTTP_MULT_CHOICE:
+                    case HttpURLConnection.HTTP_BAD_REQUEST:
+                        final String newLocation = response.getHeader(HttpHeaders.LOCATION);
+
+                        inputStream = response.getByteStream();
+                        Showcase newShowcase = ShowcaseTypeAdapter.getInstance().fromJson(inputStream);
+
+                        ShowcaseContext.Step step = new ShowcaseContext.Step(newShowcase,
+                                newLocation == null ? null : newLocation);
+                        if (responseCode == HttpURLConnection.HTTP_MULT_CHOICE) {
+                            context.pushCurrentStep(step);
+                            context.setState(ShowcaseContext.State.HAS_NEXT_STEP);
+                        } else {
+                            context.setCurrentStep(step);
+                            context.setState(ShowcaseContext.State.INVALID_PARAMS);
+                        }
+                        return context;
+                    case HttpURLConnection.HTTP_NOT_FOUND:
+                        throw new ResourceNotFoundException(response.getUrl());
+                    default:
+                        throw new IOException(processError(response));
+                }
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
         }
     }
 

@@ -25,7 +25,7 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.ExternalCard;
-import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.OAuthApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.ProcessExternalPaymentTypeAdapter;
 
@@ -79,7 +79,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
     /**
      * Request for processing external payment.
      */
-    public static final class Request extends PostRequest<ProcessExternalPayment> {
+    public static final class Request extends OAuthApiRequest<ProcessExternalPayment> {
 
         /**
          * For paying with a new card.

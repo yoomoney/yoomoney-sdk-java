@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.net;
 
-import com.yandex.money.api.exceptions.ResourceNotFoundException;
-import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.HttpHeaders;
@@ -41,7 +39,6 @@ import okhttp3.Response;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
-import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -58,7 +55,6 @@ public abstract class BaseApiClient implements ApiClient {
 
     private static final long DEFAULT_TIMEOUT = 30;
 
-    private final DocumentProvider documentProvider = new DocumentProvider();
     private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
 
     private final String clientId;
@@ -96,8 +92,9 @@ public abstract class BaseApiClient implements ApiClient {
     }
 
     @Override
-    public Response call(ApiRequest<?> request) throws IOException {
-        return httpClient.newCall(prepareRequest(request)).execute();
+    public <T> T execute(ApiRequest<T> request) throws Exception {
+        Response response = httpClient.newCall(prepareRequest(request)).execute();
+        return request.parse(new OkHttpClientResponse(response, debugMode));
     }
 
     @Override
@@ -108,19 +105,6 @@ public abstract class BaseApiClient implements ApiClient {
     @Override
     public boolean isDebugEnabled() {
         return debugMode;
-    }
-
-    public <T> HttpResourceResponse<T> fetch(ApiRequest<T> request) throws IOException, ResourceNotFoundException {
-        return documentProvider.fetch(request, this);
-    }
-
-    public ShowcaseContext getShowcase(ApiRequest<Showcase> request) throws IOException, ResourceNotFoundException {
-        return documentProvider.getShowcase(request, this);
-    }
-
-    public ShowcaseContext submitShowcase(ShowcaseContext showcaseContext)
-            throws IOException, ResourceNotFoundException {
-        return documentProvider.submitShowcase(showcaseContext, this);
     }
 
     public final void setAccessToken(String accessToken) {

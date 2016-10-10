@@ -25,7 +25,7 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.OAuthApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.RevokeTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.TokenTypeAdapter;
@@ -82,7 +82,7 @@ public class Token {
     /**
      * Request for access token.
      */
-    public static class Request extends PostRequest<Token> {
+    public static class Request extends OAuthApiRequest<Token> {
 
         /**
          * Constructor.
@@ -121,7 +121,7 @@ public class Token {
     /**
      * Revokes access token.
      */
-    public static final class Revoke extends PostRequest<Revoke> {
+    public static final class Revoke extends OAuthApiRequest<Revoke> {
 
         /**
          * Revoke only one token.

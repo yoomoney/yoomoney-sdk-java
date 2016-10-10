@@ -27,9 +27,6 @@ package com.yandex.money.api.net;
 import com.yandex.money.api.authorization.AuthorizationData;
 import com.yandex.money.api.authorization.AuthorizationParameters;
 import com.yandex.money.api.net.providers.HostsProvider;
-import okhttp3.Response;
-
-import java.io.IOException;
 
 /**
  * Yandex.Money API client.
@@ -50,14 +47,7 @@ public interface ApiClient {
      */
     HostsProvider getHostsProvider();
 
-    /**
-     * Executes {@link ApiRequest}.
-     *
-     * @param request API request
-     * @return OkHttp response
-     * @throws IOException if request is failed due to I/O-related errors
-     */
-    Response call(ApiRequest<?> request) throws IOException;
+    <T> T execute(ApiRequest<T> request) throws Exception;
 
     /**
      * Creates {@link AuthorizationData} based on a client's configuration and provided {@link AuthorizationParameters}.

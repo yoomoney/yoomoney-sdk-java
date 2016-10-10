@@ -32,7 +32,7 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
-import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.OAuthApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.net.v1.DefaultApiClient;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
@@ -98,8 +98,7 @@ public class OAuth2SessionTest {
 
     @Test(expectedExceptions = InsufficientScopeException.class)
     public void testForbidden() throws Exception {
-        executeTest(createResponse().setResponseCode(HttpURLConnection.HTTP_FORBIDDEN),
-                createRequest(true));
+        executeTest(createResponse().setResponseCode(HttpURLConnection.HTTP_FORBIDDEN), createRequest(true));
     }
 
     private static MockResponse createResponse() {
@@ -134,7 +133,7 @@ public class OAuth2SessionTest {
             this.code = code;
         }
 
-        static final class Request extends PostRequest<Mock> {
+        static final class Request extends OAuthApiRequest<Mock> {
 
             private final HttpUrl url;
 

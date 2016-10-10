@@ -24,9 +24,6 @@
 
 package com.yandex.money.api;
 
-import com.yandex.money.api.exceptions.InsufficientScopeException;
-import com.yandex.money.api.exceptions.InvalidRequestException;
-import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.AuxToken;
 import com.yandex.money.api.model.Scope;
@@ -34,7 +31,6 @@ import com.yandex.money.api.net.v1.DefaultApiClient;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -44,9 +40,7 @@ import java.util.Set;
 public class TokenTest implements ApiTest {
 
     @Test
-    public void testAuxToken() throws InvalidTokenException, InsufficientScopeException,
-            InvalidRequestException, IOException {
-
+    public void testAuxToken() throws Exception {
         DefaultApiClient client = DEFAULT_API_CLIENT_BUILDER.create();
         client.setAccessToken(ACCESS_TOKEN);
 

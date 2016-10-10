@@ -29,7 +29,7 @@ import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
-import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.OAuthApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.RequestPaymentTypeAdapter;
 import com.yandex.money.api.util.Enums;
@@ -218,7 +218,7 @@ public class RequestPayment extends BaseRequestPayment {
      * <p/>
      * Authorized session required.
      */
-    public static final class Request extends PostRequest<RequestPayment> {
+    public static final class Request extends OAuthApiRequest<RequestPayment> {
 
         /**
          * Use static methods to create

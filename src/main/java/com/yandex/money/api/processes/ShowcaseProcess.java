@@ -25,8 +25,9 @@
 package com.yandex.money.api.processes;
 
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
+import com.yandex.money.api.model.showcase.ShowcaseContext;
+import com.yandex.money.api.net.ApiClient;
 import com.yandex.money.api.net.BaseApiClient;
-import com.yandex.money.api.net.ShowcaseContext;
 
 import java.io.IOException;
 
@@ -45,9 +46,9 @@ public class ShowcaseProcess implements Process {
      */
     public final ShowcaseContext showcaseContext;
 
-    private final BaseApiClient apiClient;
+    private final ApiClient apiClient;
 
-    public ShowcaseProcess(BaseApiClient apiClient, ShowcaseContext showcaseContext) {
+    public ShowcaseProcess(ApiClient apiClient, ShowcaseContext showcaseContext) {
         this.apiClient = checkNotNull(apiClient, "apiClient");
         this.showcaseContext = checkNotNull(showcaseContext, "showcaseContext");
     }
@@ -60,11 +61,11 @@ public class ShowcaseProcess implements Process {
      * @throws ResourceNotFoundException wrong URL
      */
     @Override
-    public boolean proceed() throws IOException, ResourceNotFoundException {
+    public boolean proceed() throws Exception {
         if (isCompleted()) {
             return true;
         }
-        apiClient.submitShowcase(showcaseContext);
+        apiClient.execute(showcaseContext.createRequest());
         return isCompleted();
     }
 
@@ -74,7 +75,7 @@ public class ShowcaseProcess implements Process {
      * @return {@code true} in case of already completed process and {@code false} otherwise
      */
     @Override
-    public boolean repeat() throws IOException, ResourceNotFoundException {
+    public boolean repeat() throws Exception {
         return proceed();
     }
 

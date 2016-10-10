@@ -29,6 +29,7 @@ import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.Showcase;
+import com.yandex.money.api.model.showcase.ShowcaseContext;
 import com.yandex.money.api.model.showcase.StdFee;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.Parameter;
@@ -47,7 +48,6 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Submit;
 import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
 import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
-import com.yandex.money.api.net.ShowcaseContext;
 import com.yandex.money.api.net.v1.DefaultApiClient;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.util.Currency;
@@ -130,7 +130,7 @@ public class ShowcaseParserTest {
     }
 
     private void testShowcase(DefaultApiClient client, long scid) throws Exception {
-        ShowcaseContext showcaseContext = client.getShowcase(new Showcase.Request(scid));
+        ShowcaseContext showcaseContext = client.execute(new Showcase.Request(scid));
         assertNotNull(showcaseContext);
         assertNotNull(showcaseContext.getCurrentStep().showcase);
     }

@@ -24,9 +24,6 @@
 
 package com.yandex.money.api;
 
-import com.yandex.money.api.exceptions.InsufficientScopeException;
-import com.yandex.money.api.exceptions.InvalidRequestException;
-import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.methods.OperationDetails;
 import com.yandex.money.api.methods.OperationHistory;
 import com.yandex.money.api.model.Operation;
@@ -36,7 +33,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 
@@ -54,9 +50,7 @@ public class OperationDetailsTest implements ApiTest {
     }
 
     @Test
-    public void testOperationDetails() throws InvalidTokenException, InsufficientScopeException,
-            InvalidRequestException, IOException {
-
+    public void testOperationDetails() throws Exception {
         OperationHistory.Request historyRequest = new OperationHistory.Request.Builder()
                 .create();
         OperationHistory history = client.execute(historyRequest);

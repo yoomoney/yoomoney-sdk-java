@@ -26,21 +26,7 @@ package com.yandex.money.api.net.v1;
 
 import com.yandex.money.api.authorization.AuthorizationData;
 import com.yandex.money.api.authorization.AuthorizationParameters;
-import com.yandex.money.api.exceptions.InsufficientScopeException;
-import com.yandex.money.api.exceptions.InvalidRequestException;
-import com.yandex.money.api.exceptions.InvalidTokenException;
-import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.BaseApiClient;
-import com.yandex.money.api.util.HttpHeaders;
-import com.yandex.money.api.util.MimeTypes;
-import okhttp3.Response;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-
-import static com.yandex.money.api.net.ResponseHandler.getInputStream;
-import static com.yandex.money.api.net.ResponseHandler.processError;
 
 /**
  * Default client for API v1.
@@ -55,53 +41,6 @@ public class DefaultApiClient extends BaseApiClient {
     public AuthorizationData createAuthorizationData(AuthorizationParameters parameters) {
         parameters.add("client_id", getClientId());
         return new AuthorizationDataImpl(getHostsProvider().getWebUrl(), parameters.build());
-    }
-
-    /**
-     * Synchronous execution of a request.
-     *
-     * @param request the request
-     * @param <T> response type
-     * @return parsed response
-     * @throws IOException if something went wrong during IO operations
-     * @throws InvalidRequestException if server responded with 404 code
-     * @throws InvalidTokenException if server responded with 401 code
-     * @throws InsufficientScopeException if server responded with 403 code
-     */
-    public <T> T execute(ApiRequest<T> request)
-            throws IOException, InvalidRequestException, InvalidTokenException, InsufficientScopeException {
-
-        Response response = call(request);
-        InputStream inputStream = null;
-
-        try {
-            switch (response.code()) {
-                case HttpURLConnection.HTTP_OK:
-                case HttpURLConnection.HTTP_ACCEPTED:
-                case HttpURLConnection.HTTP_BAD_REQUEST:
-                    inputStream = getInputStream(response, isDebugEnabled());
-                    if (isJsonType(response)) {
-                        return request.parseResponse(inputStream);
-                    } else {
-                        throw new InvalidRequestException(processError(response));
-                    }
-                case HttpURLConnection.HTTP_UNAUTHORIZED:
-                    throw new InvalidTokenException(processError(response));
-                case HttpURLConnection.HTTP_FORBIDDEN:
-                    throw new InsufficientScopeException(processError(response));
-                default:
-                    throw new IOException(processError(response));
-            }
-        } finally {
-            if (inputStream != null) {
-                inputStream.close();
-            }
-        }
-    }
-
-    private static boolean isJsonType(Response response) {
-        String field = response.header(HttpHeaders.CONTENT_TYPE);
-        return field != null && (field.startsWith(MimeTypes.Application.JSON) || field.startsWith(MimeTypes.Text.JSON));
     }
 
     public static class Builder extends BaseApiClient.Builder {

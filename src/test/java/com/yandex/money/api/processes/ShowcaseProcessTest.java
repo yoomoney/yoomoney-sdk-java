@@ -28,11 +28,11 @@ import com.yandex.money.api.ApiTest;
 import com.yandex.money.api.Resources;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.Showcase;
+import com.yandex.money.api.model.showcase.ShowcaseContext;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.ShowcaseContext;
 import com.yandex.money.api.net.v1.DefaultApiClient;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import org.joda.time.DateTime;
@@ -187,9 +187,9 @@ public final class ShowcaseProcessTest extends Assert {
     }
 
     private static ShowcaseProcess initShowcaseProcess() throws Exception {
-        final ApiRequest<Showcase> resReq = new Showcase.Request(5551);
+        final ApiRequest<ShowcaseContext> resReq = new Showcase.Request(5551);
         final DefaultApiClient client = getClient();
-        final ShowcaseContext showcaseContext = client.getShowcase(resReq);
+        final ShowcaseContext showcaseContext = client.execute(resReq);
         return new ShowcaseProcess(client, showcaseContext);
     }
 }
