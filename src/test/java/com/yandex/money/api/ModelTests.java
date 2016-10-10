@@ -31,14 +31,12 @@ import com.yandex.money.api.methods.IncomingTransferReject;
 import com.yandex.money.api.methods.InstanceId;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
-import com.yandex.money.api.model.Avatar;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.model.StatusInfo;
-import com.yandex.money.api.model.YandexMoneyCard;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.CustomFee;
 import com.yandex.money.api.model.showcase.NoFee;
@@ -52,22 +50,18 @@ import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.OperationHistoryTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.RequestExternalPaymentTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.RequestPaymentTypeAdapter;
-import com.yandex.money.api.typeadapters.model.AvatarTypeAdapter;
 import com.yandex.money.api.typeadapters.model.BalanceDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.model.CardTypeAdapter;
 import com.yandex.money.api.typeadapters.model.ErrorTypeAdapter;
 import com.yandex.money.api.typeadapters.model.ExternalCardTypeAdapter;
-import com.yandex.money.api.typeadapters.model.YandexMoneyCardTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.util.Currency;
-import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
-import java.util.Arrays;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -81,11 +75,6 @@ public class ModelTests {
     @Test
     public void testAccountInfo() {
         performTest(createAccountInfo(), AccountInfoTypeAdapter.getInstance());
-    }
-
-    @Test
-    public void testAvatar() {
-        performTest(createAvatar(), AvatarTypeAdapter.getInstance());
     }
 
     @Test
@@ -176,11 +165,6 @@ public class ModelTests {
     }
 
     @Test
-    public void testYandedMoneyCard() {
-        performTest(createYandexMoneyCard(), YandexMoneyCardTypeAdapter.getInstance());
-    }
-
-    @Test
     public void testError() {
         performTest(Error.TECHNICAL_ERROR, ErrorTypeAdapter.getInstance());
     }
@@ -229,16 +213,8 @@ public class ModelTests {
                 .setCurrency(Currency.RUB)
                 .setAccountStatus(AccountStatus.IDENTIFIED)
                 .setAccountType(AccountType.PERSONAL)
-                .setAvatar(null)
                 .setBalanceDetails(createBalanceDetails())
-                .setLinkedCards(Arrays.asList(createCard(), createCard()))
-                .setAdditionalServices(Arrays.asList("service1", "service2"))
-                .setYandexMoneyCards(Arrays.asList(createYandexMoneyCard(), createYandexMoneyCard()))
                 .create();
-    }
-
-    private static Avatar createAvatar() {
-        return new Avatar("some url", DateTime.now());
     }
 
     private static BalanceDetails createBalanceDetails() {
@@ -262,15 +238,6 @@ public class ModelTests {
                 .setMoneySourceToken("moneySourceToken")
                 .setType(Card.Type.AMERICAN_EXPRESS)
                 .setPanFragment("1234 56** **** 7890");
-        return builder.create();
-    }
-
-    private static YandexMoneyCard createYandexMoneyCard() {
-        YandexMoneyCard.Builder builder = (YandexMoneyCard.Builder) new YandexMoneyCard.Builder()
-                .setState(YandexMoneyCard.State.ACTIVE)
-                .setType(Card.Type.MASTER_CARD)
-                .setPanFragment("1234 56** **** 7890")
-                .setId("id");
         return builder.create();
     }
 
