@@ -63,7 +63,9 @@ import org.testng.annotations.Test;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotEquals;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
