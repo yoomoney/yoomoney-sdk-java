@@ -44,13 +44,10 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
-/**
- *
- */
-public class YandexMoneyTest implements ApiTest {
+public class YandexMoneyTest {
 
-    private final String phoneNumber = LOCAL_PROPERTIES.getPhoneNumber();
-    private final BigDecimal amount = LOCAL_PROPERTIES.getAmount();
+    private final String phoneNumber = TestEnvironment.getLocalProperties().getPhoneNumber();
+    private final BigDecimal amount = TestEnvironment.getLocalProperties().getAmount();
 
     private ApiClient client;
 
@@ -63,7 +60,7 @@ public class YandexMoneyTest implements ApiTest {
 
     @Test
     public void testInstanceIdSuccess() throws Exception {
-        reqInstanceId = new InstanceId.Request(CLIENT_ID);
+        reqInstanceId = new InstanceId.Request(TestEnvironment.getClientId());
         respInstanceId = client.execute(reqInstanceId);
 
         Assert.assertEquals(respInstanceId.statusInfo.status, SimpleStatus.SUCCESS);
@@ -90,14 +87,14 @@ public class YandexMoneyTest implements ApiTest {
 
     @Test
     public void testRequestPayment() throws Exception {
-        client.setAccessToken(ACCESS_TOKEN);
+        client.setAccessToken(TestEnvironment.getAccessToken());
         testRequestPayment(createRequestPayment());
         client.setAccessToken(null);
     }
 
     @Test
     public void testRequestExternalFail() throws Exception {
-        reqInstanceId = new InstanceId.Request(CLIENT_ID);
+        reqInstanceId = new InstanceId.Request(TestEnvironment.getClientId());
         respInstanceId = client.execute(reqInstanceId);
 
         HashMap<String, String> params = successRequestParams();
@@ -135,7 +132,7 @@ public class YandexMoneyTest implements ApiTest {
 
     @Test
     public void testProcessPayment() throws Exception {
-        client.setAccessToken(ACCESS_TOKEN);
+        client.setAccessToken(TestEnvironment.getAccessToken());
         RequestPayment requestPayment = client.execute(createRequestPayment());
         if (requestPayment.status == BaseRequestPayment.Status.SUCCESS) {
             ProcessPayment processPayment = client.execute(
@@ -152,7 +149,7 @@ public class YandexMoneyTest implements ApiTest {
 
     @BeforeClass
     private void setUp() {
-        client = DEFAULT_API_CLIENT_BUILDER.create();
+        client = TestEnvironment.createClient();
     }
 
     @BeforeTest
@@ -211,7 +208,7 @@ public class YandexMoneyTest implements ApiTest {
     }
 
     private RequestExternalPayment.Request createRequestExternalPayment() throws Exception {
-        reqInstanceId = new InstanceId.Request(CLIENT_ID);
+        reqInstanceId = new InstanceId.Request(TestEnvironment.getClientId());
         respInstanceId = client.execute(reqInstanceId);
 
         HashMap<String, String> params = successRequestParams();

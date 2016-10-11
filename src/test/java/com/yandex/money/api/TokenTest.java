@@ -37,12 +37,11 @@ import java.util.Set;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class TokenTest implements ApiTest {
+public class TokenTest {
 
     @Test
     public void testAuxToken() throws Exception {
-        ApiClient client = DEFAULT_API_CLIENT_BUILDER.create();
-        client.setAccessToken(ACCESS_TOKEN);
+        ApiClient client = TestEnvironment.createAuthorizedClient();
 
         Set<Scope> scopes = new HashSet<>();
         scopes.add(Scope.ACCOUNT_INFO);

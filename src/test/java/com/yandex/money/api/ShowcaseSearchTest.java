@@ -35,7 +35,7 @@ import org.testng.annotations.Test;
  */
 public class ShowcaseSearchTest {
 
-    private static final ApiClient client = ApiTest.DEFAULT_API_CLIENT_BUILDER.create();
+    private static final ApiClient client = TestEnvironment.createClient();
 
     /**
      * Checks if exception is thrown and result list is not empty.

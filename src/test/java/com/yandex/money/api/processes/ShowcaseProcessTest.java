@@ -24,8 +24,8 @@
 
 package com.yandex.money.api.processes;
 
-import com.yandex.money.api.ApiTest;
 import com.yandex.money.api.Resources;
+import com.yandex.money.api.TestEnvironment;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.ShowcaseContext;
@@ -183,7 +183,7 @@ public final class ShowcaseProcessTest extends Assert {
     }
 
     private static ApiClient getClient() {
-        return ApiTest.DEFAULT_API_CLIENT_BUILDER.create();
+        return TestEnvironment.createClient();
     }
 
     private static ShowcaseProcess initShowcaseProcess() throws Exception {

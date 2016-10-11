@@ -56,7 +56,7 @@ import java.net.HttpURLConnection;
 public class OAuth2SessionTest {
 
     private final MockWebServer server = new MockWebServer();
-    private final ApiClient client = ApiTest.DEFAULT_API_CLIENT_BUILDER.create();
+    private final ApiClient client = TestEnvironment.createClient();
 
     @BeforeClass
     public void setUp() throws IOException {

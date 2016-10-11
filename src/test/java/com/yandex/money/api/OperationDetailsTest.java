@@ -39,14 +39,13 @@ import java.util.List;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class OperationDetailsTest implements ApiTest {
+public class OperationDetailsTest {
 
     private ApiClient client;
 
     @BeforeTest
     public void beforeTest() {
-        client = DEFAULT_API_CLIENT_BUILDER.create();
-        client.setAccessToken(ACCESS_TOKEN);
+        client = TestEnvironment.createAuthorizedClient();
     }
 
     @Test

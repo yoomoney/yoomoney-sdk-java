@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.showcase;
 
-import com.yandex.money.api.ApiTest;
+import com.yandex.money.api.TestEnvironment;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.Fee;
@@ -74,8 +74,7 @@ public class ShowcaseParserTest {
 
     @Test
     public void testParsing() throws Exception {
-        ApiClient client = ApiTest.DEFAULT_API_CLIENT_BUILDER.create();
-        testShowcase(client, 5551L);
+        testShowcase(TestEnvironment.createClient(), 5551L);
     }
 
     @Test

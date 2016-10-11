@@ -60,7 +60,7 @@ public class PaymentProcessTest {
 
     private final MockWebServer server = new MockWebServer();
     private final ApiClient client = new DefaultApiClient.Builder()
-            .setClientId(ApiTest.CLIENT_ID)
+            .setClientId(TestEnvironment.getClientId())
             .setHostsProvider(new DefaultApiV1HostsProvider(false) {
                 @Override
                 public String getMoney() {

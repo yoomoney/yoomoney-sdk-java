@@ -33,14 +33,13 @@ import org.testng.annotations.Test;
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class AccountInfoTest implements ApiTest {
+public class AccountInfoTest {
 
     private ApiClient client;
 
     @BeforeTest
     public void beforeTest() {
-        client = DEFAULT_API_CLIENT_BUILDER.create();
-        client.setAccessToken(ACCESS_TOKEN);
+        client = TestEnvironment.createAuthorizedClient();
     }
 
     @Test
