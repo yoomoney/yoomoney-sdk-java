@@ -87,16 +87,6 @@ public class DefaultApiClient implements ApiClient {
     }
 
     @Override
-    public String getClientId() {
-        return clientId;
-    }
-
-    @Override
-    public HostsProvider getHostsProvider() {
-        return hostsProvider;
-    }
-
-    @Override
     public <T> T execute(ApiRequest<T> request) throws Exception {
         Response response = httpClient.newCall(prepareRequest(request)).execute();
         return request.parse(new OkHttpClientResponse(response, debugMode));
@@ -104,8 +94,8 @@ public class DefaultApiClient implements ApiClient {
 
     @Override
     public AuthorizationData createAuthorizationData(AuthorizationParameters parameters) {
-        parameters.add("client_id", getClientId());
-        return new AuthorizationDataImpl(getHostsProvider().getWebUrl(), parameters.build());
+        parameters.add("client_id", clientId);
+        return new AuthorizationDataImpl(hostsProvider.getWebUrl(), parameters.build());
     }
 
     @Override
@@ -116,11 +106,6 @@ public class DefaultApiClient implements ApiClient {
     @Override
     public final boolean isAuthorized() {
         return !Strings.isNullOrEmpty(accessToken);
-    }
-
-    @Override
-    public boolean isDebugEnabled() {
-        return debugMode;
     }
 
     /**

@@ -27,26 +27,11 @@ package com.yandex.money.api.net.clients;
 import com.yandex.money.api.authorization.AuthorizationData;
 import com.yandex.money.api.authorization.AuthorizationParameters;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.providers.HostsProvider;
 
 /**
  * Yandex.Money API client.
  */
 public interface ApiClient {
-
-    /**
-     * Returns client id.
-     *
-     * @return client id
-     */
-    String getClientId();
-
-    /**
-     * Returns instance of {@link HostsProvider}
-     *
-     * @return host's provider
-     */
-    HostsProvider getHostsProvider();
 
     <T> T execute(ApiRequest<T> request) throws Exception;
 
@@ -66,11 +51,4 @@ public interface ApiClient {
      * @return {@code true}, if client is authorized
      */
     boolean isAuthorized();
-
-    /**
-     * Checks if debug mode is enabled for this client.
-     *
-     * @return {@code true} if debug mode is enabled
-     */
-    boolean isDebugEnabled();
 }
