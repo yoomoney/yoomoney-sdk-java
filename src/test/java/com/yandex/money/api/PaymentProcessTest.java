@@ -31,8 +31,9 @@ import com.yandex.money.api.methods.ProcessPayment;
 import com.yandex.money.api.methods.RequestExternalPayment;
 import com.yandex.money.api.methods.RequestPayment;
 import com.yandex.money.api.model.MoneySource;
+import com.yandex.money.api.net.ApiClient;
+import com.yandex.money.api.net.DefaultApiClient;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
-import com.yandex.money.api.net.v1.DefaultApiClient;
 import com.yandex.money.api.processes.BasePaymentProcess;
 import com.yandex.money.api.processes.ExtendedPaymentProcess;
 import com.yandex.money.api.processes.ExternalPaymentProcess;
@@ -58,7 +59,7 @@ import java.util.Map;
 public class PaymentProcessTest {
 
     private final MockWebServer server = new MockWebServer();
-    private final DefaultApiClient client = (DefaultApiClient) new DefaultApiClient.Builder()
+    private final ApiClient client = new DefaultApiClient.Builder()
             .setClientId(ApiTest.CLIENT_ID)
             .setHostsProvider(new DefaultApiV1HostsProvider(false) {
                 @Override

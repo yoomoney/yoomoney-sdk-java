@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.net;
 
+import com.yandex.money.api.authorization.AuthorizationData;
+import com.yandex.money.api.authorization.AuthorizationParameters;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.HttpHeaders;
@@ -51,7 +53,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public abstract class BaseApiClient implements ApiClient {
+public class DefaultApiClient implements ApiClient {
 
     private static final long DEFAULT_TIMEOUT = 30;
 
@@ -66,7 +68,7 @@ public abstract class BaseApiClient implements ApiClient {
 
     private String accessToken;
 
-    protected BaseApiClient(Builder builder) {
+    protected DefaultApiClient(Builder builder) {
         clientId = checkNotNull(builder.clientId, "clientId");
         hostsProvider = builder.hostsProvider;
         userAgent = new DefaultUserAgent(checkNotNull(builder, "builder").platform);
@@ -98,6 +100,17 @@ public abstract class BaseApiClient implements ApiClient {
     }
 
     @Override
+    public AuthorizationData createAuthorizationData(AuthorizationParameters parameters) {
+        parameters.add("client_id", getClientId());
+        return new AuthorizationDataImpl(getHostsProvider().getWebUrl(), parameters.build());
+    }
+
+    @Override
+    public final void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
+    }
+
+    @Override
     public final boolean isAuthorized() {
         return !Strings.isNullOrEmpty(accessToken);
     }
@@ -105,10 +118,6 @@ public abstract class BaseApiClient implements ApiClient {
     @Override
     public boolean isDebugEnabled() {
         return debugMode;
-    }
-
-    public final void setAccessToken(String accessToken) {
-        this.accessToken = accessToken;
     }
 
     /**
@@ -162,7 +171,7 @@ public abstract class BaseApiClient implements ApiClient {
         }
     }
 
-    public static abstract class Builder {
+    public static class Builder {
 
         private boolean debugMode = false;
         private String clientId;
@@ -189,6 +198,29 @@ public abstract class BaseApiClient implements ApiClient {
             return this;
         }
 
-        public abstract ApiClient create();
+        public DefaultApiClient create() {
+            return new DefaultApiClient(this);
+        }
+    }
+
+    private static final class AuthorizationDataImpl implements AuthorizationData {
+
+        private final String url;
+        private final byte[] parameters;
+
+        private AuthorizationDataImpl(String host, byte[] parameters) {
+            this.url = host + "/oauth/authorize";
+            this.parameters = parameters;
+        }
+
+        @Override
+        public String getUrl() {
+            return url;
+        }
+
+        @Override
+        public byte[] getParameters() {
+            return parameters;
+        }
     }
 }

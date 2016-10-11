@@ -32,9 +32,9 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
-import com.yandex.money.api.net.OAuthApiRequest;
+import com.yandex.money.api.net.ApiClient;
+import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.net.v1.DefaultApiClient;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.util.HttpHeaders;
@@ -56,7 +56,7 @@ import java.net.HttpURLConnection;
 public class OAuth2SessionTest {
 
     private final MockWebServer server = new MockWebServer();
-    private final DefaultApiClient client = ApiTest.DEFAULT_API_CLIENT_BUILDER.create();
+    private final ApiClient client = ApiTest.DEFAULT_API_CLIENT_BUILDER.create();
 
     @BeforeClass
     public void setUp() throws IOException {
@@ -133,7 +133,7 @@ public class OAuth2SessionTest {
             this.code = code;
         }
 
-        static final class Request extends OAuthApiRequest<Mock> {
+        static final class Request extends FirstApiRequest<Mock> {
 
             private final HttpUrl url;
 

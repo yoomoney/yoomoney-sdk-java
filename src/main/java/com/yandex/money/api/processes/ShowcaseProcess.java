@@ -27,15 +27,14 @@ package com.yandex.money.api.processes;
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.model.showcase.ShowcaseContext;
 import com.yandex.money.api.net.ApiClient;
-import com.yandex.money.api.net.BaseApiClient;
 
 import java.io.IOException;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * This class connects {@link BaseApiClient} and {@link ShowcaseContext} class and provides convenient methods to work
- * with them.
+ * This class connects {@link ApiClient} and {@link ShowcaseContext} class and provides convenient methods to work with
+ * them.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */

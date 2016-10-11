@@ -26,7 +26,7 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
-import com.yandex.money.api.net.OAuthApiRequest;
+import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
 
@@ -82,7 +82,7 @@ public class OperationDetails {
      * <p/>
      * Authorized session required.
      */
-    public static class Request extends OAuthApiRequest<OperationDetails> {
+    public static class Request extends FirstApiRequest<OperationDetails> {
 
         /**
          * Constructor.

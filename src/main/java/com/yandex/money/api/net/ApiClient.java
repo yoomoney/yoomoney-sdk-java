@@ -57,6 +57,8 @@ public interface ApiClient {
      */
     AuthorizationData createAuthorizationData(AuthorizationParameters parameters);
 
+    void setAccessToken(String accessToken);
+
     /**
      * Checks if client is in authorized state.
      *

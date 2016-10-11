@@ -29,7 +29,7 @@ import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
-import com.yandex.money.api.net.v1.DefaultApiClient;
+import com.yandex.money.api.net.ApiClient;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
@@ -40,7 +40,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  */
 public final class ExtendedPaymentProcess implements IPaymentProcess {
 
-    private final DefaultApiClient client;
+    private final ApiClient client;
     private final PaymentProcess paymentProcess;
     private final ExternalPaymentProcess externalPaymentProcess;
     private final ExternalPaymentProcess.ParameterProvider parameterProvider;
@@ -54,7 +54,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      * @param client client to run the process on
      * @param parameterProvider parameter's provider
      */
-    public ExtendedPaymentProcess(DefaultApiClient client, ExternalPaymentProcess.ParameterProvider parameterProvider) {
+    public ExtendedPaymentProcess(ApiClient client, ExternalPaymentProcess.ParameterProvider parameterProvider) {
         this.client = checkNotNull(client, "client");
         this.paymentProcess = new PaymentProcess(client, parameterProvider);
         this.externalPaymentProcess = new ExternalPaymentProcess(client, parameterProvider);

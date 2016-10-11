@@ -34,8 +34,8 @@ import com.yandex.money.api.methods.RequestPayment;
 import com.yandex.money.api.methods.params.PhoneParams;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.SimpleStatus;
+import com.yandex.money.api.net.ApiClient;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.v1.DefaultApiClient;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
@@ -52,7 +52,7 @@ public class YandexMoneyTest implements ApiTest {
     private final String phoneNumber = LOCAL_PROPERTIES.getPhoneNumber();
     private final BigDecimal amount = LOCAL_PROPERTIES.getAmount();
 
-    private DefaultApiClient client;
+    private ApiClient client;
 
     private InstanceId respInstanceId;
     private InstanceId.Request reqInstanceId;

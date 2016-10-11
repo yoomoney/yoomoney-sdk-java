@@ -26,8 +26,8 @@ package com.yandex.money.api.processes;
 
 import com.yandex.money.api.methods.ProcessPayment;
 import com.yandex.money.api.methods.RequestPayment;
+import com.yandex.money.api.net.ApiClient;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.v1.DefaultApiClient;
 
 /**
  * Payment process for authorized users.
@@ -42,7 +42,7 @@ public final class PaymentProcess extends BasePaymentProcess<RequestPayment, Pro
      * @param client client to run the process on
      * @param parameterProvider parameter's provider
      */
-    public PaymentProcess(DefaultApiClient client, IPaymentProcess.ParameterProvider parameterProvider) {
+    public PaymentProcess(ApiClient client, IPaymentProcess.ParameterProvider parameterProvider) {
         super(client, parameterProvider);
     }
 

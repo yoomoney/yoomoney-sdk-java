@@ -26,7 +26,6 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
-import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.DocumentApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseSearchTypeAdapter;
@@ -113,10 +112,6 @@ public class ShowcaseSearch {
                 '}';
     }
 
-    /**
-     * This class should be used for obtaining {@link ShowcaseReference} instances in
-     * {@link com.yandex.money.api.net.BaseApiClient#fetch(ApiRequest)} call.
-     */
     public static class Request extends DocumentApiRequest<ShowcaseSearch> {
 
         /**

@@ -27,7 +27,7 @@ package com.yandex.money.api;
 import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.AuxToken;
 import com.yandex.money.api.model.Scope;
-import com.yandex.money.api.net.v1.DefaultApiClient;
+import com.yandex.money.api.net.ApiClient;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -41,7 +41,7 @@ public class TokenTest implements ApiTest {
 
     @Test
     public void testAuxToken() throws Exception {
-        DefaultApiClient client = DEFAULT_API_CLIENT_BUILDER.create();
+        ApiClient client = DEFAULT_API_CLIENT_BUILDER.create();
         client.setAccessToken(ACCESS_TOKEN);
 
         Set<Scope> scopes = new HashSet<>();

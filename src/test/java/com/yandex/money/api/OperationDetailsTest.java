@@ -27,7 +27,7 @@ package com.yandex.money.api;
 import com.yandex.money.api.methods.OperationDetails;
 import com.yandex.money.api.methods.OperationHistory;
 import com.yandex.money.api.model.Operation;
-import com.yandex.money.api.net.v1.DefaultApiClient;
+import com.yandex.money.api.net.ApiClient;
 import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
@@ -41,7 +41,7 @@ import java.util.List;
  */
 public class OperationDetailsTest implements ApiTest {
 
-    private DefaultApiClient client;
+    private ApiClient client;
 
     @BeforeTest
     public void beforeTest() {

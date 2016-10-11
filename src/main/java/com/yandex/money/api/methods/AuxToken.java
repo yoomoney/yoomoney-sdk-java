@@ -26,7 +26,7 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Scope;
-import com.yandex.money.api.net.OAuthApiRequest;
+import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.AuxTokenTypeAdapter;
 
@@ -86,7 +86,7 @@ public class AuxToken {
      * <p/>
      * Authorized session required.
      */
-    public static final class Request extends OAuthApiRequest<AuxToken> {
+    public static final class Request extends FirstApiRequest<AuxToken> {
 
         public Request(Set<Scope> scopes) {
             super(AuxTokenTypeAdapter.getInstance());

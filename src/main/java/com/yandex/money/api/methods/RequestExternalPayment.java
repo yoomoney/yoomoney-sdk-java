@@ -25,7 +25,7 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.methods.params.PaymentParams;
-import com.yandex.money.api.net.OAuthApiRequest;
+import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.RequestExternalPaymentTypeAdapter;
 
@@ -51,7 +51,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
     /**
      * Requests context of external payment.
      */
-    public static class Request extends OAuthApiRequest<RequestExternalPayment> {
+    public static class Request extends FirstApiRequest<RequestExternalPayment> {
 
         /**
          * Use static methods to create

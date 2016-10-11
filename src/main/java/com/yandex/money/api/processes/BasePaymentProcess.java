@@ -26,8 +26,8 @@ package com.yandex.money.api.processes;
 
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
+import com.yandex.money.api.net.ApiClient;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.v1.DefaultApiClient;
 import com.yandex.money.api.util.Threads;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
@@ -45,7 +45,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      */
     final ParameterProvider parameterProvider;
 
-    private final DefaultApiClient client;
+    private final ApiClient client;
 
     private RP requestPayment;
     private PP processPayment;
@@ -57,7 +57,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      * @param client client to use for the process
      * @param parameterProvider parameter's provider
      */
-    public BasePaymentProcess(DefaultApiClient client, ParameterProvider parameterProvider) {
+    public BasePaymentProcess(ApiClient client, ParameterProvider parameterProvider) {
         this.client = checkNotNull(client, "client");
         this.parameterProvider = checkNotNull(parameterProvider, "parameterProvider");
         this.state = State.CREATED;

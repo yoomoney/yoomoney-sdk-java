@@ -41,11 +41,11 @@ import static com.yandex.money.api.util.Responses.processError;
 /**
  * @author Slava Yasevich
  */
-public abstract class OAuthApiRequest<T> extends BaseApiRequest<T> {
+public abstract class FirstApiRequest<T> extends BaseApiRequest<T> {
 
     private final TypeAdapter<T> typeAdapter;
 
-    public OAuthApiRequest(TypeAdapter<T> typeAdapter) {
+    public FirstApiRequest(TypeAdapter<T> typeAdapter) {
         this.typeAdapter = Common.checkNotNull(typeAdapter, "typeAdapter");
     }
 

@@ -32,8 +32,8 @@ import com.yandex.money.api.model.showcase.ShowcaseContext;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.model.showcase.components.uicontrols.Text;
+import com.yandex.money.api.net.ApiClient;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.v1.DefaultApiClient;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import org.joda.time.DateTime;
 import org.testng.Assert;
@@ -182,13 +182,13 @@ public final class ShowcaseProcessTest extends Assert {
                 Resources.load("/showcase/showcase_bills_novalidation.json"));
     }
 
-    private static DefaultApiClient getClient() {
+    private static ApiClient getClient() {
         return ApiTest.DEFAULT_API_CLIENT_BUILDER.create();
     }
 
     private static ShowcaseProcess initShowcaseProcess() throws Exception {
         final ApiRequest<ShowcaseContext> resReq = new Showcase.Request(5551);
-        final DefaultApiClient client = getClient();
+        final ApiClient client = getClient();
         final ShowcaseContext showcaseContext = client.execute(resReq);
         return new ShowcaseProcess(client, showcaseContext);
     }

@@ -25,7 +25,7 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.StatusInfo;
-import com.yandex.money.api.net.OAuthApiRequest;
+import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.InstanceIdTypeAdapter;
 
@@ -79,7 +79,7 @@ public class InstanceId {
     /**
      * Request for a new instance id.
      */
-    public static class Request extends OAuthApiRequest<InstanceId> {
+    public static class Request extends FirstApiRequest<InstanceId> {
 
         /**
          * Construct request using provided client ID.

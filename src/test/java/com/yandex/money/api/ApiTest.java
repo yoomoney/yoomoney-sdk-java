@@ -24,7 +24,7 @@
 
 package com.yandex.money.api;
 
-import com.yandex.money.api.net.v1.DefaultApiClient;
+import com.yandex.money.api.net.DefaultApiClient;
 import com.yandex.money.api.properties.LocalProperties;
 
 /**
@@ -34,7 +34,7 @@ public interface ApiTest {
     LocalProperties LOCAL_PROPERTIES = new LocalProperties();
     String CLIENT_ID = LOCAL_PROPERTIES.getClientId();
     String ACCESS_TOKEN = LOCAL_PROPERTIES.getAccessToken();
-    DefaultApiClient.Builder DEFAULT_API_CLIENT_BUILDER = (DefaultApiClient.Builder) new DefaultApiClient.Builder()
+    DefaultApiClient.Builder DEFAULT_API_CLIENT_BUILDER = new DefaultApiClient.Builder()
             .setClientId(CLIENT_ID)
             .setDebugMode(true);
 }

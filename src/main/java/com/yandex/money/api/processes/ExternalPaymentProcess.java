@@ -28,8 +28,8 @@ import com.yandex.money.api.methods.ProcessExternalPayment;
 import com.yandex.money.api.methods.RequestExternalPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.MoneySource;
+import com.yandex.money.api.net.ApiClient;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.v1.DefaultApiClient;
 import com.yandex.money.api.util.Strings;
 
 /**
@@ -42,7 +42,7 @@ public final class ExternalPaymentProcess
 
     private String instanceId;
 
-    public ExternalPaymentProcess(DefaultApiClient client, ParameterProvider parameterProvider) {
+    public ExternalPaymentProcess(ApiClient client, ParameterProvider parameterProvider) {
         super(client, parameterProvider);
         this.parameterProvider = parameterProvider;
     }
