@@ -83,6 +83,7 @@ public class DefaultApiClient implements ApiClient {
             SSLSocketFactory sslSocketFactory = createSslSocketFactory();
             httpClientBuilder.sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
         }
+        configHttpClient(httpClientBuilder);
         httpClient = httpClientBuilder.build();
     }
 
@@ -113,12 +114,15 @@ public class DefaultApiClient implements ApiClient {
         return !Strings.isNullOrEmpty(accessToken);
     }
 
+    protected void configHttpClient(OkHttpClient.Builder builder) {
+    }
+
     /**
      * Creates HTTP client to use.
      *
      * @return HTTP client
      */
-    protected OkHttpClient.Builder createHttpClientBuilder() {
+    private OkHttpClient.Builder createHttpClientBuilder() {
         return new OkHttpClient.Builder()
                 .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
                 .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
