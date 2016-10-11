@@ -29,7 +29,7 @@ import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
-import com.yandex.money.api.net.ApiClient;
+import com.yandex.money.api.net.clients.ApiClient;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 

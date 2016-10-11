@@ -24,7 +24,7 @@
 
 package com.yandex.money.api;
 
-import com.yandex.money.api.net.DefaultApiClient;
+import com.yandex.money.api.net.clients.DefaultApiClient;
 import com.yandex.money.api.properties.LocalProperties;
 
 /**

@@ -25,7 +25,7 @@
 package com.yandex.money.api;
 
 import com.yandex.money.api.methods.ShowcaseSearch;
-import com.yandex.money.api.net.ApiClient;
+import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseSearchTypeAdapter;
 import org.testng.Assert;
 import org.testng.annotations.Test;

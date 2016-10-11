@@ -28,8 +28,8 @@ import com.yandex.money.api.methods.ProcessExternalPayment;
 import com.yandex.money.api.methods.RequestExternalPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.MoneySource;
-import com.yandex.money.api.net.ApiClient;
 import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.util.Strings;
 
 /**

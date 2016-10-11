@@ -26,7 +26,7 @@ package com.yandex.money.api.processes;
 
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.model.showcase.ShowcaseContext;
-import com.yandex.money.api.net.ApiClient;
+import com.yandex.money.api.net.clients.ApiClient;
 
 import java.io.IOException;
 

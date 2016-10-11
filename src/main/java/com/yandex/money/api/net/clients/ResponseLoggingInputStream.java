@@ -22,56 +22,62 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
+package com.yandex.money.api.net.clients;
 
-import okhttp3.Response;
-
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * Implementation of {@link HttpClientResponse} for OkHttp.
+ * Logging wrapper for server responses
+ * Supposes, that responses in UTF-8
  */
-final class OkHttpClientResponse implements HttpClientResponse {
+final class ResponseLoggingInputStream extends InputStream {
 
-    private final Response response;
-    private final boolean debug;
+    private static final Logger LOG = Logger.getLogger(ResponseLoggingInputStream.class.getName());
 
-    OkHttpClientResponse(Response response, boolean debug) {
-        this.response = checkNotNull(response, "response");
-        this.debug = debug;
+    private final InputStream inputStream;
+    private final ByteArrayOutputStream buffer;
+
+    public ResponseLoggingInputStream(InputStream inputStream) {
+        this.inputStream = checkNotNull(inputStream, "input stream");
+        this.buffer = new ByteArrayOutputStream();
     }
 
     @Override
-    public int getCode() {
-        return response.code();
+    public int read() throws IOException {
+        int c = inputStream.read();
+        if (c > -1) {
+            buffer.write((byte) c);
+        }
+        return c;
     }
 
     @Override
-    public String getMessage() {
-        return response.message();
+    public int read(byte b[]) throws IOException {
+        int read = inputStream.read(b);
+        if (read > -1) {
+            buffer.write(b, 0, read);
+        }
+        return read;
     }
 
     @Override
-    public String getUrl() {
-        return response.request().url().toString();
+    public int read(byte b[], int off, int len) throws IOException {
+        int read = inputStream.read(b, off, len);
+        if (read > -1) {
+            buffer.write(b, off, read);
+        }
+        return read;
     }
 
     @Override
-    public String getHeader(String name) {
-        return response.header(name);
-    }
-
-    @Override
-    public String getBody() throws IOException {
-        return response.body().string();
-    }
-
-    @Override
-    public InputStream getByteStream() {
-        InputStream stream = response.body().byteStream();
-        return debug ? new ResponseLoggingInputStream(stream) : stream;
+    public void close() throws IOException {
+        inputStream.close();
+        buffer.close();
+        LOG.info(buffer.toString("UTF-8"));
     }
 }

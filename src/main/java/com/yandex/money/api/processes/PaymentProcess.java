@@ -26,8 +26,8 @@ package com.yandex.money.api.processes;
 
 import com.yandex.money.api.methods.ProcessPayment;
 import com.yandex.money.api.methods.RequestPayment;
-import com.yandex.money.api.net.ApiClient;
 import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.clients.ApiClient;
 
 /**
  * Payment process for authorized users.

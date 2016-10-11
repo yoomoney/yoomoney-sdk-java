@@ -22,10 +22,13 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
+package com.yandex.money.api.net.clients;
 
 import com.yandex.money.api.authorization.AuthorizationData;
 import com.yandex.money.api.authorization.AuthorizationParameters;
+import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.DefaultUserAgent;
+import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.HttpHeaders;

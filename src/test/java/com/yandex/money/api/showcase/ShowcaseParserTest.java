@@ -48,7 +48,7 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Submit;
 import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
 import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
-import com.yandex.money.api.net.ApiClient;
+import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.util.Currency;
 import org.joda.time.DateTime;
