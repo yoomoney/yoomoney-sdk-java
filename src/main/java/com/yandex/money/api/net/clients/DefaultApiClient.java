@@ -87,6 +87,11 @@ public class DefaultApiClient implements ApiClient {
     }
 
     @Override
+    public String getClientId() {
+        return clientId;
+    }
+
+    @Override
     public <T> T execute(ApiRequest<T> request) throws Exception {
         Response response = httpClient.newCall(prepareRequest(request)).execute();
         return request.parse(new OkHttpClientResponse(response, debugMode));
@@ -127,6 +132,7 @@ public class DefaultApiClient implements ApiClient {
 
         Request.Builder builder = new Request.Builder()
                 .cacheControl(cacheControl)
+                .url(request.requestUrl(hostsProvider))
                 .addHeader(HttpHeaders.USER_AGENT, userAgent.getName())
                 .addHeader(HttpHeaders.ACCEPT_LANGUAGE, language.iso6391Code);
 
@@ -141,9 +147,14 @@ public class DefaultApiClient implements ApiClient {
             }
         }
 
-        builder.url(request.requestUrl(hostsProvider));
-        if (request.getMethod() == ApiRequest.Method.POST) {
-            builder.post(RequestBody.create(MediaType.parse(request.getContentType()), request.getBody()));
+        RequestBody body = RequestBody.create(MediaType.parse(request.getContentType()), request.getBody());
+        switch (request.getMethod()) {
+            case POST:
+                builder.post(body);
+                break;
+            case PUT:
+                builder.put(body);
+                break;
         }
 
         return builder.build();

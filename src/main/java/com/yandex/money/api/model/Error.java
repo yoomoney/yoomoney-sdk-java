@@ -146,4 +146,12 @@ public enum Error implements Enums.WithCode<Error> {
         }
         return ERRORS.containsKey(error) ? ERRORS.get(error) : UNKNOWN;
     }
+
+    public static Error parseOrThrow(String code) {
+        Error error = ERRORS.get(code);
+        if (error == null) {
+            throw new EnumConstantNotPresentException(Error.class, code);
+        }
+        return error;
+    }
 }

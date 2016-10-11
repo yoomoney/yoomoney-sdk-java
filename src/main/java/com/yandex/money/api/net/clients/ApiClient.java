@@ -33,6 +33,8 @@ import com.yandex.money.api.net.ApiRequest;
  */
 public interface ApiClient {
 
+    String getClientId();
+
     <T> T execute(ApiRequest<T> request) throws Exception;
 
     /**
