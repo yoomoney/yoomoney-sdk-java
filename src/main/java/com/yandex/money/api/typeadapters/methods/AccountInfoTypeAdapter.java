@@ -132,7 +132,7 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
         static <T extends AccountInfo> void serialize(JsonObject object, T src) {
             object.addProperty(MEMBER_ACCOUNT, src.account);
             object.addProperty(MEMBER_BALANCE, src.balance);
-            object.addProperty(MEMBER_CURRENCY, src.currency.numericCode);
+            object.addProperty(MEMBER_CURRENCY, src.currency.numericCode.toString());
             object.addProperty(MEMBER_STATUS, src.accountStatus.code);
             object.addProperty(MEMBER_TYPE, src.accountType.code);
 
