@@ -93,6 +93,16 @@ public class DefaultApiClient implements ApiClient {
     }
 
     @Override
+    public Language getLanguage() {
+        return language;
+    }
+
+    @Override
+    public HostsProvider getHostsProvider() {
+        return hostsProvider;
+    }
+
+    @Override
     public <T> T execute(ApiRequest<T> request) throws Exception {
         Response response = httpClient.newCall(prepareRequest(request)).execute();
         return request.parse(new OkHttpClientResponse(response, debugMode));

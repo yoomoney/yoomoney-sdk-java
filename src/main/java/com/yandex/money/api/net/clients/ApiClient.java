@@ -27,6 +27,8 @@ package com.yandex.money.api.net.clients;
 import com.yandex.money.api.authorization.AuthorizationData;
 import com.yandex.money.api.authorization.AuthorizationParameters;
 import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.util.Language;
 
 /**
  * Yandex.Money API client.
@@ -34,6 +36,10 @@ import com.yandex.money.api.net.ApiRequest;
 public interface ApiClient {
 
     String getClientId();
+
+    Language getLanguage();
+
+    HostsProvider getHostsProvider();
 
     <T> T execute(ApiRequest<T> request) throws Exception;
 
