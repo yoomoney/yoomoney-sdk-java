@@ -39,12 +39,27 @@ import java.net.HttpURLConnection;
 import static com.yandex.money.api.util.Responses.processError;
 
 /**
- * @author Slava Yasevich
+ * <p>Base implementation of {@link ApiRequest} for API v1. Parses only JSON responses otherwise
+ * {@link InvalidRequestException} is thrown.</p>
+ *
+ * <p>If server returns HTTP status code 200 (Ok), 202 (Accepted) or 400 (Bad request) then this object will try to
+ * parse body of a response</p>
+ *
+ * <p>If server returns HTTP status code 401 (Unauthorized) then {@link InvalidTokenException} is thrown.</p>
+ *
+ * <p>If server returns HTTP status code 403 (Forbidden) then {@link InsufficientScopeException} is thrown.</p>
+ *
+ * <p>In other cases {@link IOException} is thrown</p>.
  */
 public abstract class FirstApiRequest<T> extends BaseApiRequest<T> {
 
     private final TypeAdapter<T> typeAdapter;
 
+    /**
+     * Constructor.
+     *
+     * @param typeAdapter type adapter to use for a response document parsing
+     */
     public FirstApiRequest(TypeAdapter<T> typeAdapter) {
         this.typeAdapter = Common.checkNotNull(typeAdapter, "typeAdapter");
     }

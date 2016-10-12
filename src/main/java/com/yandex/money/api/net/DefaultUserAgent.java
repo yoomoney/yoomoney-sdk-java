@@ -33,6 +33,11 @@ public class DefaultUserAgent implements UserAgent {
 
     private final String platform;
 
+    /**
+     * Constructor.
+     *
+     * @param platform platform name
+     */
     public DefaultUserAgent(String platform) {
         this.platform = checkNotEmpty(platform, "platform");
     }

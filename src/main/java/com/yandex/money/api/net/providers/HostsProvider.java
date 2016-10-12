@@ -25,16 +25,32 @@
 package com.yandex.money.api.net.providers;
 
 /**
- * @author Slava Yasevich
+ * Provides URLs to use by requests.
  */
 public interface HostsProvider {
+
+    /**
+     * @return URL to server
+     */
     String getMoney();
 
+    /**
+     * @return URL for API functions
+     */
     String getMoneyApi();
 
+    /**
+     * @return URL for payment API fuctions
+     */
     String getPaymentApi();
 
+    /**
+     * @return URL to mobile server
+     */
     String getMobileMoney();
 
+    /**
+     * @return URL for web browser, usually it is equal to {@link #getMoney()} or {@link #getMobileMoney()}
+     */
     String getWebUrl();
 }

@@ -38,12 +38,26 @@ import static com.yandex.money.api.util.Responses.parseDateHeader;
 import static com.yandex.money.api.util.Responses.processError;
 
 /**
- * @author Slava Yasevich
+ * <p>Base implementation of {@link ApiRequest} that allows to retrieve a document from server. If request is completed
+ * successfully method {@link ApiRequest#parse(HttpClientResponse)} returns an {@link HttpResourceResponse} instance
+ * containing requested document.</p>
+ *
+ * <p>If server returns HTTP status code 304 (Not Modified) then {@link HttpResourceResponse} does not contain a
+ * document.</p>
+ *
+ * <p>If server returns HTTP status code 404 (Not Found) then {@link ResourceNotFoundException} is thrown.</p>
+ *
+ * <p>In other cases {@link IOException} is thrown</p>.
  */
 public abstract class DocumentApiRequest<T> extends BaseApiRequest<HttpResourceResponse<T>> {
 
     private final TypeAdapter<T> typeAdapter;
 
+    /**
+     * Constructor.
+     *
+     * @param typeAdapter type adapter to use for a response document parsing
+     */
     public DocumentApiRequest(TypeAdapter<T> typeAdapter) {
         this.typeAdapter = checkNotNull(typeAdapter, "typeAdapter");
     }

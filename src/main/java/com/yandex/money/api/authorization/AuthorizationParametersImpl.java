@@ -35,6 +35,11 @@ final class AuthorizationParametersImpl implements AuthorizationParameters {
 
     private final Map<String, String> parameters;
 
+    /**
+     * Map of authorization parameters.
+     *
+     * @param parameters key-value pairs
+     */
     AuthorizationParametersImpl(Map<String, String> parameters) {
         this.parameters = parameters;
     }

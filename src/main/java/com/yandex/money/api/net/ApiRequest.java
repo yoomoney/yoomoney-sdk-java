@@ -80,7 +80,7 @@ public interface ApiRequest<T> {
     String getContentType();
 
     /**
-     * Parses API response to get meaningful object.
+     * Parses API response to get requested object.
      *
      * @param response API response
      * @return response model

@@ -30,7 +30,7 @@ package com.yandex.money.api.authorization;
 public interface AuthorizationData {
 
     /**
-     * @return url to open
+     * @return url to open in web browser
      */
     String getUrl();
 

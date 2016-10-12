@@ -49,6 +49,12 @@ public final class ParametersBuffer {
 
     private Map<String, String> params = Collections.emptyMap();
 
+    /**
+     * Encodes string value to UTF-8 byte array.
+     *
+     * @param value value to encode
+     * @return UTF-8 byte array
+     */
     public static byte[] encodeUtf8(String value) {
         try {
             return encode(value).getBytes(UTF8_CHARSET);

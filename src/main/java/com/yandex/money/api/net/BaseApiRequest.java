@@ -39,8 +39,8 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Base API request. It is preferable to extend your requests from this class or its descendants
- * rather than {@link ApiRequest}.
+ * Base implementation of {@link ApiRequest}. It is preferable to extend your requests from this class or its
+ * descendants rather than create your own implementation of {@link ApiRequest}.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */

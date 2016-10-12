@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ * Authorization parameters for {@link AuthorizationData#getParameters()}.
  */
 public interface AuthorizationParameters {
 
