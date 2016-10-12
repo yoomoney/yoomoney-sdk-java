@@ -110,8 +110,8 @@ public class DefaultApiClient implements ApiClient {
 
     @Override
     public AuthorizationData createAuthorizationData(AuthorizationParameters parameters) {
-        parameters.add("client_id", clientId);
-        return new AuthorizationDataImpl(hostsProvider.getWebUrl(), parameters.build());
+        parameters.add("client_id", getClientId());
+        return new AuthorizationDataImpl(getHostsProvider().getWebUrl(), parameters.build());
     }
 
     @Override
@@ -146,9 +146,9 @@ public class DefaultApiClient implements ApiClient {
 
         Request.Builder builder = new Request.Builder()
                 .cacheControl(cacheControl)
-                .url(request.requestUrl(hostsProvider))
+                .url(request.requestUrl(getHostsProvider()))
                 .addHeader(HttpHeaders.USER_AGENT, userAgent.getName())
-                .addHeader(HttpHeaders.ACCEPT_LANGUAGE, language.iso6391Code);
+                .addHeader(HttpHeaders.ACCEPT_LANGUAGE, getLanguage().iso6391Code);
 
         if (isAuthorized()) {
             builder.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
