@@ -283,6 +283,7 @@ public class DefaultApiClient implements ApiClient {
                     SSLSocketFactory sslSocketFactory = createSslSocketFactory();
                     builder.sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
                 }
+                httpClient = builder.build();
             }
 
             return new DefaultApiClient(this);
