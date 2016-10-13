@@ -74,7 +74,6 @@ public class AccountInfo {
      */
     public final BalanceDetails balanceDetails;
 
-
     protected AccountInfo(Builder builder) {
         account = checkNotEmpty(builder.account, "account");
         balance = builder.balance;
@@ -154,7 +153,9 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setCurrency(Currency currency) {
-            this.currency = checkNotNull(currency, "currency");
+            if (currency != null) {
+                this.currency = currency;
+            }
             return this;
         }
 
@@ -181,7 +182,9 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setBalanceDetails(BalanceDetails balanceDetails) {
-            this.balanceDetails = checkNotNull(balanceDetails, "balanceDetails");
+            if (balanceDetails != null) {
+                this.balanceDetails = balanceDetails;
+            }
             return this;
         }
 

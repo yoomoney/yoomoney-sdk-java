@@ -106,22 +106,12 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
             } catch (NumberFormatException e) {
                 // see code below
             }
-            if (currency == null) {
-                currency = Currency.XXX;
-            }
 
             BigDecimal balance = getBigDecimal(object, MEMBER_BALANCE);
             BalanceDetails balanceDetails = BalanceDetailsTypeAdapter.getInstance()
                     .fromJson(object.get(MEMBER_BALANCE_DETAILS));
-            if (balanceDetails == null) {
-                balanceDetails = new BalanceDetails.Builder()
-                        .setTotal(balance)
-                        .setAvailable(balance)
-                        .create();
-            }
 
-            builder
-                    .setAccount(getString(object, MEMBER_ACCOUNT))
+            builder.setAccount(getString(object, MEMBER_ACCOUNT))
                     .setBalance(balance)
                     .setCurrency(currency)
                     .setAccountStatus(AccountStatus.parse(getString(object, MEMBER_STATUS)))
@@ -135,7 +125,6 @@ public final class AccountInfoTypeAdapter extends BaseTypeAdapter<AccountInfo> {
             object.addProperty(MEMBER_CURRENCY, src.currency.numericCode.toString());
             object.addProperty(MEMBER_STATUS, src.accountStatus.code);
             object.addProperty(MEMBER_TYPE, src.accountType.code);
-
             object.add(MEMBER_BALANCE_DETAILS, BalanceDetailsTypeAdapter.getInstance().toJsonTree(src.balanceDetails));
         }
     }

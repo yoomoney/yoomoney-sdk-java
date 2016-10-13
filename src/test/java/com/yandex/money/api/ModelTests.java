@@ -25,12 +25,9 @@
 package com.yandex.money.api;
 
 import com.google.gson.JsonParser;
-import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.IncomingTransferAccept;
 import com.yandex.money.api.methods.IncomingTransferReject;
 import com.yandex.money.api.methods.InstanceId;
-import com.yandex.money.api.model.AccountStatus;
-import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
@@ -56,7 +53,6 @@ import com.yandex.money.api.typeadapters.model.ErrorTypeAdapter;
 import com.yandex.money.api.typeadapters.model.ExternalCardTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
-import com.yandex.money.api.util.Currency;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -74,7 +70,7 @@ public class ModelTests {
 
     @Test
     public void testAccountInfo() {
-        performTest(createAccountInfo(), AccountInfoTypeAdapter.getInstance());
+        checkTypeAdapter("/methods/account-info.json", AccountInfoTypeAdapter.getInstance());
     }
 
     @Test
@@ -204,17 +200,6 @@ public class ModelTests {
 
     private static <T> void performTest(T value, TypeAdapter<T> adapter) {
         assertEquals(adapter.fromJson(adapter.toJsonTree(value)), value);
-    }
-
-    private static AccountInfo createAccountInfo() {
-        return new AccountInfo.Builder()
-                .setAccount("account")
-                .setBalance(BigDecimal.TEN)
-                .setCurrency(Currency.RUB)
-                .setAccountStatus(AccountStatus.IDENTIFIED)
-                .setAccountType(AccountType.PERSONAL)
-                .setBalanceDetails(createBalanceDetails())
-                .create();
     }
 
     private static BalanceDetails createBalanceDetails() {
