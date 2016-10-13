@@ -52,7 +52,8 @@ import static com.yandex.money.api.util.Common.checkNotEmpty;
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * Default implementation of {@link ApiClient} interface.
+ * Default implementation of {@link ApiClient} interface. This implementation is suitable in most cases. To create an
+ * instance of this class use {@link DefaultApiClient.Builder}.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
@@ -71,6 +72,11 @@ public class DefaultApiClient implements ApiClient {
 
     private String accessToken;
 
+    /**
+     * Constructor.
+     *
+     * @param builder provides required data to create an object
+     */
     protected DefaultApiClient(Builder builder) {
         clientId = checkNotNull(builder.clientId, "clientId");
         hostsProvider = builder.hostsProvider;
@@ -124,6 +130,11 @@ public class DefaultApiClient implements ApiClient {
         return !Strings.isNullOrEmpty(accessToken);
     }
 
+    /**
+     * If required, subclasses may override this method to configure HTTP client.
+     *
+     * @param builder this builder will be used to create HTTP client
+     */
     protected void configHttpClient(OkHttpClient.Builder builder) {
     }
 
@@ -184,6 +195,9 @@ public class DefaultApiClient implements ApiClient {
         }
     }
 
+    /**
+     * Builder for {@link DefaultApiClient}.
+     */
     public static class Builder {
 
         private boolean debugMode = false;
@@ -191,26 +205,55 @@ public class DefaultApiClient implements ApiClient {
         private String platform = "Java";
         private HostsProvider hostsProvider = new DefaultApiV1HostsProvider(false);
 
+        /**
+         * Sets debug mode. Enables logging. Default value is {@code false}.
+         *
+         * @param debugMode {@code true}, if debug mode is enabled
+         * @return itself
+         */
         public final Builder setDebugMode(boolean debugMode) {
             this.debugMode = debugMode;
             return this;
         }
 
+        /**
+         * Sets client id of {@link DefaultApiClient}.
+         *
+         * @param clientId client id
+         * @return itself
+         */
         public final Builder setClientId(String clientId) {
             this.clientId = clientId;
             return this;
         }
 
+        /**
+         * Sets platform. Default value 'Java'.
+         *
+         * @param platform platform
+         * @return itself
+         */
         public final Builder setPlatform(String platform) {
             this.platform = checkNotEmpty(platform, "platform");
             return this;
         }
 
+        /**
+         * Sets hosts provider. Default value is an instance of {@link DefaultApiV1HostsProvider}.
+         *
+         * @param hostsProvider hosts provider
+         * @return itself
+         */
         public final Builder setHostsProvider(HostsProvider hostsProvider) {
             this.hostsProvider = checkNotNull(hostsProvider, "hostsProvider");
             return this;
         }
 
+        /**
+         * Creates instance of {@link DefaultApiClient}.
+         *
+         * @return instance of {@link DefaultApiClient}
+         */
         public DefaultApiClient create() {
             return new DefaultApiClient(this);
         }

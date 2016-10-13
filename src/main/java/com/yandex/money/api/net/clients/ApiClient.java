@@ -31,16 +31,34 @@ import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.Language;
 
 /**
- * Yandex.Money API client.
+ * Yandex.Money API client. The purpose of this interface is to provide methods to execute API functions, get resources
+ * from server and help with user's authorization.
  */
 public interface ApiClient {
 
+    /**
+     * @return client id
+     */
     String getClientId();
 
+    /**
+     * @return language to use for API requests
+     */
     Language getLanguage();
 
+    /**
+     * @return current host's provider
+     */
     HostsProvider getHostsProvider();
 
+    /**
+     * Executes {@link ApiRequest}.
+     *
+     * @param request request to execute
+     * @param <T> response document type
+     * @return response document
+     * @throws Exception if something goes wrong
+     */
     <T> T execute(ApiRequest<T> request) throws Exception;
 
     /**
@@ -51,6 +69,11 @@ public interface ApiClient {
      */
     AuthorizationData createAuthorizationData(AuthorizationParameters parameters);
 
+    /**
+     * Sets access token to use when executing API requests.
+     *
+     * @param accessToken access token to use
+     */
     void setAccessToken(String accessToken);
 
     /**

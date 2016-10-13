@@ -57,7 +57,7 @@ public final class ShowcaseProcessTest extends Assert {
     /**
      * Tests that complex showcase successfully proceeds two steps asynchronously.
      *
-     * @throws Exception
+     * @throws Exception if something goes wrong
      */
     @Test
     public void testProceedSuccess() throws Exception {

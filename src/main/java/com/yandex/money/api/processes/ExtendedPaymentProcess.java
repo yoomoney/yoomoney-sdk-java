@@ -133,7 +133,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     /**
-     * @see {@link BasePaymentProcess#setAccessToken(String)}
+     * @see BasePaymentProcess#setAccessToken(String)
      */
     public void setAccessToken(String accessToken) {
         client.setAccessToken(accessToken);
@@ -141,7 +141,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     /**
-     * @see {@link ExternalPaymentProcess#setInstanceId(String)}
+     * @see ExternalPaymentProcess#setInstanceId(String)
      */
     public void setInstanceId(String instanceId) {
         externalPaymentProcess.setInstanceId(instanceId);
