@@ -49,6 +49,12 @@ public final class ParametersBuffer {
 
     private Map<String, String> params = Collections.emptyMap();
 
+    /**
+     * Encodes string value to UTF-8 byte array.
+     *
+     * @param value value to encode
+     * @return UTF-8 byte array
+     */
     public static byte[] encodeUtf8(String value) {
         try {
             return encode(value).getBytes(UTF8_CHARSET);
@@ -63,7 +69,7 @@ public final class ParametersBuffer {
      * @param params key-value pairs of parameters (not null)
      * @return itself
      */
-    public ParametersBuffer setParams(Map<String, String> params) {
+    public ParametersBuffer setParameters(Map<String, String> params) {
         this.params = checkNotNull(params, "params");
         return this;
     }

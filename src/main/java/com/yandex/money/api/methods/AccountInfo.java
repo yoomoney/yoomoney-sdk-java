@@ -27,7 +27,7 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.BalanceDetails;
-import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.AccountInfoTypeAdapter;
 import com.yandex.money.api.util.Currency;
@@ -197,10 +197,8 @@ public class AccountInfo {
      * Requests for {@link com.yandex.money.api.methods.AccountInfo}.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request extends PostRequest<AccountInfo> {
+    public static final class Request extends FirstApiRequest<AccountInfo> {
 
         public Request() {
             super(AccountInfoTypeAdapter.getInstance());

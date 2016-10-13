@@ -27,24 +27,20 @@ package com.yandex.money.api.net;
 import com.google.gson.JsonElement;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.JsonUtils;
-import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.util.MimeTypes;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.yandex.money.api.util.Common.checkNotNull;
-
 /**
- * Base API request. It is preferable to extend your requests from this class or its descendants
- * rather than {@link ApiRequest}.
+ * Base implementation of {@link ApiRequest}. It is preferable to extend your requests from this class or its
+ * descendants rather than create your own implementation of {@link ApiRequest}.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
@@ -55,26 +51,16 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
             .withLocale(Locale.US)
             .withZoneUTC();
 
-    private final TypeAdapter<T> typeAdapter;
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
     private final ParametersBuffer buffer = new ParametersBuffer();
 
     private byte[] body;
 
-    /**
-     * Constructor.
-     *
-     * @param typeAdapter typeAdapter used to parse a response
-     */
-    protected BaseApiRequest(TypeAdapter<T> typeAdapter) {
-        this.typeAdapter = checkNotNull(typeAdapter, "typeAdapter");
-    }
-
     @Override
     public final String requestUrl(HostsProvider hostsProvider) {
         String url = requestUrlBase(hostsProvider);
-        return getMethod() == Method.GET ? url + buffer.setParams(parameters).prepareGet() : url;
+        return getMethod() == Method.GET ? url + buffer.setParameters(parameters).prepareGet() : url;
     }
 
     @Override
@@ -90,17 +76,12 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     @Override
     public final byte[] getBody() {
         prepareBody();
-        return body == null ? buffer.setParams(parameters).prepareBytes() : body;
+        return body == null ? buffer.setParameters(parameters).prepareBytes() : body;
     }
 
     @Override
     public String getContentType() {
         return MimeTypes.Application.X_WWW_FORM_URLENCODED;
-    }
-
-    @Override
-    public final T parseResponse(InputStream inputStream) {
-        return typeAdapter.fromJson(inputStream);
     }
 
     /**

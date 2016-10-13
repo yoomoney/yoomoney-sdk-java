@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
+package com.yandex.money.api.authorization;
 
 import com.yandex.money.api.model.Scope;
-import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.util.Strings;
 
 import java.util.HashMap;
@@ -33,51 +32,28 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import static com.yandex.money.api.util.Common.checkNotNull;
-
 /**
- * Builds parameters for OAuth2 authorization using application's web browser.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Authorization parameters for {@link AuthorizationData#getParameters()}.
  */
-public class OAuth2Authorization {
-
-    private final ApiClient client;
+public interface AuthorizationParameters {
 
     /**
-     * Constructor.
+     * Adds parameter to the list.
      *
-     * @param client API client
-     * @see com.yandex.money.api.net.clients.ApiClient
+     * @param name the name of the parameter
+     * @param value the value of the parameter
      */
-    public OAuth2Authorization(ApiClient client) {
-        this.client = checkNotNull(client, "client");
-    }
+    void add(String name, String value);
 
     /**
-     * URL to open in web browser.
+     * Builds parameters for usage in a request.
      *
-     * @return URL
+     * @return byte array of the parameters
      */
-    public String getAuthorizeUrl() {
-        return client.getHostsProvider().getMoney() + "/oauth/authorize";
-    }
+    byte[] build();
 
-    /**
-     * POST parameters for URL. Client ID is set by default.
-     *
-     * @return authorize parameters
-     */
-    public Params getAuthorizeParams() {
-        return new Params()
-                .setClientId(client.getClientId());
-    }
+    final class Builder {
 
-    /**
-     * Authorize POST parameters.
-     */
-    public static final class Params {
-        private String clientId;
         private String responseType;
         private String redirectUri;
         private Set<Scope> scopes;
@@ -87,7 +63,7 @@ public class OAuth2Authorization {
         /**
          * @param responseType specific response type
          */
-        public Params setResponseType(String responseType) {
+        public Builder setResponseType(String responseType) {
             this.responseType = responseType;
             return this;
         }
@@ -95,7 +71,7 @@ public class OAuth2Authorization {
         /**
          * @param redirectUri redirect URI
          */
-        public Params setRedirectUri(String redirectUri) {
+        public Builder setRedirectUri(String redirectUri) {
             this.redirectUri = redirectUri;
             return this;
         }
@@ -105,7 +81,7 @@ public class OAuth2Authorization {
          *
          * @param scope required scope
          */
-        public Params addScope(Scope scope) {
+        public Builder addScope(Scope scope) {
             if (scope != null) {
                 if (scopes == null) {
                     scopes = new HashSet<>();
@@ -120,7 +96,7 @@ public class OAuth2Authorization {
          *
          * @param rawScope {@code scope} parameter
          */
-        public Params setRawScope(String rawScope) {
+        public Builder setRawScope(String rawScope) {
             this.rawScope = rawScope;
             return this;
         }
@@ -130,7 +106,7 @@ public class OAuth2Authorization {
          *
          * @param instanceName the instance name
          */
-        public Params setInstanceName(String instanceName) {
+        public Builder setInstanceName(String instanceName) {
             this.instanceName = instanceName;
             return this;
         }
@@ -140,7 +116,7 @@ public class OAuth2Authorization {
          *
          * @return parameters
          */
-        public byte[] build() {
+        public AuthorizationParameters build() {
             Map<String, String> params = new HashMap<>();
             final String scopeName = "scope";
             if (Strings.isNullOrEmpty(rawScope)) {
@@ -150,19 +126,11 @@ public class OAuth2Authorization {
             } else {
                 params.put(scopeName, rawScope);
             }
-            params.put("client_id", clientId);
             params.put("response_type", responseType);
             params.put("redirect_uri", redirectUri);
             params.put("instance_name", instanceName);
 
-            return new ParametersBuffer()
-                    .setParams(params)
-                    .prepareBytes();
-        }
-
-        private Params setClientId(String clientId) {
-            this.clientId = clientId;
-            return this;
+            return new AuthorizationParametersImpl(params);
         }
     }
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,25 +24,55 @@
 
 package com.yandex.money.api.net;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 /**
- * Callback for asynchronous execution of requests. Called when response is ready or when any
- * error occurred.
- *
- * @param <T> response type
+ * HTTP client must wrap its response in this interface.
  */
-public interface OnResponseReady<T> {
-    /**
-     * Called when the request could not be executed due to cancellation, a connectivity problem
-     * or timeout.
-     *
-     * @param exception the exception
-     */
-    void onFailure(Exception exception);
+public interface HttpClientResponse {
 
     /**
-     * Called when the HTTP response was successfully returned by the remote server.
+     * Gets the HTTP status code.
      *
-     * @param response response
+     * @return HTTP status code
      */
-    void onResponse(T response);
+    int getCode();
+
+    /**
+     * Gets the HTTP status message.
+     *
+     * @return HTTP status message
+     */
+    String getMessage();
+
+    /**
+     * Request URL used to get a response.
+     *
+     * @return url
+     */
+    String getUrl();
+
+    /**
+     * Gets header by its name. Returns {@code null} if no value is present for this header.
+     *
+     * @param name name of the header
+     * @return value or {@code null} if no header found for this name
+     */
+    String getHeader(String name);
+
+    /**
+     * Returns body as UTF-8 string.
+     *
+     * @return body
+     * @throws IOException if unable to read response stream
+     */
+    String getBody() throws IOException;
+
+    /**
+     * Gets byte stream of the response.
+     *
+     * @return byte stream
+     */
+    InputStream getByteStream();
 }

@@ -25,7 +25,7 @@
 package com.yandex.money.api;
 
 import com.yandex.money.api.methods.ShowcaseSearch;
-import com.yandex.money.api.net.DocumentProvider;
+import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseSearchTypeAdapter;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -35,7 +35,7 @@ import org.testng.annotations.Test;
  */
 public class ShowcaseSearchTest {
 
-    private static final DocumentProvider documentProvider = new DocumentProvider(ApiTest.DEFAULT_API_CLIENT);
+    private static final ApiClient client = TestEnvironment.createClient();
 
     /**
      * Checks if exception is thrown and result list is not empty.
@@ -56,6 +56,6 @@ public class ShowcaseSearchTest {
     }
 
     private static ShowcaseSearch getShowcaseSearchInstance() throws Exception {
-        return documentProvider.fetch(new ShowcaseSearch.Request("skynet", 10)).document;
+        return client.execute(new ShowcaseSearch.Request("skynet", 10)).document;
     }
 }

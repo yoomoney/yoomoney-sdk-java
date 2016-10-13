@@ -24,16 +24,15 @@
 
 package com.yandex.money.api.net.clients;
 
+import com.yandex.money.api.authorization.AuthorizationData;
+import com.yandex.money.api.authorization.AuthorizationParameters;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.Language;
-import okhttp3.OkHttpClient;
 
 /**
- * Yandex.Money API client. Provides necessary information for sessions.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Yandex.Money API client. The purpose of this interface is to provide methods to execute API functions, get resources
+ * from server and help with user's authorization.
  */
 public interface ApiClient {
 
@@ -43,38 +42,44 @@ public interface ApiClient {
     String getClientId();
 
     /**
-     * @return HTTP client to use when executing API requests
-     */
-    OkHttpClient getHttpClient();
-
-    /**
-     * @return hosts provider
-     */
-    HostsProvider getHostsProvider();
-
-    /**
-     * @return specific HTTP user agent
-     */
-    UserAgent getUserAgent();
-
-    /**
-     * @return language of API responses
+     * @return language to use for API requests
      */
     Language getLanguage();
 
     /**
-     * Prepares {@link ApiRequest} to meet {@link ApiClient} requirements.
-     *
-     * @param request base request
-     * @param <T> type of response
-     * @return modified request
+     * @return current host's provider
      */
-    <T> ApiRequest<T> prepare(ApiRequest<T> request);
+    HostsProvider getHostsProvider();
 
     /**
-     * Checks if debug mode is enabled for this client.
+     * Executes {@link ApiRequest}.
      *
-     * @return {@code true} if debug mode is enabled
+     * @param request request to execute
+     * @param <T> response document type
+     * @return response document
+     * @throws Exception if something goes wrong
      */
-    boolean isDebugEnabled();
+    <T> T execute(ApiRequest<T> request) throws Exception;
+
+    /**
+     * Creates {@link AuthorizationData} based on a client's configuration and provided {@link AuthorizationParameters}.
+     *
+     * @param parameters parameters to use
+     * @return authorization data
+     */
+    AuthorizationData createAuthorizationData(AuthorizationParameters parameters);
+
+    /**
+     * Sets access token to use when executing API requests.
+     *
+     * @param accessToken access token to use
+     */
+    void setAccessToken(String accessToken);
+
+    /**
+     * Checks if client is in authorized state.
+     *
+     * @return {@code true}, if client is authorized
+     */
+    boolean isAuthorized();
 }

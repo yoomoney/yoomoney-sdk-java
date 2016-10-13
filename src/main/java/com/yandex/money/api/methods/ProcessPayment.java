@@ -27,7 +27,7 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.model.DigitalGoods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
-import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.ProcessPaymentTypeAdapter;
 import com.yandex.money.api.util.Enums;
@@ -205,10 +205,8 @@ public class ProcessPayment extends BaseProcessPayment {
      * Request for payment processing.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request extends PostRequest<ProcessPayment> {
+    public static final class Request extends FirstApiRequest<ProcessPayment> {
 
         /**
          * Repeat request using the same request id. This is used when {@link ProcessPayment} is in

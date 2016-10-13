@@ -25,7 +25,7 @@
 package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.StatusInfo;
-import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.IncomingTransferAcceptTypeAdapter;
 
@@ -103,10 +103,8 @@ public class IncomingTransferAccept {
      * Requests to perform {@link com.yandex.money.api.methods.IncomingTransferAccept}.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static final class Request extends PostRequest<IncomingTransferAccept> {
+    public static final class Request extends FirstApiRequest<IncomingTransferAccept> {
 
         /**
          * Constructor.

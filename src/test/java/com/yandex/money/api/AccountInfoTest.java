@@ -24,37 +24,28 @@
 
 package com.yandex.money.api;
 
-import com.yandex.money.api.exceptions.InsufficientScopeException;
-import com.yandex.money.api.exceptions.InvalidRequestException;
-import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.methods.AccountInfo;
-import com.yandex.money.api.net.OAuth2Session;
+import com.yandex.money.api.net.clients.ApiClient;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
-
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class AccountInfoTest implements ApiTest {
+public class AccountInfoTest {
 
-    private OAuth2Session session;
+    private ApiClient client;
 
     @BeforeTest
     public void beforeTest() {
-        session = new OAuth2Session(DEFAULT_API_CLIENT);
-        session.setDebugLogging(true);
-        session.setAccessToken(ACCESS_TOKEN);
+        client = TestEnvironment.createAuthorizedClient();
     }
 
     @Test
-    public void testAccountInfo() throws InvalidTokenException, InsufficientScopeException,
-            InvalidRequestException, IOException {
-
+    public void testAccountInfo() throws Exception {
         AccountInfo.Request request = new AccountInfo.Request();
-        AccountInfo accountInfo = session.execute(request);
+        AccountInfo accountInfo = client.execute(request);
         Assert.assertNotNull(accountInfo);
     }
 }

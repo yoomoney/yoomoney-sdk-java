@@ -31,7 +31,7 @@ import com.yandex.money.api.methods.ProcessPayment;
 import com.yandex.money.api.methods.RequestExternalPayment;
 import com.yandex.money.api.methods.RequestPayment;
 import com.yandex.money.api.model.MoneySource;
-import com.yandex.money.api.net.OAuth2Session;
+import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.net.clients.DefaultApiClient;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
 import com.yandex.money.api.processes.BasePaymentProcess;
@@ -59,15 +59,15 @@ import java.util.Map;
 public class PaymentProcessTest {
 
     private final MockWebServer server = new MockWebServer();
-    private final OAuth2Session session = new OAuth2Session(new DefaultApiClient.Builder()
-            .setClientId(ApiTest.CLIENT_ID)
+    private final ApiClient client = new DefaultApiClient.Builder()
+            .setClientId(TestEnvironment.getClientId())
             .setHostsProvider(new DefaultApiV1HostsProvider(false) {
                 @Override
                 public String getMoney() {
                     return server.url("").toString();
                 }
             })
-            .create());
+            .create();
     private final ExternalPaymentProcess.ParameterProvider parameterProvider =
             createParameterProviderStub();
 
@@ -79,19 +79,19 @@ public class PaymentProcessTest {
     @Test
     public void testPaymentProcess() throws Exception {
         enqueuePaymentProcess();
-        checkPaymentProcess(new PaymentProcess(session, parameterProvider));
+        checkPaymentProcess(new PaymentProcess(client, parameterProvider));
     }
 
     @Test
     public void testAsyncPaymentProcess() throws Exception {
         enqueuePaymentProcess();
-        checkAsyncPaymentProcess(new PaymentProcess(session, parameterProvider));
+        checkAsyncPaymentProcess(new PaymentProcess(client, parameterProvider));
     }
 
     @Test
     public void testExternalPaymentProcess() throws Exception {
         enqueueExternalPaymentProcess();
-        ExternalPaymentProcess process = new ExternalPaymentProcess(session, parameterProvider);
+        ExternalPaymentProcess process = new ExternalPaymentProcess(client, parameterProvider);
         process.setInstanceId("instanceId");
         checkPaymentProcess(process);
     }
@@ -99,14 +99,14 @@ public class PaymentProcessTest {
     @Test
     public void testAsyncExternalPaymentProcess() throws Exception {
         enqueueExternalPaymentProcess();
-        ExternalPaymentProcess process = new ExternalPaymentProcess(session, parameterProvider);
+        ExternalPaymentProcess process = new ExternalPaymentProcess(client, parameterProvider);
         process.setInstanceId("instanceId");
         checkAsyncPaymentProcess(process);
     }
 
     @Test
     public void testPaymentProcessStateRestore() {
-        PaymentProcess paymentProcess = new PaymentProcess(session, parameterProvider);
+        PaymentProcess paymentProcess = new PaymentProcess(client, parameterProvider);
 
         BasePaymentProcess.SavedState<RequestPayment, ProcessPayment> savedState =
                 createPaymentProcessSavedState();
@@ -120,7 +120,7 @@ public class PaymentProcessTest {
 
     @Test
     public void testExternalPaymentProcessStateRestore() {
-        ExternalPaymentProcess paymentProcess = new ExternalPaymentProcess( session, parameterProvider);
+        ExternalPaymentProcess paymentProcess = new ExternalPaymentProcess(client, parameterProvider);
 
         BasePaymentProcess.SavedState<RequestExternalPayment, ProcessExternalPayment> savedState =
                 createExternalPaymentProcessSavedState();
@@ -135,7 +135,7 @@ public class PaymentProcessTest {
     @Test
     public void testExtendedPaymentProcessStateRestore() {
         ExtendedPaymentProcess extendedPaymentProcess = new ExtendedPaymentProcess(
-                session, parameterProvider);
+                client, parameterProvider);
 
         ExtendedPaymentProcess.SavedState savedState = new ExtendedPaymentProcess.SavedState(
                 createPaymentProcessSavedState(), createExternalPaymentProcessSavedState(), 11);

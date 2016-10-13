@@ -26,7 +26,7 @@ package com.yandex.money.api.methods;
 
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
-import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.methods.OperationHistoryTypeAdapter;
 import com.yandex.money.api.util.Enums;
@@ -134,10 +134,8 @@ public class OperationHistory {
      * Requests for a list of operations in user's history.
      * <p/>
      * Authorized session required.
-     *
-     * @see com.yandex.money.api.net.OAuth2Session
      */
-    public static class Request extends PostRequest<OperationHistory> {
+    public static class Request extends FirstApiRequest<OperationHistory> {
 
         /**
          * Use builder to create the request.

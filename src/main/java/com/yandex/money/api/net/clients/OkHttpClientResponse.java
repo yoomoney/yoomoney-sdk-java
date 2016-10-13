@@ -22,63 +22,57 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net.providers;
+package com.yandex.money.api.net.clients;
+
+import com.yandex.money.api.net.HttpClientResponse;
+import okhttp3.Response;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * Provides necessary hosts. They are used to perform API requests.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Implementation of {@link HttpClientResponse} for OkHttp.
  */
-public class DefaultApiV1HostsProvider implements HostsProvider {
+final class OkHttpClientResponse implements HttpClientResponse {
 
-    private final boolean mobile;
+    private final Response response;
+    private final boolean debug;
 
-    /**
-     * Constructor.
-     *
-     * @param mobile {@code true} if running on a mobile device
-     */
-    public DefaultApiV1HostsProvider(boolean mobile) {
-        this.mobile = mobile;
+    OkHttpClientResponse(Response response, boolean debug) {
+        this.response = checkNotNull(response, "response");
+        this.debug = debug;
     }
 
-    /**
-     * @return {@code https://money.yandex.ru}
-     */
     @Override
-    public String getMoney() {
-        return "https://money.yandex.ru";
+    public int getCode() {
+        return response.code();
     }
 
-    /**
-     * @return {@code https://money.yandex.ru/api}
-     */
     @Override
-    public String getMoneyApi() {
-        return getMoney() + "/api";
+    public String getMessage() {
+        return response.message();
     }
 
-    /**
-     * @return {@code https://money.yandex.ru/api}
-     */
     @Override
-    public String getPaymentApi() {
-        return getMoneyApi();
+    public String getUrl() {
+        return response.request().url().toString();
     }
 
-    /**
-     * @return {@code https://m.money.yandex.ru}
-     */
     @Override
-    public String getMobileMoney() {
-        return "https://m.money.yandex.ru";
+    public String getHeader(String name) {
+        return response.header(name);
     }
 
-    /**
-     * @return platform specific url
-     */
     @Override
-    public final String getWebUrl() {
-        return mobile ? getMobileMoney() : getMoney();
+    public String getBody() throws IOException {
+        return response.body().string();
+    }
+
+    @Override
+    public InputStream getByteStream() {
+        InputStream stream = response.body().byteStream();
+        return debug ? new ResponseLoggingInputStream(stream) : stream;
     }
 }

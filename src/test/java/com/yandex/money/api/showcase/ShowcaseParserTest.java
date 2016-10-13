@@ -24,11 +24,12 @@
 
 package com.yandex.money.api.showcase;
 
-import com.yandex.money.api.ApiTest;
+import com.yandex.money.api.TestEnvironment;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.Showcase;
+import com.yandex.money.api.model.showcase.ShowcaseContext;
 import com.yandex.money.api.model.showcase.StdFee;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.Parameter;
@@ -47,8 +48,7 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Submit;
 import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
 import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
-import com.yandex.money.api.net.DocumentProvider;
-import com.yandex.money.api.net.ShowcaseContext;
+import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.util.Currency;
 import org.joda.time.DateTime;
@@ -74,8 +74,7 @@ public class ShowcaseParserTest {
 
     @Test
     public void testParsing() throws Exception {
-        DocumentProvider documentProvider = new DocumentProvider(ApiTest.DEFAULT_API_CLIENT);
-        testShowcase(documentProvider, 5551L);
+        testShowcase(TestEnvironment.createClient(), 5551L);
     }
 
     @Test
@@ -129,8 +128,8 @@ public class ShowcaseParserTest {
         ShowcaseTypeAdapter.getInstance().fromJson(inputStream);
     }
 
-    private void testShowcase(DocumentProvider documentProvider, long scid) throws Exception {
-        ShowcaseContext showcaseContext = documentProvider.getShowcase(new Showcase.Request(scid));
+    private void testShowcase(ApiClient client, long scid) throws Exception {
+        ShowcaseContext showcaseContext = client.execute(new Showcase.Request(scid));
         assertNotNull(showcaseContext);
         assertNotNull(showcaseContext.getCurrentStep().showcase);
     }

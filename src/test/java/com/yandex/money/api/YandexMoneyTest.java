@@ -24,9 +24,6 @@
 
 package com.yandex.money.api;
 
-import com.yandex.money.api.exceptions.InsufficientScopeException;
-import com.yandex.money.api.exceptions.InvalidRequestException;
-import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.methods.InstanceId;
@@ -38,25 +35,21 @@ import com.yandex.money.api.methods.params.PhoneParams;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.OAuth2Session;
+import com.yandex.money.api.net.clients.ApiClient;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
-/**
- *
- */
-public class YandexMoneyTest implements ApiTest {
+public class YandexMoneyTest {
 
-    private final String phoneNumber = LOCAL_PROPERTIES.getPhoneNumber();
-    private final BigDecimal amount = LOCAL_PROPERTIES.getAmount();
+    private final String phoneNumber = TestEnvironment.getLocalProperties().getPhoneNumber();
+    private final BigDecimal amount = TestEnvironment.getLocalProperties().getAmount();
 
-    private OAuth2Session session;
+    private ApiClient client;
 
     private InstanceId respInstanceId;
     private InstanceId.Request reqInstanceId;
@@ -66,11 +59,9 @@ public class YandexMoneyTest implements ApiTest {
     private ProcessExternalPayment.Request reqProcessExternalPayment;
 
     @Test
-    public void testInstanceIdSuccess()
-            throws IOException, InsufficientScopeException, InvalidTokenException, InvalidRequestException {
-
-        reqInstanceId = new InstanceId.Request(CLIENT_ID);
-        respInstanceId = session.execute(reqInstanceId);
+    public void testInstanceIdSuccess() throws Exception {
+        reqInstanceId = new InstanceId.Request(TestEnvironment.getClientId());
+        respInstanceId = client.execute(reqInstanceId);
 
         Assert.assertEquals(respInstanceId.statusInfo.status, SimpleStatus.SUCCESS);
         Assert.assertNotNull(respInstanceId.instanceId);
@@ -78,11 +69,9 @@ public class YandexMoneyTest implements ApiTest {
     }
 
     @Test
-    public void testInstanceIdFail()
-            throws IOException, InsufficientScopeException, InvalidTokenException, InvalidRequestException {
-
+    public void testInstanceIdFail() throws Exception {
         reqInstanceId = new InstanceId.Request(" ");
-        respInstanceId = session.execute(reqInstanceId);
+        respInstanceId = client.execute(reqInstanceId);
 
         Assert.assertEquals(respInstanceId.statusInfo.status, SimpleStatus.REFUSED);
         Assert.assertNotNull(respInstanceId.statusInfo.error);
@@ -91,28 +80,22 @@ public class YandexMoneyTest implements ApiTest {
     }
 
     @Test
-    public void testRequestExternalPayment()
-            throws IOException, InsufficientScopeException, InvalidTokenException, InvalidRequestException {
-
+    public void testRequestExternalPayment() throws Exception {
         reqRequestExternalPayment = createRequestExternalPayment();
         respRequestExternalPayment = testRequestPayment(reqRequestExternalPayment);
     }
 
     @Test
-    public void testRequestPayment()
-            throws InvalidTokenException, InsufficientScopeException, InvalidRequestException, IOException {
-
-        session.setAccessToken(ACCESS_TOKEN);
+    public void testRequestPayment() throws Exception {
+        client.setAccessToken(TestEnvironment.getAccessToken());
         testRequestPayment(createRequestPayment());
-        session.setAccessToken(null);
+        client.setAccessToken(null);
     }
 
     @Test
-    public void testRequestExternalFail()
-            throws IOException, InsufficientScopeException, InvalidTokenException, InvalidRequestException {
-
-        reqInstanceId = new InstanceId.Request(CLIENT_ID);
-        respInstanceId = session.execute(reqInstanceId);
+    public void testRequestExternalFail() throws Exception {
+        reqInstanceId = new InstanceId.Request(TestEnvironment.getClientId());
+        respInstanceId = client.execute(reqInstanceId);
 
         HashMap<String, String> params = successRequestParams();
         reqRequestExternalPayment = RequestExternalPayment.Request.newInstance(
@@ -133,11 +116,9 @@ public class YandexMoneyTest implements ApiTest {
     }
 
     @Test
-    public void testProcessExternalPayment()
-            throws IOException, InsufficientScopeException, InvalidTokenException, InvalidRequestException {
-
+    public void testProcessExternalPayment() throws Exception {
         reqRequestExternalPayment = createRequestExternalPayment();
-        respRequestExternalPayment = session.execute(reqRequestExternalPayment);
+        respRequestExternalPayment = client.execute(reqRequestExternalPayment);
 
         if (respRequestExternalPayment.status == BaseRequestPayment.Status.SUCCESS) {
             String successUri = "https://elbrus.yandex.ru/success";
@@ -150,13 +131,11 @@ public class YandexMoneyTest implements ApiTest {
     }
 
     @Test
-    public void testProcessPayment()
-            throws InvalidTokenException, InsufficientScopeException, InvalidRequestException, IOException {
-
-        session.setAccessToken(ACCESS_TOKEN);
-        RequestPayment requestPayment = session.execute(createRequestPayment());
+    public void testProcessPayment() throws Exception {
+        client.setAccessToken(TestEnvironment.getAccessToken());
+        RequestPayment requestPayment = client.execute(createRequestPayment());
         if (requestPayment.status == BaseRequestPayment.Status.SUCCESS) {
-            ProcessPayment processPayment = session.execute(
+            ProcessPayment processPayment = client.execute(
                     new ProcessPayment.Request(requestPayment.requestId)
                             .setTestResult(ProcessPayment.TestResult.SUCCESS));
             Assert.assertNotNull(processPayment);
@@ -165,13 +144,12 @@ public class YandexMoneyTest implements ApiTest {
                 Assert.assertEquals(requestPayment.error, Error.NOT_ENOUGH_FUNDS);
             }
         }
-        session.setAccessToken(null);
+        client.setAccessToken(null);
     }
 
     @BeforeClass
     private void setUp() {
-        session = new OAuth2Session(DEFAULT_API_CLIENT);
-        session.setDebugLogging(true);
+        client = TestEnvironment.createClient();
     }
 
     @BeforeTest
@@ -185,10 +163,8 @@ public class YandexMoneyTest implements ApiTest {
         reqProcessExternalPayment = null;
     }
 
-    private <T extends BaseRequestPayment> T testRequestPayment(ApiRequest<T> request)
-            throws InvalidTokenException, InsufficientScopeException, InvalidRequestException, IOException {
-
-        T response = session.execute(request);
+    private <T extends BaseRequestPayment> T testRequestPayment(ApiRequest<T> request) throws Exception {
+        T response = client.execute(request);
 
         Assert.assertNotNull(response);
         if (response.status == BaseRequestPayment.Status.SUCCESS) {
@@ -213,10 +189,8 @@ public class YandexMoneyTest implements ApiTest {
         return params;
     }
 
-    private <T extends BaseRequestPayment> T testRequestPaymentFail(ApiRequest<T> request)
-            throws InvalidTokenException, InsufficientScopeException, InvalidRequestException, IOException {
-
-        T response = session.execute(request);
+    private <T extends BaseRequestPayment> T testRequestPaymentFail(ApiRequest<T> request) throws Exception {
+        T response = client.execute(request);
 
         Assert.assertNotNull(response);
         Assert.assertEquals(response.status, RequestExternalPayment.Status.REFUSED);
@@ -227,19 +201,15 @@ public class YandexMoneyTest implements ApiTest {
         return response;
     }
 
-    private <T extends BaseProcessPayment> void testProcessPayment(ApiRequest<T> request)
-            throws InvalidTokenException, InsufficientScopeException, InvalidRequestException, IOException {
-
-        T response = session.execute(request);
+    private <T extends BaseProcessPayment> void testProcessPayment(ApiRequest<T> request) throws Exception {
+        T response = client.execute(request);
         Assert.assertNotNull(response);
         Assert.assertEquals(response.status, ProcessExternalPayment.Status.EXT_AUTH_REQUIRED);
     }
 
-    private RequestExternalPayment.Request createRequestExternalPayment()
-            throws InvalidTokenException, InsufficientScopeException, InvalidRequestException, IOException {
-
-        reqInstanceId = new InstanceId.Request(CLIENT_ID);
-        respInstanceId = session.execute(reqInstanceId);
+    private RequestExternalPayment.Request createRequestExternalPayment() throws Exception {
+        reqInstanceId = new InstanceId.Request(TestEnvironment.getClientId());
+        respInstanceId = client.execute(reqInstanceId);
 
         HashMap<String, String> params = successRequestParams();
         return RequestExternalPayment.Request.newInstance(

@@ -26,7 +26,6 @@ package com.yandex.money.api.net;
 
 import com.yandex.money.api.net.providers.HostsProvider;
 
-import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -81,12 +80,13 @@ public interface ApiRequest<T> {
     String getContentType();
 
     /**
-     * Parses API response from stream.
+     * Parses API response to get requested object.
      *
-     * @param inputStream input stream
-     * @return response
+     * @param response API response
+     * @return response model
+     * @throws Exception if something went wrong
      */
-    T parseResponse(InputStream inputStream);
+    T parse(HttpClientResponse response) throws Exception;
 
     /**
      * Methods enum.

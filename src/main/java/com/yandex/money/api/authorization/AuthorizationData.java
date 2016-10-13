@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,21 +22,20 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.net;
-
-import com.yandex.money.api.typeadapters.TypeAdapter;
+package com.yandex.money.api.authorization;
 
 /**
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Authorization data.
  */
-public abstract class GetRequest<T> extends BaseApiRequest<T> {
+public interface AuthorizationData {
 
-    protected GetRequest(TypeAdapter<T> typeAdapter) {
-        super(typeAdapter);
-    }
+    /**
+     * @return url to open in web browser
+     */
+    String getUrl();
 
-    @Override
-    public Method getMethod() {
-        return Method.GET;
-    }
+    /**
+     * @return parameters to pass as POST body
+     */
+    byte[] getParameters();
 }

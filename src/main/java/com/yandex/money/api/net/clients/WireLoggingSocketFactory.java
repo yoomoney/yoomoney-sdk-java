@@ -105,8 +105,7 @@ final class WireLoggingSocketFactory extends SSLSocketFactory {
             this.delegate = s;
         }
 
-        private static void logWire(String prefix, byte[] data, int off, int len)
-                throws IOException {
+        private static void logWire(String prefix, byte[] data, int off, int len) {
             StringBuilder buffer = new StringBuilder(prefix)
                     .append(" block buffer ")
                     .append(data.length)
@@ -121,7 +120,7 @@ final class WireLoggingSocketFactory extends SSLSocketFactory {
                     buffer.append("[\\r]");
                 } else if (b == 10) {
                     buffer.append("[\\n]\n");
-                } else if (b < 32 || b > 127) {
+                } else if (b < 32) {
                     buffer.append(" ").append(Numbers.byteToHex(b));
                 } else {
                     buffer.append((char) b);

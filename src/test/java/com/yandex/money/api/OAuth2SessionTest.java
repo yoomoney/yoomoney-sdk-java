@@ -32,8 +32,8 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
-import com.yandex.money.api.net.OAuth2Session;
-import com.yandex.money.api.net.PostRequest;
+import com.yandex.money.api.net.FirstApiRequest;
+import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.JsonUtils;
@@ -56,7 +56,7 @@ import java.net.HttpURLConnection;
 public class OAuth2SessionTest {
 
     private final MockWebServer server = new MockWebServer();
-    private final OAuth2Session session = new OAuth2Session(ApiTest.DEFAULT_API_CLIENT);
+    private final ApiClient client = TestEnvironment.createClient();
 
     @BeforeClass
     public void setUp() throws IOException {
@@ -98,8 +98,7 @@ public class OAuth2SessionTest {
 
     @Test(expectedExceptions = InsufficientScopeException.class)
     public void testForbidden() throws Exception {
-        executeTest(createResponse().setResponseCode(HttpURLConnection.HTTP_FORBIDDEN),
-                createRequest(true));
+        executeTest(createResponse().setResponseCode(HttpURLConnection.HTTP_FORBIDDEN), createRequest(true));
     }
 
     private static MockResponse createResponse() {
@@ -119,7 +118,7 @@ public class OAuth2SessionTest {
 
     private void executeTest(MockResponse response, Mock.Request request) throws Exception {
         server.enqueue(response);
-        checkResponse(session.execute(request));
+        checkResponse(client.execute(request));
     }
 
     private void checkResponse(Mock response) {
@@ -134,7 +133,7 @@ public class OAuth2SessionTest {
             this.code = code;
         }
 
-        static final class Request extends PostRequest<Mock> {
+        static final class Request extends FirstApiRequest<Mock> {
 
             private final HttpUrl url;
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2016 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,42 +22,37 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api;
+package com.yandex.money.api.authorization;
+
+import com.yandex.money.api.net.ParametersBuffer;
+
+import java.util.Map;
 
 /**
- * You can use it for simple syncing of threads.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Basic implementation of {@link AuthorizationParameters}.
  */
-final class ThreadSync {
+final class AuthorizationParametersImpl implements AuthorizationParameters {
 
-    private final Object lock = new Object();
-
-    private boolean notified = false;
+    private final Map<String, String> parameters;
 
     /**
-     * @see #wait()
+     * Map of authorization parameters.
+     *
+     * @param parameters key-value pairs
      */
-    public void doWait() {
-        synchronized (lock) {
-            if (!notified) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    // do nothing
-                }
-            }
-            notified = false;
-        }
+    AuthorizationParametersImpl(Map<String, String> parameters) {
+        this.parameters = parameters;
     }
 
-    /**
-     * @see #notifyAll()
-     */
-    public void doNotify() {
-        synchronized (lock) {
-            lock.notifyAll();
-            notified = true;
-        }
+    @Override
+    public void add(String name, String value) {
+        parameters.put(name, value);
+    }
+
+    @Override
+    public byte[] build() {
+        return new ParametersBuffer()
+                .setParameters(parameters)
+                .prepareBytes();
     }
 }
