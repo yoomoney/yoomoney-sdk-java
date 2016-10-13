@@ -27,6 +27,7 @@ package com.yandex.money.api.net.clients;
 import com.yandex.money.api.authorization.AuthorizationData;
 import com.yandex.money.api.authorization.AuthorizationParameters;
 import com.yandex.money.api.net.ApiRequest;
+import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.Language;
 
@@ -50,6 +51,11 @@ public interface ApiClient {
      * @return current host's provider
      */
     HostsProvider getHostsProvider();
+
+    /**
+     * @return user agent
+     */
+    UserAgent getUserAgent();
 
     /**
      * Executes {@link ApiRequest}.

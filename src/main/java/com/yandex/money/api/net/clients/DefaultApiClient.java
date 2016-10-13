@@ -48,7 +48,6 @@ import java.security.GeneralSecurityException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static com.yandex.money.api.util.Common.checkNotEmpty;
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
@@ -58,8 +57,6 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class DefaultApiClient implements ApiClient {
-
-    private static final long DEFAULT_TIMEOUT = 30;
 
     private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
 
@@ -80,17 +77,10 @@ public class DefaultApiClient implements ApiClient {
     protected DefaultApiClient(Builder builder) {
         clientId = checkNotNull(builder.clientId, "clientId");
         hostsProvider = builder.hostsProvider;
-        userAgent = new DefaultUserAgent(checkNotNull(builder, "builder").platform);
-        language = Language.getDefault();
+        userAgent = builder.userAgent;
+        language = builder.language;
         debugMode = builder.debugMode;
-
-        OkHttpClient.Builder httpClientBuilder = createHttpClientBuilder();
-        if (debugMode) {
-            SSLSocketFactory sslSocketFactory = createSslSocketFactory();
-            httpClientBuilder.sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
-        }
-        configHttpClient(httpClientBuilder);
-        httpClient = httpClientBuilder.build();
+        httpClient = builder.httpClient;
     }
 
     @Override
@@ -106,6 +96,11 @@ public class DefaultApiClient implements ApiClient {
     @Override
     public HostsProvider getHostsProvider() {
         return hostsProvider;
+    }
+
+    @Override
+    public UserAgent getUserAgent() {
+        return userAgent;
     }
 
     @Override
@@ -134,22 +129,10 @@ public class DefaultApiClient implements ApiClient {
      * If required, subclasses may override this method to configure HTTP client.
      *
      * @param builder this builder will be used to create HTTP client
+     * @deprecated does nothing, use {@link Builder#setHttpClient(OkHttpClient)} instead
      */
+    @Deprecated
     protected void configHttpClient(OkHttpClient.Builder builder) {
-    }
-
-    /**
-     * Creates HTTP client to use.
-     *
-     * @return HTTP client
-     */
-    private OkHttpClient.Builder createHttpClientBuilder() {
-        return new OkHttpClient.Builder()
-                .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .connectionPool(new ConnectionPool(4, 10L, TimeUnit.MINUTES))
-                .followSslRedirects(false)
-                .followRedirects(false);
     }
 
     private Request prepareRequest(ApiRequest<?> request) {
@@ -158,7 +141,7 @@ public class DefaultApiClient implements ApiClient {
         Request.Builder builder = new Request.Builder()
                 .cacheControl(cacheControl)
                 .url(request.requestUrl(getHostsProvider()))
-                .addHeader(HttpHeaders.USER_AGENT, userAgent.getName())
+                .addHeader(HttpHeaders.USER_AGENT, getUserAgent().getName())
                 .addHeader(HttpHeaders.ACCEPT_LANGUAGE, getLanguage().iso6391Code);
 
         if (isAuthorized()) {
@@ -200,10 +183,14 @@ public class DefaultApiClient implements ApiClient {
      */
     public static class Builder {
 
+        private static final long DEFAULT_TIMEOUT = 30;
+
         private boolean debugMode = false;
         private String clientId;
-        private String platform = "Java";
+        private UserAgent userAgent = new DefaultUserAgent("Java");
         private HostsProvider hostsProvider = new DefaultApiV1HostsProvider(false);
+        private Language language = Language.getDefault();
+        private OkHttpClient httpClient;
 
         /**
          * Sets debug mode. Enables logging. Default value is {@code false}.
@@ -232,9 +219,11 @@ public class DefaultApiClient implements ApiClient {
          *
          * @param platform platform
          * @return itself
+         * @deprecated use {@link #setUserAgent(UserAgent)} instead
          */
+        @Deprecated
         public final Builder setPlatform(String platform) {
-            this.platform = checkNotEmpty(platform, "platform");
+            this.userAgent = new DefaultUserAgent(platform);
             return this;
         }
 
@@ -250,12 +239,62 @@ public class DefaultApiClient implements ApiClient {
         }
 
         /**
+         * Sets {@link UserAgent} to use.
+         *
+         * @param userAgent user agent
+         * @return itself
+         */
+        public final Builder setUserAgent(UserAgent userAgent) {
+            this.userAgent = checkNotNull(userAgent, "userAgent");
+            return this;
+        }
+
+        /**
+         * Sets language for API responses.
+         *
+         * @param language language to use
+         * @return itself
+         */
+        public final Builder setLanguage(Language language) {
+            this.language = checkNotNull(language, "language");
+            return this;
+        }
+
+        /**
+         * Sets HTTP client to use.
+         *
+         * @param httpClient HTTP client
+         * @return itself
+         */
+        public final Builder setHttpClient(OkHttpClient httpClient) {
+            this.httpClient = httpClient;
+            return this;
+        }
+
+        /**
          * Creates instance of {@link DefaultApiClient}.
          *
          * @return instance of {@link DefaultApiClient}
          */
         public DefaultApiClient create() {
+            if (httpClient == null) {
+                OkHttpClient.Builder builder = createHttpClientBuilder();
+                if (debugMode) {
+                    SSLSocketFactory sslSocketFactory = createSslSocketFactory();
+                    builder.sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
+                }
+            }
+
             return new DefaultApiClient(this);
+        }
+
+        private static OkHttpClient.Builder createHttpClientBuilder() {
+            return new OkHttpClient.Builder()
+                    .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                    .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                    .connectionPool(new ConnectionPool(4, 10L, TimeUnit.MINUTES))
+                    .followSslRedirects(false)
+                    .followRedirects(false);
         }
     }
 
