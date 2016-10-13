@@ -58,6 +58,8 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  */
 public class DefaultApiClient implements ApiClient {
 
+    private static final long DEFAULT_TIMEOUT = 30;
+
     private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
 
     private final String clientId;
@@ -80,6 +82,15 @@ public class DefaultApiClient implements ApiClient {
         userAgent = builder.userAgent;
         language = builder.language;
         debugMode = builder.debugMode;
+
+        if (builder.httpClient == null) {
+            OkHttpClient.Builder httpClientBuilder = createHttpClientBuilder();
+            if (debugMode) {
+                SSLSocketFactory sslSocketFactory = createSslSocketFactory();
+                httpClientBuilder.sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
+            }
+            builder.httpClient = httpClientBuilder.build();
+        }
         httpClient = builder.httpClient;
     }
 
@@ -168,6 +179,15 @@ public class DefaultApiClient implements ApiClient {
         return builder.build();
     }
 
+    private static OkHttpClient.Builder createHttpClientBuilder() {
+        return new OkHttpClient.Builder()
+                .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
+                .connectionPool(new ConnectionPool(4, 10L, TimeUnit.MINUTES))
+                .followSslRedirects(false)
+                .followRedirects(false);
+    }
+
     private static SSLSocketFactory createSslSocketFactory() {
         try {
             SSLContext context = SSLContext.getInstance("TLS");
@@ -182,8 +202,6 @@ public class DefaultApiClient implements ApiClient {
      * Builder for {@link DefaultApiClient}.
      */
     public static class Builder {
-
-        private static final long DEFAULT_TIMEOUT = 30;
 
         private boolean debugMode = false;
         private String clientId;
@@ -274,28 +292,10 @@ public class DefaultApiClient implements ApiClient {
         /**
          * Creates instance of {@link DefaultApiClient}.
          *
-         * @return instance of {@link DefaultApiClient}
+         * @return implementation of {@link ApiClient}
          */
         public DefaultApiClient create() {
-            if (httpClient == null) {
-                OkHttpClient.Builder builder = createHttpClientBuilder();
-                if (debugMode) {
-                    SSLSocketFactory sslSocketFactory = createSslSocketFactory();
-                    builder.sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
-                }
-                httpClient = builder.build();
-            }
-
             return new DefaultApiClient(this);
-        }
-
-        private static OkHttpClient.Builder createHttpClientBuilder() {
-            return new OkHttpClient.Builder()
-                    .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                    .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                    .connectionPool(new ConnectionPool(4, 10L, TimeUnit.MINUTES))
-                    .followSslRedirects(false)
-                    .followRedirects(false);
         }
     }
 
