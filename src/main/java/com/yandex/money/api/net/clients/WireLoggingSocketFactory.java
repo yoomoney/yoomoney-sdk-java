@@ -42,6 +42,8 @@ import java.net.SocketException;
 import java.nio.channels.SocketChannel;
 import java.util.logging.Logger;
 
+import static com.yandex.money.api.util.Common.checkNotNull;
+
 /**
  * Logging wrapper for socket factory.
  *
@@ -53,8 +55,8 @@ final class WireLoggingSocketFactory extends SSLSocketFactory {
 
     private final SSLSocketFactory delegate;
 
-    WireLoggingSocketFactory(SSLSocketFactory sf0) {
-        this.delegate = sf0;
+    WireLoggingSocketFactory(SSLSocketFactory sslSocketFactory) {
+        this.delegate = checkNotNull(sslSocketFactory, "sslSocketFactory");
     }
 
     @Override

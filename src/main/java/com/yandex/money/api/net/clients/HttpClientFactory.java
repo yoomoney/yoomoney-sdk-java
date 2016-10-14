@@ -32,6 +32,8 @@ import javax.net.ssl.SSLSocketFactory;
 import java.security.GeneralSecurityException;
 import java.util.concurrent.TimeUnit;
 
+import static com.yandex.money.api.util.Common.checkNotNull;
+
 /**
  * Creates HTTP clients.
  */
@@ -75,8 +77,17 @@ public final class HttpClientFactory {
      * @param builder builder that will be used to create HTTP client
      */
     public static void applyLogging(OkHttpClient.Builder builder) {
-        SSLSocketFactory sslSocketFactory = createSslSocketFactory();
-        builder.sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
+        applyLogging(builder, createSslSocketFactory());
+    }
+
+    /**
+     * Applies logging to OkHttp client.
+     *
+     * @param builder OkHttp client builder
+     * @param sslSocketFactory SSL socket factory
+     */
+    public static void applyLogging(OkHttpClient.Builder builder, SSLSocketFactory sslSocketFactory) {
+        checkNotNull(builder, "builder").sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
     }
 
     private static SSLSocketFactory createSslSocketFactory() {
