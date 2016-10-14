@@ -54,17 +54,19 @@ public interface AuthorizationParameters {
 
     final class Builder {
 
-        private String responseType;
+        private String responseType = "code";
         private String redirectUri;
         private Set<Scope> scopes;
         private String rawScope;
         private String instanceName;
 
         /**
-         * @param responseType specific response type
+         * @param responseType specific response type, default value is {@code "code"}, null or empty values are ignored
          */
         public Builder setResponseType(String responseType) {
-            this.responseType = responseType;
+            if (responseType != null) {
+                this.responseType = responseType;
+            }
             return this;
         }
 
@@ -115,8 +117,18 @@ public interface AuthorizationParameters {
          * Build provided parameters.
          *
          * @return parameters
+         * @deprecated use {@link #create()} instead
          */
         public AuthorizationParameters build() {
+            return create();
+        }
+
+        /**
+         * Creates instance of {@link AuthorizationParameters}.
+         *
+         * @return instance of {@link AuthorizationParameters}
+         */
+        public AuthorizationParameters create() {
             Map<String, String> params = new HashMap<>();
             final String scopeName = "scope";
             if (Strings.isNullOrEmpty(rawScope)) {

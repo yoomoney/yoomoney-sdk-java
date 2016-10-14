@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Helps to deal with urls.
@@ -53,11 +54,20 @@ public final class UrlEncodedUtils {
         URI uri = new URI(checkNotEmpty(url, "url"));
         String query = uri.getQuery();
         if (query == null) {
-            return Collections.unmodifiableMap(new HashMap<String, String>());
+            return Collections.emptyMap();
         }
+        return parseQuery(query);
+    }
 
-        Map<String, String> map = new HashMap<>();
-        String[] params = query.split("&");
+    /**
+     * Parses query component of URI into parameters map.
+     *
+     * @param query query component of URI
+     * @return parameters as key-value pairs
+     */
+    public static Map<String, String> parseQuery(String query) {
+        String[] params = checkNotNull(query, "query").split("&");
+        Map<String, String> map = new HashMap<>(params.length);
         for (String param : params) {
             String[] keyValue = param.split("=");
             if (keyValue.length == 2) {
