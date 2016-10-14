@@ -100,7 +100,7 @@ final class WireLoggingSocketFactory extends SSLSocketFactory {
     private static class WireLogSocket extends SSLSocket {
         private final SSLSocket delegate;
 
-        public WireLogSocket(SSLSocket s) {
+        WireLogSocket(SSLSocket s) {
             super();
             this.delegate = s;
         }
@@ -425,7 +425,7 @@ final class WireLoggingSocketFactory extends SSLSocketFactory {
         }
 
         private static class LoggingOutputStream extends FilterOutputStream {
-            public LoggingOutputStream(OutputStream out) {
+            LoggingOutputStream(OutputStream out) {
                 super(out);
             }
 
@@ -445,7 +445,7 @@ final class WireLoggingSocketFactory extends SSLSocketFactory {
         }
 
         private static class LoggingInputStream extends FilterInputStream {
-            public LoggingInputStream(InputStream out) {
+            LoggingInputStream(InputStream out) {
                 super(out);
             }
 

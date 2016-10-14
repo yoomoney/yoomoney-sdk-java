@@ -42,7 +42,7 @@ final class ResponseLoggingInputStream extends InputStream {
     private final InputStream inputStream;
     private final ByteArrayOutputStream buffer;
 
-    public ResponseLoggingInputStream(InputStream inputStream) {
+    ResponseLoggingInputStream(InputStream inputStream) {
         this.inputStream = checkNotNull(inputStream, "input stream");
         this.buffer = new ByteArrayOutputStream();
     }

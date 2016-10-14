@@ -35,18 +35,13 @@ import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.Language;
 import com.yandex.money.api.util.Strings;
 import okhttp3.CacheControl;
-import okhttp3.ConnectionPool;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import java.security.GeneralSecurityException;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
@@ -57,8 +52,6 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class DefaultApiClient implements ApiClient {
-
-    private static final long DEFAULT_TIMEOUT = 30;
 
     private final CacheControl cacheControl = new CacheControl.Builder().noCache().build();
 
@@ -84,12 +77,7 @@ public class DefaultApiClient implements ApiClient {
         debugMode = builder.debugMode;
 
         if (builder.httpClient == null) {
-            OkHttpClient.Builder httpClientBuilder = createHttpClientBuilder();
-            if (debugMode) {
-                SSLSocketFactory sslSocketFactory = createSslSocketFactory();
-                httpClientBuilder.sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
-            }
-            builder.httpClient = httpClientBuilder.build();
+            builder.httpClient = HttpClientFactory.newOkHttpClient(debugMode);
         }
         httpClient = builder.httpClient;
     }
@@ -123,7 +111,7 @@ public class DefaultApiClient implements ApiClient {
     @Override
     public AuthorizationData createAuthorizationData(AuthorizationParameters parameters) {
         parameters.add("client_id", getClientId());
-        return new AuthorizationDataImpl(getHostsProvider().getWebUrl(), parameters.build());
+        return new AuthorizationDataImpl(getHostsProvider().getMoney(), parameters.build());
     }
 
     @Override
@@ -177,25 +165,6 @@ public class DefaultApiClient implements ApiClient {
         }
 
         return builder.build();
-    }
-
-    private static OkHttpClient.Builder createHttpClientBuilder() {
-        return new OkHttpClient.Builder()
-                .readTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .connectTimeout(DEFAULT_TIMEOUT, TimeUnit.SECONDS)
-                .connectionPool(new ConnectionPool(4, 10L, TimeUnit.MINUTES))
-                .followSslRedirects(false)
-                .followRedirects(false);
-    }
-
-    private static SSLSocketFactory createSslSocketFactory() {
-        try {
-            SSLContext context = SSLContext.getInstance("TLS");
-            context.init(null, null, null);
-            return context.getSocketFactory();
-        } catch (GeneralSecurityException exception) {
-            throw new RuntimeException(exception);
-        }
     }
 
     /**
