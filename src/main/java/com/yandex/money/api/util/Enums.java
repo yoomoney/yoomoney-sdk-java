@@ -86,6 +86,29 @@ public final class Enums {
         return defaultValue;
     }
 
+    /**
+     * Parses {@code code} to using {@code prototype} to get {@code enum}'s declaration ignoring cases.
+     *
+     * Returns {@code defaultValue} if found no matches for specified {@code code}.
+     *
+     * @param prototype    prototype to use
+     * @param defaultValue default value
+     * @param code         code to parse
+     * @param <T>          type of {@code enum}
+     * @return             {@code enum}'s value
+     */
+    public static <T extends WithCode<T>> T parseIgnoreCase(T prototype, T defaultValue, String code) {
+        if (code == null) {
+            return defaultValue;
+        }
+        for (T value : checkNotNull(prototype, "prototype").getValues()) {
+            if (code.equalsIgnoreCase(value.getCode())) {
+                return value;
+            }
+        }
+        return defaultValue;
+    }
+
     public interface WithCode<T> {
         String getCode();
         T[] getValues();
