@@ -135,7 +135,7 @@ public class Card extends MoneySource implements BankCardInfo {
         }
 
         public static Type parse(String name) {
-            return Enums.parse(UNKNOWN, UNKNOWN, name);
+            return Enums.parseIgnoreCase(UNKNOWN, UNKNOWN, name);
         }
     }
 
