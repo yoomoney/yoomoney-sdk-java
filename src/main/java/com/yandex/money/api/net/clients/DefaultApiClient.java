@@ -125,6 +125,13 @@ public class DefaultApiClient implements ApiClient {
     }
 
     /**
+     * @return {@code true} if debug mode is enabled
+     */
+    protected final boolean isDebugMode() {
+        return debugMode;
+    }
+
+    /**
      * If required, subclasses may override this method to configure HTTP client.
      *
      * @param builder this builder will be used to create HTTP client
