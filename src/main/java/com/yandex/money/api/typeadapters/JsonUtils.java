@@ -297,8 +297,8 @@ public final class JsonUtils {
     }
 
     private static JsonPrimitive getPrimitiveChecked(JsonObject object, String memberName) {
-        return checkObject(object)
-                .getAsJsonPrimitive(checkMemberName(memberName));
+        JsonElement element = checkObject(object).get(checkMemberName(memberName));
+        return element == null || element.isJsonNull() ? null : element.getAsJsonPrimitive();
     }
 
     private static JsonObject checkObject(JsonObject object) {

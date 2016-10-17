@@ -51,6 +51,7 @@ import com.yandex.money.api.typeadapters.model.BalanceDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.model.CardTypeAdapter;
 import com.yandex.money.api.typeadapters.model.ErrorTypeAdapter;
 import com.yandex.money.api.typeadapters.model.ExternalCardTypeAdapter;
+import com.yandex.money.api.typeadapters.model.StatusInfoTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import org.testng.Assert;
@@ -179,6 +180,13 @@ public class ModelTests {
         } catch (NullPointerException e) {
             // does nothing
         }
+    }
+
+    @Test
+    public void testStatusInfo() {
+        StatusInfoTypeAdapter adapter = StatusInfoTypeAdapter.getInstance();
+        checkTypeAdapter("/model/status-info-1.json", adapter);
+        checkTypeAdapter("/model/status-info-2.json", adapter);
     }
 
     /**

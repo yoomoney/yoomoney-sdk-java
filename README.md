@@ -29,7 +29,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.yandex.money.api:yandex-money-sdk-java:6.0.2'
+    compile 'com.yandex.money.api:yandex-money-sdk-java:6.0.3'
 }
 ```
 
@@ -103,7 +103,7 @@ Now you can perform any request with authorized client. For instance, if you wan
 this:
 
 ```Java
-InstanceId instanceId = session.execute(new InstanceId.Request(clientId));
+InstanceId instanceId = client.execute(new InstanceId.Request(clientId));
 // do something with instance id
 ```
 
