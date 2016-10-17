@@ -154,14 +154,17 @@ public class DefaultApiClient implements ApiClient {
             }
         }
 
-        RequestBody body = RequestBody.create(MediaType.parse(request.getContentType()), request.getBody());
-        switch (request.getMethod()) {
-            case POST:
-                builder.post(body);
-                break;
-            case PUT:
-                builder.put(body);
-                break;
+        ApiRequest.Method method = request.getMethod();
+        if (method != ApiRequest.Method.GET) {
+            RequestBody body = RequestBody.create(MediaType.parse(request.getContentType()), request.getBody());
+            switch (method) {
+                case POST:
+                    builder.post(body);
+                    break;
+                case PUT:
+                    builder.put(body);
+                    break;
+            }
         }
 
         return builder.build();
