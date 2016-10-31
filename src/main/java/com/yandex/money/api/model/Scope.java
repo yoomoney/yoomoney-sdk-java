@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.util.Strings;
-
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Iterator;
@@ -324,21 +322,24 @@ public class Scope {
 
     public static final class PaymentScope extends LimitedScope {
 
-        private final String patternId;
-        private final String account;
+        private final String parameter;
 
-        private PaymentScope(String patternId, String account) {
-            super("payment");
-            this.patternId = patternId;
-            this.account = account;
+        private PaymentScope(String name, String parameter) {
+            super(name);
+            this.parameter = checkNotEmpty(parameter, "parameter");
         }
 
         public static PaymentScope createPaymentToPattern(String patternId) {
-            return new PaymentScope(checkNotEmpty(patternId, "patternId"), null);
+            return new PaymentScope("payment.to-pattern(\"%1$s\")", patternId);
         }
 
         public static PaymentScope createPaymentToAccount(String account) {
-            return new PaymentScope(null, checkNotEmpty(account, "account"));
+            return new PaymentScope("payment.to-account(\"%1$s\")", account);
+        }
+
+        @Override
+        public String getQualifiedName() {
+            return String.format(super.getQualifiedName(), parameter);
         }
 
         @Override
@@ -349,31 +350,21 @@ public class Scope {
 
             PaymentScope that = (PaymentScope) o;
 
-            return !(patternId != null ? !patternId.equals(that.patternId) : that.patternId != null) &&
-                    !(account != null ? !account.equals(that.account) : that.account != null);
+            return parameter.equals(that.parameter);
         }
 
         @Override
         public int hashCode() {
             int result = super.hashCode();
-            result = 31 * result + (patternId != null ? patternId.hashCode() : 0);
-            result = 31 * result + (account != null ? account.hashCode() : 0);
+            result = 31 * result + parameter.hashCode();
             return result;
         }
 
         @Override
         public String toString() {
             return "PaymentScope{" +
-                    "name='" + name + '\'' +
-                    ", patternId='" + patternId + '\'' +
-                    ", account='" + account + '\'' +
+                    "parameter='" + parameter + '\'' +
                     '}';
-        }
-
-        @Override
-        public String getQualifiedName() {
-            return super.getQualifiedName() + (Strings.isNullOrEmpty(patternId) ? "to-account(\"" + account + "\")" :
-                    "to-pattern(\"" + patternId + "\")") + getLimit();
         }
     }
 }
