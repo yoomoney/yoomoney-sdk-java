@@ -43,7 +43,7 @@ public final class Log {
      * @param msg message to log
      */
     public static void v(String msg) {
-        com.yandex.money.api.util.logging.Log.v(DefaultLogger.TAG, msg);
+        com.yandex.money.api.util.logging.Log.v(msg);
     }
 
     /**
@@ -52,7 +52,7 @@ public final class Log {
      * @param msg message to log
      */
     public static void i(String msg) {
-        com.yandex.money.api.util.logging.Log.i(DefaultLogger.TAG, msg);
+        com.yandex.money.api.util.logging.Log.i(msg);
     }
 
     /**
@@ -61,7 +61,7 @@ public final class Log {
      * @param msg message to log
      */
     public static void w(String msg) {
-        com.yandex.money.api.util.logging.Log.w(DefaultLogger.TAG, msg);
+        com.yandex.money.api.util.logging.Log.w(msg);
     }
 
     /**
@@ -71,7 +71,7 @@ public final class Log {
      * @param e   Throwable associated with log message.
      */
     public static void w(String msg, Throwable e) {
-        com.yandex.money.api.util.logging.Log.w(DefaultLogger.TAG, msg, e);
+        com.yandex.money.api.util.logging.Log.w(msg, e);
     }
 
     /**
@@ -80,7 +80,7 @@ public final class Log {
      * @param msg message to log
      */
     public static void e(String msg) {
-        com.yandex.money.api.util.logging.Log.e(DefaultLogger.TAG, msg);
+        com.yandex.money.api.util.logging.Log.e(msg);
     }
 
     /**
@@ -90,6 +90,6 @@ public final class Log {
      * @param e   Throwable associated with log message.
      */
     public static void e(String msg, Throwable e) {
-        com.yandex.money.api.util.logging.Log.e(DefaultLogger.TAG, msg, e);
+        com.yandex.money.api.util.logging.Log.e(msg, e);
     }
 }

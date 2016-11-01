@@ -31,8 +31,6 @@ import java.util.logging.Level;
  */
 public final class DefaultLogger implements Logger {
 
-    public static final String TAG = "Yandex.Money";
-
     private static final DefaultLogger INSTANCE = new DefaultLogger();
 
     private DefaultLogger() {
