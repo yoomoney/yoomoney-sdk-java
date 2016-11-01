@@ -26,6 +26,7 @@ package com.yandex.money.api.util;
 
 import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.HttpClientResponse;
+import com.yandex.money.api.util.logging.DefaultLogger;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
@@ -52,9 +53,10 @@ public final class Responses {
      */
     public static String processError(HttpClientResponse response) throws IOException {
         String field = response.getHeader(HttpHeaders.WWW_AUTHENTICATE);
-        Log.w("Server has responded with a error: " + getError(response) + "\n" +
-                HttpHeaders.WWW_AUTHENTICATE + ": " + field);
-        Log.w(response.getBody());
+        com.yandex.money.api.util.logging.Log.w(DefaultLogger.TAG,
+                "Server has responded with a error: " + getError(response) + "\n" + HttpHeaders.WWW_AUTHENTICATE +
+                        ": " + field);
+        com.yandex.money.api.util.logging.Log.w(DefaultLogger.TAG, response.getBody());
         return field;
     }
 

@@ -24,10 +24,11 @@
 
 package com.yandex.money.api.net.clients;
 
+import com.yandex.money.api.util.logging.Log;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Logger;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
@@ -37,7 +38,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  */
 final class ResponseLoggingInputStream extends InputStream {
 
-    private static final Logger LOG = Logger.getLogger(ResponseLoggingInputStream.class.getName());
+    private static final String TAG = ResponseLoggingInputStream.class.getName();
 
     private final InputStream inputStream;
     private final ByteArrayOutputStream buffer;
@@ -78,6 +79,6 @@ final class ResponseLoggingInputStream extends InputStream {
     public void close() throws IOException {
         inputStream.close();
         buffer.close();
-        LOG.info(buffer.toString("UTF-8"));
+        Log.i(TAG, buffer.toString("UTF-8"));
     }
 }

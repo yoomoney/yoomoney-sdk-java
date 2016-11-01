@@ -24,17 +24,15 @@
 
 package com.yandex.money.api.util;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import com.yandex.money.api.util.logging.DefaultLogger;
 
 /**
  * Utility class for convenient logging
  *
- * @author Slava Yasevich
+ * @deprecated use {@link DefaultLogger} instead
  */
+@Deprecated
 public final class Log {
-
-    private static final Logger LOGGER = Logger.getLogger("Yandex.Money");
 
     private Log() {
     }
@@ -45,7 +43,7 @@ public final class Log {
      * @param msg message to log
      */
     public static void v(String msg) {
-        LOGGER.log(Level.ALL, msg);
+        com.yandex.money.api.util.logging.Log.v(DefaultLogger.TAG, msg);
     }
 
     /**
@@ -54,7 +52,7 @@ public final class Log {
      * @param msg message to log
      */
     public static void i(String msg) {
-        LOGGER.log(Level.INFO, msg);
+        com.yandex.money.api.util.logging.Log.i(DefaultLogger.TAG, msg);
     }
 
     /**
@@ -63,7 +61,7 @@ public final class Log {
      * @param msg message to log
      */
     public static void w(String msg) {
-        LOGGER.log(Level.WARNING, msg);
+        com.yandex.money.api.util.logging.Log.w(DefaultLogger.TAG, msg);
     }
 
     /**
@@ -73,7 +71,7 @@ public final class Log {
      * @param e   Throwable associated with log message.
      */
     public static void w(String msg, Throwable e) {
-        LOGGER.log(Level.WARNING, msg, e);
+        com.yandex.money.api.util.logging.Log.w(DefaultLogger.TAG, msg, e);
     }
 
     /**
@@ -82,7 +80,7 @@ public final class Log {
      * @param msg message to log
      */
     public static void e(String msg) {
-        LOGGER.log(Level.SEVERE, msg);
+        com.yandex.money.api.util.logging.Log.e(DefaultLogger.TAG, msg);
     }
 
     /**
@@ -92,6 +90,6 @@ public final class Log {
      * @param e   Throwable associated with log message.
      */
     public static void e(String msg, Throwable e) {
-        LOGGER.log(Level.SEVERE, msg, e);
+        com.yandex.money.api.util.logging.Log.e(DefaultLogger.TAG, msg, e);
     }
 }

@@ -25,6 +25,7 @@
 package com.yandex.money.api.net.clients;
 
 import com.yandex.money.api.util.Numbers;
+import com.yandex.money.api.util.logging.Log;
 
 import javax.net.ssl.HandshakeCompletedListener;
 import javax.net.ssl.SSLSession;
@@ -40,7 +41,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
-import java.util.logging.Logger;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
@@ -51,7 +51,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  */
 final class WireLoggingSocketFactory extends SSLSocketFactory {
 
-    private static final Logger LOG = Logger.getLogger(WireLoggingSocketFactory.class.getName());
+    private static final String TAG = WireLoggingSocketFactory.class.getName();
 
     private final SSLSocketFactory delegate;
 
@@ -71,31 +71,31 @@ final class WireLoggingSocketFactory extends SSLSocketFactory {
 
     public Socket createSocket(Socket s, String host, int port,
                                boolean autoClose) throws IOException {
-        LOG.info("Creating socket: " + host + ":" + port);
+        Log.i(TAG, "Creating socket: " + host + ":" + port);
         return new WireLogSocket((SSLSocket) delegate.createSocket(s, host, port, autoClose));
     }
 
     @Override
     public Socket createSocket(String s, int i) throws IOException {
-        LOG.info("Creating socket: " + s + ":" + i);
+        Log.i(TAG, "Creating socket: " + s + ":" + i);
         return new WireLogSocket((SSLSocket) delegate.createSocket(s, i));
     }
 
     @Override
     public Socket createSocket(String s, int i, InetAddress inetAddress, int i2) throws IOException {
-        LOG.info("Creating socket: " + inetAddress);
+        Log.i(TAG, "Creating socket: " + inetAddress);
         return new WireLogSocket((SSLSocket) delegate.createSocket(s, i, inetAddress, i2));
     }
 
     @Override
     public Socket createSocket(InetAddress inetAddress, int i) throws IOException {
-        LOG.info("Creating socket: " + inetAddress);
+        Log.i(TAG, "Creating socket: " + inetAddress);
         return new WireLogSocket((SSLSocket) delegate.createSocket(inetAddress, i));
     }
 
     @Override
     public Socket createSocket(InetAddress inetAddress, int i, InetAddress inetAddress2, int i2) throws IOException {
-        LOG.info("Creating socket: " + inetAddress);
+        Log.i(TAG, "Creating socket: " + inetAddress);
         return new WireLogSocket((SSLSocket) delegate.createSocket(inetAddress, i, inetAddress2, i2));
     }
 
@@ -128,7 +128,7 @@ final class WireLoggingSocketFactory extends SSLSocketFactory {
                     buffer.append((char) b);
                 }
             }
-            LOG.info(buffer.toString());
+            Log.i(TAG, buffer.toString());
         }
 
         @Override
