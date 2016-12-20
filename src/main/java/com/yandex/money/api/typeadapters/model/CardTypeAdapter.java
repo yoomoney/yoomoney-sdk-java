@@ -81,6 +81,7 @@ public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
     static final class Delegate {
 
         private static final String MEMBER_PAN_FRAGMENT = "pan_fragment";
+        private static final String MEMBER_CARDHOLDER_NAME = "cardholder_name";
         private static final String MEMBER_TYPE = "type";
 
         private Delegate() {
@@ -89,6 +90,7 @@ public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
         static <T extends Card.Builder> void deserialize(JsonObject object, T builder) {
             checkNotNull(builder, "builder")
                     .setPanFragment(getString(checkNotNull(object, "object"), MEMBER_PAN_FRAGMENT))
+                    .setCardholderName(getString(object, MEMBER_CARDHOLDER_NAME))
                     .setType(Card.Type.parse(getString(object, MEMBER_TYPE)));
             MoneySourceTypeAdapter.Delegate.deserialize(object, builder);
         }
@@ -96,6 +98,7 @@ public final class CardTypeAdapter extends BaseTypeAdapter<Card> {
         static <T extends Card> void serialize(JsonObject object, T value) {
             checkNotNull(object, "object")
                     .addProperty(MEMBER_PAN_FRAGMENT, checkNotNull(value, "value").panFragment);
+            object.addProperty(MEMBER_CARDHOLDER_NAME, value.cardholderName);
             object.addProperty(MEMBER_TYPE, value.type.name);
             MoneySourceTypeAdapter.Delegate.serialize(object, value);
         }

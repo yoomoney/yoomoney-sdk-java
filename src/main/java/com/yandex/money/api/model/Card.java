@@ -37,6 +37,11 @@ import static com.yandex.money.api.util.Common.checkNotNull;
 public class Card extends MoneySource implements BankCardInfo {
 
     /**
+     * name of cardholder
+     */
+    public final String cardholderName;
+
+    /**
      * panned fragment of card's number
      */
     public final String panFragment;
@@ -48,13 +53,14 @@ public class Card extends MoneySource implements BankCardInfo {
 
     protected Card(Builder builder) {
         super(builder);
+        cardholderName = builder.cardholderName;
         panFragment = builder.panFragment;
         type = builder.type;
     }
 
     @Override
     public String getCardholderName() {
-        return null;
+        return cardholderName;
     }
 
     @Override
@@ -112,6 +118,8 @@ public class Card extends MoneySource implements BankCardInfo {
         MASTER_CARD("MasterCard", "CVC2", 3),
         AMERICAN_EXPRESS("AmericanExpress", "CID", 4), // also cscAbbr = 4DBC
         JCB("JCB", "CAV2", 3),
+        MIR("Mir", "CSC", 3),
+        UNION_PAY("UnionPay", "CVN2", 3),
         UNKNOWN("Unknown", "CSC", 4);
 
         public final String name;
@@ -141,8 +149,14 @@ public class Card extends MoneySource implements BankCardInfo {
 
     public static class Builder extends MoneySource.Builder {
 
+        private String cardholderName;
         private String panFragment;
         private Type type = Type.UNKNOWN;
+
+        public Builder setCardholderName(String cardholderName) {
+            this.cardholderName = cardholderName;
+            return this;
+        }
 
         public Builder setPanFragment(String panFragment) {
             this.panFragment = panFragment;

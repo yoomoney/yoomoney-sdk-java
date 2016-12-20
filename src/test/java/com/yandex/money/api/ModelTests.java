@@ -61,8 +61,8 @@ import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.fail;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)
@@ -202,7 +202,7 @@ public class ModelTests {
             assertNotEquals(0, deserializedObject.hashCode());
             assertEquals(typeAdapter.toJsonTree(deserializedObject), new JsonParser().parse(json));
         } catch (FileNotFoundException e) {
-            assertFalse(true);
+            fail();
         }
     }
 
@@ -219,6 +219,7 @@ public class ModelTests {
 
     private static Card createCard() {
         Card.Builder builder = (Card.Builder) new Card.Builder()
+                .setCardholderName("IVAN IVANOV")
                 .setPanFragment("panFragment")
                 .setType(Card.Type.MASTER_CARD)
                 .setId("id");
