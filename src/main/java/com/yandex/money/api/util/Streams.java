@@ -35,6 +35,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
+@Deprecated
 public final class Streams {
 
     private static final int BUFFER_SIZE = 0x1000;

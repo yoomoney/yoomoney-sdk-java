@@ -182,12 +182,12 @@ public class DefaultApiClient implements ApiClient {
      */
     public static class Builder {
 
-        private boolean debugMode = false;
-        private String clientId;
-        private UserAgent userAgent = new DefaultUserAgent("Java");
-        private HostsProvider hostsProvider = new DefaultApiV1HostsProvider(false);
-        private Language language = Language.getDefault();
-        private OkHttpClient httpClient;
+        boolean debugMode = false;
+        String clientId;
+        UserAgent userAgent = new DefaultUserAgent("Java");
+        HostsProvider hostsProvider = new DefaultApiV1HostsProvider(false);
+        Language language = Language.getDefault();
+        OkHttpClient httpClient;
 
         /**
          * Sets debug mode. Enables logging. Default value is {@code false}.
@@ -283,7 +283,7 @@ public class DefaultApiClient implements ApiClient {
         private final String url;
         private final byte[] parameters;
 
-        private AuthorizationDataImpl(String host, byte[] parameters) {
+        AuthorizationDataImpl(String host, byte[] parameters) {
             this.url = host + "/oauth/authorize";
             this.parameters = parameters;
         }
