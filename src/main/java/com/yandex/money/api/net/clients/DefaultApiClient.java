@@ -71,9 +71,9 @@ public class DefaultApiClient implements ApiClient {
      */
     protected DefaultApiClient(Builder builder) {
         clientId = checkNotNull(builder.clientId, "clientId");
-        hostsProvider = builder.hostsProvider;
-        userAgent = builder.userAgent;
-        language = builder.language;
+        hostsProvider = checkNotNull(builder.hostsProvider, "hostsProvider");
+        userAgent = checkNotNull(builder.userAgent, "userAgent");
+        language = checkNotNull(builder.language, "language");
         debugMode = builder.debugMode;
 
         if (builder.httpClient == null) {
@@ -231,7 +231,7 @@ public class DefaultApiClient implements ApiClient {
          * @return itself
          */
         public final Builder setHostsProvider(HostsProvider hostsProvider) {
-            this.hostsProvider = checkNotNull(hostsProvider, "hostsProvider");
+            this.hostsProvider = hostsProvider;
             return this;
         }
 
@@ -242,7 +242,7 @@ public class DefaultApiClient implements ApiClient {
          * @return itself
          */
         public final Builder setUserAgent(UserAgent userAgent) {
-            this.userAgent = checkNotNull(userAgent, "userAgent");
+            this.userAgent = userAgent;
             return this;
         }
 
@@ -253,7 +253,7 @@ public class DefaultApiClient implements ApiClient {
          * @return itself
          */
         public final Builder setLanguage(Language language) {
-            this.language = checkNotNull(language, "language");
+            this.language = language;
             return this;
         }
 

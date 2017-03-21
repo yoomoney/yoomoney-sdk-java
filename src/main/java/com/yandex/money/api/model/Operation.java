@@ -171,10 +171,10 @@ public class Operation {
         direction = checkNotNull(builder.direction, "direction");
         title = checkNotNull(builder.title, "title");
         patternId = builder.patternId;
-        amount = builder.amount;
+        amount = checkNotNull(builder.amount, "amount");
         amountDue = builder.amountDue;
         fee = builder.fee;
-        datetime = builder.datetime;
+        datetime = checkNotNull(builder.datetime, "datetime");
         sender = builder.sender;
         recipient = builder.recipient;
         recipientType = builder.recipientType;
@@ -187,7 +187,7 @@ public class Operation {
         label = builder.label;
         details = builder.details;
         repeatable = builder.repeatable;
-        paymentParameters = Collections.unmodifiableMap(builder.paymentParameters);
+        paymentParameters = Collections.unmodifiableMap(checkNotNull(builder.paymentParameters,"paymentParameters"));
         favorite = builder.favorite;
         digitalGoods = builder.digitalGoods;
     }
@@ -423,31 +423,31 @@ public class Operation {
      * Creates {@link com.yandex.money.api.model.Operation}.
      */
     public static class Builder {
-        private String operationId;
-        private Status status;
-        private String patternId;
-        private Direction direction;
-        private BigDecimal amount = BigDecimal.ZERO;
-        private BigDecimal amountDue;
-        private BigDecimal fee;
-        private DateTime datetime = DateTime.now();
-        private String title;
-        private String sender;
-        private String recipient;
-        private PayeeIdentifierType recipientType;
-        private String message;
-        private String comment;
-        private Boolean codepro;
-        private String protectionCode;
-        private DateTime expires;
-        private DateTime answerDatetime;
-        private String label;
-        private String details;
-        private Boolean repeatable;
-        private Map<String, String> paymentParameters = Collections.emptyMap();
-        private Boolean favorite;
-        private Type type;
-        private DigitalGoods digitalGoods;
+        String operationId;
+        Status status;
+        String patternId;
+        Direction direction;
+        BigDecimal amount = BigDecimal.ZERO;
+        BigDecimal amountDue;
+        BigDecimal fee;
+        DateTime datetime = DateTime.now();
+        String title;
+        String sender;
+        String recipient;
+        PayeeIdentifierType recipientType;
+        String message;
+        String comment;
+        Boolean codepro;
+        String protectionCode;
+        DateTime expires;
+        DateTime answerDatetime;
+        String label;
+        String details;
+        Boolean repeatable;
+        Map<String, String> paymentParameters = Collections.emptyMap();
+        Boolean favorite;
+        Type type;
+        DigitalGoods digitalGoods;
 
         public Builder setOperationId(String operationId) {
             this.operationId = operationId;
@@ -470,7 +470,7 @@ public class Operation {
         }
 
         public Builder setAmount(BigDecimal amount) {
-            this.amount = checkNotNull(amount, "amount");
+            this.amount = amount;
             return this;
         }
 
@@ -485,7 +485,7 @@ public class Operation {
         }
 
         public Builder setDatetime(DateTime datetime) {
-            this.datetime = checkNotNull(datetime, "datetime");
+            this.datetime = datetime;
             return this;
         }
 
@@ -555,7 +555,7 @@ public class Operation {
         }
 
         public Builder setPaymentParameters(Map<String, String> paymentParameters) {
-            this.paymentParameters = checkNotNull(paymentParameters, "paymentParameters");
+            this.paymentParameters = paymentParameters;
             return this;
         }
 
