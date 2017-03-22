@@ -172,8 +172,8 @@ public class Date extends ParameterControl {
      */
     public static class Builder extends ParameterControl.Builder {
 
-        private DateTime min;
-        private DateTime max;
+        DateTime min;
+        DateTime max;
 
         @Override
         public Date create() {

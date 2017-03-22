@@ -38,7 +38,7 @@ public class Checkbox extends ParameterControl {
      */
     public boolean checked;
 
-    private Checkbox(Builder builder) {
+    protected Checkbox(Builder builder) {
         super(builder);
         checked = builder.checked;
     }
@@ -88,7 +88,7 @@ public class Checkbox extends ParameterControl {
      */
     public static class Builder extends ParameterControl.Builder {
 
-        private boolean checked = false;
+        boolean checked = false;
 
         @Override
         public Checkbox create() {

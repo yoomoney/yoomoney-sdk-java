@@ -34,7 +34,7 @@ import com.yandex.money.api.util.ToStringBuilder;
  */
 public class Email extends Text {
 
-    private Email(Builder builder) {
+    protected Email(Builder builder) {
         super(builder);
     }
 

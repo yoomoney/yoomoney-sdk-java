@@ -136,7 +136,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
 
     public static final class Builder extends BaseProcessPayment.Builder {
 
-        private ExternalCard externalCard;
+        ExternalCard externalCard;
 
         public Builder setExternalCard(ExternalCard externalCard) {
             this.externalCard = externalCard;

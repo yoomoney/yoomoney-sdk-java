@@ -53,7 +53,7 @@ public abstract class Container<T> extends Component {
 
     protected Container(Builder<T> builder) {
         label = builder.label;
-        items = Collections.unmodifiableList(builder.components);
+        items = Collections.unmodifiableList(checkNotNull(builder.components, "components"));
     }
 
     @Override
@@ -86,9 +86,9 @@ public abstract class Container<T> extends Component {
      */
     public static abstract class Builder<T> extends Component.Builder {
 
-        private final List<T> components = new ArrayList<>();
+        final List<T> components = new ArrayList<>();
 
-        private String label;
+        String label;
 
         public Builder setLabel(String label) {
             this.label = label;
@@ -96,7 +96,7 @@ public abstract class Container<T> extends Component {
         }
 
         public Builder addItem(T component) {
-            components.add(checkNotNull(component, "component"));
+            components.add(component);
             return this;
         }
     }

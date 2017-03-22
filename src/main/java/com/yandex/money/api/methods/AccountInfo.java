@@ -76,11 +76,11 @@ public class AccountInfo {
 
     protected AccountInfo(Builder builder) {
         account = checkNotEmpty(builder.account, "account");
-        balance = builder.balance;
-        currency = builder.currency;
-        accountStatus = builder.accountStatus;
-        accountType = builder.accountType;
-        balanceDetails = builder.balanceDetails;
+        balance = checkNotNull(builder.balance, "balance");
+        currency = checkNotNull(builder.currency, "currency");
+        accountStatus = checkNotNull(builder.accountStatus, "accountStatus");
+        accountType = checkNotNull(builder.accountType, "accountType");
+        balanceDetails = checkNotNull(builder.balanceDetails, "balanceDetails");
     }
 
     @Override
@@ -123,12 +123,12 @@ public class AccountInfo {
      */
     public static class Builder {
 
-        private String account;
-        private BigDecimal balance = BigDecimal.ZERO;
-        private Currency currency = Currency.RUB;
-        private AccountStatus accountStatus = AccountStatus.ANONYMOUS;
-        private AccountType accountType = AccountType.PERSONAL;
-        private BalanceDetails balanceDetails = BalanceDetails.ZERO;
+        String account;
+        BigDecimal balance = BigDecimal.ZERO;
+        Currency currency = Currency.RUB;
+        AccountStatus accountStatus = AccountStatus.ANONYMOUS;
+        AccountType accountType = AccountType.PERSONAL;
+        BalanceDetails balanceDetails = BalanceDetails.ZERO;
 
         /**
          * @param account account's number
@@ -144,7 +144,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setBalance(BigDecimal balance) {
-            this.balance = checkNotNull(balance, "balance");
+            this.balance = balance;
             return this;
         }
 
@@ -153,9 +153,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setCurrency(Currency currency) {
-            if (currency != null) {
-                this.currency = currency;
-            }
+            this.currency = currency;
             return this;
         }
 
@@ -164,7 +162,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setAccountStatus(AccountStatus accountStatus) {
-            this.accountStatus = checkNotNull(accountStatus, "accountStatus");
+            this.accountStatus = accountStatus;
             return this;
         }
 
@@ -173,7 +171,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setAccountType(AccountType accountType) {
-            this.accountType = checkNotNull(accountType, "accountType");
+            this.accountType = accountType;
             return this;
         }
 
@@ -182,9 +180,7 @@ public class AccountInfo {
          * @return itself
          */
         public Builder setBalanceDetails(BalanceDetails balanceDetails) {
-            if (balanceDetails != null) {
-                this.balanceDetails = balanceDetails;
-            }
+            this.balanceDetails = balanceDetails;
             return this;
         }
 

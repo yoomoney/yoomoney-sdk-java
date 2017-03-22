@@ -301,10 +301,10 @@ public final class ShowcaseContext {
 
         public Request(ShowcaseContext context, DateTime lastModified) {
             this.context = checkNotNull(context, "context");
-            checkNotEmpty(context.currentStep.submitUrl, "currentStep.submitUrl");
+            checkNotEmpty(context.getCurrentStep().submitUrl, "currentStep.submitUrl");
 
             addHeader(HttpHeaders.IF_MODIFIED_SINCE, lastModified);
-            addParameters(checkNotNull(context.currentStep.showcase, "currentStep.showcase").getPaymentParameters());
+            addParameters(checkNotNull(context.getCurrentStep().showcase, "currentStep.showcase").getPaymentParameters());
         }
 
         @Override
@@ -314,7 +314,7 @@ public final class ShowcaseContext {
 
         @Override
         protected String requestUrlBase(HostsProvider hostsProvider) {
-            return context.currentStep.submitUrl;
+            return context.getCurrentStep().submitUrl;
         }
 
         @Override
