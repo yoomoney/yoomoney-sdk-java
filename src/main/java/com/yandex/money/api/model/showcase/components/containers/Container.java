@@ -34,7 +34,7 @@ import java.util.List;
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * A generic {@link Container} object is special component that can contain other components
+ * A generic {@link Container} object is special component that can contain other items
  * (items).
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
@@ -53,7 +53,7 @@ public abstract class Container<T> extends Component {
 
     protected Container(Builder<T> builder) {
         label = builder.label;
-        items = Collections.unmodifiableList(checkNotNull(builder.components, "components"));
+        items = Collections.unmodifiableList(checkNotNull(builder.items, "items"));
     }
 
     @Override
@@ -86,7 +86,7 @@ public abstract class Container<T> extends Component {
      */
     public static abstract class Builder<T> extends Component.Builder {
 
-        final List<T> components = new ArrayList<>();
+        final List<T> items = new ArrayList<>();
 
         String label;
 
@@ -95,8 +95,13 @@ public abstract class Container<T> extends Component {
             return this;
         }
 
-        public Builder addItem(T component) {
-            components.add(component);
+        public Builder addItem(T item) {
+            items.add(item);
+            return this;
+        }
+
+        public Builder addItems(List<T> items) {
+            this.items.addAll(items);
             return this;
         }
     }
