@@ -32,8 +32,11 @@ import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.util.MimeTypes;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -44,11 +47,8 @@ import java.util.Map;
  */
 public abstract class BaseApiRequest<T> implements ApiRequest<T> {
 
-    // todo use code below for headers
-    /*public static final DateTime DATE_TIME_FORMATTER = DateTimeFormat
-            .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT")
-            .withLocale(Locale.US)
-            .withZoneUTC();*/
+    public static final DateFormat DATE_TIME_FORMATTER =
+            new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
 
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
@@ -109,7 +109,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param value value
      */
     protected final void addHeader(String key, DateTime value) {
-        addHeader(key, value == null ? null : Iso8061Format.format(value));
+        addHeader(key, value == null ? null : DATE_TIME_FORMATTER.format(value.getDate()));
     }
 
     /**
