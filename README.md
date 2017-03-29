@@ -10,7 +10,6 @@ The library uses:
 
 * [OkHttp][1] 3.4.1
 * [Google GSON][2] 2.7
-* [Joda-Time][7] 2.9.4
 
 ## Usage
 

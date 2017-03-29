@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,37 +22,41 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.showcase;
+package com.yandex.money.api.time;
 
-import com.yandex.money.api.model.showcase.components.uicontrols.Date;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.assertEquals;
 
-/**
- * @author Slava Yasevich (vyasevich@yamoney.ru)
- */
-public class MonthTest extends ParameterTest {
+public class PeriodTest {
 
     @Test
-    public void testValidation() throws ParseException {
-        Date.Builder builder = new Date.Builder();
-        prepareParameter(builder);
-        assertTrue(builder.create().isValid("1987-12-31"));
+    public void testParsing() {
+        Map<String, Period> testData = new HashMap<>(6);
+        testData.put("P3Y", new Period(3, 0, 0));
+        testData.put("P10M", new Period(0, 10, 0));
+        testData.put("P5D", new Period(0, 0, 5));
+        testData.put("P2M10D", new Period(0, 2, 10));
+        testData.put("P3Y6M", new Period(3, 6, 0));
+        testData.put("P3Y6M1D", new Period(3, 6, 1));
 
-        builder.setMin(Date.parseDate("2000-01-01", Date.FORMATTER))
-                .setMax(Date.parseDate("2010-01-01", Date.FORMATTER));
-        Date date = builder.create();
-        assertTrue(date.isValid("2000-01-01"));
-        assertTrue(date.isValid("2010-01-01"));
-        assertTrue(date.isValid("2005-01-01"));
-        Assert.assertFalse(date.isValid("1999-12-31"));
-        Assert.assertFalse(date.isValid("2010-01-02"));
-        Assert.assertFalse(date.isValid("not a date"));
+        for (Map.Entry<String, Period> entry : testData.entrySet()) {
+            Period actual = Period.parse(entry.getKey());
+            Period expected = entry.getValue();
+            assertEquals(actual, expected);
+        }
+    }
 
-        testEmptyValues(builder);
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testIllegalArgumentException() {
+        Period.parse("3Y6M1D");
+    }
+
+    @Test(expectedExceptions = UnsupportedOperationException.class)
+    public void testUnsupportedArgumentException() {
+        Period.parse("P3Y6M4DT12H30M5S");
     }
 }

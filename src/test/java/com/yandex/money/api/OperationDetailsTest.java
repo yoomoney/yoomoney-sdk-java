@@ -28,7 +28,7 @@ import com.yandex.money.api.methods.OperationDetails;
 import com.yandex.money.api.methods.OperationHistory;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.clients.ApiClient;
-import org.joda.time.DateTime;
+import com.yandex.money.api.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -69,7 +69,7 @@ public class OperationDetailsTest {
 
             DateTime datetime = operation.datetime;
             Assert.assertNotNull(datetime);
-            Assert.assertTrue(datetime.isEqual(operationDetails.operation.datetime));
+            Assert.assertTrue(datetime.equals(operationDetails.operation.datetime));
         }
 
         if (operations.size() > 0) {

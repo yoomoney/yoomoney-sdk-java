@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,53 +22,27 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrols;
+package com.yandex.money.api.time;
 
-import com.yandex.money.api.util.ToStringBuilder;
+import com.google.gson.internal.bind.util.ISO8601Utils;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.util.Calendar;
 
-/**
- * The month and year control.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
- */
-public class Month extends Date {
+import static com.yandex.money.api.util.Common.checkNotNull;
 
-    /**
-     * Acceptable pattern.
-     */
-    public static final String PATTERN = "yyyy-MM";
+public final class Iso8061Format {
 
-    /**
-     * (De)serialization formatter.
-     */
-    public static final DateFormat FORMATTER = new SimpleDateFormat(PATTERN, Locale.ENGLISH);
-
-    protected Month(Builder builder) {
-        super(builder);
+    private Iso8061Format() {
     }
 
-    @Override
-    public DateFormat getFormatter() {
-        return FORMATTER;
+    public static DateTime parse(String date) throws ParseException {
+        return DateTime.from(ISO8601Utils.parse(date, new ParsePosition(0)));
     }
 
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Month");
-    }
-
-    /**
-     * {@link Month} builder.
-     */
-    public static class Builder extends Date.Builder {
-
-        @Override
-        public Month create() {
-            return new Month(this);
-        }
+    public static String format(DateTime dateTime) {
+        Calendar calendar = checkNotNull(dateTime, "dateTime").getCalendar();
+        return ISO8601Utils.format(calendar.getTime(), true, calendar.getTimeZone());
     }
 }

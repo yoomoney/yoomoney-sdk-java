@@ -25,9 +25,9 @@
 package com.yandex.money.api.net;
 
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
+import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.util.HttpHeaders;
-import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.io.InputStream;

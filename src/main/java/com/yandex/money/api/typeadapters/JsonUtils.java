@@ -29,15 +29,15 @@ import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonWriter;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
+import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.Iso8061Format;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,10 +51,6 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public final class JsonUtils {
-
-    public static final DateTimeFormatter ISO_FORMATTER = new DateTimeFormatter(
-            ISODateTimeFormat.dateTime().getPrinter(),
-            ISODateTimeFormat.dateTimeParser().getParser()).withOffsetParsed();
 
     /**
      * This class contains only static methods.
@@ -185,41 +181,15 @@ public final class JsonUtils {
     }
 
     /**
-     * Gets DateTime from a JSON object.
-     *
-     * @param object json object
-     * @param memberName member's name
-     * @return {@link org.joda.time.DateTime} value
-     * @deprecated avoid using this method, checks should be made during object's initialization (use
-     * {@link #getDateTime(JsonObject, String)} instead)
-     */
-    @Deprecated
-    public static DateTime getMandatoryDateTime(JsonObject object, String memberName) {
-        return checkMandatoryValue(getDateTime(object, memberName), memberName);
-    }
-
-    /**
      * Gets nullable DateTime from a JSON object.
      *
      * @param object json object
      * @param memberName member's name
-     * @return {@link org.joda.time.DateTime} value
+     * @return {@link DateTime} value
      */
-    public static DateTime getDateTime(JsonObject object, String memberName) {
-        return getDateTime(object, memberName, ISO_FORMATTER);
-    }
-
-    /**
-     * Gets nullable DateTime from a JSON object using formatter.
-     *
-     * @param object     json object
-     * @param memberName member's name
-     * @param formatter  {@link org.joda.time.DateTime}'s formatter.
-     * @return {@link org.joda.time.DateTime} value
-     */
-    public static DateTime getDateTime(JsonObject object, String memberName, DateTimeFormatter formatter) {
+    public static DateTime getDateTime(JsonObject object, String memberName) throws ParseException {
         String value = getString(object, memberName);
-        return value == null ? null : DateTime.parse(value, checkNotNull(formatter, "formatter"));
+        return value == null ? null : Iso8061Format.parse(value);
     }
 
     /**

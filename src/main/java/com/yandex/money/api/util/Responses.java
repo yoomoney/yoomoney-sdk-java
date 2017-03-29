@@ -24,11 +24,12 @@
 
 package com.yandex.money.api.util;
 
-import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.HttpClientResponse;
-import org.joda.time.DateTime;
+import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.Iso8061Format;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * @author Slava Yasevich
@@ -38,10 +39,9 @@ public final class Responses {
     private Responses() {
     }
 
-    public static DateTime parseDateHeader(HttpClientResponse response, String header) {
+    public static DateTime parseDateHeader(HttpClientResponse response, String header) throws ParseException {
         String dateHeader = response.getHeader(header);
-        return dateHeader == null || dateHeader.isEmpty() ? new DateTime() :
-                BaseApiRequest.DATE_TIME_FORMATTER.parseDateTime(dateHeader);
+        return dateHeader == null || dateHeader.isEmpty() ? DateTime.now() : Iso8061Format.parse(dateHeader);
     }
 
     /**

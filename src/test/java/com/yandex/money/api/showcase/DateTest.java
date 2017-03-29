@@ -25,9 +25,11 @@
 package com.yandex.money.api.showcase;
 
 import com.yandex.money.api.model.showcase.components.uicontrols.Date;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
+import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.Period;
 import org.testng.annotations.Test;
+
+import java.text.ParseException;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
@@ -39,7 +41,7 @@ import static org.testng.Assert.assertTrue;
 public class DateTest extends ParameterTest {
 
     @Test
-    public void testValidation() {
+    public void testValidation() throws ParseException {
         Date.Builder builder = new Date.Builder();
         prepareParameter(builder);
         assertTrue(builder.create().isValid("1987-12-31"));
@@ -58,7 +60,7 @@ public class DateTest extends ParameterTest {
     }
 
     @Test
-    public void testPeriods() {
+    public void testPeriods() throws ParseException {
         final DateTime expected = Date.parseDate("2001-01-01", Date.FORMATTER);
 
         DateTime withPeriod = Date.parseDate("2000-01-01/P1Y", Date.FORMATTER);
@@ -67,7 +69,7 @@ public class DateTest extends ParameterTest {
         withPeriod = Date.parseDate("P1Y/2002-01-01", Date.FORMATTER);
         compare(withPeriod, expected);
 
-        final DateTime now = Date.parseDate(Date.FORMATTER.print(DateTime.now()), Date.FORMATTER);
+        final DateTime now = Date.parseDate(Date.FORMATTER.format(DateTime.now().getDate()), Date.FORMATTER);
         assertNotNull(now);
 
         withPeriod = Date.parseDate("now/P1Y", Date.FORMATTER);
@@ -81,12 +83,12 @@ public class DateTest extends ParameterTest {
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testWrongPeriod() {
+    public void testWrongPeriod() throws ParseException {
         Date.parseDate("2000-01-01/2001-01-01", Date.FORMATTER);
     }
 
     private static void compare(DateTime actual, DateTime expected) {
         assertNotNull(actual);
-        assertTrue(actual.isEqual(expected));
+        assertTrue(actual.equals(expected));
     }
 }
