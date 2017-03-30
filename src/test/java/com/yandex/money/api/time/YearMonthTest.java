@@ -22,41 +22,56 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.util;
+package com.yandex.money.api.time;
 
-import com.yandex.money.api.time.DateTime;
 import org.testng.annotations.Test;
-
-import java.text.ParseException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
 
 import static org.testng.Assert.assertEquals;
 
-public class HttpHeadersTest {
-
-    private final Map<String, DateTime> testData = new HashMap<>(2); {
-        DateTime value = DateTime.from(1994, 10, 15, 8, 12);
-        value.setTimeZone(TimeZone.getTimeZone("GMT"));
-        testData.put("Tue, 15 Nov 1994 08:12:00 GMT", value);
-
-        value = DateTime.from(1994, 10, 15, 8, 12);
-        value.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
-        testData.put("Tue, 15 Nov 1994 08:12:00 MSK", value);
-    }
+public class YearMonthTest {
 
     @Test
-    public void testParser() throws ParseException {
-        for (Map.Entry<String, DateTime> entry : testData.entrySet()) {
-            assertEquals(HttpHeaders.parseDateTime(entry.getKey()).getDate(), entry.getValue().getDate());
+    public void testParsing() {
+        for (int i = 0; i < 4; ++i) {
+            int year = i * 10;
+            int month = 0;
+            for (int j = 0; j < 11; ++j) {
+                testParsing(year++, month++);
+            }
         }
     }
 
     @Test
-    public void testFormatter() {
-        for (Map.Entry<String, DateTime> entry : testData.entrySet()) {
-            assertEquals(HttpHeaders.formatDateTime(entry.getValue()), entry.getKey());
+    public void testFormatting() {
+        for (int i = 0; i < 4; ++i) {
+            int year = i * 10;
+            int month = 0;
+            for (int j = 0; j < 11; ++j) {
+                testFormatting(year++, month++);
+            }
         }
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testIllegalYear() {
+        new YearMonth(-1, 0);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testIllegalMonth() {
+        new YearMonth(2000, 12);
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testIllegalMonthNegative() {
+        new YearMonth(2000, -1);
+    }
+
+    private void testParsing(int year, int month) {
+        assertEquals(YearMonth.parse(String.format("%04d-%02d", year, month)), new YearMonth(year, month));
+    }
+
+    private void testFormatting(int year, int month) {
+        assertEquals(new YearMonth(year, month).toString(), String.format("%04d-%02d", year, month));
     }
 }

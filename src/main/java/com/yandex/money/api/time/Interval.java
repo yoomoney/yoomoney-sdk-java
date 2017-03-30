@@ -24,33 +24,19 @@
 
 package com.yandex.money.api.time;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
-public final class YearMonth {
+public class Interval {
 
-    private static final Pattern PATTERN = Pattern.compile("(\\d{4})-(\\d{2})");
+    public final DateTime from;
+    public final DateTime till;
 
-    public final int year;
-    public final int month;
-
-    public YearMonth(int year, int month) {
-        if (year < 0) {
-            throw new IllegalArgumentException("negative year: " + year);
+    public Interval(DateTime from, DateTime till) {
+        if (checkNotNull(from, "from").isAfter(checkNotNull(till, "till"))) {
+            throw new IllegalArgumentException("from is after till");
         }
-        if (month < 0 || month > 11) {
-            throw new IllegalArgumentException("month of year is out of bounds: " + month);
-        }
-        this.year = year;
-        this.month = month;
-    }
-
-    public static YearMonth parse(String value) {
-        Matcher matcher = PATTERN.matcher(value);
-        if (!matcher.matches() || matcher.groupCount() != 2) {
-            throw new IllegalArgumentException("unsupported value: " + value);
-        }
-        return new YearMonth(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+        this.from = from;
+        this.till = till;
     }
 
     @Override
@@ -58,21 +44,24 @@ public final class YearMonth {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        YearMonth yearMonth = (YearMonth) o;
+        Interval interval = (Interval) o;
 
-        if (year != yearMonth.year) return false;
-        return month == yearMonth.month;
+        if (!from.equals(interval.from)) return false;
+        return till.equals(interval.till);
     }
 
     @Override
     public int hashCode() {
-        int result = year;
-        result = 31 * result + month;
+        int result = from.hashCode();
+        result = 31 * result + till.hashCode();
         return result;
     }
 
     @Override
     public String toString() {
-        return String.format("%04d-%02d", year, month);
+        return "Interval{" +
+                "from=" + from +
+                ", till=" + till +
+                '}';
     }
 }

@@ -31,7 +31,7 @@ import java.util.TimeZone;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
-public class DateTime {
+public final class DateTime {
 
     private final Calendar calendar;
 
@@ -43,6 +43,17 @@ public class DateTime {
         return new DateTime(Calendar.getInstance());
     }
 
+    public static DateTime from(long millis) {
+        return from(millis, TimeZone.getDefault());
+    }
+
+    public static DateTime from(long millis, TimeZone timeZone) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        calendar.setTimeZone(timeZone);
+        return new DateTime(calendar);
+    }
+
     public static DateTime from(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
@@ -50,7 +61,7 @@ public class DateTime {
     }
 
     public static DateTime from(int year, int month, int date, int hour, int minute) {
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        Calendar calendar = Calendar.getInstance();
         calendar.set(year, month, date, hour, minute);
         calendar.clear(Calendar.SECOND);
         calendar.clear(Calendar.MILLISECOND);
