@@ -24,12 +24,20 @@
 
 package com.yandex.money.api.util;
 
+import com.yandex.money.api.time.DateTime;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 /**
  * This is not complete list of headers.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public final class HttpHeaders {
+
     public static final String ACCEPT_LANGUAGE = "Accept-Language";
     public static final String AUTHORIZATION = "Authorization";
     public static final String CONTENT_LENGTH = "Content-Length";
@@ -41,7 +49,19 @@ public final class HttpHeaders {
     public static final String USER_AGENT = "User-Agent";
     public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
 
+    public static final DateFormat DATE_TIME_FORMATTER =
+            new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
+
     private HttpHeaders() {
         // prevents instantiating of this class
+    }
+
+    public static DateTime parseDateTime(String value) throws ParseException {
+        return DateTime.from(DATE_TIME_FORMATTER.parse(value));
+    }
+
+    public static String formatDateTime(DateTime value) {
+        DATE_TIME_FORMATTER.setTimeZone(value.getTimeZone());
+        return DATE_TIME_FORMATTER.format(value.getDate());
     }
 }

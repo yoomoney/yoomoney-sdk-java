@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2016 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,40 +24,37 @@
 
 package com.yandex.money.api.util;
 
-import com.yandex.money.api.net.HttpClientResponse;
 import com.yandex.money.api.time.DateTime;
+import org.testng.annotations.Test;
 
-import java.io.IOException;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TimeZone;
 
-/**
- * @author Slava Yasevich
- */
-public final class Responses {
+import static org.testng.Assert.assertEquals;
 
-    private Responses() {
+public class HttpHeadersTest {
+
+    private final Map<String, DateTime> testData = new HashMap<>(2); {
+        DateTime value = DateTime.from(1994, 10, 15, 8, 12);
+        testData.put("Tue, 15 Nov 1994 08:12:00 GMT", value);
+        value = DateTime.from(1994, 10, 15, 8, 12);
+        value.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+        testData.put("Tue, 15 Nov 1994 08:12:00 MSK", value);
     }
 
-    public static DateTime parseDateHeader(HttpClientResponse response, String header) throws ParseException {
-        String dateHeader = response.getHeader(header);
-        return dateHeader == null || dateHeader.isEmpty() ? DateTime.now() : HttpHeaders.parseDateTime(dateHeader);
+    @Test
+    public void testParser() throws ParseException {
+        for (Map.Entry<String, DateTime> entry : testData.entrySet()) {
+            assertEquals(HttpHeaders.parseDateTime(entry.getKey()).getDate(), entry.getValue().getDate());
+        }
     }
 
-    /**
-     * Processes connection errors.
-     *
-     * @param response response reference
-     * @return WWW-Authenticate field of connection
-     */
-    public static String processError(HttpClientResponse response) throws IOException {
-        String field = response.getHeader(HttpHeaders.WWW_AUTHENTICATE);
-        com.yandex.money.api.util.logging.Log.w("Server has responded with a error: " + getError(response) + "\n" +
-                HttpHeaders.WWW_AUTHENTICATE + ": " + field);
-        com.yandex.money.api.util.logging.Log.w(response.getBody());
-        return field;
-    }
-
-    private static String getError(HttpClientResponse response) {
-        return "HTTP " + response.getCode() + " " + response.getMessage();
+    @Test
+    public void testFormatter() {
+        for (Map.Entry<String, DateTime> entry : testData.entrySet()) {
+            assertEquals(HttpHeaders.formatDateTime(entry.getValue()), entry.getKey());
+        }
     }
 }

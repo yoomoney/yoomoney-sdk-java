@@ -27,7 +27,7 @@ package com.yandex.money.api.time;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
@@ -50,7 +50,11 @@ public class DateTime {
     }
 
     public static DateTime from(int year, int month, int date, int hour, int minute) {
-        return new DateTime(new GregorianCalendar(year, month, date, hour, minute));
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+        calendar.set(year, month, date, hour, minute);
+        calendar.clear(Calendar.SECOND);
+        calendar.clear(Calendar.MILLISECOND);
+        return new DateTime(calendar);
     }
 
     public DateTime plus(Period period) {
@@ -69,6 +73,14 @@ public class DateTime {
 
     public Date getDate() {
         return calendar.getTime();
+    }
+
+    public void setTimeZone(TimeZone timeZone) {
+        calendar.setTimeZone(timeZone);
+    }
+
+    public TimeZone getTimeZone() {
+        return calendar.getTimeZone();
     }
 
     public boolean isAfter(DateTime dateTime) {
@@ -92,6 +104,11 @@ public class DateTime {
     @Override
     public int hashCode() {
         return calendar.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return Iso8061Format.format(this);
     }
 
     public String toString(DateFormat formatter) {
