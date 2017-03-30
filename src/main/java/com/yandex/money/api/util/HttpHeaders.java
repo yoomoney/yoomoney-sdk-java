@@ -49,7 +49,7 @@ public final class HttpHeaders {
     public static final String USER_AGENT = "User-Agent";
     public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
 
-    public static final DateFormat DATE_TIME_FORMATTER =
+    private static final DateFormat DATE_TIME_FORMATTER =
             new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
 
     private HttpHeaders() {
