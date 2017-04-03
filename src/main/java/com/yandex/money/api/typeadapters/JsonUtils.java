@@ -30,7 +30,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.stream.JsonWriter;
 import com.yandex.money.api.time.DateTime;
-import com.yandex.money.api.time.Iso8061Format;
+import com.yandex.money.api.time.Iso8601Format;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -189,7 +189,7 @@ public final class JsonUtils {
      */
     public static DateTime getDateTime(JsonObject object, String memberName) throws ParseException {
         String value = getString(object, memberName);
-        return value == null ? null : Iso8061Format.parse(value);
+        return value == null ? null : Iso8601Format.parse(value);
     }
 
     /**

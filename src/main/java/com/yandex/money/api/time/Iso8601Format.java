@@ -35,9 +35,9 @@ import static com.yandex.money.api.util.Common.checkNotNull;
 /**
  * Simple utility class to parse and format ISO 8601 dates.
  */
-public final class Iso8061Format {
+public final class Iso8601Format {
 
-    private Iso8061Format() {
+    private Iso8601Format() {
     }
 
     /**

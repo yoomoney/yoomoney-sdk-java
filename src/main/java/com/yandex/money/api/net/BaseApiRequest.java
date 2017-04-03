@@ -27,14 +27,12 @@ package com.yandex.money.api.net;
 import com.google.gson.JsonElement;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.time.DateTime;
-import com.yandex.money.api.time.Iso8061Format;
+import com.yandex.money.api.time.Iso8601Format;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.MimeTypes;
 
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -185,7 +183,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param dateTime value
      */
     protected final void addParameter(String key, DateTime dateTime) {
-        addParameter(key, dateTime == null ? null : Iso8061Format.format(dateTime));
+        addParameter(key, dateTime == null ? null : Iso8601Format.format(dateTime));
     }
 
     /**

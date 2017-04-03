@@ -32,6 +32,7 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertNotNull;
 
 public class DateTimeTest {
@@ -167,6 +168,17 @@ public class DateTimeTest {
         DateTime actual = origin.minus(new Period(5, 11, 30));
         DateTime expected = DateTime.from(1990, Calendar.JANUARY, 1, 23, 59);
         assertEquals(actual, expected);
+    }
+
+    @Test
+    public void testWithTimeAtStartOfDay() {
+        DateTime now = DateTime.from(System.currentTimeMillis(), TimeZone.getTimeZone("GMT"));
+        DateTime withTimeAtStartOfDay = now.withTimeAtStartOfDay();
+        assertNotEquals(withTimeAtStartOfDay, now);
+
+        long mod = TimeUnit.HOURS.toMillis(24);
+        long millis = withTimeAtStartOfDay.getDate().getTime();
+        assertEquals(millis % mod, 0);
     }
 
     private DateTime createDateTime() {

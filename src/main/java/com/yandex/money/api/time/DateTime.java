@@ -58,7 +58,9 @@ public final class DateTime {
      * @return an instance of this class with specified time and default timezone
      */
     public static DateTime from(long millis) {
-        return from(millis, TimeZone.getDefault());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        return new DateTime(calendar);
     }
 
     /**
@@ -119,7 +121,7 @@ public final class DateTime {
      * Adds specific period.
      *
      * @param period a period to add
-     * @return modified instance of this class
+     * @return a copy of this datetime
      */
     public DateTime plus(Period period) {
         return add(period, 1);
@@ -129,7 +131,7 @@ public final class DateTime {
      * Adds specific period.
      *
      * @param period a period to add
-     * @return modified instance of this class
+     * @return a copy of this datetime
      */
     public DateTime plus(SingleFieldPeriod period) {
         return add(period, 1);
@@ -139,7 +141,7 @@ public final class DateTime {
      * Subtracts specific period.
      *
      * @param period a period to subtract
-     * @return modified instance of this class
+     * @return a copy of this datetime
      */
     public DateTime minus(Period period) {
         return add(period, -1);
@@ -149,27 +151,35 @@ public final class DateTime {
      * Subtracts specific period.
      *
      * @param period a period to subtract
-     * @return modified instance of this class
+     * @return a copy of this datetime
      */
     public DateTime minus(SingleFieldPeriod period) {
         return add(period, -1);
     }
 
     /**
-     * @return {@link Date} instance that represents this class
+     * @return a copy of this datetime with the time set to the start of the day
      */
-    public Date getDate() {
-        return calendar.getTime();
+    public DateTime withTimeAtStartOfDay() {
+        DateTime copy = copy();
+        copy.calendar.set(Calendar.HOUR_OF_DAY, 0);
+        copy.calendar.set(Calendar.MINUTE, 0);
+        copy.calendar.set(Calendar.SECOND, 0);
+        copy.calendar.set(Calendar.MILLISECOND, 0);
+        return copy;
     }
 
     /**
      * Sets timezone to use by the instance of this class.
      *
      * @param timeZone timezone to use
+     * @return a copy of this datetime with a different time zone
      * @see Calendar#setTimeZone(TimeZone)
      */
-    public void setTimeZone(TimeZone timeZone) {
-        calendar.setTimeZone(timeZone);
+    public DateTime withZone(TimeZone timeZone) {
+        DateTime copy = copy();
+        copy.calendar.setTimeZone(timeZone);
+        return copy;
     }
 
     /**
@@ -178,6 +188,13 @@ public final class DateTime {
      */
     public TimeZone getTimeZone() {
         return calendar.getTimeZone();
+    }
+
+    /**
+     * @return {@link Date} instance that represents this class
+     */
+    public Date getDate() {
+        return calendar.getTime();
     }
 
     /**
@@ -219,7 +236,7 @@ public final class DateTime {
 
     @Override
     public String toString() {
-        return Iso8061Format.format(this);
+        return Iso8601Format.format(this);
     }
 
     public String toString(DateFormat formatter) {

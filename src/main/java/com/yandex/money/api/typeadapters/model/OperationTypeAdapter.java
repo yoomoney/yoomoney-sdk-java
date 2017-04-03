@@ -31,7 +31,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.model.PayeeIdentifierType;
-import com.yandex.money.api.time.Iso8061Format;
+import com.yandex.money.api.time.Iso8601Format;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
@@ -135,7 +135,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_OPERATION_ID, src.operationId);
         object.addProperty(MEMBER_TITLE, src.title);
         object.addProperty(MEMBER_DIRECTION, src.direction.code);
-        object.addProperty(MEMBER_DATETIME, Iso8061Format.format(src.datetime));
+        object.addProperty(MEMBER_DATETIME, Iso8601Format.format(src.datetime));
         object.addProperty(MEMBER_STATUS, src.status.code);
         object.addProperty(MEMBER_PATTERN_ID, src.patternId);
         object.addProperty(MEMBER_AMOUNT, src.amount);
@@ -153,10 +153,10 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_CODEPRO, src.codepro);
         object.addProperty(MEMBER_PROTECTION_CODE, src.protectionCode);
         if (src.expires != null) {
-            object.addProperty(MEMBER_EXPIRES, Iso8061Format.format(src.expires));
+            object.addProperty(MEMBER_EXPIRES, Iso8601Format.format(src.expires));
         }
         if (src.answerDatetime != null) {
-            object.addProperty(MEMBER_ANSWER_DATETIME, Iso8061Format.format(src.answerDatetime));
+            object.addProperty(MEMBER_ANSWER_DATETIME, Iso8601Format.format(src.answerDatetime));
         }
         object.addProperty(MEMBER_DETAILS, src.details);
         object.addProperty(MEMBER_REPEATABLE, src.repeatable);

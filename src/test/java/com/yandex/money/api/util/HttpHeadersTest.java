@@ -37,12 +37,12 @@ import static org.testng.Assert.assertEquals;
 public class HttpHeadersTest {
 
     private final Map<String, DateTime> testData = new HashMap<>(2); {
-        DateTime value = DateTime.from(1994, 10, 15, 8, 12);
-        value.setTimeZone(TimeZone.getTimeZone("GMT"));
+        DateTime value = DateTime.from(1994, 10, 15, 8, 12)
+                .withZone(TimeZone.getTimeZone("GMT"));
         testData.put("Tue, 15 Nov 1994 08:12:00 GMT", value);
 
-        value = DateTime.from(1994, 10, 15, 8, 12);
-        value.setTimeZone(TimeZone.getTimeZone("Europe/Moscow"));
+        value = DateTime.from(1994, 10, 15, 8, 12)
+                .withZone(TimeZone.getTimeZone("Europe/Moscow"));
         testData.put("Tue, 15 Nov 1994 08:12:00 MSK", value);
     }
 
