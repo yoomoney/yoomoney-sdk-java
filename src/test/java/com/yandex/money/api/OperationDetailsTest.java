@@ -29,6 +29,7 @@ import com.yandex.money.api.methods.OperationHistory;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.Seconds;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -80,7 +81,7 @@ public class OperationDetailsTest {
             historyRequest = new OperationHistory.Request.Builder()
                     .setTypes(types)
                     .setFrom(operations.get(operations.size() - 1).datetime)
-                    .setTill(operations.get(0).datetime.plusSeconds(1))
+                    .setTill(operations.get(0).datetime.plus(Seconds.ONE))
                     .setDetails(true)
                     .setRecords(operations.size())
                     .create();

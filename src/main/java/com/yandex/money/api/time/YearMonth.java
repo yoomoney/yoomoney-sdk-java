@@ -27,13 +27,29 @@ package com.yandex.money.api.time;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Represents the year and monthOfYear fields.
+ */
 public final class YearMonth {
 
     private static final Pattern PATTERN = Pattern.compile("(\\d{4})-(\\d{2})");
 
+    /**
+     * Year.
+     */
     public final int year;
+
+    /**
+     * Month of year.
+     */
     public final int month;
 
+    /**
+     * Creates an instance of this class.
+     *
+     * @param year year
+     * @param month month of year
+     */
     public YearMonth(int year, int month) {
         if (year < 0) {
             throw new IllegalArgumentException("negative year: " + year);
@@ -45,6 +61,12 @@ public final class YearMonth {
         this.month = month;
     }
 
+    /**
+     * Parses year month value if represented by the pattern yyyy-MM
+     *
+     * @param value string representation of year-month
+     * @return year month instance
+     */
     public static YearMonth parse(String value) {
         Matcher matcher = PATTERN.matcher(value);
         if (!matcher.matches() || matcher.groupCount() != 2) {

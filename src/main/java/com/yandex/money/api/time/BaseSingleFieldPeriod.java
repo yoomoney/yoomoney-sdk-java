@@ -24,41 +24,24 @@
 
 package com.yandex.money.api.time;
 
-import com.google.gson.internal.bind.util.ISO8601Utils;
-
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.util.Calendar;
-
-import static com.yandex.money.api.util.Common.checkNotNull;
-
 /**
- * Simple utility class to parse and format ISO 8601 dates.
+ * Base implementation of {@link SingleFieldPeriod}.
  */
-public final class Iso8061Format {
+public abstract class BaseSingleFieldPeriod implements SingleFieldPeriod {
 
-    private Iso8061Format() {
-    }
-
-    /**
-     * Parses string of ISO 8601 date.
-     *
-     * @param date a string to parse
-     * @return parsed date time
-     * @throws ParseException if parsing is not possible
-     */
-    public static DateTime parse(String date) throws ParseException {
-        return DateTime.from(ISO8601Utils.parse(date, new ParsePosition(0)));
-    }
+    private final int amount;
 
     /**
-     * Formats date time to ISO 8601 string.
+     * Creates an instance of this class with specified amount.
      *
-     * @param dateTime date time to format
-     * @return formatted string
+     * @param amount an amount
      */
-    public static String format(DateTime dateTime) {
-        Calendar calendar = checkNotNull(dateTime, "dateTime").getCalendar();
-        return ISO8601Utils.format(calendar.getTime(), true, calendar.getTimeZone());
+    public BaseSingleFieldPeriod(int amount) {
+        this.amount = amount;
+    }
+
+    @Override
+    public final int getAmount() {
+        return amount;
     }
 }

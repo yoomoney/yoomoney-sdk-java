@@ -26,12 +26,31 @@ package com.yandex.money.api.time;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
 
+/**
+ * Represents a period of dates.
+ */
 public final class Period {
 
+    /**
+     * Number of years in period.
+     */
     final int years;
+    /**
+     * Number of months in period.
+     */
     final int months;
+    /**
+     * Number of days in period.
+     */
     final int days;
 
+    /**
+     * Creates an instance of this class of specific period.
+     *
+     * @param years number of years
+     * @param months number of months
+     * @param days number of days
+     */
     Period(int years, int months, int days) {
         if (years < 0) {
             throw new IllegalArgumentException("years");
@@ -47,39 +66,12 @@ public final class Period {
         this.days = days;
     }
 
-    public static Period years(int years) {
-        return new Period(years, 0, 0);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Period period = (Period) o;
-
-        if (years != period.years) return false;
-        if (months != period.months) return false;
-        return days == period.days;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = years;
-        result = 31 * result + months;
-        result = 31 * result + days;
-        return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Period{" +
-                "years=" + years +
-                ", months=" + months +
-                ", days=" + days +
-                '}';
-    }
-
+    /**
+     * Parses period represented by an ISO 8601 string.
+     *
+     * @param period period to parse
+     * @return a period instance
+     */
     public static Period parse(String period) {
         char[] chars = checkNotEmpty(period, "period")
                 .trim()
@@ -118,5 +110,34 @@ public final class Period {
         }
 
         return new Period(years, months, days);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Period period = (Period) o;
+
+        if (years != period.years) return false;
+        if (months != period.months) return false;
+        return days == period.days;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = years;
+        result = 31 * result + months;
+        result = 31 * result + days;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Period{" +
+                "years=" + years +
+                ", months=" + months +
+                ", days=" + days +
+                '}';
     }
 }

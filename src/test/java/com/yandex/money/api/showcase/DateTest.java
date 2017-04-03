@@ -26,7 +26,7 @@ package com.yandex.money.api.showcase;
 
 import com.yandex.money.api.model.showcase.components.uicontrols.Date;
 import com.yandex.money.api.time.DateTime;
-import com.yandex.money.api.time.Period;
+import com.yandex.money.api.time.Years;
 import org.testng.annotations.Test;
 
 import java.text.ParseException;
@@ -73,10 +73,10 @@ public class DateTest extends ParameterTest {
         assertNotNull(now);
 
         withPeriod = Date.parseDate("now/P1Y", Date.FORMATTER);
-        compare(withPeriod, now.plus(Period.years(1)));
+        compare(withPeriod, now.plus(Years.ONE));
 
         withPeriod = Date.parseDate("P1Y/now", Date.FORMATTER);
-        compare(withPeriod, now.minus(Period.years(1)));
+        compare(withPeriod, now.minus(Years.ONE));
 
         withPeriod = Date.parseDate("now", Date.FORMATTER);
         compare(withPeriod, now);

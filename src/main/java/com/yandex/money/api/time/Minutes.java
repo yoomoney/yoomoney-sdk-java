@@ -24,41 +24,39 @@
 
 package com.yandex.money.api.time;
 
-import com.google.gson.internal.bind.util.ISO8601Utils;
-
-import java.text.ParseException;
-import java.text.ParsePosition;
 import java.util.Calendar;
 
-import static com.yandex.money.api.util.Common.checkNotNull;
-
 /**
- * Simple utility class to parse and format ISO 8601 dates.
+ * Period in minutes.
  */
-public final class Iso8061Format {
+public final class Minutes extends BaseSingleFieldPeriod {
 
-    private Iso8061Format() {
+    /**
+     * One minute.
+     */
+    public static final Minutes ONE = new Minutes(1);
+
+    private Minutes(int amount) {
+        super(amount);
     }
 
     /**
-     * Parses string of ISO 8601 date.
+     * Creates an instance of this class.
      *
-     * @param date a string to parse
-     * @return parsed date time
-     * @throws ParseException if parsing is not possible
+     * @param amount number of minutes
+     * @return instance of this class
      */
-    public static DateTime parse(String date) throws ParseException {
-        return DateTime.from(ISO8601Utils.parse(date, new ParsePosition(0)));
+    public static Minutes from(int amount) {
+        switch (amount) {
+            case 1:
+                return ONE;
+            default:
+                return new Minutes(amount);
+        }
     }
 
-    /**
-     * Formats date time to ISO 8601 string.
-     *
-     * @param dateTime date time to format
-     * @return formatted string
-     */
-    public static String format(DateTime dateTime) {
-        Calendar calendar = checkNotNull(dateTime, "dateTime").getCalendar();
-        return ISO8601Utils.format(calendar.getTime(), true, calendar.getTimeZone());
+    @Override
+    public int getField() {
+        return Calendar.MINUTE;
     }
 }

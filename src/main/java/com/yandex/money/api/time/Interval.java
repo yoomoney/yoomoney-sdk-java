@@ -26,17 +26,48 @@ package com.yandex.money.api.time;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
-public class Interval {
+/**
+ * Interval between two dates.
+ */
+public final class Interval {
 
     public final DateTime from;
     public final DateTime till;
 
+    /**
+     * Creates an interval between two days.
+     *
+     * @param from date from
+     * @param till date till
+     */
     public Interval(DateTime from, DateTime till) {
         if (checkNotNull(from, "from").isAfter(checkNotNull(till, "till"))) {
             throw new IllegalArgumentException("from is after till");
         }
         this.from = from;
         this.till = till;
+    }
+
+    /**
+     * Creates an interval starting at specific date and with that covers provided period.
+     *
+     * @param from starting date
+     * @param period length of interval
+     */
+    public Interval(DateTime from, SingleFieldPeriod period) {
+        this.from = checkNotNull(from, "from");
+        this.till = from.plus(period);
+    }
+
+    /**
+     * Creates an interval ending at specific date and with that covers provided period.
+     *
+     * @param period length of interval
+     * @param till ending date
+     */
+    public Interval(SingleFieldPeriod period, DateTime till) {
+        this.till = checkNotNull(till, "till");
+        this.from = till.minus(period);
     }
 
     @Override
