@@ -70,6 +70,16 @@ public final class Interval {
         this.from = till.minus(period);
     }
 
+    /**
+     * Checks if the interval contains a datetime value.
+     *
+     * @param value value to check
+     * @return {@code true} if interval contains a value, {@code false otherwise}
+     */
+    public boolean contains(DateTime value) {
+        return (checkNotNull(value, "value").equals(from) || value.isAfter(from)) && value.isBefore(till);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
