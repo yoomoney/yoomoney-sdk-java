@@ -92,6 +92,15 @@ public class AccountInfo {
         balanceDetails = checkNotNull(builder.balanceDetails, "balanceDetails");
     }
 
+    private AccountInfo() {
+        account = null;
+        balance = BigDecimal.ZERO;
+        currency = Currency.RUB;
+        accountStatus = AccountStatus.ANONYMOUS;
+        accountType = AccountType.PERSONAL;
+        balanceDetails = BalanceDetails.ZERO;
+    }
+
     @Override
     public String toString() {
         return "AccountInfo{" +

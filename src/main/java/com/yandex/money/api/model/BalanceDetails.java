@@ -37,7 +37,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  */
 public class BalanceDetails {
 
-    public static final BalanceDetails ZERO = new Builder().create();
+    public static final BalanceDetails ZERO = new BalanceDetails();
 
     /**
      * total balance
@@ -82,6 +82,15 @@ public class BalanceDetails {
         blocked = builder.blocked;
         debt = builder.debt;
         hold = builder.hold;
+    }
+
+    private BalanceDetails() {
+        total = BigDecimal.ZERO;
+        available = BigDecimal.ZERO;
+        depositionPending = null;
+        blocked = null;
+        debt = null;
+        hold = null;
     }
 
     @Override
