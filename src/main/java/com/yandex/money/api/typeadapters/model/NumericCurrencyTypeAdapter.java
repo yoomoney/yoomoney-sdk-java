@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,41 +22,24 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters.model.showcase.uicontrol;
+package com.yandex.money.api.typeadapters.model;
 
-import com.yandex.money.api.model.showcase.components.uicontrols.Submit;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import com.yandex.money.api.model.Currency;
 
-/**
- * Type adapter for {@link Submit} component.
- *
- * @author Anton Ermak (ermak@yamoney.ru)
- */
-public final class SubmitTypeAdapter extends ControlTypeAdapter<Submit, Submit.Builder> {
+import java.io.IOException;
 
-    private static final SubmitTypeAdapter INSTANCE = new SubmitTypeAdapter();
+public final class NumericCurrencyTypeAdapter extends TypeAdapter<Currency> {
 
-    private SubmitTypeAdapter() {
-    }
-
-    /**
-     * @return instance of this class
-     */
-    public static SubmitTypeAdapter getInstance() {
-        return INSTANCE;
+    @Override
+    public void write(JsonWriter out, Currency value) throws IOException {
+        out.value(value.numericCode.toString());
     }
 
     @Override
-    protected Submit createInstance(Submit.Builder builder) {
-        return builder.create();
-    }
-
-    @Override
-    protected Submit.Builder createBuilderInstance() {
-        return new Submit.Builder();
-    }
-
-    @Override
-    public Class<Submit> getType() {
-        return Submit.class;
+    public Currency read(JsonReader in) throws IOException {
+        return Currency.parseNumericCode(Integer.parseInt(in.nextString()));
     }
 }

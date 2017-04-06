@@ -27,11 +27,11 @@ package com.yandex.money.api.typeadapters.model.showcase.uicontrol;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
+import com.yandex.money.api.model.Currency;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.NoFee;
 import com.yandex.money.api.model.showcase.components.uicontrols.Amount;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
-import com.yandex.money.api.util.Currency;
 
 /**
  * Type adapter for {@link Amount} component.
@@ -84,7 +84,7 @@ public final class AmountTypeAdapter extends BaseNumberTypeAdapter<Amount, Amoun
     }
 
     @Override
-    protected Class<Amount> getType() {
+    public Class<Amount> getType() {
         return Amount.class;
     }
 }

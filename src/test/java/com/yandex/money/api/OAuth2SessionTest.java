@@ -158,7 +158,7 @@ public class OAuth2SessionTest {
             static final TypeAdapterImpl INSTANCE = new TypeAdapterImpl();
 
             @Override
-            protected Class<Mock> getType() {
+            public Class<Mock> getType() {
                 return Mock.class;
             }
 

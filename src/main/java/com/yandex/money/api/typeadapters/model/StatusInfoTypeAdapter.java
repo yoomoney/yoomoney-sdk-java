@@ -78,7 +78,7 @@ public final class StatusInfoTypeAdapter extends BaseTypeAdapter<StatusInfo> {
     }
 
     @Override
-    protected Class<StatusInfo> getType() {
+    public Class<StatusInfo> getType() {
         return StatusInfo.class;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.util;
+package com.yandex.money.api.model;
 
 import java.util.Collections;
 import java.util.HashMap;

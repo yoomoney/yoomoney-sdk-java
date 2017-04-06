@@ -68,7 +68,7 @@ public final class CustomFeeTypeAdapter extends BaseTypeAdapter<CustomFee> {
     }
 
     @Override
-    protected Class<CustomFee> getType() {
+    public Class<CustomFee> getType() {
         return CustomFee.class;
     }
 }

@@ -24,13 +24,15 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.BalanceDetails;
+import com.yandex.money.api.model.Currency;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.methods.AccountInfoTypeAdapter;
-import com.yandex.money.api.util.Currency;
+import com.yandex.money.api.typeadapters.model.NumericCurrencyTypeAdapter;
 
 import java.math.BigDecimal;
 
@@ -47,31 +49,38 @@ public class AccountInfo {
     /**
      * account number
      */
+    @SerializedName("account")
     public final String account;
 
     /**
      * current balance
      */
+    @SerializedName("balance")
     public final BigDecimal balance;
 
     /**
      * account's currency
      */
+    @SerializedName("currency")
+    @JsonAdapter(NumericCurrencyTypeAdapter.class)
     public final Currency currency;
 
     /**
      * account's status
      */
+    @SerializedName("account_status")
     public final AccountStatus accountStatus;
 
     /**
      * account's type
      */
+    @SerializedName("account_type")
     public final AccountType accountType;
 
     /**
      * balance details
      */
+    @SerializedName("balance_details")
     public final BalanceDetails balanceDetails;
 
     protected AccountInfo(Builder builder) {
@@ -200,7 +209,7 @@ public class AccountInfo {
     public static final class Request extends FirstApiRequest<AccountInfo> {
 
         public Request() {
-            super(AccountInfoTypeAdapter.getInstance());
+            super(AccountInfo.class);
         }
 
         @Override

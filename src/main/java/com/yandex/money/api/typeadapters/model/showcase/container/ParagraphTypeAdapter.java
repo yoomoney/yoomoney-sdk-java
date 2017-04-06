@@ -89,7 +89,7 @@ public final class ParagraphTypeAdapter extends ContainerTypeAdapter<TextBlock, 
     }
 
     @Override
-    protected Class<Paragraph> getType() {
+    public Class<Paragraph> getType() {
         return Paragraph.class;
     }
 }

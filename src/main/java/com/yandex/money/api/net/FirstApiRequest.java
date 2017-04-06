@@ -27,15 +27,18 @@ package com.yandex.money.api.net;
 import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
+import com.yandex.money.api.typeadapters.BaseTypeAdapter;
+import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.TypeAdapter;
-import com.yandex.money.api.util.Common;
 import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.MimeTypes;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
+import static com.yandex.money.api.util.Common.checkNotNull;
 import static com.yandex.money.api.util.Responses.processError;
 
 /**
@@ -53,15 +56,23 @@ import static com.yandex.money.api.util.Responses.processError;
  */
 public abstract class FirstApiRequest<T> extends BaseApiRequest<T> {
 
-    private final TypeAdapter<T> typeAdapter;
+    private final Class<T> cls;
+    private final BaseTypeAdapter<T> typeAdapter;
+
+    public FirstApiRequest(Class<T> cls) {
+        this.cls = checkNotNull(cls, "cls");
+        this.typeAdapter = null;
+    }
 
     /**
      * Constructor.
      *
      * @param typeAdapter type adapter to use for a response document parsing
      */
+    @Deprecated
     public FirstApiRequest(TypeAdapter<T> typeAdapter) {
-        this.typeAdapter = Common.checkNotNull(typeAdapter, "typeAdapter");
+        this.cls = null;
+        this.typeAdapter = (BaseTypeAdapter<T>) checkNotNull(typeAdapter, "typeAdapter");
     }
 
     @Override
@@ -80,7 +91,8 @@ public abstract class FirstApiRequest<T> extends BaseApiRequest<T> {
                 case HttpURLConnection.HTTP_BAD_REQUEST:
                     inputStream = response.getByteStream();
                     if (isJsonType(response)) {
-                        return typeAdapter.fromJson(inputStream);
+                        return GsonProvider.getGson()
+                                .fromJson(new InputStreamReader(inputStream), getType());
                     } else {
                         throw new InvalidRequestException(processError(response));
                     }
@@ -101,5 +113,9 @@ public abstract class FirstApiRequest<T> extends BaseApiRequest<T> {
     private static boolean isJsonType(HttpClientResponse response) {
         String field = response.getHeader(HttpHeaders.CONTENT_TYPE);
         return field != null && (field.startsWith(MimeTypes.Application.JSON) || field.startsWith(MimeTypes.Text.JSON));
+    }
+
+    private Class<T> getType() {
+        return typeAdapter != null ? typeAdapter.getType() : cls;
     }
 }

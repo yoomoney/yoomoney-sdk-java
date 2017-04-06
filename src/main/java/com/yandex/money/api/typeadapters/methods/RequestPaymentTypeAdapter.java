@@ -126,7 +126,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
     }
 
     @Override
-    protected Class<RequestPayment> getType() {
+    public Class<RequestPayment> getType() {
         return RequestPayment.class;
     }
 

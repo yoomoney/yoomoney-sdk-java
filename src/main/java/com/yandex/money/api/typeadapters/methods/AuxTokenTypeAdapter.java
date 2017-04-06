@@ -79,7 +79,7 @@ public final class AuxTokenTypeAdapter extends BaseTypeAdapter<AuxToken> {
     }
 
     @Override
-    protected Class<AuxToken> getType() {
+    public Class<AuxToken> getType() {
         return AuxToken.class;
     }
 }

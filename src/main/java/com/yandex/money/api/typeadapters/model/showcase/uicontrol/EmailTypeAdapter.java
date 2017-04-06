@@ -56,7 +56,7 @@ public final class EmailTypeAdapter extends ParameterControlTypeAdapter<Email, E
     }
 
     @Override
-    protected Class<Email> getType() {
+    public Class<Email> getType() {
         return Email.class;
     }
 }

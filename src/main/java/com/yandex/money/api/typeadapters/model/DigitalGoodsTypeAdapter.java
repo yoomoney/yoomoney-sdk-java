@@ -78,7 +78,7 @@ public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods>
     }
 
     @Override
-    protected Class<DigitalGoods> getType() {
+    public Class<DigitalGoods> getType() {
         return DigitalGoods.class;
     }
 

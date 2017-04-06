@@ -388,7 +388,7 @@ public final class ShowcaseContext {
             throw new UnsupportedOperationException("not implemented");
         }
         @Override
-        protected Class<Params> getType() {
+        public Class<Params> getType() {
             return Params.class;
         }
     }

@@ -24,7 +24,9 @@
 
 package com.yandex.money.api;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonParser;
+import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.IncomingTransferAccept;
 import com.yandex.money.api.methods.IncomingTransferReject;
 import com.yandex.money.api.methods.InstanceId;
@@ -38,8 +40,8 @@ import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.CustomFee;
 import com.yandex.money.api.model.showcase.NoFee;
 import com.yandex.money.api.model.showcase.StdFee;
+import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.TypeAdapter;
-import com.yandex.money.api.typeadapters.methods.AccountInfoTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.IncomingTransferAcceptTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.IncomingTransferRejectTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.InstanceIdTypeAdapter;
@@ -47,7 +49,6 @@ import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.OperationHistoryTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.RequestExternalPaymentTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.RequestPaymentTypeAdapter;
-import com.yandex.money.api.typeadapters.model.BalanceDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.model.CardTypeAdapter;
 import com.yandex.money.api.typeadapters.model.ErrorTypeAdapter;
 import com.yandex.money.api.typeadapters.model.ExternalCardTypeAdapter;
@@ -71,12 +72,12 @@ public class ModelTests {
 
     @Test
     public void testAccountInfo() {
-        checkTypeAdapter("/methods/account-info.json", AccountInfoTypeAdapter.getInstance());
+        checkType("/methods/account-info.json", AccountInfo.class);
     }
 
     @Test
     public void testBalanceDetails() {
-        performTest(createBalanceDetails(), BalanceDetailsTypeAdapter.getInstance());
+        performTest(createBalanceDetails(), BalanceDetails.class);
     }
 
     @Test
@@ -207,8 +208,25 @@ public class ModelTests {
         }
     }
 
+    private static <T> void checkType(String path, Class<T> type) {
+        try {
+            String json = Resources.load(path);
+            Gson gson = GsonProvider.getGson();
+            T deserializedObject = gson.fromJson(json, type);
+            assertNotEquals(0, deserializedObject.hashCode());
+            assertEquals(gson.toJsonTree(deserializedObject), new JsonParser().parse(json));
+        } catch (FileNotFoundException e) {
+            fail();
+        }
+    }
+
     private static <T> void performTest(T value, TypeAdapter<T> adapter) {
         assertEquals(adapter.fromJson(adapter.toJsonTree(value)), value);
+    }
+
+    private static <T> void performTest(T value, Class<T> cls) {
+        Gson gson = GsonProvider.getGson();
+        assertEquals(gson.fromJson(gson.toJson(value), cls), value);
     }
 
     private static BalanceDetails createBalanceDetails() {

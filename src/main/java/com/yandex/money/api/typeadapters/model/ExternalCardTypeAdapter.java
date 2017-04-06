@@ -84,7 +84,7 @@ public final class ExternalCardTypeAdapter extends BaseTypeAdapter<ExternalCard>
     }
 
     @Override
-    protected Class<ExternalCard> getType() {
+    public Class<ExternalCard> getType() {
         return ExternalCard.class;
     }
 }

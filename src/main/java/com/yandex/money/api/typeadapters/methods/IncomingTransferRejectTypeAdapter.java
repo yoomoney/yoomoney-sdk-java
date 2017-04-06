@@ -65,7 +65,7 @@ public final class IncomingTransferRejectTypeAdapter extends BaseTypeAdapter<Inc
     }
 
     @Override
-    protected Class<IncomingTransferReject> getType() {
+    public Class<IncomingTransferReject> getType() {
         return IncomingTransferReject.class;
     }
 }

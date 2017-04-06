@@ -80,7 +80,7 @@ public final class TokenTypeAdapter extends BaseTypeAdapter<Token> {
     }
 
     @Override
-    protected Class<Token> getType() {
+    public Class<Token> getType() {
         return Token.class;
     }
 }

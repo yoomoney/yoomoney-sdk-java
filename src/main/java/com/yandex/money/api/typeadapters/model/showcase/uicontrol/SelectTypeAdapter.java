@@ -117,7 +117,7 @@ public final class SelectTypeAdapter extends ParameterControlTypeAdapter<Select,
     }
 
     @Override
-    protected Class<Select> getType() {
+    public Class<Select> getType() {
         return Select.class;
     }
 }

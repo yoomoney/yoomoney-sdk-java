@@ -88,7 +88,7 @@ public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSea
     }
 
     @Override
-    protected Class<ShowcaseSearch> getType() {
+    public Class<ShowcaseSearch> getType() {
         return ShowcaseSearch.class;
     }
 }

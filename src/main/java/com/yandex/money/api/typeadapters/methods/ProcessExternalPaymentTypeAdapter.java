@@ -84,7 +84,7 @@ public final class ProcessExternalPaymentTypeAdapter extends BaseTypeAdapter<Pro
     }
 
     @Override
-    protected Class<ProcessExternalPayment> getType() {
+    public Class<ProcessExternalPayment> getType() {
         return ProcessExternalPayment.class;
     }
 }

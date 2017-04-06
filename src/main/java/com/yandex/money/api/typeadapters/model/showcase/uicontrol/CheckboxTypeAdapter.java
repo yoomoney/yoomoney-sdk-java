@@ -73,7 +73,7 @@ public final class CheckboxTypeAdapter extends ParameterControlTypeAdapter<Check
     }
 
     @Override
-    protected Class<Checkbox> getType() {
+    public Class<Checkbox> getType() {
         return Checkbox.class;
     }
 }

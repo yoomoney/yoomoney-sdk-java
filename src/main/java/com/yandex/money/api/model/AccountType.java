@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.util.Enums;
 
 /**
@@ -35,10 +36,12 @@ public enum AccountType implements Enums.WithCode<AccountType> {
     /**
      * Personal.
      */
+    @SerializedName("personal")
     PERSONAL("personal"),
     /**
      * Professional.
      */
+    @SerializedName("professional")
     PROFESSIONAL("professional");
 
     public final String code;

@@ -71,7 +71,7 @@ public final class RequestExternalPaymentTypeAdapter extends BaseTypeAdapter<Req
     }
 
     @Override
-    protected Class<RequestExternalPayment> getType() {
+    public Class<RequestExternalPayment> getType() {
         return RequestExternalPayment.class;
     }
 }

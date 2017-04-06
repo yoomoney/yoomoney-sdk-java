@@ -171,7 +171,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
     }
 
     @Override
-    protected Class<Operation> getType() {
+    public Class<Operation> getType() {
         return Operation.class;
     }
 }

@@ -51,7 +51,7 @@ public final class TelTypeAdapter extends ParameterControlTypeAdapter<Tel, Tel.B
     }
 
     @Override
-    protected Class<Tel> getType() {
+    public Class<Tel> getType() {
         return Tel.class;
     }
 

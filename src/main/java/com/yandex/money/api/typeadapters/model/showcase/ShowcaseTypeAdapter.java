@@ -114,7 +114,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     }
 
     @Override
-    protected Class<Showcase> getType() {
+    public Class<Showcase> getType() {
         return Showcase.class;
     }
 
@@ -146,7 +146,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
         }
 
         @Override
-        protected Class<Error> getType() {
+        public Class<Error> getType() {
             return Showcase.Error.class;
         }
     }

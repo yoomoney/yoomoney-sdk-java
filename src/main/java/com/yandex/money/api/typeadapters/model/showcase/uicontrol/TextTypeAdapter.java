@@ -46,7 +46,7 @@ public final class TextTypeAdapter extends BaseTextTypeAdapter<Text, Text.Builde
     }
 
     @Override
-    protected Class<Text> getType() {
+    public Class<Text> getType() {
         return Text.class;
     }
 

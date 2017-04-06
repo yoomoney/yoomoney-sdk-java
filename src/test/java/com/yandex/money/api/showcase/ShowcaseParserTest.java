@@ -26,6 +26,7 @@ package com.yandex.money.api.showcase;
 
 import com.yandex.money.api.TestEnvironment;
 import com.yandex.money.api.model.AllowedMoneySource;
+import com.yandex.money.api.model.Currency;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.Showcase;
@@ -51,7 +52,6 @@ import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
-import com.yandex.money.api.util.Currency;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;

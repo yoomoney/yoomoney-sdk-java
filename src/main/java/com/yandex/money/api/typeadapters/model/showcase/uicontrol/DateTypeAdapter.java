@@ -56,7 +56,7 @@ public final class DateTypeAdapter extends BaseDateTypeAdapter<Date, Date.Builde
     }
 
     @Override
-    protected Class<Date> getType() {
+    public Class<Date> getType() {
         return Date.class;
     }
 }

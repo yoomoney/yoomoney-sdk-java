@@ -56,7 +56,7 @@ public final class NumberTypeAdapter extends BaseNumberTypeAdapter<Number, Numbe
     }
 
     @Override
-    protected Class<Number> getType() {
+    public Class<Number> getType() {
         return Number.class;
     }
 }

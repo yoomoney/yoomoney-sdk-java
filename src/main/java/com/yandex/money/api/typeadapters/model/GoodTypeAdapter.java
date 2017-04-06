@@ -78,7 +78,7 @@ public final class GoodTypeAdapter extends BaseTypeAdapter<Good> {
     }
 
     @Override
-    protected Class<Good> getType() {
+    public Class<Good> getType() {
         return Good.class;
     }
 }

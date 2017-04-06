@@ -24,6 +24,8 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.math.BigDecimal;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
@@ -40,31 +42,37 @@ public class BalanceDetails {
     /**
      * total balance
      */
+    @SerializedName("total")
     public final BigDecimal total;
 
     /**
      * available balance
      */
+    @SerializedName("available")
     public final BigDecimal available;
 
     /**
      * pending deposition
      */
+    @SerializedName("deposition_pending")
     public final BigDecimal depositionPending;
 
     /**
      * money blocked
      */
+    @SerializedName("blocked")
     public final BigDecimal blocked;
 
     /**
      * account's debt
      */
+    @SerializedName("debt")
     public final BigDecimal debt;
 
     /**
      * money on hold
      */
+    @SerializedName("hold")
     public final BigDecimal hold;
 
     BalanceDetails(Builder builder) {

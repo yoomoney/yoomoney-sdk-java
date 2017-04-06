@@ -88,7 +88,7 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
     }
 
     @Override
-    protected Class<Fee> getType() {
+    public Class<Fee> getType() {
         return Fee.class;
     }
 

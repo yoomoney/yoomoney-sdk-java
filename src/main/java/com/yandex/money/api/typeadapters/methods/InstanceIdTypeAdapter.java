@@ -78,7 +78,7 @@ public final class InstanceIdTypeAdapter extends BaseTypeAdapter<InstanceId> {
     }
 
     @Override
-    protected Class<InstanceId> getType() {
+    public Class<InstanceId> getType() {
         return InstanceId.class;
     }
 }

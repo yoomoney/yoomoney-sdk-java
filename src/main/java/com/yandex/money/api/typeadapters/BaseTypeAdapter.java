@@ -107,5 +107,5 @@ public abstract class BaseTypeAdapter<T> implements TypeAdapter<T>, JsonSerializ
         return array.size() == 0 ? null : array;
     }
 
-    protected abstract Class<T> getType();
+    public abstract Class<T> getType();
 }

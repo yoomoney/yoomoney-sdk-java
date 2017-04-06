@@ -84,7 +84,7 @@ public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<Operation
     }
 
     @Override
-    protected Class<OperationHistory> getType() {
+    public Class<OperationHistory> getType() {
         return OperationHistory.class;
     }
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,48 +22,24 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.typeadapters;
+package com.yandex.money.api.typeadapters.model;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import com.yandex.money.api.model.Currency;
 
-import java.lang.reflect.Type;
+import java.io.IOException;
 
-/**
- * Type adapter for strings.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
- */
-public final class StringTypeAdapter extends BaseTypeAdapter<String> {
+public final class AlphaCurrencyTypeAdapter extends TypeAdapter<Currency> {
 
-    private static final StringTypeAdapter INSTANCE = new StringTypeAdapter();
-
-    private StringTypeAdapter() {
-    }
-
-    /**
-     * @return instance of this class
-     */
-    public static StringTypeAdapter getInstance() {
-        return INSTANCE;
+    @Override
+    public void write(JsonWriter out, Currency value) throws IOException {
+        out.value(value.alphaCode);
     }
 
     @Override
-    public String deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-            throws JsonParseException {
-        return json.getAsString();
-    }
-
-    @Override
-    public JsonElement serialize(String src, Type typeOfSrc, JsonSerializationContext context) {
-        return new JsonPrimitive(src);
-    }
-
-    @Override
-    protected Class<String> getType() {
-        return String.class;
+    public Currency read(JsonReader in) throws IOException {
+        return Currency.parseAlphaCode(in.nextString());
     }
 }

@@ -63,7 +63,7 @@ public final class MonthTypeAdapter extends BaseDateTypeAdapter<Month, Month.Bui
     }
 
     @Override
-    protected Class<Month> getType() {
+    public Class<Month> getType() {
         return Month.class;
     }
 }

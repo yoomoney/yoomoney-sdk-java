@@ -64,7 +64,7 @@ public final class RevokeTypeAdapter extends BaseTypeAdapter<Token.Revoke> {
     }
 
     @Override
-    protected Class<Token.Revoke> getType() {
+    public Class<Token.Revoke> getType() {
         return Token.Revoke.class;
     }
 }

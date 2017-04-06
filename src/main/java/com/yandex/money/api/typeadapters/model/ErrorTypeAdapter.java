@@ -64,7 +64,7 @@ public final class ErrorTypeAdapter extends BaseTypeAdapter<Error> {
     }
 
     @Override
-    protected Class<Error> getType() {
+    public Class<Error> getType() {
         return Error.class;
     }
 }

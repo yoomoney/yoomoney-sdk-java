@@ -65,7 +65,7 @@ public final class AllowedMoneySourceTypeAdapter extends BaseTypeAdapter<Allowed
     }
 
     @Override
-    protected Class<AllowedMoneySource> getType() {
+    public Class<AllowedMoneySource> getType() {
         return AllowedMoneySource.class;
     }
 }

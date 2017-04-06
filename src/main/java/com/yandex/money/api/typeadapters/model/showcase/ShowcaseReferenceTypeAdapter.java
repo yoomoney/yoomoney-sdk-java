@@ -100,7 +100,7 @@ public final class ShowcaseReferenceTypeAdapter extends BaseTypeAdapter<Showcase
     }
 
     @Override
-    protected Class<ShowcaseReference> getType() {
+    public Class<ShowcaseReference> getType() {
         return ShowcaseReference.class;
     }
 }

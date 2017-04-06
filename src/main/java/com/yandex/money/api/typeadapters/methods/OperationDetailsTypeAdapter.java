@@ -81,7 +81,7 @@ public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<Operation
     }
 
     @Override
-    protected Class<OperationDetails> getType() {
+    public Class<OperationDetails> getType() {
         return OperationDetails.class;
     }
 }

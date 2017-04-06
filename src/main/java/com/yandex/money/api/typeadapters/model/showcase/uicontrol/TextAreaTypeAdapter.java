@@ -48,7 +48,7 @@ public final class TextAreaTypeAdapter extends BaseTextAreaTypeAdapter<TextArea,
     }
 
     @Override
-    protected Class<TextArea> getType() {
+    public Class<TextArea> getType() {
         return TextArea.class;
     }
 

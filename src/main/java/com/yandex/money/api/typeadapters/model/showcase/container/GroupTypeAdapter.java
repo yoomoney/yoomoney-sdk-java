@@ -118,7 +118,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
     }
 
     @Override
-    protected Class<Group> getType() {
+    public Class<Group> getType() {
         return Group.class;
     }
 

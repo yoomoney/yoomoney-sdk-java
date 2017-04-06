@@ -107,7 +107,7 @@ public final class ProcessPaymentTypeAdapter extends BaseTypeAdapter<ProcessPaym
     }
 
     @Override
-    protected Class<ProcessPayment> getType() {
+    public Class<ProcessPayment> getType() {
         return ProcessPayment.class;
     }
 
