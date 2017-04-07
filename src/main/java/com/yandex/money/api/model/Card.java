@@ -24,9 +24,11 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.time.YearMonth;
 import com.yandex.money.api.util.Enums;
 
+import static com.yandex.money.api.util.Common.checkNotEmpty;
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
@@ -34,28 +36,38 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class Card extends MoneySource implements BankCardInfo {
+public class Card implements BankCardInfo {
 
+    @SerializedName("id")
+    public final String id;
     /**
      * name of cardholder
      */
+    @SerializedName("cardholder_name")
     public final String cardholderName;
 
     /**
      * panned fragment of card's number
      */
+    @SerializedName("pan_fragment")
     public final String panFragment;
 
     /**
      * type of a card (e.g. VISA, MasterCard, AmericanExpress, etc.)
      */
+    @SerializedName("type")
     public final Type type;
 
     protected Card(Builder builder) {
-        super(builder);
+        id = checkNotEmpty(builder.id, "id");
         cardholderName = builder.cardholderName;
         panFragment = builder.panFragment;
         type = checkNotNull(builder.type, "type");
+    }
+
+    @Override
+    public String getId() {
+        return id;
     }
 
     @Override
@@ -84,42 +96,53 @@ public class Card extends MoneySource implements BankCardInfo {
     }
 
     @Override
-    public String toString() {
-        return "Card{" +
-                "id='" + id + '\'' +
-                ", panFragment='" + panFragment + '\'' +
-                ", type=" + type +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
 
         Card card = (Card) o;
 
-        return !(panFragment != null ? !panFragment.equals(card.panFragment) : card.panFragment != null) &&
-                type == card.type;
+        if (!id.equals(card.id)) return false;
+        if (cardholderName != null ? !cardholderName.equals(card.cardholderName) : card.cardholderName != null)
+            return false;
+        if (panFragment != null ? !panFragment.equals(card.panFragment) : card.panFragment != null) return false;
+        return type == card.type;
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
+        int result = id.hashCode();
+        result = 31 * result + (cardholderName != null ? cardholderName.hashCode() : 0);
         result = 31 * result + (panFragment != null ? panFragment.hashCode() : 0);
         result = 31 * result + type.hashCode();
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "Card{" +
+                "id='" + id + '\'' +
+                ", cardholderName='" + cardholderName + '\'' +
+                ", panFragment='" + panFragment + '\'' +
+                ", type=" + type +
+                '}';
+    }
+
     public enum Type implements Enums.WithCode<Type> {
 
+        @SerializedName("VISA")
         VISA("VISA", "CVV2", 3),
+        @SerializedName("MasterCard")
         MASTER_CARD("MasterCard", "CVC2", 3),
+        @SerializedName("AmericanExpress")
         AMERICAN_EXPRESS("AmericanExpress", "CID", 4), // also cscAbbr = 4DBC
+        @SerializedName("JCB")
         JCB("JCB", "CAV2", 3),
+        @SerializedName("Mir")
         MIR("Mir", "CSC", 3),
+        @SerializedName("UnionPay")
         UNION_PAY("UnionPay", "CVN2", 3),
+        @SerializedName("Unknown")
         UNKNOWN("Unknown", "CSC", 4);
 
         public final String name;
@@ -147,11 +170,17 @@ public class Card extends MoneySource implements BankCardInfo {
         }
     }
 
-    public static class Builder extends MoneySource.Builder {
+    public static class Builder {
 
+        String id;
         String cardholderName;
         String panFragment;
         Type type = Type.UNKNOWN;
+
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
+        }
 
         public Builder setCardholderName(String cardholderName) {
             this.cardholderName = cardholderName;
@@ -168,7 +197,6 @@ public class Card extends MoneySource implements BankCardInfo {
             return this;
         }
 
-        @Override
         public Card create() {
             return new Card(this);
         }

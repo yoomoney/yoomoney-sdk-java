@@ -49,8 +49,6 @@ import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.OperationHistoryTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.RequestExternalPaymentTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.RequestPaymentTypeAdapter;
-import com.yandex.money.api.typeadapters.model.CardTypeAdapter;
-import com.yandex.money.api.typeadapters.model.ExternalCardTypeAdapter;
 import com.yandex.money.api.typeadapters.model.StatusInfoTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
@@ -81,12 +79,12 @@ public class ModelTests {
 
     @Test
     public void testCard() {
-        performTest(createCard(), CardTypeAdapter.getInstance());
+        performTest(createCard(), Card.class);
     }
 
     @Test
     public void testExternalCard() {
-        performTest(createExternalCard(), ExternalCardTypeAdapter.getInstance());
+        performTest(createExternalCard(), ExternalCard.class);
     }
 
     @Test
@@ -127,9 +125,9 @@ public class ModelTests {
     @Test
     public void testOperationDetails() {
         OperationDetailsTypeAdapter adapter = OperationDetailsTypeAdapter.getInstance();
-//        checkTypeAdapter("/methods/operation-details-1.json", adapter);
-//        checkTypeAdapter("/methods/operation-details-2.json", adapter);
-//        checkTypeAdapter("/methods/operation-details-3.json", adapter);
+        checkTypeAdapter("/methods/operation-details-1.json", adapter);
+        checkTypeAdapter("/methods/operation-details-2.json", adapter);
+        checkTypeAdapter("/methods/operation-details-3.json", adapter);
         checkTypeAdapter("/methods/operation-details-4.json", adapter);
     }
 
@@ -236,7 +234,7 @@ public class ModelTests {
     }
 
     private static Card createCard() {
-        Card.Builder builder = (Card.Builder) new Card.Builder()
+        Card.Builder builder = new Card.Builder()
                 .setCardholderName("IVAN IVANOV")
                 .setPanFragment("panFragment")
                 .setType(Card.Type.MASTER_CARD)
@@ -245,7 +243,7 @@ public class ModelTests {
     }
 
     private static ExternalCard createExternalCard() {
-        ExternalCard.Builder builder = (ExternalCard.Builder) new ExternalCard.Builder()
+        ExternalCard.Builder builder = new ExternalCard.Builder()
                 .setFundingSourceType("fundingSourceType")
                 .setMoneySourceToken("moneySourceToken")
                 .setType(Card.Type.AMERICAN_EXPRESS)

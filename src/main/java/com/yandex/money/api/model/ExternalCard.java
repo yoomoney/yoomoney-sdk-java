@@ -24,59 +24,113 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.time.YearMonth;
+
 import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Represents card that not bound to an account.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class ExternalCard extends Card {
+public class ExternalCard implements BankCardInfo {
 
+    @SerializedName("payment_card_type")
+    public final Card.Type type;
+    @SerializedName("pan_fragment")
+    public final String panFragment;
+    @SerializedName("type")
     public final String fundingSourceType;
+    @SerializedName("moneySourceToken")
     public final String moneySourceToken;
 
     protected ExternalCard(Builder builder) {
-        super(builder);
+        type = checkNotNull(builder.type, "type");
+        panFragment = checkNotEmpty(builder.panFragment, "panFragment");
         fundingSourceType = checkNotEmpty(builder.fundingSourceType, "fundingSourceType");
         moneySourceToken = checkNotEmpty(builder.moneySourceToken, "moneySourceToken");
     }
 
     @Override
-    public String toString() {
-        return "ExternalCard{" +
-                "id='" + id + '\'' +
-                ", panFragment='" + panFragment + '\'' +
-                ", type=" + type +
-                ", fundingSourceType='" + fundingSourceType + '\'' +
-                ", moneySourceToken='" + moneySourceToken + '\'' +
-                '}';
+    public String getId() {
+        return moneySourceToken;
+    }
+
+    @Override
+    public String getCardholderName() {
+        return null;
+    }
+
+    @Override
+    public String getCardNumber() {
+        return panFragment;
+    }
+
+    @Override
+    public Card.Type getType() {
+        return type;
+    }
+
+    @Override
+    public YearMonth getExpiry() {
+        return null;
+    }
+
+    @Override
+    public boolean isContactless() {
+        return false;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
 
         ExternalCard that = (ExternalCard) o;
 
-        return fundingSourceType.equals(that.fundingSourceType) &&
-                moneySourceToken.equals(that.moneySourceToken);
+        if (type != that.type) return false;
+        if (!panFragment.equals(that.panFragment)) return false;
+        if (!fundingSourceType.equals(that.fundingSourceType)) return false;
+        return moneySourceToken.equals(that.moneySourceToken);
     }
 
     @Override
     public int hashCode() {
-        int result = super.hashCode();
+        int result = type.hashCode();
+        result = 31 * result + panFragment.hashCode();
         result = 31 * result + fundingSourceType.hashCode();
         result = 31 * result + moneySourceToken.hashCode();
         return result;
     }
 
-    public static class Builder extends Card.Builder {
+    @Override
+    public String toString() {
+        return "ExternalCard{" +
+                "type=" + type +
+                ", panFragment='" + panFragment + '\'' +
+                ", fundingSourceType='" + fundingSourceType + '\'' +
+                ", moneySourceToken='" + moneySourceToken + '\'' +
+                '}';
+    }
 
+    public static class Builder {
+
+        Card.Type type;
+        String panFragment;
         String fundingSourceType;
         String moneySourceToken;
+
+        public Builder setType(Card.Type type) {
+            this.type = type;
+            return this;
+        }
+
+        public Builder setPanFragment(String panFragment) {
+            this.panFragment = panFragment;
+            return this;
+        }
 
         public Builder setFundingSourceType(String fundingSourceType) {
             this.fundingSourceType = fundingSourceType;
@@ -88,7 +142,6 @@ public class ExternalCard extends Card {
             return this;
         }
 
-        @Override
         public ExternalCard create() {
             return new ExternalCard(this);
         }

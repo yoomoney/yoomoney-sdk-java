@@ -30,8 +30,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.ProcessExternalPayment;
+import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
-import com.yandex.money.api.typeadapters.model.ExternalCardTypeAdapter;
 
 import java.lang.reflect.Type;
 
@@ -61,24 +61,18 @@ public final class ProcessExternalPaymentTypeAdapter extends BaseTypeAdapter<Pro
             throws JsonParseException {
 
         JsonObject jsonObject = json.getAsJsonObject();
-        ProcessExternalPayment.Builder builder = new ProcessExternalPayment.Builder();
 
-        JsonElement moneySource = jsonObject.get(MEMBER_MONEY_SOURCE);
-        if (moneySource != null) {
-            builder.setExternalCard(ExternalCardTypeAdapter.getInstance().fromJson(moneySource));
-        }
+        ExternalCard moneySource = context.deserialize(jsonObject.get(MEMBER_MONEY_SOURCE), ExternalCard.class);
+        ProcessExternalPayment.Builder builder = new ProcessExternalPayment.Builder()
+                .setExternalCard(moneySource);
         BaseProcessPaymentTypeAdapter.Delegate.deserialize(jsonObject, builder);
-
         return builder.create();
     }
 
     @Override
     public JsonElement serialize(ProcessExternalPayment src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject jsonObject = new JsonObject();
-        if (src.externalCard != null) {
-            jsonObject.add(MEMBER_MONEY_SOURCE, ExternalCardTypeAdapter.getInstance()
-                    .toJsonTree(src.externalCard));
-        }
+        jsonObject.add(MEMBER_MONEY_SOURCE, context.serialize(src.externalCard));
         BaseProcessPaymentTypeAdapter.Delegate.serialize(jsonObject, src);
         return jsonObject;
     }

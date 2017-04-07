@@ -30,6 +30,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
+import com.google.gson.reflect.TypeToken;
 import com.yandex.money.api.methods.RequestPayment;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
@@ -37,7 +38,6 @@ import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
-import com.yandex.money.api.typeadapters.model.CardTypeAdapter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
 
         JsonObject moneySourceObject = object.getAsJsonObject(MEMBER_MONEY_SOURCE);
         if (moneySourceObject != null) {
-            builder.setMoneySources(MoneySourceListTypeAdapter.Delegate.deserialize(moneySourceObject, builder));
+            builder.setMoneySources(MoneySourceListTypeAdapter.Delegate.deserialize(moneySourceObject, builder, context));
         }
 
         BaseRequestPaymentTypeAdapter.Delegate.deserialize(object, builder);
@@ -117,7 +117,7 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
 
         if (!src.moneySources.isEmpty()) {
             jsonObject.add(MEMBER_MONEY_SOURCE, MoneySourceListTypeAdapter.Delegate.serialize(
-                    src.moneySources, src.cscRequired));
+                    src.moneySources, src.cscRequired, context));
         }
 
         BaseRequestPaymentTypeAdapter.Delegate.serialize(jsonObject, src);
@@ -145,7 +145,9 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
             private Delegate() {
             }
 
-            static List<MoneySource> deserialize(JsonObject object, RequestPayment.Builder builder) {
+            static List<MoneySource> deserialize(JsonObject object, RequestPayment.Builder builder,
+                                                 JsonDeserializationContext context) {
+
                 List<MoneySource> list = new ArrayList<>();
 
                 JsonObject walletObject = object.getAsJsonObject(MEMBER_WALLET);
@@ -156,19 +158,23 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
                 JsonObject cardsObject = object.getAsJsonObject(MEMBER_CARDS);
                 if (cardsObject != null && getMandatoryBoolean(cardsObject, MEMBER_ALLOWED)) {
                     builder.setCscRequired(getMandatoryBoolean(cardsObject, MEMBER_CSC_REQUIRED));
-                    list.addAll(CardTypeAdapter.getInstance().fromJson(cardsObject.getAsJsonArray(MEMBER_ITEMS)));
+                    Type type = new TypeToken<List<Card>>() {}.getType();
+                    List<Card> cards = context.deserialize(cardsObject.getAsJsonArray(MEMBER_ITEMS), type);
+                    list.addAll(cards);
                 }
 
                 return list;
             }
 
-            static JsonElement serialize(List<MoneySource> src, boolean cscRequired) {
+            static JsonElement serialize(List<MoneySource> src, boolean cscRequired,
+                                         JsonSerializationContext context) {
+
                 JsonObject object = new JsonObject();
                 JsonArray itemsArray = new JsonArray();
                 for (MoneySource moneySource : src) {
                     Class<? extends MoneySource> cls = moneySource.getClass();
                     if (cls == Card.class) {
-                        itemsArray.add(CardTypeAdapter.getInstance().toJsonTree((Card) moneySource));
+                        itemsArray.add(context.serialize(moneySource));
                     } else if (cls == Wallet.class) {
                         JsonObject walletObject = new JsonObject();
                         walletObject.addProperty(MEMBER_ALLOWED, true);

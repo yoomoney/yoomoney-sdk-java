@@ -237,7 +237,7 @@ public class ProcessPayment extends BaseProcessPayment {
             addParameter("ext_auth_success_uri", extAuthSuccessUri);
             addParameter("ext_auth_fail_uri", extAuthFailUri);
             if (moneySource != null) {
-                addParameter("money_source", moneySource.id);
+                addParameter("money_source", moneySource.getId());
             }
         }
 

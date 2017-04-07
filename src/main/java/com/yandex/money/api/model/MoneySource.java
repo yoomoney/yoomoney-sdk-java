@@ -24,56 +24,9 @@
 
 package com.yandex.money.api.model;
 
-import static com.yandex.money.api.util.Common.checkNotNull;
-
 /**
  * Some money source: wallet, card, etc.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public abstract class MoneySource {
-
-    /**
-     * unique money source id
-     */
-    public final String id;
-
-    protected MoneySource(Builder builder) {
-        checkNotNull(builder, "builder");
-        id = builder.id;
-    }
-
-    @Override
-    public String toString() {
-        return "MoneySource{" +
-                "id='" + id + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MoneySource that = (MoneySource) o;
-
-        return !(id != null ? !id.equals(that.id) : that.id != null);
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
-    public static abstract class Builder {
-
-        String id;
-
-        public Builder setId(String id) {
-            this.id = id;
-            return this;
-        }
-
-        public abstract MoneySource create();
-    }
+public interface MoneySource {
+    String getId();
 }
