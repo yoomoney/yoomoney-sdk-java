@@ -24,30 +24,29 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Scope;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.methods.AuxTokenTypeAdapter;
 
 import java.util.Set;
 
 /**
- * Auxiliary token. Has scopes which are subset of {@link com.yandex.money.api.methods.Token}'s
- * scopes.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Auxiliary token. Has scopes which are subset of {@link com.yandex.money.api.methods.Token}'s scopes.
  */
 public class AuxToken {
 
     /**
      * auxiliary token
      */
+    @SerializedName("aux_token")
     public final String auxToken;
 
     /**
      * error code
      */
+    @SerializedName("error")
     public final Error error;
 
     public AuxToken(String auxToken, Error error) {
@@ -89,7 +88,7 @@ public class AuxToken {
     public static final class Request extends FirstApiRequest<AuxToken> {
 
         public Request(Set<Scope> scopes) {
-            super(AuxTokenTypeAdapter.getInstance());
+            super(AuxToken.class);
             addParameter("scope", Scope.createScopeParameter(scopes));
         }
 

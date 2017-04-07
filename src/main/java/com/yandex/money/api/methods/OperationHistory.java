@@ -24,12 +24,12 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.time.DateTime;
-import com.yandex.money.api.typeadapters.methods.OperationHistoryTypeAdapter;
 import com.yandex.money.api.util.Enums;
 
 import java.util.Collections;
@@ -44,13 +44,14 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  * <p/>
  * If successful contains list of operations as well as token to a next record if there are more
  * operations in a user's history.
- *
- * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
 public class OperationHistory {
 
+    @SerializedName("error")
     public final Error error;
+    @SerializedName("next_record")
     public final String nextRecord;
+    @SerializedName("operations")
     public final List<Operation> operations;
 
     /**
@@ -142,7 +143,7 @@ public class OperationHistory {
         Request(Set<FilterType> types, String label, DateTime from, DateTime till, String startRecord, Integer records,
                 Boolean details) {
 
-            super(OperationHistoryTypeAdapter.getInstance());
+            super(OperationHistory.class);
             if (from != null && till != null && from.isAfter(till)) {
                 throw new IllegalArgumentException("\'from\' should be before \'till\'");
             }

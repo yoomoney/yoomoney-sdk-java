@@ -30,6 +30,7 @@ import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.IncomingTransferAccept;
 import com.yandex.money.api.methods.IncomingTransferReject;
 import com.yandex.money.api.methods.InstanceId;
+import com.yandex.money.api.methods.OperationHistory;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
@@ -46,7 +47,6 @@ import com.yandex.money.api.typeadapters.methods.IncomingTransferAcceptTypeAdapt
 import com.yandex.money.api.typeadapters.methods.IncomingTransferRejectTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.InstanceIdTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.OperationHistoryTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.RequestExternalPaymentTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.RequestPaymentTypeAdapter;
 import com.yandex.money.api.typeadapters.model.StatusInfoTypeAdapter;
@@ -133,11 +133,10 @@ public class ModelTests {
 
     @Test
     public void testOperationHistory() {
-        OperationHistoryTypeAdapter adapter = OperationHistoryTypeAdapter.getInstance();
-        checkTypeAdapter("/methods/operation-history-1.json", adapter);
-        checkTypeAdapter("/methods/operation-history-2.json", adapter);
-        checkTypeAdapter("/methods/operation-history-3.json", adapter);
-        checkTypeAdapter("/methods/operation-history-4.json", adapter);
+        checkType("/methods/operation-history-1.json", OperationHistory.class);
+        checkType("/methods/operation-history-2.json", OperationHistory.class);
+        checkType("/methods/operation-history-3.json", OperationHistory.class);
+        checkType("/methods/operation-history-4.json", OperationHistory.class);
     }
 
     @Test
