@@ -27,7 +27,6 @@ package com.yandex.money.api.methods;
 import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.methods.RequestExternalPaymentTypeAdapter;
 
 import java.util.Map;
 
@@ -36,8 +35,6 @@ import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Context of an external payment.
- *
- * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
 public class RequestExternalPayment extends BaseRequestPayment {
 
@@ -58,8 +55,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * {@link com.yandex.money.api.methods.RequestExternalPayment.Request}.
          */
         private Request(String instanceId, String patternId, Map<String, String> params) {
-            super(RequestExternalPaymentTypeAdapter.getInstance());
-
+            super(RequestExternalPayment.class);
             addParameter("instance_id", instanceId);
             addParameter("pattern_id", patternId);
             addParameters(params);

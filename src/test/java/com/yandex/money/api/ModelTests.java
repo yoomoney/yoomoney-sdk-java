@@ -31,6 +31,8 @@ import com.yandex.money.api.methods.IncomingTransferAccept;
 import com.yandex.money.api.methods.IncomingTransferReject;
 import com.yandex.money.api.methods.InstanceId;
 import com.yandex.money.api.methods.OperationHistory;
+import com.yandex.money.api.methods.RequestExternalPayment;
+import com.yandex.money.api.methods.RequestPayment;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
@@ -47,8 +49,6 @@ import com.yandex.money.api.typeadapters.methods.IncomingTransferAcceptTypeAdapt
 import com.yandex.money.api.typeadapters.methods.IncomingTransferRejectTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.InstanceIdTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.RequestExternalPaymentTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.RequestPaymentTypeAdapter;
 import com.yandex.money.api.typeadapters.model.StatusInfoTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
@@ -141,16 +141,14 @@ public class ModelTests {
 
     @Test
     public void testRequestExternalPayment() {
-        RequestExternalPaymentTypeAdapter adapter = RequestExternalPaymentTypeAdapter.getInstance();
-        checkTypeAdapter("/methods/request-external-payment-1.json", adapter);
-        checkTypeAdapter("/methods/request-external-payment-2.json", adapter);
+        checkType("/methods/request-external-payment-1.json", RequestExternalPayment.class);
+        checkType("/methods/request-external-payment-2.json", RequestExternalPayment.class);
     }
 
     @Test
     public void testRequestPayment() {
-        RequestPaymentTypeAdapter adapter = RequestPaymentTypeAdapter.getInstance();
-        checkTypeAdapter("/methods/request-payment-1.json", adapter);
-        checkTypeAdapter("/methods/request-payment-2.json", adapter);
+        checkType("/methods/request-payment-1.json", RequestPayment.class);
+        checkType("/methods/request-payment-2.json", RequestPayment.class);
     }
 
     @Test

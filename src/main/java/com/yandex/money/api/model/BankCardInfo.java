@@ -29,7 +29,7 @@ import com.yandex.money.api.time.YearMonth;
 /**
  * Information regarding bank card. All methods can return {@code null}.
  */
-public interface BankCardInfo extends MoneySource {
+public interface BankCardInfo extends Identifiable {
 
     /**
      * @return name of cardholder

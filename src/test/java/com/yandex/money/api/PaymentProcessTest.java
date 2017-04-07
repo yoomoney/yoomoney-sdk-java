@@ -30,7 +30,7 @@ import com.yandex.money.api.methods.ProcessExternalPayment;
 import com.yandex.money.api.methods.ProcessPayment;
 import com.yandex.money.api.methods.RequestExternalPayment;
 import com.yandex.money.api.methods.RequestPayment;
-import com.yandex.money.api.model.MoneySource;
+import com.yandex.money.api.model.Identifiable;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.net.clients.DefaultApiClient;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
@@ -208,7 +208,7 @@ public class PaymentProcessTest {
             }
 
             @Override
-            public MoneySource getMoneySource() {
+            public Identifiable getMoneySource() {
                 return null;
             }
 
@@ -237,7 +237,6 @@ public class PaymentProcessTest {
     private PaymentProcess.SavedState createPaymentProcessSavedState() {
         return new PaymentProcess.SavedState(
                 (RequestPayment) new RequestPayment.Builder()
-                        .setMoneySources(Collections.<MoneySource>emptyList())
                         .setBalance(BigDecimal.TEN)
                         .setStatus(BaseRequestPayment.Status.SUCCESS)
                         .setContractAmount(BigDecimal.ONE)

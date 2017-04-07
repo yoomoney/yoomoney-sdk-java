@@ -24,9 +24,9 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.util.Constants;
-import com.yandex.money.api.util.Enums;
 
 import java.math.BigDecimal;
 
@@ -42,26 +42,31 @@ public abstract class BaseRequestPayment {
     /**
      * Status of the request.
      */
+    @SerializedName("status")
     public final Status status;
 
     /**
      * Error code if exists.
      */
+    @SerializedName("error")
     public final Error error;
 
     /**
      * Request id.
      */
+    @SerializedName("request_id")
     public final String requestId;
 
     /**
      * Contract amount.
      */
+    @SerializedName("contract_amount")
     public final BigDecimal contractAmount;
 
     /**
      * Title of payment.
      */
+    @SerializedName("title")
     public final String title;
 
     protected BaseRequestPayment(Builder builder) {
@@ -121,31 +126,13 @@ public abstract class BaseRequestPayment {
                 '}';
     }
 
-    public enum Status implements Enums.WithCode<Status> {
-
-        SUCCESS(Constants.Status.SUCCESS),
-        REFUSED(Constants.Status.REFUSED),
-        HOLD_FOR_PICKUP(Constants.Status.HOLD_FOR_PICKUP);
-
-        public final String code;
-
-        Status(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String getCode() {
-            return code;
-        }
-
-        @Override
-        public Status[] getValues() {
-            return values();
-        }
-
-        public static Status parse(String code) {
-            return Enums.parse(SUCCESS, code);
-        }
+    public enum Status {
+        @SerializedName(Constants.Status.SUCCESS)
+        SUCCESS,
+        @SerializedName(Constants.Status.REFUSED)
+        REFUSED,
+        @SerializedName(Constants.Status.HOLD_FOR_PICKUP)
+        HOLD_FOR_PICKUP
     }
 
     public static abstract class Builder {

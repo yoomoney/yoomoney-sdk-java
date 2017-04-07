@@ -27,7 +27,7 @@ package com.yandex.money.api.processes;
 import com.yandex.money.api.methods.BaseProcessPayment;
 import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.model.ExternalCard;
-import com.yandex.money.api.model.MoneySource;
+import com.yandex.money.api.model.Identifiable;
 import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.clients.ApiClient;
 
@@ -154,7 +154,7 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
 
     private void switchContextIfRequired() {
         if (getState() == BasePaymentProcess.State.STARTED && mutablePaymentContext) {
-            MoneySource moneySource = checkNotNull(parameterProvider.getMoneySource(), "moneySource");
+            Identifiable moneySource = checkNotNull(parameterProvider.getMoneySource(), "moneySource");
 
             if (paymentContext == PaymentContext.PAYMENT && moneySource instanceof ExternalCard) {
                 paymentContext = PaymentContext.EXTERNAL_PAYMENT;

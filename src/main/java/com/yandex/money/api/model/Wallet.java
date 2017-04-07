@@ -24,17 +24,18 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Wallet. It used for payments from user's account.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class Wallet implements MoneySource {
+public class Wallet implements Identifiable {
 
-    public static final Wallet INSTANCE = new Wallet();
+    @SerializedName("allowed")
+    public final boolean allowed;
 
-    private Wallet() {
-        super();
+    public Wallet(boolean allowed) {
+        this.allowed = allowed;
     }
 
     @Override

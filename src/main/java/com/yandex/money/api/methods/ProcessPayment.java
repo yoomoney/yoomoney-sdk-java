@@ -27,7 +27,7 @@ package com.yandex.money.api.methods;
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.DigitalGoods;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.MoneySource;
+import com.yandex.money.api.model.Identifiable;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.Enums;
@@ -235,7 +235,7 @@ public class ProcessPayment extends BaseProcessPayment {
          *                          successful
          * @param extAuthFailUri uri which will be used for redirection if operation is failed
          */
-        public Request(String requestId, MoneySource moneySource, String csc, String extAuthSuccessUri,
+        public Request(String requestId, Identifiable moneySource, String csc, String extAuthSuccessUri,
                        String extAuthFailUri) {
 
             super(ProcessPayment.class);

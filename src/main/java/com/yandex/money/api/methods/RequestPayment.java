@@ -24,18 +24,18 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.methods.params.PaymentParams;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
+import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.MoneySource;
+import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.methods.RequestPaymentTypeAdapter;
 import com.yandex.money.api.util.Enums;
 
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -50,48 +50,51 @@ import static com.yandex.money.api.util.Common.checkNotNull;
 public class RequestPayment extends BaseRequestPayment {
 
     /**
-     * List of available for payment money sources.
+     * Available for payment money sources.
      */
-    public final List<MoneySource> moneySources;
-
-    /**
-     * Card Security Code. Required if i{@code true}.
-     */
-    public final boolean cscRequired;
+    @SerializedName("money_source")
+    public final MoneySource moneySource;
 
     /**
      * Account's balance.
      */
+    @SerializedName("balance")
     public final BigDecimal balance;
 
     /**
      * Status of recipient's account.
      */
+    @SerializedName("recipient_account_status")
     public final AccountStatus recipientAccountStatus;
 
     /**
      * Type of recipient's account.
      */
+    @SerializedName("recipient_account_type")
     public final AccountType recipientAccountType;
 
     /**
      * Protection code, if chosen to use it.
      */
+    @SerializedName("protection_code")
     public final String protectionCode;
 
     /**
      * URI to unblock payer's account if it was blocked.
      */
+    @SerializedName("account_unblock_uri")
     public final String accountUnblockUri;
 
     /**
      * External action URI.
      */
+    @SerializedName("ext_action_uri")
     public final String extActionUri;
 
     /**
      * {@code true} if Yandex.Money choose the last attached account for p2p payment.
      */
+    @SerializedName("multiple_recipients_found")
     public final Boolean multipleRecipientsFound;
 
     protected RequestPayment(Builder builder) {
@@ -109,8 +112,7 @@ public class RequestPayment extends BaseRequestPayment {
                 }
                 break;
         }
-        this.moneySources = Collections.unmodifiableList(checkNotNull(builder.moneySources, "moneySource"));
-        this.cscRequired = builder.cscRequired;
+        this.moneySource = builder.moneySource;
         this.balance = builder.balance;
         this.recipientAccountStatus = builder.recipientAccountStatus;
         this.recipientAccountType = builder.recipientAccountType;
@@ -120,58 +122,88 @@ public class RequestPayment extends BaseRequestPayment {
         this.multipleRecipientsFound = builder.multipleRecipientsFound;
     }
 
-    @Override
-    public String toString() {
-        return super.toString() + "RequestPayment{" +
-                "moneySources=" + moneySources +
-                ", cscRequired=" + cscRequired +
-                ", balance=" + balance +
-                ", recipientAccountStatus=" + recipientAccountStatus +
-                ", recipientAccountType=" + recipientAccountType +
-                ", protectionCode='" + protectionCode + '\'' +
-                ", accountUnblockUri='" + accountUnblockUri + '\'' +
-                ", extActionUri='" + extActionUri + '\'' +
-                ", multipleRecipientsFound='" + multipleRecipientsFound + '\'' +
-                '}';
+    public static final class MoneySource {
+
+        @SerializedName("wallet")
+        public final Wallet wallet;
+        @SerializedName("cards")
+        public final Cards cards;
+
+        public MoneySource(Wallet wallet, Cards cards) {
+            this.wallet = wallet;
+            this.cards = cards;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            MoneySource that = (MoneySource) o;
+
+            if (wallet != null ? !wallet.equals(that.wallet) : that.wallet != null) return false;
+            return cards != null ? cards.equals(that.cards) : that.cards == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = wallet != null ? wallet.hashCode() : 0;
+            result = 31 * result + (cards != null ? cards.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "MoneySource{" +
+                    "wallet=" + wallet +
+                    ", cards=" + cards +
+                    '}';
+        }
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public static final class Cards {
 
-        RequestPayment that = (RequestPayment) o;
+        @SerializedName("allowed")
+        public final boolean allowed;
+        @SerializedName("csc_required")
+        public final boolean cscRequired;
+        @SerializedName("items")
+        public final List<Card> items;
 
-        return cscRequired == that.cscRequired && moneySources.equals(that.moneySources) &&
-                !(balance != null ? !balance.equals(that.balance) : that.balance != null) &&
-                recipientAccountStatus == that.recipientAccountStatus &&
-                recipientAccountType == that.recipientAccountType &&
-                !(protectionCode != null ? !protectionCode.equals(that.protectionCode) :
-                        that.protectionCode != null) &&
-                !(accountUnblockUri != null ? !accountUnblockUri.equals(that.accountUnblockUri) :
-                        that.accountUnblockUri != null) &&
-                !(extActionUri != null ? !extActionUri.equals(that.extActionUri) :
-                        that.extActionUri != null) &&
-                !(multipleRecipientsFound != null ? !multipleRecipientsFound.equals(that.multipleRecipientsFound) :
-                        that.multipleRecipientsFound != null);
+        public Cards(boolean allowed, boolean cscRequired, List<Card> items) {
+            this.allowed = allowed;
+            this.cscRequired = cscRequired;
+            this.items = items;
+        }
 
-    }
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
 
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + moneySources.hashCode();
-        result = 31 * result + (cscRequired ? 1 : 0);
-        result = 31 * result + (balance != null ? balance.hashCode() : 0);
-        result = 31 * result + (recipientAccountStatus != null ?
-                recipientAccountStatus.hashCode() : 0);
-        result = 31 * result + (recipientAccountType != null ? recipientAccountType.hashCode() : 0);
-        result = 31 * result + (protectionCode != null ? protectionCode.hashCode() : 0);
-        result = 31 * result + (accountUnblockUri != null ? accountUnblockUri.hashCode() : 0);
-        result = 31 * result + (extActionUri != null ? extActionUri.hashCode() : 0);
-        result = 31 * result + (multipleRecipientsFound != null ? multipleRecipientsFound.hashCode() : 0);
-        return result;
+            Cards cards = (Cards) o;
+
+            if (allowed != cards.allowed) return false;
+            if (cscRequired != cards.cscRequired) return false;
+            return items != null ? items.equals(cards.items) : cards.items == null;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = (allowed ? 1 : 0);
+            result = 31 * result + (cscRequired ? 1 : 0);
+            result = 31 * result + (items != null ? items.hashCode() : 0);
+            return result;
+        }
+
+        @Override
+        public String toString() {
+            return "Cards{" +
+                    "allowed=" + allowed +
+                    ", cscRequired=" + cscRequired +
+                    ", items=" + items +
+                    '}';
+        }
     }
 
     /**
@@ -225,7 +257,7 @@ public class RequestPayment extends BaseRequestPayment {
          * {@link com.yandex.money.api.methods.RequestPayment.Request}.
          */
         private Request(String patternId, Map<String, String> paymentParameters) {
-            super(RequestPaymentTypeAdapter.getInstance());
+            super(RequestPayment.class);
 
             addParameter("pattern_id", patternId);
             addParameters(paymentParameters);
@@ -287,8 +319,7 @@ public class RequestPayment extends BaseRequestPayment {
      */
     public final static class Builder extends BaseRequestPayment.Builder {
 
-        List<MoneySource> moneySources = Collections.emptyList();
-        boolean cscRequired;
+        MoneySource moneySource;
         BigDecimal balance;
         AccountStatus recipientAccountStatus;
         AccountType recipientAccountType;
@@ -297,13 +328,8 @@ public class RequestPayment extends BaseRequestPayment {
         String extActionUri;
         Boolean multipleRecipientsFound;
 
-        public Builder setMoneySources(List<MoneySource> moneySources) {
-            this.moneySources = moneySources;
-            return this;
-        }
-
-        public Builder setCscRequired(boolean cscRequired) {
-            this.cscRequired = cscRequired;
+        public Builder setMoneySources(MoneySource moneySource) {
+            this.moneySource = moneySource;
             return this;
         }
 
