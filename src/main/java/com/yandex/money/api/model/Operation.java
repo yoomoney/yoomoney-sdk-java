@@ -27,7 +27,6 @@ package com.yandex.money.api.model;
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.util.Constants;
-import com.yandex.money.api.util.Enums;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -332,129 +331,69 @@ public class Operation {
     /**
      * Status of operation.
      */
-    public enum Status implements Enums.WithCode<Status> {
+    public enum Status {
         /**
          * Operation succeeded.
          */
         @SerializedName(Constants.Status.SUCCESS)
-        SUCCESS(Constants.Status.SUCCESS),
+        SUCCESS,
         /**
          * Operation refused.
          */
         @SerializedName(Constants.Status.REFUSED)
-        REFUSED(Constants.Status.REFUSED),
+        REFUSED,
         /**
          * Operation is in progress, e.g. P2P with protection code has not been received.
          */
         @SerializedName(Constants.Status.IN_PROGRESS)
-        IN_PROGRESS(Constants.Status.IN_PROGRESS);
-
-        public final String code;
-
-        Status(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String getCode() {
-            return code;
-        }
-
-        @Override
-        public Status[] getValues() {
-            return values();
-        }
-
-        public static Status parseOrThrow(String code) {
-            return Enums.parseOrThrow(SUCCESS, code);
-        }
+        IN_PROGRESS
     }
 
     /**
      * Type of operation.
      */
-    public enum Type implements Enums.WithCode<Type> {
+    public enum Type {
         /**
          * Payment to a shop.
          */
         @SerializedName("payment-shop")
-        PAYMENT_SHOP("payment-shop"),
+        PAYMENT_SHOP,
         /**
          * Outgoing transfer.
          */
         @SerializedName("outgoing-transfer")
-        OUTGOING_TRANSFER("outgoing-transfer"),
+        OUTGOING_TRANSFER,
         /**
          * Incoming transfer.
          */
         @SerializedName("incoming-transfer")
-        INCOMING_TRANSFER("incoming-transfer"),
+        INCOMING_TRANSFER,
         /**
          * Incoming transfer with protection code.
          */
         @SerializedName("incoming-transfer-protected")
-        INCOMING_TRANSFER_PROTECTED("incoming-transfer-protected"),
+        INCOMING_TRANSFER_PROTECTED,
         /**
          * Deposition.
          */
         @SerializedName("deposition")
-        DEPOSITION("deposition");
-
-        public final String code;
-
-        Type(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String getCode() {
-            return code;
-        }
-
-        @Override
-        public Type[] getValues() {
-            return values();
-        }
-
-        public static Type parseOrThrow(String code) {
-            return Enums.parseOrThrow(PAYMENT_SHOP, code);
-        }
+        DEPOSITION
     }
 
     /**
      * Direction of operation.
      */
-    public enum Direction implements Enums.WithCode<Direction> {
+    public enum Direction {
         /**
          * Incoming.
          */
         @SerializedName("in")
-        INCOMING("in"),
+        INCOMING,
         /**
          * Outgoing.
          */
         @SerializedName("out")
-        OUTGOING("out");
-
-        public final String code;
-
-        Direction(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String getCode() {
-            return code;
-        }
-
-        @Override
-        public Direction[] getValues() {
-            return values();
-        }
-
-        public static Direction parseOrThrow(String code) {
-            return Enums.parseOrThrow(INCOMING, code);
-        }
+        OUTGOING
     }
 
     /**
