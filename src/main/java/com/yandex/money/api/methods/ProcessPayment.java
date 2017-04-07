@@ -24,12 +24,12 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.DigitalGoods;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.methods.ProcessPaymentTypeAdapter;
 import com.yandex.money.api.util.Enums;
 
 import java.math.BigDecimal;
@@ -39,51 +39,58 @@ import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Process payment.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class ProcessPayment extends BaseProcessPayment {
 
     /**
      * Payment id.
      */
+    @SerializedName("payment_id")
     public final String paymentId;
 
     /**
      * Account's balance.
      */
+    @SerializedName("balance")
     public final BigDecimal balance;
 
     /**
      * Payer's account number.
      */
+    @SerializedName("payer")
     public final String payer;
 
     /**
      * Payee's account number.
      */
+    @SerializedName("payee")
     public final String payee;
 
     /**
      * Amount payee will receive.
      */
+    @SerializedName("credit_amount")
     public final BigDecimal creditAmount;
 
     /**
      * URL for locked accounts URI that can be used to unlock it.
      */
+    @SerializedName("account_unblock_uri")
     public final String accountUnblockUri;
 
+    @SerializedName("payee_uid")
     public final String payeeUid;
 
     /**
      * Link for payment receiving.
      */
+    @SerializedName("hold_for_pickup_link")
     public final String holdForPickupLink;
 
     /**
      * Received digital goods.
      */
+    @SerializedName("digital_goods")
     public final DigitalGoods digitalGoods;
 
     /**
@@ -231,7 +238,7 @@ public class ProcessPayment extends BaseProcessPayment {
         public Request(String requestId, MoneySource moneySource, String csc, String extAuthSuccessUri,
                        String extAuthFailUri) {
 
-            super(ProcessPaymentTypeAdapter.getInstance());
+            super(ProcessPayment.class);
             addParameter("request_id", checkNotEmpty(requestId, "requestId"));
             addParameter("csc", csc);
             addParameter("ext_auth_success_uri", extAuthSuccessUri);

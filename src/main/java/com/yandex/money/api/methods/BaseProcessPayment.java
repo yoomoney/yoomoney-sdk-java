@@ -24,9 +24,9 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.util.Constants;
-import com.yandex.money.api.util.Enums;
 
 import java.util.Collections;
 import java.util.Map;
@@ -36,16 +36,20 @@ import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Base class for all process payment operations.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public abstract class BaseProcessPayment {
 
+    @SerializedName("status")
     public final Status status;
+    @SerializedName("error")
     public final Error error;
+    @SerializedName("invoice_id")
     public final String invoiceId;
+    @SerializedName("acs_uri")
     public final String acsUri;
+    @SerializedName("acs_params")
     public final Map<String, String> acsParams;
+    @SerializedName("next_retry")
     public final long nextRetry;
 
     /**
@@ -64,8 +68,34 @@ public abstract class BaseProcessPayment {
         error = builder.error;
         invoiceId = builder.invoiceId;
         acsUri = builder.acsUri;
-        acsParams = Collections.unmodifiableMap(checkNotNull(builder.acsParams, "acsParams"));
+        acsParams = builder.acsParams != null ? Collections.unmodifiableMap(builder.acsParams) : null;
         nextRetry = builder.nextRetry;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        BaseProcessPayment that = (BaseProcessPayment) o;
+
+        if (nextRetry != that.nextRetry) return false;
+        if (status != that.status) return false;
+        if (error != that.error) return false;
+        if (invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) return false;
+        if (acsUri != null ? !acsUri.equals(that.acsUri) : that.acsUri != null) return false;
+        return acsParams != null ? acsParams.equals(that.acsParams) : that.acsParams == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = status.hashCode();
+        result = 31 * result + (error != null ? error.hashCode() : 0);
+        result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
+        result = 31 * result + (acsUri != null ? acsUri.hashCode() : 0);
+        result = 31 * result + (acsParams != null ? acsParams.hashCode() : 0);
+        result = 31 * result + (int) (nextRetry ^ (nextRetry >>> 32));
+        return result;
     }
 
     @Override
@@ -80,58 +110,15 @@ public abstract class BaseProcessPayment {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        BaseProcessPayment that = (BaseProcessPayment) o;
-
-        return nextRetry == that.nextRetry &&
-                status == that.status &&
-                error == that.error &&
-                !(invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) &&
-                !(acsUri != null ? !acsUri.equals(that.acsUri) : that.acsUri != null) &&
-                acsParams.equals(that.acsParams);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = status.hashCode();
-        result = 31 * result + (error != null ? error.hashCode() : 0);
-        result = 31 * result + (invoiceId != null ? invoiceId.hashCode() : 0);
-        result = 31 * result + (acsUri != null ? acsUri.hashCode() : 0);
-        result = 31 * result + acsParams.hashCode();
-        result = 31 * result + (int) (nextRetry ^ (nextRetry >>> 32));
-        return result;
-    }
-
-    public enum Status implements Enums.WithCode<Status> {
-
-        SUCCESS(Constants.Status.SUCCESS),
-        REFUSED(Constants.Status.REFUSED),
-        IN_PROGRESS(Constants.Status.IN_PROGRESS),
-        EXT_AUTH_REQUIRED(Constants.Status.EXT_AUTH_REQUIRED);
-
-        public final String code;
-
-        Status(String code) {
-            this.code = code;
-        }
-
-        @Override
-        public String getCode() {
-            return code;
-        }
-
-        @Override
-        public Status[] getValues() {
-            return values();
-        }
-
-        public static Status parse(String code) {
-            return Enums.parse(SUCCESS, code);
-        }
+    public enum Status {
+        @SerializedName(Constants.Status.SUCCESS)
+        SUCCESS,
+        @SerializedName(Constants.Status.REFUSED)
+        REFUSED,
+        @SerializedName(Constants.Status.IN_PROGRESS)
+        IN_PROGRESS,
+        @SerializedName(Constants.Status.EXT_AUTH_REQUIRED)
+        EXT_AUTH_REQUIRED
     }
 
     public static abstract class Builder {

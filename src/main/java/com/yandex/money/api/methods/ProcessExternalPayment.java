@@ -24,23 +24,22 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.methods.ProcessExternalPaymentTypeAdapter;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
 
 /**
  * Process external payment.
- *
- * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
 public class ProcessExternalPayment extends BaseProcessPayment {
 
     /**
      * Money source info if asked for a money source token.
      */
+    @SerializedName("money_source")
     public final ExternalCard externalCard;
 
     /**
@@ -109,14 +108,13 @@ public class ProcessExternalPayment extends BaseProcessPayment {
          */
         public Request(String instanceId, String requestId, String extAuthSuccessUri, String extAuthFailUri,
                        ExternalCard externalCard, String csc) {
-            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, false, externalCard,
-                    csc);
+            this(instanceId, requestId, extAuthSuccessUri, extAuthFailUri, false, externalCard, csc);
         }
 
         private Request(String instanceId, String requestId, String extAuthSuccessUri, String extAuthFailUri,
                         boolean requestToken, ExternalCard externalCard, String csc) {
 
-            super(ProcessExternalPaymentTypeAdapter.getInstance());
+            super(ProcessExternalPayment.class);
             addParameter("instance_id", checkNotEmpty(instanceId, "instanceId"));
             addParameter("request_id", checkNotEmpty(requestId, "requestId"));
             addParameter("ext_auth_success_uri", checkNotEmpty(extAuthSuccessUri, "extAuthSuccessUri"));
