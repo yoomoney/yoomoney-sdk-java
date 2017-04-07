@@ -81,11 +81,14 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
+        AccountStatus accountStatus = context.deserialize(
+                object.get(MEMBER_RECIPIENT_ACCOUNT_STATUS), AccountStatus.class);
+        AccountType accountType = context.deserialize(object.get(MEMBER_RECIPIENT_ACCOUNT_TYPE), AccountType.class);
 
         RequestPayment.Builder builder = new RequestPayment.Builder()
                 .setBalance(getBigDecimal(object, MEMBER_BALANCE))
-                .setRecipientAccountStatus(AccountStatus.parse(getString(object, MEMBER_RECIPIENT_ACCOUNT_STATUS)))
-                .setRecipientAccountType(AccountType.parse(getString(object, MEMBER_RECIPIENT_ACCOUNT_TYPE)))
+                .setRecipientAccountStatus(accountStatus)
+                .setRecipientAccountType(accountType)
                 .setProtectionCode(getString(object, MEMBER_PROTECTION_CODE))
                 .setAccountUnblockUri(getString(object, MEMBER_ACCOUNT_UNBLOCK_URI))
                 .setExtActionUri(getString(object, MEMBER_EXT_ACTION_URI))
@@ -109,13 +112,9 @@ public final class RequestPaymentTypeAdapter extends BaseTypeAdapter<RequestPaym
         jsonObject.addProperty(MEMBER_ACCOUNT_UNBLOCK_URI, src.accountUnblockUri);
         jsonObject.addProperty(MEMBER_EXT_ACTION_URI, src.extActionUri);
         jsonObject.addProperty(MEMBER_MULTIPLE_RECIPIENTS_FOUND, src.multipleRecipientsFound);
+        jsonObject.add(MEMBER_RECIPIENT_ACCOUNT_STATUS, context.serialize(src.recipientAccountStatus));
+        jsonObject.add(MEMBER_RECIPIENT_ACCOUNT_TYPE, context.serialize(src.recipientAccountType));
 
-        if (src.recipientAccountStatus != null) {
-            jsonObject.addProperty(MEMBER_RECIPIENT_ACCOUNT_STATUS, src.recipientAccountStatus.code);
-        }
-        if (src.recipientAccountType != null) {
-            jsonObject.addProperty(MEMBER_RECIPIENT_ACCOUNT_TYPE, src.recipientAccountType.code);
-        }
         if (!src.moneySources.isEmpty()) {
             jsonObject.add(MEMBER_MONEY_SOURCE, MoneySourceListTypeAdapter.Delegate.serialize(
                     src.moneySources, src.cscRequired));

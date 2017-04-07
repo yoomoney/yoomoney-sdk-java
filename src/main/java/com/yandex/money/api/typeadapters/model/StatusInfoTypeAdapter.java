@@ -36,8 +36,6 @@ import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.getString;
-
 /**
  * @author Slava Yasevich
  */
@@ -63,17 +61,15 @@ public final class StatusInfoTypeAdapter extends BaseTypeAdapter<StatusInfo> {
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return StatusInfo.from(SimpleStatus.parseOrThrow(getString(object, MEMBER_STATUS)),
-                Error.parse(getString(object, MEMBER_ERROR)));
+        return StatusInfo.from((SimpleStatus) context.deserialize(object.get(MEMBER_STATUS), SimpleStatus.class),
+                (Error) context.deserialize(object.get(MEMBER_ERROR), Error.class));
     }
 
     @Override
     public JsonElement serialize(StatusInfo src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.addProperty(MEMBER_STATUS, src.status.code);
-        if (src.error != null) {
-            object.addProperty(MEMBER_ERROR, src.error.code);
-        }
+        object.add(MEMBER_STATUS, context.serialize(src.status));
+        object.add(MEMBER_ERROR, context.serialize(src.error));
         return object;
     }
 

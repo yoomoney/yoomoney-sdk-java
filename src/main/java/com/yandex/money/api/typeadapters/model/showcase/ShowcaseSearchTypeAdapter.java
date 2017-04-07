@@ -64,7 +64,7 @@ public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSea
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        Error error = Error.parse(getString(object, MEMBER_ERROR));
+        Error error = context.deserialize(object.get(MEMBER_ERROR), Error.class);
         if (error == null) {
             List<ShowcaseReference> result = ShowcaseReferenceTypeAdapter.getInstance()
                     .fromJson(object.getAsJsonArray(MEMBER_RESULT));
@@ -77,12 +77,10 @@ public final class ShowcaseSearchTypeAdapter extends BaseTypeAdapter<ShowcaseSea
     @Override
     public JsonElement serialize(ShowcaseSearch src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        Error error = src.error;
-        if (error == null) {
+        object.add(MEMBER_ERROR, context.serialize(src.error));
+        if (src.error == null) {
             object.add(MEMBER_RESULT, ShowcaseReferenceTypeAdapter.getInstance().toJsonArray(src.result));
             object.addProperty(MEMBER_NEXT_PAGE, src.nextPage);
-        } else {
-            object.addProperty(MEMBER_ERROR, error.code);
         }
         return object;
     }

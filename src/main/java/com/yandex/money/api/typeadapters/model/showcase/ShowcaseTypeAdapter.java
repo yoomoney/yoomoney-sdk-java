@@ -35,7 +35,6 @@ import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.Showcase.Error;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
-import com.yandex.money.api.typeadapters.model.AllowedMoneySourceTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.container.GroupTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.container.GroupTypeAdapter.ListDelegate;
 
@@ -85,8 +84,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
             form = ListDelegate.deserialize(array, context);
         }
 
-        List<AllowedMoneySource> moneySources = AllowedMoneySourceTypeAdapter.getInstance()
-                .fromJson(object.getAsJsonArray(MEMBER_MONEY_SOURCE));
+        List<AllowedMoneySource> moneySources = context.deserialize(object.get(MEMBER_MONEY_SOURCE), List.class);
         List<Error> errors = ErrorTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_ERROR));
 
         return new Showcase.Builder()
@@ -102,7 +100,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     public JsonElement serialize(Showcase src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject objects = new JsonObject();
         objects.addProperty(MEMBER_TITLE, src.title);
-        objects.add(MEMBER_MONEY_SOURCE, AllowedMoneySourceTypeAdapter.getInstance().toJsonArray(src.moneySources));
+        objects.add(MEMBER_MONEY_SOURCE, context.serialize(src.moneySources));
         if (!src.errors.isEmpty()) {
             objects.add(MEMBER_ERROR, ErrorTypeAdapter.getInstance().toJsonArray(src.errors));
         }

@@ -25,52 +25,29 @@
 package com.yandex.money.api.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.yandex.money.api.util.Enums;
 
 /**
  * Account status.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public enum AccountStatus implements Enums.WithCode<AccountStatus> {
+public enum AccountStatus {
     /**
      * Anonymous account.
      */
     @SerializedName("anonymous")
-    ANONYMOUS("anonymous"),
+    ANONYMOUS,
     /**
      * Account is closed.
      */
     @SerializedName("closed")
-    CLOSED("closed"),
+    CLOSED,
     /**
      * Named account.
      */
     @SerializedName("named")
-    NAMED("named"),
+    NAMED,
     /**
      * Identified account.
      */
     @SerializedName("identified")
-    IDENTIFIED("identified");
-
-    public final String code;
-
-    AccountStatus(String code) {
-        this.code = code;
-    }
-
-    @Override
-    public String getCode() {
-        return code;
-    }
-
-    @Override
-    public AccountStatus[] getValues() {
-        return values();
-    }
-
-    public static AccountStatus parse(String code) {
-        return Enums.parse(ANONYMOUS, code);
-    }
+    IDENTIFIED
 }

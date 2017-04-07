@@ -24,38 +24,12 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.util.Constants;
-import com.yandex.money.api.util.Enums;
 
-/**
- * @author Slava Yasevich
- */
-public enum SimpleStatus implements Enums.WithCode<SimpleStatus> {
-
-    SUCCESS(Constants.Status.SUCCESS),
-    REFUSED(Constants.Status.REFUSED);
-
-    public final String code;
-
-    SimpleStatus(String code) {
-        this.code = code;
-    }
-
-    @Override
-    public String getCode() {
-        return code;
-    }
-
-    @Override
-    public SimpleStatus[] getValues() {
-        return values();
-    }
-
-    public static SimpleStatus parse(String code) {
-        return Enums.parse(SUCCESS, code);
-    }
-
-    public static SimpleStatus parseOrThrow(String code) {
-        return Enums.parseOrThrow(SUCCESS, code);
-    }
+public enum SimpleStatus {
+    @SerializedName(Constants.Status.SUCCESS)
+    SUCCESS,
+    @SerializedName(Constants.Status.REFUSED)
+    REFUSED
 }

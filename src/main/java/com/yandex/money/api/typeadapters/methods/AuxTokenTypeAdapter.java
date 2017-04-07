@@ -64,15 +64,14 @@ public final class AuxTokenTypeAdapter extends BaseTypeAdapter<AuxToken> {
                                 JsonDeserializationContext context) throws JsonParseException {
         JsonObject object = json.getAsJsonObject();
         return new AuxToken(getString(object, MEMBER_AUX_TOKEN),
-                Error.parse(getString(object, MEMBER_ERROR)));
+                (Error) context.deserialize(object.get(MEMBER_ERROR), Error.class));
     }
 
     @Override
     public JsonElement serialize(AuxToken src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        if (src.error != null) {
-            object.addProperty(MEMBER_ERROR, src.error.code);
-        } else {
+        object.add(MEMBER_ERROR, context.serialize(src.error));
+        if (src.error == null) {
             object.addProperty(MEMBER_AUX_TOKEN, src.auxToken);
         }
         return object;

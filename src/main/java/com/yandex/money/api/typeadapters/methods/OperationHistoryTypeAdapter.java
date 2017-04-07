@@ -66,7 +66,7 @@ public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<Operation
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new OperationHistory(Error.parse(getString(object, MEMBER_ERROR)),
+        return new OperationHistory((Error) context.deserialize(object.get(MEMBER_ERROR), Error.class),
                 getString(object, MEMBER_NEXT_RECORD),
                 toEmptyListIfNull(OperationTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_OPERATIONS))));
     }
@@ -74,9 +74,8 @@ public final class OperationHistoryTypeAdapter extends BaseTypeAdapter<Operation
     @Override
     public JsonElement serialize(OperationHistory src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        if (src.error != null) {
-            object.addProperty(MEMBER_ERROR, src.error.code);
-        } else {
+        object.add(MEMBER_ERROR, context.serialize(src.error));
+        if (src.error == null) {
             object.add(MEMBER_OPERATIONS, OperationTypeAdapter.getInstance().toJsonArray(src.operations));
             object.addProperty(MEMBER_NEXT_RECORD, src.nextRecord);
         }

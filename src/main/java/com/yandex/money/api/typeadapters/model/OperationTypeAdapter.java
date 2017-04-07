@@ -95,6 +95,8 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
 
         final JsonObject o = json.getAsJsonObject();
         try {
+            PayeeIdentifierType recipientType = context.deserialize(
+                    o.get(MEMBER_RECIPIENT_TYPE), PayeeIdentifierType.class);
             return new Operation.Builder()
                     .setOperationId(getString(o, MEMBER_OPERATION_ID))
                     .setStatus(Operation.Status.parseOrThrow(getString(o, MEMBER_STATUS)))
@@ -109,7 +111,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
                     .setType(Operation.Type.parseOrThrow(getString(o, MEMBER_TYPE)))
                     .setSender(getString(o, MEMBER_SENDER))
                     .setRecipient(getString(o, MEMBER_RECIPIENT))
-                    .setRecipientType(PayeeIdentifierType.parse(getString(o, MEMBER_RECIPIENT_TYPE)))
+                    .setRecipientType(recipientType)
                     .setMessage(getString(o, MEMBER_MESSAGE))
                     .setComment(getString(o, MEMBER_COMMENT))
                     .setCodepro(getBoolean(o, MEMBER_CODEPRO))
@@ -145,9 +147,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_TYPE, src.type.code);
         object.addProperty(MEMBER_SENDER, src.sender);
         object.addProperty(MEMBER_RECIPIENT, src.recipient);
-        if (src.recipientType != null) {
-            object.addProperty(MEMBER_RECIPIENT_TYPE, src.recipientType.code);
-        }
+        object.add(MEMBER_RECIPIENT_TYPE, context.serialize(src.recipientType));
         object.addProperty(MEMBER_MESSAGE, src.message);
         object.addProperty(MEMBER_COMMENT, src.comment);
         object.addProperty(MEMBER_CODEPRO, src.codepro);

@@ -24,40 +24,19 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.util.Enums;
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Type of money sources allowe to make a payment.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public enum AllowedMoneySource implements Enums.WithCode<AllowedMoneySource> {
+public enum AllowedMoneySource {
 
-    CARDS("cards"),
-    CASH("cash"),
-    PAYMENT_CARD("payment-card"),
-    WALLET("wallet");
-
-    /**
-     * code
-     */
-    public final String code;
-
-    AllowedMoneySource(String code) {
-        this.code = code;
-    }
-
-    @Override
-    public String getCode() {
-        return code;
-    }
-
-    @Override
-    public AllowedMoneySource[] getValues() {
-        return values();
-    }
-
-    public static AllowedMoneySource parseOrThrow(String code) {
-        return Enums.parseOrThrow(WALLET, code);
-    }
+    @SerializedName("cards")
+    CARDS,
+    @SerializedName("cash")
+    CASH,
+    @SerializedName("payment-card")
+    PAYMENT_CARD,
+    @SerializedName("wallet")
+    WALLET
 }
