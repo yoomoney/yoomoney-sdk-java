@@ -63,7 +63,7 @@ public class OperationHistory {
     public OperationHistory(Error error, String nextRecord, List<Operation> operations) {
         this.error = error;
         this.nextRecord = nextRecord;
-        this.operations = Collections.unmodifiableList(checkNotNull(operations, "operations"));
+        this.operations = operations != null ? Collections.unmodifiableList(operations) : null;
     }
 
     @Override
@@ -73,17 +73,16 @@ public class OperationHistory {
 
         OperationHistory that = (OperationHistory) o;
 
-        return error == that.error &&
-                !(nextRecord != null ? !nextRecord.equals(that.nextRecord)
-                        : that.nextRecord != null) &&
-                operations.equals(that.operations);
+        if (error != that.error) return false;
+        if (nextRecord != null ? !nextRecord.equals(that.nextRecord) : that.nextRecord != null) return false;
+        return operations != null ? operations.equals(that.operations) : that.operations == null;
     }
 
     @Override
     public int hashCode() {
         int result = error != null ? error.hashCode() : 0;
         result = 31 * result + (nextRecord != null ? nextRecord.hashCode() : 0);
-        result = 31 * result + operations.hashCode();
+        result = 31 * result + (operations != null ? operations.hashCode() : 0);
         return result;
     }
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,33 +24,34 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.Iso8601Format;
 
-/**
- * @author Slava Yasevich (vyasevich@yamoney.ru)
- */
-public final class GsonProvider {
+import java.lang.reflect.Type;
+import java.text.ParseException;
 
-    private static final GsonBuilder BUILDER = new GsonBuilder();
-    static {
-        BUILDER.registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter());
-    }
+final class DateTimeTypeAdapter implements JsonSerializer<DateTime>, JsonDeserializer<DateTime> {
 
-    private static Gson gson = BUILDER.create();
-    private static boolean hasNewTypeAdapter = false;
+    @Override
+    public DateTime deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
+            throws JsonParseException {
 
-    public static synchronized Gson getGson() {
-        if (hasNewTypeAdapter) {
-            gson = BUILDER.create();
-            hasNewTypeAdapter = false;
+        try {
+            return Iso8601Format.parse(json.getAsString());
+        } catch (ParseException e) {
+            throw new JsonParseException(e);
         }
-        return gson;
     }
 
-    public static synchronized <T> void registerTypeAdapter(Class<T> cls, TypeAdapter<T> typeAdapter) {
-        BUILDER.registerTypeAdapter(cls, typeAdapter);
-        hasNewTypeAdapter = true;
+    @Override
+    public JsonElement serialize(DateTime src, Type typeOfSrc, JsonSerializationContext context) {
+        return new JsonPrimitive(Iso8601Format.format(src));
     }
 }

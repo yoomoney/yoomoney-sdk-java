@@ -32,7 +32,6 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.ProcessPayment;
 import com.yandex.money.api.model.DigitalGoods;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
-import com.yandex.money.api.typeadapters.model.DigitalGoodsTypeAdapter;
 
 import java.lang.reflect.Type;
 
@@ -73,6 +72,8 @@ public final class ProcessPaymentTypeAdapter extends BaseTypeAdapter<ProcessPaym
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
+
+        DigitalGoods goods = context.deserialize(object.get(MEMBER_DIGITAL_GOODS), DigitalGoods.class);
         ProcessPayment.Builder builder = new ProcessPayment.Builder()
                 .setPaymentId(getString(object, MEMBER_PAYMENT_ID))
                 .setBalance(getBigDecimal(object, MEMBER_BALANCE))
@@ -82,7 +83,8 @@ public final class ProcessPaymentTypeAdapter extends BaseTypeAdapter<ProcessPaym
                 .setAccountUnblockUri(getString(object, MEMBER_ACCOUNT_UNBLOCK_URI))
                 .setPayeeUid(getString(object, MEMBER_PAYEE_UID))
                 .setHoldForPickupLink(getString(object, MEMBER_HOLD_FOR_PICKUP_LINK))
-                .setDigitalGoods(deserializeDigitalGoods(object));
+                .setDigitalGoods(goods);
+
         BaseProcessPaymentTypeAdapter.Delegate.deserialize(object, builder);
         return builder.create();
     }
@@ -98,10 +100,7 @@ public final class ProcessPaymentTypeAdapter extends BaseTypeAdapter<ProcessPaym
         jsonObject.addProperty(MEMBER_ACCOUNT_UNBLOCK_URI, src.accountUnblockUri);
         jsonObject.addProperty(MEMBER_PAYEE_UID, src.payeeUid);
         jsonObject.addProperty(MEMBER_HOLD_FOR_PICKUP_LINK, src.holdForPickupLink);
-        if (src.digitalGoods != null) {
-            jsonObject.add(MEMBER_DIGITAL_GOODS, DigitalGoodsTypeAdapter.getInstance().toJsonTree(
-                    src.digitalGoods));
-        }
+        jsonObject.add(MEMBER_DIGITAL_GOODS, context.serialize(src.digitalGoods));
         BaseProcessPaymentTypeAdapter.Delegate.serialize(jsonObject, src);
         return jsonObject;
     }
@@ -109,15 +108,5 @@ public final class ProcessPaymentTypeAdapter extends BaseTypeAdapter<ProcessPaym
     @Override
     public Class<ProcessPayment> getType() {
         return ProcessPayment.class;
-    }
-
-    private static DigitalGoods deserializeDigitalGoods(JsonObject jsonObject) {
-        JsonElement digitalGoods = jsonObject.get(MEMBER_DIGITAL_GOODS);
-        if (digitalGoods != null) {
-            JsonObject jsonDigitalGoods = digitalGoods.getAsJsonObject();
-            return DigitalGoodsTypeAdapter.getInstance().fromJson(jsonDigitalGoods);
-        } else {
-            return null;
-        }
     }
 }

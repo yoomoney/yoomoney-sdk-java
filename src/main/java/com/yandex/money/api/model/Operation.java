@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.util.Constants;
 import com.yandex.money.api.util.Enums;
@@ -42,123 +43,148 @@ public class Operation {
     /**
      * Operation id.
      */
+    @SerializedName("operation_id")
     public final String operationId;
 
     /**
      * Status of operation.
      */
+    @SerializedName("status")
     public final Status status;
 
     /**
      * Pattern id.
      */
+    @SerializedName("pattern_id")
     public final String patternId;
 
     /**
      * Direction of operation.
      */
+    @SerializedName("direction")
     public final Direction direction;
 
     /**
      * Amount.
      */
+    @SerializedName("amount")
     public final BigDecimal amount;
 
     /**
      * Received amount.
      */
+    @SerializedName("amount_due")
     public final BigDecimal amountDue;
 
     /**
      * Fee.
      */
+    @SerializedName("fee")
     public final BigDecimal fee;
 
     /**
      * Operation datetime.
      */
+    @SerializedName("datetime")
     public final DateTime datetime;
 
     /**
      * Title of operation.
      */
+    @SerializedName("title")
     public final String title;
 
     /**
      * Sender.
      */
+    @SerializedName("sender")
     public final String sender;
 
     /**
      * Recipient.
      */
+    @SerializedName("recipient")
     public final String recipient;
 
     /**
      * Type of recipient identifier.
      */
+    @SerializedName("recipient_type")
     public final PayeeIdentifierType recipientType;
 
     /**
      * Message to recipient.
      */
+    @SerializedName("message")
     public final String message;
 
     /**
      * operation comment
      */
+    @SerializedName("comment")
     public final String comment;
 
     /**
      * {@code true} if operation is protected with a code
      */
+    @SerializedName("codepro")
     public final Boolean codepro;
 
     /**
      * Protection code for operation.
      */
+    @SerializedName("protection_code")
     public final String protectionCode;
 
     /**
      * Protection code expiration datetime.
      */
+    @SerializedName("expires")
     public final DateTime expires;
 
     /**
      * Answer datetime of operation acceptance/revoke.
      */
+    @SerializedName("answer_datetime")
     public final DateTime answerDatetime;
 
     /**
      * Label of operation.
      */
+    @SerializedName("label")
     public final String label;
 
     /**
      * Details of operation.
      */
+    @SerializedName("details")
     public final String details;
 
     /**
      * {@code true} if operation can be repeated.
      */
+    @SerializedName("repeatable")
     public final Boolean repeatable;
 
     /**
      * Payment parameters.
      */
+    @SerializedName("payment_parameters")
     public final Map<String, String> paymentParameters;
 
+    @SerializedName("favourite")
     public final Boolean favorite;
 
     /**
      * Type of operation.
      */
+    @SerializedName("type")
     public final Type type;
 
     /**
      * Digital goods.
      */
+    @SerializedName("digital_goods")
     public final DigitalGoods digitalGoods;
 
     /**
@@ -187,7 +213,8 @@ public class Operation {
         label = builder.label;
         details = builder.details;
         repeatable = builder.repeatable;
-        paymentParameters = Collections.unmodifiableMap(checkNotNull(builder.paymentParameters,"paymentParameters"));
+        paymentParameters = builder.paymentParameters != null ?
+                Collections.unmodifiableMap(builder.paymentParameters) : null;
         favorite = builder.favorite;
         digitalGoods = builder.digitalGoods;
     }
@@ -202,6 +229,73 @@ public class Operation {
 
     public boolean isFavorite() {
         return favorite != null && favorite;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Operation operation = (Operation) o;
+
+        if (!operationId.equals(operation.operationId)) return false;
+        if (status != operation.status) return false;
+        if (patternId != null ? !patternId.equals(operation.patternId) : operation.patternId != null) return false;
+        if (direction != operation.direction) return false;
+        if (!amount.equals(operation.amount)) return false;
+        if (amountDue != null ? !amountDue.equals(operation.amountDue) : operation.amountDue != null) return false;
+        if (fee != null ? !fee.equals(operation.fee) : operation.fee != null) return false;
+        if (!datetime.equals(operation.datetime)) return false;
+        if (!title.equals(operation.title)) return false;
+        if (sender != null ? !sender.equals(operation.sender) : operation.sender != null) return false;
+        if (recipient != null ? !recipient.equals(operation.recipient) : operation.recipient != null) return false;
+        if (recipientType != operation.recipientType) return false;
+        if (message != null ? !message.equals(operation.message) : operation.message != null) return false;
+        if (comment != null ? !comment.equals(operation.comment) : operation.comment != null) return false;
+        if (codepro != null ? !codepro.equals(operation.codepro) : operation.codepro != null) return false;
+        if (protectionCode != null ? !protectionCode.equals(operation.protectionCode) : operation.protectionCode != null)
+            return false;
+        if (expires != null ? !expires.equals(operation.expires) : operation.expires != null) return false;
+        if (answerDatetime != null ? !answerDatetime.equals(operation.answerDatetime) : operation.answerDatetime != null)
+            return false;
+        if (label != null ? !label.equals(operation.label) : operation.label != null) return false;
+        if (details != null ? !details.equals(operation.details) : operation.details != null) return false;
+        if (repeatable != null ? !repeatable.equals(operation.repeatable) : operation.repeatable != null) return false;
+        if (paymentParameters != null ? !paymentParameters.equals(operation.paymentParameters) : operation.paymentParameters != null)
+            return false;
+        if (favorite != null ? !favorite.equals(operation.favorite) : operation.favorite != null) return false;
+        if (type != operation.type) return false;
+        return digitalGoods != null ? digitalGoods.equals(operation.digitalGoods) : operation.digitalGoods == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = operationId.hashCode();
+        result = 31 * result + status.hashCode();
+        result = 31 * result + (patternId != null ? patternId.hashCode() : 0);
+        result = 31 * result + direction.hashCode();
+        result = 31 * result + amount.hashCode();
+        result = 31 * result + (amountDue != null ? amountDue.hashCode() : 0);
+        result = 31 * result + (fee != null ? fee.hashCode() : 0);
+        result = 31 * result + datetime.hashCode();
+        result = 31 * result + title.hashCode();
+        result = 31 * result + (sender != null ? sender.hashCode() : 0);
+        result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
+        result = 31 * result + (recipientType != null ? recipientType.hashCode() : 0);
+        result = 31 * result + (message != null ? message.hashCode() : 0);
+        result = 31 * result + (comment != null ? comment.hashCode() : 0);
+        result = 31 * result + (codepro != null ? codepro.hashCode() : 0);
+        result = 31 * result + (protectionCode != null ? protectionCode.hashCode() : 0);
+        result = 31 * result + (expires != null ? expires.hashCode() : 0);
+        result = 31 * result + (answerDatetime != null ? answerDatetime.hashCode() : 0);
+        result = 31 * result + (label != null ? label.hashCode() : 0);
+        result = 31 * result + (details != null ? details.hashCode() : 0);
+        result = 31 * result + (repeatable != null ? repeatable.hashCode() : 0);
+        result = 31 * result + (paymentParameters != null ? paymentParameters.hashCode() : 0);
+        result = 31 * result + (favorite != null ? favorite.hashCode() : 0);
+        result = 31 * result + type.hashCode();
+        result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
+        return result;
     }
 
     @Override
@@ -235,72 +329,6 @@ public class Operation {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Operation operation = (Operation) o;
-
-        if (!operationId.equals(operation.operationId)) return false;
-        if (status != operation.status) return false;
-        if (patternId != null ? !patternId.equals(operation.patternId) : operation.patternId != null) return false;
-        if (direction != operation.direction) return false;
-        if (!amount.equals(operation.amount)) return false;
-        if (amountDue != null ? !amountDue.equals(operation.amountDue) : operation.amountDue != null) return false;
-        if (fee != null ? !fee.equals(operation.fee) : operation.fee != null) return false;
-        if (!datetime.equals(operation.datetime)) return false;
-        if (!title.equals(operation.title)) return false;
-        if (sender != null ? !sender.equals(operation.sender) : operation.sender != null) return false;
-        if (recipient != null ? !recipient.equals(operation.recipient) : operation.recipient != null) return false;
-        if (recipientType != operation.recipientType) return false;
-        if (message != null ? !message.equals(operation.message) : operation.message != null) return false;
-        if (comment != null ? !comment.equals(operation.comment) : operation.comment != null) return false;
-        if (codepro != null ? !codepro.equals(operation.codepro) : operation.codepro != null) return false;
-        if (protectionCode != null ? !protectionCode.equals(operation.protectionCode) : operation.protectionCode != null)
-            return false;
-        if (expires != null ? !expires.equals(operation.expires) : operation.expires != null) return false;
-        if (answerDatetime != null ? !answerDatetime.equals(operation.answerDatetime) : operation.answerDatetime != null)
-            return false;
-        if (label != null ? !label.equals(operation.label) : operation.label != null) return false;
-        if (details != null ? !details.equals(operation.details) : operation.details != null) return false;
-        if (repeatable != null ? !repeatable.equals(operation.repeatable) : operation.repeatable != null) return false;
-        if (!paymentParameters.equals(operation.paymentParameters)) return false;
-        if (favorite != null ? !favorite.equals(operation.favorite) : operation.favorite != null) return false;
-        if (type != operation.type) return false;
-        return digitalGoods != null ? digitalGoods.equals(operation.digitalGoods) : operation.digitalGoods == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = operationId.hashCode();
-        result = 31 * result + status.hashCode();
-        result = 31 * result + (patternId != null ? patternId.hashCode() : 0);
-        result = 31 * result + direction.hashCode();
-        result = 31 * result + amount.hashCode();
-        result = 31 * result + (amountDue != null ? amountDue.hashCode() : 0);
-        result = 31 * result + (fee != null ? fee.hashCode() : 0);
-        result = 31 * result + datetime.hashCode();
-        result = 31 * result + title.hashCode();
-        result = 31 * result + (sender != null ? sender.hashCode() : 0);
-        result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
-        result = 31 * result + (recipientType != null ? recipientType.hashCode() : 0);
-        result = 31 * result + (message != null ? message.hashCode() : 0);
-        result = 31 * result + (comment != null ? comment.hashCode() : 0);
-        result = 31 * result + (codepro != null ? codepro.hashCode() : 0);
-        result = 31 * result + (protectionCode != null ? protectionCode.hashCode() : 0);
-        result = 31 * result + (expires != null ? expires.hashCode() : 0);
-        result = 31 * result + (answerDatetime != null ? answerDatetime.hashCode() : 0);
-        result = 31 * result + (label != null ? label.hashCode() : 0);
-        result = 31 * result + (details != null ? details.hashCode() : 0);
-        result = 31 * result + (repeatable != null ? repeatable.hashCode() : 0);
-        result = 31 * result + paymentParameters.hashCode();
-        result = 31 * result + (favorite != null ? favorite.hashCode() : 0);
-        result = 31 * result + type.hashCode();
-        result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
-        return result;
-    }
-
     /**
      * Status of operation.
      */
@@ -308,14 +336,17 @@ public class Operation {
         /**
          * Operation succeeded.
          */
+        @SerializedName(Constants.Status.SUCCESS)
         SUCCESS(Constants.Status.SUCCESS),
         /**
          * Operation refused.
          */
+        @SerializedName(Constants.Status.REFUSED)
         REFUSED(Constants.Status.REFUSED),
         /**
          * Operation is in progress, e.g. P2P with protection code has not been received.
          */
+        @SerializedName(Constants.Status.IN_PROGRESS)
         IN_PROGRESS(Constants.Status.IN_PROGRESS);
 
         public final String code;
@@ -346,22 +377,27 @@ public class Operation {
         /**
          * Payment to a shop.
          */
+        @SerializedName("payment-shop")
         PAYMENT_SHOP("payment-shop"),
         /**
          * Outgoing transfer.
          */
+        @SerializedName("outgoing-transfer")
         OUTGOING_TRANSFER("outgoing-transfer"),
         /**
          * Incoming transfer.
          */
+        @SerializedName("incoming-transfer")
         INCOMING_TRANSFER("incoming-transfer"),
         /**
          * Incoming transfer with protection code.
          */
+        @SerializedName("incoming-transfer-protected")
         INCOMING_TRANSFER_PROTECTED("incoming-transfer-protected"),
         /**
          * Deposition.
          */
+        @SerializedName("deposition")
         DEPOSITION("deposition");
 
         public final String code;
@@ -392,10 +428,12 @@ public class Operation {
         /**
          * Incoming.
          */
+        @SerializedName("in")
         INCOMING("in"),
         /**
          * Outgoing.
          */
+        @SerializedName("out")
         OUTGOING("out");
 
         public final String code;

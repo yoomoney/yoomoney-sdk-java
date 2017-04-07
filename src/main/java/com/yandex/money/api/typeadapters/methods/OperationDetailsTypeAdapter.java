@@ -31,8 +31,8 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.methods.OperationDetails;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
-import com.yandex.money.api.typeadapters.model.OperationTypeAdapter;
 
 import java.lang.reflect.Type;
 
@@ -63,7 +63,7 @@ public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<Operation
 
         JsonObject object = json.getAsJsonObject();
         Error error = context.deserialize(object.get(MEMBER_ERROR), Error.class);
-        return error == null ? new OperationDetails(null, OperationTypeAdapter.getInstance().fromJson(json)) :
+        return error == null ? new OperationDetails(null, (Operation) context.deserialize(object, Operation.class)) :
                 new OperationDetails(error, null);
     }
 
@@ -74,7 +74,7 @@ public final class OperationDetailsTypeAdapter extends BaseTypeAdapter<Operation
             object.add(MEMBER_ERROR, context.serialize(src.error));
             return object;
         } else {
-            return OperationTypeAdapter.getInstance().toJsonTree(src.operation);
+            return context.serialize(src.operation);
         }
     }
 
