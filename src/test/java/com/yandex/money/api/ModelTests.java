@@ -38,15 +38,9 @@ import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.ExternalCard;
-import com.yandex.money.api.model.showcase.AmountType;
-import com.yandex.money.api.model.showcase.CustomFee;
-import com.yandex.money.api.model.showcase.NoFee;
-import com.yandex.money.api.model.showcase.StdFee;
 import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.TypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import java.io.FileNotFoundException;
@@ -139,22 +133,6 @@ public class ModelTests {
         performTest(Error.TECHNICAL_ERROR, Error.class);
     }
 
-    @Test
-    public void testFee() {
-        performTest(new StdFee(BigDecimal.TEN, BigDecimal.ONE, BigDecimal.ZERO, null,
-                AmountType.NET_AMOUNT), FeeTypeAdapter.getInstance());
-    }
-
-    @Test
-    public void testNoFee() {
-        try {
-            performTest(NoFee.getInstance(), FeeTypeAdapter.getInstance());
-            Assert.fail();
-        } catch (NullPointerException e) {
-            // does nothing
-        }
-    }
-
     /**
      * Reads JSON path and asserts it for equality after deserialization and serialization steps.
      *
@@ -216,10 +194,5 @@ public class ModelTests {
                 .setType(Card.Type.AMERICAN_EXPRESS)
                 .setPanFragment("1234 56** **** 7890");
         return builder.create();
-    }
-
-    @Test
-    void testCustomFee() {
-        performTest(CustomFee.getInstance(), FeeTypeAdapter.getInstance());
     }
 }

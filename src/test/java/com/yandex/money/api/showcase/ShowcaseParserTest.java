@@ -28,10 +28,10 @@ import com.yandex.money.api.TestEnvironment;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.Currency;
 import com.yandex.money.api.model.showcase.AmountType;
+import com.yandex.money.api.model.showcase.DefaultFee;
 import com.yandex.money.api.model.showcase.Fee;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.ShowcaseContext;
-import com.yandex.money.api.model.showcase.StdFee;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.TextBlock;
@@ -270,8 +270,8 @@ public class ShowcaseParserTest {
     }
 
     private void checkFee(Fee fee) {
-        assertTrue(fee instanceof StdFee);
-        StdFee stdFee = (StdFee) fee;
+        assertTrue(fee instanceof DefaultFee);
+        DefaultFee stdFee = (DefaultFee) fee;
         assertEquals(stdFee.a, new BigDecimal("0.02"));
         assertEquals(stdFee.b, new BigDecimal("10.00"));
         assertEquals(stdFee.c, new BigDecimal("10.00"));

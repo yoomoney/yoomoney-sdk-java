@@ -31,7 +31,7 @@ import java.math.BigDecimal;
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public final class CustomFee implements Fee {
+final class CustomFee implements Fee {
 
     private static final CustomFee INSTANCE = new CustomFee();
 

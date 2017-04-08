@@ -34,10 +34,8 @@ import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Standard fee.
- *
- * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public final class StdFee implements Fee {
+final class StdFee implements Fee {
 
     /**
      * Coefficient of amount due.
