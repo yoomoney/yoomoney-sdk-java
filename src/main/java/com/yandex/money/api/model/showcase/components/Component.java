@@ -25,7 +25,6 @@
 package com.yandex.money.api.model.showcase.components;
 
 import com.yandex.money.api.util.Enums;
-import com.yandex.money.api.util.ToStringBuilder;
 
 /**
  * Base entity of payment form. All components have appropriate builders and should be
@@ -35,19 +34,12 @@ import com.yandex.money.api.util.ToStringBuilder;
  */
 public abstract class Component {
 
-    @Override
-    public final String toString() {
-        return getToStringBuilder().toString();
-    }
-
     /**
      * Validates component state.
      *
      * @return {@code true} if instance is valid and {@code false} otherwise.
      */
     public abstract boolean isValid();
-
-    protected abstract ToStringBuilder getToStringBuilder();
 
     /**
      * Possible field types.

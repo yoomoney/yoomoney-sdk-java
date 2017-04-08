@@ -25,7 +25,6 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.model.showcase.components.Parameter;
-import com.yandex.money.api.util.ToStringBuilder;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
@@ -122,15 +121,6 @@ public abstract class ParameterControl extends Control implements Parameter {
      */
     public boolean isValid(String value) {
         return !required || (value != null && !value.isEmpty());
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder()
-                .setName("ParameterControl")
-                .append("name", name)
-                .append("value", value)
-                .append("valueAutoFill", valueAutoFill);
     }
 
     protected void onValueSet(String value) {

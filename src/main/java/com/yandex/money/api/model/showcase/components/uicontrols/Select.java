@@ -26,7 +26,6 @@ package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.util.Enums;
-import com.yandex.money.api.util.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -99,16 +98,6 @@ public class Select extends ParameterControl {
         result = 31 * result + (style != null ? style.hashCode() : 0);
         result = 31 * result + (selectedOption != null ? selectedOption.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder()
-                .setName("Select")
-                .append("options", options)
-                .append("values", values)
-                .append("style", style)
-                .append("selectedOption", selectedOption);
     }
 
     @Override

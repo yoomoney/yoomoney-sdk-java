@@ -26,7 +26,6 @@ package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.util.Enums;
-import com.yandex.money.api.util.ToStringBuilder;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
@@ -79,13 +78,6 @@ public class Group extends Container<Component> {
         int result = super.hashCode();
         result = 31 * result + layout.hashCode();
         return result;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder()
-                .setName("Group")
-                .append("layout", layout);
     }
 
     /**

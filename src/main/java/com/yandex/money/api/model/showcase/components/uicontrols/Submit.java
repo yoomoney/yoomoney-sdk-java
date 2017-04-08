@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.util.ToStringBuilder;
-
 /**
  * Submit button.
  *
@@ -40,11 +38,6 @@ public class Submit extends Control {
     @Override
     public boolean isValid() {
         return true;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Submit");
     }
 
     /**

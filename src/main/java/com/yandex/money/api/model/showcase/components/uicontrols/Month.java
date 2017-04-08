@@ -24,8 +24,6 @@
 
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.util.ToStringBuilder;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -54,11 +52,6 @@ public class Month extends Date {
     @Override
     public DateFormat getFormatter() {
         return FORMATTER;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Month");
     }
 
     /**

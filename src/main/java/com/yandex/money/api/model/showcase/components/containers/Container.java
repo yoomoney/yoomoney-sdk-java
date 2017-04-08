@@ -25,7 +25,6 @@
 package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.util.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,13 +71,6 @@ public abstract class Container<T> extends Component {
         int result = items.hashCode();
         result = 31 * result + (label != null ? label.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("Container")
-                .append("label", label)
-                .append("items", items);
     }
 
     /**

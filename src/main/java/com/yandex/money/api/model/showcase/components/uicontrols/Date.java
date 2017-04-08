@@ -27,7 +27,6 @@ package com.yandex.money.api.model.showcase.components.uicontrols;
 import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.time.Period;
 import com.yandex.money.api.util.Strings;
-import com.yandex.money.api.util.ToStringBuilder;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -135,14 +134,6 @@ public class Date extends ParameterControl {
         result = 31 * result + (min != null ? min.hashCode() : 0);
         result = 31 * result + (max != null ? max.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder()
-                .setName("Date")
-                .append("min", min)
-                .append("max", max);
     }
 
     private static DateTime parse(String dateTime, DateFormat formatter) throws ParseException {

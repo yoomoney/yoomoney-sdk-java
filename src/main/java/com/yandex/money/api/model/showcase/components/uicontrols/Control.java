@@ -25,7 +25,6 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.util.ToStringBuilder;
 
 /**
  * Base class for all components that allow user's input.
@@ -88,16 +87,6 @@ public abstract class Control extends Component {
         result = 31 * result + (required ? 1 : 0);
         result = 31 * result + (readonly ? 1 : 0);
         return result;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("Control")
-                .append("hint", hint)
-                .append("label", label)
-                .append("alert", alert)
-                .append("required", required)
-                .append("readonly", readonly);
     }
 
     /**

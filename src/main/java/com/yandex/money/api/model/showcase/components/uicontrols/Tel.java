@@ -25,7 +25,6 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.util.Patterns;
-import com.yandex.money.api.util.ToStringBuilder;
 
 /**
  * Telephone number control.
@@ -36,11 +35,6 @@ public class Tel extends Text {
 
     protected Tel(Builder builder) {
         super(builder);
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Tel");
     }
 
     /**
