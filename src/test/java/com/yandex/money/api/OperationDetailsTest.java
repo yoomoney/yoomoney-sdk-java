@@ -64,13 +64,12 @@ public class OperationDetailsTest {
                     operation.operationId);
             OperationDetails operationDetails = client.execute(detailsRequest);
             Assert.assertNotNull(operationDetails);
-            Assert.assertNotNull(operationDetails.operation);
             Assert.assertNull(operationDetails.error);
-            Assert.assertEquals(operation.operationId, operationDetails.operation.operationId);
+            Assert.assertEquals(operation.operationId, operationDetails.operationId);
 
             DateTime datetime = operation.datetime;
             Assert.assertNotNull(datetime);
-            Assert.assertTrue(datetime.equals(operationDetails.operation.datetime));
+            Assert.assertTrue(datetime.equals(operationDetails.datetime));
         }
 
         if (operations.size() > 0) {

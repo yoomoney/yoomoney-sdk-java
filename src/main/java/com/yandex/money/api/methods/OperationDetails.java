@@ -24,57 +24,73 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
 
 /**
  * Operation details result.
- *
- * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public class OperationDetails {
+public class OperationDetails extends Operation {
 
+    @SerializedName("error")
     public final Error error;
-    public final Operation operation;
 
-    /**
-     * Constructor.
-     *
-     * @param error error code
-     * @param operation operation
-     */
-    public OperationDetails(Error error, Operation operation) {
+    public OperationDetails(Builder builder, Error error) {
+        super(builder);
         this.error = error;
-        this.operation = operation;
-    }
-
-    @Override
-    public String toString() {
-        return "OperationDetails{" +
-                "error=" + error +
-                ", operation=" + operation +
-                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         OperationDetails that = (OperationDetails) o;
 
-        return error == that.error &&
-                !(operation != null ? !operation.equals(that.operation) : that.operation != null);
+        return error == that.error;
     }
 
     @Override
     public int hashCode() {
-        int result = error != null ? error.hashCode() : 0;
-        result = 31 * result + (operation != null ? operation.hashCode() : 0);
+        int result = super.hashCode();
+        result = 31 * result + (error != null ? error.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "OperationDetails{" +
+                "operationId='" + operationId + '\'' +
+                ", error=" + error +
+                ", status=" + status +
+                ", patternId='" + patternId + '\'' +
+                ", direction=" + direction +
+                ", amount=" + amount +
+                ", amountDue=" + amountDue +
+                ", fee=" + fee +
+                ", datetime=" + datetime +
+                ", title='" + title + '\'' +
+                ", sender='" + sender + '\'' +
+                ", recipient='" + recipient + '\'' +
+                ", recipientType=" + recipientType +
+                ", message='" + message + '\'' +
+                ", comment='" + comment + '\'' +
+                ", codepro=" + codepro +
+                ", protectionCode='" + protectionCode + '\'' +
+                ", expires=" + expires +
+                ", answerDatetime=" + answerDatetime +
+                ", label='" + label + '\'' +
+                ", details='" + details + '\'' +
+                ", repeatable=" + repeatable +
+                ", paymentParameters=" + paymentParameters +
+                ", favorite=" + favorite +
+                ", type=" + type +
+                ", digitalGoods=" + digitalGoods +
+                '}';
     }
 
     /**
@@ -90,7 +106,7 @@ public class OperationDetails {
          * @param operationId operation's id
          */
         public Request(String operationId) {
-            super(OperationDetailsTypeAdapter.getInstance());
+            super(OperationDetails.class);
             addParameter("operation_id", operationId);
         }
 

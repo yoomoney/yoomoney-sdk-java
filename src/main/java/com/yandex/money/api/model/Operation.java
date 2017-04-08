@@ -237,15 +237,16 @@ public class Operation {
 
         Operation operation = (Operation) o;
 
-        if (!operationId.equals(operation.operationId)) return false;
+        if (operationId != null ? !operationId.equals(operation.operationId) : operation.operationId != null)
+            return false;
         if (status != operation.status) return false;
         if (patternId != null ? !patternId.equals(operation.patternId) : operation.patternId != null) return false;
         if (direction != operation.direction) return false;
-        if (!amount.equals(operation.amount)) return false;
+        if (amount != null ? !amount.equals(operation.amount) : operation.amount != null) return false;
         if (amountDue != null ? !amountDue.equals(operation.amountDue) : operation.amountDue != null) return false;
         if (fee != null ? !fee.equals(operation.fee) : operation.fee != null) return false;
-        if (!datetime.equals(operation.datetime)) return false;
-        if (!title.equals(operation.title)) return false;
+        if (datetime != null ? !datetime.equals(operation.datetime) : operation.datetime != null) return false;
+        if (title != null ? !title.equals(operation.title) : operation.title != null) return false;
         if (sender != null ? !sender.equals(operation.sender) : operation.sender != null) return false;
         if (recipient != null ? !recipient.equals(operation.recipient) : operation.recipient != null) return false;
         if (recipientType != operation.recipientType) return false;
@@ -269,15 +270,15 @@ public class Operation {
 
     @Override
     public int hashCode() {
-        int result = operationId.hashCode();
-        result = 31 * result + status.hashCode();
+        int result = operationId != null ? operationId.hashCode() : 0;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (patternId != null ? patternId.hashCode() : 0);
-        result = 31 * result + direction.hashCode();
-        result = 31 * result + amount.hashCode();
+        result = 31 * result + (direction != null ? direction.hashCode() : 0);
+        result = 31 * result + (amount != null ? amount.hashCode() : 0);
         result = 31 * result + (amountDue != null ? amountDue.hashCode() : 0);
         result = 31 * result + (fee != null ? fee.hashCode() : 0);
-        result = 31 * result + datetime.hashCode();
-        result = 31 * result + title.hashCode();
+        result = 31 * result + (datetime != null ? datetime.hashCode() : 0);
+        result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (sender != null ? sender.hashCode() : 0);
         result = 31 * result + (recipient != null ? recipient.hashCode() : 0);
         result = 31 * result + (recipientType != null ? recipientType.hashCode() : 0);
@@ -292,7 +293,7 @@ public class Operation {
         result = 31 * result + (repeatable != null ? repeatable.hashCode() : 0);
         result = 31 * result + (paymentParameters != null ? paymentParameters.hashCode() : 0);
         result = 31 * result + (favorite != null ? favorite.hashCode() : 0);
-        result = 31 * result + type.hashCode();
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
         return result;
     }

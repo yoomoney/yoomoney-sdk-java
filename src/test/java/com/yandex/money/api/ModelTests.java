@@ -30,6 +30,7 @@ import com.yandex.money.api.methods.AccountInfo;
 import com.yandex.money.api.methods.IncomingTransferAccept;
 import com.yandex.money.api.methods.IncomingTransferReject;
 import com.yandex.money.api.methods.InstanceId;
+import com.yandex.money.api.methods.OperationDetails;
 import com.yandex.money.api.methods.OperationHistory;
 import com.yandex.money.api.methods.RequestExternalPayment;
 import com.yandex.money.api.methods.RequestPayment;
@@ -43,7 +44,6 @@ import com.yandex.money.api.model.showcase.NoFee;
 import com.yandex.money.api.model.showcase.StdFee;
 import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.TypeAdapter;
-import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import org.testng.Assert;
@@ -102,11 +102,10 @@ public class ModelTests {
 
     @Test
     public void testOperationDetails() {
-        OperationDetailsTypeAdapter adapter = OperationDetailsTypeAdapter.getInstance();
-        checkTypeAdapter("/methods/operation-details-1.json", adapter);
-        checkTypeAdapter("/methods/operation-details-2.json", adapter);
-        checkTypeAdapter("/methods/operation-details-3.json", adapter);
-        checkTypeAdapter("/methods/operation-details-4.json", adapter);
+        checkType("/methods/operation-details-1.json", OperationDetails.class);
+        checkType("/methods/operation-details-2.json", OperationDetails.class);
+        checkType("/methods/operation-details-3.json", OperationDetails.class);
+        checkType("/methods/operation-details-4.json", OperationDetails.class);
     }
 
     @Test
