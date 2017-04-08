@@ -24,46 +24,30 @@
 
 package com.yandex.money.api.methods;
 
-import com.yandex.money.api.model.StatusInfo;
+import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleResponse;
+import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.methods.IncomingTransferRejectTypeAdapter;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
-import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Incoming transfer reject operation.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class IncomingTransferReject {
+public class IncomingTransferReject extends SimpleResponse {
 
-    public final StatusInfo statusInfo;
-
-    public IncomingTransferReject(StatusInfo statusInfo) {
-        this.statusInfo = checkNotNull(statusInfo, "statusInfo");
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        IncomingTransferReject that = (IncomingTransferReject) o;
-
-        return statusInfo.equals(that.statusInfo);
-    }
-
-    @Override
-    public int hashCode() {
-        return statusInfo.hashCode();
+    public IncomingTransferReject(SimpleStatus status, Error error) {
+        super(status, error);
     }
 
     @Override
     public String toString() {
         return "IncomingTransferReject{" +
-                "statusInfo=" + statusInfo +
+                "status=" + status +
+                ", error=" + error +
                 '}';
     }
 
@@ -80,7 +64,7 @@ public class IncomingTransferReject {
          * @param operationId rejecting operation id
          */
         public Request(String operationId) {
-            super(IncomingTransferRejectTypeAdapter.getInstance());
+            super(IncomingTransferReject.class);
             addParameter("operation_id", checkNotEmpty(operationId, "operationId"));
         }
 

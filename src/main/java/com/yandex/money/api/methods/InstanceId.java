@@ -24,27 +24,27 @@
 
 package com.yandex.money.api.methods;
 
-import com.yandex.money.api.model.StatusInfo;
+import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleResponse;
+import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.methods.InstanceIdTypeAdapter;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Instance ID result.
- *
- * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
-public class InstanceId {
+public class InstanceId extends SimpleResponse {
 
-    public final StatusInfo statusInfo;
+    @SerializedName("instance_id")
     public final String instanceId;
 
-    public InstanceId(StatusInfo statusInfo, String instanceId) {
-        this.statusInfo = checkNotNull(statusInfo, "statusInfo");
-        if (statusInfo.isSuccessful()) {
+    public InstanceId(SimpleStatus status, Error error, String instanceId) {
+        super(status, error);
+        if (isSuccessful()) {
             checkNotNull(instanceId, "instanceId");
         }
         this.instanceId = instanceId;
@@ -54,16 +54,16 @@ public class InstanceId {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         InstanceId that = (InstanceId) o;
 
-        return statusInfo.equals(that.statusInfo) &&
-                !(instanceId != null ? !instanceId.equals(that.instanceId) : that.instanceId != null);
+        return instanceId != null ? instanceId.equals(that.instanceId) : that.instanceId == null;
     }
 
     @Override
     public int hashCode() {
-        int result = statusInfo.hashCode();
+        int result = super.hashCode();
         result = 31 * result + (instanceId != null ? instanceId.hashCode() : 0);
         return result;
     }
@@ -71,7 +71,8 @@ public class InstanceId {
     @Override
     public String toString() {
         return "InstanceId{" +
-                "statusInfo=" + statusInfo +
+                "status=" + status +
+                ", error=" + error +
                 ", instanceId='" + instanceId + '\'' +
                 '}';
     }
@@ -87,7 +88,7 @@ public class InstanceId {
          * @param clientId client id of the application
          */
         public Request(String clientId) {
-            super(InstanceIdTypeAdapter.getInstance());
+            super(InstanceId.class);
             addParameter("client_id", checkNotEmpty(clientId, "clientId"));
         }
 

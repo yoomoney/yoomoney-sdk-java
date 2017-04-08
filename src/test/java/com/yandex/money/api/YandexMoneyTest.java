@@ -63,9 +63,9 @@ public class YandexMoneyTest {
         reqInstanceId = new InstanceId.Request(TestEnvironment.getClientId());
         respInstanceId = client.execute(reqInstanceId);
 
-        Assert.assertEquals(respInstanceId.statusInfo.status, SimpleStatus.SUCCESS);
+        Assert.assertEquals(respInstanceId.status, SimpleStatus.SUCCESS);
         Assert.assertNotNull(respInstanceId.instanceId);
-        Assert.assertNull(respInstanceId.statusInfo.error);
+        Assert.assertNull(respInstanceId.error);
     }
 
     @Test
@@ -73,9 +73,9 @@ public class YandexMoneyTest {
         reqInstanceId = new InstanceId.Request(" ");
         respInstanceId = client.execute(reqInstanceId);
 
-        Assert.assertEquals(respInstanceId.statusInfo.status, SimpleStatus.REFUSED);
-        Assert.assertNotNull(respInstanceId.statusInfo.error);
-        Assert.assertEquals(respInstanceId.statusInfo.error, Error.ILLEGAL_PARAM_CLIENT_ID);
+        Assert.assertEquals(respInstanceId.status, SimpleStatus.REFUSED);
+        Assert.assertNotNull(respInstanceId.error);
+        Assert.assertEquals(respInstanceId.error, Error.ILLEGAL_PARAM_CLIENT_ID);
         Assert.assertNull(respInstanceId.instanceId);
     }
 

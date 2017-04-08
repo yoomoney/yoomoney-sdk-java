@@ -37,19 +37,13 @@ import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.ExternalCard;
-import com.yandex.money.api.model.SimpleStatus;
-import com.yandex.money.api.model.StatusInfo;
 import com.yandex.money.api.model.showcase.AmountType;
 import com.yandex.money.api.model.showcase.CustomFee;
 import com.yandex.money.api.model.showcase.NoFee;
 import com.yandex.money.api.model.showcase.StdFee;
 import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.TypeAdapter;
-import com.yandex.money.api.typeadapters.methods.IncomingTransferAcceptTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.IncomingTransferRejectTypeAdapter;
-import com.yandex.money.api.typeadapters.methods.InstanceIdTypeAdapter;
 import com.yandex.money.api.typeadapters.methods.OperationDetailsTypeAdapter;
-import com.yandex.money.api.typeadapters.model.StatusInfoTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.FeeTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import org.testng.Assert;
@@ -89,37 +83,21 @@ public class ModelTests {
 
     @Test
     public void testIncomingTransferAccept() {
-        IncomingTransferAcceptTypeAdapter adapter = IncomingTransferAcceptTypeAdapter.getInstance();
-
-        checkTypeAdapter("/methods/incoming-transfer-accept-success.json", adapter);
-        checkTypeAdapter("/methods/incoming-transfer-accept-refused-1.json", adapter);
-        checkTypeAdapter("/methods/incoming-transfer-accept-refused-2.json", adapter);
-
-        performTest(new IncomingTransferAccept(StatusInfo.from(SimpleStatus.SUCCESS, null), null, null), adapter);
-        performTest(new IncomingTransferAccept(StatusInfo.from(SimpleStatus.REFUSED, Error.TECHNICAL_ERROR), null, null),
-                adapter);
+        checkType("/methods/incoming-transfer-accept-success.json", IncomingTransferAccept.class);
+        checkType("/methods/incoming-transfer-accept-refused-1.json", IncomingTransferAccept.class);
+        checkType("/methods/incoming-transfer-accept-refused-2.json", IncomingTransferAccept.class);
     }
 
     @Test
     public void testIncomingTransferReject() {
-        IncomingTransferRejectTypeAdapter adapter = IncomingTransferRejectTypeAdapter.getInstance();
-
-        checkTypeAdapter("/methods/incoming-transfer-reject-success.json", adapter);
-        checkTypeAdapter("/methods/incoming-transfer-reject-refused.json", adapter);
-
-        performTest(new IncomingTransferReject(StatusInfo.from(SimpleStatus.SUCCESS, null)), adapter);
-        performTest(new IncomingTransferReject(StatusInfo.from(SimpleStatus.REFUSED, Error.TECHNICAL_ERROR)), adapter);
+        checkType("/methods/incoming-transfer-reject-success.json", IncomingTransferReject.class);
+        checkType("/methods/incoming-transfer-reject-refused.json", IncomingTransferReject.class);
     }
 
     @Test
     public void testInstanceId() {
-        InstanceIdTypeAdapter adapter = InstanceIdTypeAdapter.getInstance();
-
-        checkTypeAdapter("/methods/instance-id-success.json", adapter);
-        checkTypeAdapter("/methods/instance-id-refused.json", adapter);
-
-        performTest(new InstanceId(StatusInfo.from(SimpleStatus.SUCCESS, null), "123"), adapter);
-        performTest(new InstanceId(StatusInfo.from(SimpleStatus.REFUSED, Error.TECHNICAL_ERROR), null), adapter);
+        checkType("/methods/instance-id-success.json", InstanceId.class);
+        checkType("/methods/instance-id-refused.json", InstanceId.class);
     }
 
     @Test
@@ -176,13 +154,6 @@ public class ModelTests {
         } catch (NullPointerException e) {
             // does nothing
         }
-    }
-
-    @Test
-    public void testStatusInfo() {
-        StatusInfoTypeAdapter adapter = StatusInfoTypeAdapter.getInstance();
-        checkTypeAdapter("/model/status-info-1.json", adapter);
-        checkTypeAdapter("/model/status-info-2.json", adapter);
     }
 
     /**

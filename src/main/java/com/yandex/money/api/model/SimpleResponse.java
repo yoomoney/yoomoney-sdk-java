@@ -24,27 +24,27 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Extended info about status of a response. Holds error, if request wasn't successful.
- *
- * @author Slava Yasevich
  */
-public final class StatusInfo {
-
-    private static final StatusInfo SUCCESS = new StatusInfo(SimpleStatus.SUCCESS, null);
+public class SimpleResponse {
 
     /**
      * Status of the response.
      */
+    @SerializedName("status")
     public final SimpleStatus status;
     /**
      * Error info, if response was unsuccessful.
      */
+    @SerializedName("error")
     public final Error error;
 
-    private StatusInfo(SimpleStatus status, Error error) {
+    public SimpleResponse(SimpleStatus status, Error error) {
         this.status = checkNotNull(status, "status");
         if (status != SimpleStatus.SUCCESS) {
             checkNotNull(error, "error");
@@ -52,16 +52,12 @@ public final class StatusInfo {
         this.error = error;
     }
 
-    public static StatusInfo from(SimpleStatus status, Error error) {
-        return status == SimpleStatus.SUCCESS ? SUCCESS : new StatusInfo(status, error);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        StatusInfo that = (StatusInfo) o;
+        SimpleResponse that = (SimpleResponse) o;
 
         return status == that.status && error == that.error;
     }

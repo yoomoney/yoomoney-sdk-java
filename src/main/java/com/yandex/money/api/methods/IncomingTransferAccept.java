@@ -24,37 +24,41 @@
 
 package com.yandex.money.api.methods;
 
-import com.yandex.money.api.model.StatusInfo;
+import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleResponse;
+import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
-import com.yandex.money.api.typeadapters.methods.IncomingTransferAcceptTypeAdapter;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Incoming transfer accept result.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class IncomingTransferAccept {
+public class IncomingTransferAccept extends SimpleResponse {
 
-    public final StatusInfo statusInfo;
+    @SerializedName("protection_code_attempts_available")
     public final Integer protectionCodeAttemptsAvailable;
+    @SerializedName("ext_action_uri")
     public final String extActionUri;
 
     /**
      * Constructor.
      *
-     * @param statusInfo status of operation
+     * @param status status of request
+     * @param error error code if noth
      * @param protectionCodeAttemptsAvailable number of attempts available after invalid protection code submission
      * @param extActionUri address to perform external action for successful acceptance
      */
-    public IncomingTransferAccept(StatusInfo statusInfo, Integer protectionCodeAttemptsAvailable, String extActionUri) {
-        this.statusInfo = checkNotNull(statusInfo, "statusInfo");
-        switch (statusInfo.status) {
+    public IncomingTransferAccept(SimpleStatus status, Error error, Integer protectionCodeAttemptsAvailable,
+                                  String extActionUri) {
+
+        super(status, error);
+        switch (status) {
             case REFUSED:
-                switch (statusInfo.error) {
+                switch (error) {
                     case ILLEGAL_PARAM_PROTECTION_CODE:
                         checkNotNull(protectionCodeAttemptsAvailable, "protectionCodeAttemptsAvailable");
                         break;
@@ -72,19 +76,18 @@ public class IncomingTransferAccept {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         IncomingTransferAccept that = (IncomingTransferAccept) o;
 
-        return statusInfo.equals(that.statusInfo) &&
-                !(protectionCodeAttemptsAvailable != null ?
-                        !protectionCodeAttemptsAvailable.equals(that.protectionCodeAttemptsAvailable) :
-                        that.protectionCodeAttemptsAvailable != null) &&
-                !(extActionUri != null ? !extActionUri.equals(that.extActionUri) : that.extActionUri != null);
+        if (protectionCodeAttemptsAvailable != null ? !protectionCodeAttemptsAvailable.equals(that.protectionCodeAttemptsAvailable) : that.protectionCodeAttemptsAvailable != null)
+            return false;
+        return extActionUri != null ? extActionUri.equals(that.extActionUri) : that.extActionUri == null;
     }
 
     @Override
     public int hashCode() {
-        int result = statusInfo.hashCode();
+        int result = super.hashCode();
         result = 31 * result + (protectionCodeAttemptsAvailable != null ? protectionCodeAttemptsAvailable.hashCode() : 0);
         result = 31 * result + (extActionUri != null ? extActionUri.hashCode() : 0);
         return result;
@@ -93,7 +96,8 @@ public class IncomingTransferAccept {
     @Override
     public String toString() {
         return "IncomingTransferAccept{" +
-                "statusInfo=" + statusInfo +
+                "status=" + status +
+                ", error=" + error +
                 ", protectionCodeAttemptsAvailable=" + protectionCodeAttemptsAvailable +
                 ", extActionUri='" + extActionUri + '\'' +
                 '}';
@@ -113,7 +117,7 @@ public class IncomingTransferAccept {
          * @param protectionCode protection code if transfer is protected
          */
         public Request(String operationId, String protectionCode) {
-            super(IncomingTransferAcceptTypeAdapter.getInstance());
+            super(IncomingTransferAccept.class);
             addParameter("operation_id", checkNotEmpty(operationId, "operationId"));
             addParameter("protection_code", protectionCode);
         }
