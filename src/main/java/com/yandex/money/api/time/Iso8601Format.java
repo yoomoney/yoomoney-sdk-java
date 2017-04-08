@@ -27,8 +27,9 @@ package com.yandex.money.api.time;
 import com.google.gson.internal.bind.util.ISO8601Utils;
 
 import java.text.ParseException;
-import java.text.ParsePosition;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
@@ -48,7 +49,92 @@ public final class Iso8601Format {
      * @throws ParseException if parsing is not possible
      */
     public static DateTime parse(String date) throws ParseException {
-        return DateTime.from(ISO8601Utils.parse(date, new ParsePosition(0)));
+        int position = 0;
+
+        int year = parseInt(date, position, position += 4);
+        if (checkPosition(date, position, '-')) {
+            ++position;
+        }
+
+        int monthOfYear = parseInt(date, position, position += 2) - 1;
+        if (checkPosition(date, position, '-')) {
+            ++position;
+        }
+
+        int day = parseInt(date, position, position += 2);
+
+        boolean hasTime = checkPosition(date, position, 'T');
+        if (!hasTime) {
+            return DateTime.from(year, monthOfYear, day, 0, 0);
+        }
+
+        int hour = parseInt(date, position += 1, position += 2);
+        if (checkPosition(date, position, ':')) {
+            ++position;
+        }
+
+        int minutes = parseInt(date, position, position += 2);
+        if (checkPosition(date, position, ':')) {
+            ++position;
+        }
+
+        int seconds = 0;
+        int milliseconds = 0;
+        if (position < date.length() && !isTimezoneIndicator(date, position)) {
+            seconds = parseInt(date, position, position += 2);
+            if (seconds > 59 && seconds < 63) seconds = 59; // truncate up to 3 leap seconds
+
+            if (checkPosition(date, position, '.')) {
+                ++position;
+                int endPosition = indexOfNonDigit(date, position + 1); // assume at least one digit
+                endPosition = Math.min(position + 3, endPosition);
+                milliseconds = parseInt(date, position, endPosition);
+
+                switch (endPosition - position) {
+                    case 2:
+                        milliseconds *= 10;
+                        break;
+                    case 1:
+                        milliseconds *= 100;
+                        break;
+                }
+
+                position = endPosition;
+            }
+        }
+
+        if (position > date.length()) {
+            throw new ParseException("no timezone indicator", position);
+        }
+
+        TimeZone timeZone = null;
+        char timeZoneChar = date.charAt(position);
+
+        if (timeZoneChar == 'Z') {
+            timeZone = TimeZone.getTimeZone("GMT");
+        } else if (timeZoneChar == '+' || timeZoneChar == '-') {
+            String timeZoneOffset = date.substring(position);
+
+            timeZoneOffset = timeZoneOffset.length() >= 5 ? timeZoneOffset : timeZoneOffset + "00";
+
+            if ("+0000".equals(timeZoneOffset) || "+00:00".equals(timeZoneOffset)) {
+                timeZone = TimeZone.getTimeZone("GMT");
+            } else {
+                timeZone = TimeZone.getTimeZone("GMT" + timeZoneOffset);
+            }
+        }
+
+        Calendar calendar = new GregorianCalendar(timeZone);
+        calendar.setLenient(false);
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minutes);
+        calendar.set(Calendar.SECOND, seconds);
+        calendar.set(Calendar.MILLISECOND, milliseconds);
+
+        return new DateTime(calendar);
     }
 
     /**
@@ -60,5 +146,37 @@ public final class Iso8601Format {
     public static String format(DateTime dateTime) {
         Calendar calendar = checkNotNull(dateTime, "dateTime").getCalendar();
         return ISO8601Utils.format(calendar.getTime(), true, calendar.getTimeZone());
+    }
+
+    private static int parseInt(String value, int begin, int end) throws ParseException {
+        int result = 0;
+        for (int i = begin; i < end; ++i) {
+            char c = value.charAt(i);
+            if (Character.isDigit(c)) {
+                result = result * 10 + Character.getNumericValue(c);
+            } else {
+                throw new ParseException("unable to parse int value", begin);
+            }
+        }
+        return result;
+    }
+
+    private static boolean checkPosition(String value, int position, char expected) {
+        return position < value.length() && value.charAt(position) == expected;
+    }
+
+    private static boolean isTimezoneIndicator(String value, int position) {
+        char c = value.charAt(position);
+        return c == 'Z' || c == '+' || c == '-';
+    }
+
+    private static int indexOfNonDigit(String value, int position) {
+        for (int i = position; i < value.length(); ++i) {
+            char c = value.charAt(i);
+            if (!Character.isDigit(c)) {
+                return i;
+            }
+        }
+        return value.length();
     }
 }

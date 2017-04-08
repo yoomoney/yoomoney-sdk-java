@@ -41,7 +41,7 @@ public final class DateTime {
 
     private final Calendar calendar;
 
-    private DateTime(Calendar calendar) {
+    DateTime(Calendar calendar) {
         this.calendar = calendar;
     }
 
