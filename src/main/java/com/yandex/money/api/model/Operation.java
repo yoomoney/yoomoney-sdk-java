@@ -220,6 +220,39 @@ public class Operation {
     }
 
     @Override
+    public String toString() {
+        return "Operation{" +
+                "operationId='" + operationId + '\'' +
+                ", status=" + status +
+                ", patternId='" + patternId + '\'' +
+                ", direction=" + direction +
+                ", amount=" + amount +
+                ", amountDue=" + amountDue +
+                ", fee=" + fee +
+                ", datetime=" + datetime +
+                ", title='" + title + '\'' +
+                ", sender='" + sender + '\'' +
+                ", recipient='" + recipient + '\'' +
+                ", recipientType=" + recipientType +
+                ", message='" + message + '\'' +
+                ", comment='" + comment + '\'' +
+                ", codepro=" + codepro +
+                ", protectionCode='" + protectionCode + '\'' +
+                ", expires=" + expires +
+                ", answerDatetime=" + answerDatetime +
+                ", label='" + label + '\'' +
+                ", details='" + details + '\'' +
+                ", repeatable=" + repeatable +
+                ", paymentParameters=" + paymentParameters +
+                ", favorite=" + favorite +
+                ", type=" + type +
+                ", digitalGoods=" + digitalGoods +
+                ", categories=" + categories +
+                ", format='" + format + '\'' +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -289,39 +322,6 @@ public class Operation {
         result = 31 * result + (categories != null ? categories.hashCode() : 0);
         result = 31 * result + (format != null ? format.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Operation{" +
-                "operationId='" + operationId + '\'' +
-                ", status=" + status +
-                ", patternId='" + patternId + '\'' +
-                ", direction=" + direction +
-                ", amount=" + amount +
-                ", amountDue=" + amountDue +
-                ", fee=" + fee +
-                ", datetime=" + datetime +
-                ", title='" + title + '\'' +
-                ", sender='" + sender + '\'' +
-                ", recipient='" + recipient + '\'' +
-                ", recipientType=" + recipientType +
-                ", message='" + message + '\'' +
-                ", comment='" + comment + '\'' +
-                ", codepro=" + codepro +
-                ", protectionCode='" + protectionCode + '\'' +
-                ", expires=" + expires +
-                ", answerDatetime=" + answerDatetime +
-                ", label='" + label + '\'' +
-                ", details='" + details + '\'' +
-                ", repeatable=" + repeatable +
-                ", paymentParameters=" + paymentParameters +
-                ", favorite=" + favorite +
-                ", type=" + type +
-                ", digitalGoods=" + digitalGoods +
-                ", categories=" + categories +
-                ", format='" + format + '\'' +
-                '}';
     }
 
     /**
