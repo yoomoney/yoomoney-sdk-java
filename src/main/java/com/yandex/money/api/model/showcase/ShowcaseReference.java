@@ -70,7 +70,7 @@ public final class ShowcaseReference {
      */
     public final Format format;
 
-    private ShowcaseReference(Builder builder) {
+    ShowcaseReference(Builder builder) {
         scid = builder.scid;
         title = checkNotEmpty(builder.title, "title");
         topIndex = builder.topIndex;
@@ -148,12 +148,12 @@ public final class ShowcaseReference {
 
     public final static class Builder {
 
-        private long scid;
-        private String title;
-        private Integer topIndex;
-        private Format format;
-        private String url = null;
-        private Map<String, String> params = Collections.emptyMap();
+        long scid;
+        String title;
+        Integer topIndex;
+        Format format;
+        String url = null;
+        Map<String, String> params = Collections.emptyMap();
 
         public Builder setScid(long scid) {
             this.scid = scid;

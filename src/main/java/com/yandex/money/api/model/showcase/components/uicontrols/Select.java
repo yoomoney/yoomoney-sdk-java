@@ -58,9 +58,9 @@ public class Select extends ParameterControl {
 
     private Option selectedOption;
 
-    private Select(Builder builder) {
+    protected Select(Builder builder) {
         super(builder);
-        options = Collections.unmodifiableList(builder.options);
+        options = Collections.unmodifiableList(checkNotNull(builder.options, "options"));
         values = Collections.unmodifiableList(getValues(options));
         style = builder.style;
     }
@@ -236,9 +236,9 @@ public class Select extends ParameterControl {
      */
     public static class Builder extends ParameterControl.Builder {
 
-        private final List<Option> options = new ArrayList<>();
+        final List<Option> options = new ArrayList<>();
 
-        private Style style;
+        Style style;
 
         @Override
         public Select create() {

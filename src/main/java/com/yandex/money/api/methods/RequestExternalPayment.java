@@ -44,7 +44,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
     /**
      * Constructor.
      */
-    private RequestExternalPayment(Builder builder) {
+    protected RequestExternalPayment(Builder builder) {
         super(builder);
     }
 

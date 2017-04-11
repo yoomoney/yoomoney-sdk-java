@@ -94,7 +94,7 @@ public class RequestPayment extends BaseRequestPayment {
      */
     public final Boolean multipleRecipientsFound;
 
-    private RequestPayment(Builder builder) {
+    protected RequestPayment(Builder builder) {
         super(builder);
         switch (status) {
             case SUCCESS:
@@ -109,7 +109,7 @@ public class RequestPayment extends BaseRequestPayment {
                 }
                 break;
         }
-        this.moneySources = Collections.unmodifiableList(builder.moneySources);
+        this.moneySources = Collections.unmodifiableList(checkNotNull(builder.moneySources, "moneySource"));
         this.cscRequired = builder.cscRequired;
         this.balance = builder.balance;
         this.recipientAccountStatus = builder.recipientAccountStatus;
@@ -287,18 +287,18 @@ public class RequestPayment extends BaseRequestPayment {
      */
     public final static class Builder extends BaseRequestPayment.Builder {
 
-        private List<MoneySource> moneySources = Collections.emptyList();
-        private boolean cscRequired;
-        private BigDecimal balance;
-        private AccountStatus recipientAccountStatus;
-        private AccountType recipientAccountType;
-        private String protectionCode;
-        private String accountUnblockUri;
-        private String extActionUri;
-        private Boolean multipleRecipientsFound;
+        List<MoneySource> moneySources = Collections.emptyList();
+        boolean cscRequired;
+        BigDecimal balance;
+        AccountStatus recipientAccountStatus;
+        AccountType recipientAccountType;
+        String protectionCode;
+        String accountUnblockUri;
+        String extActionUri;
+        Boolean multipleRecipientsFound;
 
         public Builder setMoneySources(List<MoneySource> moneySources) {
-            this.moneySources = checkNotNull(moneySources, "moneySource");
+            this.moneySources = moneySources;
             return this;
         }
 

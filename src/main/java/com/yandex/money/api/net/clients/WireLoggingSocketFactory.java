@@ -51,7 +51,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  */
 final class WireLoggingSocketFactory extends SSLSocketFactory {
 
-    private static final String TAG = WireLoggingSocketFactory.class.getName();
+    static final String TAG = WireLoggingSocketFactory.class.getName();
 
     private final SSLSocketFactory delegate;
 
@@ -107,7 +107,7 @@ final class WireLoggingSocketFactory extends SSLSocketFactory {
             this.delegate = s;
         }
 
-        private static void logWire(String prefix, byte[] data, int off, int len) {
+        static void logWire(String prefix, byte[] data, int off, int len) {
             StringBuilder buffer = new StringBuilder(prefix)
                     .append(" block buffer ")
                     .append(data.length)

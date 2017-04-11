@@ -28,6 +28,8 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Date;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.text.ParseException;
+
 import static org.testng.Assert.assertTrue;
 
 /**
@@ -36,7 +38,7 @@ import static org.testng.Assert.assertTrue;
 public class MonthTest extends ParameterTest {
 
     @Test
-    public void testValidation() {
+    public void testValidation() throws ParseException {
         Date.Builder builder = new Date.Builder();
         prepareParameter(builder);
         assertTrue(builder.create().isValid("1987-12-31"));

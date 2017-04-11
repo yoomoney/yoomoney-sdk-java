@@ -75,8 +75,8 @@ public class ExternalCard extends Card {
 
     public static class Builder extends Card.Builder {
 
-        private String fundingSourceType;
-        private String moneySourceToken;
+        String fundingSourceType;
+        String moneySourceToken;
 
         public Builder setFundingSourceType(String fundingSourceType) {
             this.fundingSourceType = fundingSourceType;

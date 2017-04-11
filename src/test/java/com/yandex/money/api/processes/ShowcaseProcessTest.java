@@ -34,8 +34,8 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.clients.ApiClient;
+import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
-import org.joda.time.DateTime;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -98,7 +98,7 @@ public final class ShowcaseProcessTest extends Assert {
 
         final ShowcaseContext showcaseContext = new ShowcaseContext(
                 new Stack<ShowcaseContext.Step>(),
-                new DateTime(),
+                DateTime.now(),
                 currentStep,
                 Collections.<String, String>emptyMap(),
                 ShowcaseContext.State.UNKNOWN);
@@ -120,7 +120,7 @@ public final class ShowcaseProcessTest extends Assert {
 
         final ShowcaseContext showcaseContext = new ShowcaseContext(
                 new Stack<ShowcaseContext.Step>(),
-                new DateTime(),
+                DateTime.now(),
                 currentStep,
                 Collections.<String, String>emptyMap(),
                 ShowcaseContext.State.UNKNOWN
@@ -148,7 +148,7 @@ public final class ShowcaseProcessTest extends Assert {
     public void testComplete() throws Exception {
         final ShowcaseContext completedShowcaseContext = new ShowcaseContext(
                 new Stack<ShowcaseContext.Step>(),
-                new DateTime(),
+                DateTime.now(),
                 new ShowcaseContext.Step(getEmptyShowcase(), "http://foobar.foo"),
                 Collections.<String, String>emptyMap(), ShowcaseContext.State.COMPLETED);
         final ShowcaseProcess showcaseProcess = new ShowcaseProcess(getClient(), completedShowcaseContext);

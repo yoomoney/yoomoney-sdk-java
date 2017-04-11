@@ -34,7 +34,7 @@ import com.yandex.money.api.util.ToStringBuilder;
  */
 public class Tel extends Text {
 
-    private Tel(Builder builder) {
+    protected Tel(Builder builder) {
         super(builder);
     }
 

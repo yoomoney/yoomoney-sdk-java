@@ -26,16 +26,15 @@ package com.yandex.money.api.net;
 
 import com.google.gson.JsonElement;
 import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.Iso8601Format;
 import com.yandex.money.api.typeadapters.JsonUtils;
+import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.MimeTypes;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -45,11 +44,6 @@ import java.util.Map;
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public abstract class BaseApiRequest<T> implements ApiRequest<T> {
-
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat
-            .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT")
-            .withLocale(Locale.US)
-            .withZoneUTC();
 
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
@@ -110,7 +104,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param value value
      */
     protected final void addHeader(String key, DateTime value) {
-        addHeader(key, value == null ? null : DATE_TIME_FORMATTER.print(value));
+        addHeader(key, value == null ? null : HttpHeaders.formatDateTime(value));
     }
 
     /**
@@ -189,7 +183,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param dateTime value
      */
     protected final void addParameter(String key, DateTime dateTime) {
-        addParameter(key, dateTime == null ? null : dateTime.toString());
+        addParameter(key, dateTime == null ? null : Iso8601Format.format(dateTime));
     }
 
     /**

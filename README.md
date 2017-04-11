@@ -10,7 +10,6 @@ The library uses:
 
 * [OkHttp][1] 3.4.1
 * [Google GSON][2] 2.7
-* [Joda-Time][7] 2.9.4
 
 ## Usage
 
@@ -29,7 +28,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.yandex.money.api:yandex-money-sdk-java:6.1.0'
+    compile 'com.yandex.money.api:yandex-money-sdk-java:6.1.4'
 }
 ```
 

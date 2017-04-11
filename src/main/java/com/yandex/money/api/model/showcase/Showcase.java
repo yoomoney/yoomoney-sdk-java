@@ -33,9 +33,9 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.HttpClientResponse;
 import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.util.HttpHeaders;
-import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,12 +60,12 @@ public final class Showcase {
     public final List<AllowedMoneySource> moneySources;
     public final List<Error> errors;
 
-    private Showcase(Builder builder) {
+    Showcase(Builder builder) {
         title = checkNotNull(builder.title, "title");
         form = builder.form;
-        hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
-        moneySources = Collections.unmodifiableList(builder.moneySources);
-        errors = Collections.unmodifiableList(builder.errors);
+        hiddenFields = Collections.unmodifiableMap(checkNotNull(builder.hiddenFields, "hiddenFields"));
+        moneySources = Collections.unmodifiableList(checkNotNull(builder.moneySources, "moneySources"));
+        errors = Collections.unmodifiableList(checkNotNull(builder.errors, "errors"));
     }
 
     /**
@@ -121,11 +121,11 @@ public final class Showcase {
 
     public static class Builder {
 
-        private String title;
-        private Map<String, String> hiddenFields = Collections.emptyMap();
-        private Group form;
-        private List<AllowedMoneySource> moneySources = Collections.emptyList();
-        private List<Error> errors = Collections.emptyList();
+        String title;
+        Map<String, String> hiddenFields = Collections.emptyMap();
+        Group form;
+        List<AllowedMoneySource> moneySources = Collections.emptyList();
+        List<Error> errors = Collections.emptyList();
 
         public Builder setTitle(String title) {
             this.title = title;
@@ -133,7 +133,7 @@ public final class Showcase {
         }
 
         public Builder setHiddenFields(Map<String, String> hiddenFields) {
-            this.hiddenFields = checkNotNull(hiddenFields, "hiddenFields");
+            this.hiddenFields = hiddenFields;
             return this;
         }
 
@@ -143,12 +143,12 @@ public final class Showcase {
         }
 
         public Builder setMoneySources(List<AllowedMoneySource> moneySources) {
-            this.moneySources = checkNotNull(moneySources, "moneySources");
+            this.moneySources = moneySources;
             return this;
         }
 
         public Builder setErrors(List<Error> errors) {
-            this.errors = checkNotNull(errors, "errors");
+            this.errors = errors;
             return this;
         }
 

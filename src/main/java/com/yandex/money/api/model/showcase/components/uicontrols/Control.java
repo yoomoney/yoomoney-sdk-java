@@ -105,11 +105,11 @@ public abstract class Control extends Component {
      */
     public static abstract class Builder extends Component.Builder {
 
-        private String hint;
-        private String label;
-        private String alert;
-        private boolean required;
-        private boolean readonly;
+        String hint;
+        String label;
+        String alert;
+        boolean required;
+        boolean readonly;
 
         public Builder() {
             this.required = true;

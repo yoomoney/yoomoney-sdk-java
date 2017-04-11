@@ -43,9 +43,9 @@ public class Group extends Container<Component> {
      */
     public final Layout layout;
 
-    private Group(Builder builder) {
+    protected Group(Builder builder) {
         super(builder);
-        layout = builder.layout;
+        layout = checkNotNull(builder.layout, "layout");
     }
 
     /**
@@ -129,7 +129,7 @@ public class Group extends Container<Component> {
      */
     public static class Builder extends Container.Builder<Component> {
 
-        private Layout layout = Layout.VERTICAL;
+        Layout layout = Layout.VERTICAL;
 
         @Override
         public Group create() {
@@ -137,7 +137,7 @@ public class Group extends Container<Component> {
         }
 
         public Builder setLayout(Layout layout) {
-            this.layout = checkNotNull(layout, "layout");
+            this.layout = layout;
             return this;
         }
     }
