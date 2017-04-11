@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.net;
 
-import org.joda.time.DateTime;
+import com.yandex.money.api.time.DateTime;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 

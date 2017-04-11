@@ -28,9 +28,9 @@ import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.typeadapters.methods.OperationHistoryTypeAdapter;
 import com.yandex.money.api.util.Enums;
-import org.joda.time.DateTime;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -140,8 +140,8 @@ public class OperationHistory {
         /**
          * Use builder to create the request.
          */
-        private Request(Set<FilterType> types, String label, DateTime from, DateTime till,
-                        String startRecord, Integer records, Boolean details) {
+        Request(Set<FilterType> types, String label, DateTime from, DateTime till, String startRecord, Integer records,
+                Boolean details) {
 
             super(OperationHistoryTypeAdapter.getInstance());
             if (from != null && till != null && from.isAfter(till)) {

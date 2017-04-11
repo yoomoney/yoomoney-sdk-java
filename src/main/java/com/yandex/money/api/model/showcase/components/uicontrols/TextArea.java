@@ -90,8 +90,8 @@ public class TextArea extends ParameterControl {
      */
     public static class Builder extends ParameterControl.Builder {
 
-        private Integer minLength;
-        private Integer maxLength;
+        Integer minLength;
+        Integer maxLength;
 
         @Override
         public TextArea create() {

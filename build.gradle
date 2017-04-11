@@ -20,7 +20,6 @@ repositories {
 dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.4.1'
     compile 'com.google.code.gson:gson:2.7'
-    compile 'joda-time:joda-time:2.9.4'
 
     testCompile 'org.testng:testng:6.9.13.4'
     testCompile 'com.squareup.okhttp3:mockwebserver:3.4.1'
@@ -30,7 +29,7 @@ publish {
     userOrg = 'yandex-money'
     groupId = 'com.yandex.money.api'
     artifactId = 'yandex-money-sdk-java'
-    version = '6.1.1'
+    version = '6.1.4'
     website = 'https://github.com/yandex-money/yandex-money-sdk-java'
     issueTracker = "${website}/issues"
     repository = "${website}.git"

@@ -38,6 +38,9 @@ public class Wallet extends MoneySource {
     }
 
     private static class Builder extends MoneySource.Builder {
+        Builder() {
+        }
+
         @Override
         public Wallet create() {
             return INSTANCE;

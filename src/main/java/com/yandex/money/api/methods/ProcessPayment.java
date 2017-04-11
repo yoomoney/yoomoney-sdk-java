@@ -89,7 +89,7 @@ public class ProcessPayment extends BaseProcessPayment {
     /**
      * Use {@link com.yandex.money.api.methods.ProcessPayment.Builder} to create an instance.
      */
-    private ProcessPayment(Builder builder) {
+    protected ProcessPayment(Builder builder) {
         super(builder);
         switch (status) {
             case SUCCESS:
@@ -274,15 +274,15 @@ public class ProcessPayment extends BaseProcessPayment {
      */
     public static final class Builder extends BaseProcessPayment.Builder {
 
-        private String paymentId;
-        private BigDecimal balance;
-        private String payer;
-        private String payee;
-        private BigDecimal creditAmount;
-        private String accountUnblockUri;
-        private String payeeUid;
-        private String holdForPickupLink;
-        private DigitalGoods digitalGoods;
+        String paymentId;
+        BigDecimal balance;
+        String payer;
+        String payee;
+        BigDecimal creditAmount;
+        String accountUnblockUri;
+        String payeeUid;
+        String holdForPickupLink;
+        DigitalGoods digitalGoods;
 
         public Builder setPaymentId(String paymentId) {
             this.paymentId = paymentId;
