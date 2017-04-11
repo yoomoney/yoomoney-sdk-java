@@ -45,7 +45,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
 public final class ParametersBuffer {
 
     private static final String UTF8_NAME = "UTF-8";
-    private static final Charset UTF8_CHARSET = Charset.forName(UTF8_NAME);
+    static final Charset UTF8_CHARSET = Charset.forName(UTF8_NAME);
 
     private Map<String, String> params = Collections.emptyMap();
 
@@ -112,8 +112,8 @@ public final class ParametersBuffer {
         return buffer.getBytes();
     }
 
-    private static String encode(String value) throws UnsupportedEncodingException {
-        return URLEncoder.encode(value, UTF8_NAME);
+    static String encode(String value) throws UnsupportedEncodingException {
+        return URLEncoder.encode(value, UTF8_CHARSET.name());
     }
 
     private void iterate(Buffer buffer) {
@@ -140,6 +140,9 @@ public final class ParametersBuffer {
 
         public final StringBuilder builder = new StringBuilder();
 
+        GetBuffer() {
+        }
+
         @Override
         public void nextParameter(String key, String value) {
             try {
@@ -165,6 +168,9 @@ public final class ParametersBuffer {
 
         private final ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
+        PostBuffer() {
+        }
+
         @Override
         public void nextParameter(String key, String value) {
             try {
@@ -179,7 +185,7 @@ public final class ParametersBuffer {
             }
         }
 
-        public byte[] getBytes() {
+        byte[] getBytes() {
             return stream.toByteArray();
         }
     }

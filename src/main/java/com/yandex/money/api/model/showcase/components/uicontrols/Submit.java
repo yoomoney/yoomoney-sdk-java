@@ -33,7 +33,7 @@ import com.yandex.money.api.util.ToStringBuilder;
  */
 public class Submit extends Control {
 
-    private Submit(Builder builder) {
+    protected Submit(Builder builder) {
         super(builder);
     }
 

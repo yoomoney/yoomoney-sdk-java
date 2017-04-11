@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.model;
 
-import org.joda.time.YearMonth;
+import com.yandex.money.api.time.YearMonth;
 
 /**
  * Information regarding bank card. All methods can return {@code null}.

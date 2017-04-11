@@ -119,7 +119,7 @@ public final class FeeTypeAdapter extends BaseTypeAdapter<Fee> {
             to.addProperty(FeeTypeAdapter.MEMBER_TYPE, FEE_TYPE_MAPPING.get(clazz));
         }
 
-        private static String getFeeType(JsonObject jsonObject) {
+        static String getFeeType(JsonObject jsonObject) {
             return getString(jsonObject, MEMBER_TYPE);
         }
     }

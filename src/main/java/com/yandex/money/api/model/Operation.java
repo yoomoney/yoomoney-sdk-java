@@ -30,7 +30,6 @@ import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 
 import static com.yandex.money.api.util.Common.checkNotNull;

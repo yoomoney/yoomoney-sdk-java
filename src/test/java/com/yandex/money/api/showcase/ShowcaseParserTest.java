@@ -49,9 +49,9 @@ import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
 import com.yandex.money.api.model.showcase.components.uicontrols.Text;
 import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
 import com.yandex.money.api.net.clients.ApiClient;
+import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.util.Currency;
-import org.joda.time.DateTime;
 import org.testng.annotations.Test;
 
 import java.io.ByteArrayInputStream;
@@ -280,8 +280,8 @@ public class ShowcaseParserTest {
     }
 
     private void checkDate(Date date) {
-        assertEquals(date.min, new DateTime(2000, 1, 1, 0, 0));
-        assertEquals(date.max, new DateTime(2010, 1, 1, 0, 0));
+        assertEquals(date.min, DateTime.from(2000, 1, 1, 0, 0));
+        assertEquals(date.max, DateTime.from(2010, 1, 1, 0, 0));
     }
 
     private void checkOptions(List<Select.Option> options) {

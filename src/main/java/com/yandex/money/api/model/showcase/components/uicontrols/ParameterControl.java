@@ -141,9 +141,9 @@ public abstract class ParameterControl extends Control implements Parameter {
      */
     public static abstract class Builder extends Control.Builder {
 
-        private String name;
-        private String value;
-        private AutoFill valueAutoFill;
+        String name;
+        String value;
+        AutoFill valueAutoFill;
 
         @Override
         public abstract ParameterControl create();
