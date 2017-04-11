@@ -26,7 +26,6 @@ package com.yandex.money.api.model;
 
 import com.yandex.money.api.util.Constants;
 import com.yandex.money.api.util.Enums;
-
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
@@ -184,10 +183,10 @@ public class Operation {
         direction = checkNotNull(builder.direction, "direction");
         title = checkNotNull(builder.title, "title");
         patternId = builder.patternId;
-        amount = builder.amount;
+        amount = checkNotNull(builder.amount, "amount");
         amountDue = builder.amountDue;
         fee = builder.fee;
-        datetime = builder.datetime;
+        datetime = checkNotNull(builder.datetime, "datetime");
         sender = builder.sender;
         recipient = builder.recipient;
         recipientType = builder.recipientType;
@@ -200,7 +199,7 @@ public class Operation {
         label = builder.label;
         details = builder.details;
         repeatable = builder.repeatable;
-        paymentParameters = Collections.unmodifiableMap(builder.paymentParameters);
+        paymentParameters = Collections.unmodifiableMap(checkNotNull(builder.paymentParameters,"paymentParameters"));
         favorite = builder.favorite;
         digitalGoods = builder.digitalGoods;
         categories = Collections.unmodifiableList(checkNotNull(builder.categories, "categories"));
@@ -266,7 +265,7 @@ public class Operation {
         if (!amount.equals(operation.amount)) return false;
         if (amountDue != null ? !amountDue.equals(operation.amountDue) : operation.amountDue != null) return false;
         if (fee != null ? !fee.equals(operation.fee) : operation.fee != null) return false;
-        if (!datetime.isEqual(operation.datetime)) return false;
+        if (!datetime.equals(operation.datetime)) return false;
         if (!title.equals(operation.title)) return false;
         if (sender != null ? !sender.equals(operation.sender) : operation.sender != null) return false;
         if (recipient != null ? !recipient.equals(operation.recipient) : operation.recipient != null) return false;
@@ -276,8 +275,8 @@ public class Operation {
         if (codepro != null ? !codepro.equals(operation.codepro) : operation.codepro != null) return false;
         if (protectionCode != null ? !protectionCode.equals(operation.protectionCode) : operation.protectionCode != null)
             return false;
-        if (expires != null ? !expires.isEqual(operation.expires) : operation.expires != null) return false;
-        if (answerDatetime != null ? !answerDatetime.isEqual(operation.answerDatetime) : operation.answerDatetime != null)
+        if (expires != null ? !expires.equals(operation.expires) : operation.expires != null) return false;
+        if (answerDatetime != null ? !answerDatetime.equals(operation.answerDatetime) : operation.answerDatetime != null)
             return false;
         if (label != null ? !label.equals(operation.label) : operation.label != null) return false;
         if (details != null ? !details.equals(operation.details) : operation.details != null) return false;
@@ -495,7 +494,7 @@ public class Operation {
         }
 
         public Builder setAmount(BigDecimal amount) {
-            this.amount = checkNotNull(amount, "amount");
+            this.amount = amount;
             return this;
         }
 
@@ -510,7 +509,7 @@ public class Operation {
         }
 
         public Builder setDatetime(DateTime datetime) {
-            this.datetime = checkNotNull(datetime, "datetime");
+            this.datetime = datetime;
             return this;
         }
 
@@ -580,7 +579,7 @@ public class Operation {
         }
 
         public Builder setPaymentParameters(Map<String, String> paymentParameters) {
-            this.paymentParameters = checkNotNull(paymentParameters, "paymentParameters");
+            this.paymentParameters = paymentParameters;
             return this;
         }
 
