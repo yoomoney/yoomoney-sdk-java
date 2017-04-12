@@ -128,7 +128,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
      * @param component JSON component
      * @return parsed {@link Component.Type}
      */
-    private static Component.Type getTypeFromJsonElement(JsonElement component) {
+    static Component.Type getTypeFromJsonElement(JsonElement component) {
         return Component.Type.parseOrThrow(component.getAsJsonObject()
                 .get(ComponentTypeAdapter.MEMBER_TYPE).getAsString());
     }

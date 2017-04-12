@@ -182,7 +182,7 @@ public class Scope {
         private boolean wallet = true;
         private boolean cards = false;
 
-        private MoneySourceScope() {
+        MoneySourceScope() {
             super("money-source");
         }
 

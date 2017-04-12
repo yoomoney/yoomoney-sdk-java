@@ -67,13 +67,13 @@ public class BalanceDetails {
      */
     public final BigDecimal hold;
 
-    private BalanceDetails(Builder builder) {
-        this.total = builder.total;
-        this.available = builder.available;
-        this.depositionPending = builder.depositionPending;
-        this.blocked = builder.blocked;
-        this.debt = builder.debt;
-        this.hold = builder.hold;
+    BalanceDetails(Builder builder) {
+        total = checkNotNull(builder.total, "total");
+        available = checkNotNull(builder.available, "available");
+        depositionPending = builder.depositionPending;
+        blocked = builder.blocked;
+        debt = builder.debt;
+        hold = builder.hold;
     }
 
     @Override
@@ -117,15 +117,15 @@ public class BalanceDetails {
 
     public static final class Builder {
 
-        private BigDecimal total = BigDecimal.ZERO;
-        private BigDecimal available = BigDecimal.ZERO;
-        private BigDecimal depositionPending;
-        private BigDecimal blocked;
-        private BigDecimal debt;
-        private BigDecimal hold;
+        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal available = BigDecimal.ZERO;
+        BigDecimal depositionPending;
+        BigDecimal blocked;
+        BigDecimal debt;
+        BigDecimal hold;
 
         public Builder setTotal(BigDecimal total) {
-            this.total = checkNotNull(total, "total");
+            this.total = total;
             return this;
         }
 

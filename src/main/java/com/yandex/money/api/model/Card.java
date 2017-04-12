@@ -55,7 +55,7 @@ public class Card extends MoneySource implements BankCardInfo {
         super(builder);
         cardholderName = builder.cardholderName;
         panFragment = builder.panFragment;
-        type = builder.type;
+        type = checkNotNull(builder.type, "type");
     }
 
     @Override
@@ -149,9 +149,9 @@ public class Card extends MoneySource implements BankCardInfo {
 
     public static class Builder extends MoneySource.Builder {
 
-        private String cardholderName;
-        private String panFragment;
-        private Type type = Type.UNKNOWN;
+        String cardholderName;
+        String panFragment;
+        Type type = Type.UNKNOWN;
 
         public Builder setCardholderName(String cardholderName) {
             this.cardholderName = cardholderName;
@@ -164,7 +164,7 @@ public class Card extends MoneySource implements BankCardInfo {
         }
 
         public Builder setType(Type type) {
-            this.type = checkNotNull(type, "type");
+            this.type = type;
             return this;
         }
 

@@ -67,7 +67,7 @@ public abstract class MoneySource {
 
     public static abstract class Builder {
 
-        private String id;
+        String id;
 
         public Builder setId(String id) {
             this.id = id;

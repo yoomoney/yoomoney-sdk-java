@@ -64,7 +64,7 @@ public abstract class BaseProcessPayment {
         error = builder.error;
         invoiceId = builder.invoiceId;
         acsUri = builder.acsUri;
-        acsParams = Collections.unmodifiableMap(builder.acsParams);
+        acsParams = Collections.unmodifiableMap(checkNotNull(builder.acsParams, "acsParams"));
         nextRetry = builder.nextRetry;
     }
 
@@ -136,12 +136,12 @@ public abstract class BaseProcessPayment {
 
     public static abstract class Builder {
 
-        private Status status;
-        private Error error;
-        private String invoiceId;
-        private String acsUri;
-        private Map<String, String> acsParams = Collections.emptyMap();
-        private long nextRetry = TimeUnit.SECONDS.toMillis(5L);
+        Status status;
+        Error error;
+        String invoiceId;
+        String acsUri;
+        Map<String, String> acsParams = Collections.emptyMap();
+        long nextRetry = TimeUnit.SECONDS.toMillis(5L);
 
         public final Builder setStatus(Status status) {
             this.status = status;
@@ -164,7 +164,7 @@ public abstract class BaseProcessPayment {
         }
 
         public final Builder setAcsParams(Map<String, String> acsParams) {
-            this.acsParams = checkNotNull(acsParams, "acsParams");
+            this.acsParams = acsParams;
             return this;
         }
 

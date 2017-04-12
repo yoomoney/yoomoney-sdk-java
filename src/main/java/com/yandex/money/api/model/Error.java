@@ -107,6 +107,7 @@ public enum Error implements Enums.WithCode<Error> {
     PAYMENT_EXPIRED("payment_expired"),
     PAYMENT_REFUSED("payment_refused"),
     PHONE_NUMBER_REFUSED("phone_number_refused"),
+    PIN_CHANGE_TIME_NOT_YET("PIN_CHANGE_TIME_NOT_YET"),
     PIN_SET_REFUSED("pin_set_refused"),
     SUBSCRIPTION_REFUSED("subscription_refused"),
     TECHNICAL_ERROR("technical_error"),

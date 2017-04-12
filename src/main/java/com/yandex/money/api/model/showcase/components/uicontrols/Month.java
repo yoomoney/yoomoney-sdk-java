@@ -48,7 +48,7 @@ public class Month extends Date {
     public static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern(PATTERN)
             .withLocale(Locale.ENGLISH);
 
-    private Month(Builder builder) {
+    protected Month(Builder builder) {
         super(builder);
     }
 

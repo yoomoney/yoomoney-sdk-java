@@ -150,11 +150,11 @@ public abstract class BaseRequestPayment {
 
     public static abstract class Builder {
 
-        private Status status;
-        private String requestId;
-        private Error error;
-        private BigDecimal contractAmount;
-        private String title;
+        Status status;
+        String requestId;
+        Error error;
+        BigDecimal contractAmount;
+        String title;
 
         public final Builder setContractAmount(BigDecimal contractAmount) {
             this.contractAmount = contractAmount;

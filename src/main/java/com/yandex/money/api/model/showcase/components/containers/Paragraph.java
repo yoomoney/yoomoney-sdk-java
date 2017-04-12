@@ -34,7 +34,7 @@ import com.yandex.money.api.util.ToStringBuilder;
  */
 public class Paragraph extends Container<TextBlock> {
 
-    private Paragraph(Builder builder) {
+    protected Paragraph(Builder builder) {
         super(builder);
     }
 
