@@ -31,6 +31,8 @@ import com.yandex.money.api.util.ToStringBuilder;
 
 import java.math.BigDecimal;
 
+import static com.yandex.money.api.util.Common.checkNotNull;
+
 /**
  * Cost of transaction.
  *
@@ -48,10 +50,10 @@ public class Amount extends Number {
      */
     public final Fee fee;
 
-    private Amount(Builder builder) {
+    protected Amount(Builder builder) {
         super(builder);
-        currency = builder.currency;
-        fee = builder.fee;
+        currency = checkNotNull(builder.currency, "currency");
+        fee = checkNotNull(builder.fee, "fee");
     }
 
     @Override
@@ -88,8 +90,8 @@ public class Amount extends Number {
 
         private static final BigDecimal PENNY = new BigDecimal("0.01");
 
-        private Currency currency = Currency.RUB;
-        private Fee fee = NoFee.getInstance();
+        Currency currency = Currency.RUB;
+        Fee fee = NoFee.getInstance();
 
         public Builder() {
             super(PENNY, null, PENNY);

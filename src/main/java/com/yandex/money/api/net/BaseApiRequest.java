@@ -29,10 +29,10 @@ import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.util.MimeTypes;
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
@@ -46,10 +46,8 @@ import java.util.Map;
  */
 public abstract class BaseApiRequest<T> implements ApiRequest<T> {
 
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat
-            .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT")
-            .withLocale(Locale.US)
-            .withZoneUTC();
+    public static final DateFormat DATE_TIME_FORMATTER =
+            new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
 
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> parameters = new HashMap<>();
@@ -110,7 +108,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param value value
      */
     protected final void addHeader(String key, DateTime value) {
-        addHeader(key, value == null ? null : DATE_TIME_FORMATTER.print(value));
+        addHeader(key, value == null ? null : DATE_TIME_FORMATTER.format(value.toDate()));
     }
 
     /**

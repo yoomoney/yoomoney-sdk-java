@@ -169,7 +169,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         }
         object.addProperty(MEMBER_FAVOURITE, src.favorite);
         if (src.digitalGoods != null) {
-            object.addProperty(MEMBER_DIGITAL_GOODS, DigitalGoodsTypeAdapter.getInstance().toJson(src.digitalGoods));
+            object.add(MEMBER_DIGITAL_GOODS, DigitalGoodsTypeAdapter.getInstance().toJsonTree(src.digitalGoods));
         }
         if (!(src.categories == null || src.categories.isEmpty())) {
             object.add(MEMBER_CATEGORIES, new Gson().toJsonTree(src.categories));

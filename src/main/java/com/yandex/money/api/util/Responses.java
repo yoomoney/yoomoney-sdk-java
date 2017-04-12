@@ -29,6 +29,7 @@ import com.yandex.money.api.net.HttpClientResponse;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
+import java.text.ParseException;
 
 /**
  * @author Slava Yasevich
@@ -40,8 +41,12 @@ public final class Responses {
 
     public static DateTime parseDateHeader(HttpClientResponse response, String header) {
         String dateHeader = response.getHeader(header);
-        return dateHeader == null || dateHeader.isEmpty() ? new DateTime() :
-                BaseApiRequest.DATE_TIME_FORMATTER.parseDateTime(dateHeader);
+        try {
+            return dateHeader == null || dateHeader.isEmpty() ? new DateTime() :
+                    new DateTime(BaseApiRequest.DATE_TIME_FORMATTER.parse(dateHeader));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**

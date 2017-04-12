@@ -24,15 +24,20 @@
 
 package com.yandex.money.api.typeadapters.model;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.DigitalGoods;
+import com.yandex.money.api.model.Good;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Type adapter for {@link DigitalGoods}.
@@ -61,20 +66,30 @@ public final class DigitalGoodsTypeAdapter extends BaseTypeAdapter<DigitalGoods>
             throws JsonParseException {
 
         JsonObject object = json.getAsJsonObject();
-        return new DigitalGoods(GoodTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_ARTICLE)),
-                GoodTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_BONUS)));
+        return new DigitalGoods(parseGoods(object, MEMBER_ARTICLE), parseGoods(object, MEMBER_BONUS));
     }
 
     @Override
     public JsonElement serialize(DigitalGoods src, Type typeOfSrc, JsonSerializationContext context) {
         JsonObject object = new JsonObject();
-        object.add(MEMBER_ARTICLE, GoodTypeAdapter.getInstance().toJsonArray(src.article));
-        object.add(MEMBER_BONUS, GoodTypeAdapter.getInstance().toJsonArray(src.bonus));
+        toJsonArray(object, MEMBER_ARTICLE, src.article);
+        toJsonArray(object, MEMBER_BONUS, src.bonus);
         return object;
     }
 
     @Override
     protected Class<DigitalGoods> getType() {
         return DigitalGoods.class;
+    }
+
+    private List<Good> parseGoods(JsonObject object, String memberName) {
+        JsonArray array = object.getAsJsonArray(memberName);
+        if (array == null) return Collections.emptyList();
+        return GoodTypeAdapter.getInstance().fromJson(array);
+    }
+
+    private void toJsonArray(JsonObject object, String memberName, Collection<Good> goods) {
+        if (goods.isEmpty()) return;
+        object.add(memberName, GoodTypeAdapter.getInstance().toJsonArray(goods));
     }
 }

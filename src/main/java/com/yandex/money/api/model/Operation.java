@@ -183,10 +183,10 @@ public class Operation {
         direction = checkNotNull(builder.direction, "direction");
         title = checkNotNull(builder.title, "title");
         patternId = builder.patternId;
-        amount = builder.amount;
+        amount = checkNotNull(builder.amount, "amount");
         amountDue = builder.amountDue;
         fee = builder.fee;
-        datetime = builder.datetime;
+        datetime = checkNotNull(builder.datetime, "datetime");
         sender = builder.sender;
         recipient = builder.recipient;
         recipientType = builder.recipientType;
@@ -199,7 +199,7 @@ public class Operation {
         label = builder.label;
         details = builder.details;
         repeatable = builder.repeatable;
-        paymentParameters = Collections.unmodifiableMap(builder.paymentParameters);
+        paymentParameters = Collections.unmodifiableMap(checkNotNull(builder.paymentParameters,"paymentParameters"));
         favorite = builder.favorite;
         digitalGoods = builder.digitalGoods;
         categories = Collections.unmodifiableList(builder.categories);
@@ -493,7 +493,7 @@ public class Operation {
         }
 
         public Builder setAmount(BigDecimal amount) {
-            this.amount = checkNotNull(amount, "amount");
+            this.amount = amount;
             return this;
         }
 
@@ -508,7 +508,7 @@ public class Operation {
         }
 
         public Builder setDatetime(DateTime datetime) {
-            this.datetime = checkNotNull(datetime, "datetime");
+            this.datetime = datetime;
             return this;
         }
 
@@ -578,7 +578,7 @@ public class Operation {
         }
 
         public Builder setPaymentParameters(Map<String, String> paymentParameters) {
-            this.paymentParameters = checkNotNull(paymentParameters, "paymentParameters");
+            this.paymentParameters = paymentParameters;
             return this;
         }
 

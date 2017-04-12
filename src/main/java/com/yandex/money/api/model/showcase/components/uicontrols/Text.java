@@ -121,8 +121,8 @@ public class Text extends TextArea {
      */
     public static class Builder extends TextArea.Builder {
 
-        private String pattern;
-        private Keyboard keyboard;
+        String pattern;
+        Keyboard keyboard;
 
         @Override
         public Text create() {

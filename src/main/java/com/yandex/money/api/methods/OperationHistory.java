@@ -140,8 +140,8 @@ public class OperationHistory {
         /**
          * Use builder to create the request.
          */
-        private Request(Set<FilterType> types, String label, DateTime from, DateTime till,
-                        String startRecord, Integer records, Boolean details) {
+        Request(Set<FilterType> types, String label, DateTime from, DateTime till, String startRecord, Integer records,
+                Boolean details) {
 
             super(OperationHistoryTypeAdapter.getInstance());
             if (from != null && till != null && from.isAfter(till)) {
