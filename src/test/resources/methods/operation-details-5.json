@@ -1,0 +1,43 @@
+{
+  "pattern_id": "1855",
+  "operation_id": "1234567890987654321",
+  "title": "Услуга «Единый» год 3 пин-кода (все регионы)",
+  "amount": 3420,
+  "direction": "out",
+  "datetime": "2017-03-30T16:36:08.000Z",
+  "status": "success",
+  "type": "payment-shop",
+  "digital_goods": {
+    "article": [
+      {
+        "serial": "abcdefghijklmnop",
+        "secret": "qrstuvwxyz",
+        "merchantArticleId": "1234567890"
+      }
+    ]
+  },
+  "payment_parameters": {
+    "payer_device_uuid": "1234567890987654321",
+    "FormComment": "Услуга «Единый» год 3 пин-кода (все регионы)",
+    "merchant_order_id": "0986543212345890",
+    "is-repeat-payment": "true",
+    "try-payment": "true",
+    "sum": "3420",
+    "ShowCaseID": "2030",
+    "payment-name": "Услуга «Единый» год 3 пин-кода (все регионы)",
+    "card_code_1": "Номер карты",
+    "card_code_2": "PIN-код",
+    "ARTICLE_INVENTORY_VERSION": "1",
+    "nst_unilabel": "098765432123457890qwertyuiop",
+    "MERCHANT_ARTICLE_ID": "asdfghjkl",
+    "ShopID": "13813",
+    "scid": "1855"
+  },
+  "repeatable": true,
+  "categories": [
+    562234,
+    582343,
+    553243
+  ],
+  "format": "json"
+}

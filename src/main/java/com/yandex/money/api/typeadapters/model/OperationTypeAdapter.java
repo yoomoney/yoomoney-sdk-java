@@ -24,16 +24,20 @@
 
 package com.yandex.money.api.typeadapters.model;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
+import com.google.gson.reflect.TypeToken;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.model.PayeeIdentifierType;
+import com.yandex.money.api.model.showcase.ShowcaseReference;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.ISO_FORMATTER;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
@@ -77,6 +81,8 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
     private static final String MEMBER_STATUS = "status";
     private static final String MEMBER_TITLE = "title";
     private static final String MEMBER_TYPE = "type";
+    private static final String MEMBER_CATEGORIES = "categories";
+    private static final String MEMBER_FORMAT = "format";
 
     private OperationTypeAdapter() {
     }
@@ -93,6 +99,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
             throws JsonParseException {
 
         final JsonObject o = json.getAsJsonObject();
+        Type listType = new TypeToken<ArrayList<Integer>>(){}.getType();
         return new Operation.Builder()
                 .setOperationId(getString(o, MEMBER_OPERATION_ID))
                 .setStatus(Operation.Status.parseOrThrow(getString(o, MEMBER_STATUS)))
@@ -120,6 +127,8 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
                 .setFavorite(getBoolean(o, MEMBER_FAVOURITE))
                 .setDigitalGoods(DigitalGoodsTypeAdapter.getInstance().fromJson(o.get(
                         MEMBER_DIGITAL_GOODS)))
+                .setCategories(new Gson().fromJson(o.getAsJsonArray(MEMBER_CATEGORIES), listType))
+                .setFormat(ShowcaseReference.Format.parse(getString(o, MEMBER_FORMAT)))
                 .create();
     }
 
@@ -161,6 +170,12 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_FAVOURITE, src.favorite);
         if (src.digitalGoods != null) {
             object.addProperty(MEMBER_DIGITAL_GOODS, DigitalGoodsTypeAdapter.getInstance().toJson(src.digitalGoods));
+        }
+        if (!(src.categories == null || src.categories.isEmpty())) {
+            object.add(MEMBER_CATEGORIES, new Gson().toJsonTree(src.categories));
+        }
+        if (src.format != null) {
+            object.addProperty(MEMBER_FORMAT, src.format.code);
         }
         return object;
     }

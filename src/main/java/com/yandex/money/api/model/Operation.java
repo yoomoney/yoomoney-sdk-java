@@ -24,12 +24,14 @@
 
 package com.yandex.money.api.model;
 
+import com.yandex.money.api.model.showcase.ShowcaseReference;
 import com.yandex.money.api.util.Constants;
 import com.yandex.money.api.util.Enums;
 import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
@@ -162,6 +164,16 @@ public class Operation {
     public final DigitalGoods digitalGoods;
 
     /**
+     * Id of categories
+     */
+    public final List<Integer> categories;
+
+    /**
+     * Type of showcase
+     */
+    public final ShowcaseReference.Format format;
+
+    /**
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
      */
     protected Operation(Builder builder) {
@@ -190,6 +202,8 @@ public class Operation {
         paymentParameters = Collections.unmodifiableMap(builder.paymentParameters);
         favorite = builder.favorite;
         digitalGoods = builder.digitalGoods;
+        categories = Collections.unmodifiableList(builder.categories);
+        format = builder.format;
     }
 
     public boolean isCodepro() {
@@ -198,10 +212,6 @@ public class Operation {
 
     public boolean isRepeatable() {
         return repeatable != null && repeatable;
-    }
-
-    public boolean isFavorite() {
-        return favorite != null && favorite;
     }
 
     @Override
@@ -232,7 +242,13 @@ public class Operation {
                 ", favorite=" + favorite +
                 ", type=" + type +
                 ", digitalGoods=" + digitalGoods +
+                ", categories=" + categories +
+                ", format=" + format +
                 '}';
+    }
+
+    public boolean isFavorite() {
+        return favorite != null && favorite;
     }
 
     @Override
@@ -268,7 +284,10 @@ public class Operation {
         if (!paymentParameters.equals(operation.paymentParameters)) return false;
         if (favorite != null ? !favorite.equals(operation.favorite) : operation.favorite != null) return false;
         if (type != operation.type) return false;
-        return digitalGoods != null ? digitalGoods.equals(operation.digitalGoods) : operation.digitalGoods == null;
+        if (digitalGoods != null ? !digitalGoods.equals(operation.digitalGoods) : operation.digitalGoods != null)
+            return false;
+        if (!categories.equals(operation.categories)) return false;
+        return format != null ? format.equals(operation.format) : operation.format == null;
     }
 
     @Override
@@ -298,6 +317,8 @@ public class Operation {
         result = 31 * result + (favorite != null ? favorite.hashCode() : 0);
         result = 31 * result + type.hashCode();
         result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
+        result = 31 * result + categories.hashCode();
+        result = 31 * result + (format != null ? format.hashCode() : 0);
         return result;
     }
 
@@ -423,31 +444,33 @@ public class Operation {
      * Creates {@link com.yandex.money.api.model.Operation}.
      */
     public static class Builder {
-        private String operationId;
-        private Status status;
-        private String patternId;
-        private Direction direction;
-        private BigDecimal amount = BigDecimal.ZERO;
-        private BigDecimal amountDue;
-        private BigDecimal fee;
-        private DateTime datetime = DateTime.now();
-        private String title;
-        private String sender;
-        private String recipient;
-        private PayeeIdentifierType recipientType;
-        private String message;
-        private String comment;
-        private Boolean codepro;
-        private String protectionCode;
-        private DateTime expires;
-        private DateTime answerDatetime;
-        private String label;
-        private String details;
-        private Boolean repeatable;
-        private Map<String, String> paymentParameters = Collections.emptyMap();
-        private Boolean favorite;
-        private Type type;
-        private DigitalGoods digitalGoods;
+        String operationId;
+        Status status;
+        String patternId;
+        Direction direction;
+        BigDecimal amount = BigDecimal.ZERO;
+        BigDecimal amountDue;
+        BigDecimal fee;
+        DateTime datetime = DateTime.now();
+        String title;
+        String sender;
+        String recipient;
+        PayeeIdentifierType recipientType;
+        String message;
+        String comment;
+        Boolean codepro;
+        String protectionCode;
+        DateTime expires;
+        DateTime answerDatetime;
+        String label;
+        String details;
+        Boolean repeatable;
+        Map<String, String> paymentParameters = Collections.emptyMap();
+        Boolean favorite;
+        Type type;
+        DigitalGoods digitalGoods;
+        List<Integer> categories = Collections.emptyList();
+        ShowcaseReference.Format format;
 
         public Builder setOperationId(String operationId) {
             this.operationId = operationId;
@@ -571,6 +594,16 @@ public class Operation {
 
         public Builder setDigitalGoods(DigitalGoods digitalGoods) {
             this.digitalGoods = digitalGoods;
+            return this;
+        }
+
+        public Builder setCategories(List<Integer> categories) {
+            this.categories = categories == null ? Collections.emptyList() : categories;
+            return this;
+        }
+
+        public Builder setFormat(ShowcaseReference.Format format) {
+            this.format = format;
             return this;
         }
 
