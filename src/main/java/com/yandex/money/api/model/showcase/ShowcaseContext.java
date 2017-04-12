@@ -33,11 +33,11 @@ import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.HttpClientResponse;
 import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.util.HttpHeaders;
-import org.joda.time.DateTime;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -84,7 +84,7 @@ public final class ShowcaseContext {
     private State state = State.UNKNOWN;
 
     ShowcaseContext(State state) {
-        this(null, null, new DateTime());
+        this(null, null, DateTime.now());
         this.state = state;
     }
 
@@ -336,8 +336,7 @@ public final class ShowcaseContext {
                         inputStream = response.getByteStream();
                         Showcase newShowcase = ShowcaseTypeAdapter.getInstance().fromJson(inputStream);
 
-                        ShowcaseContext.Step step = new ShowcaseContext.Step(newShowcase,
-                                newLocation == null ? null : newLocation);
+                        ShowcaseContext.Step step = new ShowcaseContext.Step(newShowcase, newLocation);
                         if (responseCode == HttpURLConnection.HTTP_MULT_CHOICE) {
                             context.pushCurrentStep(step);
                             context.setState(ShowcaseContext.State.HAS_NEXT_STEP);

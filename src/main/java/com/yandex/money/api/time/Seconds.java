@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,53 +22,41 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase.components.uicontrols;
+package com.yandex.money.api.time;
 
-import com.yandex.money.api.util.ToStringBuilder;
-
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
+import java.util.Calendar;
 
 /**
- * The month and year control.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
+ * Period in seconds.
  */
-public class Month extends Date {
+public final class Seconds extends BaseSingleFieldPeriod {
 
     /**
-     * Acceptable pattern.
+     * One second.
      */
-    public static final String PATTERN = "yyyy-MM";
+    public static final Seconds ONE = new Seconds(1);
 
-    /**
-     * (De)serialization formatter.
-     */
-    public static final DateFormat FORMATTER = new SimpleDateFormat(PATTERN, Locale.ENGLISH);
-
-    protected Month(Builder builder) {
-        super(builder);
-    }
-
-    @Override
-    public DateFormat getFormatter() {
-        return FORMATTER;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Month");
+    private Seconds(int amount) {
+        super(amount);
     }
 
     /**
-     * {@link Month} builder.
+     * Creates an instance of this class.
+     *
+     * @param amount number of seconds
+     * @return instance of this class
      */
-    public static class Builder extends Date.Builder {
-
-        @Override
-        public Month create() {
-            return new Month(this);
+    public static Seconds from(int amount) {
+        switch (amount) {
+            case 1:
+                return ONE;
+            default:
+                return new Seconds(amount);
         }
+    }
+
+    @Override
+    public int getField() {
+        return Calendar.SECOND;
     }
 }

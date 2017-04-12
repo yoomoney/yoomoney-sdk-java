@@ -31,11 +31,12 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.model.PayeeIdentifierType;
+import com.yandex.money.api.time.Iso8601Format;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.ISO_FORMATTER;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBoolean;
 import static com.yandex.money.api.typeadapters.JsonUtils.getDateTime;
@@ -93,34 +94,38 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
             throws JsonParseException {
 
         final JsonObject o = json.getAsJsonObject();
-        return new Operation.Builder()
-                .setOperationId(getString(o, MEMBER_OPERATION_ID))
-                .setStatus(Operation.Status.parseOrThrow(getString(o, MEMBER_STATUS)))
-                .setDatetime(getDateTime(o, MEMBER_DATETIME))
-                .setTitle(getString(o, MEMBER_TITLE))
-                .setPatternId(getString(o, MEMBER_PATTERN_ID))
-                .setDirection(Operation.Direction.parseOrThrow(getString(o, MEMBER_DIRECTION)))
-                .setAmount(getBigDecimal(o, MEMBER_AMOUNT))
-                .setAmountDue(getBigDecimal(o, MEMBER_AMOUNT_DUE))
-                .setFee(getBigDecimal(o, MEMBER_FEE))
-                .setLabel(getString(o, MEMBER_LABEL))
-                .setType(Operation.Type.parseOrThrow(getString(o, MEMBER_TYPE)))
-                .setSender(getString(o, MEMBER_SENDER))
-                .setRecipient(getString(o, MEMBER_RECIPIENT))
-                .setRecipientType(PayeeIdentifierType.parse(getString(o, MEMBER_RECIPIENT_TYPE)))
-                .setMessage(getString(o, MEMBER_MESSAGE))
-                .setComment(getString(o, MEMBER_COMMENT))
-                .setCodepro(getBoolean(o, MEMBER_CODEPRO))
-                .setProtectionCode(getString(o, MEMBER_PROTECTION_CODE))
-                .setExpires(getDateTime(o, MEMBER_EXPIRES))
-                .setAnswerDatetime(getDateTime(o, MEMBER_ANSWER_DATETIME))
-                .setDetails(getString(o, MEMBER_DETAILS))
-                .setRepeatable(getBoolean(o, MEMBER_REPEATABLE))
-                .setPaymentParameters(getNotNullMap(o, MEMBER_PAYMENT_PARAMETERS))
-                .setFavorite(getBoolean(o, MEMBER_FAVOURITE))
-                .setDigitalGoods(DigitalGoodsTypeAdapter.getInstance().fromJson(o.get(
-                        MEMBER_DIGITAL_GOODS)))
-                .create();
+        try {
+            return new Operation.Builder()
+                    .setOperationId(getString(o, MEMBER_OPERATION_ID))
+                    .setStatus(Operation.Status.parseOrThrow(getString(o, MEMBER_STATUS)))
+                    .setDatetime(getDateTime(o, MEMBER_DATETIME))
+                    .setTitle(getString(o, MEMBER_TITLE))
+                    .setPatternId(getString(o, MEMBER_PATTERN_ID))
+                    .setDirection(Operation.Direction.parseOrThrow(getString(o, MEMBER_DIRECTION)))
+                    .setAmount(getBigDecimal(o, MEMBER_AMOUNT))
+                    .setAmountDue(getBigDecimal(o, MEMBER_AMOUNT_DUE))
+                    .setFee(getBigDecimal(o, MEMBER_FEE))
+                    .setLabel(getString(o, MEMBER_LABEL))
+                    .setType(Operation.Type.parseOrThrow(getString(o, MEMBER_TYPE)))
+                    .setSender(getString(o, MEMBER_SENDER))
+                    .setRecipient(getString(o, MEMBER_RECIPIENT))
+                    .setRecipientType(PayeeIdentifierType.parse(getString(o, MEMBER_RECIPIENT_TYPE)))
+                    .setMessage(getString(o, MEMBER_MESSAGE))
+                    .setComment(getString(o, MEMBER_COMMENT))
+                    .setCodepro(getBoolean(o, MEMBER_CODEPRO))
+                    .setProtectionCode(getString(o, MEMBER_PROTECTION_CODE))
+                    .setExpires(getDateTime(o, MEMBER_EXPIRES))
+                    .setAnswerDatetime(getDateTime(o, MEMBER_ANSWER_DATETIME))
+                    .setDetails(getString(o, MEMBER_DETAILS))
+                    .setRepeatable(getBoolean(o, MEMBER_REPEATABLE))
+                    .setPaymentParameters(getNotNullMap(o, MEMBER_PAYMENT_PARAMETERS))
+                    .setFavorite(getBoolean(o, MEMBER_FAVOURITE))
+                    .setDigitalGoods(DigitalGoodsTypeAdapter.getInstance().fromJson(o.get(
+                            MEMBER_DIGITAL_GOODS)))
+                    .create();
+        } catch (ParseException e) {
+            throw new JsonParseException(e);
+        }
     }
 
     @Override
@@ -130,7 +135,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_OPERATION_ID, src.operationId);
         object.addProperty(MEMBER_TITLE, src.title);
         object.addProperty(MEMBER_DIRECTION, src.direction.code);
-        object.addProperty(MEMBER_DATETIME, src.datetime.toString(ISO_FORMATTER));
+        object.addProperty(MEMBER_DATETIME, Iso8601Format.format(src.datetime));
         object.addProperty(MEMBER_STATUS, src.status.code);
         object.addProperty(MEMBER_PATTERN_ID, src.patternId);
         object.addProperty(MEMBER_AMOUNT, src.amount);
@@ -148,10 +153,10 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         object.addProperty(MEMBER_CODEPRO, src.codepro);
         object.addProperty(MEMBER_PROTECTION_CODE, src.protectionCode);
         if (src.expires != null) {
-            object.addProperty(MEMBER_EXPIRES, src.expires.toString(ISO_FORMATTER));
+            object.addProperty(MEMBER_EXPIRES, Iso8601Format.format(src.expires));
         }
         if (src.answerDatetime != null) {
-            object.addProperty(MEMBER_ANSWER_DATETIME, src.answerDatetime.toString(ISO_FORMATTER));
+            object.addProperty(MEMBER_ANSWER_DATETIME, Iso8601Format.format(src.answerDatetime));
         }
         object.addProperty(MEMBER_DETAILS, src.details);
         object.addProperty(MEMBER_REPEATABLE, src.repeatable);
