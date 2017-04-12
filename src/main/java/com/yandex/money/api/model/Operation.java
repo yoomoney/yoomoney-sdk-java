@@ -25,9 +25,9 @@
 package com.yandex.money.api.model;
 
 import com.yandex.money.api.model.showcase.ShowcaseReference;
+import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.util.Constants;
 import com.yandex.money.api.util.Enums;
-import org.joda.time.DateTime;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -265,7 +265,7 @@ public class Operation {
         if (!amount.equals(operation.amount)) return false;
         if (amountDue != null ? !amountDue.equals(operation.amountDue) : operation.amountDue != null) return false;
         if (fee != null ? !fee.equals(operation.fee) : operation.fee != null) return false;
-        if (!datetime.isEqual(operation.datetime)) return false;
+        if (!datetime.equals(operation.datetime)) return false;
         if (!title.equals(operation.title)) return false;
         if (sender != null ? !sender.equals(operation.sender) : operation.sender != null) return false;
         if (recipient != null ? !recipient.equals(operation.recipient) : operation.recipient != null) return false;
@@ -275,8 +275,8 @@ public class Operation {
         if (codepro != null ? !codepro.equals(operation.codepro) : operation.codepro != null) return false;
         if (protectionCode != null ? !protectionCode.equals(operation.protectionCode) : operation.protectionCode != null)
             return false;
-        if (expires != null ? !expires.isEqual(operation.expires) : operation.expires != null) return false;
-        if (answerDatetime != null ? !answerDatetime.isEqual(operation.answerDatetime) : operation.answerDatetime != null)
+        if (expires != null ? !expires.equals(operation.expires) : operation.expires != null) return false;
+        if (answerDatetime != null ? !answerDatetime.equals(operation.answerDatetime) : operation.answerDatetime != null)
             return false;
         if (label != null ? !label.equals(operation.label) : operation.label != null) return false;
         if (details != null ? !details.equals(operation.details) : operation.details != null) return false;

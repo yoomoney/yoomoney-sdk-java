@@ -28,8 +28,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.uicontrols.Date;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
+import com.yandex.money.api.time.DateTime;
+
+import java.text.DateFormat;
+import java.text.ParseException;
 
 import static com.yandex.money.api.typeadapters.JsonUtils.getString;
 
@@ -46,8 +48,16 @@ abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder> exten
 
     @Override
     protected final void deserialize(JsonObject src, U builder, JsonDeserializationContext context) {
-        builder.setMin(parseDate(src, MEMBER_MIN));
-        builder.setMax(parseDate(src, MEMBER_MAX));
+        try {
+            builder.setMin(parseDate(src, MEMBER_MIN));
+        } catch (ParseException e) {
+            // ignore restriction
+        }
+        try {
+            builder.setMax(parseDate(src, MEMBER_MAX));
+        } catch (ParseException e) {
+            // ignore restriction
+        }
         super.deserialize(src, builder, context);
     }
 
@@ -62,11 +72,11 @@ abstract class BaseDateTypeAdapter<T extends Date, U extends Date.Builder> exten
         super.serialize(src, to, context);
     }
 
-    protected DateTimeFormatter getFormatter() {
+    protected DateFormat getFormatter() {
         return Date.FORMATTER;
     }
 
-    private DateTime parseDate(JsonObject src, String memberName) {
+    private DateTime parseDate(JsonObject src, String memberName) throws ParseException {
         return Date.parseDate(getString(src, memberName), getFormatter());
     }
 }
