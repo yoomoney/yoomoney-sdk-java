@@ -34,12 +34,13 @@ import com.google.gson.reflect.TypeToken;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.model.PayeeIdentifierType;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
+import com.yandex.money.api.time.Iso8601Format;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.util.ArrayList;
 
-import static com.yandex.money.api.typeadapters.JsonUtils.ISO_FORMATTER;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBigDecimal;
 import static com.yandex.money.api.typeadapters.JsonUtils.getBoolean;
 import static com.yandex.money.api.typeadapters.JsonUtils.getDateTime;
@@ -100,36 +101,40 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
 
         final JsonObject o = json.getAsJsonObject();
         Type listType = new TypeToken<ArrayList<Integer>>(){}.getType();
-        return new Operation.Builder()
-                .setOperationId(getString(o, MEMBER_OPERATION_ID))
-                .setStatus(Operation.Status.parseOrThrow(getString(o, MEMBER_STATUS)))
-                .setDatetime(getDateTime(o, MEMBER_DATETIME))
-                .setTitle(getString(o, MEMBER_TITLE))
-                .setPatternId(getString(o, MEMBER_PATTERN_ID))
-                .setDirection(Operation.Direction.parseOrThrow(getString(o, MEMBER_DIRECTION)))
-                .setAmount(getBigDecimal(o, MEMBER_AMOUNT))
-                .setAmountDue(getBigDecimal(o, MEMBER_AMOUNT_DUE))
-                .setFee(getBigDecimal(o, MEMBER_FEE))
-                .setLabel(getString(o, MEMBER_LABEL))
-                .setType(Operation.Type.parseOrThrow(getString(o, MEMBER_TYPE)))
-                .setSender(getString(o, MEMBER_SENDER))
-                .setRecipient(getString(o, MEMBER_RECIPIENT))
-                .setRecipientType(PayeeIdentifierType.parse(getString(o, MEMBER_RECIPIENT_TYPE)))
-                .setMessage(getString(o, MEMBER_MESSAGE))
-                .setComment(getString(o, MEMBER_COMMENT))
-                .setCodepro(getBoolean(o, MEMBER_CODEPRO))
-                .setProtectionCode(getString(o, MEMBER_PROTECTION_CODE))
-                .setExpires(getDateTime(o, MEMBER_EXPIRES))
-                .setAnswerDatetime(getDateTime(o, MEMBER_ANSWER_DATETIME))
-                .setDetails(getString(o, MEMBER_DETAILS))
-                .setRepeatable(getBoolean(o, MEMBER_REPEATABLE))
-                .setPaymentParameters(getNotNullMap(o, MEMBER_PAYMENT_PARAMETERS))
-                .setFavorite(getBoolean(o, MEMBER_FAVOURITE))
-                .setDigitalGoods(DigitalGoodsTypeAdapter.getInstance().fromJson(o.get(
-                        MEMBER_DIGITAL_GOODS)))
-                .setCategories(new Gson().fromJson(o.getAsJsonArray(MEMBER_CATEGORIES), listType))
-                .setFormat(ShowcaseReference.Format.parse(getString(o, MEMBER_FORMAT)))
-                .create();
+        try {
+            return new Operation.Builder()
+                    .setOperationId(getString(o, MEMBER_OPERATION_ID))
+                    .setStatus(Operation.Status.parseOrThrow(getString(o, MEMBER_STATUS)))
+                    .setDatetime(getDateTime(o, MEMBER_DATETIME))
+                    .setTitle(getString(o, MEMBER_TITLE))
+                    .setPatternId(getString(o, MEMBER_PATTERN_ID))
+                    .setDirection(Operation.Direction.parseOrThrow(getString(o, MEMBER_DIRECTION)))
+                    .setAmount(getBigDecimal(o, MEMBER_AMOUNT))
+                    .setAmountDue(getBigDecimal(o, MEMBER_AMOUNT_DUE))
+                    .setFee(getBigDecimal(o, MEMBER_FEE))
+                    .setLabel(getString(o, MEMBER_LABEL))
+                    .setType(Operation.Type.parseOrThrow(getString(o, MEMBER_TYPE)))
+                    .setSender(getString(o, MEMBER_SENDER))
+                    .setRecipient(getString(o, MEMBER_RECIPIENT))
+                    .setRecipientType(PayeeIdentifierType.parse(getString(o, MEMBER_RECIPIENT_TYPE)))
+                    .setMessage(getString(o, MEMBER_MESSAGE))
+                    .setComment(getString(o, MEMBER_COMMENT))
+                    .setCodepro(getBoolean(o, MEMBER_CODEPRO))
+                    .setProtectionCode(getString(o, MEMBER_PROTECTION_CODE))
+                    .setExpires(getDateTime(o, MEMBER_EXPIRES))
+                    .setAnswerDatetime(getDateTime(o, MEMBER_ANSWER_DATETIME))
+                    .setDetails(getString(o, MEMBER_DETAILS))
+                    .setRepeatable(getBoolean(o, MEMBER_REPEATABLE))
+                    .setPaymentParameters(getNotNullMap(o, MEMBER_PAYMENT_PARAMETERS))
+                    .setFavorite(getBoolean(o, MEMBER_FAVOURITE))
+                    .setDigitalGoods(DigitalGoodsTypeAdapter.getInstance().fromJson(o.get(
+                            MEMBER_DIGITAL_GOODS)))
+                    .setCategories(new Gson().fromJson(o.getAsJsonArray(MEMBER_CATEGORIES), listType))
+                    .setFormat(ShowcaseReference.Format.parse(getString(o, MEMBER_FORMAT)))
+                    .create();
+        } catch (ParseException e) {
+            throw new JsonParseException(e);
+        }
     }
 
     @Override
