@@ -131,7 +131,7 @@ public class ModelTests {
         checkTypeAdapter("/methods/operation-details-2.json", adapter);
         checkTypeAdapter("/methods/operation-details-3.json", adapter);
         checkTypeAdapter("/methods/operation-details-4.json", adapter);
-   //     checkTypeAdapter("/methods/operation-details-5.json", adapter);
+        checkTypeAdapter("/methods/operation-details-5.json", adapter);
     }
 
     @Test
