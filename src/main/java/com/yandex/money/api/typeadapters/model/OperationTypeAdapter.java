@@ -36,6 +36,7 @@ import com.yandex.money.api.model.PayeeIdentifierType;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
 import com.yandex.money.api.time.Iso8601Format;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
+import com.yandex.money.api.typeadapters.GsonProvider;
 
 import java.lang.reflect.Type;
 import java.text.ParseException;
@@ -129,7 +130,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
                     .setFavorite(getBoolean(o, MEMBER_FAVOURITE))
                     .setDigitalGoods(DigitalGoodsTypeAdapter.getInstance().fromJson(o.get(
                             MEMBER_DIGITAL_GOODS)))
-                    .setCategories(new Gson().fromJson(o.getAsJsonArray(MEMBER_CATEGORIES), listType))
+                    .setCategories(GsonProvider.getGson().fromJson(o.getAsJsonArray(MEMBER_CATEGORIES), listType))
                     .setFormat(ShowcaseReference.Format.parse(getString(o, MEMBER_FORMAT)))
                     .create();
         } catch (ParseException e) {
@@ -176,7 +177,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
         if (src.digitalGoods != null) {
             object.add(MEMBER_DIGITAL_GOODS, DigitalGoodsTypeAdapter.getInstance().toJsonTree(src.digitalGoods));
         }
-        if (!(src.categories == null || src.categories.isEmpty())) {
+        if (!src.categories.isEmpty()) {
             object.add(MEMBER_CATEGORIES, new Gson().toJsonTree(src.categories));
         }
         if (src.format != null) {

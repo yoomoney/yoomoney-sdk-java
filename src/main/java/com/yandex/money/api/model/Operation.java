@@ -202,7 +202,7 @@ public class Operation {
         paymentParameters = Collections.unmodifiableMap(checkNotNull(builder.paymentParameters,"paymentParameters"));
         favorite = builder.favorite;
         digitalGoods = builder.digitalGoods;
-        categories = Collections.unmodifiableList(builder.categories);
+        categories = Collections.unmodifiableList(checkNotNull(builder.categories, "categories"));
         format = builder.format;
     }
 
@@ -212,6 +212,10 @@ public class Operation {
 
     public boolean isRepeatable() {
         return repeatable != null && repeatable;
+    }
+
+    public boolean isFavorite() {
+        return favorite != null && favorite;
     }
 
     @Override
@@ -245,10 +249,6 @@ public class Operation {
                 ", categories=" + categories +
                 ", format=" + format +
                 '}';
-    }
-
-    public boolean isFavorite() {
-        return favorite != null && favorite;
     }
 
     @Override
