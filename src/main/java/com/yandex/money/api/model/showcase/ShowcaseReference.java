@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.model.showcase;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.methods.ShowcaseSearch;
 import com.yandex.money.api.util.Enums;
 
@@ -123,6 +124,7 @@ public final class ShowcaseReference {
         /**
          * JSON.
          */
+        @SerializedName("json")
         JSON("json");
 
         public final String code;

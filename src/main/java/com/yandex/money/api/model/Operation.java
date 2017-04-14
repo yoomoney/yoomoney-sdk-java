@@ -34,8 +34,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static com.yandex.money.api.util.Common.checkNotNull;
-
 /**
  * Operation details.
  */
@@ -204,16 +202,16 @@ public class Operation {
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
      */
     protected Operation(Builder builder) {
-        operationId = checkNotNull(builder.operationId, "operationId");
-        status = checkNotNull(builder.status, "status");
-        type = checkNotNull(builder.type, "type");
-        direction = checkNotNull(builder.direction, "direction");
-        title = checkNotNull(builder.title, "title");
+        operationId = builder.operationId;
+        status = builder.status;
+        type = builder.type;
+        direction = builder.direction;
+        title = builder.title;
         patternId = builder.patternId;
-        amount = checkNotNull(builder.amount, "amount");
+        amount = builder.amount;
         amountDue = builder.amountDue;
         fee = builder.fee;
-        datetime = checkNotNull(builder.datetime, "datetime");
+        datetime = builder.datetime;
         sender = builder.sender;
         recipient = builder.recipient;
         recipientType = builder.recipientType;
@@ -230,7 +228,7 @@ public class Operation {
                 Collections.unmodifiableMap(builder.paymentParameters) : null;
         favorite = builder.favorite;
         digitalGoods = builder.digitalGoods;
-        categories = Collections.unmodifiableList(checkNotNull(builder.categories, "categories"));
+        categories = builder.categories != null ? Collections.unmodifiableList(builder.categories) : null;
         format = builder.format;
     }
 
@@ -283,8 +281,8 @@ public class Operation {
         if (type != operation.type) return false;
         if (digitalGoods != null ? !digitalGoods.equals(operation.digitalGoods) : operation.digitalGoods != null)
             return false;
-        if (!categories.equals(operation.categories)) return false;
-        return format != null ? format.equals(operation.format) : operation.format == null;
+        if (categories != null ? !categories.equals(operation.categories) : operation.categories != null) return false;
+        return format == operation.format;
     }
 
     @Override
@@ -314,7 +312,7 @@ public class Operation {
         result = 31 * result + (favorite != null ? favorite.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
-        result = 31 * result + categories.hashCode();
+        result = 31 * result + (categories != null ? categories.hashCode() : 0);
         result = 31 * result + (format != null ? format.hashCode() : 0);
         return result;
     }
@@ -347,6 +345,8 @@ public class Operation {
                 ", favorite=" + favorite +
                 ", type=" + type +
                 ", digitalGoods=" + digitalGoods +
+                ", categories=" + categories +
+                ", format=" + format +
                 '}';
     }
 
@@ -576,7 +576,7 @@ public class Operation {
         }
 
         public Builder setCategories(List<Integer> categories) {
-            this.categories = categories == null ? Collections.emptyList() : categories;
+            this.categories = categories;
             return this;
         }
 
