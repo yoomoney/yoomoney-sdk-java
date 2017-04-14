@@ -100,6 +100,7 @@ public class ModelTests {
         checkType("/methods/operation-details-2.json", OperationDetails.class);
         checkType("/methods/operation-details-3.json", OperationDetails.class);
         checkType("/methods/operation-details-4.json", OperationDetails.class);
+        checkTypeAdapter("/methods/operation-details-5.json", adapter);
     }
 
     @Test
@@ -108,6 +109,7 @@ public class ModelTests {
         checkType("/methods/operation-history-2.json", OperationHistory.class);
         checkType("/methods/operation-history-3.json", OperationHistory.class);
         checkType("/methods/operation-history-4.json", OperationHistory.class);
+        checkTypeAdapter("/methods/operation-history-5.json", adapter);
     }
 
     @Test
