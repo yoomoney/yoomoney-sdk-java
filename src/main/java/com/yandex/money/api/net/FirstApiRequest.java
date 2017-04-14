@@ -111,8 +111,4 @@ public abstract class FirstApiRequest<T> extends BaseApiRequest<T> {
         String field = response.getHeader(HttpHeaders.CONTENT_TYPE);
         return field != null && (field.startsWith(MimeTypes.Application.JSON) || field.startsWith(MimeTypes.Text.JSON));
     }
-
-    private Class<T> getType() {
-        return typeAdapter != null ? typeAdapter.getType() : cls;
-    }
 }
