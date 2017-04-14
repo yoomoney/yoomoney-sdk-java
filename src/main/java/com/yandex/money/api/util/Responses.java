@@ -26,13 +26,14 @@ package com.yandex.money.api.util;
 
 import com.yandex.money.api.net.HttpClientResponse;
 import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.typeadapters.GsonProvider;
+import com.yandex.money.api.typeadapters.TypeAdapter;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 
-/**
- * @author Slava Yasevich
- */
 public final class Responses {
 
     private Responses() {
@@ -41,6 +42,16 @@ public final class Responses {
     public static DateTime parseDateHeader(HttpClientResponse response, String header) throws ParseException {
         String dateHeader = response.getHeader(header);
         return dateHeader == null || dateHeader.isEmpty() ? DateTime.now() : HttpHeaders.parseDateTime(dateHeader);
+    }
+
+    public static <T> T parseJson(InputStream inputStream, Class<T> cls, TypeAdapter<T> typeAdapter) {
+        if (cls != null) {
+            return GsonProvider.getGson().fromJson(new InputStreamReader(inputStream), cls);
+        } else if (typeAdapter != null) {
+            return typeAdapter.fromJson(inputStream);
+        } else {
+            throw new IllegalStateException("both class type and type adapter are null");
+        }
     }
 
     /**

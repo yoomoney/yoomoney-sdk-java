@@ -28,6 +28,7 @@ import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.util.HttpHeaders;
+import com.yandex.money.api.util.Responses;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +52,13 @@ import static com.yandex.money.api.util.Responses.processError;
  */
 public abstract class DocumentApiRequest<T> extends BaseApiRequest<HttpResourceResponse<T>> {
 
+    private final Class<T> cls;
     private final TypeAdapter<T> typeAdapter;
+
+    public DocumentApiRequest(Class<T> cls) {
+        this.cls = cls;
+        this.typeAdapter = null;
+    }
 
     /**
      * Constructor.
@@ -59,6 +66,7 @@ public abstract class DocumentApiRequest<T> extends BaseApiRequest<HttpResourceR
      * @param typeAdapter type adapter to use for a response document parsing
      */
     public DocumentApiRequest(TypeAdapter<T> typeAdapter) {
+        this.cls = null;
         this.typeAdapter = checkNotNull(typeAdapter, "typeAdapter");
     }
 
@@ -87,7 +95,7 @@ public abstract class DocumentApiRequest<T> extends BaseApiRequest<HttpResourceR
                         resourceState = HttpResourceResponse.ResourceState.DOCUMENT;
                         contentType = response.getHeader(HttpHeaders.CONTENT_TYPE);
                         inputStream = response.getByteStream();
-                        document = typeAdapter.fromJson(inputStream);
+                        document = Responses.parseJson(inputStream, cls, typeAdapter);
                     }
 
                     return new HttpResourceResponse<>(resourceState, contentType, lastModified, expires, document);

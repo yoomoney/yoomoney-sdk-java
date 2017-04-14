@@ -26,7 +26,7 @@ package com.yandex.money.api;
 
 import com.yandex.money.api.methods.ShowcaseSearch;
 import com.yandex.money.api.net.clients.ApiClient;
-import com.yandex.money.api.typeadapters.model.showcase.ShowcaseSearchTypeAdapter;
+import com.yandex.money.api.typeadapters.GsonProvider;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -51,7 +51,7 @@ public class ShowcaseSearchTest {
      */
     @Test
     public void marshallingTest() throws Exception {
-        String json = ShowcaseSearchTypeAdapter.getInstance().toJson(getShowcaseSearchInstance());
+        String json = GsonProvider.getGson().toJson(getShowcaseSearchInstance());
         Assert.assertTrue(!json.isEmpty(), "json should be non empty");
     }
 

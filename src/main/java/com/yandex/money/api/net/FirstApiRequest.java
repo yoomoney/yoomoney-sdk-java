@@ -28,14 +28,13 @@ import com.yandex.money.api.exceptions.InsufficientScopeException;
 import com.yandex.money.api.exceptions.InvalidRequestException;
 import com.yandex.money.api.exceptions.InvalidTokenException;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
-import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.util.HttpHeaders;
 import com.yandex.money.api.util.MimeTypes;
+import com.yandex.money.api.util.Responses;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
@@ -69,7 +68,6 @@ public abstract class FirstApiRequest<T> extends BaseApiRequest<T> {
      *
      * @param typeAdapter type adapter to use for a response document parsing
      */
-    @Deprecated
     public FirstApiRequest(TypeAdapter<T> typeAdapter) {
         this.cls = null;
         this.typeAdapter = (BaseTypeAdapter<T>) checkNotNull(typeAdapter, "typeAdapter");
@@ -91,8 +89,7 @@ public abstract class FirstApiRequest<T> extends BaseApiRequest<T> {
                 case HttpURLConnection.HTTP_BAD_REQUEST:
                     inputStream = response.getByteStream();
                     if (isJsonType(response)) {
-                        return GsonProvider.getGson()
-                                .fromJson(new InputStreamReader(inputStream), getType());
+                        return Responses.parseJson(inputStream, cls, typeAdapter);
                     } else {
                         throw new InvalidRequestException(processError(response));
                     }
