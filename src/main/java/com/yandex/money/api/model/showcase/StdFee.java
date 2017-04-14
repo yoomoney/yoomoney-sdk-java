@@ -37,30 +37,31 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  */
 final class StdFee implements Fee {
 
+    private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT = new BigDecimal("0.01");
+    private static final MathContext UNLIMITED_MODE = new MathContext(34, RoundingMode.HALF_UP);
+
     /**
      * Coefficient of amount due.
      */
-    public final BigDecimal a;
+    private final BigDecimal a;
     /**
      * Fixed amount for a single transaction.
      */
-    public final BigDecimal b;
+    private final BigDecimal b;
     /**
      * Min fee per transaction.
      */
-    public final BigDecimal c;
+    private final BigDecimal c;
     /**
      * Max fee per transaction.
      */
-    public final BigDecimal d;
-    private static final BigDecimal ABSOLUTE_MINIMUM_AMOUNT = new BigDecimal("0.01");
-    private static final MathContext UNLIMITED_MODE = new MathContext(34, RoundingMode.HALF_UP);
-    private final AmountType amountType;
+    private final BigDecimal d;
 
+    private final AmountType amountType;
     private final BigDecimal revA; // = 1 / (1 + a)
     private final boolean hasCommission;
 
-    public StdFee(BigDecimal a, BigDecimal b, BigDecimal c, BigDecimal d, AmountType amountType) {
+    StdFee(BigDecimal a, BigDecimal b, BigDecimal c, BigDecimal d, AmountType amountType) {
         if (a == null || a.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Coefficient A is null or negative");
         }

@@ -107,19 +107,17 @@ public final class DefaultFee implements Fee {
         if (b != null ? !b.equals(that.b) : that.b != null) return false;
         if (c != null ? !c.equals(that.c) : that.c != null) return false;
         if (d != null ? !d.equals(that.d) : that.d != null) return false;
-        if (amountType != that.amountType) return false;
-        return feeDelegate != null ? feeDelegate.equals(that.feeDelegate) : that.feeDelegate == null;
+        return amountType == that.amountType;
     }
 
     @Override
     public int hashCode() {
-        int result = type.hashCode();
+        int result = type != null ? type.hashCode() : 0;
         result = 31 * result + (a != null ? a.hashCode() : 0);
         result = 31 * result + (b != null ? b.hashCode() : 0);
         result = 31 * result + (c != null ? c.hashCode() : 0);
         result = 31 * result + (d != null ? d.hashCode() : 0);
         result = 31 * result + (amountType != null ? amountType.hashCode() : 0);
-        result = 31 * result + (feeDelegate != null ? feeDelegate.hashCode() : 0);
         return result;
     }
 
@@ -132,7 +130,6 @@ public final class DefaultFee implements Fee {
                 ", c=" + c +
                 ", d=" + d +
                 ", amountType=" + amountType +
-                ", feeDelegate=" + feeDelegate +
                 '}';
     }
 
@@ -145,6 +142,8 @@ public final class DefaultFee implements Fee {
                 case CUSTOM:
                     feeDelegate = CustomFee.getInstance();
                     break;
+                default:
+                    throw new UnsupportedOperationException("type " + type + " is not supported");
             }
         }
         return feeDelegate;

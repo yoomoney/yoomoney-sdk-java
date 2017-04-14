@@ -28,8 +28,6 @@ import java.math.BigDecimal;
 
 /**
  * Custom fee. Cannot be calculated in an application.
- *
- * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
 final class CustomFee implements Fee {
 
@@ -41,7 +39,7 @@ final class CustomFee implements Fee {
     /**
      * @return instance of this class
      */
-    public static CustomFee getInstance() {
+    static CustomFee getInstance() {
         return INSTANCE;
     }
 
