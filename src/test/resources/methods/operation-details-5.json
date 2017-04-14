@@ -33,5 +33,11 @@
     "ShopID": "13813",
     "scid": "1855"
   },
-  "repeatable": true
+  "repeatable": true,
+  "categories": [
+    562234,
+    582343,
+    553243
+  ],
+  "format": "json"
 }
