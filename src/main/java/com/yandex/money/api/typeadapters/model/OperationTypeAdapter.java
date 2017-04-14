@@ -178,7 +178,7 @@ public final class OperationTypeAdapter extends BaseTypeAdapter<Operation> {
             object.add(MEMBER_DIGITAL_GOODS, DigitalGoodsTypeAdapter.getInstance().toJsonTree(src.digitalGoods));
         }
         if (!src.categories.isEmpty()) {
-            object.add(MEMBER_CATEGORIES, new Gson().toJsonTree(src.categories));
+            object.add(MEMBER_CATEGORIES, GsonProvider.getGson().toJsonTree(src.categories));
         }
         if (src.format != null) {
             object.addProperty(MEMBER_FORMAT, src.format.code);
