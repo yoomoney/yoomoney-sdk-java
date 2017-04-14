@@ -131,16 +131,6 @@ public class DefaultApiClient implements ApiClient {
         return debugMode;
     }
 
-    /**
-     * If required, subclasses may override this method to configure HTTP client.
-     *
-     * @param builder this builder will be used to create HTTP client
-     * @deprecated does nothing, use {@link Builder#setHttpClient(OkHttpClient)} instead
-     */
-    @Deprecated
-    protected void configHttpClient(OkHttpClient.Builder builder) {
-    }
-
     private Request prepareRequest(ApiRequest<?> request) {
         checkNotNull(request, "request");
 
@@ -208,19 +198,6 @@ public class DefaultApiClient implements ApiClient {
          */
         public final Builder setClientId(String clientId) {
             this.clientId = clientId;
-            return this;
-        }
-
-        /**
-         * Sets platform. Default value 'Java'.
-         *
-         * @param platform platform
-         * @return itself
-         * @deprecated use {@link #setUserAgent(UserAgent)} instead
-         */
-        @Deprecated
-        public final Builder setPlatform(String platform) {
-            this.userAgent = new DefaultUserAgent(platform);
             return this;
         }
 

@@ -129,20 +129,6 @@ public final class JsonUtils {
     }
 
     /**
-     * Gets String from a JSON object.
-     *
-     * @param object json object
-     * @param memberName member's name
-     * @return {@link String} value
-     * @deprecated avoid using this method, checks should be made during object's initialization (use
-     * {@link #getString(JsonObject, String)} instead)
-     */
-    @Deprecated
-    public static String getMandatoryString(JsonObject object, String memberName) {
-        return checkMandatoryValue(getString(object, memberName), memberName);
-    }
-
-    /**
      * Gets nullable String from a JSON object.
      *
      * @param object json object
@@ -152,20 +138,6 @@ public final class JsonUtils {
     public static String getString(JsonObject object, String memberName) {
         JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
         return primitive == null ? null : primitive.getAsString();
-    }
-
-    /**
-     * Gets BigDecimal from a JSON object.
-     *
-     * @param object json object
-     * @param memberName member's name
-     * @return {@link java.math.BigDecimal} value
-     * @deprecated avoid using this method, checks should be made during object's initialization (use
-     * {@link #getBigDecimal(JsonObject, String)} instead)
-     */
-    @Deprecated
-    public static BigDecimal getMandatoryBigDecimal(JsonObject object, String memberName) {
-        return checkMandatoryValue(getBigDecimal(object, memberName), memberName);
     }
 
     /**
