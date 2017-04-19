@@ -45,11 +45,11 @@ import java.util.Map;
  */
 public abstract class BaseApiRequest<T> implements ApiRequest<T> {
 
-    private final Map<String, String> headers = new HashMap<>();
-    private final Map<String, String> parameters = new HashMap<>();
-    private final ParametersBuffer buffer = new ParametersBuffer();
+    private transient final Map<String, String> headers = new HashMap<>();
+    private transient final Map<String, String> parameters = new HashMap<>();
+    private transient final ParametersBuffer buffer = new ParametersBuffer();
 
-    private byte[] body;
+    private transient byte[] body;
 
     @Override
     public final String requestUrl(HostsProvider hostsProvider) {
@@ -93,6 +93,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param key key
      * @param value value
      */
+    @SuppressWarnings("WeakerAccess")
     protected final void addHeader(String key, String value) {
         headers.put(key, value);
     }
@@ -200,6 +201,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      *
      * @param body body of a request
      */
+    @SuppressWarnings("WeakerAccess")
     protected final void setBody(byte[] body) {
         this.body = body;
     }
@@ -218,6 +220,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * Allows you to lazily prepare request body before {@link #getBody()} method returns. You can use
      * {@link #setBody(byte[])} or any of {@code addParameter*} methods here.
      */
+    @SuppressWarnings("WeakerAccess")
     protected void prepareBody() {
     }
 }
