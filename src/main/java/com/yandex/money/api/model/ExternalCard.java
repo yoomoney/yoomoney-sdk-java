@@ -39,13 +39,16 @@ public class ExternalCard implements BankCardInfo {
 
     @SerializedName("payment_card_type")
     public final Card.Type type;
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("pan_fragment")
     public final String panFragment;
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("type")
     public final String fundingSourceType;
-    @SerializedName("moneySourceToken")
+    @SerializedName("money_source_token")
     public final String moneySourceToken;
 
+    @SuppressWarnings("WeakerAccess")
     protected ExternalCard(Builder builder) {
         type = checkNotNull(builder.type, "type");
         panFragment = checkNotEmpty(builder.panFragment, "panFragment");
@@ -92,6 +95,7 @@ public class ExternalCard implements BankCardInfo {
 
         if (type != that.type) return false;
         if (!panFragment.equals(that.panFragment)) return false;
+        //noinspection SimplifiableIfStatement
         if (!fundingSourceType.equals(that.fundingSourceType)) return false;
         return moneySourceToken.equals(that.moneySourceToken);
     }

@@ -1,0 +1,6 @@
+{
+  "type": "payment-card",
+  "payment_card_type": "VISA",
+  "pan_fragment": "**** **** **** 0334",
+  "money_source_token": "ABCDEFGHIJKLMNOPQRSTUVWXYZ0+0123456789="
+}

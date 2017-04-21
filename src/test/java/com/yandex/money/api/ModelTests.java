@@ -72,7 +72,7 @@ public class ModelTests {
 
     @Test
     public void testExternalCard() {
-        performTest(createExternalCard(), ExternalCard.class);
+        checkType("/model/external-card.json", ExternalCard.class);
     }
 
     @Test
@@ -186,15 +186,6 @@ public class ModelTests {
                 .setPanFragment("panFragment")
                 .setType(Card.Type.MASTER_CARD)
                 .setId("id");
-        return builder.create();
-    }
-
-    private static ExternalCard createExternalCard() {
-        ExternalCard.Builder builder = new ExternalCard.Builder()
-                .setFundingSourceType("fundingSourceType")
-                .setMoneySourceToken("moneySourceToken")
-                .setType(Card.Type.AMERICAN_EXPRESS)
-                .setPanFragment("1234 56** **** 7890");
         return builder.create();
     }
 }
