@@ -66,7 +66,7 @@ public final class JsonUtils {
     /**
      * Gets int value from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return int value
      */
@@ -77,7 +77,7 @@ public final class JsonUtils {
     /**
      * Gets nullable Integer from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return {@link Integer} value
      */
@@ -89,7 +89,7 @@ public final class JsonUtils {
     /**
      * Gets long value from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return long value
      */
@@ -100,7 +100,7 @@ public final class JsonUtils {
     /**
      * Gets nullable Long from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return {@link Long} value
      */
@@ -112,7 +112,7 @@ public final class JsonUtils {
     /**
      * Gets boolean value from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return boolean value
      */
@@ -123,7 +123,7 @@ public final class JsonUtils {
     /**
      * Gets nullable Boolean from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return {@link Boolean} value
      */
@@ -135,7 +135,7 @@ public final class JsonUtils {
     /**
      * Gets String from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return {@link String} value
      * @deprecated avoid using this method, checks should be made during object's initialization (use
@@ -149,7 +149,7 @@ public final class JsonUtils {
     /**
      * Gets nullable String from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return {@link String} value
      */
@@ -161,7 +161,7 @@ public final class JsonUtils {
     /**
      * Gets BigDecimal from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return {@link java.math.BigDecimal} value
      * @deprecated avoid using this method, checks should be made during object's initialization (use
@@ -175,7 +175,7 @@ public final class JsonUtils {
     /**
      * Gets nullable BigDecimal from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return {@link java.math.BigDecimal} value
      */
@@ -187,7 +187,7 @@ public final class JsonUtils {
     /**
      * Gets DateTime from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return {@link org.joda.time.DateTime} value
      * @deprecated avoid using this method, checks should be made during object's initialization (use
@@ -201,7 +201,7 @@ public final class JsonUtils {
     /**
      * Gets nullable DateTime from a JSON object.
      *
-     * @param object     json object
+     * @param object json object
      * @param memberName member's name
      * @return {@link org.joda.time.DateTime} value
      */
@@ -246,10 +246,11 @@ public final class JsonUtils {
      * Maps JSON object to key-value pairs. Returns {@link Collections#emptyMap()} in case of
      * nullable field value.
      *
-     * @param object     JSON object
+     * @see #map(JsonObject)
+     *
+     * @param object JSON object
      * @param memberName member's name
      * @return map of string key-value pairs
-     * @see #map(JsonObject)
      */
     public static Map<String, String> getNotNullMap(JsonObject object, String memberName) {
         JsonElement jsonElement = object.get(memberName);
