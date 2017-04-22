@@ -37,7 +37,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -286,7 +286,7 @@ public final class JsonUtils {
      */
     public static byte[] getBytes(JsonElement element) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        JsonWriter writer = new JsonWriter(new OutputStreamWriter(stream, Charset.forName("UTF-8")));
+        JsonWriter writer = new JsonWriter(new OutputStreamWriter(stream, StandardCharsets.UTF_8));
         GsonProvider.getGson().toJson(checkNotNull(element, "element"), writer);
         try {
             writer.close();
