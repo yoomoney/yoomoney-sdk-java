@@ -68,21 +68,25 @@ public class AccountInfo {
     /**
      * account's status
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("account_status")
     public final AccountStatus accountStatus;
 
     /**
      * account's type
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("account_type")
     public final AccountType accountType;
 
     /**
      * balance details
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("balance_details")
     public final BalanceDetails balanceDetails;
 
+    @SuppressWarnings("WeakerAccess")
     protected AccountInfo(Builder builder) {
         account = checkNotEmpty(builder.account, "account");
         balance = checkNotNull(builder.balance, "balance");
@@ -92,7 +96,7 @@ public class AccountInfo {
         balanceDetails = checkNotNull(builder.balanceDetails, "balanceDetails");
     }
 
-    private AccountInfo() {
+    protected AccountInfo() {
         account = null;
         balance = BigDecimal.ZERO;
         currency = Currency.RUB;

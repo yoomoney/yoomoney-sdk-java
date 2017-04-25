@@ -125,7 +125,6 @@ public final class Iso8601Format {
         }
 
         Calendar calendar = new GregorianCalendar(timeZone);
-        calendar.setLenient(false);
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, monthOfYear);
         calendar.set(Calendar.DAY_OF_MONTH, day);
