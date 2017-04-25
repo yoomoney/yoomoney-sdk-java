@@ -43,12 +43,14 @@ public class Card implements BankCardInfo {
     /**
      * name of cardholder
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("cardholder_name")
     public final String cardholderName;
 
     /**
      * panned fragment of card's number
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("pan_fragment")
     public final String panFragment;
 
@@ -58,6 +60,7 @@ public class Card implements BankCardInfo {
     @SerializedName("type")
     public final Type type;
 
+    @SuppressWarnings("WeakerAccess")
     protected Card(Builder builder) {
         id = checkNotEmpty(builder.id, "id");
         cardholderName = builder.cardholderName;
@@ -105,6 +108,7 @@ public class Card implements BankCardInfo {
         if (!id.equals(card.id)) return false;
         if (cardholderName != null ? !cardholderName.equals(card.cardholderName) : card.cardholderName != null)
             return false;
+        //noinspection SimplifiableIfStatement
         if (panFragment != null ? !panFragment.equals(card.panFragment) : card.panFragment != null) return false;
         return type == card.type;
     }
@@ -163,10 +167,6 @@ public class Card implements BankCardInfo {
         @Override
         public Type[] getValues() {
             return values();
-        }
-
-        public static Type parse(String name) {
-            return Enums.parseIgnoreCase(UNKNOWN, UNKNOWN, name);
         }
     }
 

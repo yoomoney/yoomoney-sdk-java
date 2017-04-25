@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +22,38 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.model.showcase;
+package com.yandex.money.api.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.util.Constants;
 import com.yandex.money.api.util.Enums;
 
 /**
- * Sum type on payment form.
+ * Status of any continuous operation that can be described by three states: success, refused and in progress.
  */
-public enum AmountType implements Enums.WithCode<AmountType> {
+public enum OperationStatus implements Enums.WithCode<OperationStatus> {
 
     /**
-     * Sum will be debited from buyer's account.
+     * Operation succeeded.
      */
-    @SerializedName("amount")
-    AMOUNT("amount"),
+    @SerializedName(Constants.Status.SUCCESS)
+    SUCCESS(Constants.Status.SUCCESS),
 
     /**
-     * Sum will be credited to a shop.
+     * Operation refused.
      */
-    @SerializedName("netAmount")
-    NET_AMOUNT("netAmount");
+    @SerializedName(Constants.Status.REFUSED)
+    REFUSED(Constants.Status.REFUSED),
+
+    /**
+     * Operation is in progress.
+     */
+    @SerializedName(Constants.Status.IN_PROGRESS)
+    IN_PROGRESS(Constants.Status.IN_PROGRESS);
 
     public final String code;
 
-    AmountType(String code) {
+    OperationStatus(String code) {
         this.code = code;
     }
 
@@ -56,7 +63,7 @@ public enum AmountType implements Enums.WithCode<AmountType> {
     }
 
     @Override
-    public AmountType[] getValues() {
+    public OperationStatus[] getValues() {
         return values();
     }
 }

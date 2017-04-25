@@ -25,6 +25,7 @@
 package com.yandex.money.api.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.util.Enums;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ import java.util.Map;
 /**
  * List of errors you may encounter when using API methods.
  */
-public enum Error {
+public enum Error implements Enums.WithCode<Error> {
 
     @SerializedName("access_denied")
     ACCESS_DENIED("access_denied"),
@@ -209,6 +210,16 @@ public enum Error {
 
     Error(String code) {
         this.code = code;
+    }
+
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public Error[] getValues() {
+        return values();
     }
 
     public static Error parse(String error) {

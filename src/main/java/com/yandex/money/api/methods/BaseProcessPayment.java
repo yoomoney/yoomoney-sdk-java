@@ -27,6 +27,7 @@ package com.yandex.money.api.methods;
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.util.Constants;
+import com.yandex.money.api.util.Enums;
 
 import java.util.Collections;
 import java.util.Map;
@@ -43,10 +44,13 @@ public abstract class BaseProcessPayment {
     public final Status status;
     @SerializedName("error")
     public final Error error;
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("invoice_id")
     public final String invoiceId;
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("acs_uri")
     public final String acsUri;
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("acs_params")
     public final Map<String, String> acsParams;
     @SerializedName("next_retry")
@@ -55,6 +59,7 @@ public abstract class BaseProcessPayment {
     /**
      * Constructor.
      */
+    @SuppressWarnings("WeakerAccess")
     protected BaseProcessPayment(Builder builder) {
         status = checkNotNull(builder.status, "status");
         switch (status) {
@@ -83,6 +88,7 @@ public abstract class BaseProcessPayment {
         if (status != that.status) return false;
         if (error != that.error) return false;
         if (invoiceId != null ? !invoiceId.equals(that.invoiceId) : that.invoiceId != null) return false;
+        //noinspection SimplifiableIfStatement
         if (acsUri != null ? !acsUri.equals(that.acsUri) : that.acsUri != null) return false;
         return acsParams != null ? acsParams.equals(that.acsParams) : that.acsParams == null;
     }
@@ -110,15 +116,32 @@ public abstract class BaseProcessPayment {
                 '}';
     }
 
-    public enum Status {
+    public enum Status implements Enums.WithCode<Status> {
+
         @SerializedName(Constants.Status.SUCCESS)
-        SUCCESS,
+        SUCCESS(Constants.Status.SUCCESS),
         @SerializedName(Constants.Status.REFUSED)
-        REFUSED,
+        REFUSED(Constants.Status.REFUSED),
         @SerializedName(Constants.Status.IN_PROGRESS)
-        IN_PROGRESS,
+        IN_PROGRESS(Constants.Status.IN_PROGRESS),
         @SerializedName(Constants.Status.EXT_AUTH_REQUIRED)
-        EXT_AUTH_REQUIRED
+        EXT_AUTH_REQUIRED(Constants.Status.EXT_AUTH_REQUIRED);
+
+        public final String code;
+
+        Status(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Status[] getValues() {
+            return values();
+        }
     }
 
     public static abstract class Builder {

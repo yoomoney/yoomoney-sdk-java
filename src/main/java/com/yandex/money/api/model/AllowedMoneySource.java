@@ -25,18 +25,50 @@
 package com.yandex.money.api.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.util.Enums;
 
 /**
- * Type of money sources allowe to make a payment.
+ * Type of money sources allowed to make a payment.
  */
-public enum AllowedMoneySource {
+public enum AllowedMoneySource implements Enums.WithCode<AllowedMoneySource> {
 
+    /**
+     * Cards that are linked to a wallet.
+     */
     @SerializedName("cards")
-    CARDS,
+    CARDS("cards"),
+
+    /**
+     * Cash.
+     */
     @SerializedName("cash")
-    CASH,
+    CASH("cash"),
+
+    /**
+     * Any bank card, excluding ones that are linked to a wallet.
+     */
     @SerializedName("payment-card")
-    PAYMENT_CARD,
+    PAYMENT_CARD("payment-card"),
+
+    /**
+     * Wallet.
+     */
     @SerializedName("wallet")
-    WALLET
+    WALLET("wallet");
+
+    private final String code;
+
+    AllowedMoneySource(String code) {
+        this.code = code;
+    }
+
+    @Override
+    public String getCode() {
+        return code;
+    }
+
+    @Override
+    public AllowedMoneySource[] getValues() {
+        return values();
+    }
 }

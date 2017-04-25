@@ -27,7 +27,7 @@ package com.yandex.money.api.model;
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
 import com.yandex.money.api.time.DateTime;
-import com.yandex.money.api.util.Constants;
+import com.yandex.money.api.util.Enums;
 
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -49,11 +49,12 @@ public class Operation {
      * Status of operation.
      */
     @SerializedName("status")
-    public final Status status;
+    public final OperationStatus status;
 
     /**
      * Pattern id.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("pattern_id")
     public final String patternId;
 
@@ -72,6 +73,7 @@ public class Operation {
     /**
      * Received amount.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("amount_due")
     public final BigDecimal amountDue;
 
@@ -96,18 +98,21 @@ public class Operation {
     /**
      * Sender.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("sender")
     public final String sender;
 
     /**
      * Recipient.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("recipient")
     public final String recipient;
 
     /**
      * Type of recipient identifier.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("recipient_type")
     public final PayeeIdentifierType recipientType;
 
@@ -120,30 +125,35 @@ public class Operation {
     /**
      * operation comment
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("comment")
     public final String comment;
 
     /**
      * {@code true} if operation is protected with a code
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("codepro")
     public final Boolean codepro;
 
     /**
      * Protection code for operation.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("protection_code")
     public final String protectionCode;
 
     /**
      * Protection code expiration datetime.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("expires")
     public final DateTime expires;
 
     /**
      * Answer datetime of operation acceptance/revoke.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("answer_datetime")
     public final DateTime answerDatetime;
 
@@ -162,15 +172,18 @@ public class Operation {
     /**
      * {@code true} if operation can be repeated.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("repeatable")
     public final Boolean repeatable;
 
     /**
      * Payment parameters.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("payment_parameters")
     public final Map<String, String> paymentParameters;
 
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("favourite")
     public final Boolean favorite;
 
@@ -183,12 +196,14 @@ public class Operation {
     /**
      * Digital goods.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("digital_goods")
     public final DigitalGoods digitalGoods;
 
     /**
      * Id of categories
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("categories")
     public final List<Integer> categories;
 
@@ -281,6 +296,7 @@ public class Operation {
         if (type != operation.type) return false;
         if (digitalGoods != null ? !digitalGoods.equals(operation.digitalGoods) : operation.digitalGoods != null)
             return false;
+        //noinspection SimplifiableIfStatement
         if (categories != null ? !categories.equals(operation.categories) : operation.categories != null) return false;
         return format == operation.format;
     }
@@ -351,71 +367,82 @@ public class Operation {
     }
 
     /**
-     * Status of operation.
-     */
-    public enum Status {
-        /**
-         * Operation succeeded.
-         */
-        @SerializedName(Constants.Status.SUCCESS)
-        SUCCESS,
-        /**
-         * Operation refused.
-         */
-        @SerializedName(Constants.Status.REFUSED)
-        REFUSED,
-        /**
-         * Operation is in progress, e.g. P2P with protection code has not been received.
-         */
-        @SerializedName(Constants.Status.IN_PROGRESS)
-        IN_PROGRESS
-    }
-
-    /**
      * Type of operation.
      */
-    public enum Type {
+    public enum Type implements Enums.WithCode<Type> {
         /**
          * Payment to a shop.
          */
         @SerializedName("payment-shop")
-        PAYMENT_SHOP,
+        PAYMENT_SHOP("payment-shop"),
         /**
          * Outgoing transfer.
          */
         @SerializedName("outgoing-transfer")
-        OUTGOING_TRANSFER,
+        OUTGOING_TRANSFER("outgoing-transfer"),
         /**
          * Incoming transfer.
          */
         @SerializedName("incoming-transfer")
-        INCOMING_TRANSFER,
+        INCOMING_TRANSFER("incoming-transfer"),
         /**
          * Incoming transfer with protection code.
          */
         @SerializedName("incoming-transfer-protected")
-        INCOMING_TRANSFER_PROTECTED,
+        INCOMING_TRANSFER_PROTECTED("incoming-transfer-protected"),
         /**
          * Deposition.
          */
         @SerializedName("deposition")
-        DEPOSITION
+        DEPOSITION("deposition");
+
+        public final String code;
+
+        Type(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Type[] getValues() {
+            return values();
+        }
     }
 
     /**
      * Direction of operation.
      */
-    public enum Direction {
+    public enum Direction implements Enums.WithCode<Direction> {
         /**
          * Incoming.
          */
         @SerializedName("in")
-        INCOMING,
+        INCOMING("in"),
         /**
          * Outgoing.
          */
         @SerializedName("out")
-        OUTGOING
+        OUTGOING("out");
+
+        public final String code;
+
+        Direction(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Direction[] getValues() {
+            return values();
+        }
     }
 
     /**
@@ -423,7 +450,7 @@ public class Operation {
      */
     public static class Builder {
         String operationId;
-        Status status;
+        OperationStatus status;
         String patternId;
         Direction direction;
         BigDecimal amount = BigDecimal.ZERO;
@@ -455,7 +482,7 @@ public class Operation {
             return this;
         }
 
-        public Builder setStatus(Status status) {
+        public Builder setStatus(OperationStatus status) {
             this.status = status;
             return this;
         }

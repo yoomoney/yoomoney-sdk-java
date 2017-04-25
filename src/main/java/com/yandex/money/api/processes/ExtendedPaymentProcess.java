@@ -35,8 +35,6 @@ import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Combined payment process of {@link PaymentProcess} and {@link ExternalPaymentProcess}.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public final class ExtendedPaymentProcess implements IPaymentProcess {
 
@@ -147,6 +145,13 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
         externalPaymentProcess.setInstanceId(instanceId);
     }
 
+    /**
+     * @return current payment context
+     */
+    public PaymentContext getPaymentContext() {
+        return paymentContext;
+    }
+
     private void invalidatePaymentContext() {
         this.paymentContext = client.isAuthorized() ? PaymentContext.PAYMENT :
                 PaymentContext.EXTERNAL_PAYMENT;
@@ -190,10 +195,10 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      */
     public static final class SavedState {
 
-        private final PaymentProcess.SavedState paymentProcessSavedState;
-        private final ExternalPaymentProcess.SavedState externalPaymentProcessSavedState;
-        private final PaymentContext paymentContext;
-        private final boolean mutablePaymentContext;
+        final PaymentProcess.SavedState paymentProcessSavedState;
+        final ExternalPaymentProcess.SavedState externalPaymentProcessSavedState;
+        final PaymentContext paymentContext;
+        final boolean mutablePaymentContext;
 
         /**
          * Constructor.
@@ -210,9 +215,9 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
                     parseMutablePaymentContext(flags));
         }
 
-        private SavedState(PaymentProcess.SavedState paymentProcessSavedState,
-                           ExternalPaymentProcess.SavedState externalPaymentProcessSavedState,
-                           PaymentContext paymentContext, boolean mutablePaymentContext) {
+        SavedState(PaymentProcess.SavedState paymentProcessSavedState,
+                   ExternalPaymentProcess.SavedState externalPaymentProcessSavedState,
+                   PaymentContext paymentContext, boolean mutablePaymentContext) {
 
             this.paymentProcessSavedState = paymentProcessSavedState;
             this.externalPaymentProcessSavedState = externalPaymentProcessSavedState;

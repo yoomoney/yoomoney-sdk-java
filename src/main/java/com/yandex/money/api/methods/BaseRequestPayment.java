@@ -27,6 +27,7 @@ package com.yandex.money.api.methods;
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.util.Constants;
+import com.yandex.money.api.util.Enums;
 
 import java.math.BigDecimal;
 
@@ -69,6 +70,7 @@ public abstract class BaseRequestPayment {
     @SerializedName("title")
     public final String title;
 
+    @SuppressWarnings("WeakerAccess")
     protected BaseRequestPayment(Builder builder) {
         status = checkNotNull(builder.status, "status");
         switch (status) {
@@ -100,6 +102,7 @@ public abstract class BaseRequestPayment {
         if (status != that.status) return false;
         if (error != that.error) return false;
         if (requestId != null ? !requestId.equals(that.requestId) : that.requestId != null) return false;
+        //noinspection SimplifiableIfStatement
         if (contractAmount != null ? !contractAmount.equals(that.contractAmount) : that.contractAmount != null)
             return false;
         return title != null ? title.equals(that.title) : that.title == null;
@@ -126,13 +129,30 @@ public abstract class BaseRequestPayment {
                 '}';
     }
 
-    public enum Status {
+    public enum Status implements Enums.WithCode<Status> {
+
         @SerializedName(Constants.Status.SUCCESS)
-        SUCCESS,
+        SUCCESS(Constants.Status.SUCCESS),
         @SerializedName(Constants.Status.REFUSED)
-        REFUSED,
+        REFUSED(Constants.Status.REFUSED),
         @SerializedName(Constants.Status.HOLD_FOR_PICKUP)
-        HOLD_FOR_PICKUP
+        HOLD_FOR_PICKUP(Constants.Status.HOLD_FOR_PICKUP);
+
+        public final String code;
+
+        Status(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Status[] getValues() {
+            return values();
+        }
     }
 
     public static abstract class Builder {

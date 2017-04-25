@@ -26,6 +26,7 @@ package com.yandex.money.api.model.showcase;
 
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.methods.ShowcaseSearch;
+import com.yandex.money.api.util.Enums;
 
 import java.util.Collections;
 import java.util.Map;
@@ -40,6 +41,7 @@ public final class ShowcaseReference {
     /**
      * Showcase ID.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("id")
     public final long scid;
 
@@ -52,6 +54,7 @@ public final class ShowcaseReference {
     /**
      * Index of an item in list (lower is higher ranking). May be {@code null}
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("top")
     public final Integer topIndex;
 
@@ -93,6 +96,7 @@ public final class ShowcaseReference {
         if (title != null ? !title.equals(that.title) : that.title != null) return false;
         if (topIndex != null ? !topIndex.equals(that.topIndex) : that.topIndex != null) return false;
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
+        //noinspection SimplifiableIfStatement
         if (params != null ? !params.equals(that.params) : that.params != null) return false;
         return format == that.format;
     }
@@ -123,12 +127,28 @@ public final class ShowcaseReference {
     /**
      * Format.
      */
-    public enum Format {
+    public enum Format implements Enums.WithCode<Format> {
         /**
          * JSON.
          */
         @SerializedName("json")
-        JSON
+        JSON("json");
+
+        public final String code;
+
+        Format(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public Format[] getValues() {
+            return values();
+        }
     }
 
     public final static class Builder {
