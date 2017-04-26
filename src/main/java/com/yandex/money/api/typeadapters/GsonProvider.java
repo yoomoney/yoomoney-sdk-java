@@ -27,6 +27,7 @@ package com.yandex.money.api.typeadapters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.YearMonth;
 
 import java.lang.reflect.Type;
 
@@ -38,6 +39,7 @@ public final class GsonProvider {
     private static final GsonBuilder BUILDER = new GsonBuilder();
     static {
         BUILDER.registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter());
+        BUILDER.registerTypeAdapter(YearMonth.class, new YearMonthTypeAdapter());
     }
 
     private static Gson gson = BUILDER.create();
@@ -62,6 +64,7 @@ public final class GsonProvider {
      * @param type type for which the type adapter is registered
      * @param typeAdapter type adapter
      */
+    @SuppressWarnings("WeakerAccess")
     public static synchronized void registerTypeAdapter(Type type, Object typeAdapter) {
         BUILDER.registerTypeAdapter(type, typeAdapter);
         hasNewTypeAdapter = true;
