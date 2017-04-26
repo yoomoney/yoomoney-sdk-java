@@ -210,8 +210,9 @@ public class Operation {
     /**
      * Type of showcase
      */
-    @SerializedName("format")
-    public final ShowcaseReference.Format format;
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("showcase_format")
+    public final ShowcaseReference.Format showcaseFormat;
 
     /**
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
@@ -244,7 +245,7 @@ public class Operation {
         favorite = builder.favorite;
         digitalGoods = builder.digitalGoods;
         categories = builder.categories != null ? Collections.unmodifiableList(builder.categories) : null;
-        format = builder.format;
+        showcaseFormat = builder.format;
     }
 
     public boolean isCodepro() {
@@ -298,7 +299,7 @@ public class Operation {
             return false;
         //noinspection SimplifiableIfStatement
         if (categories != null ? !categories.equals(operation.categories) : operation.categories != null) return false;
-        return format == operation.format;
+        return showcaseFormat == operation.showcaseFormat;
     }
 
     @Override
@@ -329,7 +330,7 @@ public class Operation {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
         result = 31 * result + (categories != null ? categories.hashCode() : 0);
-        result = 31 * result + (format != null ? format.hashCode() : 0);
+        result = 31 * result + (showcaseFormat != null ? showcaseFormat.hashCode() : 0);
         return result;
     }
 
@@ -362,7 +363,7 @@ public class Operation {
                 ", type=" + type +
                 ", digitalGoods=" + digitalGoods +
                 ", categories=" + categories +
-                ", format=" + format +
+                ", showcaseFormat=" + showcaseFormat +
                 '}';
     }
 
