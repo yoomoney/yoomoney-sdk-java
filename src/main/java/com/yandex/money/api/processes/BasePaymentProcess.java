@@ -24,8 +24,8 @@
 
 package com.yandex.money.api.processes;
 
-import com.yandex.money.api.methods.BaseProcessPayment;
-import com.yandex.money.api.methods.BaseRequestPayment;
+import com.yandex.money.api.methods.payment.BaseProcessPayment;
+import com.yandex.money.api.methods.payment.BaseRequestPayment;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.util.Threads;
@@ -57,6 +57,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      * @param client client to use for the process
      * @param parameterProvider parameter's provider
      */
+    @SuppressWarnings("WeakerAccess")
     public BasePaymentProcess(ApiClient client, ParameterProvider parameterProvider) {
         this.client = checkNotNull(client, "client");
         this.parameterProvider = checkNotNull(parameterProvider, "parameterProvider");
@@ -138,6 +139,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      *
      * @param accessToken access token
      */
+    @SuppressWarnings("WeakerAccess")
     public final void setAccessToken(String accessToken) {
         client.setAccessToken(accessToken);
     }
@@ -245,6 +247,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
          * @param processPayment process payment
          * @param flags flags of saved state
          */
+        @SuppressWarnings("WeakerAccess")
         public SavedState(RP requestPayment, PP processPayment, int flags) {
             this(requestPayment, processPayment, parseState(flags));
         }
@@ -256,6 +259,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
          * @param processPayment process payment
          * @param state state
          */
+        @SuppressWarnings("WeakerAccess")
         protected SavedState(RP requestPayment, PP processPayment, State state) {
             this.state = checkNotNull(state, "state");
 

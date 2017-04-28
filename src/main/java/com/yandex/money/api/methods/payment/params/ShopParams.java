@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.yandex.money.api.methods.params;
+package com.yandex.money.api.methods.payment.params;
 
 import java.util.Map;
 

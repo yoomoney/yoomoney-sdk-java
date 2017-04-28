@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.methods;
+package com.yandex.money.api.methods.wallet;
 
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
@@ -39,8 +39,10 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  */
 public class IncomingTransferAccept extends SimpleResponse {
 
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("protection_code_attempts_available")
     public final Integer protectionCodeAttemptsAvailable;
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("ext_action_uri")
     public final String extActionUri;
 
@@ -80,6 +82,7 @@ public class IncomingTransferAccept extends SimpleResponse {
 
         IncomingTransferAccept that = (IncomingTransferAccept) o;
 
+        //noinspection SimplifiableIfStatement
         if (protectionCodeAttemptsAvailable != null ? !protectionCodeAttemptsAvailable.equals(that.protectionCodeAttemptsAvailable) : that.protectionCodeAttemptsAvailable != null)
             return false;
         return extActionUri != null ? extActionUri.equals(that.extActionUri) : that.extActionUri == null;
@@ -104,7 +107,7 @@ public class IncomingTransferAccept extends SimpleResponse {
     }
 
     /**
-     * Requests to perform {@link com.yandex.money.api.methods.IncomingTransferAccept}.
+     * Requests to perform {@link IncomingTransferAccept}.
      * <p/>
      * Authorized session required.
      */

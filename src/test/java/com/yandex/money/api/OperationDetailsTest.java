@@ -24,8 +24,8 @@
 
 package com.yandex.money.api;
 
-import com.yandex.money.api.methods.OperationDetails;
-import com.yandex.money.api.methods.OperationHistory;
+import com.yandex.money.api.methods.wallet.OperationDetails;
+import com.yandex.money.api.methods.wallet.OperationHistory;
 import com.yandex.money.api.model.Operation;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.time.DateTime;

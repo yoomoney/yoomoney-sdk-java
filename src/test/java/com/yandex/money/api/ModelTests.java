@@ -26,14 +26,14 @@ package com.yandex.money.api;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
-import com.yandex.money.api.methods.AccountInfo;
-import com.yandex.money.api.methods.IncomingTransferAccept;
-import com.yandex.money.api.methods.IncomingTransferReject;
 import com.yandex.money.api.methods.InstanceId;
-import com.yandex.money.api.methods.OperationDetails;
-import com.yandex.money.api.methods.OperationHistory;
-import com.yandex.money.api.methods.RequestExternalPayment;
-import com.yandex.money.api.methods.RequestPayment;
+import com.yandex.money.api.methods.payment.RequestExternalPayment;
+import com.yandex.money.api.methods.payment.RequestPayment;
+import com.yandex.money.api.methods.wallet.AccountInfo;
+import com.yandex.money.api.methods.wallet.IncomingTransferAccept;
+import com.yandex.money.api.methods.wallet.IncomingTransferReject;
+import com.yandex.money.api.methods.wallet.OperationDetails;
+import com.yandex.money.api.methods.wallet.OperationHistory;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
@@ -57,7 +57,7 @@ public class ModelTests {
 
     @Test
     public void testAccountInfo() {
-        checkType("/methods/account-info.json", AccountInfo.class);
+        checkType("/methods/wallet/account-info.json", AccountInfo.class);
     }
 
     @Test
@@ -77,15 +77,15 @@ public class ModelTests {
 
     @Test
     public void testIncomingTransferAccept() {
-        checkType("/methods/incoming-transfer-accept-success.json", IncomingTransferAccept.class);
-        checkType("/methods/incoming-transfer-accept-refused-1.json", IncomingTransferAccept.class);
-        checkType("/methods/incoming-transfer-accept-refused-2.json", IncomingTransferAccept.class);
+        checkType("/methods/wallet/incoming-transfer-accept-success.json", IncomingTransferAccept.class);
+        checkType("/methods/wallet/incoming-transfer-accept-refused-1.json", IncomingTransferAccept.class);
+        checkType("/methods/wallet/incoming-transfer-accept-refused-2.json", IncomingTransferAccept.class);
     }
 
     @Test
     public void testIncomingTransferReject() {
-        checkType("/methods/incoming-transfer-reject-success.json", IncomingTransferReject.class);
-        checkType("/methods/incoming-transfer-reject-refused.json", IncomingTransferReject.class);
+        checkType("/methods/wallet/incoming-transfer-reject-success.json", IncomingTransferReject.class);
+        checkType("/methods/wallet/incoming-transfer-reject-refused.json", IncomingTransferReject.class);
     }
 
     @Test
@@ -96,32 +96,32 @@ public class ModelTests {
 
     @Test
     public void testOperationDetails() {
-        checkType("/methods/operation-details-1.json", OperationDetails.class);
-        checkType("/methods/operation-details-2.json", OperationDetails.class);
-        checkType("/methods/operation-details-3.json", OperationDetails.class);
-        checkType("/methods/operation-details-4.json", OperationDetails.class);
-        checkType("/methods/operation-details-5.json", OperationDetails.class);
+        checkType("/methods/wallet/operation-details-1.json", OperationDetails.class);
+        checkType("/methods/wallet/operation-details-2.json", OperationDetails.class);
+        checkType("/methods/wallet/operation-details-3.json", OperationDetails.class);
+        checkType("/methods/wallet/operation-details-4.json", OperationDetails.class);
+        checkType("/methods/wallet/operation-details-5.json", OperationDetails.class);
     }
 
     @Test
     public void testOperationHistory() {
-        checkType("/methods/operation-history-1.json", OperationHistory.class);
-        checkType("/methods/operation-history-2.json", OperationHistory.class);
-        checkType("/methods/operation-history-3.json", OperationHistory.class);
-        checkType("/methods/operation-history-4.json", OperationHistory.class);
-        checkType("/methods/operation-history-5.json", OperationHistory.class);
+        checkType("/methods/wallet/operation-history-1.json", OperationHistory.class);
+        checkType("/methods/wallet/operation-history-2.json", OperationHistory.class);
+        checkType("/methods/wallet/operation-history-3.json", OperationHistory.class);
+        checkType("/methods/wallet/operation-history-4.json", OperationHistory.class);
+        checkType("/methods/wallet/operation-history-5.json", OperationHistory.class);
     }
 
     @Test
     public void testRequestExternalPayment() {
-        checkType("/methods/request-external-payment-1.json", RequestExternalPayment.class);
-        checkType("/methods/request-external-payment-2.json", RequestExternalPayment.class);
+        checkType("/methods/payment/request-external-payment-1.json", RequestExternalPayment.class);
+        checkType("/methods/payment/request-external-payment-2.json", RequestExternalPayment.class);
     }
 
     @Test
     public void testRequestPayment() {
-        checkType("/methods/request-payment-1.json", RequestPayment.class);
-        checkType("/methods/request-payment-2.json", RequestPayment.class);
+        checkType("/methods/payment/request-payment-1.json", RequestPayment.class);
+        checkType("/methods/payment/request-payment-2.json", RequestPayment.class);
     }
 
     @Test

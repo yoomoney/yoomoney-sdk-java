@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.methods.params;
+package com.yandex.money.api.methods.payment.params;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -37,9 +37,10 @@ import static com.yandex.money.api.util.Common.checkNotEmpty;
  */
 public final class P2pTransferParams extends PaymentParams {
 
+    @SuppressWarnings("WeakerAccess")
     public static final String PATTERN_ID = "p2p";
 
-    private P2pTransferParams(Map<String, String> paymentParams) {
+    P2pTransferParams(Map<String, String> paymentParams) {
         super(PATTERN_ID, paymentParams);
     }
 

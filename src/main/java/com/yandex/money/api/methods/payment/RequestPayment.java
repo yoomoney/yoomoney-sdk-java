@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.methods;
+package com.yandex.money.api.methods.payment;
 
 import com.google.gson.annotations.SerializedName;
-import com.yandex.money.api.methods.params.PaymentParams;
+import com.yandex.money.api.methods.payment.params.PaymentParams;
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Card;
@@ -52,51 +52,60 @@ public class RequestPayment extends BaseRequestPayment {
     /**
      * Available for payment money sources.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("money_source")
     public final MoneySource moneySource;
 
     /**
      * Account's balance.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("balance")
     public final BigDecimal balance;
 
     /**
      * Status of recipient's account.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("recipient_account_status")
     public final AccountStatus recipientAccountStatus;
 
     /**
      * Type of recipient's account.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("recipient_account_type")
     public final AccountType recipientAccountType;
 
     /**
      * Protection code, if chosen to use it.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("protection_code")
     public final String protectionCode;
 
     /**
      * URI to unblock payer's account if it was blocked.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("account_unblock_uri")
     public final String accountUnblockUri;
 
     /**
      * External action URI.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("ext_action_uri")
     public final String extActionUri;
 
     /**
      * {@code true} if Yandex.Money choose the last attached account for p2p payment.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("multiple_recipients_found")
     public final Boolean multipleRecipientsFound;
 
+    @SuppressWarnings("WeakerAccess")
     protected RequestPayment(Builder builder) {
         super(builder);
         switch (status) {
@@ -141,6 +150,7 @@ public class RequestPayment extends BaseRequestPayment {
 
             MoneySource that = (MoneySource) o;
 
+            //noinspection SimplifiableIfStatement
             if (wallet != null ? !wallet.equals(that.wallet) : that.wallet != null) return false;
             return cards != null ? cards.equals(that.cards) : that.cards == null;
         }
@@ -165,6 +175,7 @@ public class RequestPayment extends BaseRequestPayment {
 
         @SerializedName("allowed")
         public final boolean allowed;
+        @SuppressWarnings("WeakerAccess")
         @SerializedName("csc_required")
         public final boolean cscRequired;
         @SerializedName("items")
@@ -184,6 +195,7 @@ public class RequestPayment extends BaseRequestPayment {
             Cards cards = (Cards) o;
 
             if (allowed != cards.allowed) return false;
+            //noinspection SimplifiableIfStatement
             if (cscRequired != cards.cscRequired) return false;
             return items != null ? items.equals(cards.items) : cards.items == null;
         }
@@ -254,7 +266,7 @@ public class RequestPayment extends BaseRequestPayment {
 
         /**
          * Use static methods to create
-         * {@link com.yandex.money.api.methods.RequestPayment.Request}.
+         * {@link RequestPayment.Request}.
          */
         private Request(String patternId, Map<String, String> paymentParameters) {
             super(RequestPayment.class);
@@ -315,7 +327,7 @@ public class RequestPayment extends BaseRequestPayment {
     }
 
     /**
-     * Builds {@link com.yandex.money.api.methods.RequestPayment} instance.
+     * Builds {@link RequestPayment} instance.
      */
     public final static class Builder extends BaseRequestPayment.Builder {
 

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.methods;
+package com.yandex.money.api.methods.payment;
 
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.DigitalGoods;
@@ -45,57 +45,67 @@ public class ProcessPayment extends BaseProcessPayment {
     /**
      * Payment id.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("payment_id")
     public final String paymentId;
 
     /**
      * Account's balance.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("balance")
     public final BigDecimal balance;
 
     /**
      * Payer's account number.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("payer")
     public final String payer;
 
     /**
      * Payee's account number.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("payee")
     public final String payee;
 
     /**
      * Amount payee will receive.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("credit_amount")
     public final BigDecimal creditAmount;
 
     /**
      * URL for locked accounts URI that can be used to unlock it.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("account_unblock_uri")
     public final String accountUnblockUri;
 
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("payee_uid")
     public final String payeeUid;
 
     /**
      * Link for payment receiving.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("hold_for_pickup_link")
     public final String holdForPickupLink;
 
     /**
      * Received digital goods.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("digital_goods")
     public final DigitalGoods digitalGoods;
 
     /**
-     * Use {@link com.yandex.money.api.methods.ProcessPayment.Builder} to create an instance.
+     * Use {@link ProcessPayment.Builder} to create an instance.
      */
+    @SuppressWarnings("WeakerAccess")
     protected ProcessPayment(Builder builder) {
         super(builder);
         switch (status) {
@@ -277,7 +287,7 @@ public class ProcessPayment extends BaseProcessPayment {
     }
 
     /**
-     * Builder for {@link com.yandex.money.api.methods.ProcessPayment}.
+     * Builder for {@link ProcessPayment}.
      */
     public static final class Builder extends BaseProcessPayment.Builder {
 

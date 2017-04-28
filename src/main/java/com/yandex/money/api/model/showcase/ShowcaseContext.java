@@ -29,6 +29,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
+import com.yandex.money.api.methods.payment.RequestExternalPayment;
+import com.yandex.money.api.methods.payment.RequestPayment;
 import com.yandex.money.api.net.ApiRequest;
 import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.HttpClientResponse;
@@ -130,6 +132,7 @@ public final class ShowcaseContext {
      *
      * @return previous step
      */
+    @SuppressWarnings("UnusedReturnValue")
     public Step popStep() {
         if (!params.isEmpty()) {
             params = Collections.emptyMap();
@@ -174,8 +177,8 @@ public final class ShowcaseContext {
 
     /**
      * Collection of payment parameters which should be used in
-     * {@link com.yandex.money.api.methods.RequestPayment} or
-     * {@link com.yandex.money.api.methods.RequestExternalPayment}.
+     * {@link RequestPayment} or
+     * {@link RequestExternalPayment}.
      *
      * @return payment parameters in case of last step or empty map otherwise
      */
@@ -259,6 +262,7 @@ public final class ShowcaseContext {
     public static final class Step {
 
         public final Showcase showcase;
+        @SuppressWarnings("WeakerAccess")
         public final String submitUrl;
 
         public Step(Showcase showcase, String submitUrl) {

@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.methods;
+package com.yandex.money.api.methods.wallet;
 
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
@@ -49,6 +49,7 @@ public class OperationHistory {
 
     @SerializedName("error")
     public final Error error;
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("next_record")
     public final String nextRecord;
     @SerializedName("operations")
@@ -75,6 +76,7 @@ public class OperationHistory {
         OperationHistory that = (OperationHistory) o;
 
         if (error != that.error) return false;
+        //noinspection SimplifiableIfStatement
         if (nextRecord != null ? !nextRecord.equals(that.nextRecord) : that.nextRecord != null) return false;
         return operations != null ? operations.equals(that.operations) : that.operations == null;
     }
@@ -183,7 +185,7 @@ public class OperationHistory {
         }
 
         /**
-         * Builder for a {@link com.yandex.money.api.methods.OperationHistory.Request}.
+         * Builder for a {@link OperationHistory.Request}.
          */
         public static class Builder {
 
@@ -268,7 +270,7 @@ public class OperationHistory {
             }
 
             /**
-             * Creates the {@link com.yandex.money.api.methods.OperationHistory.Request}
+             * Creates the {@link OperationHistory.Request}
              *
              * @return the request
              */

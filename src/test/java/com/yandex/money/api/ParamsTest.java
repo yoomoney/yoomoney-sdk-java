@@ -24,8 +24,8 @@
 
 package com.yandex.money.api;
 
-import com.yandex.money.api.methods.params.P2pTransferParams;
-import com.yandex.money.api.methods.params.PhoneParams;
+import com.yandex.money.api.methods.payment.params.P2pTransferParams;
+import com.yandex.money.api.methods.payment.params.PhoneParams;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 

@@ -24,14 +24,14 @@
 
 package com.yandex.money.api;
 
-import com.yandex.money.api.methods.BaseProcessPayment;
-import com.yandex.money.api.methods.BaseRequestPayment;
 import com.yandex.money.api.methods.InstanceId;
-import com.yandex.money.api.methods.ProcessExternalPayment;
-import com.yandex.money.api.methods.ProcessPayment;
-import com.yandex.money.api.methods.RequestExternalPayment;
-import com.yandex.money.api.methods.RequestPayment;
-import com.yandex.money.api.methods.params.PhoneParams;
+import com.yandex.money.api.methods.payment.BaseProcessPayment;
+import com.yandex.money.api.methods.payment.BaseRequestPayment;
+import com.yandex.money.api.methods.payment.ProcessExternalPayment;
+import com.yandex.money.api.methods.payment.ProcessPayment;
+import com.yandex.money.api.methods.payment.RequestExternalPayment;
+import com.yandex.money.api.methods.payment.RequestPayment;
+import com.yandex.money.api.methods.payment.params.PhoneParams;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.SimpleStatus;
 import com.yandex.money.api.net.ApiRequest;

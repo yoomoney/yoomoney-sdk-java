@@ -22,32 +22,41 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.methods.params;
+package com.yandex.money.api.methods.payment.params;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
 import static com.yandex.money.api.util.Common.checkNotNull;
+import static java.util.Collections.unmodifiableMap;
 
 /**
- * Convenience class for phone top up parameters.
- *
- * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
+ * @author Anton Ermak (ermak@yamoney.ru).
  */
-public final class PhoneParams extends PaymentParams {
+public abstract class PaymentParams {
 
-    public static final String PATTERN_ID = "phone-topup";
+    public final String patternId;
+    public final Map<String, String> paymentParams;
 
-    public static PhoneParams newInstance(String number, BigDecimal amount) {
-        HashMap<String, String> params = new HashMap<>();
-        params.put("phone-number", checkNotEmpty(number, "number"));
-        params.put("amount", checkNotNull(amount, "amount").toPlainString());
-        return new PhoneParams(PATTERN_ID, params);
+    PaymentParams(String patternId, Map<String, String> paymentParams) {
+        this.patternId = checkNotEmpty(patternId, "patternId");
+        this.paymentParams = unmodifiableMap(checkNotNull(paymentParams, "paymentParams"));
     }
 
-    private PhoneParams(String patternId, Map<String, String> paymentParams) {
-        super(patternId, paymentParams);
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PaymentParams that = (PaymentParams) o;
+
+        return patternId.equals(that.patternId) && paymentParams.equals(that.paymentParams);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = patternId.hashCode();
+        result = 31 * result + paymentParams.hashCode();
+        return result;
     }
 }

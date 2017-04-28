@@ -24,8 +24,8 @@
 
 package com.yandex.money.api.processes;
 
-import com.yandex.money.api.methods.ProcessExternalPayment;
-import com.yandex.money.api.methods.RequestExternalPayment;
+import com.yandex.money.api.methods.payment.ProcessExternalPayment;
+import com.yandex.money.api.methods.payment.RequestExternalPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.Identifiable;
 import com.yandex.money.api.net.ApiRequest;

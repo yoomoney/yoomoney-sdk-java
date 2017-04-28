@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,9 @@
  * THE SOFTWARE.
  */
 
-package com.yandex.money.api.methods;
+package com.yandex.money.api.methods.payment;
 
-import com.yandex.money.api.methods.params.PaymentParams;
+import com.yandex.money.api.methods.payment.params.PaymentParams;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 
@@ -41,6 +41,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
     /**
      * Constructor.
      */
+    @SuppressWarnings("WeakerAccess")
     protected RequestExternalPayment(Builder builder) {
         super(builder);
     }
@@ -52,7 +53,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
 
         /**
          * Use static methods to create
-         * {@link com.yandex.money.api.methods.RequestExternalPayment.Request}.
+         * {@link RequestExternalPayment.Request}.
          */
         private Request(String instanceId, String patternId, Map<String, String> params) {
             super(RequestExternalPayment.class);
@@ -82,7 +83,7 @@ public class RequestExternalPayment extends BaseRequestPayment {
          * Convenience method for creating instance of payments.
          *
          * <p>
-         * Note: the subset parameters of class {@link com.yandex.money.api.methods.params
+         * Note: the subset parameters of class {@link com.yandex.money.api.methods.payment.params
          * .P2pParams} doesn't supported by now. Check out the documentation for additional
          * information.
          * </p>

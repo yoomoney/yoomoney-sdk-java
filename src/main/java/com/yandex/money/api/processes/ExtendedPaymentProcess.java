@@ -24,8 +24,8 @@
 
 package com.yandex.money.api.processes;
 
-import com.yandex.money.api.methods.BaseProcessPayment;
-import com.yandex.money.api.methods.BaseRequestPayment;
+import com.yandex.money.api.methods.payment.BaseProcessPayment;
+import com.yandex.money.api.methods.payment.BaseRequestPayment;
 import com.yandex.money.api.model.ExternalCard;
 import com.yandex.money.api.model.Identifiable;
 import com.yandex.money.api.model.Wallet;

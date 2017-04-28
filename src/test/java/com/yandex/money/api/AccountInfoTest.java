@@ -24,7 +24,7 @@
 
 package com.yandex.money.api;
 
-import com.yandex.money.api.methods.AccountInfo;
+import com.yandex.money.api.methods.wallet.AccountInfo;
 import com.yandex.money.api.net.clients.ApiClient;
 import org.testng.Assert;
 import org.testng.annotations.BeforeTest;
