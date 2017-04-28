@@ -37,7 +37,7 @@ import java.util.Map;
 /**
  * Operation details.
  */
-public class Operation {
+public class Operation implements Identifiable {
 
     /**
      * Operation id.
@@ -246,6 +246,11 @@ public class Operation {
         digitalGoods = builder.digitalGoods;
         categories = builder.categories != null ? Collections.unmodifiableList(builder.categories) : null;
         showcaseFormat = builder.format;
+    }
+
+    @Override
+    public String getId() {
+        return operationId;
     }
 
     public boolean isCodepro() {

@@ -30,6 +30,7 @@ import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.BalanceDetails;
 import com.yandex.money.api.model.Currency;
+import com.yandex.money.api.model.Identifiable;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.model.NumericCurrencyTypeAdapter;
@@ -44,7 +45,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
  */
-public class AccountInfo {
+public class AccountInfo implements Identifiable {
 
     /**
      * account number
@@ -96,13 +97,9 @@ public class AccountInfo {
         balanceDetails = checkNotNull(builder.balanceDetails, "balanceDetails");
     }
 
-    protected AccountInfo() {
-        account = null;
-        balance = BigDecimal.ZERO;
-        currency = Currency.RUB;
-        accountStatus = AccountStatus.ANONYMOUS;
-        accountType = AccountType.PERSONAL;
-        balanceDetails = BalanceDetails.ZERO;
+    @Override
+    public String getId() {
+        return account;
     }
 
     @Override
