@@ -160,6 +160,7 @@ public final class DateTime {
     /**
      * @return a copy of this datetime with the time set to the start of the day
      */
+    @SuppressWarnings("WeakerAccess")
     public DateTime withTimeAtStartOfDay() {
         DateTime copy = copy();
         copy.calendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -195,6 +196,38 @@ public final class DateTime {
      */
     public Date getDate() {
         return calendar.getTime();
+    }
+
+    public int getYear() {
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public int getMonth() {
+        return calendar.get(Calendar.MONTH);
+    }
+
+    public int getMonthOfYear() {
+        return getMonth() + 1;
+    }
+
+    public int getDayOfMonth() {
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getHourOfDay() {
+        return calendar.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public int getMinute() {
+        return calendar.get(Calendar.MINUTE);
+    }
+
+    public int getSecond() {
+        return calendar.get(Calendar.SECOND);
+    }
+
+    public int getMillisecond() {
+        return calendar.get(Calendar.MILLISECOND);
     }
 
     /**
