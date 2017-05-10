@@ -31,6 +31,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class Wallet implements Identifiable {
 
+    public static final String ID = "wallet";
+
     @SerializedName("allowed")
     public final boolean allowed;
 
@@ -40,6 +42,28 @@ public class Wallet implements Identifiable {
 
     @Override
     public String getId() {
-        return "wallet";
+        return ID;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Wallet wallet = (Wallet) o;
+
+        return allowed == wallet.allowed;
+    }
+
+    @Override
+    public int hashCode() {
+        return (allowed ? 1 : 0);
+    }
+
+    @Override
+    public String toString() {
+        return "Wallet{" +
+                "allowed=" + allowed +
+                '}';
     }
 }
