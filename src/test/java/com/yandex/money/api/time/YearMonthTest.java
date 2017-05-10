@@ -26,6 +26,8 @@ package com.yandex.money.api.time;
 
 import org.testng.annotations.Test;
 
+import java.text.SimpleDateFormat;
+
 import static org.testng.Assert.assertEquals;
 
 public class YearMonthTest {
@@ -33,9 +35,9 @@ public class YearMonthTest {
     @Test
     public void testParsing() {
         for (int i = 0; i < 4; ++i) {
-            int year = i * 10;
-            int month = 0;
-            for (int j = 0; j < 11; ++j) {
+            int year = i * 10 + 1;
+            int month = 1;
+            for (int j = 1; j <= 12; ++j) {
                 testParsing(year++, month++);
             }
         }
@@ -44,9 +46,9 @@ public class YearMonthTest {
     @Test
     public void testFormatting() {
         for (int i = 0; i < 4; ++i) {
-            int year = i * 10;
-            int month = 0;
-            for (int j = 0; j < 11; ++j) {
+            int year = i * 10 + 1;
+            int month = 1;
+            for (int j = 1; j <= 12; ++j) {
                 testFormatting(year++, month++);
             }
         }
@@ -59,7 +61,7 @@ public class YearMonthTest {
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testIllegalMonth() {
-        new YearMonth(2000, 12);
+        new YearMonth(2000, 13);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -73,5 +75,7 @@ public class YearMonthTest {
 
     private void testFormatting(int year, int month) {
         assertEquals(new YearMonth(year, month).toString(), String.format("%04d-%02d", year, month));
+        assertEquals(new YearMonth(year, month).toString(new SimpleDateFormat("MM/yy")),
+                String.format("%02d/%02d", month, year));
     }
 }

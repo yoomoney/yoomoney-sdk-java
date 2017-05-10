@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.time;
 
+import java.text.DateFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +38,7 @@ public final class YearMonth {
     /**
      * Year.
      */
+    @SuppressWarnings("WeakerAccess")
     public final int year;
 
     /**
@@ -50,11 +52,12 @@ public final class YearMonth {
      * @param year year
      * @param month month of year
      */
+    @SuppressWarnings("WeakerAccess")
     public YearMonth(int year, int month) {
         if (year < 0) {
             throw new IllegalArgumentException("negative year: " + year);
         }
-        if (month < 0 || month > 11) {
+        if (month < 1 || month > 12) {
             throw new IllegalArgumentException("month of year is out of bounds: " + month);
         }
         this.year = year;
@@ -82,6 +85,7 @@ public final class YearMonth {
 
         YearMonth yearMonth = (YearMonth) o;
 
+        //noinspection SimplifiableIfStatement
         if (year != yearMonth.year) return false;
         return month == yearMonth.month;
     }
@@ -96,5 +100,9 @@ public final class YearMonth {
     @Override
     public String toString() {
         return String.format("%04d-%02d", year, month);
+    }
+
+    public String toString(DateFormat formatter) {
+        return DateTime.from(year, month - 1, 1, 0, 0).toString(formatter);
     }
 }
