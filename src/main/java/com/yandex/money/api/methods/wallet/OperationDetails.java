@@ -38,9 +38,9 @@ public class OperationDetails extends Operation {
     @SerializedName("error")
     public final Error error;
 
-    public OperationDetails(Builder builder, Error error) {
+    OperationDetails(Builder builder) {
         super(builder);
-        this.error = error;
+        error = builder.error;
     }
 
     @Override
@@ -91,6 +91,20 @@ public class OperationDetails extends Operation {
                 ", type=" + type +
                 ", digitalGoods=" + digitalGoods +
                 '}';
+    }
+
+    public static class Builder extends Operation.Builder {
+
+        Error error;
+
+        public Builder setError(Error error) {
+            this.error = error;
+            return this;
+        }
+
+        public OperationDetails create() {
+            return new OperationDetails(this);
+        }
     }
 
     /**

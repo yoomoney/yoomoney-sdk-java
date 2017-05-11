@@ -29,7 +29,7 @@ publish {
     userOrg = 'yandex-money'
     groupId = 'com.yandex.money.api'
     artifactId = 'yandex-money-sdk-java'
-    version = '7.0.0-alpha-8'
+    version = '7.0.0-alpha-9'
     website = 'https://github.com/yandex-money/yandex-money-sdk-java'
     issueTracker = "${website}/issues"
     repository = "${website}.git"

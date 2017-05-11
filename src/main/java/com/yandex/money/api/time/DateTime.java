@@ -37,7 +37,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  *
  * @see Calendar
  */
-public final class DateTime {
+public final class DateTime implements Comparable<DateTime> {
 
     private final Calendar calendar;
 
@@ -250,6 +250,11 @@ public final class DateTime {
      */
     public boolean isBefore(DateTime dateTime) {
         return calendar.before(checkNotNull(dateTime, "dateTime").calendar);
+    }
+
+    @Override
+    public int compareTo(DateTime other) {
+        return calendar.compareTo(other.calendar);
     }
 
     @Override

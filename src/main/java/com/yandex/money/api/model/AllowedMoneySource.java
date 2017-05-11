@@ -56,7 +56,7 @@ public enum AllowedMoneySource implements Enums.WithCode<AllowedMoneySource> {
     @SerializedName("wallet")
     WALLET("wallet");
 
-    private final String code;
+    public final String code;
 
     AllowedMoneySource(String code) {
         this.code = code;

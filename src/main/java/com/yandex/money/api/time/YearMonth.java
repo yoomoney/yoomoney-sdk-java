@@ -31,7 +31,7 @@ import java.util.regex.Pattern;
 /**
  * Represents the year and monthOfYear fields.
  */
-public final class YearMonth {
+public final class YearMonth implements Comparable<YearMonth> {
 
     private static final Pattern PATTERN = Pattern.compile("(\\d{4})-(\\d{2})");
 
@@ -76,6 +76,12 @@ public final class YearMonth {
             throw new IllegalArgumentException("unsupported value: " + value);
         }
         return new YearMonth(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)));
+    }
+
+    @Override
+    public int compareTo(YearMonth other) {
+        int result = Double.compare(year, other.year);
+        return result != 0 ? result : Double.compare(month, other.month);
     }
 
     @Override
