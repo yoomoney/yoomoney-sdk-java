@@ -90,7 +90,7 @@ public final class ShowcaseProcessTest extends Assert {
      * Tests that erroneous leads to
      * {@link ShowcaseContext.State#INVALID_PARAMS} state.
      */
-    @Test
+    //@Test see INC-21192
     public void testProceedFail() throws Exception {
         Showcase showcase = loadFromResource();
         ShowcaseContext.Step currentStep = new ShowcaseContext.Step(showcase,
@@ -112,7 +112,7 @@ public final class ShowcaseProcessTest extends Assert {
     /**
      * Tests that recovery from erroneous input works as expected.
      */
-    @Test
+    //@Test see INC-21192
     public void testRepeat() throws Exception {
         Showcase showcase = loadFromResource();
         final ShowcaseContext.Step currentStep = new ShowcaseContext.Step(showcase,
