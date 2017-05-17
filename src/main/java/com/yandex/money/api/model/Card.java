@@ -36,7 +36,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class Card implements BankCardInfo {
+public class Card implements BankCardInfo, MoneySource {
 
     @SerializedName("id")
     public final String id;

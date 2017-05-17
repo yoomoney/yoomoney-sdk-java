@@ -8,7 +8,7 @@ This Java library contains classes that allows you to do payments and call other
 
 The library uses:
 
-* [OkHttp][1] 3.7.0
+* [OkHttp][1] 3.8.0
 * [Google GSON][2] 2.8.0
 
 ## Usage
@@ -28,7 +28,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.yandex.money.api:yandex-money-sdk-java:7.0.0'
+    compile 'com.yandex.money.api:yandex-money-sdk-java:7.0.1'
 }
 ```
 

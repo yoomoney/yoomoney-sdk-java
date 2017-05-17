@@ -30,7 +30,7 @@ import com.yandex.money.api.methods.payment.ProcessExternalPayment;
 import com.yandex.money.api.methods.payment.ProcessPayment;
 import com.yandex.money.api.methods.payment.RequestExternalPayment;
 import com.yandex.money.api.methods.payment.RequestPayment;
-import com.yandex.money.api.model.Identifiable;
+import com.yandex.money.api.model.MoneySource;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.net.clients.DefaultApiClient;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
@@ -209,7 +209,7 @@ public class PaymentProcessTest {
             }
 
             @Override
-            public Identifiable getMoneySource() {
+            public MoneySource getMoneySource() {
                 return null;
             }
 

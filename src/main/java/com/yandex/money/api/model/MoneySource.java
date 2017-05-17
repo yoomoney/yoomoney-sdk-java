@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,47 +24,8 @@
 
 package com.yandex.money.api.model;
 
-import com.google.gson.annotations.SerializedName;
-
 /**
- * Wallet. It used for payments from user's account.
+ * Marker interface for payment's money sources.
  */
-public class Wallet implements MoneySource {
-
-    @SuppressWarnings("WeakerAccess")
-    public static final String ID = "wallet";
-
-    @SerializedName("allowed")
-    public final boolean allowed;
-
-    public Wallet(boolean allowed) {
-        this.allowed = allowed;
-    }
-
-    @Override
-    public String getId() {
-        return ID;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Wallet wallet = (Wallet) o;
-
-        return allowed == wallet.allowed;
-    }
-
-    @Override
-    public int hashCode() {
-        return (allowed ? 1 : 0);
-    }
-
-    @Override
-    public String toString() {
-        return "Wallet{" +
-                "allowed=" + allowed +
-                '}';
-    }
+public interface MoneySource extends Identifiable {
 }

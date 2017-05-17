@@ -26,7 +26,7 @@ package com.yandex.money.api.processes;
 
 import com.yandex.money.api.methods.payment.BaseProcessPayment;
 import com.yandex.money.api.methods.payment.BaseRequestPayment;
-import com.yandex.money.api.model.Identifiable;
+import com.yandex.money.api.model.MoneySource;
 
 import java.util.Map;
 
@@ -70,7 +70,7 @@ public interface IPaymentProcess extends Process {
         /**
          * @return selected money source
          */
-        Identifiable getMoneySource();
+        MoneySource getMoneySource();
 
         /**
          * @return CSC code if required

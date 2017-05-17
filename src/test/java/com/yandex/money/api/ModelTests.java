@@ -67,7 +67,8 @@ public class ModelTests {
 
     @Test
     public void testCard() {
-        performTest(createCard(), Card.class);
+        checkType("/model/card-1.json", Card.class);
+        checkType("/model/card-2.json", Card.class);
     }
 
     @Test
@@ -164,10 +165,6 @@ public class ModelTests {
         }
     }
 
-    private static <T> void performTest(T value, TypeAdapter<T> adapter) {
-        assertEquals(adapter.fromJson(adapter.toJsonTree(value)), value);
-    }
-
     private static <T> void performTest(T value, Class<T> cls) {
         Gson gson = GsonProvider.getGson();
         assertEquals(gson.fromJson(gson.toJson(value), cls), value);
@@ -178,14 +175,5 @@ public class ModelTests {
                 .setTotal(BigDecimal.ONE)
                 .setAvailable(BigDecimal.TEN)
                 .create();
-    }
-
-    private static Card createCard() {
-        Card.Builder builder = new Card.Builder()
-                .setCardholderName("IVAN IVANOV")
-                .setPanFragment("panFragment")
-                .setType(Card.Type.MASTER_CARD)
-                .setId("id");
-        return builder.create();
     }
 }

@@ -35,7 +35,7 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
-public class ExternalCard implements BankCardInfo {
+public class ExternalCard implements BankCardInfo, MoneySource {
 
     @SerializedName("payment_card_type")
     public final Card.Type type;
