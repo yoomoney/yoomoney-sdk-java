@@ -182,6 +182,6 @@ public class DateTimeTest {
     }
 
     private DateTime createDateTime() {
-        return DateTime.from(820443540000L);
+        return DateTime.from(1995, Calendar.DECEMBER, 31, 23, 59);
     }
 }
