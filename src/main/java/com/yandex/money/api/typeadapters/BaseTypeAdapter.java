@@ -31,6 +31,7 @@ import com.google.gson.JsonSerializer;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -57,7 +58,7 @@ public abstract class BaseTypeAdapter<T> implements TypeAdapter<T>, JsonSerializ
 
     @Override
     public T fromJson(InputStream inputStream) {
-        return getGson().fromJson(new InputStreamReader(inputStream), getType());
+        return getGson().fromJson(new InputStreamReader(inputStream, Charset.forName("UTF-8")), getType());
     }
 
     @Override
