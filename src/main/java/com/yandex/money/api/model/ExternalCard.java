@@ -32,13 +32,11 @@ import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Represents card that not bound to an account.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public class ExternalCard implements BankCardInfo, MoneySource {
 
     @SerializedName("payment_card_type")
-    public final Card.Type type;
+    public final CardBrand type;
     @SuppressWarnings("WeakerAccess")
     @SerializedName("pan_fragment")
     public final String panFragment;
@@ -72,7 +70,7 @@ public class ExternalCard implements BankCardInfo, MoneySource {
     }
 
     @Override
-    public Card.Type getType() {
+    public CardBrand getCardBrand() {
         return type;
     }
 
@@ -121,12 +119,12 @@ public class ExternalCard implements BankCardInfo, MoneySource {
 
     public static class Builder {
 
-        Card.Type type;
+        CardBrand type;
         String panFragment;
         String fundingSourceType;
         String moneySourceToken;
 
-        public Builder setType(Card.Type type) {
+        public Builder setType(CardBrand type) {
             this.type = type;
             return this;
         }

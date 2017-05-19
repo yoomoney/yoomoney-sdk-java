@@ -26,26 +26,17 @@ package com.yandex.money.api.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.time.YearMonth;
-import com.yandex.money.api.util.Enums;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * Bank card info.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Represents basic bank card data.
  */
 public class Card implements BankCardInfo, MoneySource {
 
     @SerializedName("id")
     public final String id;
-    /**
-     * name of cardholder
-     */
-    @SuppressWarnings("WeakerAccess")
-    @SerializedName("cardholder_name")
-    public final String cardholderName;
 
     /**
      * panned fragment of card's number
@@ -58,13 +49,12 @@ public class Card implements BankCardInfo, MoneySource {
      * type of a card (e.g. VISA, MasterCard, AmericanExpress, etc.)
      */
     @SerializedName("type")
-    public final Type type;
+    public final CardBrand type;
 
     @SuppressWarnings("WeakerAccess")
     protected Card(Builder builder) {
         id = checkNotEmpty(builder.id, "id");
-        cardholderName = builder.cardholderName;
-        panFragment = builder.panFragment;
+        panFragment = checkNotEmpty(builder.panFragment, "panFragment");
         type = checkNotNull(builder.type, "type");
     }
 
@@ -75,7 +65,7 @@ public class Card implements BankCardInfo, MoneySource {
 
     @Override
     public String getCardholderName() {
-        return cardholderName;
+        return null;
     }
 
     @Override
@@ -84,7 +74,7 @@ public class Card implements BankCardInfo, MoneySource {
     }
 
     @Override
-    public Type getType() {
+    public CardBrand getCardBrand() {
         return type;
     }
 
@@ -106,8 +96,6 @@ public class Card implements BankCardInfo, MoneySource {
         Card card = (Card) o;
 
         if (!id.equals(card.id)) return false;
-        if (cardholderName != null ? !cardholderName.equals(card.cardholderName) : card.cardholderName != null)
-            return false;
         //noinspection SimplifiableIfStatement
         if (panFragment != null ? !panFragment.equals(card.panFragment) : card.panFragment != null) return false;
         return type == card.type;
@@ -116,7 +104,6 @@ public class Card implements BankCardInfo, MoneySource {
     @Override
     public int hashCode() {
         int result = id.hashCode();
-        result = 31 * result + (cardholderName != null ? cardholderName.hashCode() : 0);
         result = 31 * result + (panFragment != null ? panFragment.hashCode() : 0);
         result = 31 * result + type.hashCode();
         return result;
@@ -126,64 +113,24 @@ public class Card implements BankCardInfo, MoneySource {
     public String toString() {
         return "Card{" +
                 "id='" + id + '\'' +
-                ", cardholderName='" + cardholderName + '\'' +
                 ", panFragment='" + panFragment + '\'' +
                 ", type=" + type +
                 '}';
     }
 
-    public enum Type implements Enums.WithCode<Type> {
-
-        @SerializedName("VISA")
-        VISA("VISA", "CVV2", 3),
-        @SerializedName("MasterCard")
-        MASTER_CARD("MasterCard", "CVC2", 3),
-        @SerializedName("AmericanExpress")
-        AMERICAN_EXPRESS("AmericanExpress", "CID", 4), // also cscAbbr = 4DBC
-        @SerializedName("JCB")
-        JCB("JCB", "CAV2", 3),
-        @SerializedName("Mir")
-        MIR("Mir", "CSC", 3),
-        @SerializedName("UnionPay")
-        UNION_PAY("UnionPay", "CVN2", 3),
-        @SerializedName("Unknown")
-        UNKNOWN("Unknown", "CSC", 4);
-
-        public final String name;
-        public final String cscAbbr;
-        public final int cscLength;
-
-        Type(String name, String cscAbbr, int cscLength) {
-            this.name = name;
-            this.cscAbbr = cscAbbr;
-            this.cscLength = cscLength;
-        }
-
-        @Override
-        public String getCode() {
-            return name;
-        }
-
-        @Override
-        public Type[] getValues() {
-            return values();
-        }
-    }
-
     public static class Builder {
 
         String id;
-        String cardholderName;
         String panFragment;
-        Type type = Type.UNKNOWN;
+        CardBrand type = CardBrand.UNKNOWN;
 
         public Builder setId(String id) {
             this.id = id;
             return this;
         }
 
+        @Deprecated
         public Builder setCardholderName(String cardholderName) {
-            this.cardholderName = cardholderName;
             return this;
         }
 
@@ -192,7 +139,7 @@ public class Card implements BankCardInfo, MoneySource {
             return this;
         }
 
-        public Builder setType(Type type) {
+        public Builder setType(CardBrand type) {
             this.type = type;
             return this;
         }

@@ -43,9 +43,8 @@ public interface BankCardInfo extends Identifiable {
 
     /**
      * @return card type
-     * @see com.yandex.money.api.model.Card.Type
      */
-    Card.Type getType();
+    CardBrand getCardBrand();
 
     /**
      * @return expiration date
