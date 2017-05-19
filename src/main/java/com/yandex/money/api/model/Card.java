@@ -129,11 +129,6 @@ public class Card implements BankCardInfo, MoneySource {
             return this;
         }
 
-        @Deprecated
-        public Builder setCardholderName(String cardholderName) {
-            return this;
-        }
-
         public Builder setPanFragment(String panFragment) {
             this.panFragment = panFragment;
             return this;
