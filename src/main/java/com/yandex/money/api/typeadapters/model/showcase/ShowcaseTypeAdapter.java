@@ -30,6 +30,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
+import com.google.gson.reflect.TypeToken;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.Showcase.Error;
@@ -61,7 +62,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     private static final String MEMBER_TITLE = "title";
 
     private ShowcaseTypeAdapter() {
-        // register type adapters to GSON instance.
+        //noinspection ResultOfMethodCallIgnored
         GroupTypeAdapter.getInstance();
     }
 
@@ -84,7 +85,8 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
             form = ListDelegate.deserialize(array, context);
         }
 
-        List<AllowedMoneySource> moneySources = context.deserialize(object.get(MEMBER_MONEY_SOURCE), List.class);
+        List<AllowedMoneySource> moneySources = context.deserialize(object.get(MEMBER_MONEY_SOURCE),
+                new TypeToken<List<AllowedMoneySource>>() {}.getType());
         List<Error> errors = ErrorTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_ERROR));
 
         return new Showcase.Builder()

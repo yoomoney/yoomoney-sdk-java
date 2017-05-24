@@ -25,6 +25,8 @@
 package com.yandex.money.api;
 
 import com.google.gson.Gson;
+import com.yandex.money.api.model.AllowedMoneySource;
+import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.container.GroupTypeAdapter;
@@ -41,6 +43,11 @@ import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TelTypeAdapter
 import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TextAreaTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TextTypeAdapter;
 import org.testng.annotations.Test;
+
+import java.io.FileNotFoundException;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
 
 /**
  * Checks {@link com.yandex.money.api.model.showcase.components.Component}'s {@link Gson} type
@@ -132,15 +139,32 @@ public final class ShowcaseTypeAdapterTest {
 
     @Test
     public void testShowcaseBills() {
-        check("showcase_bills.json", ShowcaseTypeAdapter.getInstance());
+        testShowcase("showcase_bills.json");
     }
 
     @Test
     public void testShowcaseSkype() {
-        check("showcase_skype.json", ShowcaseTypeAdapter.getInstance());
+        testShowcase("showcase_skype.json");
+    }
+
+    private static void testShowcase(String fileName) {
+        ShowcaseTypeAdapter adapter = ShowcaseTypeAdapter.getInstance();
+        check(fileName, adapter);
+
+        try {
+            Showcase showcase = adapter.fromJson(Resources.load(getPath(fileName)));
+            Object allowedMoneySource = showcase.moneySources.get(0);
+            assertEquals(allowedMoneySource.getClass(), AllowedMoneySource.class);
+        } catch (FileNotFoundException e) {
+            fail();
+        }
     }
 
     private static <T> void check(String fileName, TypeAdapter<T> typeAdapter) {
-        ModelTests.checkTypeAdapter("/showcase/" + fileName, typeAdapter);
+        ModelTests.checkTypeAdapter(getPath(fileName), typeAdapter);
+    }
+
+    private static String getPath(String fileName) {
+        return "/showcase/" + fileName;
     }
 }
