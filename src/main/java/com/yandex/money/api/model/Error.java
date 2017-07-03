@@ -36,6 +36,8 @@ import java.util.Map;
  */
 public enum Error implements Enums.WithCode<Error> {
 
+    @SerializedName("account_already_identified")
+    ACCOUNT_ALREADY_IDENTIFIED("account_already_identified"),
     @SerializedName("access_denied")
     ACCESS_DENIED("access_denied"),
     @SerializedName("account_blocked")
@@ -178,6 +180,8 @@ public enum Error implements Enums.WithCode<Error> {
     PAYMENT_EXPIRED("payment_expired"),
     @SerializedName("payment_refused")
     PAYMENT_REFUSED("payment_refused"),
+    @SerializedName("personification_refused")
+    PERSONIFICATION_REFUSED("personification_refused"),
     @SerializedName("phone_number_refused")
     PHONE_NUMBER_REFUSED("phone_number_refused"),
     @SerializedName("PIN_CHANGE_TIME_NOT_YET")
