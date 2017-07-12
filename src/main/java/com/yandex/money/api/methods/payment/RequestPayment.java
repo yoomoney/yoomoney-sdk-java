@@ -106,13 +106,6 @@ public class RequestPayment extends BaseRequestPayment {
     @SerializedName("multiple_recipients_found")
     public final Boolean multipleRecipientsFound;
 
-    /**
-     * Payment fees.
-     */
-    @SuppressWarnings("WeakerAccess")
-    @SerializedName("fees")
-    public final Fees fees;
-
     @SuppressWarnings("WeakerAccess")
     protected RequestPayment(Builder builder) {
         super(builder);
@@ -137,7 +130,6 @@ public class RequestPayment extends BaseRequestPayment {
         this.accountUnblockUri = builder.accountUnblockUri;
         this.extActionUri = builder.extActionUri;
         this.multipleRecipientsFound = builder.multipleRecipientsFound;
-        this.fees = builder.fees;
     }
 
     public static final class MoneySource {
@@ -348,7 +340,6 @@ public class RequestPayment extends BaseRequestPayment {
         String accountUnblockUri;
         String extActionUri;
         Boolean multipleRecipientsFound;
-        Fees fees;
 
         public Builder setMoneySources(MoneySource moneySource) {
             this.moneySource = moneySource;
@@ -390,12 +381,7 @@ public class RequestPayment extends BaseRequestPayment {
             return this;
         }
 
-        public Builder setFees(Fees fees) {
-            this.fees = fees;
-            return this;
-        }
 
-        @Override
         public RequestPayment create() {
             return new RequestPayment(this);
         }
