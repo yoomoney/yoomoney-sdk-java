@@ -30,7 +30,6 @@ import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.Fees;
 import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
@@ -380,7 +379,6 @@ public class RequestPayment extends BaseRequestPayment {
             this.multipleRecipientsFound = multipleRecipientsFound;
             return this;
         }
-
 
         public RequestPayment create() {
             return new RequestPayment(this);
