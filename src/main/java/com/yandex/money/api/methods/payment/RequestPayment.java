@@ -26,11 +26,8 @@ package com.yandex.money.api.methods.payment;
 
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.methods.payment.params.PaymentParams;
-import com.yandex.money.api.model.AccountStatus;
-import com.yandex.money.api.model.AccountType;
-import com.yandex.money.api.model.Card;
+import com.yandex.money.api.model.*;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.Enums;
@@ -105,6 +102,13 @@ public class RequestPayment extends BaseRequestPayment {
     @SerializedName("multiple_recipients_found")
     public final Boolean multipleRecipientsFound;
 
+    /**
+     * Payment fees
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("fees")
+    public final Fees fees;
+
     @SuppressWarnings("WeakerAccess")
     protected RequestPayment(Builder builder) {
         super(builder);
@@ -129,6 +133,7 @@ public class RequestPayment extends BaseRequestPayment {
         this.accountUnblockUri = builder.accountUnblockUri;
         this.extActionUri = builder.extActionUri;
         this.multipleRecipientsFound = builder.multipleRecipientsFound;
+        this.fees = builder.fees;
     }
 
     public static final class MoneySource {
@@ -339,6 +344,7 @@ public class RequestPayment extends BaseRequestPayment {
         String accountUnblockUri;
         String extActionUri;
         Boolean multipleRecipientsFound;
+        Fees fees;
 
         public Builder setMoneySources(MoneySource moneySource) {
             this.moneySource = moneySource;
@@ -377,6 +383,11 @@ public class RequestPayment extends BaseRequestPayment {
 
         public Builder setMultipleRecipientsFound(Boolean multipleRecipientsFound) {
             this.multipleRecipientsFound = multipleRecipientsFound;
+            return this;
+        }
+
+        public Builder setFees(Fees fees) {
+            this.fees = fees;
             return this;
         }
 
