@@ -26,8 +26,12 @@ package com.yandex.money.api.methods.payment;
 
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.methods.payment.params.PaymentParams;
-import com.yandex.money.api.model.*;
+import com.yandex.money.api.model.AccountStatus;
+import com.yandex.money.api.model.AccountType;
+import com.yandex.money.api.model.Card;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.Fees;
+import com.yandex.money.api.model.Wallet;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.Enums;
