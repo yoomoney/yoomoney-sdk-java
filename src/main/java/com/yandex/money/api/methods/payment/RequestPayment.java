@@ -103,7 +103,7 @@ public class RequestPayment extends BaseRequestPayment {
     public final Boolean multipleRecipientsFound;
 
     /**
-     * Payment fees
+     * Payment fees.
      */
     @SuppressWarnings("WeakerAccess")
     @SerializedName("fees")
