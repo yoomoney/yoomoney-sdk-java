@@ -26,6 +26,7 @@ package com.yandex.money.api.methods.payment;
 
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.Fees;
 import com.yandex.money.api.util.Constants;
 import com.yandex.money.api.util.Enums;
 
@@ -70,6 +71,13 @@ public abstract class BaseRequestPayment {
     @SerializedName("title")
     public final String title;
 
+    /**
+     * Payment fees.
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("fees")
+    public final Fees fees;
+
     @SuppressWarnings("WeakerAccess")
     protected BaseRequestPayment(Builder builder) {
         status = checkNotNull(builder.status, "status");
@@ -90,6 +98,7 @@ public abstract class BaseRequestPayment {
         requestId = builder.requestId;
         contractAmount = builder.contractAmount;
         title = builder.title;
+        fees = builder.fees;
     }
 
     @Override
@@ -102,10 +111,11 @@ public abstract class BaseRequestPayment {
         if (status != that.status) return false;
         if (error != that.error) return false;
         if (requestId != null ? !requestId.equals(that.requestId) : that.requestId != null) return false;
-        //noinspection SimplifiableIfStatement
         if (contractAmount != null ? !contractAmount.equals(that.contractAmount) : that.contractAmount != null)
             return false;
-        return title != null ? title.equals(that.title) : that.title == null;
+        //noinspection SimplifiableIfStatement
+        if (title != null ? !title.equals(that.title) : that.title != null) return false;
+        return fees != null ? fees.equals(that.fees) : that.fees == null;
     }
 
     @Override
@@ -115,6 +125,7 @@ public abstract class BaseRequestPayment {
         result = 31 * result + (requestId != null ? requestId.hashCode() : 0);
         result = 31 * result + (contractAmount != null ? contractAmount.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
+        result = 31 * result + (fees != null ? fees.hashCode() : 0);
         return result;
     }
 
@@ -126,6 +137,7 @@ public abstract class BaseRequestPayment {
                 ", requestId='" + requestId + '\'' +
                 ", contractAmount=" + contractAmount +
                 ", title='" + title + '\'' +
+                ", fees=" + fees +
                 '}';
     }
 
@@ -162,6 +174,7 @@ public abstract class BaseRequestPayment {
         Error error;
         BigDecimal contractAmount;
         String title;
+        Fees fees;
 
         public final Builder setContractAmount(BigDecimal contractAmount) {
             this.contractAmount = contractAmount;
@@ -185,6 +198,11 @@ public abstract class BaseRequestPayment {
 
         public Builder setTitle(String title) {
             this.title = title;
+            return this;
+        }
+
+        public Builder setFees(Fees fees) {
+            this.fees = fees;
             return this;
         }
 
