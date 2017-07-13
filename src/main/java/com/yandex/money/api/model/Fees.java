@@ -41,6 +41,7 @@ public class Fees {
 
         final Fees fees = (Fees) o;
 
+        //noinspection SimplifiableIfStatement
         if (service != null ? !service.equals(fees.service) : fees.service != null) return false;
         return counterparty != null ? counterparty.equals(fees.counterparty) : fees.counterparty == null;
     }
