@@ -79,9 +79,9 @@ public class ModelTests {
 
     @Test
     public void testFees() throws Exception {
-        checkType("/model/fees-service-fee.json", Fees.class);
-        checkType("/model/fees-counterparty-fee.json", Fees.class);
-        checkType("/model/fees-full.json", Fees.class);
+        checkType("/model/fees-1.json", Fees.class);
+        checkType("/model/fees-2.json", Fees.class);
+        checkType("/model/fees-3.json", Fees.class);
     }
 
     @Test
@@ -124,19 +124,15 @@ public class ModelTests {
     @Test
     public void testRequestExternalPayment() {
         checkType("/methods/payment/request-external-payment-1.json", RequestExternalPayment.class);
-        checkType("/methods/payment/request-external-payment-1-fee-service.json", RequestExternalPayment.class);
-        checkType("/methods/payment/request-external-payment-1-fee-counterparty.json", RequestExternalPayment.class);
-        checkType("/methods/payment/request-external-payment-1-fee-full.json", RequestExternalPayment.class);
         checkType("/methods/payment/request-external-payment-2.json", RequestExternalPayment.class);
+        checkType("/methods/payment/request-external-payment-3.json", RequestExternalPayment.class);
     }
 
     @Test
     public void testRequestPayment() {
         checkType("/methods/payment/request-payment-1.json", RequestPayment.class);
-        checkType("/methods/payment/request-payment-1-fee-service.json", RequestPayment.class);
-        checkType("/methods/payment/request-payment-1-fee-counterparty.json", RequestPayment.class);
-        checkType("/methods/payment/request-payment-1-fee-full.json", RequestPayment.class);
         checkType("/methods/payment/request-payment-2.json", RequestPayment.class);
+        checkType("/methods/payment/request-payment-3.json", RequestPayment.class);
     }
 
     @Test
