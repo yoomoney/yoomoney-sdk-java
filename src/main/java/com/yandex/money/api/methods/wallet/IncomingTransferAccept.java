@@ -61,9 +61,6 @@ public class IncomingTransferAccept extends SimpleResponse {
         switch (status) {
             case REFUSED:
                 switch (error) {
-                    case ILLEGAL_PARAM_PROTECTION_CODE:
-                        checkNotNull(protectionCodeAttemptsAvailable, "protectionCodeAttemptsAvailable");
-                        break;
                     case EXT_ACTION_REQUIRED:
                         checkNotNull(extActionUri, "extActionUri");
                         break;
