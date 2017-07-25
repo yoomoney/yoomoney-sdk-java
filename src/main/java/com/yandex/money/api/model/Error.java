@@ -199,7 +199,9 @@ public enum Error implements Enums.WithCode<Error> {
     @SerializedName("unauthorized_client")
     UNAUTHORIZED_CLIENT("unauthorized_client"),
     @SerializedName("unknown")
-    UNKNOWN("unknown");
+    UNKNOWN("unknown"),
+    @SerializedName("WRONG_PAYMENT_AUTH")
+    WRONG_PAYMENT_AUTH("WRONG_PAYMENT_AUTH");
 
     private static final Map<String, Error> ERRORS;
     static {
