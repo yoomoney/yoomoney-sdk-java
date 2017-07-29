@@ -391,6 +391,7 @@ public final class ShowcaseContext {
         public JsonElement serialize(Params src, Type typeOfSrc, JsonSerializationContext context) {
             throw new UnsupportedOperationException("not implemented");
         }
+
         @Override
         public Class<Params> getType() {
             return Params.class;

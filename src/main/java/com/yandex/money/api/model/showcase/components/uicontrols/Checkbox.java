@@ -26,8 +26,6 @@ package com.yandex.money.api.model.showcase.components.uicontrols;
 
 /**
  * On/off control.
- *
- * @author Aleksandr Ershov (asershov@yamoney.ru)
  */
 public class Checkbox extends ParameterControl {
 
@@ -36,6 +34,7 @@ public class Checkbox extends ParameterControl {
      */
     public boolean checked;
 
+    @SuppressWarnings("WeakerAccess")
     protected Checkbox(Builder builder) {
         super(builder);
         checked = builder.checked;
