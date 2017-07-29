@@ -17,7 +17,7 @@ public class Fees {
     public final BigDecimal service;
 
     /**
-     * Сounterparty fee. (optional)
+     * Counterparty fee. (optional)
      */
     @SuppressWarnings("WeakerAccess")
     @SerializedName("counterparty")
