@@ -25,15 +25,17 @@
 package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.Component;
+import com.yandex.money.api.model.showcase.components.Parameter;
+import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.util.Enums;
+
+import java.util.Map;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * A {@link Group} is implementation of a {@link Component} that can contain only {@link Component}
  * instances.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public class Group extends Container<Component> {
 
@@ -42,9 +44,33 @@ public class Group extends Container<Component> {
      */
     public final Layout layout;
 
+    @SuppressWarnings("WeakerAccess")
     protected Group(Builder builder) {
         super(builder);
         layout = checkNotNull(builder.layout, "layout");
+    }
+
+    /**
+     * Fills specified map with values from group's controls.
+     *
+     * @param map map to fill
+     * @param group group to traverse
+     */
+    public static void fillMapWithValues(Map<String, String> map, Group group) {
+        for (Component component : group.items) {
+            if (component instanceof Group) {
+                fillMapWithValues(map, (Group) component);
+            } else if (component instanceof Parameter) {
+                Parameter parameter = (Parameter) component;
+                map.put(parameter.getName(), parameter.getValue());
+                if (component instanceof Select) {
+                    Select.Option option = ((Select) component).getSelectedOption();
+                    if (option != null && option.group != null) {
+                        fillMapWithValues(map, option.group);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -128,6 +154,7 @@ public class Group extends Container<Component> {
             return new Group(this);
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         public Builder setLayout(Layout layout) {
             this.layout = layout;
             return this;

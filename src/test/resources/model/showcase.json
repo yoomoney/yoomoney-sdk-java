@@ -1,0 +1,73 @@
+{
+  "title": "Test Showcase",
+  "money_source": [
+    "wallet",
+    "cards",
+    "payment-card",
+    "cash"
+  ],
+  "hidden_fields": {
+    "a": "123",
+    "b": "456",
+    "c": "789"
+  },
+  "form": [
+    {
+      "type": "text",
+      "name": "text",
+      "label": "Text",
+      "required": true,
+      "readonly": false
+    },
+    {
+      "type": "number",
+      "name": "number",
+      "label": "Number",
+      "required": false,
+      "readonly": false
+    },
+    {
+      "type": "amount",
+      "name": "amount",
+      "currency": "RUB",
+      "label": "Amount",
+      "required": true,
+      "readonly": false
+    },
+    {
+      "type": "select",
+      "name": "select",
+      "label": "Number",
+      "required": true,
+      "readonly": false,
+      "options": [
+        {
+          "value": "option1",
+          "label": "Option 1"
+        },
+        {
+          "value": "option2",
+          "label": "Option 2",
+          "group": [
+            {
+              "type": "tel",
+              "name": "tel",
+              "label": "Telephone",
+              "required": true,
+              "readonly": false
+            },
+            {
+              "type": "checkbox",
+              "name": "checkbox",
+              "label": "Checkbox",
+              "checked": false,
+              "value": "checkboxValue",
+              "required": false,
+              "readonly": false
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

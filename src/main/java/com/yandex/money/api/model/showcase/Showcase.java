@@ -26,10 +26,7 @@ package com.yandex.money.api.model.showcase;
 
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.model.AllowedMoneySource;
-import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.containers.Group;
-import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.net.BaseApiRequest;
 import com.yandex.money.api.net.HttpClientResponse;
 import com.yandex.money.api.net.providers.HostsProvider;
@@ -74,7 +71,7 @@ public final class Showcase {
     public Map<String, String> getPaymentParameters() {
         Map<String, String> params = new HashMap<>();
         params.putAll(hiddenFields);
-        fillPaymentParameters(params, form);
+        Group.fillMapWithValues(params, form);
         return params;
     }
 
@@ -88,6 +85,7 @@ public final class Showcase {
         if (!title.equals(showcase.title)) return false;
         if (!hiddenFields.equals(showcase.hiddenFields)) return false;
         if (form != null ? !form.equals(showcase.form) : showcase.form != null) return false;
+        //noinspection SimplifiableIfStatement
         if (!moneySources.equals(showcase.moneySources)) return false;
         return errors.equals(showcase.errors);
     }
@@ -100,23 +98,6 @@ public final class Showcase {
         result = 31 * result + moneySources.hashCode();
         result = 31 * result + errors.hashCode();
         return result;
-    }
-
-    private static void fillPaymentParameters(Map<String, String> parameters, Group group) {
-        for (Component component : group.items) {
-            if (component instanceof Group) {
-                fillPaymentParameters(parameters, (Group) component);
-            } else if (component instanceof Parameter) {
-                Parameter parameter = (Parameter) component;
-                parameters.put(parameter.getName(), parameter.getValue());
-                if (component instanceof Select) {
-                    Group selectedGroup = ((Select) component).getSelectedOption().group;
-                    if (selectedGroup != null) {
-                        fillPaymentParameters(parameters, selectedGroup);
-                    }
-                }
-            }
-        }
     }
 
     public static class Builder {
