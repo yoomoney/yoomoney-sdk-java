@@ -42,7 +42,7 @@ public enum Error implements Enums.WithCode<Error> {
     ACCESS_DENIED("access_denied"),
     @SerializedName("account_blocked")
     ACCOUNT_BLOCKED("account_blocked"),
-    @SerializedName("activation_refused")
+    @SerializedName(value = "activation_refused", alternate = "forbidden")
     ACTIVATION_REFUSED("activation_refused"),
     @SerializedName("activation_too_many_ycard")
     ACTIVATION_TOO_MANY_YCARD("activation_too_many_ycard"),
@@ -72,6 +72,8 @@ public enum Error implements Enums.WithCode<Error> {
     ILLEGAL_PARAM_AMOUNT_DUE("illegal_param_amount_due"),
     @SerializedName("illegal_param_application_name")
     ILLEGAL_PARAM_APPLICATION_NAME("illegal_param_application_name"),
+    @SerializedName("illegal_param_arrow_pass")
+    ILLEGAL_PARAM_ARROW_PASS("illegal_param_arrow_pass"),
     @SerializedName("illegal_param_client_id")
     ILLEGAL_PARAM_CLIENT_ID("illegal_param_client_id"),
     @SerializedName("illegal_param_comment")
@@ -166,7 +168,7 @@ public enum Error implements Enums.WithCode<Error> {
     INVALID_REQUEST("invalid_request"),
     @SerializedName("invalid_scope")
     INVALID_SCOPE("invalid_scope"),
-    @SerializedName("not_enough_funds")
+    @SerializedName(value = "not_enough_funds", alternate = "not_enough_money")
     NOT_ENOUGH_FUNDS("not_enough_funds"),
     @SerializedName("limit_exceeded")
     LIMIT_EXCEEDED("limit_exceeded"),
