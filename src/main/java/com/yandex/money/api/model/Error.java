@@ -64,6 +64,8 @@ public enum Error implements Enums.WithCode<Error> {
     EXT_ACTION_REQUIRED("ext_action_required"),
     @SerializedName("favourite_duplicate")
     FAVORITE_DUPLICATE("favourite_duplicate"),
+    @SerializedName("forbidden")
+    FORBIDDEN("forbidden"),
     @SerializedName("illegal_param_activation_code")
     ILLEGAL_PARAM_ACTIVATION_CODE("illegal_param_activation_code"),
     @SerializedName("illegal_param_amount")
@@ -72,6 +74,8 @@ public enum Error implements Enums.WithCode<Error> {
     ILLEGAL_PARAM_AMOUNT_DUE("illegal_param_amount_due"),
     @SerializedName("illegal_param_application_name")
     ILLEGAL_PARAM_APPLICATION_NAME("illegal_param_application_name"),
+    @SerializedName("illegal_param_arrow_pass")
+    ILLEGAL_PARAM_ARROW_PASS("illegal_param_arrow_pass"),
     @SerializedName("illegal_param_client_id")
     ILLEGAL_PARAM_CLIENT_ID("illegal_param_client_id"),
     @SerializedName("illegal_param_comment")
@@ -168,6 +172,8 @@ public enum Error implements Enums.WithCode<Error> {
     INVALID_SCOPE("invalid_scope"),
     @SerializedName("not_enough_funds")
     NOT_ENOUGH_FUNDS("not_enough_funds"),
+    @SerializedName("not_enough_money")
+    NOT_ENOUGH_MONEY("not_enough_money"),
     @SerializedName("limit_exceeded")
     LIMIT_EXCEEDED("limit_exceeded"),
     @SerializedName("linked_phone_required")
