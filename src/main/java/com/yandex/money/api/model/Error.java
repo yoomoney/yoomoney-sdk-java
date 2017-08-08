@@ -42,7 +42,7 @@ public enum Error implements Enums.WithCode<Error> {
     ACCESS_DENIED("access_denied"),
     @SerializedName("account_blocked")
     ACCOUNT_BLOCKED("account_blocked"),
-    @SerializedName("activation_refused")
+    @SerializedName(value = "activation_refused", alternate = "forbidden")
     ACTIVATION_REFUSED("activation_refused"),
     @SerializedName("activation_too_many_ycard")
     ACTIVATION_TOO_MANY_YCARD("activation_too_many_ycard"),
@@ -64,8 +64,6 @@ public enum Error implements Enums.WithCode<Error> {
     EXT_ACTION_REQUIRED("ext_action_required"),
     @SerializedName("favourite_duplicate")
     FAVORITE_DUPLICATE("favourite_duplicate"),
-    @SerializedName("forbidden")
-    FORBIDDEN("forbidden"),
     @SerializedName("illegal_param_activation_code")
     ILLEGAL_PARAM_ACTIVATION_CODE("illegal_param_activation_code"),
     @SerializedName("illegal_param_amount")
@@ -170,10 +168,8 @@ public enum Error implements Enums.WithCode<Error> {
     INVALID_REQUEST("invalid_request"),
     @SerializedName("invalid_scope")
     INVALID_SCOPE("invalid_scope"),
-    @SerializedName("not_enough_funds")
+    @SerializedName(value = "not_enough_funds", alternate = "not_enough_money")
     NOT_ENOUGH_FUNDS("not_enough_funds"),
-    @SerializedName("not_enough_money")
-    NOT_ENOUGH_MONEY("not_enough_money"),
     @SerializedName("limit_exceeded")
     LIMIT_EXCEEDED("limit_exceeded"),
     @SerializedName("linked_phone_required")
