@@ -476,11 +476,11 @@ public class Operation implements Identifiable {
         String label;
         String details;
         Boolean repeatable;
-        Map<String, String> paymentParameters = Collections.emptyMap();
+        Map<String, String> paymentParameters;
         Boolean favorite;
         Type type;
         DigitalGoods digitalGoods;
-        List<Integer> categories = Collections.emptyList();
+        List<Integer> categories;
         ShowcaseReference.Format format;
 
         public Builder setOperationId(String operationId) {
