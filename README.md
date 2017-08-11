@@ -15,8 +15,7 @@ The library uses:
 
 ### Gradle Dependency (jCenter)
 
-[![Download](https://api.bintray.com/packages/yandex-money/maven/yandex-money-sdk-java/images/download.svg)]
-(https://bintray.com/yandex-money/maven/yandex-money-sdk-java/_latestVersion)
+[![Download](https://api.bintray.com/packages/yandex-money/maven/yandex-money-sdk-java/images/download.svg)](https://bintray.com/yandex-money/maven/yandex-money-sdk-java/_latestVersion)
 
 To use the library in your project write this code to your build.gradle:
 
