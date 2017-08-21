@@ -26,6 +26,7 @@ package com.yandex.money.api.time;
 
 import org.testng.annotations.Test;
 
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -179,6 +180,29 @@ public class DateTimeTest {
         long mod = TimeUnit.HOURS.toMillis(24);
         long millis = withTimeAtStartOfDay.getDate().getTime();
         assertEquals(millis % mod, 0);
+    }
+
+    @Test
+    public void testWithTimeZone() throws ParseException {
+        DateTime dateTime = Iso8601Format.parse("1970-01-01T00:00:00.000Z");
+
+        dateTime = dateTime.withZone(TimeZone.getTimeZone("GMT+04:00"));
+        assertEquals(dateTime.getYear(), 1970);
+        assertEquals(dateTime.getMonth(), Calendar.JANUARY);
+        assertEquals(dateTime.getDayOfMonth(), 1);
+        assertEquals(dateTime.getHourOfDay(), 4);
+
+        dateTime = dateTime.withZone(TimeZone.getTimeZone("GMT-04:00"));
+        assertEquals(dateTime.getYear(), 1969);
+        assertEquals(dateTime.getMonth(), Calendar.DECEMBER);
+        assertEquals(dateTime.getDayOfMonth(), 31);
+        assertEquals(dateTime.getHourOfDay(), 20);
+
+        dateTime = dateTime.withZone(TimeZone.getTimeZone("GMT"));
+        assertEquals(dateTime.getYear(), 1970);
+        assertEquals(dateTime.getMonth(), Calendar.JANUARY);
+        assertEquals(dateTime.getDayOfMonth(), 1);
+        assertEquals(dateTime.getHourOfDay(), 0);
     }
 
     private DateTime createDateTime() {

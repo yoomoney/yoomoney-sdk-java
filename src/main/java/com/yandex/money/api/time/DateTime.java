@@ -43,6 +43,8 @@ public final class DateTime implements Comparable<DateTime> {
 
     DateTime(Calendar calendar) {
         this.calendar = calendar;
+        // we want to manually invoke update time within a calendar
+        this.calendar.getTimeInMillis();
     }
 
     /**
@@ -177,6 +179,7 @@ public final class DateTime implements Comparable<DateTime> {
      * @return a copy of this datetime with a different time zone
      * @see Calendar#setTimeZone(TimeZone)
      */
+    @SuppressWarnings("WeakerAccess")
     public DateTime withZone(TimeZone timeZone) {
         DateTime copy = copy();
         copy.calendar.setTimeZone(timeZone);
@@ -198,6 +201,7 @@ public final class DateTime implements Comparable<DateTime> {
         return calendar.getTime();
     }
 
+    @SuppressWarnings("WeakerAccess")
     public int getYear() {
         return calendar.get(Calendar.YEAR);
     }
@@ -210,10 +214,12 @@ public final class DateTime implements Comparable<DateTime> {
         return getMonth() + 1;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public int getDayOfMonth() {
         return calendar.get(Calendar.DAY_OF_MONTH);
     }
 
+    @SuppressWarnings("WeakerAccess")
     public int getHourOfDay() {
         return calendar.get(Calendar.HOUR_OF_DAY);
     }
