@@ -81,11 +81,13 @@ public class DateTimeTest {
         int hourOfDay = 23;
         int minute = 59;
 
-        long millis = 820443540000L;
-
         DateTime dateTime = DateTime.from(year, month, dayOfMonth, hourOfDay, minute);
         assertNotNull(dateTime);
-        assertEquals(dateTime.getDate().getTime(), millis);
+        assertEquals(dateTime.getYear(), year);
+        assertEquals(dateTime.getMonth(), month);
+        assertEquals(dateTime.getDayOfMonth(), dayOfMonth);
+        assertEquals(dateTime.getHourOfDay(), hourOfDay);
+        assertEquals(dateTime.getMinute(), minute);
         assertEquals(dateTime.getTimeZone(), TimeZone.getDefault());
     }
 
