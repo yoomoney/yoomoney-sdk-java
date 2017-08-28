@@ -28,12 +28,9 @@ import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.uicontrols.ParameterControl;
 import org.testng.Assert;
 
-/**
- * @author Slava Yasevich (vyasevich@yamoney.ru)
- */
 abstract class ParameterTest {
 
-    protected void prepareParameter(ParameterControl.Builder builder) {
+    static void prepareParameter(ParameterControl.Builder builder) {
         builder.setName("name")
                 .setValue("value")
                 .setValueAutoFill(Parameter.AutoFill.CURRENT_USER_EMAIL)
@@ -41,7 +38,7 @@ abstract class ParameterTest {
                 .setHint("hint");
     }
 
-    protected void testEmptyValues(ParameterControl.Builder builder) {
+    static void testEmptyValues(ParameterControl.Builder builder) {
         Assert.assertFalse(builder.create().isValid(null));
         Assert.assertFalse(builder.create().isValid(""));
         builder.setRequired(false);

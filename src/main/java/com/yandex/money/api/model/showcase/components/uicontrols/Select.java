@@ -57,6 +57,7 @@ public class Select extends ParameterControl {
 
     private Option selectedOption;
 
+    @SuppressWarnings("WeakerAccess")
     protected Select(Builder builder) {
         super(builder);
         options = Collections.unmodifiableList(checkNotNull(builder.options, "options"));
@@ -102,7 +103,16 @@ public class Select extends ParameterControl {
 
     @Override
     protected void onValueSet(String value) {
-        selectedOption = options.get(values.indexOf(value));
+        int index = values.indexOf(value);
+        if (index < 0) {
+            if (value == null) {
+                selectedOption = null;
+            } else {
+                setValue(null);
+            }
+        } else {
+            selectedOption = options.get(index);
+        }
     }
 
     private static List<String> getValues(List<Option> options) {
@@ -234,6 +244,7 @@ public class Select extends ParameterControl {
             return new Select(this);
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         public Builder setStyle(Style style) {
             this.style = style;
             return this;

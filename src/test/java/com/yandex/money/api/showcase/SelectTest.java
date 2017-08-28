@@ -25,25 +25,47 @@
 package com.yandex.money.api.showcase;
 
 import com.yandex.money.api.model.showcase.components.uicontrols.Select;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
-/**
- * @author Slava Yasevich (vyasevich@yamoney.ru)
- */
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
 public class SelectTest extends ParameterTest {
 
     @Test
     public void textValidation() {
+        Select.Builder builder = createSelectBuilder();
+        Select select = builder.create();
+        assertTrue(select.isValid("value1"));
+        assertFalse(select.isValid("value5"));
+        testEmptyValues(builder);
+    }
+
+    @Test
+    public void testValueSet() {
+        Select select = createSelectBuilder().create();
+        select.setValue("missing");
+        assertNull(select.getValue());
+        assertNull(select.getSelectedOption());
+
+        String expectedValue = "value2";
+        select.setValue(expectedValue);
+        assertEquals(select.getValue(), expectedValue);
+        assertEquals(select.getSelectedOption(), select.options.get(1));
+
+        select.setValue(null);
+        assertNull(select.getValue());
+        assertNull(select.getSelectedOption());
+    }
+
+    private static Select.Builder createSelectBuilder() {
         Select.Builder builder = new Select.Builder()
                 .addOption(new Select.Option("label1", "value1", null))
                 .addOption(new Select.Option("label2", "value2", null))
                 .addOption(new Select.Option("label3", "value3", null));
         prepareParameter(builder);
-        Select select = builder.create();
-        Assert.assertTrue(select.isValid("value1"));
-        Assert.assertFalse(select.isValid("value5"));
-
-        testEmptyValues(builder);
+        return builder;
     }
 }
