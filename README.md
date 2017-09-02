@@ -93,7 +93,7 @@ if (response.error == null) {
         handleAuthorizationError(token.error);
     }
 } else {
-    handleAuthorizationError(token.error);
+    handleAuthorizationError(response.error);
 }
 ```
 
