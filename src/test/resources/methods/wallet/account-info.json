@@ -5,6 +5,12 @@
     "total": 1000,
     "available": 1000
   },
+  "cards_linked": [
+    {
+      "pan_fragment": "510000******9999",
+      "type": "MasterCard"
+    }
+  ],
   "currency": "643",
   "account_status": "anonymous",
   "account_type": "personal"
