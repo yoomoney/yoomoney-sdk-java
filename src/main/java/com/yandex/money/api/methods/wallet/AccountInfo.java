@@ -26,9 +26,11 @@ package com.yandex.money.api.methods.wallet;
 
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+
 import com.yandex.money.api.model.AccountStatus;
 import com.yandex.money.api.model.AccountType;
 import com.yandex.money.api.model.BalanceDetails;
+import com.yandex.money.api.model.CardInfo;
 import com.yandex.money.api.model.Currency;
 import com.yandex.money.api.model.Identifiable;
 import com.yandex.money.api.net.FirstApiRequest;
@@ -36,6 +38,8 @@ import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.typeadapters.model.NumericCurrencyTypeAdapter;
 
 import java.math.BigDecimal;
+import java.util.Collections;
+import java.util.List;
 
 import static com.yandex.money.api.util.Common.checkNotEmpty;
 import static com.yandex.money.api.util.Common.checkNotNull;
@@ -87,6 +91,14 @@ public class AccountInfo implements Identifiable {
     @SerializedName("balance_details")
     public final BalanceDetails balanceDetails;
 
+    /**
+     * linked cards may be null
+     */
+
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("cards_linked")
+    public final List<CardInfo> linkedCards;
+
     @SuppressWarnings("WeakerAccess")
     protected AccountInfo(Builder builder) {
         account = checkNotEmpty(builder.account, "account");
@@ -95,6 +107,7 @@ public class AccountInfo implements Identifiable {
         accountStatus = checkNotNull(builder.accountStatus, "accountStatus");
         accountType = checkNotNull(builder.accountType, "accountType");
         balanceDetails = checkNotNull(builder.balanceDetails, "balanceDetails");
+        linkedCards = builder.linkedCards;
     }
 
     @Override
@@ -111,6 +124,7 @@ public class AccountInfo implements Identifiable {
                 ", accountStatus=" + accountStatus +
                 ", accountType=" + accountType +
                 ", balanceDetails=" + balanceDetails +
+                (linkedCards != null ? ", linkedCards=" + linkedCards.toString() : "") +
                 '}';
     }
 
@@ -123,7 +137,9 @@ public class AccountInfo implements Identifiable {
 
         return account.equals(that.account) && balance.equals(that.balance) && currency == that.currency &&
                 accountStatus == that.accountStatus && accountType == that.accountType &&
-                balanceDetails.equals(that.balanceDetails);
+                (balanceDetails.equals(that.balanceDetails)) &&
+                ((linkedCards == null && that.linkedCards == null) || (linkedCards != null &&
+                        linkedCards.containsAll(that.linkedCards) && that.linkedCards.containsAll(linkedCards)));
     }
 
     @Override
@@ -134,6 +150,7 @@ public class AccountInfo implements Identifiable {
         result = 31 * result + accountStatus.hashCode();
         result = 31 * result + accountType.hashCode();
         result = 31 * result + balanceDetails.hashCode();
+        result = 31 * result + (linkedCards != null ? linkedCards.hashCode() : 0);
         return result;
     }
 
@@ -148,6 +165,7 @@ public class AccountInfo implements Identifiable {
         AccountStatus accountStatus = AccountStatus.ANONYMOUS;
         AccountType accountType = AccountType.PERSONAL;
         BalanceDetails balanceDetails = BalanceDetails.ZERO;
+        List<CardInfo> linkedCards = Collections.emptyList();
 
         /**
          * @param account account's number
@@ -200,6 +218,15 @@ public class AccountInfo implements Identifiable {
          */
         public Builder setBalanceDetails(BalanceDetails balanceDetails) {
             this.balanceDetails = balanceDetails;
+            return this;
+        }
+
+        /**
+         * @param linkedCards linked cards
+         * @return itself
+         */
+        public Builder setLinkedCards(List<CardInfo> linkedCards) {
+            this.linkedCards = linkedCards;
             return this;
         }
 
