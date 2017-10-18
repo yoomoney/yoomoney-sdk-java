@@ -202,6 +202,8 @@ public enum Error implements Enums.WithCode<Error> {
     UNAUTHORIZED_CLIENT("unauthorized_client"),
     @SerializedName("unknown")
     UNKNOWN("unknown"),
+    @SerializedName("VacationLimitExceeded")
+    VACATION_LIMIT_EXCEEDED("VacationLimitExceeded"),
     @SerializedName("WRONG_PAYMENT_AUTH")
     WRONG_PAYMENT_AUTH("WRONG_PAYMENT_AUTH");
 
