@@ -114,7 +114,8 @@ public enum Error implements Enums.WithCode<Error> {
     TOO_MANY_RECORDS("too_many_records"),
     TWO_FA_REQUIRED("2fa_required"),
     UNAUTHORIZED_CLIENT("unauthorized_client"),
-    UNKNOWN("unknown");
+    UNKNOWN("unknown"),
+    VACATION_LIMIT_EXCEEDED("VacationLimitExceeded");
 
     private static final Map<String, Error> ERRORS;
     static {
