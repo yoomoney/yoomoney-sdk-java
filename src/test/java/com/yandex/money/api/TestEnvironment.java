@@ -45,21 +45,7 @@ public final class TestEnvironment {
                 .create();
     }
 
-    static ApiClient createAuthorizedClient() {
-        ApiClient client = createClient();
-        client.setAccessToken(getAccessToken());
-        return client;
-    }
-
     static String getClientId() {
         return LOCAL_PROPERTIES.getClientId();
-    }
-
-    static String getAccessToken() {
-        return LOCAL_PROPERTIES.getAccessToken();
-    }
-
-    static LocalProperties getLocalProperties() {
-        return LOCAL_PROPERTIES;
     }
 }
