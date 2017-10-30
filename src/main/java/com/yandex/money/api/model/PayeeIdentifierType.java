@@ -24,29 +24,31 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.utils.Enums;
-import com.yandex.money.api.utils.Patterns;
-import com.yandex.money.api.utils.Strings;
+import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.util.Enums;
+import com.yandex.money.api.util.Patterns;
+import com.yandex.money.api.util.Strings;
 
 /**
  * Type of payee identifier.
  * <p/>
  * Provides convenience methods to determine the type.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public enum PayeeIdentifierType implements Enums.WithCode<PayeeIdentifierType> {
     /**
      * Account number.
      */
+    @SerializedName("account")
     ACCOUNT("account"),
     /**
      * Phone number.
      */
+    @SerializedName("phone")
     PHONE("phone"),
     /**
      * Email address.
      */
+    @SerializedName("email")
     EMAIL("email");
 
     public final String code;

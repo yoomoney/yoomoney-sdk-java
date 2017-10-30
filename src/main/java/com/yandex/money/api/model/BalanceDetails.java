@@ -24,9 +24,11 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.math.BigDecimal;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Detailed balance info.
@@ -35,45 +37,60 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public class BalanceDetails {
 
-    public static final BalanceDetails ZERO = new Builder().create();
+    public static final BalanceDetails ZERO = new BalanceDetails();
 
     /**
      * total balance
      */
+    @SerializedName("total")
     public final BigDecimal total;
 
     /**
      * available balance
      */
+    @SerializedName("available")
     public final BigDecimal available;
 
     /**
      * pending deposition
      */
+    @SerializedName("deposition_pending")
     public final BigDecimal depositionPending;
 
     /**
      * money blocked
      */
+    @SerializedName("blocked")
     public final BigDecimal blocked;
 
     /**
      * account's debt
      */
+    @SerializedName("debt")
     public final BigDecimal debt;
 
     /**
      * money on hold
      */
+    @SerializedName("hold")
     public final BigDecimal hold;
 
-    private BalanceDetails(Builder builder) {
-        this.total = builder.total;
-        this.available = builder.available;
-        this.depositionPending = builder.depositionPending;
-        this.blocked = builder.blocked;
-        this.debt = builder.debt;
-        this.hold = builder.hold;
+    BalanceDetails(Builder builder) {
+        total = checkNotNull(builder.total, "total");
+        available = checkNotNull(builder.available, "available");
+        depositionPending = builder.depositionPending;
+        blocked = builder.blocked;
+        debt = builder.debt;
+        hold = builder.hold;
+    }
+
+    private BalanceDetails() {
+        total = BigDecimal.ZERO;
+        available = BigDecimal.ZERO;
+        depositionPending = null;
+        blocked = null;
+        debt = null;
+        hold = null;
     }
 
     @Override
@@ -117,15 +134,15 @@ public class BalanceDetails {
 
     public static final class Builder {
 
-        private BigDecimal total = BigDecimal.ZERO;
-        private BigDecimal available = BigDecimal.ZERO;
-        private BigDecimal depositionPending;
-        private BigDecimal blocked;
-        private BigDecimal debt;
-        private BigDecimal hold;
+        BigDecimal total = BigDecimal.ZERO;
+        BigDecimal available = BigDecimal.ZERO;
+        BigDecimal depositionPending;
+        BigDecimal blocked;
+        BigDecimal debt;
+        BigDecimal hold;
 
         public Builder setTotal(BigDecimal total) {
-            this.total = checkNotNull(total, "total");
+            this.total = total;
             return this;
         }
 

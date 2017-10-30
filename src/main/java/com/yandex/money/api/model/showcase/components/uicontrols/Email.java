@@ -24,23 +24,17 @@
 
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.utils.Patterns;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.Patterns;
+import com.yandex.money.api.util.logging.Log;
 
 /**
  * Email control.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public class Email extends Text {
 
-    private Email(Builder builder) {
+    @SuppressWarnings("WeakerAccess")
+    protected Email(Builder builder) {
         super(builder);
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Email");
     }
 
     /**
@@ -59,24 +53,26 @@ public class Email extends Text {
 
         @Override
         public Builder setMinLength(Integer minLength) {
-            throw new UnsupportedOperationException(
-                    "email min length defined by predefined pattern");
+            Log.w("email min length defined by predefined pattern");
+            return this;
         }
 
         @Override
         public Builder setMaxLength(Integer maxLength) {
-            throw new UnsupportedOperationException(
-                    "email max length defined by predefined pattern");
+            Log.w("email max length defined by predefined pattern");
+            return this;
         }
 
         @Override
         public Builder setPattern(String pattern) {
-            throw new UnsupportedOperationException("email has predefined pattern");
+            Log.w("email has predefined pattern");
+            return this;
         }
 
         @Override
         public Text.Builder setKeyboard(Keyboard keyboard) {
-            throw new UnsupportedOperationException("only email keyboards");
+            Log.w("only email keyboards");
+            return this;
         }
     }
 }

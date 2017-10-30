@@ -25,16 +25,17 @@
 package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.utils.Enums;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.model.showcase.components.Parameter;
+import com.yandex.money.api.model.showcase.components.uicontrols.Select;
+import com.yandex.money.api.util.Enums;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import java.util.Map;
+
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * A {@link Group} is implementation of a {@link Component} that can contain only {@link Component}
  * instances.
- *
- * @author Aleksandr Ershov (asershov@yamoney.com)
  */
 public class Group extends Container<Component> {
 
@@ -43,9 +44,33 @@ public class Group extends Container<Component> {
      */
     public final Layout layout;
 
-    private Group(Builder builder) {
+    @SuppressWarnings("WeakerAccess")
+    protected Group(Builder builder) {
         super(builder);
-        layout = builder.layout;
+        layout = checkNotNull(builder.layout, "layout");
+    }
+
+    /**
+     * Fills specified map with values from group's controls.
+     *
+     * @param map map to fill
+     * @param group group to traverse
+     */
+    public static void fillMapWithValues(Map<String, String> map, Group group) {
+        for (Component component : group.items) {
+            if (component instanceof Group) {
+                fillMapWithValues(map, (Group) component);
+            } else if (component instanceof Parameter) {
+                Parameter parameter = (Parameter) component;
+                map.put(parameter.getName(), parameter.getValue());
+                if (component instanceof Select) {
+                    Select.Option option = ((Select) component).getSelectedOption();
+                    if (option != null && option.group != null) {
+                        fillMapWithValues(map, option.group);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -79,13 +104,6 @@ public class Group extends Container<Component> {
         int result = super.hashCode();
         result = 31 * result + layout.hashCode();
         return result;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder()
-                .setName("Group")
-                .append("layout", layout);
     }
 
     /**
@@ -129,15 +147,16 @@ public class Group extends Container<Component> {
      */
     public static class Builder extends Container.Builder<Component> {
 
-        private Layout layout = Layout.VERTICAL;
+        Layout layout = Layout.VERTICAL;
 
         @Override
         public Group create() {
             return new Group(this);
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         public Builder setLayout(Layout layout) {
-            this.layout = checkNotNull(layout, "layout");
+            this.layout = layout;
             return this;
         }
     }

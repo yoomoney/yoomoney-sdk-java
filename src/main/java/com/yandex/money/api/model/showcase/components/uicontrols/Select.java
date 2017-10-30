@@ -25,14 +25,13 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 import com.yandex.money.api.model.showcase.components.containers.Group;
-import com.yandex.money.api.utils.Enums;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.Enums;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Control for selecting amongst a set of options.
@@ -58,9 +57,10 @@ public class Select extends ParameterControl {
 
     private Option selectedOption;
 
-    private Select(Builder builder) {
+    @SuppressWarnings("WeakerAccess")
+    protected Select(Builder builder) {
         super(builder);
-        options = Collections.unmodifiableList(builder.options);
+        options = Collections.unmodifiableList(checkNotNull(builder.options, "options"));
         values = Collections.unmodifiableList(getValues(options));
         style = builder.style;
     }
@@ -102,18 +102,17 @@ public class Select extends ParameterControl {
     }
 
     @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder()
-                .setName("Select")
-                .append("options", options)
-                .append("values", values)
-                .append("style", style)
-                .append("selectedOption", selectedOption);
-    }
-
-    @Override
     protected void onValueSet(String value) {
-        selectedOption = options.get(values.indexOf(value));
+        int index = values.indexOf(value);
+        if (index < 0) {
+            if (value == null) {
+                selectedOption = null;
+            } else {
+                setValue(null);
+            }
+        } else {
+            selectedOption = options.get(index);
+        }
     }
 
     private static List<String> getValues(List<Option> options) {
@@ -236,14 +235,16 @@ public class Select extends ParameterControl {
      */
     public static class Builder extends ParameterControl.Builder {
 
-        private List<Option> options = new ArrayList<>();
-        private Style style;
+        final List<Option> options = new ArrayList<>();
+
+        Style style;
 
         @Override
         public Select create() {
             return new Select(this);
         }
 
+        @SuppressWarnings("UnusedReturnValue")
         public Builder setStyle(Style style) {
             this.style = style;
             return this;

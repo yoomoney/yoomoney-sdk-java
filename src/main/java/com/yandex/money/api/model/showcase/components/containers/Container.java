@@ -25,16 +25,15 @@
 package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.utils.ToStringBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * A generic {@link Container} object is special component that can contain other components
+ * A generic {@link Container} object is special component that can contain other items
  * (items).
  *
  * @author Aleksandr Ershov (asershov@yamoney.com)
@@ -53,7 +52,7 @@ public abstract class Container<T> extends Component {
 
     protected Container(Builder<T> builder) {
         label = builder.label;
-        items = Collections.unmodifiableList(builder.components);
+        items = Collections.unmodifiableList(checkNotNull(builder.items, "items"));
     }
 
     @Override
@@ -74,29 +73,27 @@ public abstract class Container<T> extends Component {
         return result;
     }
 
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("Container")
-                .append("label", label)
-                .append("items", items);
-    }
-
     /**
      * Base class for all component builders.
      */
     public static abstract class Builder<T> extends Component.Builder {
 
-        private final List<T> components = new ArrayList<>();
+        final List<T> items = new ArrayList<>();
 
-        private String label;
+        String label;
 
         public Builder setLabel(String label) {
             this.label = label;
             return this;
         }
 
-        public Builder addItem(T component) {
-            components.add(checkNotNull(component, "component"));
+        public Builder addItem(T item) {
+            items.add(item);
+            return this;
+        }
+
+        public Builder addItems(List<T> items) {
+            this.items.addAll(items);
             return this;
         }
     }

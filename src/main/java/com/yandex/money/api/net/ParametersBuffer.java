@@ -24,10 +24,7 @@
 
 package com.yandex.money.api.net;
 
-import com.squareup.okhttp.MediaType;
-import com.squareup.okhttp.RequestBody;
-import com.yandex.money.api.utils.MimeTypes;
-import com.yandex.money.api.utils.Strings;
+import com.yandex.money.api.util.Strings;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,7 +34,7 @@ import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Buffers request parameters and creates request body for different methods. It also encodes keys
@@ -47,11 +44,24 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  */
 public final class ParametersBuffer {
 
-    private static final MediaType CONTENT_TYPE = MediaType.parse(MimeTypes.Application.X_WWW_FORM_URLENCODED);
     private static final String UTF8_NAME = "UTF-8";
-    private static final Charset UTF8_CHARSET = Charset.forName(UTF8_NAME);
+    static final Charset UTF8_CHARSET = Charset.forName(UTF8_NAME);
 
     private Map<String, String> params = Collections.emptyMap();
+
+    /**
+     * Encodes string value to UTF-8 byte array.
+     *
+     * @param value value to encode
+     * @return UTF-8 byte array
+     */
+    public static byte[] encodeUtf8(String value) {
+        try {
+            return encode(value).getBytes(UTF8_CHARSET);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     /**
      * Sets parameters.
@@ -59,7 +69,7 @@ public final class ParametersBuffer {
      * @param params key-value pairs of parameters (not null)
      * @return itself
      */
-    public ParametersBuffer setParams(Map<String, String> params) {
+    public ParametersBuffer setParameters(Map<String, String> params) {
         this.params = checkNotNull(params, "params");
         return this;
     }
@@ -84,23 +94,6 @@ public final class ParametersBuffer {
     }
 
     /**
-     * Prepares body for a request.
-     * <p>
-     * For example, there are two parameters provided:
-     * <p>
-     * {@code Map<String, String> params = new HashMap<>();}
-     * {@code params.put("key1", "value1");}<br/>
-     * {@code params.put("key2", "value2");}
-     * <p>
-     * Then the method will return a body "key1=value1&key2=value2".
-     *
-     * @return body
-     */
-    public RequestBody prepareBody() {
-        return RequestBody.create(CONTENT_TYPE, prepareBytes());
-    }
-
-    /**
      * Prepares parameters for a request as bytes.
      * <p>
      * For example, there are two parameters provided:
@@ -119,8 +112,8 @@ public final class ParametersBuffer {
         return buffer.getBytes();
     }
 
-    private static String encode(String value) throws UnsupportedEncodingException {
-        return URLEncoder.encode(value, UTF8_NAME);
+    static String encode(String value) throws UnsupportedEncodingException {
+        return URLEncoder.encode(value, UTF8_CHARSET.name());
     }
 
     private void iterate(Buffer buffer) {
@@ -147,6 +140,9 @@ public final class ParametersBuffer {
 
         public final StringBuilder builder = new StringBuilder();
 
+        GetBuffer() {
+        }
+
         @Override
         public void nextParameter(String key, String value) {
             try {
@@ -172,21 +168,24 @@ public final class ParametersBuffer {
 
         private final ByteArrayOutputStream stream = new ByteArrayOutputStream();
 
+        PostBuffer() {
+        }
+
         @Override
         public void nextParameter(String key, String value) {
             try {
                 if (stream.size() > 0) {
                     stream.write(AMPERSAND);
                 }
-                stream.write(encode(key).getBytes(UTF8_CHARSET));
+                stream.write(encodeUtf8(key));
                 stream.write(EQUALS_SIGN);
-                stream.write(encode(value).getBytes(UTF8_CHARSET));
+                stream.write(encodeUtf8(value));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
 
-        public byte[] getBytes() {
+        byte[] getBytes() {
             return stream.toByteArray();
         }
     }

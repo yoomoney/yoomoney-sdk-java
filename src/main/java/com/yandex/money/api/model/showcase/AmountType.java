@@ -24,23 +24,24 @@
 
 package com.yandex.money.api.model.showcase;
 
-import com.yandex.money.api.utils.Enums;
+import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.util.Enums;
 
 /**
  * Sum type on payment form.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public enum AmountType implements Enums.WithCode<AmountType> {
 
     /**
      * Sum will be debited from buyer's account.
      */
+    @SerializedName("amount")
     AMOUNT("amount"),
 
     /**
      * Sum will be credited to a shop.
      */
+    @SerializedName("netAmount")
     NET_AMOUNT("netAmount");
 
     public final String code;
@@ -57,13 +58,5 @@ public enum AmountType implements Enums.WithCode<AmountType> {
     @Override
     public AmountType[] getValues() {
         return values();
-    }
-
-    /**
-     * Parses amount type. If no matches found the {@link AmountType#AMOUNT} will be
-     * returned.
-     */
-    public static AmountType parse(String code) {
-        return Enums.parse(AMOUNT, AMOUNT, code);
     }
 }

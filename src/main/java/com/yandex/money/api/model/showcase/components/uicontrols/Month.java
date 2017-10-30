@@ -24,10 +24,8 @@
 
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.utils.ToStringBuilder;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
@@ -45,21 +43,15 @@ public class Month extends Date {
     /**
      * (De)serialization formatter.
      */
-    public static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern(PATTERN)
-            .withLocale(Locale.ENGLISH);
+    public static final DateFormat FORMATTER = new SimpleDateFormat(PATTERN, Locale.ENGLISH);
 
-    private Month(Builder builder) {
+    protected Month(Builder builder) {
         super(builder);
     }
 
     @Override
-    public DateTimeFormatter getFormatter() {
+    public DateFormat getFormatter() {
         return FORMATTER;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Month");
     }
 
     /**

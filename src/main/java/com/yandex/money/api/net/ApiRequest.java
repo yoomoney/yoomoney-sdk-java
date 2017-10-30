@@ -24,7 +24,8 @@
 
 package com.yandex.money.api.net;
 
-import java.io.InputStream;
+import com.yandex.money.api.net.providers.HostsProvider;
+
 import java.util.Map;
 
 /**
@@ -51,32 +52,48 @@ public interface ApiRequest<T> {
     String requestUrl(HostsProvider hostsProvider);
 
     /**
-     * Gets headers for a request. Can not be null.
+     * Gets headers for a request. Must not be null.
      *
      * @return headers for a request
      */
     Map<String, String> getHeaders();
 
     /**
-     * Gets post parameters to use when posting a request. Can not be null.
+     * Gets parameters represented as key-value pairs. Must not be null
      *
-     * @return parameters for a request
+     * @return parameters
      */
     Map<String, String> getParameters();
 
     /**
-     * Parses API response from stream.
+     * Gets a body of a request. Must not be null.
      *
-     * @param inputStream input stream
-     * @return response
+     * @return body of a request
      */
-    T parseResponse(InputStream inputStream);
+    byte[] getBody();
+
+    /**
+     * Gets content type of a body as described in https://www.w3.org/Protocols/rfc1341/4_Content-Type.html
+     *
+     * @return content type
+     */
+    String getContentType();
+
+    /**
+     * Parses API response to get requested object.
+     *
+     * @param response API response
+     * @return response model
+     * @throws Exception if something went wrong
+     */
+    T parse(HttpClientResponse response) throws Exception;
 
     /**
      * Methods enum.
      */
     enum Method {
         GET,
-        POST
+        POST,
+        PUT
     }
 }

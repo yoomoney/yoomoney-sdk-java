@@ -24,12 +24,8 @@
 
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.utils.ToStringBuilder;
-
 /**
  * On/off control.
- *
- * @author Aleksandr Ershov (asershov@yamoney.ru)
  */
 public class Checkbox extends ParameterControl {
 
@@ -38,7 +34,8 @@ public class Checkbox extends ParameterControl {
      */
     public boolean checked;
 
-    private Checkbox(Builder builder) {
+    @SuppressWarnings("WeakerAccess")
+    protected Checkbox(Builder builder) {
         super(builder);
         checked = builder.checked;
     }
@@ -76,19 +73,12 @@ public class Checkbox extends ParameterControl {
         throw new UnsupportedOperationException("call setChecked(boolean) instead");
     }
 
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder()
-                .setName("Checkbox")
-                .append("checked", checked);
-    }
-
     /**
      * {@link Checkbox} builder.
      */
     public static class Builder extends ParameterControl.Builder {
 
-        private boolean checked = false;
+        boolean checked = false;
 
         @Override
         public Checkbox create() {

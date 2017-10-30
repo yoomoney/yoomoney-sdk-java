@@ -25,7 +25,6 @@
 package com.yandex.money.api.model.showcase.components.containers;
 
 import com.yandex.money.api.model.showcase.components.TextBlock;
-import com.yandex.money.api.utils.ToStringBuilder;
 
 /**
  * Sequence of text blocks.
@@ -34,18 +33,13 @@ import com.yandex.money.api.utils.ToStringBuilder;
  */
 public class Paragraph extends Container<TextBlock> {
 
-    private Paragraph(Builder builder) {
+    protected Paragraph(Builder builder) {
         super(builder);
     }
 
     @Override
     public boolean isValid() {
         return true;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder().setName("Paragraph");
     }
 
     /**

@@ -2,22 +2,20 @@
 
 ## Overview
 
-This Java library contains classes that allows you to do payments using Yandex.Money public API.
+This Java library contains classes that allows you to do payments and call other methods of Yandex.Money public API.
 
 ## Requirements
 
 The library uses:
 
-* [OkHttp][1] 2.5.0
-* [Google GSON][2] 2.4
-* [Joda-Time][7] 2.8.2
+* [OkHttp][1] 3.9.0
+* [Google GSON][2] 2.8.2
 
 ## Usage
 
 ### Gradle Dependency (jCenter)
 
-[![Download](https://api.bintray.com/packages/yandex-money/maven/yandex-money-sdk-java/images/download.svg)]
-(https://bintray.com/yandex-money/maven/yandex-money-sdk-java/_latestVersion)
+[![Download](https://api.bintray.com/packages/yandex-money/maven/yandex-money-sdk-java/images/download.svg)](https://bintray.com/yandex-money/maven/yandex-money-sdk-java/_latestVersion)
 
 To use the library in your project write this code to your build.gradle:
 
@@ -29,35 +27,81 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.yandex.money.api:yandex-money-sdk-java:5.1.0'
+    compile 'com.yandex.money.api:yandex-money-sdk-java:7.2.0'
 }
 ```
 
 ### App Registration
 
-To be able to use the library you: the first thing you need to do is to register your application and get your unique *client id*. To do that please follow the steps described on [this page][3] (also available in [Russian][4]).
+To be able to use the library you: the first thing you need to do is to register your application and get your unique
+*client id*. To do that please follow the steps described on [this page][3] (also available in [Russian][4]).
 
 ### Conception
 
 All API methods are represented as classes in package `com.yandex.money.api.methods`.
 
-Some methods require an unique id to get the response. To get it use API method `instance-id` passing your *client id*. Once obtained *instance id* can be used to perform those methods.
+Some methods require an unique id to get the response. To get it use API method `instance-id` passing your *client id*.
+Once obtained *instance id* can be used to perform those methods.
 
-**Do NOT request *instance id* every time you need to call an API method. Obtain it once and reuse it.**
+**Do NOT request *instance id* every time you need to call an API method. Obtain it once, store it safely and reuse it
+in future requests.**
 
 ### Performing Request
 
-To perform request from `com.yandex.money.api.methods` package you may want to instantiate `OAuth2Session` providing `ApiClient`. For your convenience we also include `DefaultApiClient`. Also most of the methods require authorization token that will be used to authorize a user.
+To perform request from `com.yandex.money.api.methods` package you will need to use `ApiClient`. For your convenience
+there is default implementation of the `ApiClient` called  `DefaultApiClient`. It is suitable for most cases. So the
+very first thing you need to do, is to create `ApiClient`.
+
+The minimal implementation will look like this:
 
 ```Java
-OAuth2Session session = new OAuth2Session(new DefaultApiClient("your_client_id"));
-session.setAccessToken("access_token");
+ApiClient client = new DefaultApiClient.Builder()
+    .setClientId("your_client_id_here")
+    .create();
 ```
 
-Once a session was created, you can perform any requests both synchronously and asynchronously using `execute` and `enqueue` methods respectively. For example:
+If you want to perform a method that requires user's authentication you need request access token. The easiest way to
+do this is to get `AuthorizationData` from a client:
 
 ```Java
-InstanceId instanceId = session.execute(new InstanceId.Request(clientId));
+AuthorizationParameters parameters = new AuthorizationParameters.Builder()
+    ...
+    .create();
+AuthorizationData data = client.createAuthorizationData(parameters);
+```
+
+Provided `AuthorizationParameters` allows you to set request parameters as described [here][9]. When created
+`AuthorizationData` will have URL and POST parameters for OAuth2 authorization.
+
+To get the result from redirect uri you may want to use `AuthorizationCodeResponse.parse(redirectUri)` method. If
+successful the instance of `AuthorizationCodeResponse` will contain temporary authorization code that must be
+immediately exchanged for an access token:
+
+```Java
+// parse redirect uri from web browser
+AuthorizationCodeResponse response = AuthorizationCodeResponse.parse(redirectUri);
+
+if (response.error == null) {
+    // try to get OAuth2 access token
+    Token token = client.execute(new Token.Request(response.code, client.getClientId(), myRedirectUri, myClientSecret));
+    if (token.error == null) {
+        ... // store token.accessToken safely for future uses
+
+        // and authorize client to perform methods that require user's authentication
+        client.setAccessToken(token.accessToken);
+    } else {
+        handleAuthorizationError(token.error);
+    }
+} else {
+    handleAuthorizationError(response.error);
+}
+```
+
+Now you can perform any request with authorized client. For instance, if you want to get `InstanceId` you can do it like
+this:
+
+```Java
+InstanceId instanceId = client.execute(new InstanceId.Request(clientId));
 // do something with instance id
 ```
 
@@ -74,3 +118,4 @@ InstanceId instanceId = session.execute(new InstanceId.Request(clientId));
 [6]: http://api.yandex.ru/money/
 [7]: http://www.joda.org/joda-time/
 [8]: https://bintray.com/yandex-money/maven/yandex-money-sdk-java/view
+[9]: https://tech.yandex.com/money/doc/dg/reference/request-access-token-docpage/

@@ -24,12 +24,12 @@
 
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
+import com.yandex.money.api.model.Currency;
 import com.yandex.money.api.model.showcase.Fee;
-import com.yandex.money.api.model.showcase.NoFee;
-import com.yandex.money.api.utils.Currency;
-import com.yandex.money.api.utils.ToStringBuilder;
 
 import java.math.BigDecimal;
+
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Cost of transaction.
@@ -44,13 +44,13 @@ public class Amount extends Number {
     public final Currency currency;
 
     /**
-     * Fee. Default is {@link NoFee}.
+     * Fee.
      */
     public final Fee fee;
 
-    private Amount(Builder builder) {
+    protected Amount(Builder builder) {
         super(builder);
-        currency = builder.currency;
+        currency = checkNotNull(builder.currency, "currency");
         fee = builder.fee;
     }
 
@@ -62,23 +62,16 @@ public class Amount extends Number {
 
         Amount amount = (Amount) o;
 
-        return currency == amount.currency && fee.equals(amount.fee);
+        if (currency != amount.currency) return false;
+        return fee != null ? fee.equals(amount.fee) : amount.fee == null;
     }
 
     @Override
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + currency.hashCode();
-        result = 31 * result + fee.hashCode();
+        result = 31 * result + (fee != null ? fee.hashCode() : 0);
         return result;
-    }
-
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder()
-                .setName("Amount")
-                .append("currency", currency.toString())
-                .append("fee", fee.toString());
     }
 
     /**
@@ -88,8 +81,8 @@ public class Amount extends Number {
 
         private static final BigDecimal PENNY = new BigDecimal("0.01");
 
-        private Currency currency = Currency.RUB;
-        private Fee fee = NoFee.getInstance();
+        Currency currency = Currency.RUB;
+        Fee fee;
 
         public Builder() {
             super(PENNY, null, PENNY);

@@ -26,17 +26,30 @@ package com.yandex.money.api.typeadapters;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.YearMonth;
+
+import java.lang.reflect.Type;
 
 /**
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Provides a single GSON instance to serialize / deserialize any object within this SDK.
  */
 public final class GsonProvider {
 
     private static final GsonBuilder BUILDER = new GsonBuilder();
+    static {
+        BUILDER.registerTypeAdapter(DateTime.class, new DateTimeTypeAdapter());
+        BUILDER.registerTypeAdapter(YearMonth.class, new YearMonthTypeAdapter());
+    }
 
     private static Gson gson = BUILDER.create();
     private static boolean hasNewTypeAdapter = false;
 
+    /**
+     * Gets actual instance of GSON. If necessary rebuilds it to add new type adapters.
+     *
+     * @return instance of GSON
+     */
     public static synchronized Gson getGson() {
         if (hasNewTypeAdapter) {
             gson = BUILDER.create();
@@ -45,8 +58,15 @@ public final class GsonProvider {
         return gson;
     }
 
-    public static synchronized <T> void registerTypeAdapter(Class<T> cls, TypeAdapter<T> typeAdapter) {
-        BUILDER.registerTypeAdapter(cls, typeAdapter);
+    /**
+     * Registers type adapter to use with GSON instance.
+     *
+     * @param type type for which the type adapter is registered
+     * @param typeAdapter type adapter
+     */
+    @SuppressWarnings("WeakerAccess")
+    public static synchronized void registerTypeAdapter(Type type, Object typeAdapter) {
+        BUILDER.registerTypeAdapter(type, typeAdapter);
         hasNewTypeAdapter = true;
     }
 }

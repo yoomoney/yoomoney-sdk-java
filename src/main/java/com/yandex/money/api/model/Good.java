@@ -24,7 +24,9 @@
 
 package com.yandex.money.api.model;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import com.google.gson.annotations.SerializedName;
+
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Describes digital item, that user can obtain when paying for them.
@@ -34,16 +36,19 @@ public class Good {
     /**
      * serial number
      */
+    @SerializedName("serial")
     public final String serial;
 
     /**
      * secret
      */
+    @SerializedName("secret")
     public final String secret;
 
     /**
      * merchant article id
      */
+    @SerializedName("merchantArticleId")
     public final String merchantArticleId;
 
     /**

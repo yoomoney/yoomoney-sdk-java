@@ -1,0 +1,22 @@
+{
+  "account": "4100123456789",
+  "balance": 1000,
+  "balance_details": {
+    "total": 1000,
+    "available": 1000
+  },
+  "currency": "643",
+  "account_status": "anonymous",
+  "account_type": "personal",
+  "avatar": {
+    "url": "http://avatars.yandex.net/get-yamoney-profile/yamoney-profile-30633298/normal",
+    "ts": "2013-03-13T20:43:00.000+04:00"
+  },
+  "cards_linked": [
+    {
+      "id": "card-385244400",
+      "pan_fragment": "510000******9999",
+      "type": "MasterCard"
+    }
+  ]
+}

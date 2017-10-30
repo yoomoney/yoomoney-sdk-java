@@ -24,13 +24,13 @@
 
 package com.yandex.money.api.processes;
 
-import com.yandex.money.api.methods.BaseProcessPayment;
-import com.yandex.money.api.methods.BaseRequestPayment;
+import com.yandex.money.api.methods.payment.BaseProcessPayment;
+import com.yandex.money.api.methods.payment.BaseRequestPayment;
 import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.OAuth2Session;
-import com.yandex.money.api.utils.Threads;
+import com.yandex.money.api.net.clients.ApiClient;
+import com.yandex.money.api.util.Threads;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Base implementation for all payment processes.
@@ -40,11 +40,13 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
 public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         PP extends BaseProcessPayment> implements IPaymentProcess {
 
-    private final OAuth2Session session;
     /**
      * Provides parameters for requests.
      */
-    protected final ParameterProvider parameterProvider;
+    final ParameterProvider parameterProvider;
+
+    private final ApiClient client;
+
     private RP requestPayment;
     private PP processPayment;
     private State state;
@@ -52,11 +54,12 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     /**
      * Constructor.
      *
-     * @param session session to run the process on
+     * @param client client to use for the process
      * @param parameterProvider parameter's provider
      */
-    public BasePaymentProcess(OAuth2Session session, ParameterProvider parameterProvider) {
-        this.session = checkNotNull(session, "session");
+    @SuppressWarnings("WeakerAccess")
+    public BasePaymentProcess(ApiClient client, ParameterProvider parameterProvider) {
+        this.client = checkNotNull(client, "client");
         this.parameterProvider = checkNotNull(parameterProvider, "parameterProvider");
         this.state = State.CREATED;
     }
@@ -136,8 +139,9 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
      *
      * @param accessToken access token
      */
+    @SuppressWarnings("WeakerAccess")
     public final void setAccessToken(String accessToken) {
-        session.setAccessToken(accessToken);
+        client.setAccessToken(accessToken);
     }
 
     /**
@@ -198,7 +202,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     }
 
     private <T> T execute(ApiRequest<T> apiRequest) throws Exception {
-        return session.execute(apiRequest);
+        return client.execute(apiRequest);
     }
 
     private boolean isCompleted() {
@@ -243,6 +247,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
          * @param processPayment process payment
          * @param flags flags of saved state
          */
+        @SuppressWarnings("WeakerAccess")
         public SavedState(RP requestPayment, PP processPayment, int flags) {
             this(requestPayment, processPayment, parseState(flags));
         }
@@ -254,6 +259,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
          * @param processPayment process payment
          * @param state state
          */
+        @SuppressWarnings("WeakerAccess")
         protected SavedState(RP requestPayment, PP processPayment, State state) {
             this.state = checkNotNull(state, "state");
 

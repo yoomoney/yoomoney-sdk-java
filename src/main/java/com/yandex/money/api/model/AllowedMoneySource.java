@@ -24,23 +24,38 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.utils.Enums;
+import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.util.Enums;
 
 /**
- * Type of money sources allowe to make a payment.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Type of money sources allowed to make a payment.
  */
 public enum AllowedMoneySource implements Enums.WithCode<AllowedMoneySource> {
 
+    /**
+     * Cards that are linked to a wallet.
+     */
+    @SerializedName("cards")
     CARDS("cards"),
-    CASH("cash"),
-    PAYMENT_CARD("payment-card"),
-    WALLET("wallet");
 
     /**
-     * code
+     * Cash.
      */
+    @SerializedName("cash")
+    CASH("cash"),
+
+    /**
+     * Any bank card, excluding ones that are linked to a wallet.
+     */
+    @SerializedName("payment-card")
+    PAYMENT_CARD("payment-card"),
+
+    /**
+     * Wallet.
+     */
+    @SerializedName("wallet")
+    WALLET("wallet");
+
     public final String code;
 
     AllowedMoneySource(String code) {
@@ -55,9 +70,5 @@ public enum AllowedMoneySource implements Enums.WithCode<AllowedMoneySource> {
     @Override
     public AllowedMoneySource[] getValues() {
         return values();
-    }
-
-    public static AllowedMoneySource parse(String code) {
-        return Enums.parseOrThrow(WALLET, code);
     }
 }

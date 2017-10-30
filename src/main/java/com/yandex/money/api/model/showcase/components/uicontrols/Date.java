@@ -24,14 +24,13 @@
 
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
-import com.yandex.money.api.utils.Strings;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.Period;
+import com.yandex.money.api.util.Strings;
 
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 /**
@@ -49,8 +48,7 @@ public class Date extends ParameterControl {
     /**
      * Date formatter.
      */
-    public static final DateTimeFormatter FORMATTER = DateTimeFormat.forPattern(PATTERN)
-            .withLocale(Locale.ENGLISH);
+    public static final DateFormat FORMATTER = new SimpleDateFormat(PATTERN, Locale.ENGLISH);
 
     /**
      * Minimal allowed value.
@@ -75,9 +73,9 @@ public class Date extends ParameterControl {
      * Parses a {@link DateTime} from the specified string using a formatter.
      *
      * @param date      value to parse.
-     * @param formatter {@link DateTimeFormatter}.
+     * @param formatter {@link DateFormat}.
      */
-    public static DateTime parseDate(String date, DateTimeFormatter formatter) {
+    public static DateTime parseDate(String date, DateFormat formatter) throws ParseException {
         if (Strings.isNullOrEmpty(date)) {
             return null;
         }
@@ -104,13 +102,17 @@ public class Date extends ParameterControl {
      * Parses internal value to {@link DateTime}.
      */
     public DateTime toDateTime() {
-        return parseDate(getValue(), getFormatter());
+        try {
+            return parseDate(getValue(), getFormatter());
+        } catch (ParseException e) {
+            throw new IllegalStateException("illegal value: " + getValue());
+        }
     }
 
     /**
      * @return control's formatter.
      */
-    public DateTimeFormatter getFormatter() {
+    public DateFormat getFormatter() {
         return FORMATTER;
     }
 
@@ -134,22 +136,15 @@ public class Date extends ParameterControl {
         return result;
     }
 
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder()
-                .setName("Date")
-                .append("min", min)
-                .append("max", max);
+    private static DateTime parse(String dateTime, DateFormat formatter) throws ParseException {
+        java.util.Date parsed = dateTime.equals("now") ?
+                formatter.parse(formatter.format(DateTime.now().getDate())) :
+                formatter.parse(dateTime);
+        return DateTime.from(parsed);
     }
 
-    private static DateTime parse(String dateTime, DateTimeFormatter formatter) {
-        return dateTime.equals("now") ?
-                DateTime.parse(formatter.print(DateTime.now()), formatter) :
-                DateTime.parse(dateTime, formatter);
-    }
-
-    private static DateTime parseWithPeriod(String dateTime, String period, boolean add,
-                                            DateTimeFormatter formatter) {
+    private static DateTime parseWithPeriod(String dateTime, String period, boolean add, DateFormat formatter)
+            throws ParseException {
         return parseWithPeriod(parse(dateTime, formatter), Period.parse(period), add);
     }
 
@@ -161,9 +156,9 @@ public class Date extends ParameterControl {
         try {
             DateTime dateTime = parseDate(value, getFormatter());
             return dateTime == null ||
-                    (min == null || min.isBefore(dateTime) || min.isEqual(dateTime)) &&
-                            (max == null || max.isAfter(dateTime) || max.isEqual(dateTime));
-        } catch (IllegalArgumentException e) {
+                    (min == null || min.isBefore(dateTime) || min.equals(dateTime)) &&
+                            (max == null || max.isAfter(dateTime) || max.equals(dateTime));
+        } catch (IllegalArgumentException | ParseException e) {
             return false;
         }
     }
@@ -173,8 +168,8 @@ public class Date extends ParameterControl {
      */
     public static class Builder extends ParameterControl.Builder {
 
-        private DateTime min;
-        private DateTime max;
+        DateTime min;
+        DateTime max;
 
         @Override
         public Date create() {

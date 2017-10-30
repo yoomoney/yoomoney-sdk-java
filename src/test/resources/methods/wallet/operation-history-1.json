@@ -1,0 +1,35 @@
+{
+  "next_record": "4",
+  "operations": [
+    {
+      "operation_id": "1234567",
+      "status": "success",
+      "pattern_id": "2904",
+      "direction": "out",
+      "amount": 500,
+      "datetime": "2011-03-11T20:43:00.000+03:00",
+      "title": "Оплата ADSL-интернет компании XXX",
+      "favourite": true,
+      "type": "payment-shop"
+    },
+    {
+      "operation_id": "1234568",
+      "status": "success",
+      "pattern_id": "2901",
+      "direction": "out",
+      "amount": 300,
+      "datetime": "2011-03-10T20:43:00.000+03:00",
+      "title": "Прямое пополние счета телефона YYY",
+      "type": "payment-shop"
+    },
+    {
+      "operation_id": "1234569",
+      "status": "success",
+      "direction": "in",
+      "amount": 1000,
+      "datetime": "2011-03-10T20:40:00.000+03:00",
+      "title": "Банк ZZZ, пополнение",
+      "type": "deposition"
+    }
+  ]
+}

@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.model.showcase;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.exceptions.IllegalAmountException;
 
 import java.math.BigDecimal;
@@ -67,4 +68,11 @@ public interface Fee {
      * @return amount type
      */
     AmountType getAmountType();
+
+    enum Type {
+        @SerializedName("std")
+        STD,
+        @SerializedName("custom")
+        CUSTOM
+    }
 }

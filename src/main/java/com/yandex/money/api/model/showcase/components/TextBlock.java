@@ -24,9 +24,7 @@
 
 package com.yandex.money.api.model.showcase.components;
 
-import com.yandex.money.api.utils.ToStringBuilder;
-
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Block of plain text.
@@ -59,15 +57,6 @@ public class TextBlock {
         return text.hashCode();
     }
 
-    @Override
-    public final String toString() {
-        return getToStringBuilder().toString();
-    }
-
-    protected ToStringBuilder getToStringBuilder() {
-        return new ToStringBuilder("TextBlock").append("text", text);
-    }
-
     /**
      * Link.
      */
@@ -96,13 +85,6 @@ public class TextBlock {
             int result = super.hashCode();
             result = 31 * result + link.hashCode();
             return result;
-        }
-
-        @Override
-        public ToStringBuilder getToStringBuilder() {
-            return super.getToStringBuilder()
-                    .setName("WithLink")
-                    .append("link", link);
         }
     }
 }

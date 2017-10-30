@@ -24,44 +24,37 @@
 
 package com.yandex.money.api.net;
 
-import com.yandex.money.api.typeadapters.TypeAdapter;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
+import com.google.gson.JsonElement;
+import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.Iso8601Format;
+import com.yandex.money.api.typeadapters.JsonUtils;
+import com.yandex.money.api.util.HttpHeaders;
+import com.yandex.money.api.util.MimeTypes;
 
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
-
 /**
- * Base API request. It is preferable to extend your requests from this class or its descendants
- * rather than {@link ApiRequest}.
+ * Base implementation of {@link ApiRequest}. It is preferable to extend your requests from this class or its
+ * descendants rather than create your own implementation of {@link ApiRequest}.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public abstract class BaseApiRequest<T> implements ApiRequest<T> {
 
-    public static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormat
-            .forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT")
-            .withLocale(Locale.US)
-            .withZoneUTC();
+    private transient final Map<String, String> headers = new HashMap<>();
+    private transient final Map<String, String> parameters = new HashMap<>();
+    private transient final ParametersBuffer buffer = new ParametersBuffer();
 
-    private final TypeAdapter<T> typeAdapter;
-    private final Map<String, String> headers = new HashMap<>();
-    private final Map<String, String> parameters = new HashMap<>();
+    private transient byte[] body;
 
-    /**
-     * Constructor.
-     *
-     * @param typeAdapter typeAdapter used to parse a response
-     */
-    protected BaseApiRequest(TypeAdapter<T> typeAdapter) {
-        this.typeAdapter = checkNotNull(typeAdapter, "typeAdapter");
+    @Override
+    public final String requestUrl(HostsProvider hostsProvider) {
+        String url = requestUrlBase(hostsProvider);
+        return getMethod() == Method.GET ? url + buffer.setParameters(parameters).prepareGet() : url;
     }
 
     @Override
@@ -75,9 +68,24 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     }
 
     @Override
-    public final T parseResponse(InputStream inputStream) {
-        return typeAdapter.fromJson(inputStream);
+    public final byte[] getBody() {
+        prepareBody();
+        return body == null ? buffer.setParameters(parameters).prepareBytes() : body;
     }
+
+    @Override
+    public String getContentType() {
+        return MimeTypes.Application.X_WWW_FORM_URLENCODED;
+    }
+
+    /**
+     * Creates base URL of a request. For instance base URL for https://money.yandex.ru/api/method?param=value is
+     * https://money.yandex.ru/api/method.
+     *
+     * @param hostsProvider hosts provider
+     * @return base URL of a request
+     */
+    protected abstract String requestUrlBase(HostsProvider hostsProvider);
 
     /**
      * Adds {@link String} header to this request.
@@ -85,6 +93,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param key key
      * @param value value
      */
+    @SuppressWarnings("WeakerAccess")
     protected final void addHeader(String key, String value) {
         headers.put(key, value);
     }
@@ -96,7 +105,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param value value
      */
     protected final void addHeader(String key, DateTime value) {
-        addHeader(key, value == null ? null : DATE_TIME_FORMATTER.print(value));
+        addHeader(key, value == null ? null : HttpHeaders.formatDateTime(value));
     }
 
     /**
@@ -139,6 +148,16 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     }
 
     /**
+     * Adds {@link Double} parameter to this request.
+     *
+     * @param key key
+     * @param value value
+     */
+    protected final void addParameter(String key, Double value) {
+        addParameter(key, value == null ? null : value.toString());
+    }
+
+    /**
      * Adds {@link Boolean} parameter to this request.
      *
      * @param key key
@@ -165,7 +184,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      * @param dateTime value
      */
     protected final void addParameter(String key, DateTime dateTime) {
-        addParameter(key, dateTime == null ? null : dateTime.toString());
+        addParameter(key, dateTime == null ? null : Iso8601Format.format(dateTime));
     }
 
     /**
@@ -175,5 +194,33 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
      */
     protected final void addParameters(Map<String, String> parameters) {
         this.parameters.putAll(parameters);
+    }
+
+    /**
+     * Sets a body for a request. Will override any added parameters if not {code null}.
+     *
+     * @param body body of a request
+     */
+    @SuppressWarnings("WeakerAccess")
+    protected final void setBody(byte[] body) {
+        this.body = body;
+    }
+
+    /**
+     * Sets a JSON body. Will override any added parameters if not {code null}.
+     *
+     * @param json JSON body
+     * @see #setBody(byte[])
+     */
+    protected final void setBody(JsonElement json) {
+        setBody(JsonUtils.getBytes(json));
+    }
+
+    /**
+     * Allows you to lazily prepare request body before {@link #getBody()} method returns. You can use
+     * {@link #setBody(byte[])} or any of {@code addParameter*} methods here.
+     */
+    @SuppressWarnings("WeakerAccess")
+    protected void prepareBody() {
     }
 }

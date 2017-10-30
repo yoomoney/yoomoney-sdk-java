@@ -24,22 +24,27 @@
 
 package com.yandex.money.api.model.showcase;
 
+import com.yandex.money.api.exceptions.ResourceNotFoundException;
 import com.yandex.money.api.model.AllowedMoneySource;
-import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.containers.Group;
-import com.yandex.money.api.model.showcase.components.uicontrols.Select;
 import com.yandex.money.api.net.BaseApiRequest;
-import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.typeadapters.showcase.ShowcaseTypeAdapter;
+import com.yandex.money.api.net.HttpClientResponse;
+import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
+import com.yandex.money.api.util.HttpHeaders;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
+import static com.yandex.money.api.util.Responses.parseDateHeader;
+import static com.yandex.money.api.util.Responses.processError;
 
 /**
  * @author Aleksandr Ershov (asershov@yamoney.com)
@@ -49,15 +54,15 @@ public final class Showcase {
     public final String title;
     public final Map<String, String> hiddenFields;
     public final Group form;
-    public final Set<AllowedMoneySource> moneySources;
+    public final List<AllowedMoneySource> moneySources;
     public final List<Error> errors;
 
-    private Showcase(Builder builder) {
+    Showcase(Builder builder) {
         title = checkNotNull(builder.title, "title");
-        form = checkNotNull(builder.form, "form");
-        hiddenFields = Collections.unmodifiableMap(builder.hiddenFields);
-        moneySources = Collections.unmodifiableSet(builder.moneySources);
-        errors = Collections.unmodifiableList(builder.errors);
+        form = builder.form;
+        hiddenFields = Collections.unmodifiableMap(checkNotNull(builder.hiddenFields, "hiddenFields"));
+        moneySources = Collections.unmodifiableList(checkNotNull(builder.moneySources, "moneySources"));
+        errors = Collections.unmodifiableList(checkNotNull(builder.errors, "errors"));
     }
 
     /**
@@ -66,7 +71,7 @@ public final class Showcase {
     public Map<String, String> getPaymentParameters() {
         Map<String, String> params = new HashMap<>();
         params.putAll(hiddenFields);
-        fillPaymentParameters(params, form);
+        Group.fillMapWithValues(params, form);
         return params;
     }
 
@@ -77,47 +82,31 @@ public final class Showcase {
 
         Showcase showcase = (Showcase) o;
 
-        return title.equals(showcase.title)
-                && hiddenFields.equals(showcase.hiddenFields)
-                && form.equals(showcase.form)
-                && moneySources.equals(showcase.moneySources)
-                && errors.equals(showcase.errors);
+        if (!title.equals(showcase.title)) return false;
+        if (!hiddenFields.equals(showcase.hiddenFields)) return false;
+        if (form != null ? !form.equals(showcase.form) : showcase.form != null) return false;
+        //noinspection SimplifiableIfStatement
+        if (!moneySources.equals(showcase.moneySources)) return false;
+        return errors.equals(showcase.errors);
     }
 
     @Override
     public int hashCode() {
         int result = title.hashCode();
         result = 31 * result + hiddenFields.hashCode();
-        result = 31 * result + form.hashCode();
+        result = 31 * result + (form != null ? form.hashCode() : 0);
         result = 31 * result + moneySources.hashCode();
         result = 31 * result + errors.hashCode();
         return result;
     }
 
-    private static void fillPaymentParameters(Map<String, String> parameters, Group group) {
-        for (Component component : group.items) {
-            if (component instanceof Group) {
-                fillPaymentParameters(parameters, (Group) component);
-            } else if (component instanceof Parameter) {
-                Parameter parameter = (Parameter) component;
-                parameters.put(parameter.getName(), parameter.getValue());
-                if (component instanceof Select) {
-                    Group selectedGroup = ((Select) component).getSelectedOption().group;
-                    if (selectedGroup != null) {
-                        fillPaymentParameters(parameters, selectedGroup);
-                    }
-                }
-            }
-        }
-    }
-
     public static class Builder {
 
-        private String title;
-        private Map<String, String> hiddenFields = Collections.emptyMap();
-        private Group form;
-        private Set<AllowedMoneySource> moneySources = Collections.emptySet();
-        private List<Error> errors = Collections.emptyList();
+        String title;
+        Map<String, String> hiddenFields = Collections.emptyMap();
+        Group form;
+        List<AllowedMoneySource> moneySources = Collections.emptyList();
+        List<Error> errors = Collections.emptyList();
 
         public Builder setTitle(String title) {
             this.title = title;
@@ -125,7 +114,7 @@ public final class Showcase {
         }
 
         public Builder setHiddenFields(Map<String, String> hiddenFields) {
-            this.hiddenFields = checkNotNull(hiddenFields, "hiddenFields");
+            this.hiddenFields = hiddenFields;
             return this;
         }
 
@@ -134,13 +123,13 @@ public final class Showcase {
             return this;
         }
 
-        public Builder setMoneySources(Set<AllowedMoneySource> moneySources) {
-            this.moneySources = checkNotNull(moneySources, "moneySources");
+        public Builder setMoneySources(List<AllowedMoneySource> moneySources) {
+            this.moneySources = moneySources;
             return this;
         }
 
         public Builder setErrors(List<Error> errors) {
-            this.errors = checkNotNull(errors, "errors");
+            this.errors = errors;
             return this;
         }
 
@@ -163,7 +152,7 @@ public final class Showcase {
     /**
      * Requests showcase.
      */
-    public static final class Request extends BaseApiRequest<Showcase> {
+    public static final class Request extends BaseApiRequest<ShowcaseContext> {
 
         private final String patternId;
         private final String url;
@@ -197,7 +186,6 @@ public final class Showcase {
         }
 
         private Request(String patternId, String url, Map<String, String> params) {
-            super(ShowcaseTypeAdapter.getInstance());
             if (url != null) {
                 addParameters(checkNotNull(params, "params"));
             }
@@ -211,8 +199,39 @@ public final class Showcase {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return url == null ? hostsProvider.getMoneyApi() + "/showcase/" + patternId : url;
+        }
+
+        @Override
+        public ShowcaseContext parse(HttpClientResponse response) throws Exception {
+            InputStream inputStream = null;
+            try {
+                switch (response.getCode()) {
+                    case HttpURLConnection.HTTP_MULT_CHOICE:
+                        DateTime dateModified = parseDateHeader(response, HttpHeaders.LAST_MODIFIED);
+                        final String location = response.getHeader(HttpHeaders.LOCATION);
+
+                        inputStream = response.getByteStream();
+                        Showcase showcase = ShowcaseTypeAdapter.getInstance().fromJson(inputStream);
+                        ShowcaseContext showcaseContext = new ShowcaseContext(showcase, location, dateModified);
+                        showcaseContext.setState(ShowcaseContext.State.HAS_NEXT_STEP);
+                        return showcaseContext;
+                    case HttpURLConnection.HTTP_NOT_MODIFIED: {
+                        return new ShowcaseContext(ShowcaseContext.State.NOT_MODIFIED);
+                    }
+                    case HttpURLConnection.HTTP_MOVED_PERM:
+                        // todo create new request and call it
+                    case HttpURLConnection.HTTP_NOT_FOUND:
+                        throw new ResourceNotFoundException(response.getUrl());
+                    default:
+                        throw new IOException(processError(response));
+                }
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
         }
     }
 }

@@ -24,21 +24,22 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.utils.Enums;
+import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.util.Enums;
 
 /**
  * Account's type.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public enum AccountType implements Enums.WithCode<AccountType> {
     /**
      * Personal.
      */
+    @SerializedName("personal")
     PERSONAL("personal"),
     /**
      * Professional.
      */
+    @SerializedName("professional")
     PROFESSIONAL("professional");
 
     public final String code;
@@ -55,9 +56,5 @@ public enum AccountType implements Enums.WithCode<AccountType> {
     @Override
     public AccountType[] getValues() {
         return values();
-    }
-
-    public static AccountType parse(String code) {
-        return Enums.parse(PERSONAL, code);
     }
 }

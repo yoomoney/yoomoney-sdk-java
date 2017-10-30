@@ -24,24 +24,26 @@
 
 package com.yandex.money.api.typeadapters;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonIOException;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
+import com.google.gson.stream.JsonWriter;
+import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.time.Iso8601Format;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.nio.charset.Charset;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Static class for JSON parsing process.
@@ -49,9 +51,6 @@ import static com.yandex.money.api.utils.Common.checkNotNull;
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public final class JsonUtils {
-
-    public static final DateTimeFormatter ISO_FORMATTER = ISODateTimeFormat.dateTimeParser()
-            .withOffsetParsed();
 
     /**
      * This class contains only static methods.
@@ -130,17 +129,6 @@ public final class JsonUtils {
     }
 
     /**
-     * Gets String from a JSON object.
-     *
-     * @param object json object
-     * @param memberName member's name
-     * @return {@link String} value
-     */
-    public static String getMandatoryString(JsonObject object, String memberName) {
-        return checkMandatoryValue(getString(object, memberName), memberName);
-    }
-
-    /**
      * Gets nullable String from a JSON object.
      *
      * @param object json object
@@ -150,17 +138,6 @@ public final class JsonUtils {
     public static String getString(JsonObject object, String memberName) {
         JsonPrimitive primitive = getPrimitiveChecked(object, memberName);
         return primitive == null ? null : primitive.getAsString();
-    }
-
-    /**
-     * Gets BigDecimal from a JSON object.
-     *
-     * @param object json object
-     * @param memberName member's name
-     * @return {@link java.math.BigDecimal} value
-     */
-    public static BigDecimal getMandatoryBigDecimal(JsonObject object, String memberName) {
-        return checkMandatoryValue(getBigDecimal(object, memberName), memberName);
     }
 
     /**
@@ -176,92 +153,15 @@ public final class JsonUtils {
     }
 
     /**
-     * Gets DateTime from a JSON object.
-     *
-     * @param object json object
-     * @param memberName member's name
-     * @return {@link org.joda.time.DateTime} value
-     */
-    public static DateTime getMandatoryDateTime(JsonObject object, String memberName) {
-        return checkMandatoryValue(getDateTime(object, memberName), memberName);
-    }
-
-
-    /**
      * Gets nullable DateTime from a JSON object.
      *
      * @param object json object
      * @param memberName member's name
-     * @return {@link org.joda.time.DateTime} value
+     * @return {@link DateTime} value
      */
-    public static DateTime getDateTime(JsonObject object, String memberName) {
-        return getDateTime(object, memberName, ISO_FORMATTER);
-    }
-
-    /**
-     * Gets nullable DateTime from a JSON object using formatter.
-     *
-     * @param object     json object
-     * @param memberName member's name
-     * @param formatter  {@link org.joda.time.DateTime}'s formatter.
-     * @return {@link org.joda.time.DateTime} value
-     */
-    public static DateTime getDateTime(JsonObject object, String memberName, DateTimeFormatter formatter) {
+    public static DateTime getDateTime(JsonObject object, String memberName) throws ParseException {
         String value = getString(object, memberName);
-        return value == null ? null : DateTime.parse(value, checkNotNull(formatter, "formatter"));
-    }
-
-    /**
-     * Gets array from a JSON object. Uses {@link ArrayList} implementation of {@link List}.
-     *
-     * @param object json object
-     * @param memberName member's name
-     * @param converter converter
-     * @param <T> type of a value in the array
-     * @return list of values
-     */
-    public static <T> List<T> getMandatoryArray(JsonObject object, String memberName, TypeAdapter<T> converter) {
-        return checkMandatoryValue(getArray(object, memberName, converter), memberName);
-    }
-
-    /**
-     * Gets nullable array from a JSON object. Uses {@link ArrayList} implementation of
-     * {@link List}.
-     *
-     * @param object json object
-     * @param memberName member's name
-     * @param converter converter
-     * @param <T> type of a value in the array
-     * @return list of values
-     */
-    public static <T> List<T> getArray(JsonObject object, String memberName, TypeAdapter<T> converter) {
-        JsonArray array = checkObject(object)
-                .getAsJsonArray(checkMemberName(memberName));
-        if (array == null) {
-            return null;
-        }
-
-        checkNotNull(converter, "converter");
-        List<T> result = new ArrayList<>(array.size());
-        for (JsonElement element : array) {
-            result.add(converter.fromJson(element));
-        }
-        return result;
-    }
-
-    /**
-     * Gets array from a JSON object. Uses {@link ArrayList} implementation of {@link List}. If
-     * there is no such member in object then returns empty list.
-     *
-     * @param object     json object
-     * @param memberName member's name
-     * @param converter  converter
-     * @param <T>        type of a value in the array
-     * @return list of values
-     */
-    public static <T> List<T> getNotNullArray(JsonObject object, String memberName, TypeAdapter<T> converter) {
-        List<T> array = getArray(object, memberName, converter);
-        return array == null ? Collections.<T>emptyList() : array;
+        return value == null ? null : Iso8601Format.parse(value);
     }
 
     /**
@@ -288,7 +188,7 @@ public final class JsonUtils {
      * Maps JSON object to key-value pairs. Returns {@link Collections#emptyMap()} in case of
      * nullable field value.
      *
-     * @see {@link #map(JsonObject)}
+     * @see #map(JsonObject)
      *
      * @param object JSON object
      * @param memberName member's name
@@ -321,29 +221,26 @@ public final class JsonUtils {
     }
 
     /**
-     * Creates JSON array with collection values using provided converter to create JSON elements.
-     * Returns {@code null} if parameter {@code map} is null.
+     * Gets UTF-8 bytes of JSON element
      *
-     * @param collection the collection
-     * @param converter converter for values
-     * @param <T> type of value
-     * @return JSON array
+     * @param element JSON element
+     * @return byte array
      */
-    public static <T> JsonArray toJsonArray(Collection<T> collection, TypeAdapter<T> converter) {
-        if (collection == null) {
-            return null;
+    public static byte[] getBytes(JsonElement element) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        JsonWriter writer = new JsonWriter(new OutputStreamWriter(stream, Charset.forName("UTF-8")));
+        GsonProvider.getGson().toJson(checkNotNull(element, "element"), writer);
+        try {
+            writer.close();
+        } catch (IOException e) {
+            throw new JsonIOException(e);
         }
-        checkNotNull(converter, "converter");
-        JsonArray array = new JsonArray();
-        for (T value : collection) {
-            array.add(converter.toJsonTree(value));
-        }
-        return array;
+        return stream.toByteArray();
     }
 
     private static JsonPrimitive getPrimitiveChecked(JsonObject object, String memberName) {
-        return checkObject(object)
-                .getAsJsonPrimitive(checkMemberName(memberName));
+        JsonElement element = checkObject(object).get(checkMemberName(memberName));
+        return element == null || element.isJsonNull() ? null : element.getAsJsonPrimitive();
     }
 
     private static JsonObject checkObject(JsonObject object) {

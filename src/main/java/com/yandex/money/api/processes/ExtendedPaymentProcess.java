@@ -24,23 +24,21 @@
 
 package com.yandex.money.api.processes;
 
-import com.yandex.money.api.methods.BaseProcessPayment;
-import com.yandex.money.api.methods.BaseRequestPayment;
+import com.yandex.money.api.methods.payment.BaseProcessPayment;
+import com.yandex.money.api.methods.payment.BaseRequestPayment;
 import com.yandex.money.api.model.ExternalCard;
-import com.yandex.money.api.model.MoneySource;
+import com.yandex.money.api.model.Identifiable;
 import com.yandex.money.api.model.Wallet;
-import com.yandex.money.api.net.OAuth2Session;
+import com.yandex.money.api.net.clients.ApiClient;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Combined payment process of {@link PaymentProcess} and {@link ExternalPaymentProcess}.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
 public final class ExtendedPaymentProcess implements IPaymentProcess {
 
-    private final OAuth2Session session;
+    private final ApiClient client;
     private final PaymentProcess paymentProcess;
     private final ExternalPaymentProcess externalPaymentProcess;
     private final ExternalPaymentProcess.ParameterProvider parameterProvider;
@@ -51,13 +49,13 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     /**
      * Constructor.
      *
-     * @param session session to run the process on
+     * @param client client to run the process on
      * @param parameterProvider parameter's provider
      */
-    public ExtendedPaymentProcess(OAuth2Session session, ExternalPaymentProcess.ParameterProvider parameterProvider) {
-        this.session = checkNotNull(session, "session");
-        this.paymentProcess = new PaymentProcess(session, parameterProvider);
-        this.externalPaymentProcess = new ExternalPaymentProcess(session, parameterProvider);
+    public ExtendedPaymentProcess(ApiClient client, ExternalPaymentProcess.ParameterProvider parameterProvider) {
+        this.client = checkNotNull(client, "client");
+        this.paymentProcess = new PaymentProcess(client, parameterProvider);
+        this.externalPaymentProcess = new ExternalPaymentProcess(client, parameterProvider);
         this.parameterProvider = parameterProvider;
         invalidatePaymentContext();
     }
@@ -133,28 +131,35 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
     }
 
     /**
-     * @see {@link BasePaymentProcess#setAccessToken(String)}
+     * @see BasePaymentProcess#setAccessToken(String)
      */
     public void setAccessToken(String accessToken) {
-        session.setAccessToken(accessToken);
+        client.setAccessToken(accessToken);
         invalidatePaymentContext();
     }
 
     /**
-     * @see {@link ExternalPaymentProcess#setInstanceId(String)}
+     * @see ExternalPaymentProcess#setInstanceId(String)
      */
     public void setInstanceId(String instanceId) {
         externalPaymentProcess.setInstanceId(instanceId);
     }
 
+    /**
+     * @return current payment context
+     */
+    public PaymentContext getPaymentContext() {
+        return paymentContext;
+    }
+
     private void invalidatePaymentContext() {
-        this.paymentContext = session.isAuthorized() ? PaymentContext.PAYMENT :
+        this.paymentContext = client.isAuthorized() ? PaymentContext.PAYMENT :
                 PaymentContext.EXTERNAL_PAYMENT;
     }
 
     private void switchContextIfRequired() {
         if (getState() == BasePaymentProcess.State.STARTED && mutablePaymentContext) {
-            MoneySource moneySource = checkNotNull(parameterProvider.getMoneySource(), "moneySource");
+            Identifiable moneySource = checkNotNull(parameterProvider.getMoneySource(), "moneySource");
 
             if (paymentContext == PaymentContext.PAYMENT && moneySource instanceof ExternalCard) {
                 paymentContext = PaymentContext.EXTERNAL_PAYMENT;
@@ -190,10 +195,10 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
      */
     public static final class SavedState {
 
-        private final PaymentProcess.SavedState paymentProcessSavedState;
-        private final ExternalPaymentProcess.SavedState externalPaymentProcessSavedState;
-        private final PaymentContext paymentContext;
-        private final boolean mutablePaymentContext;
+        final PaymentProcess.SavedState paymentProcessSavedState;
+        final ExternalPaymentProcess.SavedState externalPaymentProcessSavedState;
+        final PaymentContext paymentContext;
+        final boolean mutablePaymentContext;
 
         /**
          * Constructor.
@@ -210,9 +215,9 @@ public final class ExtendedPaymentProcess implements IPaymentProcess {
                     parseMutablePaymentContext(flags));
         }
 
-        private SavedState(PaymentProcess.SavedState paymentProcessSavedState,
-                           ExternalPaymentProcess.SavedState externalPaymentProcessSavedState,
-                           PaymentContext paymentContext, boolean mutablePaymentContext) {
+        SavedState(PaymentProcess.SavedState paymentProcessSavedState,
+                   ExternalPaymentProcess.SavedState externalPaymentProcessSavedState,
+                   PaymentContext paymentContext, boolean mutablePaymentContext) {
 
             this.paymentProcessSavedState = paymentProcessSavedState;
             this.externalPaymentProcessSavedState = externalPaymentProcessSavedState;

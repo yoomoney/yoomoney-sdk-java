@@ -37,8 +37,7 @@ package com.yandex.money.api.exceptions;
  * The app should ask for a new token.
  *
  * @author Roman Tsirulnikov (romanvt@yamoney.ru)
- * @see com.yandex.money.api.net.OAuth2Authorization
- * @see com.yandex.money.api.net.OAuth2Session
+ * @see com.yandex.money.api.authorization.AuthorizationData
  */
 public final class InvalidTokenException extends Exception {
     public InvalidTokenException(String error) {

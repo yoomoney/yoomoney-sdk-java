@@ -24,67 +24,46 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
+import com.yandex.money.api.model.SimpleResponse;
 import com.yandex.money.api.model.SimpleStatus;
-import com.yandex.money.api.model.StatusInfo;
-import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.PostRequest;
-import com.yandex.money.api.typeadapters.InstanceIdTypeAdapter;
+import com.yandex.money.api.net.FirstApiRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Instance ID result.
- *
- * @author Dmitriy Melnikov (dvmelnikov@yamoney.ru)
  */
-public class InstanceId {
+public class InstanceId extends SimpleResponse {
 
-    public final StatusInfo statusInfo;
-    @Deprecated
-    public final SimpleStatus status;
-    @Deprecated
-    public final Error error;
+    @SerializedName("instance_id")
     public final String instanceId;
 
-    /**
-     * Constructor.
-     *
-     * @param status status of an operation
-     * @param error error code
-     * @param instanceId instance id if success
-     * @deprecated use {@link #InstanceId(StatusInfo, String)} instead
-     */
-    @Deprecated
     public InstanceId(SimpleStatus status, Error error, String instanceId) {
-        this(StatusInfo.from(status, error), instanceId);
-    }
-
-    public InstanceId(StatusInfo statusInfo, String instanceId) {
-        this.statusInfo = checkNotNull(statusInfo, "statusInfo");
-        if (statusInfo.isSuccessful()) {
+        super(status, error);
+        if (isSuccessful()) {
             checkNotNull(instanceId, "instanceId");
         }
         this.instanceId = instanceId;
-        this.status = statusInfo.status;
-        this.error = statusInfo.error;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
         InstanceId that = (InstanceId) o;
 
-        return statusInfo.equals(that.statusInfo) &&
-                !(instanceId != null ? !instanceId.equals(that.instanceId) : that.instanceId != null);
+        return instanceId != null ? instanceId.equals(that.instanceId) : that.instanceId == null;
     }
 
     @Override
     public int hashCode() {
-        int result = statusInfo.hashCode();
+        int result = super.hashCode();
         result = 31 * result + (instanceId != null ? instanceId.hashCode() : 0);
         return result;
     }
@@ -92,20 +71,16 @@ public class InstanceId {
     @Override
     public String toString() {
         return "InstanceId{" +
-                "statusInfo=" + statusInfo +
+                "status=" + status +
+                ", error=" + error +
                 ", instanceId='" + instanceId + '\'' +
                 '}';
-    }
-
-    @Deprecated
-    public boolean isSuccess() {
-        return statusInfo.isSuccessful();
     }
 
     /**
      * Request for a new instance id.
      */
-    public static class Request extends PostRequest<InstanceId> {
+    public static class Request extends FirstApiRequest<InstanceId> {
 
         /**
          * Construct request using provided client ID.
@@ -113,12 +88,12 @@ public class InstanceId {
          * @param clientId client id of the application
          */
         public Request(String clientId) {
-            super(InstanceIdTypeAdapter.getInstance());
+            super(InstanceId.class);
             addParameter("client_id", checkNotEmpty(clientId, "clientId"));
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/instance-id";
         }
     }

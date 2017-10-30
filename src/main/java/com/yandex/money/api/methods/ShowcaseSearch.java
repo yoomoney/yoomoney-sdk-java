@@ -24,46 +24,44 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
-import com.yandex.money.api.net.ApiRequest;
-import com.yandex.money.api.net.DocumentProvider;
-import com.yandex.money.api.net.GetRequest;
-import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.typeadapters.showcase.ShowcaseSearchTypeAdapter;
+import com.yandex.money.api.net.DocumentApiRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * This class wraps result of showcase searching provided by response of
- * {@link ShowcaseSearch.Request} call.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * This class wraps result of showcase searching provided by response of {@link ShowcaseSearch.Request} call.
  */
 public class ShowcaseSearch {
 
     /**
      * Error code. May be {@code null}.
      */
+    @SerializedName("error")
     public final Error error;
 
     /**
      * List of {@link ShowcaseReference}.
      */
+    @SerializedName("result")
     public final List<ShowcaseReference> result;
 
     /**
      * Next page marker.
      */
+    @SerializedName("nextPage")
     public final String nextPage;
 
     private ShowcaseSearch(Error error, List<ShowcaseReference> result, String nextPage) {
         this.error = error;
-        this.result = Collections.unmodifiableList(checkNotNull(result, "result"));
+        this.result = result != null ? Collections.unmodifiableList(checkNotNull(result, "result")) : null;
         this.nextPage = nextPage;
     }
 
@@ -93,14 +91,15 @@ public class ShowcaseSearch {
 
         ShowcaseSearch that = (ShowcaseSearch) o;
 
-        return error == that.error && result.equals(that.result) &&
-                !(nextPage != null ? !nextPage.equals(that.nextPage) : that.nextPage != null);
+        if (error != that.error) return false;
+        if (result != null ? !result.equals(that.result) : that.result != null) return false;
+        return nextPage != null ? nextPage.equals(that.nextPage) : that.nextPage == null;
     }
 
     @Override
     public int hashCode() {
         int result1 = error != null ? error.hashCode() : 0;
-        result1 = 31 * result1 + result.hashCode();
+        result1 = 31 * result1 + (result != null ? result.hashCode() : 0);
         result1 = 31 * result1 + (nextPage != null ? nextPage.hashCode() : 0);
         return result1;
     }
@@ -114,11 +113,7 @@ public class ShowcaseSearch {
                 '}';
     }
 
-    /**
-     * This class should be used for obtaining {@link ShowcaseReference} instances in
-     * {@link DocumentProvider#fetch(ApiRequest)} call.
-     */
-    public static class Request extends GetRequest<ShowcaseSearch> {
+    public static class Request extends DocumentApiRequest<ShowcaseSearch> {
 
         /**
          * Constructor.
@@ -127,13 +122,13 @@ public class ShowcaseSearch {
          * @param records number of records to requests from remote server
          */
         public Request(String query, int records) {
-            super(ShowcaseSearchTypeAdapter.getInstance());
+            super(ShowcaseSearch.class);
             addParameter("query", checkNotEmpty(query, "query"));
             addParameter("records", records);
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/showcase-search";
         }
     }

@@ -24,31 +24,89 @@
 
 package com.yandex.money.api.model;
 
-import com.yandex.money.api.utils.Enums;
+import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.time.YearMonth;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * Bank card info.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Represents basic bank card data.
  */
-public class Card extends MoneySource {
+public class Card implements BankCardInfo, MoneySource {
+
+    @SerializedName("id")
+    public final String id;
 
     /**
      * panned fragment of card's number
      */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("pan_fragment")
     public final String panFragment;
 
     /**
      * type of a card (e.g. VISA, MasterCard, AmericanExpress, etc.)
      */
-    public final Type type;
+    @SerializedName("type")
+    public final CardBrand type;
 
+    @SuppressWarnings("WeakerAccess")
     protected Card(Builder builder) {
-        super(builder);
-        panFragment = builder.panFragment;
-        type = builder.type;
+        id = checkNotEmpty(builder.id, "id");
+        panFragment = checkNotEmpty(builder.panFragment, "panFragment");
+        type = checkNotNull(builder.type, "type");
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String getCardholderName() {
+        return null;
+    }
+
+    @Override
+    public String getCardNumber() {
+        return panFragment;
+    }
+
+    @Override
+    public CardBrand getCardBrand() {
+        return type;
+    }
+
+    @Override
+    public YearMonth getExpiry() {
+        return null;
+    }
+
+    @Override
+    public boolean isContactless() {
+        return false;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Card card = (Card) o;
+
+        if (!id.equals(card.id)) return false;
+        //noinspection SimplifiableIfStatement
+        if (panFragment != null ? !panFragment.equals(card.panFragment) : card.panFragment != null) return false;
+        return type == card.type;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id.hashCode();
+        result = 31 * result + (panFragment != null ? panFragment.hashCode() : 0);
+        result = 31 * result + type.hashCode();
+        return result;
     }
 
     @Override
@@ -60,75 +118,27 @@ public class Card extends MoneySource {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+    public static class Builder {
 
-        Card card = (Card) o;
+        String id;
+        String panFragment;
+        CardBrand type = CardBrand.UNKNOWN;
 
-        return !(panFragment != null ? !panFragment.equals(card.panFragment) : card.panFragment != null) &&
-                type == card.type;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = super.hashCode();
-        result = 31 * result + (panFragment != null ? panFragment.hashCode() : 0);
-        result = 31 * result + type.hashCode();
-        return result;
-    }
-
-    public enum Type implements Enums.WithCode<Type> {
-
-        VISA("VISA", "CVV2", 3),
-        MASTER_CARD("MasterCard", "CVC2", 3),
-        AMERICAN_EXPRESS("AmericanExpress", "CID", 4), // also cscAbbr = 4DBC
-        JCB("JCB", "CAV2", 3),
-        UNKNOWN("UNKNOWN", "CSC", 4);
-
-        public final String name;
-        public final String cscAbbr;
-        public final int cscLength;
-
-        Type(String name, String cscAbbr, int cscLength) {
-            this.name = name;
-            this.cscAbbr = cscAbbr;
-            this.cscLength = cscLength;
+        public Builder setId(String id) {
+            this.id = id;
+            return this;
         }
-
-        @Override
-        public String getCode() {
-            return name;
-        }
-
-        @Override
-        public Type[] getValues() {
-            return values();
-        }
-
-        public static Type parse(String name) {
-            return Enums.parse(UNKNOWN, UNKNOWN, name);
-        }
-    }
-
-    public static class Builder extends MoneySource.Builder {
-
-        private String panFragment;
-        private Type type = Type.UNKNOWN;
 
         public Builder setPanFragment(String panFragment) {
             this.panFragment = panFragment;
             return this;
         }
 
-        public Builder setType(Type type) {
-            this.type = checkNotNull(type, "type");
+        public Builder setType(CardBrand type) {
+            this.type = type;
             return this;
         }
 
-        @Override
         public Card create() {
             return new Card(this);
         }

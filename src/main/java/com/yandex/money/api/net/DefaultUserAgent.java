@@ -24,7 +24,7 @@
 
 package com.yandex.money.api.net;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
 
 /**
  *  Default implementation of {@link com.yandex.money.api.net.UserAgent} interface.
@@ -33,6 +33,11 @@ public class DefaultUserAgent implements UserAgent {
 
     private final String platform;
 
+    /**
+     * Constructor.
+     *
+     * @param platform platform name
+     */
     public DefaultUserAgent(String platform) {
         this.platform = checkNotEmpty(platform, "platform");
     }

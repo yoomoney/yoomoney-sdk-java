@@ -25,16 +25,16 @@
 package com.yandex.money.api.processes;
 
 import com.yandex.money.api.exceptions.ResourceNotFoundException;
-import com.yandex.money.api.net.DocumentProvider;
-import com.yandex.money.api.net.ShowcaseContext;
+import com.yandex.money.api.model.showcase.ShowcaseContext;
+import com.yandex.money.api.net.clients.ApiClient;
 
 import java.io.IOException;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * This class connects {@link DocumentProvider} and {@link ShowcaseContext} class and provides
- * convenient methods to work with them.
+ * This class connects {@link ApiClient} and {@link ShowcaseContext} class and provides convenient methods to work with
+ * them.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
  */
@@ -44,10 +44,11 @@ public class ShowcaseProcess implements Process {
      * Related context which encapsulates current step and overall state
      */
     public final ShowcaseContext showcaseContext;
-    private final DocumentProvider documentProvider;
 
-    public ShowcaseProcess(DocumentProvider documentProvider, ShowcaseContext showcaseContext) {
-        this.documentProvider = checkNotNull(documentProvider, "documentProvider");
+    private final ApiClient apiClient;
+
+    public ShowcaseProcess(ApiClient apiClient, ShowcaseContext showcaseContext) {
+        this.apiClient = checkNotNull(apiClient, "apiClient");
         this.showcaseContext = checkNotNull(showcaseContext, "showcaseContext");
     }
 
@@ -59,11 +60,11 @@ public class ShowcaseProcess implements Process {
      * @throws ResourceNotFoundException wrong URL
      */
     @Override
-    public boolean proceed() throws IOException, ResourceNotFoundException {
+    public boolean proceed() throws Exception {
         if (isCompleted()) {
             return true;
         }
-        documentProvider.submitShowcase(showcaseContext);
+        apiClient.execute(showcaseContext.createRequest());
         return isCompleted();
     }
 
@@ -73,7 +74,7 @@ public class ShowcaseProcess implements Process {
      * @return {@code true} in case of already completed process and {@code false} otherwise
      */
     @Override
-    public boolean repeat() throws IOException, ResourceNotFoundException {
+    public boolean repeat() throws Exception {
         return proceed();
     }
 

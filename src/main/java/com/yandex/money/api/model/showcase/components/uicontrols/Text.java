@@ -25,8 +25,7 @@
 package com.yandex.money.api.model.showcase.components.uicontrols;
 
 
-import com.yandex.money.api.utils.Enums;
-import com.yandex.money.api.utils.ToStringBuilder;
+import com.yandex.money.api.util.Enums;
 
 /**
  * Text field. Specializes {@link TextArea} with optional keyboard layout and pattern.
@@ -79,14 +78,6 @@ public class Text extends TextArea {
         return result;
     }
 
-    @Override
-    protected ToStringBuilder getToStringBuilder() {
-        return super.getToStringBuilder()
-                .setName("Text")
-                .append("pattern", pattern)
-                .append("keyboard", keyboard);
-    }
-
     /**
      * Keyboard type. The {@link Keyboard#NUMBER} means that field value can be filled with
      * number keyboard.
@@ -121,8 +112,8 @@ public class Text extends TextArea {
      */
     public static class Builder extends TextArea.Builder {
 
-        private String pattern;
-        private Keyboard keyboard;
+        String pattern;
+        Keyboard keyboard;
 
         @Override
         public Text create() {

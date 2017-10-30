@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,56 +24,8 @@
 
 package com.yandex.money.api.model;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
-
 /**
- * Some money source: wallet, card, etc.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Marker interface for payment's money sources.
  */
-public abstract class MoneySource {
-
-    /**
-     * unique money source id
-     */
-    public final String id;
-
-    protected MoneySource(Builder builder) {
-        checkNotNull(builder, "builder");
-        id = builder.id;
-    }
-
-    @Override
-    public String toString() {
-        return "MoneySource{" +
-                "id='" + id + '\'' +
-                '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MoneySource that = (MoneySource) o;
-
-        return !(id != null ? !id.equals(that.id) : that.id != null);
-    }
-
-    @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
-    }
-
-    public static abstract class Builder {
-
-        private String id;
-
-        public Builder setId(String id) {
-            this.id = id;
-            return this;
-        }
-
-        public abstract MoneySource create();
-    }
+public interface MoneySource extends Identifiable {
 }

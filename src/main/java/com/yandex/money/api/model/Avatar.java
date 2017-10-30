@@ -1,7 +1,7 @@
 /*
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 NBCO Yandex.Money LLC
+ * Copyright (c) 2017 NBCO Yandex.Money LLC
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,28 @@
 
 package com.yandex.money.api.model;
 
-import org.joda.time.DateTime;
+import com.google.gson.annotations.SerializedName;
+import com.yandex.money.api.time.DateTime;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * Describes avatar from {@link com.yandex.money.api.methods.AccountInfo}.
- *
- * @author Slava Yasevich (vyasevich@yamoney.ru)
+ * Describes avatar from {@link com.yandex.money.api.methods.wallet.AccountInfo}.
  */
-public class Avatar {
+public final class Avatar {
 
     /**
      * url to avatar
      */
+    @SerializedName("url")
     public final String url;
 
     /**
      * avatar change time
      */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("ts")
     public final DateTime timestamp;
 
     /**
@@ -58,27 +60,29 @@ public class Avatar {
     }
 
     @Override
-    public String toString() {
-        return "Avatar{" +
-                "url='" + url + '\'' +
-                ", timestamp=" + timestamp +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         Avatar avatar = (Avatar) o;
 
-        return url.equals(avatar.url) && timestamp.isEqual(avatar.timestamp);
+        //noinspection SimplifiableIfStatement
+        if (url != null ? !url.equals(avatar.url) : avatar.url != null) return false;
+        return timestamp != null ? timestamp.equals(avatar.timestamp) : avatar.timestamp == null;
     }
 
     @Override
     public int hashCode() {
-        int result = url.hashCode();
-        result = 31 * result + timestamp.hashCode();
+        int result = url != null ? url.hashCode() : 0;
+        result = 31 * result + (timestamp != null ? timestamp.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Avatar{" +
+                "url='" + url + '\'' +
+                ", timestamp=" + timestamp +
+                '}';
     }
 }

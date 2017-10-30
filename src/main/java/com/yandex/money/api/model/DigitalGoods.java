@@ -24,10 +24,12 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.Collections;
 import java.util.List;
 
-import static com.yandex.money.api.utils.Common.checkNotNull;
+import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
  * Digital Goods that can be obtained after payment if available.
@@ -39,11 +41,13 @@ public class DigitalGoods {
     /**
      * not null list of articles
      */
+    @SerializedName("article")
     public final List<Good> article;
 
     /**
      * not null list of bonuses
      */
+    @SerializedName("bonus")
     public final List<Good> bonus;
 
     /**
@@ -54,7 +58,7 @@ public class DigitalGoods {
      */
     public DigitalGoods(List<Good> article, List<Good> bonus) {
         this.article = Collections.unmodifiableList(checkNotNull(article, "article"));
-        this.bonus = Collections.unmodifiableList(checkNotNull(bonus, "bonus"));
+        this.bonus = bonus != null ? Collections.unmodifiableList(bonus) : null;
     }
 
     @Override
@@ -62,15 +66,16 @@ public class DigitalGoods {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        DigitalGoods that = (DigitalGoods) o;
+        DigitalGoods goods = (DigitalGoods) o;
 
-        return article.equals(that.article) && bonus.equals(that.bonus);
+        if (!article.equals(goods.article)) return false;
+        return bonus != null ? bonus.equals(goods.bonus) : goods.bonus == null;
     }
 
     @Override
     public int hashCode() {
         int result = article.hashCode();
-        result = 31 * result + bonus.hashCode();
+        result = 31 * result + (bonus != null ? bonus.hashCode() : 0);
         return result;
     }
 

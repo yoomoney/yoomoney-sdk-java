@@ -24,13 +24,12 @@
 
 package com.yandex.money.api.methods;
 
+import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.net.HostsProvider;
-import com.yandex.money.api.net.PostRequest;
-import com.yandex.money.api.typeadapters.RevokeTypeAdapter;
-import com.yandex.money.api.typeadapters.TokenTypeAdapter;
+import com.yandex.money.api.net.FirstApiRequest;
+import com.yandex.money.api.net.providers.HostsProvider;
 
-import static com.yandex.money.api.utils.Common.checkNotEmpty;
+import static com.yandex.money.api.util.Common.checkNotEmpty;
 
 /**
  * Access token.
@@ -39,7 +38,9 @@ import static com.yandex.money.api.utils.Common.checkNotEmpty;
  */
 public class Token {
 
+    @SerializedName("access_token")
     public final String accessToken;
+    @SerializedName("error")
     public final Error error;
 
     /**
@@ -82,7 +83,7 @@ public class Token {
     /**
      * Request for access token.
      */
-    public static class Request extends PostRequest<Token> {
+    public static class Request extends FirstApiRequest<Token> {
 
         /**
          * Constructor.
@@ -104,7 +105,7 @@ public class Token {
          * @param clientSecret a secret word for verifying application's authenticity.
          */
         public Request(String code, String clientId, String redirectUri, String clientSecret) {
-            super(TokenTypeAdapter.getInstance());
+            super(Token.class);
             addParameter("code", checkNotEmpty(code, "code"));
             addParameter("client_id", checkNotEmpty(clientId, "clientId"));
             addParameter("grant_type", "authorization_code");
@@ -113,7 +114,7 @@ public class Token {
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoney() + "/oauth/token";
         }
     }
@@ -121,7 +122,7 @@ public class Token {
     /**
      * Revokes access token.
      */
-    public static final class Revoke extends PostRequest<Revoke> {
+    public static final class Revoke extends FirstApiRequest<Revoke> {
 
         /**
          * Revoke only one token.
@@ -136,12 +137,12 @@ public class Token {
          * @param revokeAll if {@code true} all bound tokens will be also revoked
          */
         public Revoke(boolean revokeAll) {
-            super(RevokeTypeAdapter.getInstance());
+            super(Revoke.class);
             addParameter("revoke-all", revokeAll);
         }
 
         @Override
-        public String requestUrl(HostsProvider hostsProvider) {
+        protected String requestUrlBase(HostsProvider hostsProvider) {
             return hostsProvider.getMoneyApi() + "/revoke";
         }
     }

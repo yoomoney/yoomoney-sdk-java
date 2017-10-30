@@ -25,7 +25,7 @@
 package com.yandex.money.api.net;
 
 import com.yandex.money.api.model.Error;
-import com.yandex.money.api.utils.UrlEncodedUtils;
+import com.yandex.money.api.util.UrlEncodedUtils;
 
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -34,7 +34,7 @@ import java.util.Map;
  * This is a convenience class to parse OAuth2 response after user authentication.
  *
  * @author Slava Yasevich (vyasevich@yamoney.ru)
- * @see com.yandex.money.api.net.OAuth2Authorization
+ * @see com.yandex.money.api.authorization.AuthorizationData
  */
 public class AuthorizationCodeResponse {
 
