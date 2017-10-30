@@ -79,6 +79,6 @@ final class ResponseLoggingInputStream extends InputStream {
     public void close() throws IOException {
         inputStream.close();
         buffer.close();
-        Log.i(TAG, buffer.toString("UTF-8"));
+        Log.i("response: " + buffer.toString("UTF-8"));
     }
 }

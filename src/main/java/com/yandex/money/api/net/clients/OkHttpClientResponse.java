@@ -25,7 +25,9 @@
 package com.yandex.money.api.net.clients;
 
 import com.yandex.money.api.net.HttpClientResponse;
+import com.yandex.money.api.util.logging.Log;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -67,12 +69,26 @@ final class OkHttpClientResponse implements HttpClientResponse {
 
     @Override
     public String getBody() throws IOException {
-        return response.body().string();
+        ResponseBody body = response.body();
+        if (body == null) {
+            Log.i("response: body is empty");
+            return null;
+        }
+
+        String data = body.string();
+        Log.i("response: " + data);
+        return data;
     }
 
     @Override
     public InputStream getByteStream() {
-        InputStream stream = response.body().byteStream();
+        ResponseBody body = response.body();
+        if (body == null) {
+            Log.i("response: body is empty");
+            return null;
+        }
+
+        InputStream stream = body.byteStream();
         return debug ? new ResponseLoggingInputStream(stream) : stream;
     }
 }
