@@ -60,6 +60,10 @@ public enum Error implements Enums.WithCode<Error> {
     CONTRACT_NOT_FOUND("contract_not_found"),
     @SerializedName("data_expired")
     DATA_EXPIRED("data_expired"),
+    @SerializedName("DateTimeIsPast")
+    DATE_TIME_IS_PAST("DateTimeIsPast"),
+    @SerializedName("DateTimeIsTooFar")
+    DATE_TIME_IS_TOO_FAR("DateTimeIsTooFar"),
     @SerializedName("ext_action_required")
     EXT_ACTION_REQUIRED("ext_action_required"),
     @SerializedName("favourite_duplicate")
@@ -182,6 +186,8 @@ public enum Error implements Enums.WithCode<Error> {
     PAYMENT_EXPIRED("payment_expired"),
     @SerializedName("payment_refused")
     PAYMENT_REFUSED("payment_refused"),
+    @SerializedName("PeriodTooLong")
+    PERIOD_TOO_LONG("PeriodTooLong"),
     @SerializedName("personification_refused")
     PERSONIFICATION_REFUSED("personification_refused"),
     @SerializedName("phone_number_refused")
@@ -205,7 +211,9 @@ public enum Error implements Enums.WithCode<Error> {
     @SerializedName("VacationLimitExceeded")
     VACATION_LIMIT_EXCEEDED("VacationLimitExceeded"),
     @SerializedName("WRONG_PAYMENT_AUTH")
-    WRONG_PAYMENT_AUTH("WRONG_PAYMENT_AUTH");
+    WRONG_PAYMENT_AUTH("WRONG_PAYMENT_AUTH"),
+    @SerializedName("WrongPeriod")
+    WRONG_PERIOD("WrongPeriod");
 
     private static final Map<String, Error> ERRORS;
     static {
