@@ -71,12 +71,12 @@ final class OkHttpClientResponse implements HttpClientResponse {
     public String getBody() throws IOException {
         ResponseBody body = response.body();
         if (body == null) {
-            Log.i("response: body is empty");
+            Log.i("body is empty");
             return null;
         }
 
         String data = body.string();
-        Log.i("response: " + data);
+        Log.i(data);
         return data;
     }
 
@@ -84,7 +84,7 @@ final class OkHttpClientResponse implements HttpClientResponse {
     public InputStream getByteStream() {
         ResponseBody body = response.body();
         if (body == null) {
-            Log.i("response: body is empty");
+            Log.i("body is empty");
             return null;
         }
 
