@@ -90,7 +90,7 @@ public final class ShowcaseContext {
         this.state = state;
     }
 
-    ShowcaseContext(Showcase showcase, String submitUrl, DateTime lastModified) {
+    public ShowcaseContext(Showcase showcase, String submitUrl, DateTime lastModified) {
         this.history = new Stack<>();
         this.currentStep = new Step(showcase, submitUrl);
         this.lastModified = lastModified;
@@ -335,13 +335,20 @@ public final class ShowcaseContext {
                         return context;
                     case HttpURLConnection.HTTP_MULT_CHOICE:
                     case HttpURLConnection.HTTP_BAD_REQUEST:
+                    case HttpURLConnection.HTTP_MOVED_TEMP:
                         final String newLocation = response.getHeader(HttpHeaders.LOCATION);
 
-                        inputStream = response.getByteStream();
-                        Showcase newShowcase = ShowcaseTypeAdapter.getInstance().fromJson(inputStream);
+                        ShowcaseContext.Step step;
+                        if (responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
+                            step = new ShowcaseContext.Step(context.currentStep.showcase, newLocation);
+                        } else {
+                            inputStream = response.getByteStream();
+                            Showcase newShowcase = ShowcaseTypeAdapter.getInstance().fromJson(inputStream);
+                            step = new ShowcaseContext.Step(newShowcase, newLocation);
+                        }
 
-                        ShowcaseContext.Step step = new ShowcaseContext.Step(newShowcase, newLocation);
-                        if (responseCode == HttpURLConnection.HTTP_MULT_CHOICE) {
+                        if (responseCode == HttpURLConnection.HTTP_MULT_CHOICE ||
+                                responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
                             context.pushCurrentStep(step);
                             context.setState(ShowcaseContext.State.HAS_NEXT_STEP);
                         } else {
