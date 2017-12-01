@@ -74,35 +74,6 @@ public class Group extends Container<Component> {
     }
 
     /**
-     * Fills specified group's controls with values from map.
-     *
-     * @param group group to fill
-     * @param map map to traverse
-     */
-    public static void fillGroupWithValues(Group group, Map<String, String> map) {
-        for (Component component : group.items) {
-            if (component instanceof Group) {
-                fillGroupWithValues((Group) component, map);
-            } else if (component instanceof Parameter) {
-                Parameter parameter = (Parameter) component;
-                String parameterName = parameter.getName();
-                if (map.containsKey(parameterName)) {
-                    parameter.setValue(map.remove(parameterName));
-                    if (map.isEmpty()) {
-                        break;
-                    }
-                }
-                if (component instanceof Select) {
-                    Select.Option option = ((Select) component).getSelectedOption();
-                    if (option != null && option.group != null) {
-                        fillGroupWithValues(option.group, map);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Validates contained components across constraints.
      *
      * @return {@code true} if group is valid and {@code false} otherwise.

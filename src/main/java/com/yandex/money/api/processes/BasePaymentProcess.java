@@ -145,13 +145,6 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     }
 
     /**
-     * @return state of payment process
-     */
-    public final State getState() {
-        return state;
-    }
-
-    /**
      * Creates request payment method.
      *
      * @return method request
@@ -219,7 +212,7 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
     /**
      * State of payment process
      */
-    public enum State {
+    enum State {
         /**
          * Indicates that payment process is created.
          */
@@ -325,5 +318,12 @@ public abstract class BasePaymentProcess<RP extends BaseRequestPayment,
         State getState() {
             return state;
         }
+    }
+
+    /**
+     * @return state of payment process
+     */
+    final State getState() {
+        return state;
     }
 }
