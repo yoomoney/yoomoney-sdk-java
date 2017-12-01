@@ -134,7 +134,7 @@ public class ProcessExternalPayment extends BaseProcessPayment {
         }
     }
 
-    public static final class Builder extends BaseProcessPayment.Builder {
+    public static class Builder extends BaseProcessPayment.Builder {
 
         ExternalCard externalCard;
 
