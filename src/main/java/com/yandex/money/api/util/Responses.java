@@ -62,9 +62,8 @@ public final class Responses {
      */
     public static String processError(HttpClientResponse response) throws IOException {
         String field = response.getHeader(HttpHeaders.WWW_AUTHENTICATE);
-        com.yandex.money.api.util.logging.Log.w("Server has responded with a error: " + getError(response) + "\n" +
-                HttpHeaders.WWW_AUTHENTICATE + ": " + field);
-        com.yandex.money.api.util.logging.Log.w(response.getBody());
+        com.yandex.money.api.util.logging.Log.w("Server has responded with an error: " + getError(response) +
+                "\n" + HttpHeaders.WWW_AUTHENTICATE + ": " + field);
         return field;
     }
 
