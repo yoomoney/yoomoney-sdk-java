@@ -24,71 +24,61 @@
 
 package com.yandex.money.api.net.clients;
 
-import com.yandex.money.api.net.HttpClientResponse;
 import com.yandex.money.api.util.logging.Log;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
 /**
- * Implementation of {@link HttpClientResponse} for OkHttp.
+ * Logging wrapper for server responses
+ * Supposes, that responses in UTF-8
  */
-final class OkHttpClientResponse implements HttpClientResponse {
+final class ResponseLoggingInputStream extends InputStream {
 
-    private final Response response;
-    private final boolean debug;
+    private static final String TAG = ResponseLoggingInputStream.class.getName();
 
-    OkHttpClientResponse(Response response, boolean debug) {
-        this.response = checkNotNull(response, "response");
-        this.debug = debug;
+    private final InputStream inputStream;
+    private final ByteArrayOutputStream buffer;
+
+    ResponseLoggingInputStream(InputStream inputStream) {
+        this.inputStream = checkNotNull(inputStream, "input stream");
+        this.buffer = new ByteArrayOutputStream();
     }
 
     @Override
-    public int getCode() {
-        return response.code();
-    }
-
-    @Override
-    public String getMessage() {
-        return response.message();
-    }
-
-    @Override
-    public String getUrl() {
-        return response.request().url().toString();
-    }
-
-    @Override
-    public String getHeader(String name) {
-        return response.header(name);
-    }
-
-    @Override
-    public String getBody() throws IOException {
-        ResponseBody body = response.body();
-        if (body == null) {
-            Log.i("body is empty");
-            return null;
+    public int read() throws IOException {
+        int c = inputStream.read();
+        if (c > -1) {
+            buffer.write((byte) c);
         }
-
-        String data = body.string();
-        Log.i(data);
-        return data;
+        return c;
     }
 
     @Override
-    public InputStream getByteStream() {
-        ResponseBody body = response.body();
-        if (body == null) {
-            Log.i("body is empty");
-            return null;
+    public int read(byte b[]) throws IOException {
+        int read = inputStream.read(b);
+        if (read > -1) {
+            buffer.write(b, 0, read);
         }
+        return read;
+    }
 
-        InputStream stream = body.byteStream();
-        return debug ? new ResponseLoggingInputStream(stream) : stream;
+    @Override
+    public int read(byte b[], int off, int len) throws IOException {
+        int read = inputStream.read(b, off, len);
+        if (read > -1) {
+            buffer.write(b, off, read);
+        }
+        return read;
+    }
+
+    @Override
+    public void close() throws IOException {
+        inputStream.close();
+        buffer.close();
+        Log.i(buffer.toString("UTF-8"));
     }
 }

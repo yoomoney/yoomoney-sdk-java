@@ -24,13 +24,12 @@
 
 package com.yandex.money.api.net.clients;
 
-import com.yandex.money.api.util.logging.Log;
 import okhttp3.ConnectionPool;
-import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
 
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
+import java.security.GeneralSecurityException;
 import java.util.concurrent.TimeUnit;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
@@ -39,8 +38,6 @@ import static com.yandex.money.api.util.Common.checkNotNull;
  * Creates HTTP clients.
  */
 public final class HttpClientFactory {
-
-    private static Interceptor loggingInterceptor;
 
     private HttpClientFactory() {
     }
@@ -64,7 +61,6 @@ public final class HttpClientFactory {
      *
      * @return instance of {@link OkHttpClient.Builder}
      */
-    @SuppressWarnings("WeakerAccess")
     public static OkHttpClient.Builder createDefaultOkHttpClientBuilder() {
         final long timeout = 30;
         return new OkHttpClient.Builder()
@@ -80,36 +76,27 @@ public final class HttpClientFactory {
      *
      * @param builder builder that will be used to create HTTP client
      */
-    @SuppressWarnings("WeakerAccess")
     public static void applyLogging(OkHttpClient.Builder builder) {
-        checkNotNull(builder, "builder").addNetworkInterceptor(getLoggingInterceptor());
+        applyLogging(builder, createSslSocketFactory());
     }
 
     /**
      * Applies logging to OkHttp client.
      *
      * @param builder OkHttp client builder
-     * @param sslSocketFactory ignored as of deprecation
-     *
-     * @deprecated use {@link #applyLogging(OkHttpClient.Builder)} instead
+     * @param sslSocketFactory SSL socket factory
      */
-    @Deprecated
-    public static void applyLogging(
-            OkHttpClient.Builder builder,
-            @SuppressWarnings("unused") SSLSocketFactory sslSocketFactory
-    ) {
-        applyLogging(builder);
+    public static void applyLogging(OkHttpClient.Builder builder, SSLSocketFactory sslSocketFactory) {
+        checkNotNull(builder, "builder").sslSocketFactory(new WireLoggingSocketFactory(sslSocketFactory));
     }
 
-    private synchronized static Interceptor getLoggingInterceptor() {
-        if (loggingInterceptor == null) {
-            loggingInterceptor = new HttpLoggingInterceptor(new HttpLoggingInterceptor.Logger() {
-                @Override
-                public void log(String message) {
-                    Log.i(message);
-                }
-            }).setLevel(HttpLoggingInterceptor.Level.BODY);
+    private static SSLSocketFactory createSslSocketFactory() {
+        try {
+            SSLContext context = SSLContext.getInstance("TLS");
+            context.init(null, null, null);
+            return context.getSocketFactory();
+        } catch (GeneralSecurityException exception) {
+            throw new RuntimeException(exception);
         }
-        return loggingInterceptor;
     }
 }
