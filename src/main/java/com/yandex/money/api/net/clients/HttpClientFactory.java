@@ -82,7 +82,7 @@ public final class HttpClientFactory {
      */
     @SuppressWarnings("WeakerAccess")
     public static void applyLogging(OkHttpClient.Builder builder) {
-        checkNotNull(builder, "builder").addNetworkInterceptor(getLoggingInterceptor());
+        checkNotNull(builder, "builder").addInterceptor(getLoggingInterceptor());
     }
 
     /**
