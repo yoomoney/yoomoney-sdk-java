@@ -87,8 +87,6 @@ final class OkHttpClientResponse implements HttpClientResponse {
             Log.i("body is empty");
             return null;
         }
-
-        InputStream stream = body.byteStream();
-        return debug ? new ResponseLoggingInputStream(stream) : stream;
+        return body.byteStream();
     }
 }
