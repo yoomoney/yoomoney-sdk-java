@@ -465,7 +465,10 @@ public class Operation implements Identifiable {
     }
 
     /**
-     * Types of available operations
+     * Types of available operations.
+     *
+     * These elements are for internal use only.
+     * Use them carefully as they can be removed or changed.
      */
     public enum AvailableOperation implements Enums.WithCode<AvailableOperation> {
 
