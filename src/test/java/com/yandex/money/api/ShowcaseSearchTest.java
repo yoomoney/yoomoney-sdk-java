@@ -56,6 +56,6 @@ public class ShowcaseSearchTest {
     }
 
     private static ShowcaseSearch getShowcaseSearchInstance() throws Exception {
-        return client.execute(new ShowcaseSearch.Request("skynet", 10)).document;
+        return client.execute(new ShowcaseSearch.Request("мтс", 10)).document;
     }
 }
