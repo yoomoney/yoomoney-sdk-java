@@ -215,6 +215,13 @@ public class Operation implements Identifiable {
     public final ShowcaseReference.Format showcaseFormat;
 
     /**
+     * Available operations
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("available_operations")
+    public final List<AvailableOperation> availableOperations;
+
+    /**
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
      */
     protected Operation(Builder builder) {
@@ -246,6 +253,8 @@ public class Operation implements Identifiable {
         digitalGoods = builder.digitalGoods;
         categories = builder.categories != null ? Collections.unmodifiableList(builder.categories) : null;
         showcaseFormat = builder.format;
+        availableOperations = builder.availableOperations != null ?
+                Collections.unmodifiableList(builder.availableOperations) : null;
     }
 
     @Override
@@ -302,9 +311,11 @@ public class Operation implements Identifiable {
         if (type != operation.type) return false;
         if (digitalGoods != null ? !digitalGoods.equals(operation.digitalGoods) : operation.digitalGoods != null)
             return false;
-        //noinspection SimplifiableIfStatement
         if (categories != null ? !categories.equals(operation.categories) : operation.categories != null) return false;
-        return showcaseFormat == operation.showcaseFormat;
+        //noinspection SimplifiableIfStatement
+        if (showcaseFormat != operation.showcaseFormat) return false;
+        return availableOperations != null ? availableOperations.equals(operation.availableOperations) :
+                operation.availableOperations == null;
     }
 
     @Override
@@ -336,6 +347,7 @@ public class Operation implements Identifiable {
         result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
         result = 31 * result + (categories != null ? categories.hashCode() : 0);
         result = 31 * result + (showcaseFormat != null ? showcaseFormat.hashCode() : 0);
+        result = 31 * result + (availableOperations != null ? availableOperations.hashCode() : 0);
         return result;
     }
 
@@ -369,6 +381,7 @@ public class Operation implements Identifiable {
                 ", digitalGoods=" + digitalGoods +
                 ", categories=" + categories +
                 ", showcaseFormat=" + showcaseFormat +
+                ", availableOperations=" + availableOperations +
                 '}';
     }
 
@@ -452,6 +465,40 @@ public class Operation implements Identifiable {
     }
 
     /**
+     * Types of available operations.
+     *
+     * These elements are for internal use only.
+     * Use them carefully as they can be removed or changed.
+     */
+    public enum AvailableOperation implements Enums.WithCode<AvailableOperation> {
+
+        @SerializedName("turn-on-reminder")
+        TURN_ON_REMINDER("turn-on-reminder"),
+        @SerializedName("turn-on-autopayment")
+        TURN_ON_AUTOPAYMENT("turn-on-autopayment"),
+        @SerializedName("repeat")
+        REPEAT("repeat"),
+        @SerializedName("add-to-favourites")
+        ADD_TO_FAVOURITES("add-to-favourites");
+
+        public final String code;
+
+        AvailableOperation(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String getCode() {
+            return code;
+        }
+
+        @Override
+        public AvailableOperation[] getValues() {
+            return values();
+        }
+    }
+
+    /**
      * Creates {@link com.yandex.money.api.model.Operation}.
      */
     public static class Builder {
@@ -482,6 +529,7 @@ public class Operation implements Identifiable {
         DigitalGoods digitalGoods;
         List<Integer> categories;
         ShowcaseReference.Format format;
+        List<AvailableOperation> availableOperations;
 
         public Builder setOperationId(String operationId) {
             this.operationId = operationId;
@@ -615,6 +663,11 @@ public class Operation implements Identifiable {
 
         public Builder setFormat(ShowcaseReference.Format format) {
             this.format = format;
+            return this;
+        }
+
+        public Builder setAvailableOperations(List<AvailableOperation> operations) {
+            this.availableOperations = operations;
             return this;
         }
 
