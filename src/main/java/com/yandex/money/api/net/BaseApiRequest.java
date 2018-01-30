@@ -30,6 +30,7 @@ import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.time.Iso8601Format;
 import com.yandex.money.api.typeadapters.JsonUtils;
 import com.yandex.money.api.util.HttpHeaders;
+import com.yandex.money.api.util.HttpMethod;
 import com.yandex.money.api.util.MimeTypes;
 
 import java.math.BigDecimal;
@@ -54,7 +55,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     @Override
     public final String requestUrl(HostsProvider hostsProvider) {
         String url = requestUrlBase(hostsProvider);
-        return getMethod() == Method.GET ? url + buffer.setParameters(parameters).prepareGet() : url;
+        return !HttpMethod.supportsRequestBody(getMethod()) ? url + buffer.setParameters(parameters).prepareGet() : url;
     }
 
     @Override

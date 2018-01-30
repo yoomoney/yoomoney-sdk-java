@@ -94,6 +94,7 @@ public interface ApiRequest<T> {
     enum Method {
         GET,
         POST,
-        PUT
+        PUT,
+        DELETE
     }
 }
