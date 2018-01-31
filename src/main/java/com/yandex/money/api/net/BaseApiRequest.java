@@ -54,7 +54,7 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     @Override
     public final String requestUrl(HostsProvider hostsProvider) {
         String url = requestUrlBase(hostsProvider);
-        return !getMethod().supportsRequestBody() ? url + buffer.setParameters(parameters).prepareGet() : url;
+        return getMethod().supportsRequestBody() ? url : url + buffer.setParameters(parameters).prepareGet();
     }
 
     @Override
