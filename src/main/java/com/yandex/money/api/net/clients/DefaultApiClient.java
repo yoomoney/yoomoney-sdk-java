@@ -153,7 +153,7 @@ public class DefaultApiClient implements ApiClient {
         }
 
         ApiRequest.Method method = request.getMethod();
-        if (HttpMethod.supportsRequestBody(method)) {
+        if (method != ApiRequest.Method.GET) {
             RequestBody body = RequestBody.create(MediaType.parse(request.getContentType()), request.getBody());
             switch (method) {
                 case POST:
@@ -161,6 +161,9 @@ public class DefaultApiClient implements ApiClient {
                     break;
                 case PUT:
                     builder.put(body);
+                    break;
+                case DELETE:
+                    builder.delete();
                     break;
             }
         }
