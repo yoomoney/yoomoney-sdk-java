@@ -161,6 +161,9 @@ public class DefaultApiClient implements ApiClient {
                 case PUT:
                     builder.put(body);
                     break;
+                case DELETE:
+                    builder.delete();
+                    break;
             }
         }
 

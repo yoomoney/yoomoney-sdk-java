@@ -92,8 +92,18 @@ public interface ApiRequest<T> {
      * Methods enum.
      */
     enum Method {
+        DELETE,
         GET,
         POST,
-        PUT
+        PUT;
+
+        /**
+         * Checks if method supports request body
+         *
+         * @return {@code true} if supports
+         */
+        public boolean supportsRequestBody() {
+            return this != DELETE && this != GET;
+        }
     }
 }
