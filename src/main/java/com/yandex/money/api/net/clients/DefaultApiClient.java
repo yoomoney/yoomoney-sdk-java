@@ -32,7 +32,6 @@ import com.yandex.money.api.net.UserAgent;
 import com.yandex.money.api.net.providers.DefaultApiV1HostsProvider;
 import com.yandex.money.api.net.providers.HostsProvider;
 import com.yandex.money.api.util.HttpHeaders;
-import com.yandex.money.api.util.HttpMethod;
 import com.yandex.money.api.util.Language;
 import com.yandex.money.api.util.Strings;
 import okhttp3.CacheControl;
