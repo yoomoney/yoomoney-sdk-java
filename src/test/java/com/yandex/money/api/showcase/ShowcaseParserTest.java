@@ -88,6 +88,49 @@ public class ShowcaseParserTest {
     }
 
     @Test
+    public void testShowcaseWithUndefinedType() {
+        final String SHOWCASE = "{\"title\":\"Квитанции\",\"form\":[{\"type\":\"group\"," +
+                "\"layout\":\"VBox\",\"items\":[{\"type\":\"text\",\"name\":\"supplierInn\"," +
+                "\"value\":\"525536353633\",\"hint\":\"10 цифр (для ИП - 12 цифр)\"," +
+                "\"label\":\"ИНН получателя:\",\"alert\":\"Не заполнено поле «ИНН получателя»\"," +
+                "\"required\":true,\"readonly\":false,\"minlength\":10,\"maxlength\":12," +
+                "\"pattern\":\"^\\\\d{10}$|^\\\\d{12}$\"}," +
+                "{\"type\": \"ol\", \"label\": \"Треклист\", \"items\": [\"Nikes\", \"Ivy\", \"Solo\"]}," +
+                "{\"type\":\"text\"," +
+                "\"name\":\"supplierBankAccount\",\"hint\":\"20 цифр\",\"label\":\"Расчетный " +
+                "счет\",\"alert\":\"Не заполнено поле «Расчетный счет получателя»\"," +
+                "\"required\":true,\"readonly\":false,\"minlength\":20,\"maxlength\":20}," +
+                "{\"type\":\"text\",\"name\":\"supplierName\",\"hint\":\"Включая " +
+                "организационно-правовую форму: ООО, ИП и т.д.\",\"label\":\"Название " +
+                "организации\",\"alert\":\"Не заполнено поле «Наименование получателя»\"," +
+                "\"required\":true,\"readonly\":false,\"minlength\":1,\"maxlength\":200}]}," +
+                "{\"type\":\"group\",\"layout\":\"VBox\",\"items\":[{\"type\":\"text\"," +
+                "\"name\":\"supplierBankBik\",\"hint\":\"9 цифр\",\"label\":\"БИК банка " +
+                "получателя:\",\"alert\":\"Не заполнено поле «БИК банка получателя»\"," +
+                "\"required\":true,\"readonly\":false,\"minlength\":9,\"maxlength\":9}]}," +
+                "{\"type\":\"group\",\"layout\":\"VBox\",\"items\":[{\"type\":\"text\"," +
+                "\"name\":\"paymentKbk\",\"hint\":\"20 цифр\",\"label\":\"КБК\",\"alert\":\"Не " +
+                "заполнено поле КБК\",\"required\":false,\"readonly\":false,\"minlength\":20," +
+                "\"maxlength\":20},{\"type\":\"text\",\"name\":\"CustKPP\",\"hint\":\"9 цифр\"," +
+                "\"label\":\"КПП\",\"alert\":\"Не заполнено поле КПП\",\"required\":false," +
+                "\"readonly\":false,\"minlength\":9,\"maxlength\":9," +
+                "\"pattern\":\"^\\\\d{4}[\\\\dA-Za-z]{2}\\\\d{3}$\"},{\"type\":\"text\"," +
+                "\"name\":\"paymentOkato\",\"hint\":\"8 или 11 цифр\",\"label\":\"ОКТМО или " +
+                "ОКАТО\",\"alert\":\"Не заполнено поле ОКТМО или ОКАТО\",\"required\":false," +
+                "\"readonly\":false,\"minlength\":8,\"maxlength\":11," +
+                "\"pattern\":\"^\\\\d{8}|\\\\d{11}$\"}]},{\"type\":\"submit\"," +
+                "\"label\":\"Продолжить\"}],\"money_source\":[\"wallet\",\"cards\"," +
+                "\"payment-card\",\"cash\"],\"hidden_fields\":{\"budgetDocNumber\":\"0\"," +
+                "\"ContractTemplateID\":\"524867\",\"sc_param_scid\":\"5551\"," +
+                "\"ShopArticleID\":\"35241\",\"has_external_status\":\"\",\"is_withdrawal\":\"\"," +
+                "\"sc_param_step\":\"step_INN_3038\",\"ShopID\":\"13423\"," +
+                "\"ShowCaseID\":\"3005\",\"supplierInn\":\"525536353633\"}}";
+        InputStream inputStream = new ByteArrayInputStream(SHOWCASE.getBytes(Charset.forName(
+                "UTF-8")));
+        ShowcaseTypeAdapter.getInstance().fromJson(inputStream);
+    }
+
+    @Test
     public void testCustomShowcase() {
         final String SHOWCASE = "{\"title\":\"Квитанции\",\"form\":[{\"type\":\"group\"," +
                 "\"layout\":\"VBox\",\"items\":[{\"type\":\"text\",\"name\":\"supplierInn\"," +

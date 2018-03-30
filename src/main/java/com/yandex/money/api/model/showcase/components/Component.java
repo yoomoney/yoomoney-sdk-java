@@ -58,7 +58,8 @@ public abstract class Component {
         TEXT_AREA("textarea"),
         SUBMIT("submit"),
         PARAGRAPH("p"),
-        GROUP("group");
+        GROUP("group"),
+        UNDEFINED("undefined");
 
         public final String code;
 
@@ -78,6 +79,14 @@ public abstract class Component {
 
         public static Type parseOrThrow(String code) {
             return Enums.parseOrThrow(TEXT, code);
+        }
+
+        public static Type parse(String code) {
+            return Enums.parse(TEXT, UNDEFINED, code);
+        }
+
+        public static Type parse(String code, Type defaultValue) {
+            return Enums.parse(TEXT, defaultValue, code);
         }
     }
 
