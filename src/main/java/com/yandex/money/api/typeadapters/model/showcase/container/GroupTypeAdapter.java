@@ -77,6 +77,15 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
                 .get(ComponentTypeAdapter.MEMBER_TYPE).getAsString());
     }
 
+    @Nullable
+    static Component deserializeComponent(JsonElement component, JsonDeserializationContext context) {
+        Component.Type type = getTypeFromJsonElement(component);
+        if (type == null) {
+            return null;
+        }
+        return context.deserialize(component, ComponentsTypeProvider.getClassOfComponentType(type));
+    }
+
     @Override
     protected void deserialize(JsonObject src, Group.Builder builder, JsonDeserializationContext context) {
         JsonElement layout = src.getAsJsonPrimitive(MEMBER_LAYOUT);
@@ -112,7 +121,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
     @Override
     @Nullable
     protected Component deserializeItem(JsonElement src, JsonDeserializationContext context) {
-        return ListDelegate.deserializeComponent(src, context);
+        return deserializeComponent(src, context);
     }
 
     @Override
@@ -134,15 +143,6 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
                 jsonArray.add(context.serialize(component));
             }
             return jsonArray;
-        }
-
-        @Nullable
-        public static Component deserializeComponent(JsonElement component, JsonDeserializationContext context) {
-            Component.Type type = getTypeFromJsonElement(component);
-            if (type == null) {
-                return null;
-            }
-            return context.deserialize(component, ComponentsTypeProvider.getClassOfComponentType(type));
         }
 
         public static Group deserialize(JsonArray jsonArray, JsonDeserializationContext context) {
