@@ -30,6 +30,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.Component;
+import com.yandex.money.api.model.showcase.components.Undefined;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.typeadapters.model.showcase.ComponentsTypeProvider;
 import com.yandex.money.api.typeadapters.model.showcase.uicontrol.AmountTypeAdapter;
@@ -152,8 +153,11 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
         public static Group deserialize(JsonArray jsonArray, JsonDeserializationContext context) {
             Group.Builder builder = new Group.Builder();
             for (JsonElement item : jsonArray) {
-                builder.addItem((Component) context.deserialize(item, ComponentsTypeProvider
-                        .getClassOfComponentType(getTypeFromJsonElement(item))));
+                Component component = context.deserialize(item, ComponentsTypeProvider
+                        .getClassOfComponentType(getTypeFromJsonElement(item)));
+                if (!(component instanceof Undefined)) {
+                    builder.addItem(component);
+                }
             }
             return builder.create();
         }

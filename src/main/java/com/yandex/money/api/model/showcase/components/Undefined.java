@@ -1,6 +1,6 @@
 package com.yandex.money.api.model.showcase.components;
 
-public class UndefinedComponent extends Component {
+public class Undefined extends Component {
 
     @Override
     public boolean isValid() {
