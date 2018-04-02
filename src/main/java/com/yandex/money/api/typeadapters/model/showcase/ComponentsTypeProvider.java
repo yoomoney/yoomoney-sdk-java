@@ -27,8 +27,17 @@ package com.yandex.money.api.typeadapters.model.showcase;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.containers.Paragraph;
-import com.yandex.money.api.model.showcase.components.uicontrols.*;
+import com.yandex.money.api.model.showcase.components.uicontrols.Amount;
+import com.yandex.money.api.model.showcase.components.uicontrols.Checkbox;
+import com.yandex.money.api.model.showcase.components.uicontrols.Date;
+import com.yandex.money.api.model.showcase.components.uicontrols.Email;
+import com.yandex.money.api.model.showcase.components.uicontrols.Month;
 import com.yandex.money.api.model.showcase.components.uicontrols.Number;
+import com.yandex.money.api.model.showcase.components.uicontrols.Select;
+import com.yandex.money.api.model.showcase.components.uicontrols.Submit;
+import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
+import com.yandex.money.api.model.showcase.components.uicontrols.Text;
+import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
 
 import java.lang.reflect.Type;
 import java.util.Collections;

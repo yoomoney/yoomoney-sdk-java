@@ -27,14 +27,28 @@ package com.yandex.money.api.showcase;
 import com.yandex.money.api.TestEnvironment;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.Currency;
-import com.yandex.money.api.model.showcase.*;
+import com.yandex.money.api.model.showcase.AmountType;
+import com.yandex.money.api.model.showcase.DefaultFee;
+import com.yandex.money.api.model.showcase.Fee;
+import com.yandex.money.api.model.showcase.Showcase;
+import com.yandex.money.api.model.showcase.ShowcaseContext;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.TextBlock;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.containers.Paragraph;
-import com.yandex.money.api.model.showcase.components.uicontrols.*;
+import com.yandex.money.api.model.showcase.components.uicontrols.Amount;
+import com.yandex.money.api.model.showcase.components.uicontrols.Checkbox;
+import com.yandex.money.api.model.showcase.components.uicontrols.Date;
+import com.yandex.money.api.model.showcase.components.uicontrols.Email;
+import com.yandex.money.api.model.showcase.components.uicontrols.Month;
 import com.yandex.money.api.model.showcase.components.uicontrols.Number;
+import com.yandex.money.api.model.showcase.components.uicontrols.ParameterControl;
+import com.yandex.money.api.model.showcase.components.uicontrols.Select;
+import com.yandex.money.api.model.showcase.components.uicontrols.Submit;
+import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
+import com.yandex.money.api.model.showcase.components.uicontrols.Text;
+import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
 import com.yandex.money.api.net.clients.ApiClient;
 import com.yandex.money.api.time.DateTime;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
@@ -47,7 +61,11 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Map;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
 /**
  * @author Slava Yasevich (vyasevich@yamoney.ru)

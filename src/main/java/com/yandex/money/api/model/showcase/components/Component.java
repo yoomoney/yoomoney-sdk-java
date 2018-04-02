@@ -24,7 +24,6 @@
 
 package com.yandex.money.api.model.showcase.components;
 
-import com.sun.istack.internal.Nullable;
 import com.yandex.money.api.util.Enums;
 
 /**
@@ -81,7 +80,6 @@ public abstract class Component {
             return Enums.parseOrThrow(TEXT, code);
         }
 
-        @Nullable
         public static Type parse(String code) {
             return Enums.parse(TEXT, null, code);
         }

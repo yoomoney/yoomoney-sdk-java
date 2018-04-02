@@ -24,12 +24,26 @@
 
 package com.yandex.money.api.typeadapters.model.showcase.container;
 
-import com.google.gson.*;
-import com.sun.istack.internal.Nullable;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.typeadapters.model.showcase.ComponentsTypeProvider;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.*;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.AmountTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.CheckboxTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.ComponentTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.DateTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.EmailTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.MonthTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.NumberTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.SelectTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.SubmitTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TelTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TextAreaTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TextTypeAdapter;
 
 /**
  * Type serializer for {@link Group} component container.
@@ -71,19 +85,22 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
      * @param component JSON component
      * @return parsed {@link Component.Type}
      */
-    @Nullable
     static Component.Type getTypeFromJsonElement(JsonElement component) {
         return Component.Type.parse(component.getAsJsonObject()
                 .get(ComponentTypeAdapter.MEMBER_TYPE).getAsString());
     }
 
-    @Nullable
+    /**
+     * Deserializes {@link Component}'s item.
+     *
+     * @param component JSON component
+     * @param context   deserialization context
+     * @return deserialized component {@link Component}
+     */
     static Component deserializeComponent(JsonElement component, JsonDeserializationContext context) {
         Component.Type type = getTypeFromJsonElement(component);
-        if (type == null) {
-            return null;
-        }
-        return context.deserialize(component, ComponentsTypeProvider.getClassOfComponentType(type));
+        return type != null ? (Component) context.deserialize(component,
+                ComponentsTypeProvider.getClassOfComponentType(type)) : null;
     }
 
     @Override
@@ -119,7 +136,6 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
     }
 
     @Override
-    @Nullable
     protected Component deserializeItem(JsonElement src, JsonDeserializationContext context) {
         return deserializeComponent(src, context);
     }
