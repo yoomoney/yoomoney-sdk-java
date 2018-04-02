@@ -24,7 +24,6 @@
 
 package com.yandex.money.api.typeadapters.model.showcase.container;
 
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;

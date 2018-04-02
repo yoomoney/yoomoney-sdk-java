@@ -80,17 +80,6 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
     }
 
     /**
-     * Extracts {@link Component.Type} from {@link JsonElement}.
-     *
-     * @param component JSON component
-     * @return parsed {@link Component.Type}
-     */
-    static Component.Type getTypeFromJsonElement(JsonElement component) {
-        return Component.Type.parse(component.getAsJsonObject()
-                .get(ComponentTypeAdapter.MEMBER_TYPE).getAsString());
-    }
-
-    /**
      * Deserializes {@link Component}'s item.
      *
      * @param component JSON component
@@ -143,6 +132,17 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
     @Override
     public Class<Group> getType() {
         return Group.class;
+    }
+
+    /**
+     * Extracts {@link Component.Type} from {@link JsonElement}.
+     *
+     * @param component JSON component
+     * @return parsed {@link Component.Type}
+     */
+    static Component.Type getTypeFromJsonElement(JsonElement component) {
+        return Component.Type.parse(component.getAsJsonObject()
+                .get(ComponentTypeAdapter.MEMBER_TYPE).getAsString());
     }
 
     /**
