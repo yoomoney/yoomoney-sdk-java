@@ -25,20 +25,10 @@
 package com.yandex.money.api.typeadapters.model.showcase;
 
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.model.showcase.components.Undefined;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.containers.Paragraph;
-import com.yandex.money.api.model.showcase.components.uicontrols.Amount;
-import com.yandex.money.api.model.showcase.components.uicontrols.Checkbox;
-import com.yandex.money.api.model.showcase.components.uicontrols.Date;
-import com.yandex.money.api.model.showcase.components.uicontrols.Email;
-import com.yandex.money.api.model.showcase.components.uicontrols.Month;
+import com.yandex.money.api.model.showcase.components.uicontrols.*;
 import com.yandex.money.api.model.showcase.components.uicontrols.Number;
-import com.yandex.money.api.model.showcase.components.uicontrols.Select;
-import com.yandex.money.api.model.showcase.components.uicontrols.Submit;
-import com.yandex.money.api.model.showcase.components.uicontrols.Tel;
-import com.yandex.money.api.model.showcase.components.uicontrols.Text;
-import com.yandex.money.api.model.showcase.components.uicontrols.TextArea;
 
 import java.lang.reflect.Type;
 import java.util.Collections;
@@ -69,7 +59,6 @@ public final class ComponentsTypeProvider {
         typeMapping.put(Component.Type.TEL, Tel.class);
         typeMapping.put(Component.Type.TEXT, Text.class);
         typeMapping.put(Component.Type.TEXT_AREA, TextArea.class);
-        typeMapping.put(Component.Type.UNDEFINED, Undefined.class);
 
         TYPE_MAPPING = Collections.unmodifiableMap(typeMapping);
 

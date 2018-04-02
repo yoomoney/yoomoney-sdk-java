@@ -24,27 +24,12 @@
 
 package com.yandex.money.api.typeadapters.model.showcase.container;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
+import com.google.gson.*;
+import com.sun.istack.internal.Nullable;
 import com.yandex.money.api.model.showcase.components.Component;
-import com.yandex.money.api.model.showcase.components.Undefined;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.typeadapters.model.showcase.ComponentsTypeProvider;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.AmountTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.CheckboxTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.ComponentTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.DateTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.EmailTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.MonthTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.NumberTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.SelectTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.SubmitTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TelTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TextAreaTypeAdapter;
-import com.yandex.money.api.typeadapters.model.showcase.uicontrol.TextTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.*;
 
 /**
  * Type serializer for {@link Group} component container.
@@ -80,6 +65,18 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
         return INSTANCE;
     }
 
+    /**
+     * Extracts {@link Component.Type} from {@link JsonElement}.
+     *
+     * @param component JSON component
+     * @return parsed {@link Component.Type}
+     */
+    @Nullable
+    static Component.Type getTypeFromJsonElement(JsonElement component) {
+        return Component.Type.parse(component.getAsJsonObject()
+                .get(ComponentTypeAdapter.MEMBER_TYPE).getAsString());
+    }
+
     @Override
     protected void deserialize(JsonObject src, Group.Builder builder, JsonDeserializationContext context) {
         JsonElement layout = src.getAsJsonPrimitive(MEMBER_LAYOUT);
@@ -113,25 +110,14 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
     }
 
     @Override
+    @Nullable
     protected Component deserializeItem(JsonElement src, JsonDeserializationContext context) {
-        return context.deserialize(src, ComponentsTypeProvider.getClassOfComponentType(
-                getTypeFromJsonElement(src)));
+        return ListDelegate.deserializeComponent(src, context);
     }
 
     @Override
     public Class<Group> getType() {
         return Group.class;
-    }
-
-    /**
-     * Extracts {@link Component.Type} from {@link JsonElement}.
-     *
-     * @param component JSON component
-     * @return parsed {@link Component.Type}
-     */
-    static Component.Type getTypeFromJsonElement(JsonElement component) {
-        return Component.Type.parse(component.getAsJsonObject()
-                .get(ComponentTypeAdapter.MEMBER_TYPE).getAsString());
     }
 
     /**
@@ -150,12 +136,20 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
             return jsonArray;
         }
 
+        @Nullable
+        public static Component deserializeComponent(JsonElement component, JsonDeserializationContext context) {
+            Component.Type type = getTypeFromJsonElement(component);
+            if (type == null) {
+                return null;
+            }
+            return context.deserialize(component, ComponentsTypeProvider.getClassOfComponentType(type));
+        }
+
         public static Group deserialize(JsonArray jsonArray, JsonDeserializationContext context) {
             Group.Builder builder = new Group.Builder();
             for (JsonElement item : jsonArray) {
-                Component component = context.deserialize(item, ComponentsTypeProvider
-                        .getClassOfComponentType(getTypeFromJsonElement(item)));
-                if (!(component instanceof Undefined)) {
+                Component component = deserializeComponent(item, context);
+                if (component != null) {
                     builder.addItem(component);
                 }
             }

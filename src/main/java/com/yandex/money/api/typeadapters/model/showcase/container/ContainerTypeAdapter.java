@@ -24,12 +24,8 @@
 
 package com.yandex.money.api.typeadapters.model.showcase.container;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.yandex.money.api.model.showcase.components.Undefined;
+import com.google.gson.*;
+import com.sun.istack.internal.Nullable;
 import com.yandex.money.api.model.showcase.components.containers.Container;
 import com.yandex.money.api.typeadapters.model.showcase.uicontrol.ComponentTypeAdapter;
 
@@ -50,7 +46,7 @@ abstract class ContainerTypeAdapter<T, U extends Container<T>, K extends Contain
     protected void deserialize(JsonObject src, K builder, JsonDeserializationContext context) {
         for (JsonElement item : src.getAsJsonArray(MEMBER_ITEMS)) {
             T deserializedItem = deserializeItem(item, context);
-            if (!(deserializedItem instanceof Undefined)) {
+            if (deserializedItem != null) {
                 builder.addItem(deserializedItem);
             }
         }
@@ -83,5 +79,6 @@ abstract class ContainerTypeAdapter<T, U extends Container<T>, K extends Contain
      * @param context deserialization context
      * @return {@link Container}'s item
      */
+    @Nullable
     protected abstract T deserializeItem(JsonElement src, JsonDeserializationContext context);
 }

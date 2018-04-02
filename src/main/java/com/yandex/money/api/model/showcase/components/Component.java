@@ -24,6 +24,7 @@
 
 package com.yandex.money.api.model.showcase.components;
 
+import com.sun.istack.internal.Nullable;
 import com.yandex.money.api.util.Enums;
 
 /**
@@ -58,8 +59,7 @@ public abstract class Component {
         TEXT_AREA("textarea"),
         SUBMIT("submit"),
         PARAGRAPH("p"),
-        GROUP("group"),
-        UNDEFINED("undefined");
+        GROUP("group");
 
         public final String code;
 
@@ -81,8 +81,9 @@ public abstract class Component {
             return Enums.parseOrThrow(TEXT, code);
         }
 
+        @Nullable
         public static Type parse(String code) {
-            return Enums.parse(TEXT, UNDEFINED, code);
+            return Enums.parse(TEXT, null, code);
         }
 
         public static Type parse(String code, Type defaultValue) {
