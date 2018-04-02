@@ -48,7 +48,10 @@ abstract class ContainerTypeAdapter<T, U extends Container<T>, K extends Contain
     @Override
     protected void deserialize(JsonObject src, K builder, JsonDeserializationContext context) {
         for (JsonElement item : src.getAsJsonArray(MEMBER_ITEMS)) {
-            builder.addItem(deserializeItem(item, context));
+            T deserializedItem = deserializeItem(item, context);
+            if (deserializedItem != null) {
+                builder.addItem(deserializedItem);
+            }
         }
         builder.setLabel(getString(src, MEMBER_LABEL));
     }

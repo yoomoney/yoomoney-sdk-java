@@ -88,6 +88,20 @@ public class ShowcaseParserTest {
     }
 
     @Test
+    public void testShowcaseWithUndefinedType() {
+        InputStream inputStream = ShowcaseParserTest.class.getResourceAsStream("/showcase/showcase_with_undefined_types.json");
+        if (inputStream == null) {
+            return;
+        }
+        Showcase showcase = ShowcaseTypeAdapter.getInstance().fromJson(inputStream);
+        assertEquals(showcase.form.items.size(), 1);
+        Component component = showcase.form.items.get(0);
+        assertTrue(component instanceof Group);
+        Group group = (Group) component;
+        assertEquals(group.items.size(), 0);
+    }
+
+    @Test
     public void testCustomShowcase() {
         final String SHOWCASE = "{\"title\":\"Квитанции\",\"form\":[{\"type\":\"group\"," +
                 "\"layout\":\"VBox\",\"items\":[{\"type\":\"text\",\"name\":\"supplierInn\"," +

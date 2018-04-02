@@ -1,0 +1,16 @@
+{
+  "title": "Ридер для мобильного терминала (mPOS)",
+  "form": [
+    {
+      "type": "undefined_type"
+    },
+    {
+      "type": "group",
+      "items": [
+        {
+          "type": "undefined_type"
+        }
+      ]
+    }
+  ]
+}

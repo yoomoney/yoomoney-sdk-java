@@ -79,6 +79,14 @@ public abstract class Component {
         public static Type parseOrThrow(String code) {
             return Enums.parseOrThrow(TEXT, code);
         }
+
+        public static Type parse(String code) {
+            return Enums.parse(TEXT, null, code);
+        }
+
+        public static Type parse(String code, Type defaultValue) {
+            return Enums.parse(TEXT, defaultValue, code);
+        }
     }
 
     public static abstract class Builder {
