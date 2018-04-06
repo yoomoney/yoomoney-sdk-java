@@ -34,15 +34,18 @@ public final class Period {
     /**
      * Number of years in period.
      */
-    final int years;
+    @SuppressWarnings("WeakerAccess")
+    public final int years;
     /**
      * Number of months in period.
      */
-    final int months;
+    @SuppressWarnings("WeakerAccess")
+    public final int months;
     /**
      * Number of days in period.
      */
-    final int days;
+    @SuppressWarnings("WeakerAccess")
+    public final int days;
 
     /**
      * Creates an instance of this class of specific period.
