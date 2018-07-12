@@ -18,12 +18,14 @@ repositories {
 }
 
 dependencies {
-    compile 'com.squareup.okhttp3:okhttp:3.9.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.9.1'
-    compile 'com.google.code.gson:gson:2.8.2'
+    def okhttpVersion = "3.10.0" // http://square.github.io/okhttp/
 
-    testCompile 'org.testng:testng:6.10'
-    testCompile 'com.squareup.okhttp3:mockwebserver:3.9.0'
+    compile "com.squareup.okhttp3:okhttp:$okhttpVersion"
+    compile "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
+    compile 'com.google.code.gson:gson:2.8.4' // https://github.com/google/gson/releases
+
+    testCompile 'org.testng:testng:6.10' // http://testng.org/doc/download.html
+    testCompile "com.squareup.okhttp3:mockwebserver:$okhttpVersion"
 }
 
 compileTestJava {
@@ -34,7 +36,7 @@ publish {
     userOrg = 'yandex-money'
     groupId = 'com.yandex.money.api'
     artifactId = 'yandex-money-sdk-java'
-    version = '7.2.3'
+    version = '7.2.10'
     website = 'https://github.com/yandex-money/yandex-money-sdk-java'
     issueTracker = "${website}/issues"
     repository = "${website}.git"

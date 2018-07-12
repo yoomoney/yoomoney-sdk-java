@@ -79,6 +79,19 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
         return INSTANCE;
     }
 
+    /**
+     * Deserializes {@link Component}'s item.
+     *
+     * @param component JSON component
+     * @param context   deserialization context
+     * @return deserialized component {@link Component}
+     */
+    static Component deserializeComponent(JsonElement component, JsonDeserializationContext context) {
+        Component.Type type = getTypeFromJsonElement(component);
+        return type != null ? (Component) context.deserialize(component,
+                ComponentsTypeProvider.getClassOfComponentType(type)) : null;
+    }
+
     @Override
     protected void deserialize(JsonObject src, Group.Builder builder, JsonDeserializationContext context) {
         JsonElement layout = src.getAsJsonPrimitive(MEMBER_LAYOUT);
@@ -113,8 +126,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
 
     @Override
     protected Component deserializeItem(JsonElement src, JsonDeserializationContext context) {
-        return context.deserialize(src, ComponentsTypeProvider.getClassOfComponentType(
-                getTypeFromJsonElement(src)));
+        return deserializeComponent(src, context);
     }
 
     @Override
@@ -129,7 +141,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
      * @return parsed {@link Component.Type}
      */
     static Component.Type getTypeFromJsonElement(JsonElement component) {
-        return Component.Type.parseOrThrow(component.getAsJsonObject()
+        return Component.Type.parse(component.getAsJsonObject()
                 .get(ComponentTypeAdapter.MEMBER_TYPE).getAsString());
     }
 
@@ -152,8 +164,10 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
         public static Group deserialize(JsonArray jsonArray, JsonDeserializationContext context) {
             Group.Builder builder = new Group.Builder();
             for (JsonElement item : jsonArray) {
-                builder.addItem((Component) context.deserialize(item, ComponentsTypeProvider
-                        .getClassOfComponentType(getTypeFromJsonElement(item))));
+                Component component = deserializeComponent(item, context);
+                if (component != null) {
+                    builder.addItem(component);
+                }
             }
             return builder.create();
         }
