@@ -44,6 +44,8 @@ public enum CardBrand implements Enums.WithCode<CardBrand> {
     MIR("Mir", "CSC", 3),
     @SerializedName("UnionPay")
     UNION_PAY("UnionPay", "CVN2", 3),
+    @SerializedName("Maestro")
+    MAESTRO("Maestro", "", 0),
     @SerializedName("Unknown")
     UNKNOWN("Unknown", "CSC", 4);
 
