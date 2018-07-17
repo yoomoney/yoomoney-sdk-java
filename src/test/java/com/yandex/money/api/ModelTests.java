@@ -61,6 +61,11 @@ public class ModelTests {
     }
 
     @Test
+    public void testAccountInfoNoBonusBalance() {
+        checkType("/methods/wallet/account-info-no-bonus.json", AccountInfo.class);
+    }
+
+    @Test
     public void testBalanceDetails() {
         performTest(createBalanceDetails(), BalanceDetails.class);
     }

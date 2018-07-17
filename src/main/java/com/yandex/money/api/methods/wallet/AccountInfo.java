@@ -33,6 +33,7 @@ import com.yandex.money.api.model.Currency;
 import com.yandex.money.api.model.Identifiable;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.typeadapters.model.BonusBalanceTypeAdapter;
 import com.yandex.money.api.typeadapters.model.NumericCurrencyTypeAdapter;
 
 import java.math.BigDecimal;
@@ -87,6 +88,14 @@ public class AccountInfo implements Identifiable {
     @SerializedName("balance_details")
     public final BalanceDetails balanceDetails;
 
+    /**
+     * Bonus balance.
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("bonus_balance")
+    @JsonAdapter(BonusBalanceTypeAdapter.class)
+    public final BigDecimal bonusBalance;
+
     @SuppressWarnings("WeakerAccess")
     protected AccountInfo(Builder builder) {
         account = checkNotEmpty(builder.account, "account");
@@ -95,6 +104,7 @@ public class AccountInfo implements Identifiable {
         accountStatus = checkNotNull(builder.accountStatus, "accountStatus");
         accountType = checkNotNull(builder.accountType, "accountType");
         balanceDetails = checkNotNull(builder.balanceDetails, "balanceDetails");
+        bonusBalance = builder.bonusBalance;
     }
 
     @Override
@@ -111,6 +121,7 @@ public class AccountInfo implements Identifiable {
                 ", accountStatus=" + accountStatus +
                 ", accountType=" + accountType +
                 ", balanceDetails=" + balanceDetails +
+                ", bonusBalance=" + bonusBalance +
                 '}';
     }
 
@@ -123,7 +134,8 @@ public class AccountInfo implements Identifiable {
 
         return account.equals(that.account) && balance.equals(that.balance) && currency == that.currency &&
                 accountStatus == that.accountStatus && accountType == that.accountType &&
-                balanceDetails.equals(that.balanceDetails);
+                balanceDetails.equals(that.balanceDetails) &&
+                (bonusBalance != null ? bonusBalance.equals(that.bonusBalance) : that.bonusBalance == null);
     }
 
     @Override
@@ -134,6 +146,7 @@ public class AccountInfo implements Identifiable {
         result = 31 * result + accountStatus.hashCode();
         result = 31 * result + accountType.hashCode();
         result = 31 * result + balanceDetails.hashCode();
+        result = 31 * result + (bonusBalance != null ? bonusBalance.hashCode() : 0);
         return result;
     }
 
@@ -148,6 +161,7 @@ public class AccountInfo implements Identifiable {
         AccountStatus accountStatus = AccountStatus.ANONYMOUS;
         AccountType accountType = AccountType.PERSONAL;
         BalanceDetails balanceDetails = BalanceDetails.ZERO;
+        BigDecimal bonusBalance;
 
         /**
          * @param account account's number
@@ -200,6 +214,15 @@ public class AccountInfo implements Identifiable {
          */
         public Builder setBalanceDetails(BalanceDetails balanceDetails) {
             this.balanceDetails = balanceDetails;
+            return this;
+        }
+
+        /**
+         * @param bonusBalance user's bonus balance
+         * @return itself
+         */
+        public Builder setBonusBalance(BigDecimal bonusBalance) {
+            this.bonusBalance = bonusBalance;
             return this;
         }
 
