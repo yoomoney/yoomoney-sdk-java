@@ -1,0 +1,11 @@
+{
+  "account": "4100123456789",
+  "balance": 1000,
+  "balance_details": {
+    "total": 1000,
+    "available": 1000
+  },
+  "currency": "643",
+  "account_status": "anonymous",
+  "account_type": "personal"
+}

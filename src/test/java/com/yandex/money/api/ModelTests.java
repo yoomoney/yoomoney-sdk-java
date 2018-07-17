@@ -42,6 +42,7 @@ import com.yandex.money.api.model.Fees;
 import com.yandex.money.api.typeadapters.GsonProvider;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
+
 import org.testng.annotations.Test;
 
 import java.io.FileNotFoundException;
@@ -59,6 +60,11 @@ public class ModelTests {
     @Test
     public void testAccountInfo() {
         checkType("/methods/wallet/account-info.json", AccountInfo.class);
+    }
+
+    @Test
+    public void testAccountInfoNoBonusBalance() {
+        checkType("/methods/wallet/account-info-no-bonus.json", AccountInfo.class);
     }
 
     @Test
