@@ -35,6 +35,7 @@ import com.yandex.money.api.model.Currency;
 import com.yandex.money.api.model.Identifiable;
 import com.yandex.money.api.net.FirstApiRequest;
 import com.yandex.money.api.net.providers.HostsProvider;
+import com.yandex.money.api.typeadapters.model.BonusBalanceTypeAdapter;
 import com.yandex.money.api.typeadapters.model.NumericCurrencyTypeAdapter;
 
 import java.math.BigDecimal;
@@ -105,6 +106,14 @@ public class AccountInfo implements Identifiable {
     @SerializedName("cards_linked")
     public final List<Card> linkedCards;
 
+    /**
+     * Bonus balance.
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("bonus_balance")
+    @JsonAdapter(BonusBalanceTypeAdapter.class)
+    public final BigDecimal bonusBalance;
+
     @SuppressWarnings("WeakerAccess")
     protected AccountInfo(Builder builder) {
         account = checkNotEmpty(builder.account, "account");
@@ -115,6 +124,7 @@ public class AccountInfo implements Identifiable {
         avatar = builder.avatar;
         balanceDetails = checkNotNull(builder.balanceDetails, "balanceDetails");
         linkedCards = builder.linkedCards != null ? unmodifiableList(builder.linkedCards) : null;
+        bonusBalance = builder.bonusBalance;
     }
 
     @Override
@@ -135,10 +145,12 @@ public class AccountInfo implements Identifiable {
         if (accountStatus != that.accountStatus) return false;
         if (accountType != that.accountType) return false;
         if (avatar != null ? !avatar.equals(that.avatar) : that.avatar != null) return false;
-        //noinspection SimplifiableIfStatement
         if (balanceDetails != null ? !balanceDetails.equals(that.balanceDetails) : that.balanceDetails != null)
             return false;
-        return linkedCards != null ? linkedCards.equals(that.linkedCards) : that.linkedCards == null;
+        //noinspection SimplifiableIfStatement
+        if (linkedCards != null ? !linkedCards.equals(that.linkedCards) : that.linkedCards != null)
+            return false;
+        return bonusBalance != null ? bonusBalance.equals(that.bonusBalance) : that.bonusBalance == null;
     }
 
     @Override
@@ -151,6 +163,7 @@ public class AccountInfo implements Identifiable {
         result = 31 * result + (avatar != null ? avatar.hashCode() : 0);
         result = 31 * result + (balanceDetails != null ? balanceDetails.hashCode() : 0);
         result = 31 * result + (linkedCards != null ? linkedCards.hashCode() : 0);
+        result = 31 * result + (bonusBalance != null ? bonusBalance.hashCode() : 0);
         return result;
     }
 
@@ -165,6 +178,7 @@ public class AccountInfo implements Identifiable {
                 ", avatar=" + avatar +
                 ", balanceDetails=" + balanceDetails +
                 ", linkedCards=" + linkedCards +
+                ", bonusBalance=" + bonusBalance +
                 '}';
     }
 
@@ -181,6 +195,7 @@ public class AccountInfo implements Identifiable {
         Avatar avatar;
         BalanceDetails balanceDetails = BalanceDetails.ZERO;
         List<Card> linkedCards;
+        BigDecimal bonusBalance;
 
         /**
          * @param account account's number
@@ -251,6 +266,15 @@ public class AccountInfo implements Identifiable {
          */
         public Builder setLinkedCards(List<Card> linkedCards) {
             this.linkedCards = linkedCards;
+            return this;
+        }
+
+        /**
+         * @param bonusBalance user's bonus balance
+         * @return itself
+         */
+        public Builder setBonusBalance(BigDecimal bonusBalance) {
+            this.bonusBalance = bonusBalance;
             return this;
         }
 
