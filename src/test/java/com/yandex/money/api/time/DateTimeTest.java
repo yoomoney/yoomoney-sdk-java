@@ -207,6 +207,29 @@ public class DateTimeTest {
         assertEquals(dateTime.getHourOfDay(), 0);
     }
 
+    @Test
+    public void tesISO8601() throws ParseException {
+        DateTime year = Iso8601Format.parse("2018");
+        assertEquals(year.getYear(), 2018);
+
+        DateTime yearMonth = Iso8601Format.parse("2018-05");
+        assertEquals(yearMonth.getYear(), 2018);
+        assertEquals(yearMonth.getMonthOfYear(), 5);
+
+        DateTime yearMonthDay = Iso8601Format.parse("2018-05-06");
+        assertEquals(yearMonthDay.getYear(), 2018);
+        assertEquals(yearMonthDay.getMonthOfYear(), 5);
+        assertEquals(yearMonthDay.getDayOfMonth(), 6);
+
+        DateTime yearMonthDayTime = Iso8601Format.parse("2018-05-06T06:06:06.000Z");
+        assertEquals(yearMonthDayTime.getYear(), 2018);
+        assertEquals(yearMonthDayTime.getMonthOfYear(), 5);
+        assertEquals(yearMonthDayTime.getDayOfMonth(), 6);
+        assertEquals(yearMonthDayTime.getHourOfDay(), 6);
+        assertEquals(yearMonthDayTime.getMinute(), 6);
+        assertEquals(yearMonthDayTime.getSecond(), 6);
+    }
+
     private DateTime createDateTime() {
         return DateTime.from(1995, Calendar.DECEMBER, 31, 23, 59);
     }

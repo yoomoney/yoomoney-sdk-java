@@ -58,6 +58,7 @@ public enum Currency {
     BSD("BSD", 44),
     BTN("BTN", 64),
     BWP("BWP", 72),
+    BYN("BYN", 933),
     BYR("BYR", 974),
     BZD("BZD", 84),
     CAD("CAD", 124),
