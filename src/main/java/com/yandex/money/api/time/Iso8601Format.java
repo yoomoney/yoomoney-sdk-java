@@ -56,9 +56,19 @@ public final class Iso8601Format {
             ++position;
         }
 
+        boolean hasMonth = position < date.length();
+        if (!hasMonth) {
+            return DateTime.from(year, 0, 1, 0, 0);
+        }
+
         int monthOfYear = parseInt(date, position, position += 2) - 1;
         if (checkPosition(date, position, '-')) {
             ++position;
+        }
+
+        boolean hasDay = position < date.length();
+        if (!hasDay) {
+            return DateTime.from(year, monthOfYear, 1, 0, 0);
         }
 
         int day = parseInt(date, position, position += 2);
