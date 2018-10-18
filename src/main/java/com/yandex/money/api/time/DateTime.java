@@ -96,11 +96,7 @@ public final class DateTime implements Comparable<DateTime> {
      * @return an instance of this class with specified values and default timezone
      */
     public static DateTime from(int year, int month, int date, int hour, int minute) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, date, hour, minute);
-        calendar.clear(Calendar.SECOND);
-        calendar.clear(Calendar.MILLISECOND);
-        return new DateTime(calendar);
+        return DateTime.from(year, month, date, hour, minute, TimeZone.getDefault());
     }
 
     /**
@@ -110,7 +106,7 @@ public final class DateTime implements Comparable<DateTime> {
      * @param hour an hour
      * @param minute a minute
      * @param timeZone a time zone
-     * @return an instance of this class with specified values and default timezone
+     * @return an instance of this class with specified values and timezone
      */
     public static DateTime from(int year, int month, int date, int hour, int minute, TimeZone timeZone) {
         Calendar calendar = Calendar.getInstance(timeZone);
