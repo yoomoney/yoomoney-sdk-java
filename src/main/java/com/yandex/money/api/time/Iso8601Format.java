@@ -58,7 +58,7 @@ public final class Iso8601Format {
 
         boolean hasMonth = position < date.length();
         if (!hasMonth) {
-            return DateTime.from(year, 0, 1, 0, 0);
+            return DateTime.from(year, 0, 1, 0, 0, TimeZone.getTimeZone("GMT"));
         }
 
         int monthOfYear = parseInt(date, position, position += 2) - 1;
@@ -68,14 +68,14 @@ public final class Iso8601Format {
 
         boolean hasDay = position < date.length();
         if (!hasDay) {
-            return DateTime.from(year, monthOfYear, 1, 0, 0);
+            return DateTime.from(year, monthOfYear, 1, 0, 0, TimeZone.getTimeZone("GMT"));
         }
 
         int day = parseInt(date, position, position += 2);
 
         boolean hasTime = checkPosition(date, position, 'T');
         if (!hasTime) {
-            return DateTime.from(year, monthOfYear, day, 0, 0);
+            return DateTime.from(year, monthOfYear, day, 0, 0, TimeZone.getTimeZone("GMT"));
         }
 
         int hour = parseInt(date, position += 1, position += 2);
