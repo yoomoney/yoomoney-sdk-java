@@ -49,6 +49,18 @@ public final class Iso8601Format {
      * @throws ParseException if parsing is not possible
      */
     public static DateTime parse(String date) throws ParseException {
+        return parse(date, TimeZone.getDefault());
+    }
+
+    /**
+     * Parses string of ISO 8601 date.
+     *
+     * @param date a string to parse
+     * @param defaultTimezone a time zone which will be used if date doesn't contain time zone
+     * @return parsed date time
+     * @throws ParseException if parsing is not possible
+     */
+    public static DateTime parse(String date, TimeZone defaultTimezone) throws ParseException {
         int position = 0;
 
         int year = parseInt(date, position, position += 4);
@@ -58,7 +70,7 @@ public final class Iso8601Format {
 
         boolean hasMonth = position < date.length();
         if (!hasMonth) {
-            return DateTime.from(year, 0, 1, 0, 0);
+            return DateTime.from(year, 0, 1, 0, 0, defaultTimezone);
         }
 
         int monthOfYear = parseInt(date, position, position += 2) - 1;
@@ -68,14 +80,14 @@ public final class Iso8601Format {
 
         boolean hasDay = position < date.length();
         if (!hasDay) {
-            return DateTime.from(year, monthOfYear, 1, 0, 0);
+            return DateTime.from(year, monthOfYear, 1, 0, 0, defaultTimezone);
         }
 
         int day = parseInt(date, position, position += 2);
 
         boolean hasTime = checkPosition(date, position, 'T');
         if (!hasTime) {
-            return DateTime.from(year, monthOfYear, day, 0, 0);
+            return DateTime.from(year, monthOfYear, day, 0, 0, defaultTimezone);
         }
 
         int hour = parseInt(date, position += 1, position += 2);
