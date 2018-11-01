@@ -208,6 +208,13 @@ public class Operation implements Identifiable {
     public final List<Integer> categories;
 
     /**
+     * Spending categories
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("spendingCategories")
+    public final List<SpendingCategory> spendingCategories;
+
+    /**
      * Type of showcase
      */
     @SuppressWarnings("WeakerAccess")
@@ -252,6 +259,7 @@ public class Operation implements Identifiable {
         favorite = builder.favorite;
         digitalGoods = builder.digitalGoods;
         categories = builder.categories != null ? Collections.unmodifiableList(builder.categories) : null;
+        spendingCategories = builder.spendingCategories != null ? Collections.unmodifiableList(builder.spendingCategories) : null;
         showcaseFormat = builder.format;
         availableOperations = builder.availableOperations != null ?
                 Collections.unmodifiableList(builder.availableOperations) : null;
@@ -312,6 +320,7 @@ public class Operation implements Identifiable {
         if (digitalGoods != null ? !digitalGoods.equals(operation.digitalGoods) : operation.digitalGoods != null)
             return false;
         if (categories != null ? !categories.equals(operation.categories) : operation.categories != null) return false;
+        if (spendingCategories != null ? !spendingCategories.equals(operation.spendingCategories) : operation.spendingCategories != null) return false;
         //noinspection SimplifiableIfStatement
         if (showcaseFormat != operation.showcaseFormat) return false;
         return availableOperations != null ? availableOperations.equals(operation.availableOperations) :
@@ -346,6 +355,7 @@ public class Operation implements Identifiable {
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (digitalGoods != null ? digitalGoods.hashCode() : 0);
         result = 31 * result + (categories != null ? categories.hashCode() : 0);
+        result = 31 * result + (spendingCategories != null ? spendingCategories.hashCode() : 0);
         result = 31 * result + (showcaseFormat != null ? showcaseFormat.hashCode() : 0);
         result = 31 * result + (availableOperations != null ? availableOperations.hashCode() : 0);
         return result;
@@ -380,6 +390,7 @@ public class Operation implements Identifiable {
                 ", type=" + type +
                 ", digitalGoods=" + digitalGoods +
                 ", categories=" + categories +
+                ", spendingCategories=" + spendingCategories +
                 ", showcaseFormat=" + showcaseFormat +
                 ", availableOperations=" + availableOperations +
                 '}';
@@ -528,6 +539,7 @@ public class Operation implements Identifiable {
         Type type;
         DigitalGoods digitalGoods;
         List<Integer> categories;
+        List<SpendingCategory> spendingCategories;
         ShowcaseReference.Format format;
         List<AvailableOperation> availableOperations;
 
@@ -659,6 +671,10 @@ public class Operation implements Identifiable {
         public Builder setCategories(List<Integer> categories) {
             this.categories = categories;
             return this;
+        }
+
+        public void setSpendingCategories(List<SpendingCategory> spendingCategories) {
+            this.spendingCategories = spendingCategories;
         }
 
         public Builder setFormat(ShowcaseReference.Format format) {
