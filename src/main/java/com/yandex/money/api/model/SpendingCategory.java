@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 import static com.yandex.money.api.util.Common.checkNotNull;
 
-public class SpendingCategory {
+public final class SpendingCategory {
 
     /**
      * Name of the category
