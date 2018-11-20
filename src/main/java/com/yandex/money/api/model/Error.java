@@ -134,6 +134,8 @@ public enum Error implements Enums.WithCode<Error> {
     ILLEGAL_PARAM_OAUTH_TOKEN("illegal_param_oauth_token"),
     @SerializedName("illegal_param_operation_id")
     ILLEGAL_PARAM_OPERATION_ID("illegal_param_operation_id"),
+    @SerializedName("illegal_param_operation_label")
+    ILLEGAL_PARAM_OPERATION_LABEL("illegal_param_operation_label"),
     @SerializedName("illegal_param_pan_fragment")
     ILLEGAL_PARAM_PAN_FRAGMENT("illegal_param_pan_fragment"),
     @SerializedName("illegal_param_phone_number")
