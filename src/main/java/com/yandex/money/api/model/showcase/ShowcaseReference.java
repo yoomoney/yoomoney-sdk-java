@@ -28,6 +28,7 @@ import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.methods.ShowcaseSearch;
 import com.yandex.money.api.util.Enums;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 
@@ -76,6 +77,12 @@ public final class ShowcaseReference {
     @SerializedName("format")
     public final Format format;
 
+    /**
+     * Describing possibility to use bonuses in showcase
+     */
+    @SerializedName("bonus_points")
+    public final BonusUseType[] bonusPoints;
+
     ShowcaseReference(Builder builder) {
         scid = builder.scid;
         title = checkNotEmpty(builder.title, "title");
@@ -83,6 +90,7 @@ public final class ShowcaseReference {
         url = builder.url;
         format = builder.format;
         params = builder.params != null ? Collections.unmodifiableMap(builder.params) : null;
+        bonusPoints = builder.bonusPoints;
     }
 
     @Override
@@ -98,6 +106,8 @@ public final class ShowcaseReference {
         if (url != null ? !url.equals(that.url) : that.url != null) return false;
         //noinspection SimplifiableIfStatement
         if (params != null ? !params.equals(that.params) : that.params != null) return false;
+        if (bonusPoints != null ? !Arrays.equals(bonusPoints, that.bonusPoints)
+                : that.bonusPoints != null) return false;
         return format == that.format;
     }
 
@@ -109,6 +119,7 @@ public final class ShowcaseReference {
         result = 31 * result + (url != null ? url.hashCode() : 0);
         result = 31 * result + (params != null ? params.hashCode() : 0);
         result = 31 * result + (format != null ? format.hashCode() : 0);
+        result = 31 * result + (bonusPoints != null ? Arrays.hashCode(bonusPoints) : 0);
         return result;
     }
 
@@ -121,6 +132,7 @@ public final class ShowcaseReference {
                 ", url='" + url + '\'' +
                 ", params=" + params +
                 ", format=" + format +
+                ", bonusPoints=" + bonusPoints +
                 '}';
     }
 
@@ -151,6 +163,13 @@ public final class ShowcaseReference {
         }
     }
 
+    public enum BonusUseType {
+        @SerializedName("spending")
+        SPENDING,
+        @SerializedName("earning")
+        EARNING
+    }
+
     public final static class Builder {
 
         long scid;
@@ -159,6 +178,7 @@ public final class ShowcaseReference {
         Format format;
         String url = null;
         Map<String, String> params;
+        BonusUseType[] bonusPoints;
 
         public Builder setScid(long scid) {
             this.scid = scid;
@@ -187,6 +207,11 @@ public final class ShowcaseReference {
 
         public Builder setParams(Map<String, String> params) {
             this.params = params;
+            return this;
+        }
+
+        public Builder setBonusPoints(BonusUseType[] bonusPoints) {
+            this.bonusPoints = bonusPoints;
             return this;
         }
 
