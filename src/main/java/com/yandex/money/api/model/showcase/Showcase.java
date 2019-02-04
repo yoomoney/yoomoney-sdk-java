@@ -56,6 +56,7 @@ public final class Showcase {
     public final Group form;
     public final List<AllowedMoneySource> moneySources;
     public final List<Error> errors;
+    public final List<ShowcaseReference.BonusOperationType> bonusPoints;
 
     Showcase(Builder builder) {
         title = checkNotNull(builder.title, "title");
@@ -63,6 +64,7 @@ public final class Showcase {
         hiddenFields = Collections.unmodifiableMap(checkNotNull(builder.hiddenFields, "hiddenFields"));
         moneySources = Collections.unmodifiableList(checkNotNull(builder.moneySources, "moneySources"));
         errors = Collections.unmodifiableList(checkNotNull(builder.errors, "errors"));
+        bonusPoints = Collections.unmodifiableList(checkNotNull(builder.bonusPoints, "bonusPoints"));
     }
 
     /**
@@ -87,6 +89,7 @@ public final class Showcase {
         if (form != null ? !form.equals(showcase.form) : showcase.form != null) return false;
         //noinspection SimplifiableIfStatement
         if (!moneySources.equals(showcase.moneySources)) return false;
+        if (!bonusPoints.equals(showcase.bonusPoints)) return false;
         return errors.equals(showcase.errors);
     }
 
@@ -97,6 +100,7 @@ public final class Showcase {
         result = 31 * result + (form != null ? form.hashCode() : 0);
         result = 31 * result + moneySources.hashCode();
         result = 31 * result + errors.hashCode();
+        result = 31 * result + bonusPoints.hashCode();
         return result;
     }
 
@@ -107,6 +111,7 @@ public final class Showcase {
         Group form;
         List<AllowedMoneySource> moneySources = Collections.emptyList();
         List<Error> errors = Collections.emptyList();
+        List<ShowcaseReference.BonusOperationType> bonusPoints = Collections.emptyList();
 
         public Builder setTitle(String title) {
             this.title = title;
@@ -130,6 +135,11 @@ public final class Showcase {
 
         public Builder setErrors(List<Error> errors) {
             this.errors = errors;
+            return this;
+        }
+
+        public Builder setBonusPoints(List<ShowcaseReference.BonusOperationType> bonusPoints) {
+            this.bonusPoints = bonusPoints;
             return this;
         }
 

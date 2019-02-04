@@ -81,7 +81,7 @@ public final class ShowcaseReference {
      * Describing possibility to use bonuses in showcase
      */
     @SerializedName("bonus_points")
-    public final BonusUseType[] bonusPoints;
+    public final BonusOperationType[] bonusPoints;
 
     ShowcaseReference(Builder builder) {
         scid = builder.scid;
@@ -163,7 +163,7 @@ public final class ShowcaseReference {
         }
     }
 
-    public enum BonusUseType {
+    public enum BonusOperationType {
         @SerializedName("spending")
         SPENDING,
         @SerializedName("earning")
@@ -178,7 +178,7 @@ public final class ShowcaseReference {
         Format format;
         String url = null;
         Map<String, String> params;
-        BonusUseType[] bonusPoints;
+        BonusOperationType[] bonusPoints;
 
         public Builder setScid(long scid) {
             this.scid = scid;
@@ -210,7 +210,7 @@ public final class ShowcaseReference {
             return this;
         }
 
-        public Builder setBonusPoints(BonusUseType[] bonusPoints) {
+        public Builder setBonusPoints(BonusOperationType[] bonusPoints) {
             this.bonusPoints = bonusPoints;
             return this;
         }

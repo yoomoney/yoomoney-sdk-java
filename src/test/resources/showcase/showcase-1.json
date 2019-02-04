@@ -9,5 +9,6 @@
     "cards",
     "payment-card",
     "cash"
-  ]
+  ],
+  "bonus_points": []
 }
