@@ -34,6 +34,7 @@ import com.google.gson.reflect.TypeToken;
 import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.model.showcase.Showcase.Error;
+import com.yandex.money.api.model.showcase.ShowcaseReference;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.typeadapters.BaseTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.container.GroupTypeAdapter;
@@ -60,6 +61,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
     private static final String MEMBER_HIDDEN_FIELDS = "hidden_fields";
     private static final String MEMBER_MONEY_SOURCE = "money_source";
     private static final String MEMBER_TITLE = "title";
+    private static final String MEMBER_BONUS = "bonus_points";
 
     private ShowcaseTypeAdapter() {
         //noinspection ResultOfMethodCallIgnored
@@ -89,12 +91,18 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
                 new TypeToken<List<AllowedMoneySource>>() {}.getType());
         List<Error> errors = ErrorTypeAdapter.getInstance().fromJson(object.getAsJsonArray(MEMBER_ERROR));
 
+        List<ShowcaseReference.BonusOperationType> bonusPoints = context.deserialize(
+                object.get(MEMBER_BONUS),
+                new TypeToken<List<ShowcaseReference.BonusOperationType>>() {}.getType()
+        );
+
         return new Showcase.Builder()
                 .setTitle(getString(object, MEMBER_TITLE))
                 .setHiddenFields(getNotNullMap(object, MEMBER_HIDDEN_FIELDS))
                 .setForm(form)
                 .setMoneySources(toEmptyListIfNull(moneySources))
                 .setErrors(toEmptyListIfNull(errors))
+                .setBonusPoints(toEmptyListIfNull(bonusPoints))
                 .create();
     }
 
@@ -110,6 +118,7 @@ public final class ShowcaseTypeAdapter extends BaseTypeAdapter<Showcase> {
             objects.add(MEMBER_FORM, ListDelegate.serialize(src.form, context));
         }
         objects.add(MEMBER_HIDDEN_FIELDS, toJsonObject(src.hiddenFields));
+        objects.add(MEMBER_BONUS, context.serialize(src.bonusPoints));
         return objects;
     }
 
