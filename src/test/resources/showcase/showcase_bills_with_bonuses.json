@@ -31,5 +31,8 @@
     "has_external_status": "",
     "is_withdrawal": ""
   },
-  "bonus_points": []
+  "bonus_points": [
+    "spending",
+    "earning"
+  ]
 }

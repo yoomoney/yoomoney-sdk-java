@@ -147,6 +147,11 @@ public final class ShowcaseTypeAdapterTest {
         testShowcase("showcase_skype.json");
     }
 
+    @Test
+    public void testShowcaseWithBonuses() {
+        testShowcase("showcase_bills_with_bonuses.json");
+    }
+
     private static void testShowcase(String fileName) {
         ShowcaseTypeAdapter adapter = ShowcaseTypeAdapter.getInstance();
         check(fileName, adapter);
