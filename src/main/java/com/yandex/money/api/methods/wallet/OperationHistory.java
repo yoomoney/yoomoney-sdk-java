@@ -143,7 +143,7 @@ public class OperationHistory {
          * Use builder to create the request.
          */
         Request(Set<FilterType> types, String label, DateTime from, DateTime till, String startRecord, Integer records,
-                Boolean details) {
+                Boolean details, Boolean currencyExchanges) {
 
             super(OperationHistory.class);
             if (from != null && till != null && from.isAfter(till)) {
@@ -164,6 +164,7 @@ public class OperationHistory {
             addParameter("start_record", startRecord);
             addParameter("records", records);
             addParameter("details", details);
+            addParameter("currency_exchanges", currencyExchanges);
         }
 
         @Override
@@ -196,6 +197,7 @@ public class OperationHistory {
             private String startRecord;
             private Integer records;
             private Boolean details;
+            private Boolean currencyExchanges;
 
             /**
              * Specifies types of operations that respond should contain. Can be omitted if no
@@ -270,13 +272,24 @@ public class OperationHistory {
             }
 
             /**
+             * Request currency exchanges. If set to {@code true} list of operations will contain
+             * currency exchanges. False by default.
+             *
+             * @param currencyExchanges request currency exchanges
+             */
+            public Builder setCurrencyExchanges(Boolean currencyExchanges) {
+                this.currencyExchanges = currencyExchanges;
+                return this;
+            }
+
+            /**
              * Creates the {@link OperationHistory.Request}
              *
              * @return the request
              */
             public Request create() {
                 return new Request(types == null ? Collections.<FilterType>emptySet() : types,
-                        label, from, till, startRecord, records, details);
+                        label, from, till, startRecord, records, details, currencyExchanges);
             }
         }
     }
