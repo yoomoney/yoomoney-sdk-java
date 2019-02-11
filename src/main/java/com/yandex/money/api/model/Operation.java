@@ -232,7 +232,7 @@ public class Operation implements Identifiable {
     public final List<AvailableOperation> availableOperations;
 
     /**
-     * Operation currency code. ISO-4217 3-alpha currency symbol.
+     * Operation currency (ISO-4217 3-alpha currency symbol).
      */
     @SuppressWarnings("WeakerAccess")
     @SerializedName("amount_currency")
@@ -248,7 +248,7 @@ public class Operation implements Identifiable {
     public final BigDecimal exchangeAmount;
 
     /**
-     * Exchange currency code. ISO-4217 3-alpha currency symbol.
+     * Exchange currency (ISO-4217 3-alpha currency symbol).
      */
     @SuppressWarnings("WeakerAccess")
     @SerializedName("exchange_amount_currency")
