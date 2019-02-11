@@ -28,7 +28,7 @@ import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
 import com.yandex.money.api.time.DateTime;
-import com.yandex.money.api.typeadapters.model.NumericCurrencyTypeAdapter;
+import com.yandex.money.api.typeadapters.model.AlphaCurrencyTypeAdapter;
 import com.yandex.money.api.util.Enums;
 
 import java.math.BigDecimal;
@@ -236,7 +236,7 @@ public class Operation implements Identifiable {
      */
     @SuppressWarnings("WeakerAccess")
     @SerializedName("amount_currency")
-    @JsonAdapter(NumericCurrencyTypeAdapter.class)
+    @JsonAdapter(AlphaCurrencyTypeAdapter.class)
     public final Currency amountCurrency;
 
     /**
@@ -252,7 +252,7 @@ public class Operation implements Identifiable {
      */
     @SuppressWarnings("WeakerAccess")
     @SerializedName("exchange_amount_currency")
-    @JsonAdapter(NumericCurrencyTypeAdapter.class)
+    @JsonAdapter(AlphaCurrencyTypeAdapter.class)
     public final Currency exchangeAmountCurrency;
 
     /**
