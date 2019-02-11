@@ -24,9 +24,11 @@
 
 package com.yandex.money.api.model;
 
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import com.yandex.money.api.model.showcase.ShowcaseReference;
 import com.yandex.money.api.time.DateTime;
+import com.yandex.money.api.typeadapters.model.NumericCurrencyTypeAdapter;
 import com.yandex.money.api.util.Enums;
 
 import java.math.BigDecimal;
@@ -42,6 +44,7 @@ public class Operation implements Identifiable {
     /**
      * Operation id.
      */
+    @SuppressWarnings("WeakerAccess")
     @SerializedName("operation_id")
     public final String operationId;
 
@@ -233,7 +236,8 @@ public class Operation implements Identifiable {
      */
     @SuppressWarnings("WeakerAccess")
     @SerializedName("amount_currency")
-    public final String amountCurrency;
+    @JsonAdapter(NumericCurrencyTypeAdapter.class)
+    public final Currency amountCurrency;
 
     /**
      * Exchange currency amount. The currency is always different from the currency of the account
@@ -248,7 +252,8 @@ public class Operation implements Identifiable {
      */
     @SuppressWarnings("WeakerAccess")
     @SerializedName("exchange_amount_currency")
-    public final String exchangeAmountCurrency;
+    @JsonAdapter(NumericCurrencyTypeAdapter.class)
+    public final Currency exchangeAmountCurrency;
 
     /**
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
@@ -579,9 +584,9 @@ public class Operation implements Identifiable {
         List<SpendingCategory> spendingCategories;
         ShowcaseReference.Format format;
         List<AvailableOperation> availableOperations;
-        String amountCurrency;
+        Currency amountCurrency;
         BigDecimal exchangeAmount;
-        String exchangeAmountCurrency;
+        Currency exchangeAmountCurrency;
 
         public Builder setOperationId(String operationId) {
             this.operationId = operationId;
@@ -727,7 +732,7 @@ public class Operation implements Identifiable {
             return this;
         }
 
-        public Builder setAmountCurrency(String amountCurrency) {
+        public Builder setAmountCurrency(Currency amountCurrency) {
             this.amountCurrency = amountCurrency;
             return this;
         }
@@ -737,7 +742,7 @@ public class Operation implements Identifiable {
             return this;
         }
 
-        public Builder setExchangeAmountCurrency(String exchangeAmountCurrency) {
+        public Builder setExchangeAmountCurrency(Currency exchangeAmountCurrency) {
             this.exchangeAmountCurrency = exchangeAmountCurrency;
             return this;
         }
