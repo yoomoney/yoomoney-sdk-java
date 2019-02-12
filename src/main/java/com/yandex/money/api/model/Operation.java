@@ -74,6 +74,30 @@ public class Operation implements Identifiable {
     public final BigDecimal amount;
 
     /**
+     * Operation currency (ISO-4217 3-alpha currency symbol).
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("amount_currency")
+    @JsonAdapter(AlphaCurrencyTypeAdapter.class)
+    public final Currency amountCurrency;
+
+    /**
+     * Exchange currency amount. The currency is always different from the currency of the account
+     * for which the history is requested.
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("exchange_amount")
+    public final BigDecimal exchangeAmount;
+
+    /**
+     * Exchange currency (ISO-4217 3-alpha currency symbol).
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("exchange_amount_currency")
+    @JsonAdapter(AlphaCurrencyTypeAdapter.class)
+    public final Currency exchangeAmountCurrency;
+
+    /**
      * Received amount.
      */
     @SuppressWarnings("WeakerAccess")
@@ -81,10 +105,24 @@ public class Operation implements Identifiable {
     public final BigDecimal amountDue;
 
     /**
+     * Received amount currency (ISO-4217 3-alpha currency symbol).
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("amount_due_currency")
+    public final Currency amountDueCurrency;
+
+    /**
      * Fee.
      */
     @SerializedName("fee")
     public final BigDecimal fee;
+
+    /**
+     * Fee currency (ISO-4217 3-alpha currency symbol).
+     */
+    @SuppressWarnings("WeakerAccess")
+    @SerializedName("fee_currency")
+    public final Currency feeCurrency;
 
     /**
      * Operation datetime.
@@ -232,30 +270,6 @@ public class Operation implements Identifiable {
     public final List<AvailableOperation> availableOperations;
 
     /**
-     * Operation currency (ISO-4217 3-alpha currency symbol).
-     */
-    @SuppressWarnings("WeakerAccess")
-    @SerializedName("amount_currency")
-    @JsonAdapter(AlphaCurrencyTypeAdapter.class)
-    public final Currency amountCurrency;
-
-    /**
-     * Exchange currency amount. The currency is always different from the currency of the account
-     * for which the history is requested.
-     */
-    @SuppressWarnings("WeakerAccess")
-    @SerializedName("exchange_amount")
-    public final BigDecimal exchangeAmount;
-
-    /**
-     * Exchange currency (ISO-4217 3-alpha currency symbol).
-     */
-    @SuppressWarnings("WeakerAccess")
-    @SerializedName("exchange_amount_currency")
-    @JsonAdapter(AlphaCurrencyTypeAdapter.class)
-    public final Currency exchangeAmountCurrency;
-
-    /**
      * Use {@link com.yandex.money.api.model.Operation.Builder} instead.
      */
     protected Operation(Builder builder) {
@@ -266,8 +280,13 @@ public class Operation implements Identifiable {
         title = builder.title;
         patternId = builder.patternId;
         amount = builder.amount;
+        amountCurrency = builder.amountCurrency;
+        exchangeAmount = builder.exchangeAmount;
+        exchangeAmountCurrency = builder.exchangeAmountCurrency;
         amountDue = builder.amountDue;
+        amountDueCurrency = builder.amountDueCurrency;
         fee = builder.fee;
+        feeCurrency = builder.feeCurrency;
         datetime = builder.datetime;
         sender = builder.sender;
         recipient = builder.recipient;
@@ -290,9 +309,6 @@ public class Operation implements Identifiable {
         showcaseFormat = builder.format;
         availableOperations = builder.availableOperations != null ?
                 Collections.unmodifiableList(builder.availableOperations) : null;
-        amountCurrency = builder.amountCurrency;
-        exchangeAmount = builder.exchangeAmount;
-        exchangeAmountCurrency = builder.exchangeAmountCurrency;
     }
 
     @Override
@@ -325,8 +341,18 @@ public class Operation implements Identifiable {
         if (patternId != null ? !patternId.equals(operation.patternId) : operation.patternId != null) return false;
         if (direction != operation.direction) return false;
         if (amount != null ? !amount.equals(operation.amount) : operation.amount != null) return false;
+        if (amountCurrency != null ? !amountCurrency.equals(operation.amountCurrency) :
+                operation.amountCurrency != null) return false;
+        if (exchangeAmount != null ? !exchangeAmount.equals(operation.exchangeAmount) :
+                operation.exchangeAmount != null) return false;
+        if (exchangeAmountCurrency != null ? !exchangeAmountCurrency.equals(operation.exchangeAmountCurrency) :
+                operation.exchangeAmountCurrency != null) return false;
         if (amountDue != null ? !amountDue.equals(operation.amountDue) : operation.amountDue != null) return false;
+        if (amountDueCurrency != null ? !amountDueCurrency.equals(operation.amountDueCurrency) :
+                operation.amountDueCurrency != null) return false;
         if (fee != null ? !fee.equals(operation.fee) : operation.fee != null) return false;
+        if (feeCurrency != null ? !feeCurrency.equals(operation.feeCurrency) :
+                operation.feeCurrency != null) return false;
         if (datetime != null ? !datetime.equals(operation.datetime) : operation.datetime != null) return false;
         if (title != null ? !title.equals(operation.title) : operation.title != null) return false;
         if (sender != null ? !sender.equals(operation.sender) : operation.sender != null) return false;
@@ -353,12 +379,6 @@ public class Operation implements Identifiable {
         if (spendingCategories != null ? !spendingCategories.equals(operation.spendingCategories) : operation.spendingCategories != null) return false;
         //noinspection SimplifiableIfStatement
         if (showcaseFormat != operation.showcaseFormat) return false;
-        if (amountCurrency != null ? !amountCurrency.equals(operation.amountCurrency) :
-                operation.amountCurrency != null) return false;
-        if (exchangeAmount != null ? !exchangeAmount.equals(operation.exchangeAmount) :
-                operation.exchangeAmount != null) return false;
-        if (exchangeAmountCurrency != null ? !exchangeAmountCurrency.equals(operation.exchangeAmountCurrency) :
-                operation.exchangeAmountCurrency != null) return false;
         return availableOperations != null ? availableOperations.equals(operation.availableOperations) :
                 operation.availableOperations == null;
     }
@@ -370,8 +390,13 @@ public class Operation implements Identifiable {
         result = 31 * result + (patternId != null ? patternId.hashCode() : 0);
         result = 31 * result + (direction != null ? direction.hashCode() : 0);
         result = 31 * result + (amount != null ? amount.hashCode() : 0);
+        result = 31 * result + (amountCurrency != null ? amountCurrency.hashCode() : 0);
+        result = 31 * result + (exchangeAmount != null ? exchangeAmount.hashCode() : 0);
+        result = 31 * result + (exchangeAmountCurrency != null ? exchangeAmountCurrency.hashCode() : 0);
         result = 31 * result + (amountDue != null ? amountDue.hashCode() : 0);
+        result = 31 * result + (amountDueCurrency != null ? amountDueCurrency.hashCode() : 0);
         result = 31 * result + (fee != null ? fee.hashCode() : 0);
+        result = 31 * result + (feeCurrency != null ? feeCurrency.hashCode() : 0);
         result = 31 * result + (datetime != null ? datetime.hashCode() : 0);
         result = 31 * result + (title != null ? title.hashCode() : 0);
         result = 31 * result + (sender != null ? sender.hashCode() : 0);
@@ -394,9 +419,6 @@ public class Operation implements Identifiable {
         result = 31 * result + (spendingCategories != null ? spendingCategories.hashCode() : 0);
         result = 31 * result + (showcaseFormat != null ? showcaseFormat.hashCode() : 0);
         result = 31 * result + (availableOperations != null ? availableOperations.hashCode() : 0);
-        result = 31 * result + (amountCurrency != null ? amountCurrency.hashCode() : 0);
-        result = 31 * result + (exchangeAmount != null ? exchangeAmount.hashCode() : 0);
-        result = 31 * result + (exchangeAmountCurrency != null ? exchangeAmountCurrency.hashCode() : 0);
         return result;
     }
 
@@ -408,8 +430,13 @@ public class Operation implements Identifiable {
                 ", patternId='" + patternId + '\'' +
                 ", direction=" + direction +
                 ", amount=" + amount +
+                ", amountCurrency=" + amountCurrency +
+                ", exchangeAmount=" + exchangeAmount +
+                ", exchangeAmountCurrency=" + exchangeAmountCurrency +
                 ", amountDue=" + amountDue +
+                ", amountDueCurrency=" + amountDueCurrency +
                 ", fee=" + fee +
+                ", feeCurrency=" + feeCurrency +
                 ", datetime=" + datetime +
                 ", title='" + title + '\'' +
                 ", sender='" + sender + '\'' +
@@ -432,9 +459,6 @@ public class Operation implements Identifiable {
                 ", spendingCategories=" + spendingCategories +
                 ", showcaseFormat=" + showcaseFormat +
                 ", availableOperations=" + availableOperations +
-                ", amountCurrency=" + amountCurrency +
-                ", exchangeAmount=" + exchangeAmount +
-                ", exchangeAmountCurrency=" + exchangeAmountCurrency +
                 '}';
     }
 
@@ -560,8 +584,13 @@ public class Operation implements Identifiable {
         String patternId;
         Direction direction;
         BigDecimal amount = BigDecimal.ZERO;
+        Currency amountCurrency;
+        BigDecimal exchangeAmount;
+        Currency exchangeAmountCurrency;
         BigDecimal amountDue;
+        Currency amountDueCurrency;
         BigDecimal fee;
+        Currency feeCurrency;
         DateTime datetime = DateTime.now();
         String title;
         String sender;
@@ -584,9 +613,6 @@ public class Operation implements Identifiable {
         List<SpendingCategory> spendingCategories;
         ShowcaseReference.Format format;
         List<AvailableOperation> availableOperations;
-        Currency amountCurrency;
-        BigDecimal exchangeAmount;
-        Currency exchangeAmountCurrency;
 
         public Builder setOperationId(String operationId) {
             this.operationId = operationId;
@@ -613,13 +639,38 @@ public class Operation implements Identifiable {
             return this;
         }
 
+        public Builder setAmountCurrency(Currency amountCurrency) {
+            this.amountCurrency = amountCurrency;
+            return this;
+        }
+
+        public Builder setExchangeAmount(BigDecimal exchangeAmount) {
+            this.exchangeAmount = exchangeAmount;
+            return this;
+        }
+
+        public Builder setExchangeAmountCurrency(Currency exchangeAmountCurrency) {
+            this.exchangeAmountCurrency = exchangeAmountCurrency;
+            return this;
+        }
+
         public Builder setAmountDue(BigDecimal amountDue) {
             this.amountDue = amountDue;
             return this;
         }
 
+        public Builder setAmountDueCurrency(Currency amountDueCurrency) {
+            this.amountDueCurrency = amountDueCurrency;
+            return this;
+        }
+
         public Builder setFee(BigDecimal fee) {
             this.fee = fee;
+            return this;
+        }
+
+        public Builder setFeeCurrency(Currency feeCurrency) {
+            this.feeCurrency = feeCurrency;
             return this;
         }
 
@@ -729,21 +780,6 @@ public class Operation implements Identifiable {
 
         public Builder setAvailableOperations(List<AvailableOperation> operations) {
             this.availableOperations = operations;
-            return this;
-        }
-
-        public Builder setAmountCurrency(Currency amountCurrency) {
-            this.amountCurrency = amountCurrency;
-            return this;
-        }
-
-        public Builder setExchangeAmount(BigDecimal exchangeAmount) {
-            this.exchangeAmount = exchangeAmount;
-            return this;
-        }
-
-        public Builder setExchangeAmountCurrency(Currency exchangeAmountCurrency) {
-            this.exchangeAmountCurrency = exchangeAmountCurrency;
             return this;
         }
 
