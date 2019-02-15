@@ -490,7 +490,12 @@ public class Operation implements Identifiable {
          * Deposition.
          */
         @SerializedName("deposition")
-        DEPOSITION("deposition");
+        DEPOSITION("deposition"),
+        /**
+         * Currency exchange operation
+         */
+        @SerializedName("currency-exchange")
+        CURRENCY_EXCHANGE("currency-exchange");
 
         public final String code;
 
