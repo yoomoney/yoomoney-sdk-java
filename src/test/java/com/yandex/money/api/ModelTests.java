@@ -126,6 +126,7 @@ public class ModelTests {
         checkType("/methods/wallet/operation-history-4.json", OperationHistory.class);
         checkType("/methods/wallet/operation-history-5.json", OperationHistory.class);
         checkType("/methods/wallet/operation-history-6.json", OperationHistory.class);
+        checkType("/methods/wallet/operation-history-7.json", OperationHistory.class);
     }
 
     @Test

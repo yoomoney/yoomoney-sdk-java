@@ -143,7 +143,7 @@ public class OperationHistory {
          * Use builder to create the request.
          */
         Request(Set<FilterType> types, String label, DateTime from, DateTime till, String startRecord, Integer records,
-                Boolean details, Boolean currencyExchanges) {
+                Boolean details, Boolean includeCurrencyExchanges) {
 
             super(OperationHistory.class);
             if (from != null && till != null && from.isAfter(till)) {
@@ -164,7 +164,7 @@ public class OperationHistory {
             addParameter("start_record", startRecord);
             addParameter("records", records);
             addParameter("details", details);
-            addParameter("currency_exchanges", currencyExchanges);
+            addParameter("include_currency_exchanges", includeCurrencyExchanges);
         }
 
         @Override
@@ -197,7 +197,7 @@ public class OperationHistory {
             private String startRecord;
             private Integer records;
             private Boolean details;
-            private Boolean currencyExchanges;
+            private Boolean includeCurrencyExchanges;
 
             /**
              * Specifies types of operations that respond should contain. Can be omitted if no
@@ -275,10 +275,10 @@ public class OperationHistory {
              * Request currency exchanges. If set to {@code true} list of operations will contain
              * currency exchanges. False by default.
              *
-             * @param currencyExchanges request currency exchanges
+             * @param includeCurrencyExchanges request currency exchanges
              */
-            public Builder setCurrencyExchanges(Boolean currencyExchanges) {
-                this.currencyExchanges = currencyExchanges;
+            public Builder setIncludeCurrencyExchanges(Boolean includeCurrencyExchanges) {
+                this.includeCurrencyExchanges = includeCurrencyExchanges;
                 return this;
             }
 
@@ -289,7 +289,7 @@ public class OperationHistory {
              */
             public Request create() {
                 return new Request(types == null ? Collections.<FilterType>emptySet() : types,
-                        label, from, till, startRecord, records, details, currencyExchanges);
+                        label, from, till, startRecord, records, details, includeCurrencyExchanges);
             }
         }
     }
