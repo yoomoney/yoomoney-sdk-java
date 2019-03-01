@@ -26,8 +26,6 @@ package com.yandex.money.api.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import static com.yandex.money.api.util.Common.checkNotNull;
-
 /**
  * Describes digital item, that user can obtain when paying for them.
  */
@@ -46,6 +44,12 @@ public class Good {
     public final String secret;
 
     /**
+     * secret url
+     */
+    @SerializedName("secretUrl")
+    public final String secretUrl;
+
+    /**
      * merchant article id
      */
     @SerializedName("merchantArticleId")
@@ -59,8 +63,21 @@ public class Good {
      * @param merchantArticleId merchant article id
      */
     public Good(String serial, String secret, String merchantArticleId) {
-        this.serial = checkNotNull(serial, "serial");
-        this.secret = checkNotNull(secret, "secret");
+        this(serial, secret, null, merchantArticleId);
+    }
+
+    /**
+     * Constructor.
+     *
+     * @param serial serial number
+     * @param secret secret
+     * @param secretUrl secretUrl
+     * @param merchantArticleId merchant article id
+     */
+    public Good(String serial, String secret, String secretUrl, String merchantArticleId) {
+        this.serial = serial;
+        this.secret = secret;
+        this.secretUrl = secretUrl;
         this.merchantArticleId = merchantArticleId;
     }
 
@@ -71,17 +88,21 @@ public class Good {
 
         Good good = (Good) o;
 
-        return serial.equals(good.serial) &&
-                secret.equals(good.secret) &&
-                !(merchantArticleId != null ? !merchantArticleId.equals(good.merchantArticleId) :
-                        good.merchantArticleId != null);
+        return (serial == null ? good.serial == null : serial.equals(good.serial)) &&
+                (secret == null ? good.secret == null : secret.equals(good.secret)) &&
+                (secretUrl == null ? good.secretUrl == null : secretUrl.equals(good.secretUrl)) &&
+                (merchantArticleId == null ? good.merchantArticleId == null :
+                        merchantArticleId.equals(good.merchantArticleId));
     }
 
     @Override
     public int hashCode() {
-        int result = serial.hashCode();
-        result = 31 * result + secret.hashCode();
-        result = 31 * result + (merchantArticleId != null ? merchantArticleId.hashCode() : 0);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (serial == null ? 0 : serial.hashCode());
+        result = prime * result + (secret == null ? 0 : secret.hashCode());
+        result = prime * result + (secretUrl == null ? 0 : secretUrl.hashCode());
+        result = prime * result + (merchantArticleId == null ? 0 : merchantArticleId.hashCode());
         return result;
     }
 
@@ -90,6 +111,7 @@ public class Good {
         return "Good{" +
                 "serial='" + serial + '\'' +
                 ", secret='" + secret + '\'' +
+                ", secretUrl=" + secretUrl + '\'' +
                 ", merchantArticleId='" + merchantArticleId + '\'' +
                 '}';
     }
