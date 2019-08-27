@@ -7,67 +7,224 @@
     "cash"
   ],
   "hidden_fields": {
-    "a": "123",
-    "b": "456",
-    "c": "789"
+    "field1": "value1",
+    "field2": "value2"
   },
+  "error": [
+    {
+      "name": "name",
+      "alert": "alert"
+    },
+    {
+      "name": "name",
+      "alert": "alert"
+    }
+  ],
   "form": [
     {
       "type": "text",
-      "name": "text",
-      "label": "Text",
+      "name": "name1",
+      "label": "label",
+      "alert": "alert",
+      "value_autofill": "currentuser_accountkey",
+      "value": "required",
+      "hint": "hint",
+      "minlength": 2,
+      "maxlength": 10,
+      "pattern": "\\D*?",
       "required": true,
       "readonly": false
     },
     {
       "type": "number",
-      "name": "number",
-      "label": "Number",
-      "required": false,
-      "readonly": false
+      "name": "name2",
+      "label": "label",
+      "hint": "hint",
+      "alert": "alert",
+      "value": 10.00,
+      "required": true,
+      "readonly": false,
+      "min": 5.00,
+      "max": 100.00,
+      "step": 5.00
     },
     {
       "type": "amount",
-      "name": "amount",
+      "name": "name3",
       "currency": "RUB",
-      "label": "Amount",
+      "label": "label",
+      "hint": "hint",
+      "alert": "alert",
+      "value": 10.00,
+      "required": true,
+      "readonly": false,
+      "min": 5.00,
+      "max": 100.00,
+      "step": 5.00,
+      "fee": {
+        "a": 0.02,
+        "b": 10.00,
+        "c": 10.00,
+        "d": 15.00,
+        "amount_type": "amount"
+      }
+    },
+    {
+      "type": "email",
+      "name": "name4",
+      "label": "label",
+      "hint": "hint",
+      "alert": "alert",
+      "value": "rvivanov@yamoney.ru",
+      "required": true,
+      "readonly": false
+    },
+    {
+      "type": "tel",
+      "name": "name5",
+      "value": "79995150041",
+      "hint": "hint",
+      "label": "label",
+      "alert": "alert",
+      "required": true,
+      "readonly": false
+    },
+    {
+      "type": "checkbox",
+      "name": "name6",
+      "value": "true",
+      "checked" : true,
+      "label": "label",
+      "hint": "hint",
+      "alert": "alert",
+      "required": true,
+      "readonly": false
+    },
+    {
+      "type": "date",
+      "name": "name7",
+      "label": "label",
+      "hint": "hint",
+      "alert": "alert",
+      "value": "2005-01-01",
+      "min": "2000-02-01T00:00:00.000+03:00",
+      "max": "2010-02-01T00:00:00.000+03:00",
+      "required": true,
+      "readonly": false
+    },
+    {
+      "type": "month",
+      "name": "name8",
+      "label": "label",
+      "hint": "hint",
+      "alert": "alert",
+      "value": "2005-01",
+      "min": "2000-02-01T00:00:00.000+03:00",
+      "max": "2010-02-01T00:00:00.000+03:00",
       "required": true,
       "readonly": false
     },
     {
       "type": "select",
-      "name": "select",
-      "label": "Number",
+      "name": "name9",
+      "label": "label",
+      "hint": "hint",
+      "alert": "alert",
+      "value": "value2",
+      "style": "RadioGroup",
       "required": true,
       "readonly": false,
       "options": [
         {
-          "value": "option1",
-          "label": "Option 1"
+          "value": "value1",
+          "label": "label1"
         },
         {
-          "value": "option2",
-          "label": "Option 2",
+          "value": "value2",
+          "label": "label2"
+        },
+        {
+          "value": "value3",
+          "label": "label3",
           "group": [
             {
-              "type": "tel",
-              "name": "tel",
-              "label": "Telephone",
-              "required": true,
-              "readonly": false
-            },
-            {
-              "type": "checkbox",
-              "name": "checkbox",
-              "label": "Checkbox",
-              "checked": false,
-              "value": "checkboxValue",
+              "type": "text",
+              "name": "name14",
+              "value": "readonly",
+              "label": "label",
+              "hint": "hint",
+              "alert": "alert",
               "required": false,
-              "readonly": false
+              "readonly": true
             }
           ]
         }
       ]
+    },
+    {
+      "type": "textarea",
+      "name": "name10",
+      "value": "value",
+      "label": "label",
+      "hint": "hint",
+      "alert": "alert",
+      "minlength": 2,
+      "maxlength": 10,
+      "required": true,
+      "readonly": false
+    },
+    {
+      "type": "submit",
+      "label": "label",
+      "hint": "hint",
+      "alert": "alert",
+      "required": true,
+      "readonly": false
+    },
+    {
+      "type": "group",
+      "label": "label",
+      "layout": "HBox",
+      "items": [
+        {
+          "type": "text",
+          "name": "surname",
+          "label": "Фамилия",
+          "required": true,
+          "readonly": false,
+          "maxlength": 50,
+          "alert": "Пожалуйста, укажите фамилию получателя"
+        },
+        {
+          "type": "text",
+          "name": "name",
+          "label": "Имя",
+          "required": true,
+          "readonly": false,
+          "maxlength": 50,
+          "alert": "Пожалуйста, укажите имя получателя"
+        }
+      ]
+    },
+    {
+      "type": "p",
+      "label": "label",
+      "items": [
+        "Text with ",
+        {
+          "type": "a",
+          "href": "https://money.yandex.ru",
+          "label": "link"
+        },
+        "."
+      ]
+    },
+    {
+      "type": "additionaldata",
+      "name": "name11",
+      "value": "value",
+      "label": "label",
+      "readonly": true
     }
   ]
 }
