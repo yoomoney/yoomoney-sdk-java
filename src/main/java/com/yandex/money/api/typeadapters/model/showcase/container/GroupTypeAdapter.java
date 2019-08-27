@@ -32,6 +32,7 @@ import com.google.gson.JsonSerializationContext;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.typeadapters.model.showcase.ComponentsTypeProvider;
+import com.yandex.money.api.typeadapters.model.showcase.uicontrol.AdditionalDataTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.uicontrol.AmountTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.uicontrol.CheckboxTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.uicontrol.ComponentTypeAdapter;
@@ -70,6 +71,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
         TextTypeAdapter.getInstance();
         TelTypeAdapter.getInstance();
         ParagraphTypeAdapter.getInstance();
+        AdditionalDataTypeAdapter.getInstance();
     }
 
     /**
