@@ -29,6 +29,7 @@ import com.yandex.money.api.model.AllowedMoneySource;
 import com.yandex.money.api.model.showcase.Showcase;
 import com.yandex.money.api.typeadapters.TypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.ShowcaseTypeAdapter;
+import com.yandex.money.api.typeadapters.model.showcase.container.ExpandTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.container.GroupTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.container.ParagraphTypeAdapter;
 import com.yandex.money.api.typeadapters.model.showcase.uicontrol.AmountTypeAdapter;
@@ -125,6 +126,11 @@ public final class ShowcaseTypeAdapterTest {
     @Test
     public void testGroup() {
         check("group.json", GroupTypeAdapter.getInstance());
+    }
+
+    @Test
+    public void testExpand() {
+        check("expand.json", ExpandTypeAdapter.getInstance());
     }
 
     @Test
