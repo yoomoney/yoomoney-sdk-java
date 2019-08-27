@@ -58,7 +58,8 @@ public abstract class Component {
         TEXT_AREA("textarea"),
         SUBMIT("submit"),
         PARAGRAPH("p"),
-        GROUP("group");
+        GROUP("group"),
+        ADDITIONAL_DATA("additionaldata");
 
         public final String code;
 
