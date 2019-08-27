@@ -37,6 +37,7 @@ import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.TextBlock;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.containers.Paragraph;
+import com.yandex.money.api.model.showcase.components.uicontrols.AdditionalData;
 import com.yandex.money.api.model.showcase.components.uicontrols.Amount;
 import com.yandex.money.api.model.showcase.components.uicontrols.Checkbox;
 import com.yandex.money.api.model.showcase.components.uicontrols.Date;
@@ -79,10 +80,8 @@ public class ShowcaseParserTest {
 
     @Test
     public void testResourceShowcase() {
-        InputStream inputStream = ShowcaseParserTest.class.getResourceAsStream("/showcase.json");
-        if (inputStream == null) {
-            return;
-        }
+        InputStream inputStream = ShowcaseParserTest.class.getResourceAsStream("/model/showcase.json");
+        assertNotNull(inputStream);
         Showcase showcase = ShowcaseTypeAdapter.getInstance().fromJson(inputStream);
         checkShowcase(showcase);
     }
@@ -149,7 +148,7 @@ public class ShowcaseParserTest {
     }
 
     private void checkShowcase(Showcase showcase) {
-        assertEquals(showcase.title, "Test Form");
+        assertEquals(showcase.title, "Test Showcase");
         checkForm(showcase.form);
         checkMoneySources(showcase.moneySources);
         checkHiddenFields(showcase.hiddenFields);
@@ -161,7 +160,7 @@ public class ShowcaseParserTest {
         assertEquals(form.layout, Group.Layout.VERTICAL);
 
         List<Component> components = form.items;
-        assertEquals(components.size(), 13);
+        assertEquals(components.size(), 14);
 
         Component component = components.get(0);
         assertTrue(component instanceof Text);
@@ -188,11 +187,11 @@ public class ShowcaseParserTest {
 
         component = components.get(3);
         assertTrue(component instanceof Email);
-        checkComponentFields(component, "name4", "vyasevich@yamoney.ru");
+        checkComponentFields(component, "name4", "my@email.com");
 
         component = components.get(4);
         assertTrue(component instanceof Tel);
-        checkComponentFields(component, "name5", "79876543210");
+        checkComponentFields(component, "name5", "79111234567");
 
         component = components.get(5);
         assertTrue(component instanceof Checkbox);
@@ -263,6 +262,14 @@ public class ShowcaseParserTest {
 
         block = items.get(2);
         assertEquals(block.text, ".");
+
+        component = components.get(13);
+        assertTrue(component instanceof AdditionalData);
+        AdditionalData additionalData = (AdditionalData) component;
+        assertEquals(additionalData.label, "label");
+        assertEquals(additionalData.name, "name11");
+        assertEquals(additionalData.getValue(), "value");
+        assertTrue(additionalData.readonly);
     }
 
     private void checkComponentFields(Component component, String name, String value) {
@@ -290,7 +297,7 @@ public class ShowcaseParserTest {
         assertEquals(stdFee.b, new BigDecimal("10.00"));
         assertEquals(stdFee.c, new BigDecimal("10.00"));
         assertEquals(stdFee.d, new BigDecimal("15.00"));
-        assertEquals(stdFee.getAmountType(), AmountType.AMOUNT);
+        assertEquals(stdFee.amountType, AmountType.AMOUNT);
     }
 
     private void checkDate(Date date) {
@@ -343,8 +350,8 @@ public class ShowcaseParserTest {
     private void checkHiddenFields(Map<String, String> hiddenFields) {
         assertNotNull(hiddenFields);
         assertEquals(hiddenFields.size(), 2);
-        assertTrue("value1".equals(hiddenFields.get("field1")));
-        assertTrue("value2".equals(hiddenFields.get("field2")));
+        assertEquals(hiddenFields.get("field1"), "value1");
+        assertEquals(hiddenFields.get("field2"), "value2");
     }
 
     private void checkErrors(List<Showcase.Error> errors) {

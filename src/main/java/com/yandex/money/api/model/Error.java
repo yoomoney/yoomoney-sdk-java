@@ -64,6 +64,8 @@ public enum Error implements Enums.WithCode<Error> {
     DATE_TIME_IS_PAST("DateTimeIsPast"),
     @SerializedName("DateTimeIsTooFar")
     DATE_TIME_IS_TOO_FAR("DateTimeIsTooFar"),
+    @SerializedName("default_email_not_found")
+    DEFAULT_EMAIL_NOT_FOUND("default_email_not_found"),
     @SerializedName("ext_action_required")
     EXT_ACTION_REQUIRED("ext_action_required"),
     @SerializedName("favourite_duplicate")

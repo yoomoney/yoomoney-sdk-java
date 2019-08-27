@@ -27,6 +27,7 @@ package com.yandex.money.api.typeadapters.model.showcase;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.containers.Paragraph;
+import com.yandex.money.api.model.showcase.components.uicontrols.AdditionalData;
 import com.yandex.money.api.model.showcase.components.uicontrols.Amount;
 import com.yandex.money.api.model.showcase.components.uicontrols.Checkbox;
 import com.yandex.money.api.model.showcase.components.uicontrols.Date;
@@ -68,6 +69,7 @@ public final class ComponentsTypeProvider {
         typeMapping.put(Component.Type.TEL, Tel.class);
         typeMapping.put(Component.Type.TEXT, Text.class);
         typeMapping.put(Component.Type.TEXT_AREA, TextArea.class);
+        typeMapping.put(Component.Type.ADDITIONAL_DATA, AdditionalData.class);
 
         TYPE_MAPPING = Collections.unmodifiableMap(typeMapping);
 
