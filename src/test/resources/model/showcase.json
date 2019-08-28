@@ -75,14 +75,14 @@
       "label": "label",
       "hint": "hint",
       "alert": "alert",
-      "value": "rvivanov@yamoney.ru",
+      "value": "my@email.com",
       "required": true,
       "readonly": false
     },
     {
       "type": "tel",
       "name": "name5",
-      "value": "79995150041",
+      "value": "79111234567",
       "hint": "hint",
       "label": "label",
       "alert": "alert",
@@ -225,6 +225,27 @@
       "value": "value",
       "label": "label",
       "readonly": true
+    },
+    {
+      "type": "expand",
+      "label_minimized": "label_minimized",
+      "label_expanded": "label_expanded",
+      "items": [
+        {
+          "type": "additionaldata",
+          "name": "name1",
+          "value": "value1",
+          "label": "label1",
+          "readonly": true
+        },
+        {
+          "type": "additionaldata",
+          "name": "name2",
+          "value": "value2",
+          "label": "label2",
+          "readonly": true
+        }
+      ]
     }
   ]
 }
