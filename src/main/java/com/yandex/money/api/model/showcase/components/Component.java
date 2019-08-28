@@ -59,7 +59,8 @@ public abstract class Component {
         SUBMIT("submit"),
         PARAGRAPH("p"),
         GROUP("group"),
-        ADDITIONAL_DATA("additionaldata");
+        ADDITIONAL_DATA("additionaldata"),
+        EXPAND("expand");
 
         public final String code;
 

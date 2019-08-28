@@ -35,6 +35,7 @@ import com.yandex.money.api.model.showcase.ShowcaseContext;
 import com.yandex.money.api.model.showcase.components.Component;
 import com.yandex.money.api.model.showcase.components.Parameter;
 import com.yandex.money.api.model.showcase.components.TextBlock;
+import com.yandex.money.api.model.showcase.components.containers.Expand;
 import com.yandex.money.api.model.showcase.components.containers.Group;
 import com.yandex.money.api.model.showcase.components.containers.Paragraph;
 import com.yandex.money.api.model.showcase.components.uicontrols.AdditionalData;
@@ -160,7 +161,7 @@ public class ShowcaseParserTest {
         assertEquals(form.layout, Group.Layout.VERTICAL);
 
         List<Component> components = form.items;
-        assertEquals(components.size(), 14);
+        assertEquals(components.size(), 15);
 
         Component component = components.get(0);
         assertTrue(component instanceof Text);
@@ -270,6 +271,13 @@ public class ShowcaseParserTest {
         assertEquals(additionalData.name, "name11");
         assertEquals(additionalData.getValue(), "value");
         assertTrue(additionalData.readonly);
+
+        component = components.get(14);
+        assertTrue(component instanceof Expand);
+        Expand expand = (Expand) component;
+        assertEquals(expand.labelMinimized, "label_minimized");
+        assertNotNull(expand.labelExpanded, "label_expanded");
+        assertEquals(expand.items.size(), 2);
     }
 
     private void checkComponentFields(Component component, String name, String value) {

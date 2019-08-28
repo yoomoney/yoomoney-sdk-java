@@ -72,6 +72,7 @@ public final class GroupTypeAdapter extends ContainerTypeAdapter<Component, Grou
         TelTypeAdapter.getInstance();
         ParagraphTypeAdapter.getInstance();
         AdditionalDataTypeAdapter.getInstance();
+        ExpandTypeAdapter.getInstance();
     }
 
     /**

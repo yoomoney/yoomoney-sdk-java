@@ -1,0 +1,35 @@
+{
+  "type": "expand",
+  "label_minimized": "Посмотреть все реквизиты",
+  "label_expanded": "Свернуть реквизиты",
+  "items": [
+    {
+      "type": "additionaldata",
+      "name": "bankName",
+      "label": "Банк получателя",
+      "value": "СЕВЕРО-ЗАПАДНЫЙ БАНК ПАО СБЕРБАНК",
+      "readonly": true
+    },
+    {
+      "type": "additionaldata",
+      "name": "corrAccount",
+      "label": "Корр. счет",
+      "value": "301018105000000000653",
+      "readonly": true
+    },
+    {
+      "type": "additionaldata",
+      "name": "bankBik",
+      "label": "БИК",
+      "value": "044030653",
+      "readonly": true
+    },
+    {
+      "type": "additionaldata",
+      "name": "city",
+      "label": "Город",
+      "value": "Санкт-Петербург",
+      "readonly": true
+    }
+  ]
+}
