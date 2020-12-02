@@ -1,8 +1,8 @@
-# Yandex.Money SDK for Java
+# YooMoney SDK for Java
 
 ## Overview
 
-This Java library contains classes that allows you to do payments and call other methods of Yandex.Money public API.
+This Java library contains classes that allows you to do payments and call other methods of YooMoney public API.
 
 ## Requirements
 
@@ -27,7 +27,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.yandex.money.api:yandex-money-sdk-java:7.2.23'
+    compile 'com.yoo.money.api:yandex-money-sdk-java:7.2.23'
 }
 ```
 
@@ -38,7 +38,7 @@ To be able to use the library you: the first thing you need to do is to register
 
 ### Conception
 
-All API methods are represented as classes in package `com.yandex.money.api.methods`.
+All API methods are represented as classes in package `com.yoo.money.api.methods`.
 
 Some methods require an unique id to get the response. To get it use API method `instance-id` passing your *client id*.
 Once obtained *instance id* can be used to perform those methods.
@@ -48,7 +48,7 @@ in future requests.**
 
 ### Performing Request
 
-To perform request from `com.yandex.money.api.methods` package you will need to use `ApiClient`. For your convenience
+To perform request from `com.yoo.money.api.methods` package you will need to use `ApiClient`. For your convenience
 there is default implementation of the `ApiClient` called  `DefaultApiClient`. It is suitable for most cases. So the
 very first thing you need to do, is to create `ApiClient`.
 
@@ -107,15 +107,15 @@ InstanceId instanceId = client.execute(new InstanceId.Request(clientId));
 
 ## Links
 
-1. Yandex.Money API (in [English][5], in [Russian][6])
-2. [Yandex.Money Java SDK on Bintray][8]
+1. YooMoney API (in [English][5], in [Russian][6])
+2. [YooMoney Java SDK on Bintray][8]
 
 [1]: http://square.github.io/okhttp/
 [2]: https://code.google.com/p/google-gson/
-[3]: http://api.yandex.com/money/doc/dg/tasks/register-client.xml
-[4]: http://api.yandex.ru/money/doc/dg/tasks/register-client.xml
-[5]: http://api.yandex.com/money/
-[6]: http://api.yandex.ru/money/
+[3]: https://yoomoney.ru/docs/wallet/using-api/authorization/register-client?lang=en
+[4]: https://yoomoney.ru/docs/wallet/using-api/authorization/register-client?lang=ru
+[5]: https://yoomoney.ru/docs/wallet?lang=en
+[6]: https://yoomoney.ru/docs/wallet?lang=ru
 [7]: http://www.joda.org/joda-time/
-[8]: https://bintray.com/yandex-money/maven/yandex-money-sdk-java/view
-[9]: https://tech.yandex.com/money/doc/dg/reference/request-access-token-docpage/
+[8]: https://bintray.com/yandexxx-money/maven/yandex-money-sdk-java/view
+[9]: https://yoomoney.ru/docs/wallet/using-api/authorization/request-access-token/
