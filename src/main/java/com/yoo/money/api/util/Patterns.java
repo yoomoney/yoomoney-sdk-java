@@ -43,9 +43,9 @@ public final class Patterns {
             "([0-9][0-9\\- \\.]+[0-9])";
 
     /**
-     * Strings match this pattern are Yandex accounts.
+     * Strings match this pattern are YooMoney accounts.
      */
-    public static final String YANDEX = "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}";
+    public static final String YOOMONEY = "[a-zA-Z0-9\\+\\._%\\-\\+]{1,256}";
 
     /**
      * Strings match this pattern are emails.

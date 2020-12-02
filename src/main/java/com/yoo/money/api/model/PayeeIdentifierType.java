@@ -86,7 +86,7 @@ public enum PayeeIdentifierType implements Enums.WithCode<PayeeIdentifierType> {
             return ACCOUNT;
         } else if (identifier.matches(Patterns.PHONE)) {
             return PHONE;
-        } else if (identifier.matches(Patterns.YANDEX) || identifier.matches(Patterns.EMAIL)) {
+        } else if (identifier.matches(Patterns.YOOMONEY) || identifier.matches(Patterns.EMAIL)) {
             return EMAIL;
         } else {
             return null;

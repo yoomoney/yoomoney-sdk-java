@@ -50,7 +50,7 @@ import java.util.Stack;
  */
 public final class ShowcaseProcessTest extends Assert {
 
-    private static final String BILLS_SECOND_STEP_URL = "https://money.yandex" +
+    private static final String BILLS_SECOND_STEP_URL = "https://yoomoney" +
             ".ru/api/showcase/validate/5551/step_INN_3038";
     private static final String SAMPLE_INN = "7805498776";
 

@@ -79,8 +79,8 @@ public abstract class BaseApiRequest<T> implements ApiRequest<T> {
     }
 
     /**
-     * Creates base URL of a request. For instance base URL for https://money.yandex.ru/api/method?param=value is
-     * https://money.yandex.ru/api/method.
+     * Creates base URL of a request. For instance base URL for https://yoomoney.ru/api/method?param=value is
+     * https://yoomoney.ru/api/method.
      *
      * @param hostsProvider hosts provider
      * @return base URL of a request

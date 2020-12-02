@@ -4,7 +4,7 @@
     "Нажимая \"Заплатить\", вы соглашаетесь с",
     {
       "type": "a",
-      "href": "http://money.yandex.ru/doc/12345567890",
+      "href": "http://yoomoney.ru/doc/12345567890",
       "label": "условиями покупки"
     },
     "пин-кода iTunes."

@@ -51,15 +51,15 @@ public class DefaultApiV1HostsProvider implements HostsProvider {
     }
 
     /**
-     * @return {@code https://yoomoney.ru/docs/wallet}
+     * @return {@code https://yoomoney.ru/api}
      */
     @Override
     public String getMoneyApi() {
-        return getMoney() + "/docs/wallet";
+        return getMoney() + "/api";
     }
 
     /**
-     * @return {@code https://yoomoney.ru/docs/wallet}
+     * @return {@code https://yoomoney.ru/api}
      */
     @Override
     public String getPaymentApi() {
@@ -67,11 +67,11 @@ public class DefaultApiV1HostsProvider implements HostsProvider {
     }
 
     /**
-     * @return {@code https://yoomoney.ru}
+     * @return {@code https://m.yoomoney.ru}
      */
     @Override
     public String getMobileMoney() {
-        return "https://yoomoney.ru";
+        return "https://m.yoomoney.ru";
     }
 
     /**
