@@ -15,7 +15,7 @@ The library uses:
 
 ### Gradle Dependency (jCenter)
 
-[![Download](https://api.bintray.com/packages/yandex-money/maven/yandex-money-sdk-java/images/download.svg)](https://bintray.com/yandex-money/maven/yandex-money-sdk-java/_latestVersion)
+[![Download](https://api.bintray.com/packages/yoo-money/maven/yoo-money-sdk-java/images/download.svg)](https://bintray.com/yoo-money/maven/yoo-money-sdk-java/_latestVersion)
 
 To use the library in your project write this code to your build.gradle:
 
@@ -27,7 +27,7 @@ buildscript {
 }
 
 dependencies {
-    compile 'com.yoo.money.api:yandex-money-sdk-java:7.2.23'
+    compile 'com.yoo.money.api:yoo-money-sdk-java:7.2.23'
 }
 ```
 
@@ -117,5 +117,5 @@ InstanceId instanceId = client.execute(new InstanceId.Request(clientId));
 [5]: https://yoomoney.ru/docs/wallet?lang=en
 [6]: https://yoomoney.ru/docs/wallet?lang=ru
 [7]: http://www.joda.org/joda-time/
-[8]: https://bintray.com/yandexxx-money/maven/yandex-money-sdk-java/view
+[8]: https://bintray.com/yoo-money/maven/yoo-money-sdk-java/view
 [9]: https://yoomoney.ru/docs/wallet/using-api/authorization/request-access-token/
