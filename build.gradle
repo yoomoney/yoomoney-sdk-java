@@ -33,11 +33,11 @@ compileTestJava {
 }
 
 publish {
-    userOrg = 'yoo-money'
+    userOrg = 'yoomoney'
     groupId = 'com.yoo.money.api'
-    artifactId = 'yoo-money-sdk-java'
+    artifactId = 'yoomoney-sdk-java'
     version = '7.2.23'
-    website = 'https://github.com/yoomoney/yoo-money-sdk-java'
+    website = 'https://github.com/yoomoney/yoomoney-sdk-java'
     issueTracker = "${website}/issues"
     repository = "${website}.git"
 }
