@@ -12,7 +12,7 @@
       "recipient": "4100123456789",
       "recipient_type": "account",
       "message": "Купите бублики",
-      "comment": "Перевод от пользователя Яндекс.Денег",
+      "comment": "Перевод от пользователя ЮMoney",
       "codepro": false,
       "details": "Счет получателя:\n4100123456789\nСумма к получению: 50,00 руб.",
       "type": "outgoing-transfer"
